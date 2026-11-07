@@ -1,0 +1,72 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+
+import { fireEvent, screen } from '@testing-library/react';
+
+import { renderWithStore } from 'app/shared/util/test-utils';
+import { changeLogLevel, getLoggers } from '../administration.reducer';
+import { administrationState } from '../admin-test-utils';
+
+import LogsPage from './logs';
+
+vi.mock('../administration.reducer', async importOriginal => ({
+  ...(await importOriginal<typeof import('../administration.reducer')>()),
+  getLoggers: vi.fn(() => ({ type: 'test/getLoggers' })),
+  changeLogLevel: vi.fn(() => ({ type: 'test/changeLogLevel' })),
+}));
+
+const loggers = [
+  { name: 'ROOT', level: 'INFO' as const },
+  { name: 'tech.jhipster', level: 'DEBUG' as const },
+];
+
+describe('LogsPage', () => {
+  it('should load the loggers and render their levels', () => {
+    renderWithStore(<LogsPage />, '/', administrationState({ logs: { loggers } }));
+
+    expect(getLoggers).toHaveBeenCalled();
+    expect(document.querySelectorAll('tbody tr')).toHaveLength(2);
+    expect(screen.getAllByText('INFO')[0].className).toContain('btn-info');
+    expect(screen.getAllByText('INFO')[1].className).toContain('btn-light');
+  });
+
+  it('should filter the loggers', () => {
+    renderWithStore(<LogsPage />, '/', administrationState({ logs: { loggers } }));
+
+    fireEvent.change(document.querySelector('input')!, { target: { value: 'jhip' } });
+
+    expect(document.querySelectorAll('tbody tr')).toHaveLength(1);
+  });
+
+  it('should change the level of a logger', () => {
+    renderWithStore(<LogsPage />, '/', administrationState({ logs: { loggers } }));
+
+    for (const level of ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF']) {
+      fireEvent.click(screen.getAllByText(level)[0]);
+      expect(changeLogLevel).toHaveBeenCalledWith('ROOT', level);
+    }
+  });
+
+  it('should render without loggers', () => {
+    renderWithStore(<LogsPage />, '/', administrationState({ logs: undefined }));
+
+    expect(document.querySelectorAll('tbody tr')).toHaveLength(0);
+  });
+});

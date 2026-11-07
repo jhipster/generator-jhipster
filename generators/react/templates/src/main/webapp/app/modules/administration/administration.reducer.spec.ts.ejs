@@ -33,6 +33,7 @@ import { type MetricsSection } from 'app/shared/jhipster/metrics.model';
 <%_ } _%>
 import administration, {
 <%_ if (withAdminUi) { _%>
+  changeLogLevel,
   getConfiguration,
 <%_ } _%>
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
@@ -296,6 +297,12 @@ describe('Administration reducer tests', () => {
       expect(getSystemHealth.fulfilled.match(result)).toBe(true);
       expect(result.payload).toBe(resolvedObject);
     });
+    it('accepts the health of an unhealthy application', async () => {
+      await getSystemHealth()(dispatch, getState, extra);
+
+      const { validateStatus } = vi.mocked(axios.get).mock.calls[0][1]!;
+      expect([200, 503, 500].map(status => validateStatus!(status))).toEqual([true, true, false]);
+    });
     it('dispatches FETCH_METRICS_PENDING and FETCH_METRICS_FULFILLED actions', async () => {
       vi.mocked(toMetrics).mockReturnValue(sections);
       axios.get = vi.fn().mockImplementation(respond);
@@ -332,6 +339,13 @@ describe('Administration reducer tests', () => {
         }),
       );
       expect(setLoggers.fulfilled.match(result)).toBe(true);
+    });
+    it('changes the level of a logger and loads the loggers again', async () => {
+      const thunkDispatch = vi.fn().mockResolvedValue({});
+
+      changeLogLevel('ROOT', 'DEBUG')(thunkDispatch, getState, extra);
+
+      await vi.waitFor(() => expect(thunkDispatch).toHaveBeenCalledTimes(2));
     });
     it('dispatches FETCH_CONFIGURATION_PENDING and FETCH_CONFIGURATION_FULFILLED actions', async () => {
       vi.mocked(toConfiguration).mockReturnValue(configuration);

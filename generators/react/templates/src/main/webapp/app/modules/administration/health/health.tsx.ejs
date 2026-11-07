@@ -51,11 +51,7 @@ export const HealthPage = () => {
     dispatch(getSystemHealth());
   }, []);
 
-  const fetchSystemHealth = () => {
-    if (!isFetching) {
-      dispatch(getSystemHealth());
-    }
-  };
+  const fetchSystemHealth = () => dispatch(getSystemHealth());
 
   const getSystemHealthInfo = (check: HealthCheck) => () => {
     setShowModal(true);

@@ -42,11 +42,7 @@ export const MetricsPage = () => {
     dispatch(getSystemMetrics());
   }, []);
 
-  const getMetrics = () => {
-    if (!isFetching) {
-      dispatch(getSystemMetrics());
-    }
-  };
+  const getMetrics = () => dispatch(getSystemMetrics());
 
   return (
     <div>
