@@ -1,0 +1,209 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { afterEach, describe, expect, it } from 'vitest';
+
+import { type MetricsResponse, type MetricsWithPercentile, type Thread, ThreadState, toMetrics } from './metrics';
+import { type MetricsSection } from './metrics.model';
+
+const percentiles: MetricsWithPercentile = { count: 2, mean: 1, max: 3, '0.0': 0, '0.5': 1, '0.75': 2, '0.95': 3, '0.99': 3 };
+
+const metrics: MetricsResponse = {
+  jvm: {
+    Metaspace: { committed: 1048576, max: -1, used: 2097152 },
+    'G1 Eden Space': { committed: 2097152, max: 4194304, used: 1048576 },
+  },
+  processMetrics: {
+    'system.cpu.usage': 0.5,
+    'system.cpu.count': 8,
+    'process.cpu.usage': 0.25,
+    'process.start.time': 0,
+    'process.uptime': 90061000,
+  },
+};
+
+const stackTrace = [{ className: 'Foo', methodName: 'bar', fileName: 'Foo.java', lineNumber: 1 }];
+
+const threads = [ThreadState.Runnable, ThreadState.Runnable, ThreadState.Waiting, ThreadState.Blocked].map(
+  (threadState, threadId): Thread => ({
+    threadName: 'thread',
+    threadId,
+    threadState,
+    blockedTime: -1,
+    blockedCount: 1,
+    waitedTime: -1,
+    waitedCount: 2,
+    lockName: null,
+    stackTrace,
+  }),
+);
+
+const toSections = (response: MetricsResponse): MetricsSection[] => toMetrics([response, { threads }]);
+
+describe('metrics', () => {
+  afterEach(() => {
+    document.documentElement.lang = '';
+  });
+
+  describe('toMetrics', () => {
+    it('should ignore an invalid language of the page', () => {
+      document.documentElement.lang = 'not a language';
+
+      expect(() => toSections(metrics)).not.toThrow();
+    });
+
+    it('should format the numbers in the language of the page', () => {
+      document.documentElement.lang = 'pt-BR';
+
+      const [{ blocks }] = toSections({ ...metrics, processMetrics: { ...metrics.processMetrics, 'process.files.max': 10240 } });
+
+      expect(blocks[2].items.find(({ label }) => label.text === 'Process files max')?.value).toBe('10.240');
+    });
+
+    it('should give only the JVM section when the other groups are empty', () => {
+      const sections = toSections({ ...metrics, databases: {}, cache: {}, services: {}, 'http.server.requests': undefined, garbageCollector: undefined });
+
+      expect(sections.map(section => section.id)).toEqual(['jvmMetrics']);
+    });
+
+    it('should convert the memory pools, with a gauge only for the ones with a maximum', () => {
+      const [{ blocks }] = toSections(metrics);
+
+      expect(blocks[0].items).toEqual([
+        {
+          label: { text: 'G1 Eden Space' },
+          value: '1M / 4M',
+          note: 'Committed: 2M',
+          gauge: { percent: 25, text: '25%', status: 'success' },
+        },
+        { label: { text: 'Metaspace' }, value: '2M' },
+      ]);
+    });
+
+    it('should give the details of the threads', () => {
+      const [{ blocks }] = toSections(metrics);
+      const details = blocks[1].details!;
+
+      expect(details.filters.map(({ value, count, status }) => [value, count, status])).toEqual([
+        [undefined, 4, 'primary'],
+        ['RUNNABLE', 2, 'success'],
+        ['WAITING', 1, 'info'],
+        ['TIMED_WAITING', 0, 'warning'],
+        ['BLOCKED', 1, 'danger'],
+      ]);
+      expect(details.items[0]).toEqual({
+        title: 'thread (ID 0)',
+        value: 'RUNNABLE',
+        status: 'success',
+        lines: ['Foo.bar(Foo.java:1)'],
+        cells: ['-1', '1', '-1', '2', ''],
+      });
+    });
+
+    it('should count the threads by state', () => {
+      const [{ blocks }] = toSections(metrics);
+
+      expect(blocks[1].items.map(({ value, gauge }) => [value, gauge?.text, gauge?.status])).toEqual([
+        ['2', '50%', 'success'],
+        ['0', '0%', 'warning'],
+        ['1', '25%', 'warning'],
+        ['1', '25%', 'danger'],
+        ['4', undefined, undefined],
+      ]);
+    });
+
+    it('should show the system values the backend gives', () => {
+      const [{ blocks }] = toSections({ ...metrics, processMetrics: { ...metrics.processMetrics, 'process.files.open': 12 } });
+
+      const texts = blocks[2].items.map(({ label, value }) => [label.text, value]);
+      expect(texts).toContainEqual(['Uptime', '1 day 1 hour 1 minute 1 second']);
+      expect(texts).toContainEqual(['Process CPU usage', '25 %']);
+      expect(texts).toContainEqual(['Process files open', '12']);
+      expect(texts.map(([text]) => text)).not.toContain('Process files max');
+    });
+
+    it('should convert the garbage collector', () => {
+      const [, section] = toSections({
+          ...metrics,
+          garbageCollector: {
+            'jvm.gc.max.data.size': 4194304,
+            'jvm.gc.live.data.size': 2097152,
+            'jvm.gc.memory.promoted': 0,
+            'jvm.gc.memory.allocated': 0,
+            'jvm.gc.pause': percentiles,
+            classesLoaded: 10,
+            classesUnloaded: 1,
+          },
+        });
+
+      expect(section.id).toBe('garbageCollectorMetrics');
+      expect(section.blocks[0].items[0]).toMatchObject({ value: '2M / 4M', gauge: { percent: 50 } });
+      expect(section.blocks[1].items[0].gauge?.percent).toBe(0);
+      expect(section.tables[0].rows[0].map(({ text }) => text)).toEqual(['jvm.gc.pause', '2', '1', '0', '1', '2', '3', '3', '3']);
+    });
+
+    it('should convert the requests, with the share of each code', () => {
+      const [, section] = toSections({
+          ...metrics,
+          'http.server.requests': {
+            all: { count: 4 },
+            percode: { 404: { count: 1, mean: 2, max: 3 }, 200: { count: 3, mean: Number.NaN, max: 5 } },
+          },
+        });
+
+      expect(section.tables[0].rows).toEqual([
+        [{ text: '200' }, { gauge: { percent: 75, text: '3', status: 'success' } }, { text: '0' }, { text: '5' }],
+        [{ text: '404' }, { gauge: { percent: 25, text: '1', status: 'success' } }, { text: '2' }, { text: '3' }],
+      ]);
+    });
+
+    it('should give a row by endpoint and method', () => {
+      const [, section] = toSections({ ...metrics, services: { '/api/b': { GET: { count: 1, mean: 2, max: 3 } }, '/api/a': { POST: { count: 4, mean: 5, max: 6 } } } });
+
+      expect(section.tables[0].rows.map(row => row.map(({ text }) => text))).toEqual([
+        ['POST', '/api/a', '4', '5'],
+        ['GET', '/api/b', '1', '2'],
+      ]);
+    });
+
+    it('should convert the caches, without a share when nothing was read', () => {
+      const cache = { 'cache.gets.hit': 0, 'cache.gets.miss': 0, 'cache.puts': 1, 'cache.removals': 2, 'cache.evictions': 3 };
+      const [, section] = toSections({ ...metrics, cache: { users: cache } });
+
+      expect(section.tables[0].rows[0].map(({ text }) => text)).toEqual(['users', '0', '0', '0', '1', '2', '3', '0', '0']);
+    });
+
+    it('should convert the datasource', () => {
+      const [, section] = toSections({
+          ...metrics,
+          databases: {
+            active: { value: 1 },
+            min: { value: 2 },
+            max: { value: 3 },
+            idle: { value: 4 },
+            acquire: percentiles,
+            creation: percentiles,
+            usage: percentiles,
+          },
+        });
+
+      expect(section.blocks[0].items[0].value).toBe('active: 1, min: 2, max: 3, idle: 4');
+      expect(section.tables[0].rows.map(([{ text }]) => text)).toEqual(['Acquire', 'Creation', 'Usage']);
+    });
+  });
+});

@@ -1,0 +1,96 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { type Label } from './label';
+
+export type MetricStatus = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger';
+
+/** A progress bar of the metrics page. */
+export interface MetricGauge {
+  percent: number;
+  text: string;
+  status: MetricStatus;
+}
+
+/** A line of a block, with its value and progress bar. */
+export interface MetricItem {
+  label: Label;
+  value?: string;
+  note?: string;
+  gauge?: MetricGauge;
+}
+
+/** A filter of the details of a block, without a value it keeps all the items. */
+export interface MetricDetailFilter {
+  label: Label;
+  value?: string;
+  count: number;
+  status: MetricStatus;
+}
+
+/** An item of the details of a block. */
+export interface MetricDetailItem {
+  title: string;
+  /** The value the filters compare, shown in a badge. */
+  value: string;
+  status: MetricStatus;
+  /** The lines shown on demand. */
+  lines: string[];
+  /** The values of the columns of the details. */
+  cells: string[];
+}
+
+/** What a block has to show in a modal. */
+export interface MetricDetails {
+  label: Label;
+  showLines: Label;
+  hideLines: Label;
+  columns: Label[];
+  filters: MetricDetailFilter[];
+  items: MetricDetailItem[];
+}
+
+/** A column of the blocks of a section. */
+export interface MetricsBlock {
+  label?: Label;
+  items: MetricItem[];
+  details?: MetricDetails;
+}
+
+export interface MetricColumn {
+  label: Label;
+  numeric?: boolean;
+}
+
+export interface MetricCell {
+  text?: string;
+  gauge?: MetricGauge;
+}
+
+export interface MetricsTable {
+  columns: MetricColumn[];
+  rows: MetricCell[][];
+}
+
+/** A section of the metrics page, with its texts. */
+export interface MetricsSection {
+  id: string;
+  label: Label;
+  blocks: MetricsBlock[];
+  tables: MetricsTable[];
+}
