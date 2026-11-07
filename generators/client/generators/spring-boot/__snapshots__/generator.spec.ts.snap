@@ -5,6 +5,9 @@ exports[`generator - client:spring-boot with defaults options should match files
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/configuration.spec.ts": {
     "stateCleared": "modified",
   },

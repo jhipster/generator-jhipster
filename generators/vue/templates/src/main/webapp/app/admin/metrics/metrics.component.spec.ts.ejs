@@ -23,317 +23,86 @@ import { defineComponent, h } from 'vue';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
+import { metricsResponses } from '@/shared/jhipster/admin.samples';
+import { metricsEndpoints, toMetrics } from '@/shared/jhipster/metrics';
+
 import MetricsService, { metricsServiceKey } from './metrics.service';
 import Metrics from './metrics.vue';
-
-type MetricsComponentType = InstanceType<typeof Metrics>;
 
 const axiosStub = {
   get: vi.spyOn(axios, 'get'),
 };
 
+const respond = (url?: string) => Promise.resolve({ data: metricsResponses[metricsEndpoints.indexOf(url!)] });
+
 describe('Metrics Component', () => {
-  let metricsComponent: MetricsComponentType;
-  const response = {
-    jvm: {
-      'PS Eden Space': {
-        committed: 5.57842432e8,
-        max: 6.49592832e8,
-        used: 4.20828184e8,
-      },
-      'Code Cache': {
-        committed: 2.3461888e7,
-        max: 2.5165824e8,
-        used: 2.2594368e7,
-      },
-      'Compressed Class Space': {
-        committed: 1.2320768e7,
-        max: 1.073741824e9,
-        used: 1.1514008e7,
-      },
-      'PS Survivor Space': {
-        committed: 1.5204352e7,
-        max: 1.5204352e7,
-        used: 1.2244376e7,
-      },
-      'PS Old Gen': {
-        committed: 1.10624768e8,
-        max: 1.37887744e9,
-        used: 4.1390776e7,
-      },
-      Metaspace: {
-        committed: 9.170944e7,
-        max: -1.0,
-        used: 8.7377552e7,
-      },
+  const show = vi.fn();
+  const contentStub = defineComponent({
+    setup(_props, { slots }) {
+      return () => h('div', [slots.title?.(), slots.default?.(), slots.footer?.()]);
     },
-    databases: {
-      min: {
-        value: 10.0,
-      },
-      max: {
-        value: 10.0,
-      },
-      idle: {
-        value: 10.0,
-      },
-      usage: {
-        '0.0': 0.0,
-        '1.0': 0.0,
-        max: 0.0,
-        totalTime: 4210.0,
-        mean: 701.6666666666666,
-        '0.5': 0.0,
-        count: 6,
-        '0.99': 0.0,
-        '0.75': 0.0,
-        '0.95': 0.0,
-      },
-      pending: {
-        value: 0.0,
-      },
-      active: {
-        value: 0.0,
-      },
-      acquire: {
-        '0.0': 0.0,
-        '1.0': 0.0,
-        max: 0.0,
-        totalTime: 0.884426,
-        mean: 0.14740433333333333,
-        '0.5': 0.0,
-        count: 6,
-        '0.99': 0.0,
-        '0.75': 0.0,
-        '0.95': 0.0,
-      },
-      creation: {
-        '0.0': 0.0,
-        '1.0': 0.0,
-        max: 0.0,
-        totalTime: 27.0,
-        mean: 3.0,
-        '0.5': 0.0,
-        count: 9,
-        '0.99': 0.0,
-        '0.75': 0.0,
-        '0.95': 0.0,
-      },
-      connections: {
-        value: 10.0,
-      },
+    methods: {
+      show,
     },
-    'http.server.requests': {
-      all: {
-        count: 5,
+  });
+
+  const mountMetrics = () =>
+    shallowMount(Metrics, {
+      global: {
+        stubs: { bModal: contentStub, bProgress: contentStub, 'font-awesome-icon': true, MetricsModal: true },
+        provide: { [metricsServiceKey as symbol]: new MetricsService() },
       },
-      percode: {
-        '200': {
-          max: 0.0,
-          mean: 298.9012628,
-          count: 5,
-        },
-      },
-    },
-    cache: {
-      usersByEmail: {
-        'cache.gets.miss': 0.0,
-        'cache.puts': 0.0,
-        'cache.gets.hit': 0.0,
-        'cache.removals': 0.0,
-        'cache.evictions': 0.0,
-      },
-      usersByLogin: {
-        'cache.gets.miss': 1.0,
-        'cache.puts': 1.0,
-        'cache.gets.hit': 1.0,
-        'cache.removals': 0.0,
-        'cache.evictions': 0.0,
-      },
-      'tech.jhipster.domain.Authority': {
-        'cache.gets.miss': 0.0,
-        'cache.puts': 2.0,
-        'cache.gets.hit': 0.0,
-        'cache.removals': 0.0,
-        'cache.evictions': 0.0,
-      },
-      'tech.jhipster.domain.User.authorities': {
-        'cache.gets.miss': 0.0,
-        'cache.puts': 1.0,
-        'cache.gets.hit': 0.0,
-        'cache.removals': 0.0,
-        'cache.evictions': 0.0,
-      },
-      'tech.jhipster.domain.User': {
-        'cache.gets.miss': 0.0,
-        'cache.puts': 1.0,
-        'cache.gets.hit': 0.0,
-        'cache.removals': 0.0,
-        'cache.evictions': 0.0,
-      },
-    },
-    garbageCollector: {
-      'jvm.gc.max.data.size': 1.37887744e9,
-      'jvm.gc.pause': {
-        '0.0': 0.0,
-        '1.0': 0.0,
-        max: 0.0,
-        totalTime: 242.0,
-        mean: 242.0,
-        '0.5': 0.0,
-        count: 1,
-        '0.99': 0.0,
-        '0.75': 0.0,
-        '0.95': 0.0,
-      },
-      'jvm.gc.memory.promoted': 2.992732e7,
-      'jvm.gc.memory.allocated': 1.26362872e9,
-      classesLoaded: 17393.0,
-      'jvm.gc.live.data.size': 3.1554408e7,
-      classesUnloaded: 0.0,
-    },
-    services: {
-      '/management/info': {
-        GET: {
-          max: 0.0,
-          mean: 104.952893,
-          count: 1,
-        },
-      },
-      '/api/authenticate': {
-        POST: {
-          max: 0.0,
-          mean: 909.53003,
-          count: 1,
-        },
-      },
-      '/api/account': {
-        GET: {
-          max: 0.0,
-          mean: 141.209628,
-          count: 1,
-        },
-      },
-      '/**': {
-        GET: {
-          max: 0.0,
-          mean: 169.4068815,
-          count: 2,
-        },
-      },
-    },
-    processMetrics: {
-      'system.load.average.1m': 3.63,
-      'system.cpu.usage': 0.5724934148485453,
-      'system.cpu.count': 4.0,
-      'process.start.time': 1.548140811306e12,
-      'process.files.open': 205.0,
-      'process.cpu.usage': 0.003456347568026252,
-      'process.uptime': 88404.0,
-      'process.files.max': 1048576.0,
-    },
-    threads: [{ name: 'test1', threadState: 'RUNNABLE' }],
-  };
+    });
 
   beforeEach(() => {
-    axiosStub.get.mockResolvedValue({ data: response });
-    const wrapper = shallowMount(Metrics, {
-      global: {
-        stubs: {
-          bModal: true,
-          bProgress: true,
-          bProgressBar: true,
-          'font-awesome-icon': true,
-          MetricsModal: true,
-        },
-        directives: {
-          'b-modal': {},
-          'b-progress': {},
-          'b-progress-bar': {},
-        },
-        provide: {
-          [metricsServiceKey as symbol]: new MetricsService(),
-        },
-      },
-    });
-    metricsComponent = wrapper.vm;
+    axiosStub.get.mockImplementation(respond);
   });
 
-  describe('refresh', () => {
-    it('should load the sections on init', async () => {
-      // WHEN
-      await metricsComponent.refresh();
-      await metricsComponent.$nextTick();
+  it('should load the sections on init', async () => {
+    // WHEN
+    const wrapper = mountMetrics();
+    await flushPromises();
 
-      // THEN
-      expect(axiosStub.get).toHaveBeenCalledWith('management/jhimetrics');
-      expect(axiosStub.get).toHaveBeenCalledWith('management/threaddump');
-      expect(metricsComponent.sections.map(section => section.id)).toContain('jvmMetrics');
-      expect(metricsComponent.threads).toEqual(response.threads);
-      expect(metricsComponent.updatingMetrics).toBe(false);
-    });
+    // THEN
+    for (const endpoint of metricsEndpoints) {
+      expect(axiosStub.get).toHaveBeenCalledWith(endpoint);
+    }
+    expect(wrapper.vm.sections).toEqual(toMetrics(metricsResponses));
+    expect(wrapper.vm.updatingMetrics).toBe(false);
   });
 
-  describe('view', () => {
-    const show = vi.fn();
-    const contentStub = defineComponent({
-      setup(_props, { slots }) {
-        return () => h('div', [slots.title?.(), slots.default?.(), slots.footer?.()]);
-      },
-      methods: {
-        show,
-      },
-    });
+  it('should render the sections and open the details of a block', async () => {
+    // GIVEN
+    const wrapper = mountMetrics();
+    await flushPromises();
 
-    it('should render the sections and open the thread dump', async () => {
-      // GIVEN
-      const wrapper = shallowMount(Metrics, {
-        global: {
-          stubs: {
-            bModal: contentStub,
-            bProgress: contentStub,
-            'font-awesome-icon': true,
-            MetricsModal: true,
-          },
-          provide: {
-            [metricsServiceKey as symbol]: new MetricsService(),
-          },
-        },
-      });
-      await flushPromises();
+    // WHEN
+    await wrapper.find('button.btn-sm').trigger('click');
 
-      // WHEN
-      await wrapper.find('button.btn-sm').trigger('click');
+    // THEN
+    expect(wrapper.findAll('h3')).toHaveLength(wrapper.vm.sections.length);
+    expect(wrapper.find('table').exists()).toBe(true);
+    expect(show).toHaveBeenCalled();
+  });
 
-      // THEN
-      expect(wrapper.find('h3#jvmMetrics').exists()).toBe(true);
-      expect(wrapper.find('table').exists()).toBe(true);
-      expect(show).toHaveBeenCalled();
-    });
+  it('should stop updating when a request fails', async () => {
+    // GIVEN
+    axiosStub.get.mockRejectedValue(new Error('failed'));
 
-    it('should stop updating when the thread dump fails', async () => {
-      // GIVEN
-      axiosStub.get.mockImplementation((url?: string) =>
-        url === 'management/threaddump' ? Promise.reject(new Error('failed')) : Promise.resolve({ data: response }),
-      );
+    // WHEN
+    const wrapper = mountMetrics();
+    await flushPromises();
 
-      // WHEN
-      await metricsComponent.refresh();
+    // THEN
+    expect(wrapper.vm.updatingMetrics).toBe(false);
+  });
 
-      // THEN
-      expect(metricsComponent.updatingMetrics).toBe(false);
-    });
+  it('should use the default service', async () => {
+    // WHEN
+    shallowMount(Metrics, { global: { stubs: { bModal: true, bProgress: true, 'font-awesome-icon': true, MetricsModal: true } } });
+    await flushPromises();
 
-    it('should use the default service', async () => {
-      // GIVEN
-      axiosStub.get.mockResolvedValue({ data: response });
-
-      // WHEN
-      shallowMount(Metrics, { global: { stubs: { bModal: true, bProgress: true, 'font-awesome-icon': true, MetricsModal: true } } });
-      await flushPromises();
-
-      // THEN
-      expect(axiosStub.get).toHaveBeenCalledWith('management/jhimetrics');
-    });
+    // THEN
+    expect(axiosStub.get).toHaveBeenCalledWith(metricsEndpoints[0]);
   });
 });

@@ -23,6 +23,9 @@ import { defineComponent, h } from 'vue';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
+import { healthResponse } from '@/shared/jhipster/admin.samples';
+import { healthEndpoint } from '@/shared/jhipster/health';
+
 import HealthService, { healthServiceKey } from './health.service';
 import Health from './health.vue';
 
@@ -36,7 +39,7 @@ describe('Health Component', () => {
   let health: HealthComponentType;
 
   beforeEach(() => {
-    axiosStub.get.mockResolvedValue({ data: { status: 'UP' } });
+    axiosStub.get.mockResolvedValue({ data: healthResponse });
     const wrapper = shallowMount(Health, {
       global: {
         stubs: {
@@ -58,14 +61,14 @@ describe('Health Component', () => {
   describe('refresh', () => {
     it('should call refresh on init', async () => {
       // GIVEN
-      axiosStub.get.mockResolvedValue({ data: { status: 'UP' } });
+      axiosStub.get.mockResolvedValue({ data: healthResponse });
 
       // WHEN
       health.refresh();
       await health.$nextTick();
 
       // THEN
-      expect(axiosStub.get).toHaveBeenCalledWith('management/health', expect.anything());
+      expect(axiosStub.get).toHaveBeenCalledWith(healthEndpoint, expect.anything());
       await vi.waitFor(() => expect(health.updatingHealth).toEqual(false));
     });
     it('should stop updating when the request fails', async () => {
@@ -77,7 +80,7 @@ describe('Health Component', () => {
       await health.$nextTick();
 
       // THEN
-      expect(axiosStub.get).toHaveBeenCalledWith('management/health', expect.anything());
+      expect(axiosStub.get).toHaveBeenCalledWith(healthEndpoint, expect.anything());
       await vi.waitFor(() => expect(health.updatingHealth).toEqual(false));
     });
     it('should show the checks of the response', async () => {

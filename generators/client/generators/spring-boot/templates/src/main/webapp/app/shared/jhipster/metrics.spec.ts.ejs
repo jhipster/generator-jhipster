@@ -18,7 +18,7 @@
 -%>
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { type MetricsResponse, type MetricsWithPercentile, type Thread, ThreadState, toMetrics } from './metrics';
+import { type MetricsResponse, type MetricsSection, type MetricsWithPercentile, type Thread, ThreadState, toMetrics } from './metrics';
 
 const percentiles: MetricsWithPercentile = { count: 2, mean: 1, max: 3, '0.0': 0, '0.5': 1, '0.75': 2, '0.95': 3, '0.99': 3 };
 
@@ -36,9 +36,23 @@ const metrics: MetricsResponse = {
   },
 };
 
+const stackTrace = [{ className: 'Foo', methodName: 'bar', fileName: 'Foo.java', lineNumber: 1 }];
+
 const threads = [ThreadState.Runnable, ThreadState.Runnable, ThreadState.Waiting, ThreadState.Blocked].map(
-  threadState => ({ threadState }) as Thread,
+  (threadState, threadId): Thread => ({
+    threadName: 'thread',
+    threadId,
+    threadState,
+    blockedTime: -1,
+    blockedCount: 1,
+    waitedTime: -1,
+    waitedCount: 2,
+    lockName: null,
+    stackTrace,
+  }),
 );
+
+const toSections = (response: MetricsResponse): MetricsSection[] => toMetrics([response, { threads }]);
 
 describe('metrics', () => {
   afterEach(() => {
@@ -46,25 +60,28 @@ describe('metrics', () => {
   });
 
   describe('toMetrics', () => {
+    it('should ignore an invalid language of the page', () => {
+      document.documentElement.lang = 'not a language';
+
+      expect(() => toSections(metrics)).not.toThrow();
+    });
+
     it('should format the numbers in the language of the page', () => {
       document.documentElement.lang = 'pt-BR';
 
-      const [{ blocks }] = toMetrics({ ...metrics, processMetrics: { ...metrics.processMetrics, 'process.files.max': 10240 } }, threads);
+      const [{ blocks }] = toSections({ ...metrics, processMetrics: { ...metrics.processMetrics, 'process.files.max': 10240 } });
 
       expect(blocks[2].items.find(({ label }) => label.text === 'Process files max')?.value).toBe('10.240');
     });
 
     it('should give only the JVM section when the other groups are empty', () => {
-      const sections = toMetrics(
-        { ...metrics, databases: {}, cache: {}, services: {}, 'http.server.requests': undefined, garbageCollector: undefined },
-        threads,
-      );
+      const sections = toSections({ ...metrics, databases: {}, cache: {}, services: {}, 'http.server.requests': undefined, garbageCollector: undefined });
 
       expect(sections.map(section => section.id)).toEqual(['jvmMetrics']);
     });
 
     it('should convert the memory pools, with a gauge only for the ones with a maximum', () => {
-      const [{ blocks }] = toMetrics(metrics, threads);
+      const [{ blocks }] = toSections(metrics);
 
       expect(blocks[0].items).toEqual([
         {
@@ -77,10 +94,29 @@ describe('metrics', () => {
       ]);
     });
 
-    it('should count the threads by state and ask for the thread dump', () => {
-      const [{ blocks }] = toMetrics(metrics, threads);
+    it('should give the details of the threads', () => {
+      const [{ blocks }] = toSections(metrics);
+      const details = blocks[1].details!;
 
-      expect(blocks[1].threadDump).toBe(true);
+      expect(details.filters.map(({ value, count, status }) => [value, count, status])).toEqual([
+        [undefined, 4, 'primary'],
+        ['RUNNABLE', 2, 'success'],
+        ['WAITING', 1, 'info'],
+        ['TIMED_WAITING', 0, 'warning'],
+        ['BLOCKED', 1, 'danger'],
+      ]);
+      expect(details.items[0]).toEqual({
+        title: 'thread (ID 0)',
+        value: 'RUNNABLE',
+        status: 'success',
+        lines: ['Foo.bar(Foo.java:1)'],
+        cells: ['-1', '1', '-1', '2', ''],
+      });
+    });
+
+    it('should count the threads by state', () => {
+      const [{ blocks }] = toSections(metrics);
+
       expect(blocks[1].items.map(({ value, gauge }) => [value, gauge?.text, gauge?.status])).toEqual([
         ['2', '50%', 'success'],
         ['0', '0%', 'warning'],
@@ -91,7 +127,7 @@ describe('metrics', () => {
     });
 
     it('should show the system values the backend gives', () => {
-      const [{ blocks }] = toMetrics({ ...metrics, processMetrics: { ...metrics.processMetrics, 'process.files.open': 12 } }, threads);
+      const [{ blocks }] = toSections({ ...metrics, processMetrics: { ...metrics.processMetrics, 'process.files.open': 12 } });
 
       const texts = blocks[2].items.map(({ label, value }) => [label.text, value]);
       expect(texts).toContainEqual(['Uptime', '1 day 1 hour 1 minute 1 second']);
@@ -101,8 +137,7 @@ describe('metrics', () => {
     });
 
     it('should convert the garbage collector', () => {
-      const [, section] = toMetrics(
-        {
+      const [, section] = toSections({
           ...metrics,
           garbageCollector: {
             'jvm.gc.max.data.size': 4194304,
@@ -113,9 +148,7 @@ describe('metrics', () => {
             classesLoaded: 10,
             classesUnloaded: 1,
           },
-        },
-        threads,
-      );
+        });
 
       expect(section.id).toBe('garbageCollectorMetrics');
       expect(section.blocks[0].items[0]).toMatchObject({ value: '2M / 4M', gauge: { percent: 50 } });
@@ -124,16 +157,13 @@ describe('metrics', () => {
     });
 
     it('should convert the requests, with the share of each code', () => {
-      const [, section] = toMetrics(
-        {
+      const [, section] = toSections({
           ...metrics,
           'http.server.requests': {
             all: { count: 4 },
             percode: { 404: { count: 1, mean: 2, max: 3 }, 200: { count: 3, mean: Number.NaN, max: 5 } },
           },
-        },
-        threads,
-      );
+        });
 
       expect(section.tables[0].rows).toEqual([
         [{ text: '200' }, { gauge: { percent: 75, text: '3', status: 'success' } }, { text: '0' }, { text: '5' }],
@@ -142,10 +172,7 @@ describe('metrics', () => {
     });
 
     it('should give a row by endpoint and method', () => {
-      const [, section] = toMetrics(
-        { ...metrics, services: { '/api/b': { GET: { count: 1, mean: 2, max: 3 } }, '/api/a': { POST: { count: 4, mean: 5, max: 6 } } } },
-        threads,
-      );
+      const [, section] = toSections({ ...metrics, services: { '/api/b': { GET: { count: 1, mean: 2, max: 3 } }, '/api/a': { POST: { count: 4, mean: 5, max: 6 } } } });
 
       expect(section.tables[0].rows.map(row => row.map(({ text }) => text))).toEqual([
         ['POST', '/api/a', '4', '5'],
@@ -155,14 +182,13 @@ describe('metrics', () => {
 
     it('should convert the caches, without a share when nothing was read', () => {
       const cache = { 'cache.gets.hit': 0, 'cache.gets.miss': 0, 'cache.puts': 1, 'cache.removals': 2, 'cache.evictions': 3 };
-      const [, section] = toMetrics({ ...metrics, cache: { users: cache } }, threads);
+      const [, section] = toSections({ ...metrics, cache: { users: cache } });
 
       expect(section.tables[0].rows[0].map(({ text }) => text)).toEqual(['users', '0', '0', '0', '1', '2', '3', '0', '0']);
     });
 
     it('should convert the datasource', () => {
-      const [, section] = toMetrics(
-        {
+      const [, section] = toSections({
           ...metrics,
           databases: {
             active: { value: 1 },
@@ -173,9 +199,7 @@ describe('metrics', () => {
             creation: percentiles,
             usage: percentiles,
           },
-        },
-        threads,
-      );
+        });
 
       expect(section.blocks[0].items[0].value).toBe('active: 1, min: 2, max: 3, idle: 4');
       expect(section.tables[0].rows.map(([{ text }]) => text)).toEqual(['Acquire', 'Creation', 'Usage']);

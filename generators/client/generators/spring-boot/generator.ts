@@ -82,6 +82,7 @@ export default class ClientSpringBootGenerator extends BaseApplicationGenerator 
             clientApplicationTemplatesBlock({
               condition: ctx => ctx.withAdminUi && ctx.clientTestFrameworkVitest,
               templates: [
+                'shared/jhipster/admin.samples.ts',
                 'shared/jhipster/configuration.spec.ts',
                 'shared/jhipster/health.spec.ts',
                 'shared/jhipster/logs.spec.ts',

@@ -18,17 +18,14 @@
 -%>
 import { type InjectionKey } from 'vue';
 
-import axios, { type AxiosPromise } from 'axios';
+import axios from 'axios';
 
-import { type MetricsResponse, type ThreadDump } from '@/shared/jhipster/metrics';
+import { type MetricsSection, metricsEndpoints, toMetrics } from '@/shared/jhipster/metrics';
 
 export default class MetricsService {
-  getMetrics(): AxiosPromise<MetricsResponse> {
-    return axios.get('management/jhimetrics');
-  }
-
-  retrieveThreadDump(): AxiosPromise<ThreadDump> {
-    return axios.get('management/threaddump');
+  async getMetrics(): Promise<MetricsSection[]> {
+    const responses = await Promise.all(metricsEndpoints.map(endpoint => axios.get(endpoint)));
+    return toMetrics(responses.map(({ data }) => data));
   }
 }
 

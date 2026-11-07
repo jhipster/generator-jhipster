@@ -55,6 +55,9 @@ export interface ConfigurationSection {
   rows: ConfigurationRow[];
 }
 
+/** The endpoints of the configuration page, their responses are given to `toConfiguration` in this order. */
+export const configurationEndpoints = ['management/configprops', 'management/env'];
+
 const readableValue = (value: unknown): string => (typeof value === 'string' ? value : JSON.stringify(value));
 
 const toBeansSection = ({ contexts }: ConfigProps): ConfigurationSection => {
@@ -81,12 +84,15 @@ const toBeansSection = ({ contexts }: ConfigProps): ConfigurationSection => {
   };
 };
 
-/** Converts the responses of the configuration properties and environment endpoints to the tables of the configuration page. */
-export const toConfiguration = (configProps: ConfigProps, { propertySources }: Env): ConfigurationSection[] => [
-  toBeansSection(configProps),
-  ...propertySources.map(({ name, properties }): ConfigurationSection => ({
-    label: { text: name },
-    columns: [{ text: 'Property' }, { text: 'Value' }],
-    rows: Object.entries(properties).map(([key, { value }]) => ({ key, value: readableValue(value) })),
-  })),
-];
+/** Converts the responses of the `configurationEndpoints` to the tables of the configuration page. */
+export const toConfiguration = (responses: unknown[]): ConfigurationSection[] => {
+  const [configProps, { propertySources }] = responses as [ConfigProps, Env];
+  return [
+    toBeansSection(configProps),
+    ...propertySources.map(({ name, properties }): ConfigurationSection => ({
+      label: { text: name },
+      columns: [{ text: 'Property' }, { text: 'Value' }],
+      rows: Object.entries(properties).map(([key, { value }]) => ({ key, value: readableValue(value) })),
+    })),
+  ];
+};

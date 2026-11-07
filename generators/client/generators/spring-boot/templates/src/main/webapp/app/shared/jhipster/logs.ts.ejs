@@ -36,6 +36,9 @@ export interface Log {
   level: Level;
 }
 
+/** The endpoint of the logs page. */
+export const loggersEndpoint = 'management/loggers';
+
 /** Converts the response of the loggers endpoint to the rows of the logs page. */
 export const toLogs = ({ loggers }: LoggersResponse): Log[] =>
   Object.entries(loggers).map(([name, { effectiveLevel }]) => ({ name, level: effectiveLevel }));

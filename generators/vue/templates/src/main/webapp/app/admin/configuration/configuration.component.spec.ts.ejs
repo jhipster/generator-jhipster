@@ -21,6 +21,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
+import { configurationResponses } from '@/shared/jhipster/admin.samples';
+import { configurationEndpoints, toConfiguration } from '@/shared/jhipster/configuration';
 import JhiSortHeader from '@/shared/sort/jhi-sort-header.vue';
 
 import Configuration from './configuration.vue';
@@ -35,9 +37,7 @@ describe('Configuration Component', () => {
   let configuration: ConfigurationComponentType;
 
   beforeEach(() => {
-    axiosStub.get.mockResolvedValue({
-      data: { contexts: [{ beans: [{ prefix: 'A' }, { prefix: 'B' }] }], propertySources: [{ properties: { key1: { value: 'value' } } }] },
-    });
+    axiosStub.get.mockImplementation((url?: string) => Promise.resolve({ data: configurationResponses[configurationEndpoints.indexOf(url!)] }));
     const wrapper = shallowMount(Configuration, {
       global: {
         stubs: {
@@ -60,8 +60,9 @@ describe('Configuration Component', () => {
       await configuration.$nextTick();
 
       // THEN
-      expect(axiosStub.get).toHaveBeenCalledWith('management/env');
-      expect(axiosStub.get).toHaveBeenCalledWith('management/configprops');
+      for (const endpoint of configurationEndpoints) {
+        expect(axiosStub.get).toHaveBeenCalledWith(endpoint);
+      }
     });
   });
 
@@ -84,24 +85,10 @@ describe('Configuration view', () => {
   it('should list the configuration, sort it and filter it', async () => {
     // GIVEN
     vi.spyOn(axios, 'get').mockImplementation((url?: string) =>
-      Promise.resolve({
-        data:
-          url === 'management/env'
-            ? { propertySources: [{ name: 'source', properties: { key1: { value: 'value1' } } }] }
-            : {
-                contexts: {
-                  bootstrap: { beans: {} },
-                  jhipsterVue: {
-                    beans: {
-                      b: { prefix: 'B', properties: { key2: 'value2' } },
-                      a: { prefix: 'A', properties: { key3: 'value3' } },
-                      a2: { prefix: 'A' },
-                    },
-                  },
-                },
-              },
-      }),
+      Promise.resolve({ data: configurationResponses[configurationEndpoints.indexOf(url!)] }),
     );
+    const expectedSections = toConfiguration(configurationResponses);
+    const [{ key }] = expectedSections[0].rows;
     const wrapper = shallowMount(Configuration, { global: { stubs: { 'jhi-sort-header': JhiSortHeader, 'font-awesome-icon': true } } });
     await flushPromises();
 
@@ -109,12 +96,11 @@ describe('Configuration view', () => {
     for (const element of wrapper.findAll('th button')) {
       await element.trigger('click');
     }
-    await wrapper.find('input').setValue('b');
+    await wrapper.find('input').setValue(key);
 
     // THEN
-    expect(wrapper.vm.allSections[0].rows.map(({ key }) => key)).toEqual(['A', 'A', 'B']);
-    expect(wrapper.vm.allSections[1]).toMatchObject({ label: { text: 'source' }, rows: [{ key: 'key1', value: 'value1' }] });
-    expect(wrapper.vm.sections[0].rows).toEqual([expect.objectContaining({ key: 'B' })]);
-    expect(wrapper.text()).toContain('value2');
+    expect(wrapper.vm.allSections).toEqual(expectedSections);
+    expect(wrapper.vm.sections[0].rows).toEqual([expect.objectContaining({ key })]);
+    expect(wrapper.text()).toContain(key);
   });
 });

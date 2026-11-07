@@ -1573,6 +1573,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/shared/jhi-item-count.vue": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/admin.samples.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/configuration.spec.ts": {
     "stateCleared": "modified",
   },
@@ -3408,6 +3411,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/shared/jhi-item-count.vue": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/configuration.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4450,6 +4456,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhi-item-count.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/configuration.spec.ts": {

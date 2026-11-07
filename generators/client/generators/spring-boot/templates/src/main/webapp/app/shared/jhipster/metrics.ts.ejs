@@ -123,8 +123,6 @@ export interface Thread {
   waitedCount: number;
   lockName: string | null;
   stackTrace: StackTrace[];
-  /** The stack trace is shown in the thread dump. */
-  showThreadDump?: boolean;
 }
 
 /** The response of the thread dump endpoint. */
@@ -132,11 +130,13 @@ export interface ThreadDump {
   threads: Thread[];
 }
 
+export type MetricStatus = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger';
+
 /** A progress bar of the metrics page. */
 export interface MetricGauge {
   percent: number;
   text: string;
-  status: 'success' | 'warning' | 'danger';
+  status: MetricStatus;
 }
 
 /** A line of a block, with its value and progress bar. */
@@ -147,12 +147,41 @@ export interface MetricItem {
   gauge?: MetricGauge;
 }
 
+/** A filter of the details of a block, without a value it keeps all the items. */
+export interface MetricDetailFilter {
+  label: Label;
+  value?: string;
+  count: number;
+  status: MetricStatus;
+}
+
+/** An item of the details of a block. */
+export interface MetricDetailItem {
+  title: string;
+  /** The value the filters compare, shown in a badge. */
+  value: string;
+  status: MetricStatus;
+  /** The lines shown on demand. */
+  lines: string[];
+  /** The values of the columns of the details. */
+  cells: string[];
+}
+
+/** What a block has to show in a modal. */
+export interface MetricDetails {
+  label: Label;
+  showLines: Label;
+  hideLines: Label;
+  columns: Label[];
+  filters: MetricDetailFilter[];
+  items: MetricDetailItem[];
+}
+
 /** A column of the blocks of a section. */
 export interface MetricsBlock {
   label?: Label;
   items: MetricItem[];
-  /** The block has the details of the threads to show. */
-  threadDump?: boolean;
+  details?: MetricDetails;
 }
 
 export interface MetricColumn {
@@ -178,6 +207,9 @@ export interface MetricsSection {
   tables: MetricsTable[];
 }
 
+/** The endpoints of the metrics page, their responses are given to `toMetrics` in this order. */
+export const metricsEndpoints = ['management/jhimetrics', 'management/threaddump'];
+
 const BYTES_PER_MEGABYTE = 1048576;
 
 const MILLISECONDS_PER_UNIT = {
@@ -190,7 +222,13 @@ const MILLISECONDS_PER_UNIT = {
 };
 
 /** The language of the page, which is not always the one of the browser. */
-const pageLocale = (): string | undefined => document.documentElement.lang || undefined;
+const pageLocale = (): string | undefined => {
+  try {
+    return Intl.getCanonicalLocales(document.documentElement.lang)[0];
+  } catch {
+    return undefined;
+  }
+};
 
 const formatNumber = (value: number, maximumFractionDigits = 0): string =>
   new Intl.NumberFormat(pageLocale(), { maximumFractionDigits }).format(Number.isNaN(value) ? 0 : value);
@@ -230,6 +268,57 @@ const toMemoryItem = ([name, { used, max, committed }]: [string, JvmMetrics]): M
         gauge: toGauge(used, max),
       };
 
+const threadStatuses: Record<ThreadState, MetricStatus> = {
+  RUNNABLE: 'success',
+  TIMED_WAITING: 'warning',
+  WAITING: 'info',
+  BLOCKED: 'danger',
+  NEW: 'secondary',
+};
+
+const toThreadDetailItem = ({ threadName, threadId, threadState, stackTrace, ...thread }: Thread): MetricDetailItem => ({
+  title: `${threadName} (ID ${threadId})`,
+  value: threadState,
+  status: threadStatuses[threadState],
+  lines: stackTrace.map(({ className, methodName, fileName, lineNumber }) => `${className}.${methodName}(${fileName}:${lineNumber})`),
+  cells: [
+    String(thread.blockedTime),
+    String(thread.blockedCount),
+    String(thread.waitedTime),
+    String(thread.waitedCount),
+    thread.lockName ?? '',
+  ],
+});
+
+const toThreadDetails = (threads: Thread[]): MetricDetails => {
+  const toFilter = (label: Label, value: ThreadState): MetricDetailFilter => ({
+    label,
+    value,
+    count: threads.filter(thread => thread.threadState === value).length,
+    status: threadStatuses[value],
+  });
+  return {
+    label: <%- label('Threads dump', 'metrics.jvm.threads.dump.title') %>,
+    showLines: <%- label('Show Stacktrace', 'metrics.jvm.threads.dump.show') %>,
+    hideLines: <%- label('Hide Stacktrace', 'metrics.jvm.threads.dump.hide') %>,
+    columns: [
+      <%- label('Blocked Time', 'metrics.jvm.threads.dump.blockedtime') %>,
+      <%- label('Blocked Count', 'metrics.jvm.threads.dump.blockedcount') %>,
+      <%- label('Waited Time', 'metrics.jvm.threads.dump.waitedtime') %>,
+      <%- label('Waited Count', 'metrics.jvm.threads.dump.waitedcount') %>,
+      <%- label('Lock name', 'metrics.jvm.threads.dump.lockname') %>,
+    ],
+    filters: [
+      { label: <%- label('All', 'metrics.jvm.threads.all') %>, count: threads.length, status: 'primary' },
+      toFilter(<%- label('Runnable', 'metrics.jvm.threads.runnable') %>, ThreadState.Runnable),
+      toFilter(<%- label('Waiting', 'metrics.jvm.threads.waiting') %>, ThreadState.Waiting),
+      toFilter(<%- label('Timed waiting', 'metrics.jvm.threads.timedwaiting') %>, ThreadState.TimedWaiting),
+      toFilter(<%- label('Blocked', 'metrics.jvm.threads.blocked') %>, ThreadState.Blocked),
+    ],
+    items: threads.map(toThreadDetailItem),
+  };
+};
+
 const toThreadsBlock = (threads: Thread[]): MetricsBlock => {
   const count = (threadState: ThreadState): number => threads.filter(thread => thread.threadState === threadState).length;
   const toThreadItem = (label: Label, threadState: ThreadState, status: MetricGauge['status']): MetricItem => ({
@@ -246,7 +335,7 @@ const toThreadsBlock = (threads: Thread[]): MetricsBlock => {
       toThreadItem(<%- label('Blocked', 'metrics.jvm.threads.blocked') %>, ThreadState.Blocked, 'danger'),
       { label: { text: 'Total' }, value: formatNumber(threads.length) },
     ],
-    threadDump: true,
+    details: toThreadDetails(threads),
   };
 };
 
@@ -451,8 +540,9 @@ const toDatasourceSection = ({ active, min, max, idle, acquire, creation, usage 
 
 const isNotEmpty = <T extends object>(value: T | undefined): value is T => Object.keys(value ?? {}).length > 0;
 
-/** Converts the responses of the metrics and thread dump endpoints to the sections of the metrics page. */
-export const toMetrics = (metrics: MetricsResponse, threads: Thread[]): MetricsSection[] => {
+/** Converts the responses of the `metricsEndpoints` to the sections of the metrics page. */
+export const toMetrics = (responses: unknown[]): MetricsSection[] => {
+  const [metrics, { threads }] = responses as [MetricsResponse, ThreadDump];
   const { garbageCollector, services, cache, databases } = metrics;
   const requests = metrics['http.server.requests'];
   return [

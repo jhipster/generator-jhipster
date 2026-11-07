@@ -27,7 +27,7 @@
             </b-progress>
           </template>
 
-          <button v-if="block.threadDump" class="hand btn btn-primary btn-sm mt-2" @click="openModal()">
+          <button v-if="block.details" class="hand btn btn-primary btn-sm mt-2" @click="openModal(block.details)">
             <span>Expand</span>
           </button>
         </div>
@@ -58,9 +58,9 @@
 
     <b-modal ref="metricsModal" size="lg" ok-only>
       <template #title>
-        <h4 class="modal-title" id="showMetricsLabel">{{ t$('metrics.jvm.threads.dump.title') }}</h4>
+        <h4 class="modal-title" id="showMetricsLabel">{{ details ? labelText(details.label) : '' }}</h4>
       </template>
-      <MetricsModal :thread-dump="threads"></MetricsModal>
+      <MetricsModal v-if="details" :details="details"></MetricsModal>
     </b-modal>
   </div>
 </template>
@@ -72,7 +72,7 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { type Label } from '@/shared/jhipster/label';
-import { type MetricsSection, type Thread, toMetrics } from '@/shared/jhipster/metrics';
+import { type MetricDetails, type MetricsSection } from '@/shared/jhipster/metrics';
 
 import MetricsModal from './metrics-modal.vue';
 import MetricsService, { metricsServiceKey } from './metrics.service';
@@ -91,17 +91,17 @@ const labelText = ({ text }: Label): string => text;
 <%_ } _%>
 
 const sections = ref<MetricsSection[]>([]);
-const threads = ref<Thread[]>([]);
+const details = ref<MetricDetails>();
 const updatingMetrics = ref(true);
 
 const metricsModal = ref<{ show: () => void } | null>(null);
 
 const refresh = (): Promise<void> => {
   updatingMetrics.value = true;
-  return Promise.all([metricsService.getMetrics(), metricsService.retrieveThreadDump()])
-    .then(([metricsResponse, threadDumpResponse]) => {
-      threads.value = threadDumpResponse.data.threads;
-      sections.value = toMetrics(metricsResponse.data, threads.value);
+  return metricsService
+    .getMetrics()
+    .then(res => {
+      sections.value = res;
     })
     .catch(() => undefined)
     .finally(() => {
@@ -109,7 +109,8 @@ const refresh = (): Promise<void> => {
     });
 };
 
-const openModal = (): void => {
+const openModal = (blockDetails: MetricDetails): void => {
+  details.value = blockDetails;
   metricsModal.value?.show();
 };
 

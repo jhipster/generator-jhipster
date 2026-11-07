@@ -20,16 +20,19 @@ import { describe, expect, it, vi } from 'vitest';
 
 import axios from 'axios';
 
+import { healthResponse } from '@/shared/jhipster/admin.samples';
+import { healthEndpoint, toHealthChecks } from '@/shared/jhipster/health';
+
 import HealthService from './health.service';
 
 describe('Health Service', () => {
   it('should get the checks of the health endpoint', async () => {
-    const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: { status: 'UP', components: { db: { status: 'UP' } } } });
+    const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: healthResponse });
 
-    await expect(new HealthService().checkHealth()).resolves.toEqual([expect.objectContaining({ id: 'db', healthy: true })]);
+    await expect(new HealthService().checkHealth()).resolves.toEqual(toHealthChecks(healthResponse));
 
     const { validateStatus } = get.mock.calls[0][1]!;
-    expect(get.mock.calls[0][0]).toBe('management/health');
+    expect(get.mock.calls[0][0]).toBe(healthEndpoint);
     expect([200, 503, 500].map(status => validateStatus!(status))).toEqual([true, true, false]);
   });
 });

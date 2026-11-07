@@ -20,15 +20,15 @@ import { type InjectionKey } from 'vue';
 
 import axios, { type AxiosPromise } from 'axios';
 
-import { type LoggersResponse } from '@/shared/jhipster/logs';
+import { type LoggersResponse, loggersEndpoint } from '@/shared/jhipster/logs';
 
 export default class LogsService {
   changeLevel(name: string, configuredLevel: string): AxiosPromise<void> {
-    return axios.post(`management/loggers/${name}`, { configuredLevel });
+    return axios.post(`${loggersEndpoint}/${name}`, { configuredLevel });
   }
 
   findAll(): AxiosPromise<LoggersResponse> {
-    return axios.get('management/loggers');
+    return axios.get(loggersEndpoint);
   }
 }
 

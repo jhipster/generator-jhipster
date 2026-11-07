@@ -20,12 +20,12 @@ import { type InjectionKey } from 'vue';
 
 import axios from 'axios';
 
-import { type HealthCheck, type HealthResponse, toHealthChecks } from '@/shared/jhipster/health';
+import { type HealthCheck, type HealthResponse, healthEndpoint, toHealthChecks } from '@/shared/jhipster/health';
 
 export default class HealthService {
   async checkHealth(): Promise<HealthCheck[]> {
     // An unhealthy application answers with 503 and its health.
-    const res = await axios.get<HealthResponse>('management/health', { validateStatus: status => status === 200 || status === 503 });
+    const res = await axios.get<HealthResponse>(healthEndpoint, { validateStatus: status => status === 200 || status === 503 });
     return toHealthChecks(res.data);
   }
 }

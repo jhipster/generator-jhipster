@@ -20,12 +20,12 @@ import { type InjectionKey } from 'vue';
 
 import axios from 'axios';
 
-import { type ConfigProps, type ConfigurationSection, type Env, toConfiguration } from '@/shared/jhipster/configuration';
+import { type ConfigurationSection, configurationEndpoints, toConfiguration } from '@/shared/jhipster/configuration';
 
 export default class ConfigurationService {
   async loadConfiguration(): Promise<ConfigurationSection[]> {
-    const [configProps, env] = await Promise.all([axios.get<ConfigProps>('management/configprops'), axios.get<Env>('management/env')]);
-    return toConfiguration(configProps.data, env.data);
+    const responses = await Promise.all(configurationEndpoints.map(endpoint => axios.get(endpoint)));
+    return toConfiguration(responses.map(({ data }) => data));
   }
 }
 
