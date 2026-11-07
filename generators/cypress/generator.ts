@@ -20,7 +20,6 @@
 import { mutateData, stringHashCode } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
-import { generateTestEntity } from '../client/support/index.ts';
 import type { Source as ClientSource } from '../client/types.ts';
 import type { Source as JavaSource } from '../java/types.d.ts';
 
@@ -30,7 +29,6 @@ import type {
   Config as CypressConfig,
   Entity as CypressEntity,
   Features as CypressFeatures,
-  Field as CypressField,
   Options as CypressOptions,
 } from './types.ts';
 
@@ -361,9 +359,5 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
-  }
-
-  generateTestEntity(fields: CypressField[]) {
-    return generateTestEntity(fields);
   }
 }
