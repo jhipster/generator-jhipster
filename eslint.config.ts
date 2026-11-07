@@ -113,8 +113,6 @@ export default defineConfig(
   },
   {
     files: ['**/*.spec.ts'],
-    // The internal JDL parser is left as it is: it is to be replaced by the jdl-parser package.
-    ignores: ['lib/jdl/core/parsing/**'],
     plugins: { jhipster: jhipsterPlugin },
     rules: {
       'jhipster/snapshot-test-name': 'error',
