@@ -1351,6 +1351,12 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/modules/administration/logs/logs.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/metrics/metrics-details-modal.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/metrics/metrics-details-modal.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/metrics/metrics.tsx": {
     "stateCleared": "modified",
   },
@@ -3389,6 +3395,12 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/modules/administration/logs/logs.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/metrics/metrics-details-modal.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/metrics/metrics-details-modal.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/metrics/metrics.tsx": {
     "stateCleared": "modified",
   },
@@ -4434,6 +4446,12 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/logs/logs.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/metrics/metrics-details-modal.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/metrics/metrics-details-modal.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/metrics/metrics.tsx": {

@@ -21,12 +21,14 @@ import axios from 'axios';
 
 import { AppThunk } from 'app/config/store';
 <%_ if (withAdminUi) { _%>
-import { type ConfigProps, type Env, toConfiguration } from 'app/shared/jhipster/configuration';
+import { configurationEndpoints, toConfiguration } from 'app/shared/jhipster/configuration';
 import { type ConfigurationSection } from 'app/shared/jhipster/configuration.model';
-import { type HealthResponse, toHealthChecks } from 'app/shared/jhipster/health';
+import { healthEndpoint, toHealthChecks } from 'app/shared/jhipster/health';
 import { type HealthCheck } from 'app/shared/jhipster/health.model';
-import { type LoggersResponse, toLevelChange, toLogs } from 'app/shared/jhipster/logs';
+import { loggersEndpoint, toLevelChange, toLogs } from 'app/shared/jhipster/logs';
 import { type Level, type Log } from 'app/shared/jhipster/logs.model';
+import { metricsEndpoints, toMetrics } from 'app/shared/jhipster/metrics';
+import { type MetricsSection } from 'app/shared/jhipster/metrics.model';
 <%_ } _%>
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
@@ -43,8 +45,7 @@ const initialState = {
     loggers: [] as Log[],
   },
   health: [] as HealthCheck[],
-  metrics: {} as any,
-  threadDump: [],
+  metrics: [] as MetricsSection[],
   configuration: [] as ConfigurationSection[],
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
@@ -68,25 +69,24 @@ export const getGatewayRoutes = createAsyncThunk('administration/fetch_gateway_r
 export const getSystemHealth = createAsyncThunk(
   'administration/fetch_health',
   // An unhealthy application answers with 503 and its health.
-  async () => axios.get<HealthResponse>('management/health', { validateStatus: status => status === 200 || status === 503 }),
+  async () => axios.get<unknown>(healthEndpoint, { validateStatus: status => status === 200 || status === 503 }),
   {
     serializeError: serializeAxiosError,
   },
 );
 
-export const getSystemMetrics = createAsyncThunk('administration/fetch_metrics', async () => axios.get<any>('management/jhimetrics'), {
-  serializeError: serializeAxiosError,
-});
-
-export const getSystemThreadDump = createAsyncThunk(
-  'administration/fetch_thread_dump',
-  async () => axios.get<any>('management/threaddump'),
+export const getSystemMetrics = createAsyncThunk(
+  'administration/fetch_metrics',
+  async () => {
+    const responses = await Promise.all(metricsEndpoints.map(endpoint => axios.get(endpoint)));
+    return toMetrics(responses.map(({ data }) => data));
+  },
   {
     serializeError: serializeAxiosError,
   },
 );
 
-export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<unknown>('management/loggers'), {
+export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<unknown>(loggersEndpoint), {
   serializeError: serializeAxiosError,
 });
 
@@ -109,8 +109,8 @@ export const changeLogLevel: (name: string, level: Level) => AppThunk = (name, l
 export const getConfiguration = createAsyncThunk(
   'administration/fetch_configuration',
   async () => {
-    const [configProps, env] = await Promise.all([axios.get<ConfigProps>('management/configprops'), axios.get<Env>('management/env')]);
-    return toConfiguration(configProps.data, env.data);
+    const responses = await Promise.all(configurationEndpoints.map(endpoint => axios.get(endpoint)));
+    return toConfiguration(responses.map(({ data }) => data));
   },
   {
     serializeError: serializeAxiosError,
@@ -152,11 +152,7 @@ export const AdministrationSlice = createSlice({
       })
       .addCase(getSystemMetrics.fulfilled, (state, action) => {
         state.loading = false;
-        state.metrics = action.payload.data;
-      })
-      .addCase(getSystemThreadDump.fulfilled, (state, action) => {
-        state.loading = false;
-        state.threadDump = action.payload.data;
+        state.metrics = action.payload;
       })
       .addCase(getLoggers.fulfilled, (state, action) => {
         state.loading = false;
@@ -177,7 +173,6 @@ export const AdministrationSlice = createSlice({
   <%_ if (withAdminUi) { _%>
           getSystemHealth,
           getSystemMetrics,
-          getSystemThreadDump,
           getLoggers,
           getConfiguration
   <%_ } _%>
@@ -195,7 +190,6 @@ export const AdministrationSlice = createSlice({
   <%_ if (withAdminUi) { _%>
           getSystemHealth,
           getSystemMetrics,
-          getSystemThreadDump,
           getLoggers,
           getConfiguration
   <%_ } _%>

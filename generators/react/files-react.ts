@@ -170,6 +170,7 @@ export const files = asWriteFilesSection({
         'modules/administration/health/health.tsx',
         'modules/administration/health/health-modal.tsx',
         'modules/administration/logs/logs.tsx',
+        'modules/administration/metrics/metrics-details-modal.tsx',
         'modules/administration/metrics/metrics.tsx',
       ],
     },
@@ -270,6 +271,11 @@ export const files = asWriteFilesSection({
         'shared/layout/menus/account.spec.tsx',
         'modules/administration/administration.reducer.spec.ts',
       ],
+    },
+    {
+      condition: generator => generator.withAdminUi,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['modules/administration/metrics/metrics-details-modal.spec.tsx'],
     },
     {
       condition: generator => generator.generateUserManagement,

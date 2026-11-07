@@ -16,26 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Col, ProgressBar, Row, Table } from 'react-bootstrap';
-import { ThreadsModal, Translate<%- enableTranslation ? ', translate' : '' %> } from 'react-jhipster';
+import { Translate } from 'react-jhipster';
 
 import { faSync } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { type Label } from 'app/shared/jhipster/label';
-import { type MetricGauge, toMetrics } from 'app/shared/jhipster/metrics';
-import { getSystemMetrics, getSystemThreadDump } from '../administration.reducer';
-
-<%_ if (enableTranslation) { _%>
-const labelText = ({ text, translationKey }: Label): string => {
-  const translated: string | undefined = translationKey && translate(translationKey);
-  return !translated || translated.startsWith('translation-not-found') ? text : translated;
-};
-<%_ } else { _%>
-const labelText = ({ text }: Label): string => text;
-<%_ } _%>
+import { type MetricDetails, type MetricGauge } from 'app/shared/jhipster/metrics';
+import { getSystemMetrics } from '../administration.reducer';
+import MetricsDetailsModal, { labelText } from './metrics-details-modal';
 
 const Gauge = ({ gauge }: { gauge: MetricGauge }) => (
   <ProgressBar animated={false} striped now={gauge.percent} label={gauge.text} variant={gauge.status} />
@@ -43,25 +34,17 @@ const Gauge = ({ gauge }: { gauge: MetricGauge }) => (
 
 export const MetricsPage = () => {
   const dispatch = useAppDispatch();
-  const metrics = useAppSelector(state => state.administration.metrics);
+  const sections = useAppSelector(state => state.administration.metrics);
   const isFetching = useAppSelector(state => state.administration.loading);
-  const threadDump = useAppSelector(state => state.administration.threadDump);
-  const [showThreadDump, setShowThreadDump] = useState(false);
-
-  const sections = useMemo(
-    () => (metrics?.jvm && threadDump?.threads ? toMetrics(metrics, threadDump.threads) : []),
-    [metrics, threadDump],
-  );
+  const [details, setDetails] = useState<MetricDetails>();
 
   useEffect(() => {
     dispatch(getSystemMetrics());
-    dispatch(getSystemThreadDump());
   }, []);
 
   const getMetrics = () => {
     if (!isFetching) {
       dispatch(getSystemMetrics());
-      dispatch(getSystemThreadDump());
     }
   };
 
@@ -107,8 +90,8 @@ export const MetricsPage = () => {
                     </div>
                   ))}
 
-                  {block.threadDump && (
-                    <Button className="hand mt-2" size="sm" variant="primary" onClick={() => setShowThreadDump(true)}>
+                  {block.details && (
+                    <Button className="hand mt-2" size="sm" variant="primary" onClick={() => setDetails(block.details)}>
                       <span>Expand</span>
                     </Button>
                   )}
@@ -144,7 +127,7 @@ export const MetricsPage = () => {
         </div>
       ))}
 
-      <ThreadsModal showModal={showThreadDump} handleClose={() => setShowThreadDump(false)} threadDump={threadDump} />
+      {details && <MetricsDetailsModal details={details} handleClose={() => setDetails(undefined)} />}
     </div>
   );
 };
