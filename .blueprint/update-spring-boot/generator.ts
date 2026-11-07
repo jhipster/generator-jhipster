@@ -45,7 +45,7 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
         if (this.version.endsWith('-SNAPSHOT')) {
           this.repository = 'https://repo.spring.io/snapshot/';
         }
-        const pomUrl = `${this.repository}org/springframework/boot/spring-boot-dependencies/${this.version}/spring-boot-dependencies-${this.version}.pom`;
+        const pomUrl = `${this.repository.replace(/\/+$/, '')}/org/springframework/boot/spring-boot-dependencies/${this.version}/spring-boot-dependencies-${this.version}.pom`;
         const response = await fetch(pomUrl);
 
         if (!response.ok) {
