@@ -1,0 +1,174 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup } from '@angular/forms';
+
+import dayjs from 'dayjs/esm';
+import duration from 'dayjs/esm/plugin/duration';
+import relativeTime from 'dayjs/esm/plugin/relativeTime';
+
+<%_ if (enableTranslation) { _%>
+import { missingTranslationHandler } from 'app/config/translation.config';
+<%_ } _%>
+import { createRequestOption } from 'app/core/request/request-util';
+import { DataUtils } from 'app/core/util/data-util.service';
+
+import DurationPipe from './date/duration.pipe';
+import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from './jhipster/constants';
+import { byteSize, openFile, toOpenableContentType } from './jhipster/data-utils';
+import { getMessageFromHeaders } from './jhipster/headers';
+<%_ if (enableTranslation) { _%>
+import FindLanguageFromKeyPipe from './language/find-language-from-key.pipe';
+<%_ } _%>
+import { SortService } from './sort/sort.service';
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
+
+describe('Shared utilities', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  describe('files', () => {
+    it('should tell the size of the data', () => {
+      expect(byteSize('aGlwc3Rlcg==')).toBe('7 bytes');
+      expect(byteSize('aGlwc3Rlcnk=')).toBe('8 bytes');
+      expect(byteSize('aGlwc3Rlcnl5')).toBe('9 bytes');
+    });
+
+    it('should open only the content that is safe', () => {
+      expect(toOpenableContentType('image/png; charset=utf-8', 'image')).toBe('image/png');
+      expect(toOpenableContentType('image/svg+xml', 'image')).toBe('application/octet-stream');
+      expect(toOpenableContentType('text/plain', 'text')).toBe('text/plain');
+      expect(toOpenableContentType('text/html', 'text')).toBe('application/octet-stream');
+      expect(toOpenableContentType(undefined)).toBe('application/octet-stream');
+    });
+
+    it('should release the file when the window opened loads', () => {
+      const opened: { onload?: () => void } = {};
+      vi.spyOn(globalThis, 'open').mockReturnValue(opened as unknown as Window);
+      const revokeObjectURL = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => undefined);
+
+      openFile('aGlwc3Rlcg==', 'text/plain', 'text');
+      opened.onload!();
+
+      expect(revokeObjectURL).toHaveBeenCalled();
+    });
+
+    describe('loadFileToForm', () => {
+      const form = new FormGroup({ file: new FormControl(''), fileContentType: new FormControl('') });
+      const eventOf = (files?: File[]): Event => ({ target: { files } }) as unknown as Event;
+      let dataUtils: DataUtils;
+
+      beforeEach(() => {
+        dataUtils = TestBed.inject(DataUtils);
+      });
+
+      it('should refuse an event without a file', () => {
+        const error = vi.fn();
+
+        dataUtils.loadFileToForm(eventOf(), form, 'file', false).subscribe({ error });
+
+        expect(error).toHaveBeenCalledWith(expect.objectContaining({ key: 'could.not.extract' }));
+      });
+
+      it('should refuse a file that is not an image', () => {
+        const error = vi.fn();
+
+        dataUtils.loadFileToForm(eventOf([new File(['a'], 'a.txt', { type: 'text/plain' })]), form, 'file', true).subscribe({ error });
+
+        expect(error).toHaveBeenCalledWith(expect.objectContaining({ key: 'not.image' }));
+      });
+
+      it('should load the file into the form', async () => {
+        vi.useFakeTimers();
+        dataUtils.loadFileToForm(eventOf([new File(['a'], 'a.txt', { type: 'text/plain' })]), form, 'file', false).subscribe();
+
+        await vi.runAllTimersAsync();
+
+        expect(form.getRawValue()).toEqual({ file: 'YQ==', fileContentType: 'text/plain' });
+      });
+    });
+  });
+
+  describe('createRequestOption', () => {
+    it('should skip what has no value', () => {
+      const options = createRequestOption({ a: 1, b: undefined, c: null, d: '', e: ['x', ''] });
+
+      expect(options.keys()).toEqual(['a', 'e']);
+      expect(createRequestOption().keys()).toEqual([]);
+    });
+  });
+
+  describe('getMessageFromHeaders', () => {
+    it('should tell a key from a message', () => {
+      const message = getMessageFromHeaders({
+        [MESSAGE_ALERT_HEADER_NAME]: 'app.key',
+        [MESSAGE_ERROR_HEADER_NAME]: 'A message',
+        [MESSAGE_PARAM_HEADER_NAME]: 'a+b',
+      });
+
+      expect(message).toEqual(expect.objectContaining({ alert: 'app.key', errorMessage: 'A message', param: 'a b' }));
+    });
+
+    it('should accept the first value of a list', () => {
+      expect(getMessageFromHeaders({ [MESSAGE_ALERT_HEADER_NAME]: ['app.key'] }).alert).toBe('app.key');
+    });
+
+    it('should refuse headers that are not a single string', () => {
+      expect(() => getMessageFromHeaders({ [MESSAGE_ALERT_HEADER_NAME]: ['a', 'b'] })).toThrow('Multiple header values found');
+      expect(() => getMessageFromHeaders({ [MESSAGE_ALERT_HEADER_NAME]: 1 })).toThrow('Header value is not a string');
+    });
+  });
+
+  describe('DurationPipe', () => {
+    it('should format a duration', () => {
+      const pipe = new DurationPipe();
+
+      expect(pipe.transform('PT1H')).not.toBe('');
+      expect(pipe.transform(undefined)).toBe('');
+    });
+  });
+
+  describe('SortService', () => {
+    it('should use the fallback when the values are equal', () => {
+      const compare = TestBed.inject(SortService).startSort({ predicate: 'a', order: 'desc' }, { predicate: 'b', order: 'asc' });
+
+      expect(compare({ a: 1, b: 1 }, { a: 1, b: 2 })).toBeLessThan(0);
+    });
+  });
+<%_ if (enableTranslation) { _%>
+
+  describe('translation', () => {
+    it('should tell a missing translation', () => {
+      expect(missingTranslationHandler().handle({ key: 'foo' } as never)).toBe('translation-not-found[foo]');
+    });
+
+    it('should find a language', () => {
+      TestBed.runInInjectionContext(() => {
+        const pipe = new FindLanguageFromKeyPipe();
+
+        expect(pipe.transform('en')).toBe('English');
+      });
+    });
+  });
+<%_ } _%>
+});
