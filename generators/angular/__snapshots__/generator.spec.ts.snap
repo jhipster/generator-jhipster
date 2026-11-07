@@ -3249,6 +3249,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/admin/admin.routes.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
@@ -3256,6 +3259,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/docs/docs.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/admin/docs/docs.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/docs/docs.ts": {
@@ -4354,13 +4360,13 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/admin/admin.routes.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/configuration/configuration.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/configuration/configuration.model.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/configuration/configuration.service.spec.ts": {
@@ -4381,6 +4387,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/admin/docs/docs.scss": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/admin/docs/docs.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/admin/docs/docs.ts": {
     "stateCleared": "modified",
   },
@@ -4397,9 +4406,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/health/health.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/health/health.model.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/health/health.service.spec.ts": {
@@ -4438,67 +4444,16 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/admin/logs/logs.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/metrics/blocks/jvm-memory/jvm-memory.html": {
+  "clientRoot/src/app/admin/metrics/metrics-details-modal.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/metrics/blocks/jvm-memory/jvm-memory.ts": {
+  "clientRoot/src/app/admin/metrics/metrics-details-modal.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/metrics/blocks/jvm-threads/jvm-threads.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/jvm-threads/jvm-threads.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-cache/metrics-cache.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-cache/metrics-cache.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-request/metrics-request.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-request/metrics-request.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-system/metrics-system.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
+  "clientRoot/src/app/admin/metrics/metrics-details-modal.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/metrics/metrics.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/metrics/metrics.model.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/metrics/metrics.service.spec.ts": {
@@ -5129,6 +5084,12 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/language/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/language/label.pipe.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/language/label.pipe.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/language/translate.directive.spec.ts": {
@@ -6874,9 +6835,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/admin/configuration/configuration.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/configuration/configuration.model.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/configuration/configuration.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -6890,9 +6848,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/health/health.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/health/health.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/health/health.service.spec.ts": {
@@ -6931,67 +6886,16 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/admin/logs/logs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.html": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.ts": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/metrics/metrics.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/metrics.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/metrics/metrics.service.spec.ts": {
@@ -7553,6 +7457,12 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/label.pipe.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/label.pipe.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.spec.ts": {
@@ -8281,13 +8191,13 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/account/settings/settings.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/admin.routes.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/configuration/configuration.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/configuration/configuration.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/configuration/configuration.service.spec.ts": {
@@ -8308,13 +8218,13 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/admin/docs/docs.scss": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/docs/docs.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/docs/docs.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/health/health.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/health/health.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/health/health.service.spec.ts": {
@@ -8353,67 +8263,16 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/admin/logs/logs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.html": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.ts": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/metrics/metrics.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/metrics.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/metrics/metrics.service.spec.ts": {
@@ -9127,6 +8986,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/language/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/language/label.pipe.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/label.pipe.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/translate.directive.spec.ts": {
     "stateCleared": "modified",
   },
@@ -9730,6 +9595,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/admin.routes.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
@@ -9737,6 +9605,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.scss": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.ts": {
@@ -10812,6 +10683,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/admin.routes.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
@@ -10819,6 +10693,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.scss": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.ts": {

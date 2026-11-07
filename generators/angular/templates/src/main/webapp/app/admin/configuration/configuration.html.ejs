@@ -16,71 +16,53 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-@if (allBeans()) {
+<%_ const labelText = label => enableTranslation ? `${label}.translationKey ? (${label}.translationKey | translate) : ${label}.text` : `${label}.text`; _%>
+@if (allSections()) {
   <div>
     <h2 id="configuration-page-heading" data-cy="configurationPageHeading">__jhiTranslateTag__('configuration.title')</h2>
 
     <label for="configuration-filter">__jhiTranslateTag__('configuration.filter')</label>
     <input
-      #beansFilterInput
+      #filterInput
       id="configuration-filter"
       type="text"
-      [value]="beansFilter()"
-      (input)="beansFilter.set(beansFilterInput.value)"
+      [value]="filter()"
+      (input)="filter.set(filterInput.value)"
       class="form-control"
     />
 
-    <h3 id="spring-configuration">Spring configuration</h3>
-
-    <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="spring-configuration">
-      <thead>
-        <tr <%- jhiPrefix %>Sort [(sortState)]="sortState">
-          <th <%- jhiPrefix %>SortBy="prefix" scope="col" class="w-40">
-            <span>__jhiTranslateTag__('configuration.table.prefix')</span> <fa-icon icon="sort" />
-          </th>
-          <th scope="col" class="w-60"><span>__jhiTranslateTag__('configuration.table.properties')</span></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (bean of beans(); track bean.prefix) {
-          <tr>
-            <td class="break">
-              <span>{{ bean.prefix }}</span>
-            </td>
-            <td>
-              @for (property of bean.properties | keyvalue; track property.key) {
-                <div class="row">
-                  <div class="col-md-4 break">{{ property.key }}</div>
-                  <div class="col-md-8">
-                    <span class="float-end bg-secondary break">{{ property.value | json }}</span>
-                  </div>
-                </div>
-              }
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-
-    @for (propertySource of propertySources(); track i; let i = $index) {
+    @for (section of sections(); track section.label.text; let i = $index) {
       <div>
-        <h4 [id]="'property-source-' + i">
-          <span>{{ propertySource.name }}</span>
-        </h4>
+        <h3 [id]="'configuration-section-' + i">{{ <%- labelText('section.label') %> }}</h3>
 
-        <table class="table table-sm table-striped table-bordered table-responsive d-table" [aria-describedby]="'property-source-' + i">
+        <table class="table table-striped table-bordered table-responsive d-table" [attr.aria-describedby]="'configuration-section-' + i">
           <thead>
-            <tr>
-              <th scope="col" class="w-40">Property</th>
-              <th scope="col" class="w-60">Value</th>
+            <tr <%- jhiPrefix %>Sort [sortState]="sortState()" (sortStateChange)="sortState.set($event)">
+              <th <%- jhiPrefix %>SortBy="key" scope="col" class="w-40">
+                <span>{{ <%- labelText('section.columns[0]') %> }}</span> <fa-icon icon="sort" />
+              </th>
+              <th scope="col" class="w-60"><span>{{ <%- labelText('section.columns[1]') %> }}</span></th>
             </tr>
           </thead>
           <tbody>
-            @for (property of propertySource.properties | keyvalue; track property.key) {
+            @for (row of section.rows; track row.key) {
               <tr>
-                <td class="break">{{ property.key }}</td>
                 <td class="break">
-                  <span class="float-end bg-secondary break">{{ property.value.value }}</span>
+                  <span>{{ row.key }}</span>
+                </td>
+                <td class="break">
+                  @if (row.properties) {
+                    @for (property of row.properties; track property.key) {
+                      <div class="row">
+                        <div class="col-md-4 break">{{ property.key }}</div>
+                        <div class="col-md-8">
+                          <span class="float-end bg-secondary break">{{ property.value }}</span>
+                        </div>
+                      </div>
+                    }
+                  } @else {
+                    <span class="float-end bg-secondary break">{{ row.value }}</span>
+                  }
                 </td>
               </tr>
             }

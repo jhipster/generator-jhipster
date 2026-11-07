@@ -20,6 +20,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
+<%_ if (enableTranslation) { _%>
+import { provideTranslateService } from '@ngx-translate/core';
+<%_ } _%>
 
 import HealthModal from './health-modal';
 
@@ -30,7 +33,7 @@ describe('HealthModal', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [NgbActiveModal],
+      providers: [NgbActiveModal<%- enableTranslation ? ', provideTranslateService()' : '' %>],
     });
   });
 
@@ -40,75 +43,53 @@ describe('HealthModal', () => {
     mockActiveModal = TestBed.inject(NgbActiveModal);
   });
 
-  describe('readableValue', () => {
-    it('should return stringify value', () => {
+  describe('view', () => {
+    it('should show the details and the error of an indicator', () => {
       // GIVEN
-      comp.health = undefined;
-
-      // WHEN
-      const result = comp.readableValue({ name: 'jhipster' });
-
-      // THEN
-      expect(result).toEqual('{"name":"jhipster"}');
-    });
-
-    it('should return string value', () => {
-      // GIVEN
-      comp.health = undefined;
-
-      // WHEN
-      const result = comp.readableValue('jhipster');
-
-      // THEN
-      expect(result).toEqual('jhipster');
-    });
-
-    it('should return storage space in a human-readable unit (GB)', () => {
-      // GIVEN
-      comp.health = {
-        key: 'diskSpace',
-        value: {
-          status: 'UP',
-        },
+      comp.check = {
+        id: 'db.primary',
+        label: { text: 'db' },
+        sublabel: 'primary',
+        status: { text: 'DOWN' },
+        healthy: false,
+        error: 'failed',
+        details: [{ key: 'database', value: 'H2' }],
       };
 
       // WHEN
-      const result = comp.readableValue(1073741825);
+      fixture.detectChanges();
 
       // THEN
-      expect(result).toEqual('1.00 GB');
+      expect(fixture.nativeElement.textContent).toContain('H2');
+      expect(fixture.nativeElement.textContent).toContain('failed');
+      expect(fixture.nativeElement.textContent).toContain(' - primary');
+    });
+  });
+
+  describe('view without a check', () => {
+    it('should render a check without sublabel', () => {
+      comp.check = { id: 'ping', label: { text: 'ping' }, status: { text: 'UP' }, healthy: true };
+      fixture.detectChanges();
+
+      expect((fixture.nativeElement as HTMLElement).querySelector('h4')?.textContent).not.toContain(' - ');
     });
 
-    it('should return storage space in a human-readable unit (MB)', () => {
-      // GIVEN
-      comp.health = {
-        key: 'diskSpace',
-        value: {
-          status: 'UP',
-        },
-      };
+    it('should render no details', () => {
+      fixture.detectChanges();
 
-      // WHEN
-      const result = comp.readableValue(1073741824);
-
-      // THEN
-      expect(result).toEqual('1024.00 MB');
+      expect((fixture.nativeElement as HTMLElement).querySelector('table')).toBeNull();
+      expect((fixture.nativeElement as HTMLElement).querySelector('pre')).toBeNull();
     });
 
-    it('should return number value as string when health key is not diskSpace', () => {
-      // GIVEN
-      comp.health = {
-        key: 'mail',
-        value: {
-          status: 'UP',
-        },
-      };
+    it('should dismiss from the buttons', () => {
+      const spy = vi.spyOn(mockActiveModal, 'dismiss');
+      fixture.detectChanges();
 
-      // WHEN
-      const result = comp.readableValue(1234);
+      for (const button of (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('button')) {
+        button.click();
+      }
 
-      // THEN
-      expect(result).toEqual('1234');
+      expect(spy).toHaveBeenCalledTimes(2);
     });
   });
 

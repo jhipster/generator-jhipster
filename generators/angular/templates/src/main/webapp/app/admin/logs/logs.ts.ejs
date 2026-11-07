@@ -28,7 +28,6 @@ import {
 } from 'rxjs';
 
 import { Level, Log } from 'app/shared/jhipster/logs.model';
-import { toLogs } from 'app/shared/jhipster/logs';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
@@ -110,7 +109,7 @@ export default class Logs implements OnInit {
         }),
       )
       .subscribe({
-        next: response => this.loggers.set(toLogs(response)),
+        next: loggers => this.loggers.set(loggers),
         error: () => this.loggers.set([]),
       });
   }
