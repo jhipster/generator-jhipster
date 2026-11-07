@@ -23,13 +23,25 @@ import { defineComponent, h } from 'vue';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import { loggersResponse } from '@/shared/jhipster/admin.samples';
-import { loggersEndpoint, toLogs } from '@/shared/jhipster/logs';
+import { loggersEndpoint, toLevelChange, toLogs } from '@/shared/jhipster/logs';
+import { type Log } from '@/shared/jhipster/logs.model';
 import JhiSortHeader from '@/shared/sort/jhi-sort-header.vue';
 
 import Logs from './logs.vue';
 
 type LogsComponentType = InstanceType<typeof Logs>;
+
+vi.mock('@/shared/jhipster/logs', () => ({
+  loggersEndpoint: 'loggers',
+  toLogs: vi.fn(),
+  toLevelChange: vi.fn((name: string, level: string) => ({ url: `loggers/${name}`, body: { level } })),
+}));
+
+const loggersResponse = { response: 'of the backend' };
+const loggers: Log[] = [
+  { name: 'ROOT', level: 'INFO' },
+  { name: 'main', level: 'WARN' },
+];
 
 const axiosStub = {
   get: vi.spyOn(axios, 'get'),
@@ -40,6 +52,7 @@ describe('Logs Component', () => {
   let logs: LogsComponentType;
 
   beforeEach(() => {
+    vi.mocked(toLogs).mockReturnValue(loggers);
     axiosStub.get.mockResolvedValue({});
     const wrapper = shallowMount(Logs, {
       global: {
@@ -79,7 +92,8 @@ describe('Logs Component', () => {
       await logs.$nextTick();
 
       // THEN
-      expect(axiosStub.post).toHaveBeenCalledWith(`${loggersEndpoint}/main`, { configuredLevel: 'ERROR' });
+      const { url, body } = toLevelChange('main', 'ERROR');
+      expect(axiosStub.post).toHaveBeenCalledWith(url, body);
       expect(axiosStub.get).toHaveBeenCalledWith(loggersEndpoint);
     });
   });
@@ -113,7 +127,8 @@ describe('Logs view', () => {
   it('should list the loggers and change their level', async () => {
     // GIVEN
     const levels = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF'];
-    const [logger, ...otherLoggers] = toLogs(loggersResponse);
+    const [logger, ...otherLoggers] = loggers;
+    vi.mocked(toLogs).mockReturnValue(loggers);
     vi.spyOn(axios, 'get').mockResolvedValue({ data: loggersResponse });
     const post = vi.spyOn(axios, 'post').mockResolvedValue({});
     const wrapper = shallowMount(Logs, {
@@ -135,12 +150,14 @@ describe('Logs view', () => {
     await flushPromises();
 
     // THEN
+    expect(toLogs).toHaveBeenCalledWith(loggersResponse);
     expect(post).toHaveBeenCalledTimes(levels.length * (otherLoggers.length + 1));
     expect(wrapper.vm.filteredLoggers).toEqual([logger]);
   });
 
   it('should use the default service', async () => {
     // GIVEN
+    vi.mocked(toLogs).mockReturnValue(loggers);
     const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: loggersResponse });
 
     // WHEN

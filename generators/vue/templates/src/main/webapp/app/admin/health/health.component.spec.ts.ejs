@@ -23,14 +23,18 @@ import { defineComponent, h } from 'vue';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import { healthResponse } from '@/shared/jhipster/admin.samples';
-import { type HealthCheck } from '@/shared/jhipster/health.model';
 import { healthEndpoint, toHealthChecks } from '@/shared/jhipster/health';
+import { type HealthCheck } from '@/shared/jhipster/health.model';
 
 import HealthService, { healthServiceKey } from './health.service';
 import Health from './health.vue';
 
 type HealthComponentType = InstanceType<typeof Health>;
+
+vi.mock('@/shared/jhipster/health', () => ({ healthEndpoint: 'health', toHealthChecks: vi.fn() }));
+
+const healthResponse = { response: 'of the backend' };
+const checks: HealthCheck[] = [{ id: 'db', label: { text: 'Database' }, status: { text: 'UP' }, healthy: true }];
 
 const axiosStub = {
   get: vi.spyOn(axios, 'get'),
@@ -40,6 +44,7 @@ describe('Health Component', () => {
   let health: HealthComponentType;
 
   beforeEach(() => {
+    vi.mocked(toHealthChecks).mockReturnValue(checks);
     axiosStub.get.mockResolvedValue({ data: healthResponse });
     const wrapper = shallowMount(Health, {
       global: {
@@ -93,7 +98,8 @@ describe('Health Component', () => {
       await vi.waitFor(() => expect(health.updatingHealth).toEqual(false));
 
       // THEN
-      expect(health.checks).toEqual(toHealthChecks(healthResponse));
+      expect(toHealthChecks).toHaveBeenCalledWith(healthResponse);
+      expect(health.checks).toEqual(checks);
     });
   });
 });
@@ -112,6 +118,7 @@ describe('Health view', () => {
   it('should list the checks of the response and show the details of a check', async () => {
     // GIVEN
     const check: HealthCheck = { id: 'check', label: { text: 'Check' }, status: { text: 'UP' }, healthy: true, details: [{ key: 'key', value: 'value' }] };
+    vi.mocked(toHealthChecks).mockReturnValue(checks);
     const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: healthResponse });
     get.mockClear();
     const wrapper = shallowMount(Health, {
@@ -129,7 +136,7 @@ describe('Health view', () => {
 
     // THEN
     expect(get).toHaveBeenCalledTimes(2);
-    expect(wrapper.vm.checks).toEqual(toHealthChecks(healthResponse));
+    expect(wrapper.vm.checks).toEqual(checks);
     expect(show).toHaveBeenCalledTimes(1);
     expect(wrapper.vm.currentCheck).toEqual(check);
     expect(wrapper.find('#showHealthLabel').exists()).toBe(true);

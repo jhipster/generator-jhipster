@@ -335,7 +335,7 @@ describe('Administration reducer tests', () => {
       expect(getLoggers.fulfilled.match(result)).toBe(true);
     });
     it('dispatches FETCH_LOGS_CHANGE_LEVEL_PENDING and FETCH_LOGS_CHANGE_LEVEL_FULFILLED actions', async () => {
-      const result = await setLoggers({ name: 'ROOT', configuredLevel: 'DEBUG' })(dispatch, getState, extra);
+      const result = await setLoggers({ name: 'ROOT', level: 'DEBUG' })(dispatch, getState, extra);
 
       expect(dispatch).toHaveBeenCalledWith(
         expect.objectContaining({

@@ -77,7 +77,7 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
-import { type Log } from '@/shared/jhipster/logs.model';
+import { type Level, type Log } from '@/shared/jhipster/logs.model';
 
 import LogsService, { logsServiceKey } from './logs.service';
 
@@ -105,7 +105,7 @@ const init = (): void => {
     loggers.value = found;
   });
 };
-const updateLevel = (name: string, level: string): void => {
+const updateLevel = (name: string, level: Level): void => {
   logsService.changeLevel(name, level).then(() => {
     init();
   });

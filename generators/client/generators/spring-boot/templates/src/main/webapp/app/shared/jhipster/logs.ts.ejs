@@ -33,6 +33,18 @@ export interface LoggersResponse {
 /** The endpoint of the logs page. */
 export const loggersEndpoint = 'management/loggers';
 
+/** A request to the backend, its url is relative to the one of the API. */
+export interface BackendRequest {
+  url: string;
+  body: unknown;
+}
+
+/** The request that changes the level of a logger. */
+export const toLevelChange = (name: string, level: Level): BackendRequest => ({
+  url: `${loggersEndpoint}/${name}`,
+  body: { configuredLevel: level },
+});
+
 /** Converts the response of the loggers endpoint to the rows of the logs page. */
 export const toLogs = (response: unknown): Log[] =>
   Object.entries((response as LoggersResponse).loggers).map(([name, { effectiveLevel }]) => ({ name, level: effectiveLevel }));

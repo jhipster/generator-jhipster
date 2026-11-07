@@ -23,8 +23,8 @@ import { defineComponent, h } from 'vue';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import { metricsResponses } from '@/shared/jhipster/admin.samples';
 import { metricsEndpoints, toMetrics } from '@/shared/jhipster/metrics';
+import { type MetricsSection } from '@/shared/jhipster/metrics.model';
 
 import MetricsService, { metricsServiceKey } from './metrics.service';
 import Metrics from './metrics.vue';
@@ -33,7 +33,33 @@ const axiosStub = {
   get: vi.spyOn(axios, 'get'),
 };
 
-const respond = (url?: string) => Promise.resolve({ data: metricsResponses[metricsEndpoints.indexOf(url!)] });
+vi.mock('@/shared/jhipster/metrics', () => ({ metricsEndpoints: ['metrics', 'threads'], toMetrics: vi.fn() }));
+
+// Each endpoint answers with its own name.
+const respond = (url?: string) => Promise.resolve({ data: url });
+
+const sections: MetricsSection[] = [
+  {
+    id: 'memory',
+    label: { text: 'Memory' },
+    blocks: [
+      {
+        label: { text: 'Heap' },
+        items: [{ label: { text: 'Used' }, value: '10 MB', gauge: { percent: 10, text: '10%', status: 'success' } }],
+        details: {
+          label: { text: 'Heap' },
+          showLines: { text: 'Show' },
+          hideLines: { text: 'Hide' },
+          columns: [{ text: 'Value' }],
+          filters: [],
+          items: [{ title: 'Item', value: 'value', status: 'info', lines: [], cells: ['cell'] }],
+        },
+      },
+    ],
+    tables: [{ columns: [{ label: { text: 'Pool' } }, { label: { text: 'Used' }, numeric: true }], rows: [[{ text: 'Eden' }, { text: '1' }]] }],
+  },
+  { id: 'empty', label: { text: 'Empty' }, blocks: [], tables: [] },
+];
 
 describe('Metrics Component', () => {
   const show = vi.fn();
@@ -55,6 +81,7 @@ describe('Metrics Component', () => {
     });
 
   beforeEach(() => {
+    vi.mocked(toMetrics).mockReturnValue(sections);
     axiosStub.get.mockImplementation(respond);
   });
 
@@ -67,7 +94,8 @@ describe('Metrics Component', () => {
     for (const endpoint of metricsEndpoints) {
       expect(axiosStub.get).toHaveBeenCalledWith(endpoint);
     }
-    expect(wrapper.vm.sections).toEqual(toMetrics(metricsResponses));
+    expect(toMetrics).toHaveBeenCalledWith(metricsEndpoints);
+    expect(wrapper.vm.sections).toEqual(sections);
     expect(wrapper.vm.updatingMetrics).toBe(false);
   });
 

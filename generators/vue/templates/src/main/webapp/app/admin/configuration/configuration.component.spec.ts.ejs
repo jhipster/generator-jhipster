@@ -21,13 +21,30 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import { configurationResponses } from '@/shared/jhipster/admin.samples';
 import { configurationEndpoints, toConfiguration } from '@/shared/jhipster/configuration';
+import { type ConfigurationSection } from '@/shared/jhipster/configuration.model';
 import JhiSortHeader from '@/shared/sort/jhi-sort-header.vue';
 
 import Configuration from './configuration.vue';
 
 type ConfigurationComponentType = InstanceType<typeof Configuration>;
+
+vi.mock('@/shared/jhipster/configuration', () => ({ configurationEndpoints: ['properties', 'environment'], toConfiguration: vi.fn() }));
+
+// Each endpoint answers with its own name.
+const respond = (url?: string) => Promise.resolve({ data: url });
+
+const sections: ConfigurationSection[] = [
+  {
+    label: { text: 'Properties' },
+    columns: [{ text: 'Prefix' }, { text: 'Properties' }],
+    rows: [
+      { key: 'server', properties: [{ key: 'port', value: '8080' }] },
+      { key: 'spring.application', properties: [{ key: 'name', value: 'app' }] },
+    ],
+  },
+  { label: { text: 'Environment' }, columns: [{ text: 'Property' }, { text: 'Value' }], rows: [{ key: 'user.timezone', value: 'UTC' }] },
+];
 
 const axiosStub = {
   get: vi.spyOn(axios, 'get'),
@@ -37,7 +54,8 @@ describe('Configuration Component', () => {
   let configuration: ConfigurationComponentType;
 
   beforeEach(() => {
-    axiosStub.get.mockImplementation((url?: string) => Promise.resolve({ data: configurationResponses[configurationEndpoints.indexOf(url!)] }));
+    vi.mocked(toConfiguration).mockReturnValue(sections);
+    axiosStub.get.mockImplementation(respond);
     const wrapper = shallowMount(Configuration, {
       global: {
         stubs: {
@@ -84,11 +102,9 @@ describe('Configuration Component', () => {
 describe('Configuration view', () => {
   it('should list the configuration, sort it and filter it', async () => {
     // GIVEN
-    vi.spyOn(axios, 'get').mockImplementation((url?: string) =>
-      Promise.resolve({ data: configurationResponses[configurationEndpoints.indexOf(url!)] }),
-    );
-    const expectedSections = toConfiguration(configurationResponses);
-    const [{ key }] = expectedSections[0].rows;
+    vi.mocked(toConfiguration).mockReturnValue(sections);
+    vi.spyOn(axios, 'get').mockImplementation(respond);
+    const [{ key }] = sections[0].rows;
     const wrapper = shallowMount(Configuration, { global: { stubs: { 'jhi-sort-header': JhiSortHeader, 'font-awesome-icon': true } } });
     await flushPromises();
 
@@ -99,7 +115,8 @@ describe('Configuration view', () => {
     await wrapper.find('input').setValue(key);
 
     // THEN
-    expect(wrapper.vm.allSections).toEqual(expectedSections);
+    expect(toConfiguration).toHaveBeenCalledWith(configurationEndpoints);
+    expect(wrapper.vm.allSections).toEqual(sections);
     expect(wrapper.vm.sections[0].rows).toEqual([expect.objectContaining({ key })]);
     expect(wrapper.text()).toContain(key);
   });

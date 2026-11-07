@@ -22,14 +22,16 @@ import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { <%- applicationTypeGateway && gatewayServicesApiAvailable ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config';
+import { toLevelChange } from 'app/shared/jhipster/logs';
 import { Level } from 'app/shared/jhipster/logs.model';
 
 @Service()
 export class LogsService {
   private readonly http = inject(HttpClient);
 
-  changeLevel(name: string, configuredLevel: Level<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service?: string' : '' %>): Observable<{}> {
-    return this.http.post(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `${microserviceContextPath}${service}/` : ''}" : '' %>management/loggers/${name}`, { configuredLevel });
+  changeLevel(name: string, level: Level<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service?: string' : '' %>): Observable<{}> {
+    const { url, body } = toLevelChange(name, level);
+    return this.http.post(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `${microserviceContextPath}${service}/` : ''}" : '' %>${url}`, body);
   }
 
   findAll(<%- applicationTypeGateway && gatewayServicesApiAvailable ? 'service?: string' : '' %>): Observable<unknown> {

@@ -20,12 +20,13 @@ import { type InjectionKey } from 'vue';
 
 import axios, { type AxiosPromise } from 'axios';
 
-import { type Log } from '@/shared/jhipster/logs.model';
-import { loggersEndpoint, toLogs } from '@/shared/jhipster/logs';
+import { loggersEndpoint, toLevelChange, toLogs } from '@/shared/jhipster/logs';
+import { type Level, type Log } from '@/shared/jhipster/logs.model';
 
 export default class LogsService {
-  changeLevel(name: string, configuredLevel: string): AxiosPromise<void> {
-    return axios.post(`${loggersEndpoint}/${name}`, { configuredLevel });
+  changeLevel(name: string, level: Level): AxiosPromise<void> {
+    const { url, body } = toLevelChange(name, level);
+    return axios.post(url, body);
   }
 
   async findAll(): Promise<Log[]> {
