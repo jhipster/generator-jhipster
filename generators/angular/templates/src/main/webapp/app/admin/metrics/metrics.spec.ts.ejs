@@ -25,16 +25,21 @@ import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { of } from 'rxjs';
 
-import { metricsResponses } from 'app/shared/jhipster/admin.samples';
-import { toMetrics } from 'app/shared/jhipster/metrics';
-import { MetricDetails } from 'app/shared/jhipster/metrics.model';
+import { MetricDetails, MetricsSection } from 'app/shared/jhipster/metrics.model';
 
 import Metrics from './metrics';
 import { MetricsDetailsModal } from './metrics-details-modal';
 import { MetricsService } from './metrics.service';
 
 describe('Metrics', () => {
-  const sections = toMetrics(metricsResponses);
+  const sections: MetricsSection[] = [
+    {
+      id: 'memory',
+      label: { text: 'Memory' },
+      blocks: [{ label: { text: 'Heap' }, items: [{ label: { text: 'Used' }, value: '10 MB' }] }],
+      tables: [{ columns: [{ label: { text: 'Pool' } }], rows: [[{ text: 'Eden' }]] }],
+    },
+  ];
   let comp: Metrics;
   let fixture: ComponentFixture<Metrics>;
   let service: MetricsService;
