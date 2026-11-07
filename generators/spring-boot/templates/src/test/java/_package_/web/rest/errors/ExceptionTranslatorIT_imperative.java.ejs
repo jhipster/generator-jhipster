@@ -33,6 +33,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -68,6 +69,17 @@ class ExceptionTranslatorIT {
     }
 
 <%_ } _%>
+    @Test
+    void testUnreadableBody() throws Exception {
+         mockMvc.perform(post("/api/exception-translator-test/method-argument").content("{").contentType(MediaType.APPLICATION_JSON)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(jsonPath("$.type").value("https://www.jhipster.tech/problem/problem-with-message"))
+            .andExpect(jsonPath("$.message").value("error.http.400"))
+            .andExpect(jsonPath("$.path").value("/api/exception-translator-test/method-argument"))
+            .andExpect(jsonPath("$.detail").value("Failed to read request"));
+    }
+
     @Test
     void testMethodArgumentNotValid() throws Exception {
          mockMvc.perform(post("/api/exception-translator-test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
@@ -119,6 +131,7 @@ class ExceptionTranslatorIT {
         mockMvc
             .perform(get("/api/exception-translator-test/bad-request-alert"))
             .andExpect(status().isBadRequest())
+            .andExpect(header().string("X-<%- (!locals.skipClient && locals.frontendAppName) || camelizedBaseName %>-error", "error.testkey"))
             .andExpect(jsonPath("$.message").value("error.testkey"))
             .andExpect(jsonPath("$.detail").doesNotExist());
     }
