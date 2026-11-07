@@ -21,11 +21,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import axios from 'axios';
 
 <%_ if (withAdminUi) { _%>
-import { configurationResponses, healthResponse, loggersResponse, metricsResponses } from 'app/shared/jhipster/admin.samples';
 import { configurationEndpoints, toConfiguration } from 'app/shared/jhipster/configuration';
+import { type ConfigurationSection } from 'app/shared/jhipster/configuration.model';
 import { toHealthChecks } from 'app/shared/jhipster/health';
+import { type HealthCheck } from 'app/shared/jhipster/health.model';
 import { toLogs } from 'app/shared/jhipster/logs';
+import { type Log } from 'app/shared/jhipster/logs.model';
 import { metricsEndpoints, toMetrics } from 'app/shared/jhipster/metrics';
+import { type MetricsSection } from 'app/shared/jhipster/metrics.model';
 
 <%_ } _%>
 import administration, {
@@ -45,6 +48,27 @@ import administration, {
   <%_ } _%>
 <%_ } _%>
 } from './administration.reducer';
+<%_ if (withAdminUi) { _%>
+
+vi.mock('app/shared/jhipster/configuration', () => ({ configurationEndpoints: ['properties', 'environment'], toConfiguration: vi.fn() }));
+vi.mock('app/shared/jhipster/health', () => ({ healthEndpoint: 'health', toHealthChecks: vi.fn() }));
+vi.mock('app/shared/jhipster/logs', () => ({
+  loggersEndpoint: 'loggers',
+  toLogs: vi.fn(),
+  toLevelChange: vi.fn((name: string, level: string) => ({ url: `loggers/${name}`, body: { level } })),
+}));
+vi.mock('app/shared/jhipster/metrics', () => ({ metricsEndpoints: ['metrics', 'threads'], toMetrics: vi.fn() }));
+
+const backendResponse = { response: 'of the backend' };
+const checks: HealthCheck[] = [{ id: 'db', label: { text: 'Database' }, status: { text: 'UP' }, healthy: true }];
+const loggers: Log[] = [{ name: 'main', level: 'WARN' }];
+const sections: MetricsSection[] = [{ id: 'memory', label: { text: 'Memory' }, blocks: [], tables: [] }];
+const configuration: ConfigurationSection[] = [
+  { label: { text: 'source' }, columns: [{ text: 'Property' }, { text: 'Value' }], rows: [{ key: 'key', value: 'value' }] },
+];
+// Each endpoint answers with its own name.
+const respond = (url: string) => Promise.resolve({ data: url });
+<%_ } _%>
 
 describe('Administration reducer tests', () => {
 
@@ -154,27 +178,31 @@ describe('Administration reducer tests', () => {
   <%_ } _%>
   <%_ if (withAdminUi) { _%>
     it('should update state according to a successful fetch logs request', () => {
-      const payload = { data: loggersResponse };
+      vi.mocked(toLogs).mockReturnValue(loggers);
+      const payload = { data: backendResponse };
       const toTest = administration(undefined, { type: getLoggers.fulfilled.type, payload });
 
+      expect(toLogs).toHaveBeenCalledWith(backendResponse);
       expect(toTest).toMatchObject({
         loading: false,
-        logs: { loggers: toLogs(loggersResponse) },
+        logs: { loggers },
       });
     });
 
     it('should update state according to a successful fetch health request', () => {
-      const payload = { data: healthResponse };
+      vi.mocked(toHealthChecks).mockReturnValue(checks);
+      const payload = { data: backendResponse };
       const toTest = administration(undefined, { type: getSystemHealth.fulfilled.type, payload });
 
+      expect(toHealthChecks).toHaveBeenCalledWith(backendResponse);
       expect(toTest).toMatchObject({
         loading: false,
-        health: toHealthChecks(healthResponse),
+        health: checks,
       });
     });
 
     it('should update state according to a successful fetch metrics request', () => {
-      const payload = toMetrics(metricsResponses);
+      const payload = sections;
       const toTest = administration(undefined, { type: getSystemMetrics.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
@@ -184,7 +212,7 @@ describe('Administration reducer tests', () => {
     });
 
     it('should update state according to a successful fetch configuration request', () => {
-      const payload = [{ label: { text: 'source' }, columns: [{ text: 'Property' }, { text: 'Value' }], rows: [{ key: 'key', value: 'value' }] }];
+      const payload = configuration;
       const toTest = administration(undefined, { type: getConfiguration.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
@@ -269,7 +297,8 @@ describe('Administration reducer tests', () => {
       expect(result.payload).toBe(resolvedObject);
     });
     it('dispatches FETCH_METRICS_PENDING and FETCH_METRICS_FULFILLED actions', async () => {
-      axios.get = vi.fn().mockImplementation((url: string) => Promise.resolve({ data: metricsResponses[metricsEndpoints.indexOf(url)] }));
+      vi.mocked(toMetrics).mockReturnValue(sections);
+      axios.get = vi.fn().mockImplementation(respond);
       const result = await getSystemMetrics()(dispatch, getState, extra);
 
       expect(dispatch).toHaveBeenCalledWith(
@@ -279,7 +308,8 @@ describe('Administration reducer tests', () => {
         }),
       );
       expect(getSystemMetrics.fulfilled.match(result)).toBe(true);
-      expect(result.payload).toEqual(toMetrics(metricsResponses));
+      expect(toMetrics).toHaveBeenCalledWith(metricsEndpoints);
+      expect(result.payload).toEqual(sections);
     });
     it('dispatches FETCH_LOGS_PENDING and FETCH_LOGS_FULFILLED actions', async () => {
       const result = await getLoggers()(dispatch, getState, extra);
@@ -304,7 +334,8 @@ describe('Administration reducer tests', () => {
       expect(setLoggers.fulfilled.match(result)).toBe(true);
     });
     it('dispatches FETCH_CONFIGURATION_PENDING and FETCH_CONFIGURATION_FULFILLED actions', async () => {
-      axios.get = vi.fn().mockImplementation((url: string) => Promise.resolve({ data: configurationResponses[configurationEndpoints.indexOf(url)] }));
+      vi.mocked(toConfiguration).mockReturnValue(configuration);
+      axios.get = vi.fn().mockImplementation(respond);
       const result = await getConfiguration()(dispatch, getState, extra);
 
       expect(dispatch).toHaveBeenCalledWith(
@@ -314,7 +345,8 @@ describe('Administration reducer tests', () => {
         }),
       );
       expect(getConfiguration.fulfilled.match(result)).toBe(true);
-      expect(result.payload).toEqual(toConfiguration(configurationResponses));
+      expect(toConfiguration).toHaveBeenCalledWith(configurationEndpoints);
+      expect(result.payload).toEqual(configuration);
     });
   <%_ } _%>
   });
