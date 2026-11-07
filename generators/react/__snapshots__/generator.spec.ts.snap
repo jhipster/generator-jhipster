@@ -510,7 +510,7 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/modules/home/home.tsx": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/modules/login/login-modal.tsx": {
+  "clientRoot/src/app/modules/login/login.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/login/login.tsx": {
@@ -2488,7 +2488,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/modules/home/home.tsx": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/modules/login/login-modal.tsx": {
+  "clientRoot/src/app/modules/login/login.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/login/login.tsx": {
@@ -4445,7 +4445,7 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/modules/home/home.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/modules/login/login-modal.tsx": {
+  "src/main/webapp/app/modules/login/login.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/login/login.tsx": {
@@ -6127,7 +6127,7 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "src/main/webapp/app/modules/home/home.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/modules/login/login-modal.tsx": {
+  "src/main/webapp/app/modules/login/login.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/login/login.tsx": {

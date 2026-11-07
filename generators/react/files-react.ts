@@ -87,7 +87,7 @@ export const files = asWriteFilesSection({
     {
       condition: generator => !generator.authenticationTypeOauth2,
       ...clientApplicationTemplatesBlock(),
-      templates: ['modules/login/login.tsx', 'modules/login/login-modal.tsx'],
+      templates: ['modules/login/login.tsx'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
@@ -253,6 +253,11 @@ export const files = asWriteFilesSection({
       condition: generator => !generator.applicationTypeMonolith,
       ...clientApplicationTemplatesBlock(),
       templates: ['entities/menu.spec.tsx'],
+    },
+    {
+      condition: generator => !generator.authenticationTypeOauth2,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['modules/login/login.spec.tsx'],
     },
     {
       ...clientApplicationTemplatesBlock(),

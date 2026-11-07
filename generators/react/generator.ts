@@ -369,6 +369,7 @@ ${comment}
             'webpack/logo-jhipster.png',
             [application.microfrontend, 'webpack/webpack.microfrontend.js'],
           ],
+          '9.5.0': [`${application.clientSrcDir}app/modules/login/login-modal.tsx`],
         });
       },
       cleanupOldFilesTask,

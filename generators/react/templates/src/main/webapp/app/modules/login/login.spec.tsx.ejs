@@ -1,0 +1,85 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+import { Route, Routes } from 'react-router';
+
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+
+import { initialState, login } from 'app/shared/reducers/authentication';
+import { renderWithStore } from 'app/shared/util/test-utils';
+
+import Login from './login';
+
+vi.mock('app/shared/reducers/authentication', async importOriginal => ({
+  ...(await importOriginal<typeof import('app/shared/reducers/authentication')>()),
+  login: vi.fn(() => ({ type: 'test/login' })),
+}));
+
+const renderLogin = (authentication: Partial<typeof initialState> = {}) =>
+  renderWithStore(
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<div id="home-page" />} />
+    </Routes>,
+    '/login',
+    { authentication: { ...initialState, ...authentication } },
+  );
+
+describe('Login', () => {
+  it('should render the login page', () => {
+    renderLogin();
+
+    expect(document.querySelector('[data-cy="loginTitle"]')).not.toBeNull();
+    expect(document.querySelector('[data-cy="loginError"]')).toBeNull();
+    expect(document.querySelector('.modal')).toBeNull();
+  });
+
+  it('should sign in with the credentials', async () => {
+    const { container } = renderLogin();
+
+    fireEvent.change(container.querySelector('[name="username"]')!, { target: { value: 'admin' } });
+    fireEvent.change(container.querySelector('[name="password"]')!, { target: { value: 'secret' } });
+    fireEvent.click(screen.getByRole('button'));
+
+    await waitFor(() => expect(login).toHaveBeenCalledWith('admin', 'secret', false));
+  });
+
+  it('should require the username and the password', async () => {
+    const { container } = renderLogin();
+
+    fireEvent.blur(container.querySelector('[name="username"]')!);
+    fireEvent.blur(container.querySelector('[name="password"]')!);
+    fireEvent.click(screen.getByRole('button'));
+
+    await waitFor(() => expect(container.querySelectorAll('.invalid-feedback')).toHaveLength(2));
+    expect(login).not.toHaveBeenCalled();
+  });
+
+  it('should tell when the sign in failed', () => {
+    renderLogin({ loginError: true });
+
+    expect(document.querySelector('[data-cy="loginError"]')).not.toBeNull();
+  });
+
+  it('should leave the page once authenticated', () => {
+    renderLogin({ isAuthenticated: true });
+
+    expect(document.querySelector('#home-page')).not.toBeNull();
+  });
+});
