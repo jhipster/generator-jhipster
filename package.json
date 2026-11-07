@@ -195,7 +195,6 @@
     "eslint-plugin-prettier": "5.5.7",
     "expect-node": "0.4.0",
     "globals": "17.14.0",
-    "jest-snapshot": "30.5.2",
     "jiti": "2.7.0",
     "jsdoc": "4.0.5",
     "rimraf": "6.1.4",
