@@ -73,6 +73,25 @@ class ExceptionTranslatorIT {
 <%_ } _%>
 
     @Test
+    void testUnreadableBody() {
+        webTestClient
+            .post()
+            .uri("/api/exception-translator-test/method-argument")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue("{")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.400")
+            .jsonPath("$.path")
+            .isEqualTo("/api/exception-translator-test/method-argument");
+    }
+
+    @Test
     void testMethodArgumentNotValid() {
         webTestClient
             .post()
@@ -167,6 +186,8 @@ class ExceptionTranslatorIT {
             .exchange()
             .expectStatus()
             .isBadRequest()
+            .expectHeader()
+            .valueEquals("X-<%- (!locals.skipClient && locals.frontendAppName) || camelizedBaseName %>-error", "error.testkey")
             .expectBody()
             .jsonPath("$.message")
             .isEqualTo("error.testkey")
