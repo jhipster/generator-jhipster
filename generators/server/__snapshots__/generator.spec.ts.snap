@@ -155,6 +155,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
@@ -325,6 +328,9 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
@@ -493,6 +499,9 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -1038,6 +1047,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {

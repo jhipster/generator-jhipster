@@ -324,9 +324,11 @@ _%>
             if (err instanceof DataAccessException) return "Failure during data access";
             if (err instanceof PropertyReferenceException) return "Invalid sort property";
 <%_ } _%>
-            if (containsPackageName(err.getMessage())) return "Unexpected runtime exception";
         }
-        return err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
+        String detail = err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
+        return activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION) && containsPackageName(detail)
+            ? "Unexpected runtime exception"
+            : detail;
     }
 
     private HttpStatus getMappedStatus(Throwable err) {
