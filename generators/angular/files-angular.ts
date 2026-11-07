@@ -386,6 +386,11 @@ export const files = asWriteFilesSection({
   ],
   clientTestFw: [
     {
+      condition: generator => !generator.applicationTypeMicroservice,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['admin/admin.routes.spec.ts', 'admin/docs/docs.spec.ts'],
+    },
+    {
       condition: generator => generator.withAdminUi,
       ...clientApplicationTemplatesBlock(),
       templates: [

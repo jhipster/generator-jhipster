@@ -18,10 +18,16 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 
-import { of } from 'rxjs';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 
+<%_ if (enableTranslation) { _%>
+import { provideTranslateService } from '@ngx-translate/core';
+<%_ } _%>
+import { of, throwError } from 'rxjs';
+
+import { fontAwesomeIcons } from 'app/config/font-awesome-icons';
 import { Log } from 'app/shared/jhipster/logs.model';
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
 import { GatewayRoutesService } from '../gateway/gateway-routes.service';
@@ -34,22 +40,32 @@ const loggers: Log[] = [
   { name: 'ROOT', level: 'INFO' },
   { name: 'main', level: 'WARN' },
 ];
+const loggersOfEveryLevel: Log[] = (['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF'] as const).map(level => ({ name: level, level }));
 
 describe('Logs', () => {
   let comp: Logs;
   let fixture: ComponentFixture<Logs>;
   let service: LogsService;
 
+  const renderLoggers = async (): Promise<void> => {
+    fixture.detectChanges();
+    const [deferBlock] = await fixture.getDeferBlocks();
+    await deferBlock.render(DeferBlockState.Loading);
+    await deferBlock.render(DeferBlockState.Complete);
+  };
+
   beforeEach(
     async () => {
       await TestBed.configureTestingModule({
         imports: [Logs],
-        providers: [provideHttpClientTesting(), LogsService<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
+        deferBlockBehavior: DeferBlockBehavior.Manual,
+        providers: [provideHttpClientTesting()<%- enableTranslation ? ', provideTranslateService()' : '' %>, LogsService<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
       }).compileComponents();
     }
   );
 
   beforeEach(() => {
+    TestBed.inject(FaIconLibrary).addIcons(...fontAwesomeIcons);
     fixture = TestBed.createComponent(Logs);
     comp = fixture.componentInstance;
     service = TestBed.inject(LogsService);
@@ -89,5 +105,71 @@ describe('Logs', () => {
       expect(service.findAll).toHaveBeenCalled();
       expect(comp.loggers()).toEqual(loggers);
     });
+  });
+
+  describe('view', () => {
+    const names = (): string[] =>
+      Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('tbody small')).map(cell => cell.textContent.trim());
+
+    beforeEach(async () => {
+      vi.spyOn(service, 'findAll').mockReturnValue(of(loggers.map(logger => ({ ...logger }))));
+      vi.spyOn(service, 'changeLevel').mockReturnValue(of({}));
+      await renderLoggers();
+    });
+
+    it('should render the loggers and their levels', () => {
+      const element = fixture.nativeElement as HTMLElement;
+      expect(names()).toEqual(['main', 'ROOT']);
+      expect(element.querySelectorAll('.btn-info')).toHaveLength(1);
+      expect(element.querySelectorAll('.btn-warning')).toHaveLength(1);
+    });
+
+    it('should filter and order the loggers', () => {
+      const element = fixture.nativeElement as HTMLElement;
+      const input = element.querySelector<HTMLInputElement>('#logs-filter')!;
+      input.value = 'ro';
+      input.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      expect(names()).toEqual(['ROOT']);
+
+      comp.filter.set('');
+      element.querySelector<HTMLElement>('th')!.click();
+      fixture.detectChanges();
+      expect(names()).toEqual(['ROOT', 'main']);
+
+      comp.sortState.set({});
+      fixture.detectChanges();
+      expect(names()).toHaveLength(2);
+    });
+
+    it('should change the level from its buttons', () => {
+      const buttons = (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('tbody tr:first-child button');
+      buttons.forEach(button => button.click());
+
+      expect(vi.mocked(service.changeLevel).mock.calls.map(([, level]) => level)).toEqual(['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF']);
+    });
+  });
+
+  it('should highlight the level of each logger', async () => {
+    vi.spyOn(service, 'findAll').mockReturnValue(of(loggersOfEveryLevel));
+    await renderLoggers();
+
+    const highlighted = Array.from<HTMLButtonElement>(
+      fixture.nativeElement.querySelectorAll('tbody button:not(.btn-light)'),
+    ).map(button => button.textContent.trim());
+    expect(highlighted.sort()).toEqual(['DEBUG', 'ERROR', 'INFO', 'OFF', 'TRACE', 'WARN']);
+  });
+
+  it('should have no loggers before they load', () => {
+    expect(comp.filteredAndOrderedLoggers()).toEqual([]);
+  });
+
+  it('should have no loggers when they fail to load', () => {
+    vi.spyOn(service, 'findAll').mockReturnValue(throwError(() => new Error('failed')));
+
+    comp.ngOnInit();
+
+    expect(comp.loggers()).toEqual([]);
+    expect(comp.isLoading()).toBe(false);
   });
 });

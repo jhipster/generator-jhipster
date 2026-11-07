@@ -19,12 +19,15 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { of } from 'rxjs';
 
+import { fontAwesomeIcons } from 'app/config/font-awesome-icons';
 import { MetricDetails, MetricsSection } from 'app/shared/jhipster/metrics.model';
 
 import Metrics from './metrics';
@@ -53,6 +56,7 @@ describe('Metrics', () => {
 
 <%_ } _%>
   beforeEach(() => {
+    TestBed.inject(FaIconLibrary).addIcons(...fontAwesomeIcons);
     fixture = TestBed.createComponent(Metrics);
     comp = fixture.componentInstance;
     service = TestBed.inject(MetricsService);
@@ -84,6 +88,66 @@ describe('Metrics', () => {
       // THEN
       expect(open).toHaveBeenCalledWith(MetricsDetailsModal, { size: 'lg' });
       expect(modalRef.componentInstance).toEqual({ details });
+    });
+  });
+
+  describe('view', () => {
+    const gauge = { percent: 50, text: '50%', status: 'success' as const };
+    const fullSections: MetricsSection[] = [
+      {
+        id: 'jvm',
+        label: { text: 'JVM' },
+        blocks: [
+          {
+            label: { text: 'Memory' },
+            items: [
+              { label: { text: 'Heap' }, value: '1 MB', note: 'of 2 MB', gauge },
+              { label: { text: 'Classes' }, value: '10' },
+            ],
+            details: { label: { text: 'Threads' } } as MetricDetails,
+          },
+          { items: [{ label: { text: 'Uptime' }, value: '1 h' }] },
+        ],
+        tables: [
+          {
+            columns: [{ label: { text: 'Name' } }, { label: { text: 'Count' }, numeric: true }, { label: { text: 'Usage' } }],
+            rows: [[{ text: 'gc' }, { text: '2' }, { text: '', gauge }]],
+          },
+        ],
+      },
+      { id: 'cache', label: { text: 'Cache' }, blocks: [], tables: [] },
+    ];
+
+    beforeEach(() => {
+      vi.mocked(service.getMetrics).mockReturnValue(of(fullSections));
+      fixture.detectChanges();
+    });
+
+    it('should render the sections', () => {
+      const element = fixture.nativeElement as HTMLElement;
+      expect(element.textContent).toContain('of 2 MB');
+      expect(element.textContent).toContain('Cache');
+      expect(element.querySelectorAll('ngb-progressbar')).toHaveLength(2);
+      expect(element.querySelectorAll('td.text-end')).toHaveLength(1);
+      expect(element.querySelector('.alert-info')).toBeNull();
+    });
+
+    it('should refresh and open the details from their buttons', () => {
+      const open = vi.spyOn(TestBed.inject(NgbModal), 'open').mockReturnValue({ componentInstance: {} } as never);
+      const element = fixture.nativeElement as HTMLElement;
+
+      element.querySelector<HTMLButtonElement>('h2 button')!.click();
+      element.querySelector<HTMLButtonElement>('.col-md-4 button')!.click();
+
+      expect(service.getMetrics).toHaveBeenCalledTimes(2);
+      expect(open).toHaveBeenCalled();
+    });
+
+    it('should tell that the metrics are updating', () => {
+      comp.updatingMetrics.set(true);
+      fixture.detectChanges();
+
+      expect((fixture.nativeElement as HTMLElement).querySelector('.alert-info')).not.toBeNull();
     });
   });
 });

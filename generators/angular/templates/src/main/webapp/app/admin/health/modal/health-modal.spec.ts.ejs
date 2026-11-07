@@ -66,6 +66,33 @@ describe('HealthModal', () => {
     });
   });
 
+  describe('view without a check', () => {
+    it('should render a check without sublabel', () => {
+      comp.check = { id: 'ping', label: { text: 'ping' }, status: { text: 'UP' }, healthy: true };
+      fixture.detectChanges();
+
+      expect((fixture.nativeElement as HTMLElement).querySelector('h4')?.textContent).not.toContain(' - ');
+    });
+
+    it('should render no details', () => {
+      fixture.detectChanges();
+
+      expect((fixture.nativeElement as HTMLElement).querySelector('table')).toBeNull();
+      expect((fixture.nativeElement as HTMLElement).querySelector('pre')).toBeNull();
+    });
+
+    it('should dismiss from the buttons', () => {
+      const spy = vi.spyOn(mockActiveModal, 'dismiss');
+      fixture.detectChanges();
+
+      for (const button of (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('button')) {
+        button.click();
+      }
+
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe('dismiss', () => {
     it('should call dismiss when dismiss modal is called', () => {
       // GIVEN

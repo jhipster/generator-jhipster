@@ -37,7 +37,7 @@
 
         <table class="table table-striped table-bordered table-responsive d-table" [attr.aria-describedby]="'configuration-section-' + i">
           <thead>
-            <tr <%- jhiPrefix %>Sort [(sortState)]="sortState">
+            <tr <%- jhiPrefix %>Sort [sortState]="sortState()" (sortStateChange)="sortState.set($event)">
               <th <%- jhiPrefix %>SortBy="key" scope="col" class="w-40">
                 <span>{{ <%- labelText('section.columns[0]') %> }}</span> <fa-icon icon="sort" />
               </th>

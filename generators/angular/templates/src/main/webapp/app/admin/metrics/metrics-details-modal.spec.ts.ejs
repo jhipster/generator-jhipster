@@ -86,12 +86,40 @@ describe('MetricsDetailsModal', () => {
   });
 
   it('should render the items', () => {
-    comp.toggle('first');
+    fixture.detectChanges();
+    (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>('h6 a')!.click();
     fixture.detectChanges();
 
     const text = (fixture.nativeElement as HTMLElement).textContent;
     expect(text).toContain('a line');
     expect(text).toContain('a cell');
+  });
+
+  it('should filter and dismiss from the view', () => {
+    const dismiss = vi.spyOn(TestBed.inject(NgbActiveModal), 'dismiss');
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+
+    Array.from(element.querySelectorAll<HTMLButtonElement>('button.badge'))
+      .find(button => button.textContent.includes('One'))!
+      .click();
+    expect(comp.selectedValue()).toBe('ONE');
+
+    const input = element.querySelector<HTMLInputElement>('#details-filter')!;
+    input.value = 'first';
+    input.dispatchEvent(new Event('input'));
+    expect(comp.term()).toBe('first');
+
+    element.querySelectorAll<HTMLButtonElement>('.btn-close, .modal-footer button').forEach(button => button.click());
+    expect(dismiss).toHaveBeenCalledTimes(2);
+  });
+
+  it('should render nothing without details', () => {
+    comp.details = undefined;
+    fixture.detectChanges();
+
+    expect(comp.items()).toEqual([]);
+    expect((fixture.nativeElement as HTMLElement).querySelector('h6')).toBeNull();
   });
 
   it('should dismiss the modal', () => {
