@@ -154,7 +154,7 @@ describe('ci samples groups', () => {
   });
 
   describe('describeGithubSamples', () => {
-    it('describes the samples of every group', async () => {
+    it('describes the samples of every group - snapshot', async () => {
       const samples = await describeGithubSamples({ samplesGroupFolder: valid, root: fixtures });
       expect(
         samples.map(({ name, config, generatorOptions, matrix, ...sample }) => ({

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - generate-blueprint help should print expected information 1`] = `
+exports[`generator - generate-blueprint help should print expected information - snapshot 1`] = `
 "Usage: jhipster generate-blueprint [options]
 
 Generate a blueprint

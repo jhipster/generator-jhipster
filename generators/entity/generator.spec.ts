@@ -42,7 +42,7 @@ describe(`generator - ${generator}`, () => {
         .withMockedSource();
     });
 
-    it('should match source calls', () => {
+    it('should match source calls snapshot', () => {
       expect(runResult.sourceCallsArg).toMatchSnapshot();
     });
 
@@ -82,7 +82,7 @@ describe(`generator - ${generator}`, () => {
         .withMockedSource();
     });
 
-    it('should match source calls', () => {
+    it('should match source calls snapshot', () => {
       expect(runResult.sourceCallsArg).toMatchSnapshot();
     });
 

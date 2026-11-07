@@ -318,7 +318,7 @@ describe('generator - base - local blueprint', () => {
         .withJHipsterConfig();
     });
 
-    it('creates expected default files', () => {
+    it('creates expected default files - snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
 {
   ".blueprint/app/index.mjs": {

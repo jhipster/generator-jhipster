@@ -96,7 +96,7 @@ public enum Test {
           );
       });
 
-      it('should match file content', () => {
+      it('should match file content snapshot', () => {
         expect(result.getSnapshot('**/Test.java')).toMatchSnapshot();
       });
     });
@@ -128,7 +128,7 @@ public class Test {
           );
       });
 
-      it('should match file content', () => {
+      it('should match file content snapshot', () => {
         expect(result.getSnapshot('**/Test.java')).toMatchSnapshot();
       });
     });

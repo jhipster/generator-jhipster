@@ -55,7 +55,7 @@ describe(`generator - ${generator}`, () => {
           );
       });
 
-      it('should ignore sonar rule', () => {
+      it('should ignore sonar rule - snapshot', () => {
         expect(runResult.getSnapshot('**/sonar-project.properties')).toMatchSnapshot();
       });
     });
@@ -78,7 +78,7 @@ describe(`generator - ${generator}`, () => {
             );
         });
 
-        it('should ignore sonar rule', () => {
+        it('should ignore sonar rule - snapshot', () => {
           expect(runResult.getSnapshot('**/sonar-project.properties')).toMatchSnapshot();
         });
       });
@@ -100,7 +100,7 @@ describe(`generator - ${generator}`, () => {
             );
         });
 
-        it('should ignore sonar rule', () => {
+        it('should ignore sonar rule - snapshot', () => {
           expect(runResult.getSnapshot('**/sonar-project.properties')).toMatchSnapshot();
         });
       });
@@ -131,7 +131,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runJHipster(generator).withJHipsterConfig().withMockedGenerators(mockedGenerators);
       });
 
-      it('should succeed', () => {
+      it('should succeed - snapshot', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
 

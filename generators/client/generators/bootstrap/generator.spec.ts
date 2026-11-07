@@ -69,7 +69,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runJHipster(generator).withJHipsterConfig();
       });
 
-      it('should succeed', () => {
+      it('should succeed - snapshot', () => {
         expect(runResult.getSnapshot()).toMatchInlineSnapshot(`
 {
   ".yo-rc.json": {

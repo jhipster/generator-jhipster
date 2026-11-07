@@ -314,7 +314,7 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
 }
 `;
 
-exports[`generator - entities regenerating all entities should match source calls 1`] = `
+exports[`generator - entities regenerating all entities should match source calls snapshot 1`] = `
 {
   "addEntitiesToClient": [
     {
@@ -596,7 +596,7 @@ exports[`generator - entities regenerating some entities should match snapshot 1
 }
 `;
 
-exports[`generator - entities regenerating some entities should match source calls 1`] = `
+exports[`generator - entities regenerating some entities should match source calls snapshot 1`] = `
 {
   "addEntitiesToClient": [
     {

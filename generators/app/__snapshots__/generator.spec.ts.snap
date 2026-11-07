@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - app help should print expected information 1`] = `
+exports[`generator - app help should print expected information - snapshot 1`] = `
 "Usage: jhipster app [options]
 
 [Default] Create a new JHipster application based on the selected options

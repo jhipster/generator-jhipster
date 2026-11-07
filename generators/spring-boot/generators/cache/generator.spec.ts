@@ -51,7 +51,7 @@ describe(`generator - ${generator}`, () => {
         expect(result.getStateSnapshot()).toMatchSnapshot();
       });
 
-      it('should match source calls', () => {
+      it('should match source calls snapshot', () => {
         expect(result.sourceCallsArg).toMatchSnapshot();
       });
     });

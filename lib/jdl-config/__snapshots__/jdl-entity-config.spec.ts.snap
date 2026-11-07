@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`jdl entity definitions should give the entity options of the generators app reaches 1`] = `
+exports[`jdl entity definitions should give the entity options of the generators app reaches - snapshot 1`] = `
 {
   "configs": {
     "angularSuffix": {

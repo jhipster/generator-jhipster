@@ -163,7 +163,7 @@ describe('jdl - JDLOptions', () => {
         });
       });
 
-      it('should use each option', () => {
+      it('should use each option - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   "skipClient",

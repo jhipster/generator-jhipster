@@ -44,7 +44,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -138,7 +138,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -153,7 +153,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -168,7 +168,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -183,7 +183,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -250,7 +250,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });

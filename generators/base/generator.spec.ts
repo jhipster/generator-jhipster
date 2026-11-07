@@ -33,7 +33,7 @@ const generator = basename(import.meta.dirname);
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(BaseGenerator);
   describe('help', () => {
-    it('should print expected information', async () => {
+    it('should print expected information - snapshot', async () => {
       expect(await getCommandHelpOutput()).toMatchSnapshot();
     });
   });
@@ -211,7 +211,7 @@ describe(`generator - ${generator}`, () => {
           });
       });
 
-      it('should call removeFiles', async () => {
+      it('should call removeFiles - snapshot', async () => {
         expect(removeFiles.mock.lastCall).toMatchInlineSnapshot(`
 [
   {

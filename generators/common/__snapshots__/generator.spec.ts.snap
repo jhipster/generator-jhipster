@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - common source apis addSonarProperties with empty properties should ignore sonar rule 1`] = `
+exports[`generator - common source apis addSonarProperties with empty properties should ignore sonar rule - snapshot 1`] = `
 {
   "sonar-project.properties": {
     "contents": "
@@ -11,7 +11,7 @@ sonar.new.property = newValue",
 }
 `;
 
-exports[`generator - common source apis addSonarProperties with existing sonar.issue.ignore.multicriteria key should ignore sonar rule 1`] = `
+exports[`generator - common source apis addSonarProperties with existing sonar.issue.ignore.multicriteria key should ignore sonar rule - snapshot 1`] = `
 {
   "sonar-project.properties": {
     "contents": "
@@ -24,7 +24,7 @@ sonar.issue.ignore.multicriteria = ruleId, ruleId2",
 }
 `;
 
-exports[`generator - common source apis ignoreSonarRule should ignore sonar rule 1`] = `
+exports[`generator - common source apis ignoreSonarRule should ignore sonar rule - snapshot 1`] = `
 {
   "sonar-project.properties": {
     "contents": "
@@ -40,7 +40,7 @@ sonar.issue.ignore.multicriteria.ruleId2.ruleKey = ruleKey2",
 }
 `;
 
-exports[`generator - common with default config should succeed 1`] = `
+exports[`generator - common with default config should succeed - snapshot 1`] = `
 {
   ".editorconfig": {
     "contents": "# EditorConfig helps developers define and maintain consistent

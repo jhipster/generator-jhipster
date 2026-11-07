@@ -21,7 +21,7 @@ import { describe, expect, it } from 'expect-node';
 import { lookupGeneratorsNamespaces } from './lookup-namespaces.ts';
 
 describe('lookupGeneratorsNamespaces', () => {
-  it('should return the correct generator namespaces', () => {
+  it('should return the correct generator namespaces - snapshot', () => {
     expect(lookupGeneratorsNamespaces()).toMatchInlineSnapshot(`
 [
   "angular",

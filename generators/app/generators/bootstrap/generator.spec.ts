@@ -118,7 +118,7 @@ describe(`generator - ${generator}`, () => {
         ]);
       });
 
-      it('should write files', () => {
+      it('should write files - snapshot', () => {
         expect(runResult.getSnapshot('**/{.jhipster/**, entities.json}')).toMatchInlineSnapshot(`
 {
   ".jhipster/EntityA.json": {
@@ -170,7 +170,7 @@ describe(`generator - ${generator}`, () => {
 }
 `);
       });
-      it('should prepare entities', () => {
+      it('should prepare entities - snapshot', () => {
         expect(Object.keys(runResult.entities!)).toMatchInlineSnapshot(`
 [
   "UserManagement",
@@ -180,11 +180,11 @@ describe(`generator - ${generator}`, () => {
 ]
 `);
       });
-      it('should prepare User', () => {
+      it('should prepare User - snapshot', () => {
         const entity = runResult.entities!.User;
         expect(entity).toMatchSnapshot(expectedEntity(entity));
       });
-      it('should prepare EntityA', () => {
+      it('should prepare EntityA - snapshot', () => {
         const entity = runResult.entities!.EntityA;
         expect(entity).toMatchSnapshot(expectedEntity(entity));
       });
@@ -214,7 +214,7 @@ describe(`generator - ${generator}`, () => {
         );
       });
 
-      it('should write files', () => {
+      it('should write files - snapshot', () => {
         expect(runResult.getSnapshot('**/{.jhipster/**, entities.json}')).toMatchInlineSnapshot(`
 {
   ".jhipster/EntityA.json": {
@@ -238,14 +238,14 @@ describe(`generator - ${generator}`, () => {
 }
 `);
       });
-      it('should prepare entities', () => {
+      it('should prepare entities - snapshot', () => {
         expect(Object.keys(runResult.entities!)).toMatchInlineSnapshot(`
 [
   "EntityA",
 ]
 `);
       });
-      it('should prepare EntityA', () => {
+      it('should prepare EntityA - snapshot', () => {
         const entity = runResult.entities!.EntityA;
         expect(entity).toMatchSnapshot(expectedEntity(entity));
       });

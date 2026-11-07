@@ -30,7 +30,7 @@ const convert = (jdl: string) =>
   applyCompatibilityDefaults(astToFiles(performJDLPostParsingTasks(parse(jdl, runtime, { onWarning: () => {} })), runtime)).files;
 
 describe('jdl - applyCompatibilityDefaults', () => {
-  it('should give a deployment the defaults of its type, and empty lists', () => {
+  it('should give a deployment the defaults of its type, and empty lists - snapshot', () => {
     expect(convert('deployment { deploymentType docker-compose appsFolders [shop] monitoring prometheus }')).toMatchInlineSnapshot(`
 {
   "docker-compose/.yo-rc.json": {

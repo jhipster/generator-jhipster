@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`helpers run using withJHipsterGenerators should register jhipster generators namespaces 1`] = `
+exports[`helpers run using withJHipsterGenerators should register jhipster generators namespaces - snapshot 1`] = `
 [
   "jhipster:angular",
   "jhipster:angular:bootstrap",
@@ -120,7 +120,7 @@ exports[`helpers run using withJHipsterGenerators should register jhipster gener
 ]
 `;
 
-exports[`helpers runJHipster defaults should register jhipster generators namespaces 1`] = `
+exports[`helpers runJHipster defaults should register jhipster generators namespaces - snapshot 1`] = `
 [
   "jhipster:angular",
   "jhipster:angular:bootstrap",
@@ -240,7 +240,7 @@ exports[`helpers runJHipster defaults should register jhipster generators namesp
 ]
 `;
 
-exports[`helpers runJHipster with useDefaultMocks should register jhipster generators namespaces 1`] = `
+exports[`helpers runJHipster with useDefaultMocks should register jhipster generators namespaces - snapshot 1`] = `
 [
   "jhipster:angular",
   "jhipster:angular:bootstrap",

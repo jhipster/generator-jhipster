@@ -112,6 +112,13 @@ export default defineConfig(
     },
   },
   {
+    files: ['**/*.spec.ts'],
+    plugins: { jhipster: jhipsterPlugin },
+    rules: {
+      'jhipster/snapshot-test-name': 'error',
+    },
+  },
+  {
     files: jsTsFiles,
     extends: [imports.flatConfigs.recommended, imports.flatConfigs.typescript],
     settings: {

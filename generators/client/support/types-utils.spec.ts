@@ -28,7 +28,7 @@ const { CommonDBTypes } = fieldTypes;
 describe('generator - client - support - type-utils', () => {
   describe('getTypescriptType', () => {
     describe('when called with sql DB name', () => {
-      it('return SQL', () => {
+      it('return SQL - snapshot', () => {
         expect(
           Object.fromEntries(
             Object.values(CommonDBTypes)

@@ -1483,7 +1483,7 @@ entity Customer {
         it('should create entity initial fake data file', () => {
           runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`]);
         });
-        it('should create fake data file with required content', () => {
+        it('should create fake data file with required content - snapshot', () => {
           expect(
             runResult.getSnapshot(`**/${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`),
           ).toMatchSnapshot();

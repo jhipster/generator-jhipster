@@ -46,7 +46,7 @@ describe(`generator - ${generator}`, () => {
         .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
     });
 
-    it('should write the translation files', () => {
+    it('should write the translation files - snapshot', () => {
       expect(
         Object.keys(runResult.getStateSnapshot())
           .filter(file => file.includes('i18n'))
@@ -68,7 +68,7 @@ describe(`generator - ${generator}`, () => {
 
     // The entity menu entry is added by the needle, the rest of global.json belongs to the writing
     // priority the entities command skips.
-    it('should add the entity to the menu of the global translations', () => {
+    it('should add the entity to the menu of the global translations - snapshot', () => {
       expect(runResult.getSnapshot(`**/i18n/*/global.json`)).toMatchInlineSnapshot(`
 {
   "src/main/webapp/i18n/en/global.json": {
@@ -152,7 +152,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
 
-      it('should match source calls', () => {
+      it('should match source calls snapshot', () => {
         expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
 
@@ -186,7 +186,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
 
-      it('should match source calls', () => {
+      it('should match source calls snapshot', () => {
         expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
 
