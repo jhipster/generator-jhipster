@@ -20,7 +20,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { ConfigProps, ConfigurationSection, Env } from 'app/shared/jhipster/configuration';
+import { configurationResponses } from 'app/shared/jhipster/admin.samples';
+import { ConfigurationSection, configurationEndpoints, toConfiguration } from 'app/shared/jhipster/configuration';
 
 import { ConfigurationService } from './configuration.service';
 
@@ -45,18 +46,12 @@ describe('Configuration Service', () => {
 
   describe('Service methods', () => {
     it('should get the configuration', () => {
-      const configProps: ConfigProps = {
-        contexts: { jhipster: { beans: { bean: { prefix: 'jhipster', properties: { name: 'app' } } } } },
-      };
-      const env: Env = { propertySources: [{ name: 'server.ports', properties: { 'local.server.port': { value: '8080' } } }] };
       service.getConfiguration().subscribe(received => (expectedResult = received));
 
-      httpMock.expectOne(req => req.url.endsWith('management/configprops')).flush(configProps);
-      httpMock.expectOne(req => req.url.endsWith('management/env')).flush(env);
-      expect(expectedResult).toEqual([
-        expect.objectContaining({ label: { text: 'Spring configuration' }, rows: [{ key: 'jhipster', properties: [{ key: 'name', value: 'app' }] }] }),
-        expect.objectContaining({ label: { text: 'server.ports' }, rows: [{ key: 'local.server.port', value: '8080' }] }),
-      ]);
+      configurationEndpoints.forEach((endpoint, index) => {
+        httpMock.expectOne(req => req.url.endsWith(endpoint)).flush(configurationResponses[index] as object);
+      });
+      expect(expectedResult).toEqual(toConfiguration(configurationResponses));
     });
   });
 });

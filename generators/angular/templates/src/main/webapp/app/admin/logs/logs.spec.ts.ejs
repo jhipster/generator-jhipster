@@ -22,7 +22,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
-import { Log } from 'app/shared/jhipster/logs.model';
+import { loggersResponse } from 'app/shared/jhipster/admin.samples';
+import { toLogs } from 'app/shared/jhipster/logs';
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
 import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ } _%>
@@ -59,40 +60,22 @@ describe('Logs', () => {
 
     it('should call load all on init', () => {
       // GIVEN
-      const log: Log = { name: 'main', level: 'WARN' };
-      vi.spyOn(service, 'findAll').mockReturnValue(
-        of({
-          loggers: {
-            main: {
-              effectiveLevel: 'WARN',
-            },
-          },
-        }),
-      );
+      vi.spyOn(service, 'findAll').mockReturnValue(of(loggersResponse));
 
       // WHEN
       comp.ngOnInit();
 
       // THEN
       expect(service.findAll).toHaveBeenCalled();
-      expect(comp.loggers()?.[0]).toEqual(expect.objectContaining(log));
+      expect(comp.loggers()).toEqual(toLogs(loggersResponse as LoggersResponse));
     });
   });
 
   describe('change log level', () => {
     it('should change log level correctly', () => {
       // GIVEN
-      const log: Log = { name: 'main', level: 'ERROR' };
       vi.spyOn(service, 'changeLevel').mockReturnValue(of({}));
-      vi.spyOn(service, 'findAll').mockReturnValue(
-        of({
-          loggers: {
-            main: {
-              effectiveLevel: 'ERROR',
-            },
-          },
-        }),
-      );
+      vi.spyOn(service, 'findAll').mockReturnValue(of(loggersResponse));
 
       // WHEN
       comp.changeLevel('main', 'ERROR');
@@ -100,7 +83,7 @@ describe('Logs', () => {
       // THEN
       expect(service.changeLevel).toHaveBeenCalled();
       expect(service.findAll).toHaveBeenCalled();
-      expect(comp.loggers()?.[0]).toEqual(expect.objectContaining(log));
+      expect(comp.loggers()).toEqual(toLogs(loggersResponse as LoggersResponse));
     });
   });
 });

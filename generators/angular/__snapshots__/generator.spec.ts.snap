@@ -4432,13 +4432,13 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/admin/logs/logs.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html": {
+  "clientRoot/src/app/admin/metrics/metrics-details-modal.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts": {
+  "clientRoot/src/app/admin/metrics/metrics-details-modal.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts": {
+  "clientRoot/src/app/admin/metrics/metrics-details-modal.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/metrics/metrics.html": {
@@ -6874,13 +6874,13 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/admin/logs/logs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/metrics/metrics.html": {
@@ -8245,13 +8245,13 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/admin/logs/logs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts": {
+  "src/main/webapp/app/admin/metrics/metrics-details-modal.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/metrics/metrics.html": {

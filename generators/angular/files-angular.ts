@@ -234,8 +234,8 @@ export const files = asWriteFilesSection({
         'admin/metrics/metrics.ts',
         'admin/metrics/metrics.html',
         'admin/metrics/metrics.service.ts',
-        'admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts',
-        'admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html',
+        'admin/metrics/metrics-details-modal.ts',
+        'admin/metrics/metrics-details-modal.html',
       ],
     },
     {
@@ -398,7 +398,7 @@ export const files = asWriteFilesSection({
         'admin/logs/logs.service.spec.ts',
         'admin/metrics/metrics.spec.ts',
         'admin/metrics/metrics.service.spec.ts',
-        'admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts',
+        'admin/metrics/metrics-details-modal.spec.ts',
       ],
     },
     {
