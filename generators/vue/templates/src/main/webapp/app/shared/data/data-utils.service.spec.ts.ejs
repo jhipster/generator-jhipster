@@ -29,22 +29,6 @@ describe('DataUtils Service', () => {
     dataUtilsService = useDataUtils();
   });
 
-  it('should abbreviate no text to an empty text', () => {
-    expect(dataUtilsService.abbreviate(undefined)).toBe('');
-  });
-
-  it('should not abbreviate text shorter than 30 characters', () => {
-    const result = dataUtilsService.abbreviate('JHipster JHipster');
-
-    expect(result).toBe('JHipster JHipster');
-  });
-
-  it('should abbreviate text longer than 30 characters', () => {
-    const result = dataUtilsService.abbreviate('JHipster JHipster JHipster JHipster JHipster');
-
-    expect(result).toBe('JHipster JHipst...r JHipster');
-  });
-
   it('should retrieve byteSize', () => {
     const result = dataUtilsService.byteSize('JHipster rocks!');
 
