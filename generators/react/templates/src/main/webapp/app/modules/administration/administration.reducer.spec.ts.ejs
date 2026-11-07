@@ -20,6 +20,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import axios from 'axios';
 
+<%_ if (withAdminUi) { _%>
+import { configurationResponses, healthResponse, loggersResponse, metricsResponses } from 'app/shared/jhipster/admin.samples';
+import { configurationEndpoints, toConfiguration } from 'app/shared/jhipster/configuration';
+import { toHealthChecks } from 'app/shared/jhipster/health';
+import { type LoggersResponse, toLogs } from 'app/shared/jhipster/logs';
+import { metricsEndpoints, toMetrics } from 'app/shared/jhipster/metrics';
+
+<%_ } _%>
 import administration, {
 <%_ if (withAdminUi) { _%>
   getConfiguration,
@@ -31,7 +39,6 @@ import administration, {
   getLoggers,
   getSystemHealth,
   getSystemMetrics,
-  getSystemThreadDump,
   setLoggers,
   <%_ if (communicationSpringWebsocket) { _%>
   websocketActivityMessage,
@@ -61,7 +68,6 @@ describe('Administration reducer tests', () => {
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
     expect(isEmpty(state.logs.loggers)).toBe(true);
-    expect(isEmpty(state.threadDump)).toBe(true);
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
     expect(isEmpty(state.tracker.activities)).toBe(true);
@@ -91,7 +97,6 @@ describe('Administration reducer tests', () => {
           getLoggers.pending.type,
           getSystemHealth.pending.type,
           getSystemMetrics.pending.type,
-          getSystemThreadDump.pending.type,
           getConfiguration.pending.type,
 <%_ } _%>
         ],
@@ -117,7 +122,6 @@ describe('Administration reducer tests', () => {
           getLoggers.rejected.type,
           getSystemHealth.rejected.type,
           getSystemMetrics.rejected.type,
-          getSystemThreadDump.rejected.type,
           getConfiguration.rejected.type,
 <%_ } _%>
         ],
@@ -150,50 +154,32 @@ describe('Administration reducer tests', () => {
   <%_ } _%>
   <%_ if (withAdminUi) { _%>
     it('should update state according to a successful fetch logs request', () => {
-      const payload = {
-        data: {
-          loggers: {
-            main: {
-              effectiveLevel: 'WARN',
-            },
-          },
-        },
-      };
+      const payload = { data: loggersResponse };
       const toTest = administration(undefined, { type: getLoggers.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
-        logs: { loggers: [{ name: 'main', level: 'WARN' }] },
+        logs: { loggers: toLogs(loggersResponse as LoggersResponse) },
       });
     });
 
     it('should update state according to a successful fetch health request', () => {
-      const payload = { data: { status: 'UP', components: { ping: { status: 'UP' } } } };
+      const payload = { data: healthResponse };
       const toTest = administration(undefined, { type: getSystemHealth.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
-        health: [expect.objectContaining({ id: 'ping', healthy: true })],
+        health: toHealthChecks(healthResponse),
       });
     });
 
     it('should update state according to a successful fetch metrics request', () => {
-      const payload = { data: { version: '3.1.3', gauges: {} } };
+      const payload = toMetrics(metricsResponses);
       const toTest = administration(undefined, { type: getSystemMetrics.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
-        metrics: payload.data,
-      });
-    });
-
-    it('should update state according to a successful fetch thread dump request', () => {
-      const payload = { data: [{ threadName: 'hz.gateway.cached.thread-6', threadId: 9266 }] };
-      const toTest = administration(undefined, { type: getSystemThreadDump.fulfilled.type, payload });
-
-      expect(toTest).toMatchObject({
-        loading: false,
-        threadDump: payload.data,
+        metrics: payload,
       });
     });
 
@@ -283,6 +269,7 @@ describe('Administration reducer tests', () => {
       expect(result.payload).toBe(resolvedObject);
     });
     it('dispatches FETCH_METRICS_PENDING and FETCH_METRICS_FULFILLED actions', async () => {
+      axios.get = vi.fn().mockImplementation((url: string) => Promise.resolve({ data: metricsResponses[metricsEndpoints.indexOf(url)] }));
       const result = await getSystemMetrics()(dispatch, getState, extra);
 
       expect(dispatch).toHaveBeenCalledWith(
@@ -292,17 +279,7 @@ describe('Administration reducer tests', () => {
         }),
       );
       expect(getSystemMetrics.fulfilled.match(result)).toBe(true);
-    });
-    it('dispatches FETCH_THREAD_DUMP_PENDING and FETCH_THREAD_DUMP_FULFILLED actions', async () => {
-      const result = await getSystemThreadDump()(dispatch, getState, extra);
-
-      expect(dispatch).toHaveBeenCalledWith(
-        expect.objectContaining({
-          type: getSystemThreadDump.pending.type,
-          meta: expect.objectContaining({ requestStatus: 'pending' }),
-        }),
-      );
-      expect(getSystemThreadDump.fulfilled.match(result)).toBe(true);
+      expect(result.payload).toEqual(toMetrics(metricsResponses));
     });
     it('dispatches FETCH_LOGS_PENDING and FETCH_LOGS_FULFILLED actions', async () => {
       const result = await getLoggers()(dispatch, getState, extra);
@@ -327,7 +304,7 @@ describe('Administration reducer tests', () => {
       expect(setLoggers.fulfilled.match(result)).toBe(true);
     });
     it('dispatches FETCH_CONFIGURATION_PENDING and FETCH_CONFIGURATION_FULFILLED actions', async () => {
-      axios.get = vi.fn().mockResolvedValue({ data: { contexts: {}, propertySources: [] } });
+      axios.get = vi.fn().mockImplementation((url: string) => Promise.resolve({ data: configurationResponses[configurationEndpoints.indexOf(url)] }));
       const result = await getConfiguration()(dispatch, getState, extra);
 
       expect(dispatch).toHaveBeenCalledWith(
@@ -337,6 +314,7 @@ describe('Administration reducer tests', () => {
         }),
       );
       expect(getConfiguration.fulfilled.match(result)).toBe(true);
+      expect(result.payload).toEqual(toConfiguration(configurationResponses));
     });
   <%_ } _%>
   });

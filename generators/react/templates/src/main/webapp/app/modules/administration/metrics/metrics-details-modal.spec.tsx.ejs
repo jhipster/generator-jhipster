@@ -1,0 +1,75 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+
+import { fireEvent, render, screen } from '@testing-library/react';
+
+import { type MetricDetails } from 'app/shared/jhipster/metrics';
+
+import MetricsDetailsModal from './metrics-details-modal';
+
+const details: MetricDetails = {
+  label: { text: 'Details' },
+  showLines: { text: 'Show' },
+  hideLines: { text: 'Hide' },
+  columns: [{ text: 'Column' }],
+  filters: [
+    { label: { text: 'All' }, count: 2, status: 'primary' },
+    { label: { text: 'One' }, value: 'ONE', count: 1, status: 'success' },
+  ],
+  items: [
+    { title: 'first', value: 'ONE', status: 'success', lines: ['a line'], cells: ['a cell'] },
+    { title: 'second', value: 'TWO', status: 'danger', lines: [], cells: [] },
+  ],
+};
+
+describe('MetricsDetailsModal', () => {
+  it('should filter the items by value and by title', () => {
+    render(<MetricsDetailsModal details={details} handleClose={vi.fn()} />);
+    expect(screen.queryByText(/second/)).not.toBeNull();
+
+    fireEvent.click(screen.getByText(/^One/));
+    expect(screen.queryByText(/second/)).toBeNull();
+
+    fireEvent.click(screen.getByText(/^All/));
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'SECOND' } });
+    expect(screen.queryByText(/second/)).not.toBeNull();
+    expect(screen.queryByText(/first/)).toBeNull();
+  });
+
+  it('should show and hide the lines of an item', () => {
+    render(<MetricsDetailsModal details={details} handleClose={vi.fn()} />);
+    expect(screen.queryByText('a line')).toBeNull();
+
+    fireEvent.click(screen.getByText('Show'));
+    expect(screen.queryByText('a line')).not.toBeNull();
+
+    fireEvent.click(screen.getByText('Hide'));
+    expect(screen.queryByText('a line')).toBeNull();
+  });
+
+  it('should close', () => {
+    const handleClose = vi.fn();
+    render(<MetricsDetailsModal details={details} handleClose={handleClose} />);
+
+    fireEvent.click(screen.getByText('Close', { selector: '.btn-primary' }));
+
+    expect(handleClose).toHaveBeenCalled();
+  });
+});

@@ -48,6 +48,7 @@ const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/modules/administration/configuration/configuration.tsx`,
   `${clientSrcDir}app/modules/administration/health/health.tsx`,
   `${clientSrcDir}app/modules/administration/health/health-modal.tsx`,
+  `${clientSrcDir}app/modules/administration/metrics/metrics-details-modal.tsx`,
   `${clientSrcDir}app/modules/administration/metrics/metrics.tsx`,
   `${clientSrcDir}app/modules/administration/logs/logs.tsx`,
 ];
@@ -186,8 +187,7 @@ describe(`generator - ${clientFramework}`, () => {
                 '    loggers: [] as Log[],\n' +
                 '  },\n' +
                 '  health: [] as HealthCheck[],\n' +
-                '  metrics: {} as any,\n' +
-                '  threadDump: [],\n' +
+                '  metrics: [] as MetricsSection[],\n' +
                 '  configuration: [] as ConfigurationSection[],',
             );
 
