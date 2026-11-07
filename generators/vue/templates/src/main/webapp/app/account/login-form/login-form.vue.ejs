@@ -67,12 +67,14 @@
             }}</b-link>
           </b-alert>
         </div>
+  <%_ if (generateUserRegistration) { _%>
         <div>
           <b-alert :model-value="true" variant="warning">
             <span>{{ t$('global.messages.info.register.noaccount') }}</span>
             <b-link to="/register" class="alert-link ms-1">{{ t$('global.messages.info.register.link') }}</b-link>
           </b-alert>
         </div>
+  <%_ } _%>
 <%_ } _%>
       </div>
     </div>

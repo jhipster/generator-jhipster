@@ -147,14 +147,16 @@ public class MailService {
     }
 <%_ if (!authenticationTypeOauth2) { _%>
 
-  <%_ if (!reactive) { _%>
+  <%_ if (generateUserRegistration) { _%>
+    <%_ if (!reactive) { _%>
     @Async
-  <%_ } _%>
+    <%_ } _%>
     public void sendActivationEmail(<%- user.persistClass %> user) {
         LOG.debug("Sending activation email to '{}'", user.getEmail());
         <%- localSendEmailFromTemplateApi %>(user, "mail/activationEmail", "email.activation.title");
     }
 
+  <%_ } _%>
   <%_ if (!reactive) { _%>
     @Async
   <%_ } _%>

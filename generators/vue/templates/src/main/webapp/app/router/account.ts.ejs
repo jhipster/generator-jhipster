@@ -19,8 +19,10 @@
 <%_ if (generateUserManagement) { _%>
 import { Authority } from '@/shared/jhipster/constants';
 
+  <%_ if (generateUserRegistration) { _%>
 const Register = () => import('@/account/register/register.vue');
 const Activate = () => import('@/account/activate/activate.vue');
+  <%_ } _%>
 const ResetPasswordInit = () => import('@/account/reset-password/init/reset-password-init.vue');
 const ResetPasswordFinish = () => import('@/account/reset-password/finish/reset-password-finish.vue');
 const ChangePassword = () => import('@/account/change-password/change-password.vue');
@@ -32,6 +34,7 @@ const Sessions = () => import('@/account/sessions/sessions.vue');
 
 export default [
 <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
   {
     path: '/register',
     name: 'Register',
@@ -42,6 +45,7 @@ export default [
     name: 'Activate',
     component: Activate,
   },
+  <%_ } _%>
   {
     path: '/account/reset/request',
     name: 'ResetPasswordInit',

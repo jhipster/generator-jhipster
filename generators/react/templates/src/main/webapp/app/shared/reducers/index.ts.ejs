@@ -22,10 +22,14 @@ import { ReducersMapObject } from '@reduxjs/toolkit';
 import entitiesReducers from 'app/entities/reducers';
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
 import activate from 'app/modules/account/activate/activate.reducer';
+  <%_ } _%>
 import password from 'app/modules/account/password/password.reducer';
 import passwordReset from 'app/modules/account/password-reset/password-reset.reducer';
+  <%_ if (generateUserRegistration) { _%>
 import register from 'app/modules/account/register/register.reducer';
+  <%_ } _%>
   <%_ if (authenticationTypeSession) { _%>
 import sessions from 'app/modules/account/sessions/sessions.reducer';
   <%_ } _%>
@@ -55,8 +59,10 @@ const rootReducer: ReducersMapObject = {
   users,
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
   register,
   activate,
+  <%_ } _%>
   passwordReset,
   password,
   settings,

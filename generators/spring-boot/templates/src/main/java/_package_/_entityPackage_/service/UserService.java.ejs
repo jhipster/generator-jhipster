@@ -63,7 +63,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
   <%_ } _%>
 import org.springframework.data.domain.Pageable;
-  <%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (generateUserRegistration || (authenticationTypeSession && !reactive)) { _%>
 import org.springframework.scheduling.annotation.Scheduled;
   <%_ } _%>
 <%_ } _%>
@@ -91,7 +91,7 @@ import java.time.LocalDate;
 <%_ if (!databaseTypeNo) { _%>
 import java.time.Instant;
 <%_ } _%>
-<%_ if (databaseTypeSql && reactive && !authenticationTypeOauth2) { _%>
+<%_ if (databaseTypeSql && reactive && generateUserRegistration) { _%>
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 <%_ } _%>
@@ -156,10 +156,11 @@ public class UserService {
   <%_ } _%>
     }
   <%_ if (!authenticationTypeOauth2) { _%>
+    <%_ if (generateUserRegistration) { _%>
 
-    <%_ if (databaseTypeSql && reactive) { _%>
+      <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
-    <%_ } _%>
+      <%_ } _%>
     public <%- reactive ? 'Mono' : 'Optional' %><<%- user.persistClass %>> activateRegistration(String key) {
         LOG.debug("Activating user for activation key {}", key);
         return userRepository
@@ -168,31 +169,32 @@ public class UserService {
                 // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
-    <%_ if (reactive) { _%>
+      <%_ if (reactive) { _%>
                 return saveUser(user);
             })
-      <%_ if (searchEngineElasticsearch) { _%>
+        <%_ if (searchEngineElasticsearch) { _%>
             .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
-      <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+        <%_ } _%>
+        <%_ if (cacheProviderAny) { _%>
             .doOnNext(this::clearUserCaches)
-      <%_ } _%>
+        <%_ } _%>
             .doOnNext(user -> LOG.debug("Activated user: {}", user));
-    <%_ } else { _%>
-      <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
+      <%_ } else { _%>
+        <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
-      <%_ } _%>
-      <%_ if (searchEngineElasticsearch) { _%>
+        <%_ } _%>
+        <%_ if (searchEngineElasticsearch) { _%>
                 userSearchRepository.index(user);
-      <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+        <%_ } _%>
+        <%_ if (cacheProviderAny) { _%>
                 this.clearUserCaches(user);
-      <%_ } _%>
+        <%_ } _%>
                 LOG.debug("Activated user: {}", user);
                 return user;
             });
-    <%_ } _%>
+      <%_ } _%>
     }
+    <%_ } _%>
 
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
@@ -258,18 +260,19 @@ public class UserService {
     <%_ } _%>
     }
 
-    <%_ if (databaseTypeSql && reactive) { _%>
+    <%_ if (generateUserRegistration) { _%>
+      <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
-    <%_ } _%>
+      <%_ } _%>
     public <% if (reactive) { %>Mono<<%- user.persistClass %>><% } else { %><%- user.persistClass %><% } %> registerUser(<%- user.adminUserDto %> userDTO, String password) {
-    <%_ if (reactive) { _%>
+      <%_ if (reactive) { _%>
         return userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .flatMap(existingUser -> {
                 if (!existingUser.isActivated()) {
-      <%_ if (cacheProviderAny) { _%>
+        <%_ if (cacheProviderAny) { _%>
                     this.clearUserCaches(existingUser);
-      <%_ } _%>
+        <%_ } _%>
                     return userRepository.delete(existingUser);
                 } else {
                     return Mono.error(new UsernameAlreadyUsedException());
@@ -278,9 +281,9 @@ public class UserService {
             .then(userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()))
             .flatMap(existingUser -> {
                 if (!existingUser.isActivated()) {
-      <%_ if (cacheProviderAny) { _%>
+        <%_ if (cacheProviderAny) { _%>
                     this.clearUserCaches(existingUser);
-      <%_ } _%>
+        <%_ } _%>
                     return userRepository.delete(existingUser);
                 } else {
                     return Mono.error(new EmailAlreadyUsedException());
@@ -289,9 +292,9 @@ public class UserService {
             .publishOn(Schedulers.boundedElastic())
             .then(Mono.fromCallable(() -> {
                 <%- user.persistClass %> newUser = new <%- user.persistClass %>();
-      <%_ if (databaseTypeCassandra) { _%>
+        <%_ if (databaseTypeCassandra) { _%>
                 newUser.setId(UUID.randomUUID().toString());
-      <%_ } _%>
+        <%_ } _%>
                 String encryptedPassword = passwordEncoder.encode(password);
                 newUser.setLogin(userDTO.getLogin().toLowerCase());
                 // new user gets initially a generated password
@@ -301,9 +304,9 @@ public class UserService {
                 if (userDTO.getEmail() != null) {
                     newUser.setEmail(userDTO.getEmail().toLowerCase());
                 }
-      <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
+        <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
                 newUser.setImageUrl(userDTO.getImageUrl());
-      <%_ } _%>
+        <%_ } _%>
                 newUser.setLangKey(userDTO.getLangKey());
                 // new user is not active
                 newUser.setActivated(false);
@@ -313,26 +316,26 @@ public class UserService {
             }))
             .flatMap(newUser -> {
                 Set<<%- databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j ? 'Authority' : 'String' %>> authorities = new HashSet<>();
-      <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+        <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
                 return authorityRepository.findById(AuthoritiesConstants.USER)
                     .map(authorities::add)
                     .thenReturn(newUser)
                     .doOnNext(user -> user.setAuthorities(authorities))
                     .flatMap(this::saveUser)
-      <%_ } else { _%>
+        <%_ } else { _%>
                 authorities.add(AuthoritiesConstants.USER);
                 newUser.setAuthorities(authorities);
                 return saveUser(newUser)
-      <%_ } _%>
-      <%_ if (searchEngineElasticsearch) { _%>
+        <%_ } _%>
+        <%_ if (searchEngineElasticsearch) { _%>
                     .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
-      <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+        <%_ } _%>
+        <%_ if (cacheProviderAny) { _%>
                     .doOnNext(this::clearUserCaches)
-      <%_ } _%>
+        <%_ } _%>
                     .doOnNext(user -> LOG.debug("Created Information for User: {}", user));
             });
-    <%_ } else { /* !reactive */ _%>
+      <%_ } else { /* !reactive */ _%>
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
@@ -346,9 +349,9 @@ public class UserService {
             }
         });
         <%- user.persistClass %> newUser = new <%- user.persistClass %>();
-      <%_ if (databaseTypeCassandra) { _%>
+        <%_ if (databaseTypeCassandra) { _%>
         newUser.setId(UUID.randomUUID().toString());
-      <%_ } _%>
+        <%_ } _%>
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
@@ -358,49 +361,50 @@ public class UserService {
         if (userDTO.getEmail() != null) {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
         }
-      <%_ if (user.hasImageField) { _%>
+        <%_ if (user.hasImageField) { _%>
         newUser.setImageUrl(userDTO.getImageUrl());
-      <%_ } _%>
+        <%_ } _%>
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-      <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+        <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-      <%_ } else { _%>
+        <%_ } else { _%>
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.USER);
-      <%_ } _%>
+        <%_ } _%>
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
-      <%_ if (searchEngineElasticsearch) { _%>
+        <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.index(newUser);
-      <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+        <%_ } _%>
+        <%_ if (cacheProviderAny) { _%>
         this.clearUserCaches(newUser);
-      <%_ } _%>
+        <%_ } _%>
         LOG.debug("Created Information for User: {}", newUser);
         return newUser;
-    <%_ } _%>
+      <%_ } _%>
     }
 
-    <%_ if (!reactive) { _%>
+      <%_ if (!reactive) { _%>
     protected boolean removeNonActivatedUser(<%- user.persistClass %> existingUser) {
         if (existingUser.isActivated()) {
             return false;
         }
         userRepository.delete(existingUser);
-      <%_ if (databaseTypeSql) { _%>
+        <%_ if (databaseTypeSql) { _%>
         userRepository.flush();
-      <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+        <%_ } _%>
+        <%_ if (cacheProviderAny) { _%>
         this.clearUserCaches(existingUser);
-      <%_ } _%>
+        <%_ } _%>
         return true;
     }
 
+      <%_ } _%>
     <%_ } _%>
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
@@ -835,7 +839,7 @@ public class UserService {
         });
     }
   <%_ } _%>
-  <%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
+  <%_ if (generateUserRegistration && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
 
     /**
      * Not activated users should be automatically deleted after 3 days.
