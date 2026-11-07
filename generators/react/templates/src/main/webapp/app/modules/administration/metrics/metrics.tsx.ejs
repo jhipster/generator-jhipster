@@ -16,42 +16,35 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useEffect } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
-import {
-  CacheMetrics,
-  DatasourceMetrics,
-  EndpointsRequestsMetrics,
-  GarbageCollectorMetrics,
-  HttpRequestMetrics,
-  JvmMemory,
-  JvmThreads,
-  SystemMetrics,
-  Translate,
-} from 'react-jhipster';
+import { useEffect, useState } from 'react';
+import { Button, Col, ProgressBar, Row, Table } from 'react-bootstrap';
+import { Translate } from 'react-jhipster';
 
 import { faSync } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { APP_TIMESTAMP_FORMAT, APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT, APP_WHOLE_NUMBER_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getSystemMetrics, getSystemThreadDump } from '../administration.reducer';
+import { type MetricDetails, type MetricGauge } from 'app/shared/jhipster/metrics.model';
+import { getSystemMetrics } from '../administration.reducer';
+import MetricsDetailsModal, { labelText } from './metrics-details-modal';
+
+const Gauge = ({ gauge }: { gauge: MetricGauge }) => (
+  <ProgressBar animated={false} striped now={gauge.percent} label={gauge.text} variant={gauge.status} />
+);
 
 export const MetricsPage = () => {
   const dispatch = useAppDispatch();
-  const metrics = useAppSelector(state => state.administration.metrics);
+  const sections = useAppSelector(state => state.administration.metrics);
   const isFetching = useAppSelector(state => state.administration.loading);
-  const threadDump = useAppSelector(state => state.administration.threadDump);
+  const [details, setDetails] = useState<MetricDetails>();
 
   useEffect(() => {
     dispatch(getSystemMetrics());
-    dispatch(getSystemThreadDump());
   }, []);
 
   const getMetrics = () => {
     if (!isFetching) {
       dispatch(getSystemMetrics());
-      dispatch(getSystemThreadDump());
     }
   };
 
@@ -70,56 +63,71 @@ export const MetricsPage = () => {
         </Button>
       </h2>
 
-      <Row>
-        <Col sm="12">
-          <h3>
-            <Translate contentKey="metrics.jvm.title">JVM Metrics</Translate>
-          </h3>
-          <Row>
-            <Col md="4">{metrics?.jvm && <JvmMemory jvmMetrics={metrics.jvm} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} />}</Col>
-            <Col md="4">{threadDump && <JvmThreads jvmThreads={threadDump} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} />}</Col>
-            <Col md="4">
-              {metrics?.processMetrics && (
-                <SystemMetrics
-                  systemMetrics={metrics.processMetrics}
-                  wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}
-                  timestampFormat={APP_TIMESTAMP_FORMAT}
-                />
-              )}
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-
-      {metrics?.garbageCollector && (
-        <GarbageCollectorMetrics garbageCollectorMetrics={metrics.garbageCollector} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} />
-      )}
-      {metrics?.['http.server.requests'] && (
-        <HttpRequestMetrics
-          requestMetrics={metrics['http.server.requests']}
-          twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}
-          wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}
-        />
-      )}
-      {metrics?.services && (
-        <EndpointsRequestsMetrics endpointsRequestsMetrics={metrics.services} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} />
+      {isFetching && (
+        <div className="alert alert-info">
+          <Translate contentKey="metrics.updating">Updating...</Translate>
+        </div>
       )}
 
-      {metrics?.cache && (
-        <Row>
-          <Col sm="12">
-            <CacheMetrics cacheMetrics={metrics.cache} twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
-          </Col>
-        </Row>
-      )}
+      {sections.map(section => (
+        <div key={section.id}>
+          <h3 id={section.id}>{labelText(section.label)}</h3>
 
-      {metrics?.databases && JSON.stringify(metrics.databases) !== '{}' && (
-        <Row>
-          <Col sm="12">
-            <DatasourceMetrics datasourceMetrics={metrics.databases} twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
-          </Col>
-        </Row>
-      )}
+          {section.blocks.length > 0 && (
+            <Row>
+              {section.blocks.map((block, blockIndex) => (
+                <Col md="4" key={blockIndex}>
+                  {block.label && <h4>{labelText(block.label)}</h4>}
+
+                  {block.items.map((item, itemIndex) => (
+                    <div key={itemIndex}>
+                      <div className="d-flex flex-wrap justify-content-between column-gap-2">
+                        <span>{labelText(item.label)}</span>
+                        <span>{item.value}</span>
+                      </div>
+                      {item.note && <div>{item.note}</div>}
+                      {item.gauge && <Gauge gauge={item.gauge} />}
+                    </div>
+                  ))}
+
+                  {block.details && (
+                    <Button className="hand mt-2" size="sm" variant="primary" onClick={() => setDetails(block.details)}>
+                      <span>Expand</span>
+                    </Button>
+                  )}
+                </Col>
+              ))}
+            </Row>
+          )}
+
+          {section.tables.map((table, tableIndex) => (
+            <Table key={tableIndex} responsive striped aria-describedby={section.id}>
+              <thead>
+                <tr>
+                  {table.columns.map((column, columnIndex) => (
+                    <th key={columnIndex} scope="col" className={column.numeric ? 'text-end' : undefined}>
+                      {labelText(column.label)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {table.rows.map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {row.map((cell, cellIndex) => (
+                      <td key={cellIndex} className={table.columns[cellIndex].numeric ? 'text-end' : undefined}>
+                        {cell.gauge ? <Gauge gauge={cell.gauge} /> : cell.text}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ))}
+        </div>
+      ))}
+
+      {details && <MetricsDetailsModal details={details} handleClose={() => setDetails(undefined)} />}
     </div>
   );
 };
