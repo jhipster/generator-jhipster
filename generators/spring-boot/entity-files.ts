@@ -47,6 +47,11 @@ export const restFiles = javaWriteFileSection({
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       templates: ['web/rest/_entityClass_Resource.java'],
     },
+    {
+      condition: generator => !generator.embedded && generator.entityRestLayer && generator.entityDomainLayer && !generator.paginationNo,
+      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['domain/_persistClass_.java.jhi.sortable'],
+    },
   ],
   restTestFiles: [
     {

@@ -92,6 +92,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
@@ -189,6 +192,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserResource.java": {
@@ -387,6 +393,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
@@ -565,6 +574,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {
     "stateCleared": "modified",
   },
@@ -602,6 +614,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -737,6 +752,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
@@ -906,6 +924,9 @@ exports[`generator - elasticsearch gateway-oauth2-reactive(true)-gradle-enableTr
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/domain/User.java": {
     "stateCleared": "modified",
   },
@@ -970,6 +991,9 @@ exports[`generator - elasticsearch gateway-oauth2-reactive(true)-gradle-enableTr
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -1122,6 +1146,9 @@ exports[`generator - elasticsearch gateway-oauth2-reactive(true)-gradle-enableTr
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -1250,6 +1277,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -1293,6 +1323,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
@@ -1437,6 +1470,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
@@ -1606,6 +1642,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -1637,6 +1676,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -1778,6 +1820,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
@@ -1947,6 +1992,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -1978,6 +2026,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -2121,6 +2172,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -2246,6 +2300,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
@@ -2331,6 +2388,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserResource.java": {
@@ -2525,6 +2585,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -2701,6 +2764,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {
     "stateCleared": "modified",
   },
@@ -2744,6 +2810,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -2887,6 +2956,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -3012,6 +3084,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/repository/search/AnotherSimpleSearchRepository.java": {
     "stateCleared": "modified",
   },
@@ -3067,6 +3142,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
@@ -3217,6 +3295,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
@@ -3383,6 +3464,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {
     "stateCleared": "modified",
   },
@@ -3426,6 +3510,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -3575,6 +3662,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -3709,6 +3799,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
@@ -3818,6 +3911,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserResource.java": {
@@ -4024,6 +4120,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -4200,6 +4299,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/Sortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {
     "stateCleared": "modified",
   },
@@ -4243,6 +4345,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -4390,6 +4495,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {

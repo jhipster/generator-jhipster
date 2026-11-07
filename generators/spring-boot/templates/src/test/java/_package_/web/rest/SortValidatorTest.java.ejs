@@ -1,0 +1,80 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.web.rest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import <%- packageName %>.domain.Sortable;
+import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Sort;
+
+/**
+ * Test class for the {@link SortValidator} utility class.
+ */
+class SortValidatorTest {
+
+    static class Related {}
+
+    static class Base {
+
+        @Sortable
+        private Long id;
+    }
+
+    static class Sample extends Base {
+
+        @Sortable
+        private String name;
+
+        private String secret;
+
+        @Sortable({ "id", "name" })
+        private Related related;
+    }
+
+    @Test
+    void acceptsTheSortableProperties() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("id", "name", "related.id", "related.name"))).isTrue();
+    }
+
+    @Test
+    void acceptsNoSort() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.unsorted())).isTrue();
+    }
+
+    @Test
+    void rejectsAPropertyThatIsNotSortable() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("name", "secret"))).isFalse();
+    }
+
+    @Test
+    void rejectsAPropertyThatDoesNotExist() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("doesNotExist"))).isFalse();
+    }
+
+    @Test
+    void rejectsARelationshipAlone() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("related"))).isFalse();
+    }
+
+    @Test
+    void rejectsAPropertyOfARelationshipThatIsNotSortable() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("related.secret"))).isFalse();
+    }
+}

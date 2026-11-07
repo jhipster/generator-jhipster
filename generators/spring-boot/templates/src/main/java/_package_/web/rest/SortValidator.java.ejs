@@ -1,0 +1,68 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.web.rest;
+
+import <%- packageName %>.domain.Sortable;
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.data.domain.Sort;
+
+/**
+ * Checks the properties of a sort against the {@link Sortable} properties of an entity.
+ */
+public final class SortValidator {
+
+    private static final Map<Class<?>, Set<String>> SORTABLE_PROPERTIES = new ConcurrentHashMap<>();
+
+    private SortValidator() {}
+
+    /**
+     * Whether every property of the sort is a {@link Sortable} property of the entity.
+     *
+     * @param entityClass the class of the entity.
+     * @param sort the sort.
+     * @return {@code true} if the entity can be sorted by every property of the sort.
+     */
+    public static boolean isSortable(Class<?> entityClass, Sort sort) {
+        Set<String> sortableProperties = SORTABLE_PROPERTIES.computeIfAbsent(entityClass, SortValidator::sortablePropertiesOf);
+        return sort.stream().map(Sort.Order::getProperty).allMatch(sortableProperties::contains);
+    }
+
+    private static Set<String> sortablePropertiesOf(Class<?> entityClass) {
+        Set<String> properties = new HashSet<>();
+        for (Class<?> type = entityClass; type != null && type != Object.class; type = type.getSuperclass()) {
+            for (Field field : type.getDeclaredFields()) {
+                Sortable sortable = field.getAnnotation(Sortable.class);
+                if (sortable == null) {
+                    continue;
+                }
+                if (sortable.value().length == 0) {
+                    properties.add(field.getName());
+                }
+                for (String relatedProperty : sortable.value()) {
+                    properties.add(field.getName() + "." + relatedProperty);
+                }
+            }
+        }
+        return Set.copyOf(properties);
+    }
+}
