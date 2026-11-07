@@ -1,64 +1,41 @@
 <template>
   <div class="modal-body">
-    <span class="badge bg-primary" @click="threadDumpFilter = ''"
-      >{{ t$('metrics.jvm.threads.all') }}&nbsp;<span class="badge rounded-pill">{{ threadDumpData.threadDumpAll }}</span></span
-    >&nbsp;
-    <span class="badge bg-success" @click="threadDumpFilter = 'RUNNABLE'"
-      >{{ t$('metrics.jvm.threads.runnable') }}&nbsp;<span class="badge rounded-pill">{{ threadDumpData.threadDumpRunnable }}</span></span
-    >&nbsp;
-    <span class="badge bg-info" @click="threadDumpFilter = 'WAITING'"
-      >{{ t$('metrics.jvm.threads.waiting') }}&nbsp;<span class="badge rounded-pill">{{ threadDumpData.threadDumpWaiting }}</span></span
-    >&nbsp;
-    <span class="badge bg-warning" @click="threadDumpFilter = 'TIMED_WAITING'"
-      >{{ t$('metrics.jvm.threads.timedwaiting') }}&nbsp;<span class="badge rounded-pill">{{
-        threadDumpData.threadDumpTimedWaiting
-      }}</span></span
-    >&nbsp;
-    <span class="badge bg-danger" @click="threadDumpFilter = 'BLOCKED'"
-      >{{ t$('metrics.jvm.threads.blocked') }}&nbsp;<span class="badge rounded-pill">{{ threadDumpData.threadDumpBlocked }}</span></span
-    >&nbsp;
+    <span
+      v-for="filter of details.filters"
+      :key="filter.value ?? 'all'"
+      class="badge hand me-1"
+      :class="`bg-${filter.status}`"
+      @click="selectedValue = filter.value"
+    >
+      {{ labelText(filter.label) }}&nbsp;<span class="badge rounded-pill">{{ filter.count }}</span>
+    </span>
     <div class="mt-2">&nbsp;</div>
     Filter
-    <input type="text" v-model="threadDumpFilter" class="form-control" />
-    <div class="pad" v-for="(entry, key1) of filteredThreadDump" :key="key1">
+    <input type="text" v-model="term" class="form-control" />
+    <div class="pad" v-for="item of filteredItems" :key="item.title">
       <h6>
-        <span class="badge" :class="getBadgeClass(entry.threadState)">{{ entry.threadState }}</span
-        >&nbsp;{{ entry.threadName }} (ID {{ entry.threadId }})
-        <a @click="entry.show = !entry.show" href="javascript:void(0);">
-          <span :hidden="entry.show">{{ t$('metrics.jvm.threads.dump.show') }}</span>
-          <span :hidden="!entry.show">{{ t$('metrics.jvm.threads.dump.hide') }}</span>
+        <span class="badge" :class="`bg-${item.status}`">{{ item.value }}</span
+        >&nbsp;{{ item.title }}
+        <a v-if="item.lines.length > 0" @click="toggle(item.title)" href="javascript:void(0);">
+          {{ labelText(shownItems.has(item.title) ? details.hideLines : details.showLines) }}
         </a>
       </h6>
-      <div class="card" :hidden="!entry.show">
+      <div v-if="shownItems.has(item.title)" class="card">
         <div class="card-body">
-          <div v-for="(st, key2) of entry.stackTrace" :key="key2" class="break">
-            <samp
-              >{{ st.className }}.{{ st.methodName }}(<code>{{ st.fileName }}:{{ st.lineNumber }}</code
-              >)</samp
-            >
-            <span class="mt-1"></span>
+          <div v-for="(line, lineIndex) of item.lines" :key="lineIndex" class="break">
+            <samp>{{ line }}</samp>
           </div>
         </div>
       </div>
       <table class="table table-sm table-responsive" aria-describedby="showMetricsLabel">
         <thead>
           <tr>
-            <th scope="col">{{ t$('metrics.jvm.threads.dump.blockedtime') }}</th>
-            <th scope="col">{{ t$('metrics.jvm.threads.dump.blockedcount') }}</th>
-            <th scope="col">{{ t$('metrics.jvm.threads.dump.waitedtime') }}</th>
-            <th scope="col">{{ t$('metrics.jvm.threads.dump.waitedcount') }}</th>
-            <th scope="col">{{ t$('metrics.jvm.threads.dump.lockname') }}</th>
+            <th v-for="(column, columnIndex) of details.columns" :key="columnIndex" scope="col">{{ labelText(column) }}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{{ entry.blockedTime }}</td>
-            <td>{{ entry.blockedCount }}</td>
-            <td>{{ entry.waitedTime }}</td>
-            <td>{{ entry.waitedCount }}</td>
-            <td class="thread-dump-modal-lock" :title="entry.lockName ?? undefined">
-              <code>{{ entry.lockName }}</code>
-            </td>
+            <td v-for="(cell, cellIndex) of item.cells" :key="cellIndex">{{ cell }}</td>
           </tr>
         </tbody>
       </table>
@@ -72,58 +49,35 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import { filterBy } from '@/shared/computables';
-
-import { type Thread } from './metrics.service';
+import { type Label } from '@/shared/jhipster/label';
+import { type MetricDetails } from '@/shared/jhipster/metrics.model';
 
 defineOptions({ name: '<%- jhiPrefixCapitalized %>MetricsModal' });
 
-const props = withDefaults(defineProps<{ threadDump?: Thread[] | null }>(), {
-  threadDump: () => [],
-});
+const props = defineProps<{ details: MetricDetails }>();
 
 <%_ if (enableTranslation) { _%>
-const { t: t$ } = useI18n();
+const { t: t$, te } = useI18n();
+
+const labelText = ({ text, translationKey }: Label): string => (translationKey && te(translationKey) ? t$(translationKey) : text);
+<%_ } else { _%>
+const labelText = ({ text }: Label): string => text;
 <%_ } _%>
 
-const threadDumpFilter = ref('');
-const filteredThreadDump = computed(() => filterBy(props.threadDump ?? [], { filterByTerm: threadDumpFilter.value }));
+const selectedValue = ref<string>();
+const term = ref('');
+const shownItems = ref(new Set<string>());
 
-const threadDumpData = computed(() => {
-  const data = {
-    threadDumpAll: 0,
-    threadDumpBlocked: 0,
-    threadDumpRunnable: 0,
-    threadDumpTimedWaiting: 0,
-    threadDumpWaiting: 0,
-  };
-  if (props.threadDump) {
-    props.threadDump.forEach(value => {
-      if (value.threadState === 'RUNNABLE') {
-        data.threadDumpRunnable += 1;
-      } else if (value.threadState === 'WAITING') {
-        data.threadDumpWaiting += 1;
-      } else if (value.threadState === 'TIMED_WAITING') {
-        data.threadDumpTimedWaiting += 1;
-      } else if (value.threadState === 'BLOCKED') {
-        data.threadDumpBlocked += 1;
-      }
-    });
-    data.threadDumpAll = data.threadDumpRunnable + data.threadDumpWaiting + data.threadDumpTimedWaiting + data.threadDumpBlocked;
-  }
-  return data;
-});
+const filteredItems = computed(() =>
+  props.details.items.filter(
+    ({ title, value }) =>
+      (!selectedValue.value || value === selectedValue.value) && title.toLowerCase().includes(term.value.toLowerCase()),
+  ),
+);
 
-const getBadgeClass = (threadState: string): string => {
-  if (threadState === 'RUNNABLE') {
-    return 'bg-success';
-  } else if (threadState === 'WAITING') {
-    return 'bg-info';
-  } else if (threadState === 'TIMED_WAITING') {
-    return 'bg-warning';
-  } else if (threadState === 'BLOCKED') {
-    return 'bg-danger';
+const toggle = (title: string): void => {
+  if (!shownItems.value.delete(title)) {
+    shownItems.value.add(title);
   }
-  return '';
 };
 </script>

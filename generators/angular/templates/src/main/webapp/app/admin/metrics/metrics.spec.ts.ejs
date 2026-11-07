@@ -19,16 +19,27 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { of } from 'rxjs';
 
+import { MetricDetails, MetricsSection } from 'app/shared/jhipster/metrics.model';
+
 import Metrics from './metrics';
-import { MetricsModel, Thread } from './metrics.model';
+import { MetricsDetailsModal } from './metrics-details-modal';
 import { MetricsService } from './metrics.service';
 
 describe('Metrics', () => {
+  const sections: MetricsSection[] = [
+    {
+      id: 'memory',
+      label: { text: 'Memory' },
+      blocks: [{ label: { text: 'Heap' }, items: [{ label: { text: 'Used' }, value: '10 MB' }] }],
+      tables: [{ columns: [{ label: { text: 'Pool' } }], rows: [[{ text: 'Eden' }]] }],
+    },
+  ];
   let comp: Metrics;
   let fixture: ComponentFixture<Metrics>;
   let service: MetricsService;
@@ -45,73 +56,34 @@ describe('Metrics', () => {
     fixture = TestBed.createComponent(Metrics);
     comp = fixture.componentInstance;
     service = TestBed.inject(MetricsService);
+    vi.spyOn(service, 'getMetrics').mockReturnValue(of(sections));
   });
 
   describe('ngOnInit', () => {
-    it('should call refresh on init', () => {
-      // GIVEN
-      const metrics = {
-        garbageCollector: {
-          'PS Scavenge': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-          'PS MarkSweep': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-        },
-      } as unknown as MetricsModel;
-      const threadDump = { threads: [{ threadName: 'thread 1' } as Thread] };
-
-      vi.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
-      vi.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
-
+    it('should load the sections on init', () => {
       // WHEN
       comp.ngOnInit();
 
       // THEN
       expect(service.getMetrics).toHaveBeenCalled();
-      expect(comp.metrics()).toEqual(metrics);
-      expect(comp.threads()).toEqual(threadDump.threads);
-      expect(comp.updatingMetrics()).toBeFalsy();
+      expect(comp.sections()).toEqual(sections);
+      expect(comp.updatingMetrics()).toBe(false);
     });
   });
 
-  describe('metricsKeyExistsAndObjectNotEmpty', () => {
-    it('should check that metrics key exists and is not empty', () => {
+  describe('openDetails', () => {
+    it('should open the details in a modal', () => {
       // GIVEN
-      comp.metrics.set({
-        garbageCollector: {
-          'PS Scavenge': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-          'PS MarkSweep': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-        },
-      } as unknown as MetricsModel);
+      const details = { label: { text: 'Details' } } as MetricDetails;
+      const modalRef = { componentInstance: {} };
+      const open = vi.spyOn(TestBed.inject(NgbModal), 'open').mockReturnValue(modalRef as never);
 
       // WHEN
-      const garbageCollectorKeyExistsAndNotEmpty = comp.metricsKeyExistsAndObjectNotEmpty('garbageCollector');
+      comp.openDetails(details);
 
       // THEN
-      expect(garbageCollectorKeyExistsAndNotEmpty).toBeTruthy();
-    });
-
-    it('should check that metrics key is empty', () => {
-      // GIVEN
-      comp.metrics.set({
-        garbageCollector: {},
-      } as MetricsModel);
-
-      // WHEN
-      const garbageCollectorKeyEmpty = comp.metricsKeyExistsAndObjectNotEmpty('garbageCollector');
-
-      // THEN
-      expect(garbageCollectorKeyEmpty).toBeFalsy();
+      expect(open).toHaveBeenCalledWith(MetricsDetailsModal, { size: 'lg' });
+      expect(modalRef.componentInstance).toEqual({ details });
     });
   });
 });

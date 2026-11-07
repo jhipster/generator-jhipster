@@ -21,7 +21,8 @@ import axios from 'axios';
 
 import { AppThunk } from 'app/config/store';
 <%_ if (withAdminUi) { _%>
-import { type Log, type LoggersResponse, toLogs } from 'app/shared/jhipster/logs';
+import { type Level, type Log } from 'app/shared/jhipster/logs.model';
+import { toLevelChange, toLogs } from 'app/shared/jhipster/logs';
 <%_ } _%>
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
@@ -79,20 +80,23 @@ export const getSystemThreadDump = createAsyncThunk(
   },
 );
 
-export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<LoggersResponse>('management/loggers'), {
+export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<unknown>('management/loggers'), {
   serializeError: serializeAxiosError,
 });
 
 export const setLoggers = createAsyncThunk(
   'administration/fetch_logs_change_level',
-  async ({ name, configuredLevel }: any) => axios.post(`management/loggers/${name}`, { configuredLevel }),
+  async ({ name, level }: { name: string; level: Level }) => {
+    const { url, body } = toLevelChange(name, level);
+    return axios.post(url, body);
+  },
   {
     serializeError: serializeAxiosError,
   },
 );
 
-export const changeLogLevel: (name, configuredLevel) => AppThunk = (name, configuredLevel) => async dispatch => {
-  await dispatch(setLoggers({ name, configuredLevel }));
+export const changeLogLevel: (name: string, level: Level) => AppThunk = (name, level) => async dispatch => {
+  await dispatch(setLoggers({ name, level }));
   dispatch(getLoggers());
 };
 

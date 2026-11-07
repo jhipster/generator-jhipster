@@ -16,24 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { DecimalPipe, KeyValuePipe } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { type Label } from './label';
 
-import { Services } from 'app/admin/metrics/metrics.model';
+export interface HealthDetail {
+  key: string;
+  value: string;
+}
 
-@Component({
-  selector: '<%- jhiPrefixDashed %>-metrics-endpoints-requests',
-  templateUrl: './metrics-endpoints-requests.html',
-  imports: [KeyValuePipe, DecimalPipe],
-})
-export class MetricsEndpointsRequests {
-  /**
-   * Object containing service related metrics
-   */
-  readonly endpointsRequestsMetrics = input<Services>();
-
-  /**
-   * Boolean field saying if the metrics are in the process of being updated
-   */
-  readonly updating = input<boolean>();
+/** A row of the health page, with its texts. */
+export interface HealthCheck {
+  id: string;
+  label: Label;
+  /** What tells apart the checks with the same label, like the name of a datasource. */
+  sublabel?: string;
+  status: Label;
+  healthy: boolean;
+  error?: string;
+  details?: HealthDetail[];
 }

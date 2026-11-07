@@ -1,0 +1,70 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+/** Responses of the backend for the specs of the admin screens. */
+const percentiles = { count: 2, mean: 1, max: 3, '0.0': 0, '0.5': 1, '0.75': 2, '0.95': 3, '0.99': 3 };
+
+export const configurationResponses: unknown[] = [
+  { contexts: { application: { beans: { bean: { prefix: 'jhipster', properties: { name: 'app' } } } } } },
+  { propertySources: [{ name: 'server.ports', properties: { 'local.server.port': { value: '8080' } } }] },
+];
+
+export const healthResponse = { status: 'UP', components: { db: { status: 'UP' }, ping: { status: 'UP' } } };
+
+export const loggersResponse = {
+  levels: ['INFO', 'WARN'],
+  loggers: { ROOT: { configuredLevel: 'INFO', effectiveLevel: 'INFO' } },
+};
+
+export const metricsResponses: unknown[] = [
+  {
+    jvm: { 'G1 Old Gen': { committed: 1048576, max: 4194304, used: 2097152 } },
+    garbageCollector: {
+      'jvm.gc.max.data.size': 4194304,
+      'jvm.gc.live.data.size': 2097152,
+      'jvm.gc.memory.promoted': 1048576,
+      'jvm.gc.memory.allocated': 2097152,
+      'jvm.gc.pause': percentiles,
+      classesLoaded: 10,
+      classesUnloaded: 1,
+    },
+    'http.server.requests': { all: { count: 1 }, percode: { 200: { count: 1, mean: 2, max: 3 } } },
+    processMetrics: {
+      'system.cpu.usage': 0.5,
+      'system.cpu.count': 8,
+      'process.cpu.usage': 0.25,
+      'process.start.time': 0,
+      'process.uptime': 1000,
+    },
+  },
+  {
+    threads: [
+      {
+        threadName: 'main',
+        threadId: 1,
+        threadState: 'RUNNABLE',
+        blockedTime: -1,
+        blockedCount: 0,
+        waitedTime: -1,
+        waitedCount: 0,
+        lockName: null,
+        stackTrace: [{ className: 'Foo', methodName: 'bar', fileName: 'Foo.java', lineNumber: 1 }],
+      },
+    ],
+  },
+];

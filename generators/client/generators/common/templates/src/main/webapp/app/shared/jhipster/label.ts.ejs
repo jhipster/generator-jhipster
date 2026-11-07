@@ -16,37 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export interface ConfigProps {
-  contexts: Contexts;
-}
-
-export type Contexts = Record<string, Context>;
-
-export interface Context {
-  beans: Beans;
-  parentId?: any;
-}
-
-export type Beans = Record<string, Bean>;
-
-export interface Bean {
-  prefix: string;
-  properties: any;
-}
-
-export interface Env {
-  activeProfiles?: string[];
-  propertySources: PropertySource[];
-}
-
-export interface PropertySource {
-  name: string;
-  properties: Properties;
-}
-
-export type Properties = Record<string, Property>;
-
-export interface Property {
-  value: string;
-  origin?: string;
+/** A text of a page, given by the backend. */
+export interface Label {
+  text: string;
+<%_ if (enableTranslation) { _%>
+  /** Gives the text in the language of the user. */
+  translationKey?: string;
+<%_ } _%>
 }
