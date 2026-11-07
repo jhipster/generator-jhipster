@@ -49,7 +49,7 @@ describe('jdl - UnaryOptions', () => {
         unaryOptions.forEach(option => result.push(option));
       });
 
-      it('should loop over the unary options', () => {
+      it('should loop over the unary options - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   "skipClient",

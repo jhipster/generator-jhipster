@@ -96,7 +96,7 @@ entity A
       it('stringified JDL should match original jdl', () => {
         expect(convertedJdl).toEqual(expectedJdl);
       });
-      it('should result matching', () => {
+      it('should result matching - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
@@ -144,7 +144,7 @@ relationship ManyToOne {
         expect(result.get(applicationName)![1].relationships).toHaveLength(1);
       });
 
-      it('should result matching', () => {
+      it('should result matching - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
@@ -217,7 +217,7 @@ relationship ManyToOne {
         expect(result.get(applicationName)![1].relationships).toHaveLength(0);
       });
 
-      it('should result matching', () => {
+      it('should result matching - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
@@ -274,7 +274,7 @@ relationship ManyToOne {
         expect(result.get(applicationName)![1].relationships).toHaveLength(1);
       });
 
-      it('should result matching', () => {
+      it('should result matching - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
@@ -376,7 +376,7 @@ application {
         result = importState.exportedApplicationsWithEntities;
       });
 
-      it('should result matching', () => {
+      it('should result matching - snapshot', () => {
         expect(result[applicationName]).toMatchInlineSnapshot(`
 {
   "config": {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`describe-samples - support describeSample should match a sample 1`] = `
+exports[`describe-samples - support describeSample should match a sample snapshot 1`] = `
 {
   "defaultCommand": "app",
   "disabled": undefined,
@@ -56,7 +56,7 @@ exports[`describe-samples - support describeSample should match a sample 1`] = `
 }
 `;
 
-exports[`describe-samples - support describeSampleGroup should match the samples of a group 1`] = `
+exports[`describe-samples - support describeSampleGroup should match the samples of a group snapshot 1`] = `
 {
   "samples": {
     "mf-ng-eureka-jwt-psql-ehcache": {
@@ -239,7 +239,7 @@ exports[`describe-samples - support describeSampleGroup should match the samples
 }
 `;
 
-exports[`describe-samples - support describeSampleGroups should match the samples groups and their samples 1`] = `
+exports[`describe-samples - support describeSampleGroups should match the samples groups and their samples snapshot 1`] = `
 {
   "angular": {
     "samples": [

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - spring-boot addTestSpringFactory should add a test spring factory 1`] = `
+exports[`generator - spring-boot addTestSpringFactory should add a test spring factory - snapshot 1`] = `
 {
   "src/test/resources/META-INF/spring.factories": {
     "contents": "key = first.value,second.value",
@@ -9,7 +9,7 @@ exports[`generator - spring-boot addTestSpringFactory should add a test spring f
 }
 `;
 
-exports[`generator - spring-boot gradle with consul service discovery should replace the placeholders in every configuration file 1`] = `
+exports[`generator - spring-boot gradle with consul service discovery should replace the placeholders in every configuration file - snapshot 1`] = `
 {
   "gradle/profile_dev.gradle": {
     "contents": "dependencies {
@@ -115,7 +115,7 @@ def integrationTest = tasks.register('integrationTest', Test) {
 }
 `;
 
-exports[`generator - spring-boot gradle with no service discovery should replace the placeholders in every configuration file 1`] = `
+exports[`generator - spring-boot gradle with no service discovery should replace the placeholders in every configuration file - snapshot 1`] = `
 {
   "gradle/profile_dev.gradle": {
     "contents": "dependencies {

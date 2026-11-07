@@ -34,7 +34,7 @@ describe(`generator - ${generator}`, () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withJHipsterConfig();
     });
 
-    it('should write no file of its own', () => {
+    it('should write no file of its own - snapshot', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
 

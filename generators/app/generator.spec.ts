@@ -37,7 +37,7 @@ describe(`generator - ${helpers.commandName}`, () => {
     expect(await helpers.forwardsFeaturesParameter()).toBe(true);
   });
   describe('help', () => {
-    it('should print expected information', async () => {
+    it('should print expected information - snapshot', async () => {
       expect(await helpers.getCommandHelpOutput()).toMatchSnapshot();
     });
   });
@@ -228,7 +228,7 @@ describe(`generator - ${helpers.commandName}`, () => {
         await helpers.runJHipster().withSkipWritingPriorities();
       });
 
-      it('should match order', () => {
+      it('should match order snapshot', () => {
         expect(result.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "baseName",
@@ -264,7 +264,7 @@ describe(`generator - ${helpers.commandName}`, () => {
           .withSkipWritingPriorities();
       });
 
-      it('should match order', () => {
+      it('should match order snapshot', () => {
         expect(result.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "baseName",
@@ -299,7 +299,7 @@ describe(`generator - ${helpers.commandName}`, () => {
         await helpers.runJHipster().withAnswers({ applicationType: 'microservice', databaseType: 'mongodb' }).withSkipWritingPriorities();
       });
 
-      it('should match order', () => {
+      it('should match order snapshot', () => {
         expect(result.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "baseName",

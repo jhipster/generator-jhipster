@@ -165,7 +165,7 @@ describe('needles - support', () => {
         const contentToAdd = `a bar value
 another bar value`;
 
-        it('should insert content and add ident', () => {
+        it('should insert content and add ident - snapshot', () => {
           const content = insertContentBeforeNeedle({
             content: `
         ${needlePrefix} jhipster-needle-${needle}
@@ -183,7 +183,7 @@ another bar value`;
   `);
         });
 
-        it('should insert an array of content and add ident', () => {
+        it('should insert an array of content and add ident - snapshot', () => {
           const content = insertContentBeforeNeedle({
             content: `
         ${needlePrefix} jhipster-needle-${needle}
@@ -203,7 +203,7 @@ another bar value`;
   `);
         });
 
-        it('should insert content with needles at start and end of contents', () => {
+        it('should insert content with needles at start and end of contents - snapshot', () => {
           const content = insertContentBeforeNeedle({
             content: `${needlePrefix} jhipster-needle-${needle}`,
             contentToAdd,
@@ -434,7 +434,7 @@ content
       expect(needleCallback.call(gen, content, 'file')).toBe(content);
     });
 
-    it('returned function should add contentToAdd', () => {
+    it('returned function should add contentToAdd - snapshot', () => {
       const needleCallback = createNeedleCallback({ contentToAdd, needle });
       expect(needleCallback.call(gen, `// jhipster-needle-${needle}`, 'file')).toMatchInlineSnapshot(`
 "content to add
@@ -442,7 +442,7 @@ content
 `);
     });
 
-    it('returned function should add contentToAdd array', () => {
+    it('returned function should add contentToAdd array - snapshot', () => {
       const needleCallback = createNeedleCallback({ contentToAdd: [contentToAdd, `${contentToAdd}2`], needle });
       expect(needleCallback.call(gen, `// jhipster-needle-${needle}`, 'any-file')).toMatchInlineSnapshot(`
 "content to add
@@ -451,7 +451,7 @@ content to add2
 `);
     });
 
-    it('returned function should add contentToAdd array of objects', () => {
+    it('returned function should add contentToAdd array of objects - snapshot', () => {
       const needleCallback = createNeedleCallback({
         contentToAdd: [
           { content: contentToAdd },
@@ -478,7 +478,7 @@ content to add2
 `);
     });
 
-    it('contentToAdd should be called', () => {
+    it('contentToAdd should be called - snapshot', () => {
       const contentToAdd = test.mock.fn((_arg0: string, _arg1: any) => 'result content');
       const needleCallback = createNeedleCallback({ contentToAdd, needle });
       const content = `  // jhipster-needle-${needle}`;

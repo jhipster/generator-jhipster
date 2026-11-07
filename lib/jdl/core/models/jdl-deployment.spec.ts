@@ -76,7 +76,7 @@ describe('jdl - JDLDeployment', () => {
         deployment = new JDLDeployment(args);
       });
 
-      it('should stringify its content without default values', () => {
+      it('should stringify its content without default values - snapshot', () => {
         expect(deployment.toString()).toMatchInlineSnapshot(`
 "deployment {
     deploymentType docker-compose
@@ -102,7 +102,7 @@ describe('jdl - JDLDeployment', () => {
         deployment = new JDLDeployment(args);
       });
 
-      it('should stringify it', () => {
+      it('should stringify it - snapshot', () => {
         expect(deployment.toString()).toMatchInlineSnapshot(`
 "deployment {
     deploymentType docker-compose

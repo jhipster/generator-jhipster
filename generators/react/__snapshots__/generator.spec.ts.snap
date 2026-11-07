@@ -1729,7 +1729,7 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
 }
 `;
 
-exports[`generator - react microfrontend translations should keep the translations registered by the host when registering its own 1`] = `
+exports[`generator - react microfrontend translations should keep the translations registered by the host when registering its own - snapshot 1`] = `
 {
   "src/main/webapp/app/shared/reducers/locale.spec.ts": {
     "contents": "import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -2807,7 +2807,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
 }
 `;
 
-exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should share application modules in the dev server and the build 1`] = `
+exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should share application modules in the dev server and the build - snapshot 1`] = `
 {
   "clientRoot/module-federation.config.ts": {
     "contents": "import { fileURLToPath } from 'node:url';
@@ -3765,7 +3765,7 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
 }
 `;
 
-exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should share application modules in the dev server and the build 1`] = `
+exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should share application modules in the dev server and the build - snapshot 1`] = `
 {
   "module-federation.config.ts": {
     "contents": "import { fileURLToPath } from 'node:url';

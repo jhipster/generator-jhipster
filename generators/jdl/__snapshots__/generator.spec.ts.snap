@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - jdl --json-only option for two applications and entity jdl with valid jdl should write expected files 1`] = `
+exports[`generator - jdl --json-only option for two applications and entity jdl with valid jdl should write expected files - snapshot 1`] = `
 {
   "jhipster/.jhipster/Foo.json": {
     "contents": "{
@@ -57,7 +57,7 @@ exports[`generator - jdl --json-only option for two applications and entity jdl 
 }
 `;
 
-exports[`generator - jdl for application jdl with valid jdl should write expected files 1`] = `
+exports[`generator - jdl for application jdl with valid jdl should write expected files - snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
@@ -72,7 +72,7 @@ exports[`generator - jdl for application jdl with valid jdl should write expecte
 }
 `;
 
-exports[`generator - jdl for one application and entity jdl with --ignore-application option should write entity files 1`] = `
+exports[`generator - jdl for one application and entity jdl with --ignore-application option should write entity files - snapshot 1`] = `
 {
   ".jhipster/Foo.json": {
     "contents": "{
@@ -90,7 +90,7 @@ exports[`generator - jdl for one application and entity jdl with --ignore-applic
 }
 `;
 
-exports[`generator - jdl for one application and entity jdl with valid jdl should write expected files 1`] = `
+exports[`generator - jdl for one application and entity jdl with valid jdl should write expected files - snapshot 1`] = `
 {
   ".jhipster/Foo.json": {
     "contents": "{
@@ -120,7 +120,7 @@ exports[`generator - jdl for one application and entity jdl with valid jdl shoul
 }
 `;
 
-exports[`generator - jdl for two applications and entity jdl with --ignore-application option should write expected files 1`] = `
+exports[`generator - jdl for two applications and entity jdl with --ignore-application option should write expected files - snapshot 1`] = `
 {
   "jhipster/.jhipster/Foo.json": {
     "contents": "{
@@ -151,7 +151,7 @@ exports[`generator - jdl for two applications and entity jdl with --ignore-appli
 }
 `;
 
-exports[`generator - jdl help should print expected information 1`] = `
+exports[`generator - jdl help should print expected information - snapshot 1`] = `
 "Usage: jhipster jdl|import-jdl [options] [jdlFiles...]
 
 Create entities from the JDL file/URL/content passed in argument.
@@ -244,7 +244,7 @@ Options:
 "
 `;
 
-exports[`generator - jdl with a gateway generating json should generate expected config 1`] = `
+exports[`generator - jdl with a gateway generating json should generate expected config - snapshot 1`] = `
 {
   ".jhipster/Bar.json": {
     "contents": "{
@@ -279,7 +279,7 @@ exports[`generator - jdl with a gateway generating json should generate expected
 }
 `;
 
-exports[`generator - jdl with a microservices stack generating json should generate expected config 1`] = `
+exports[`generator - jdl with a microservices stack generating json should generate expected config - snapshot 1`] = `
 {
   "gatewayApp/.jhipster/Bar.json": {
     "contents": "{

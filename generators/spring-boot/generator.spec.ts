@@ -79,7 +79,7 @@ describe(`generator - ${generator}`, () => {
         );
     });
 
-    it('should add a test spring factory', () => {
+    it('should add a test spring factory - snapshot', () => {
       expect(runResult.getSnapshot('**/spring.factories')).toMatchSnapshot();
     });
   });
@@ -602,7 +602,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runJHipster(generator).withJHipsterConfig({ buildTool: 'gradle', serviceDiscoveryType, skipClient: true });
       });
 
-      it('should replace the placeholders in every configuration file', () => {
+      it('should replace the placeholders in every configuration file - snapshot', () => {
         expect(runResult.getSnapshot('**/gradle/profile_*.gradle')).toMatchSnapshot();
       });
     });

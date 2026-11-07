@@ -158,7 +158,7 @@ describe(`generator - ${clientFramework}`, () => {
         it('should not share the locale reducer, so the microfrontend registers its own translations', () => {
           runResult.assertNoFileContent(`${clientRootDir}module-federation.config.ts`, "'app/shared/reducers/locale'");
         });
-        it('should share application modules in the dev server and the build', () => {
+        it('should share application modules in the dev server and the build - snapshot', () => {
           expect(runResult.getSnapshot('**/module-federation.config.ts')).toMatchSnapshot();
         });
       }
@@ -446,7 +446,7 @@ describe(`generator - ${clientFramework}`, () => {
         .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
     });
 
-    it('should keep the translations registered by the host when registering its own', () => {
+    it('should keep the translations registered by the host when registering its own - snapshot', () => {
       expect(runResult.getSnapshot('**/app/shared/reducers/locale*.ts')).toMatchSnapshot();
     });
   });

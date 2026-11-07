@@ -127,7 +127,7 @@ describe('jdl - JDLEnums', () => {
         });
       });
 
-      it('should use each enum name', () => {
+      it('should use each enum name - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   "A",

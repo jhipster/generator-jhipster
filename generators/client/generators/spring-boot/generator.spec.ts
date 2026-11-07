@@ -100,7 +100,7 @@ describe(`generator - ${generator}`, () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
 
-    it('should compose with generators', () => {
+    it('should compose with generators - snapshot', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`[]`);
     });
   });

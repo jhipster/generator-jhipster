@@ -66,7 +66,7 @@ const getWebappTranslation: GetWebappTranslationCallback = (s, data) => `getWeba
 
 describe('generator - vue - transform', () => {
   describe('removeDeclarations', () => {
-    it('should remove i18n declarations', () => {
+    it('should remove i18n declarations - snapshot', () => {
       expect(
         removeDeclarations({
           content: `
@@ -88,7 +88,7 @@ return {
     });
   });
   describe('replaceTranslations', () => {
-    it('should replace t$ and interpolate at ts file', () => {
+    it('should replace t$ and interpolate at ts file - snapshot', () => {
       expect(
         replaceTranslations({
           getWebappTranslation,
@@ -111,7 +111,7 @@ t$('msg', {  exp:foo,num : 1 , str  :  'a'  }).toString();
 "
 `);
     });
-    it('should replace t$ and interpolate at vue file', () => {
+    it('should replace t$ and interpolate at vue file - snapshot', () => {
       expect(
         replaceTranslations({
           type: 'vue',
@@ -167,7 +167,7 @@ const message = 'translated entity.validation.required';
       });
     });
     describe('with translation disabled', () => {
-      it('should return the body without translation attributes', () => {
+      it('should return the body without translation attributes - snapshot', () => {
         expect(replaceVueTranslations({ getWebappTranslation, body: FULL_BODY, enableTranslation: false })).toMatchInlineSnapshot(`
 "
 <span>getWebappTranslation('activate.messages.success')</span>
@@ -211,7 +211,7 @@ const message = 'translated entity.validation.required';
     });
 
     describe('with translation enabled', () => {
-      it('should return the body without translation tags contents', () => {
+      it('should return the body without translation tags contents - snapshot', () => {
         expect(replaceVueTranslations({ getWebappTranslation, body: FULL_BODY, enableTranslation: true })).toMatchInlineSnapshot(String.raw`
 "
 <span v-html="t$('activate.messages.success')"></span>

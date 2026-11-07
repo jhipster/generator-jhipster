@@ -35,7 +35,7 @@ describe(`generator - ${generator}`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('help', () => {
-    it('should print expected information', async () => {
+    it('should print expected information - snapshot', async () => {
       expect(await getCommandHelpOutput(generator)).toMatchSnapshot();
     });
   });
@@ -52,7 +52,7 @@ describe(`generator - ${generator}`, () => {
         expect(result.getStateSnapshot()).toMatchSnapshot();
       });
 
-      it('should compose with generators', () => {
+      it('should compose with generators - snapshot', () => {
         expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:git",

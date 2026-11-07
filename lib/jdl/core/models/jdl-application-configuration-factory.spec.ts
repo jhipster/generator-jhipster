@@ -38,7 +38,7 @@ describe('jdl - JDLApplicationConfigurationFactory', () => {
         createdConfiguration = createApplicationConfigurationFromObject(undefined, runtime);
       });
 
-      it('should a configuration without option', () => {
+      it('should a configuration without option - snapshot', () => {
         expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
   "namespace": undefined,
@@ -60,7 +60,7 @@ JDLApplicationConfiguration {
           );
         });
 
-        it('should create it', () => {
+        it('should create it - snapshot', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
   "namespace": undefined,
@@ -87,7 +87,7 @@ JDLApplicationConfiguration {
           );
         });
 
-        it('should create it', () => {
+        it('should create it - snapshot', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
   "namespace": undefined,
@@ -113,7 +113,7 @@ JDLApplicationConfiguration {
           );
         });
 
-        it('should create it', () => {
+        it('should create it - snapshot', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
   "namespace": undefined,
@@ -139,7 +139,7 @@ JDLApplicationConfiguration {
           );
         });
 
-        it('should create it', () => {
+        it('should create it - snapshot', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
   "namespace": undefined,

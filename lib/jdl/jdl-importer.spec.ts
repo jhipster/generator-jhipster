@@ -94,7 +94,7 @@ relationship OneToMany {
           });
       });
 
-      it('should return the final state', () => {
+      it('should return the final state - snapshot', () => {
         expect(returned).toMatchSnapshot();
       });
     });
@@ -251,7 +251,7 @@ relationship OneToOne {
         contents = importer.import();
       });
 
-      it('should export the application contents', () => {
+      it('should export the application contents - snapshot', () => {
         expect(contents).toMatchSnapshot();
       });
     });
@@ -365,7 +365,7 @@ relationship OneToOne {
         importState = importer.import();
       });
 
-      it('should export the application & deployment contents', () => {
+      it('should export the application & deployment contents - snapshot', () => {
         expect(importState).toMatchSnapshot();
       });
     });
@@ -383,7 +383,7 @@ relationship OneToOne {
         });
       });
 
-      it('should export the deployment contents', () => {
+      it('should export the deployment contents - snapshot', () => {
         expect(contents).toMatchSnapshot();
       });
     });
@@ -463,7 +463,7 @@ ${entities}`,
           expect(returned.exportedApplications).toHaveLength(1);
           expect(returned.exportedDeployments).toHaveLength(0);
         });
-        it('should return the corresponding exportedApplicationsWithEntities', () => {
+        it('should return the corresponding exportedApplicationsWithEntities - snapshot', () => {
           returned.exportedApplications.forEach((application: any) => {
             const applicationConfig = application['generator-jhipster'];
             const entityNames = applicationConfig.entities ?? [];
@@ -486,7 +486,7 @@ ${entities}`,
         importState = importer.import();
       });
 
-      it('should return the blueprints attributes in the application', () => {
+      it('should return the blueprints attributes in the application - snapshot', () => {
         expect(importState.exportedApplications).toMatchSnapshot();
       });
     });
@@ -593,7 +593,7 @@ relationship OneToOne {
         relationshipOnDestination = imported.exportedEntities[1].relationships?.[0];
       });
 
-      it('should export them', () => {
+      it('should export them - snapshot', () => {
         expect(relationshipOnSource).toMatchInlineSnapshot(`
           {
             "options": {
@@ -624,7 +624,7 @@ relationship OneToOne {
       });
     });
     describe('when importing a JDL application with microfrontends', () => {
-      it('should return the microfrontends attributes in the application', () => {
+      it('should return the microfrontends attributes in the application - snapshot', () => {
         const importer = createImporterFromContent(
           `application {
   config {

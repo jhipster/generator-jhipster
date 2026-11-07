@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - github-build-matrix with angular should match matrix value 1`] = `
+exports[`generator - github-build-matrix with angular should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -529,7 +529,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-couchbase should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-couchbase should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -600,7 +600,7 @@ exports[`generator - github-build-matrix with daily-couchbase should match matri
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-elasticsearch should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-elasticsearch should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -650,7 +650,7 @@ exports[`generator - github-build-matrix with daily-elasticsearch should match m
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-monolith-oauth2 should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-monolith-oauth2 should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -743,7 +743,7 @@ exports[`generator - github-build-matrix with daily-monolith-oauth2 should match
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-ms-jwt should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-ms-jwt should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -922,7 +922,7 @@ exports[`generator - github-build-matrix with daily-ms-jwt should match matrix v
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-ms-oauth2 should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-ms-oauth2 should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -1101,7 +1101,7 @@ exports[`generator - github-build-matrix with daily-ms-oauth2 should match matri
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-neo4j should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-neo4j should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -1258,7 +1258,7 @@ exports[`generator - github-build-matrix with daily-neo4j should match matrix va
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-ng-gradle-nosql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-ng-gradle-nosql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -1309,7 +1309,7 @@ exports[`generator - github-build-matrix with daily-ng-gradle-nosql should match
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-ng-gradle-sql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-ng-gradle-sql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -1470,7 +1470,7 @@ exports[`generator - github-build-matrix with daily-ng-gradle-sql should match m
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-ng-maven-nosql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-ng-maven-nosql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -1519,7 +1519,7 @@ exports[`generator - github-build-matrix with daily-ng-maven-nosql should match 
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-ng-maven-sql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-ng-maven-sql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -1673,7 +1673,7 @@ exports[`generator - github-build-matrix with daily-ng-maven-sql should match ma
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-no-database should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-no-database should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -1852,7 +1852,7 @@ exports[`generator - github-build-matrix with daily-no-database should match mat
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-react-gradle-nosql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-react-gradle-nosql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -1903,7 +1903,7 @@ exports[`generator - github-build-matrix with daily-react-gradle-nosql should ma
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-react-gradle-sql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-react-gradle-sql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -2064,7 +2064,7 @@ exports[`generator - github-build-matrix with daily-react-gradle-sql should matc
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-react-maven-nosql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-react-maven-nosql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -2113,7 +2113,7 @@ exports[`generator - github-build-matrix with daily-react-maven-nosql should mat
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-react-maven-sql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-react-maven-sql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -2267,7 +2267,7 @@ exports[`generator - github-build-matrix with daily-react-maven-sql should match
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-vue-gradle-nosql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-vue-gradle-nosql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -2318,7 +2318,7 @@ exports[`generator - github-build-matrix with daily-vue-gradle-nosql should matc
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-vue-gradle-sql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-vue-gradle-sql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -2523,7 +2523,7 @@ exports[`generator - github-build-matrix with daily-vue-gradle-sql should match 
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-vue-maven-nosql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-vue-maven-nosql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -2572,7 +2572,7 @@ exports[`generator - github-build-matrix with daily-vue-maven-nosql should match
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-vue-maven-sql should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-vue-maven-sql should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -2768,7 +2768,7 @@ exports[`generator - github-build-matrix with daily-vue-maven-sql should match m
 }"
 `;
 
-exports[`generator - github-build-matrix with daily-windows should match matrix value 1`] = `
+exports[`generator - github-build-matrix with daily-windows should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -2930,7 +2930,7 @@ exports[`generator - github-build-matrix with daily-windows should match matrix 
 }"
 `;
 
-exports[`generator - github-build-matrix with devserver should match matrix value 1`] = `
+exports[`generator - github-build-matrix with devserver should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -3022,7 +3022,7 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
 }"
 `;
 
-exports[`generator - github-build-matrix with docker-compose-integration should match matrix value 1`] = `
+exports[`generator - github-build-matrix with docker-compose-integration should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -3224,7 +3224,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
 }"
 `;
 
-exports[`generator - github-build-matrix with generators should match matrix value 1`] = `
+exports[`generator - github-build-matrix with generators should match matrix value snapshot 1`] = `
 "{
   "database-changelog": {
     "disabled": false,
@@ -3247,7 +3247,7 @@ exports[`generator - github-build-matrix with generators should match matrix val
 }"
 `;
 
-exports[`generator - github-build-matrix with graalvm should match matrix value 1`] = `
+exports[`generator - github-build-matrix with graalvm should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -3310,7 +3310,7 @@ exports[`generator - github-build-matrix with graalvm should match matrix value 
 }"
 `;
 
-exports[`generator - github-build-matrix with react should match matrix value 1`] = `
+exports[`generator - github-build-matrix with react should match matrix value snapshot 1`] = `
 "{
   "include": [
     {
@@ -3510,7 +3510,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
 }"
 `;
 
-exports[`generator - github-build-matrix with vue should match matrix value 1`] = `
+exports[`generator - github-build-matrix with vue should match matrix value snapshot 1`] = `
 "{
   "include": [
     {

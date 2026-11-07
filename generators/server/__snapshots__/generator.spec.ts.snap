@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - server composing databaseType option no with jwt should match generated files 1`] = `
+exports[`generator - server composing databaseType option no with jwt should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -173,7 +173,7 @@ exports[`generator - server composing databaseType option no with jwt should mat
 }
 `;
 
-exports[`generator - server composing databaseType option no with oauth2 should match generated files 1`] = `
+exports[`generator - server composing databaseType option no with oauth2 should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -346,7 +346,7 @@ exports[`generator - server composing databaseType option no with oauth2 should 
 }
 `;
 
-exports[`generator - server composing databaseType option no with session should match generated files 1`] = `
+exports[`generator - server composing databaseType option no with session should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",

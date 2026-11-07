@@ -22,7 +22,7 @@ import { before, describe, expect, it } from 'expect-node';
 import { binaryOptions } from './index.ts';
 
 describe('jdl - BinaryOptions', () => {
-  it('should match values', () => {
+  it('should match values snapshot', () => {
     expect(binaryOptions.Values).toMatchInlineSnapshot(`
 {
   "dto": {
@@ -69,7 +69,7 @@ describe('jdl - BinaryOptions', () => {
         binaryOptions.forEach(optionName => result.push(optionName));
       });
 
-      it('should iterate over them', () => {
+      it('should iterate over them - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   "dto",
