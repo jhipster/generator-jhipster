@@ -1106,7 +1106,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ if (!paginationNo) { _%>
   <%_ const sortRelationship = relationships.find(relationship => relationship.persistableRelationship && !relationship.collection && !relationship.otherEntity.embedded); _%>
 
-    @Test
+    @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
   <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL + "?sort=doesNotExist,asc")
@@ -1121,7 +1121,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
   <%_ if (sortRelationship) { _%>
 
-    @Test
+    @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>SortedByWhatIsNotAPropertyOfARelationship() <%- reactive ? '' : 'throws Exception ' %>{
     <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.doesNotExist,asc")
@@ -1136,7 +1136,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
     <%_ if (sortRelationship.otherEntity.builtInUser && !authenticationTypeOauth2) { _%>
 
-    @Test
+    @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>SortedByAPropertyOfARelationshipMarkedNotSortable() <%- reactive ? '' : 'throws Exception ' %>{
       <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.password,asc")
@@ -1153,7 +1153,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
   <%_ if (searchEngineCouchbase) { _%>
 
-    @Test
+    @Test<%- transactionalAnnotation %>
     void search<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
     <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:doesNotExist&sort=doesNotExist,asc")
