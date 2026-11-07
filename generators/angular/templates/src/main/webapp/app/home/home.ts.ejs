@@ -17,12 +17,12 @@
  limitations under the License.
 -%>
 import { Component, inject } from '@angular/core';
-<%_ if (generateUserManagement || !authenticationTypeOauth2) { _%>
+<%_ if (generateUserRegistration || !authenticationTypeOauth2) { _%>
 import {
   <%_ if (!authenticationTypeOauth2) { _%>
   Router,
   <%_ } _%>
-  <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
   RouterLink,
   <%_ } _%>
 } from '@angular/router';
@@ -43,7 +43,7 @@ import { TranslateDirective } from 'app/shared/language';
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
 <%_ } _%>
-<%_ if (generateUserManagement) { _%>
+<%_ if (generateUserRegistration) { _%>
     RouterLink,
 <%_ } _%>
   ],

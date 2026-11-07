@@ -211,8 +211,10 @@ public class SecurityConfiguration {
                     .requestMatchers("/api/authenticate").permitAll()
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
                     .requestMatchers("/api/register").permitAll()
                     .requestMatchers("/api/activate").permitAll()
+  <%_ } _%>
                     .requestMatchers("/api/account/reset-password/init").permitAll()
                     .requestMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>

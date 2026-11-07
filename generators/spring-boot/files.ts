@@ -121,16 +121,21 @@ const userManagementFiles = asWriteFilesSection<SpringBootApplication>({
     },
     {
       path: SERVER_MAIN_RES_DIR,
-      templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
+      templates: ['templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
     },
     {
       path: SERVER_TEST_RES_DIR,
-      templates: [
-        'templates/mail/activationEmail.html',
-        'templates/mail/creationEmail.html',
-        'templates/mail/passwordResetEmail.html',
-        'templates/mail/testEmail.html',
-      ],
+      templates: ['templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html', 'templates/mail/testEmail.html'],
+    },
+    {
+      condition: data => data.generateUserRegistration,
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['templates/mail/activationEmail.html'],
+    },
+    {
+      condition: data => data.generateUserRegistration,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['templates/mail/activationEmail.html'],
     },
   ],
 });

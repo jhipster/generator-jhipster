@@ -71,11 +71,16 @@ export const cypressFiles = asWriteFilesSection({
       templates: ['e2e/account/login-page.cy.ts'],
     },
     {
+      condition: generator => generator.generateUserRegistration,
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
+      templates: ['e2e/account/register-page.cy.ts'],
+    },
+    {
       condition: generator => generator.generateUserManagement,
       path: CYPRESS_TEMPLATE_SOURCE_DIR,
       renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: [
-        'e2e/account/register-page.cy.ts',
         'e2e/account/settings-page.cy.ts',
         'e2e/account/password-page.cy.ts',
         'e2e/account/reset-password-page.cy.ts',

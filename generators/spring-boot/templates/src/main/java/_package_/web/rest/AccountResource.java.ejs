@@ -105,6 +105,7 @@ public class AccountResource {
         this.persistentTokenRepository = persistentTokenRepository;
 <%_ } _%>
     }
+<%_ if (generateUserRegistration) { _%>
 
     /**
      * {@code POST  /register} : register the user.
@@ -121,12 +122,12 @@ public class AccountResource {
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-<%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
         return userService.registerUser(managedUserVM, managedUserVM.getPassword()).doOnSuccess(mailService::sendActivationEmail).then();
-<%_ } else { _%>
+  <%_ } else { _%>
         <%- user.persistClass %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
-<%_ } _%>
+  <%_ } _%>
     }
 
     /**
@@ -138,18 +139,19 @@ public class AccountResource {
     @GetMapping("/activate")
     public <%- reactive ? 'Mono<Void>' : 'void' %> activateAccount(@RequestParam(value = "key") String key) {
         LOG.debug("REST request to activate account");
-<%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
         return userService
             .activateRegistration(key)
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
             .then();
-<%_ } else { _%>
+  <%_ } else { _%>
         Optional<<%- user.persistClass %>> user = userService.activateRegistration(key);
         if (user.isEmpty()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
-<%_ } _%>
+  <%_ } _%>
     }
+<%_ } _%>
 
 <%_ if (!authenticationTypeJwt) { _%>
     /**

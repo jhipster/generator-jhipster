@@ -66,11 +66,13 @@
           >__jhiTranslateTag__('login.password.forgot')</a
         >
       </div>
+  <%_ if (generateUserRegistration) { _%>
 
       <div class="alert alert-warning">
         <span>__jhiTranslateTag__('global.messages.info.register.noaccount')</span>
         <a class="alert-link" routerLink="/account/register">__jhiTranslateTag__('global.messages.info.register.link')</a>
       </div>
+  <%_ } _%>
 <%_ } _%>
     </div>
   </div>

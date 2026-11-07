@@ -169,7 +169,7 @@
             <font-awesome-icon icon="sign-in-alt" />
             <span>{{ t$('global.menu.account.login') }}</span>
           </b-dropdown-item>
-<%_ if (generateUserManagement) { _%>
+<%_ if (generateUserRegistration) { _%>
           <b-dropdown-item data-cy="register" to="/register" id="register" v-if="!authenticated" active-class="active">
             <font-awesome-icon icon="user-plus" />
             <span>{{ t$('global.menu.account.register') }}</span>

@@ -196,7 +196,13 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                   {
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
                     to: context => `${context.clientI18nDir}${context.lang}/`,
-                    templates: ['activate.json', 'global.json', 'home.json', 'reset.json'],
+                    templates: ['global.json', 'home.json', 'reset.json'],
+                  },
+                  {
+                    condition: context => context.generateUserRegistration,
+                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
+                    to: context => `${context.clientI18nDir}${context.lang}/`,
+                    templates: ['activate.json'],
                   },
                   {
                     condition: context => context.withAdminUi,

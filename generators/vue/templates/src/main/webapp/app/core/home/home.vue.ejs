@@ -20,7 +20,7 @@
             password="user").</span
           >
         </div>
-<%_ if (generateUserManagement) { _%>
+<%_ if (generateUserRegistration) { _%>
         <div class="alert alert-warning" v-if="!authenticated">
           <span>{{ t$('global.messages.info.register.noaccount') }}</span>
           <router-link class="alert-link ms-1" to="/register">{{ t$('global.messages.info.register.link') }}</router-link>

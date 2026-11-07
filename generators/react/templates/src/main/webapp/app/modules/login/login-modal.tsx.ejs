@@ -104,6 +104,7 @@ const LoginModal = (props: ILoginModalProps) => {
                 <Translate contentKey="login.password.forgot">Did you forget your password?</Translate>
               </Link>
             </Alert>
+  <%_ if (generateUserRegistration) { _%>
             <Alert variant="warning">
               <span>
                 <Translate contentKey="global.messages.info.register.noaccount">You don&apos;t have an account yet?</Translate>
@@ -113,6 +114,7 @@ const LoginModal = (props: ILoginModalProps) => {
                 <Translate contentKey="global.messages.info.register.link">Register a new account</Translate>
               </Link>
             </Alert>
+  <%_ } _%>
 <%_ } _%>
           </ModalBody>
           <ModalFooter>

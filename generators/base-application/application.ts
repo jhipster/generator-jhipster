@@ -25,6 +25,9 @@ type UserManagementProperties<Entity extends { fields: unknown[] }> = {
   skipUserManagement: boolean;
   generateAuthenticationApi: boolean;
   generateUserManagement: boolean;
+  skipUserRegistration?: boolean;
+  /** Users register and activate their account themselves. */
+  generateUserRegistration: boolean;
   generateBuiltInUserEntity?: boolean;
   generateBuiltInAuthorityEntity: boolean;
   /** The user entity, with its fields by their name, the source of the validations of the user in every layer. */
@@ -42,6 +45,7 @@ export const mutateUserManagementApplication = {
   skipUserManagement: data =>
     !data.generateAuthenticationApi || data.authenticationTypeUsesRemoteAuthorization || data.databaseType === 'no',
   generateUserManagement: data => !data.skipUserManagement && data.generateAuthenticationApi,
+  generateUserRegistration: data => data.generateUserManagement && !data.skipUserRegistration,
 
   syncUserWithIdp: data =>
     Boolean(
