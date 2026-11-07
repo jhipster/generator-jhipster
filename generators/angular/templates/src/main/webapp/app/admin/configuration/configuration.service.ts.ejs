@@ -22,7 +22,8 @@ import { Service, inject } from '@angular/core';
 import { Observable, forkJoin, map } from 'rxjs';
 
 import { serverApiUrl } from 'app/config';
-import { ConfigurationSection, configurationEndpoints, toConfiguration } from 'app/shared/jhipster/configuration';
+import { configurationEndpoints, toConfiguration } from 'app/shared/jhipster/configuration';
+import { ConfigurationSection } from 'app/shared/jhipster/configuration.model';
 
 @Service()
 export class ConfigurationService {

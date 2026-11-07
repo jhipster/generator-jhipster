@@ -23,7 +23,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { serverApiUrl } from 'app/config';
 import { healthResponse } from 'app/shared/jhipster/admin.samples';
-import { HealthResponse, healthEndpoint, toHealthChecks } from 'app/shared/jhipster/health';
+import { healthEndpoint, toHealthChecks } from 'app/shared/jhipster/health';
 
 import { HealthService } from './health.service';
 
@@ -66,7 +66,7 @@ describe('HealthService Service', () => {
     it('should give the health of a 503', () => {
       // GIVEN
       let expectedResult;
-      const health: HealthResponse = healthResponse;
+      const health = healthResponse;
 
       // WHEN
       service.checkHealth().subscribe(received => {

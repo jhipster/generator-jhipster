@@ -67,7 +67,7 @@ describe('Logs', () => {
 
       // THEN
       expect(service.findAll).toHaveBeenCalled();
-      expect(comp.loggers()).toEqual(toLogs(loggersResponse as LoggersResponse));
+      expect(comp.loggers()).toEqual(toLogs(loggersResponse));
     });
   });
 
@@ -83,7 +83,7 @@ describe('Logs', () => {
       // THEN
       expect(service.changeLevel).toHaveBeenCalled();
       expect(service.findAll).toHaveBeenCalled();
-      expect(comp.loggers()).toEqual(toLogs(loggersResponse as LoggersResponse));
+      expect(comp.loggers()).toEqual(toLogs(loggersResponse));
     });
   });
 });
