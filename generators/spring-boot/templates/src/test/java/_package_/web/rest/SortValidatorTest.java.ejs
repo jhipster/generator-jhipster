@@ -33,42 +33,50 @@ class SortValidatorTest {
 
     static class Related {
 
-        private Long id;
+        Long id;
 
-        private String name;
+        String name;
 
         @NotSortable
-        private String secret;
+        String secret;
 
-        private Related parent;
+        Related parent;
     }
 
     static class Base {
 
-        private Long id;
+        Long id;
     }
 
     static class Sample extends Base {
 
-        private static final String CONSTANT = "constant";
+        static final String CONSTANT = "constant";
 
-        private String name;
+        String name;
 
-        private Instant createdDate;
+        Instant createdDate;
 
-        private byte[] picture;
+        byte[] picture;
 
-        private transient String computed;
+        transient String computed;
+
+        @org.springframework.data.annotation.Transient
+        String notStored;
+<%_ if (databaseTypeSql && !reactive) { _%>
+
+        @jakarta.persistence.Transient
+        String notPersisted;
+<%_ } _%>
 
         @NotSortable
-        private String secret;
+        String secret;
 
-        private Related related;
+        Related related;
 
         @NotSortable
-        private Related hidden;
+        Related hidden;
 
-        private Set<Related> others;
+        Set<Related> others;
     }
 
     @Test
@@ -98,7 +106,7 @@ class SortValidatorTest {
 
     @Test
     void rejectsWhatIsNotAColumn() {
-        for (String property : new String[] { "doesNotExist", "CONSTANT", "computed", "picture", "related", "others", "others.name" }) {
+        for (String property : new String[] { "doesNotExist", "CONSTANT", "computed", <%- (databaseTypeSql && !reactive) ? '"notPersisted", ' : '' %>"notStored", "picture", "related", "others", "others.name" }) {
             assertThat(SortValidator.isSortable(Sample.class, Sort.by(property))).as(property).isFalse();
         }
     }

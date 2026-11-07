@@ -19,7 +19,6 @@
 package <%- packageName %>.web.rest;
 
 import <%- packageName %>.domain.NotSortable;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.time.temporal.Temporal;
@@ -94,12 +93,12 @@ public final class SortValidator {
     }
 
     private static boolean hasTransientAnnotation(Field field) {
-        for (Annotation annotation : field.getAnnotations()) {
-            if (annotation.annotationType().getSimpleName().equals("Transient")) {
-                return true;
-            }
-        }
-        return false;
+        return (
+<%_ if (databaseTypeSql && !reactive) { _%>
+            field.isAnnotationPresent(jakarta.persistence.Transient.class) ||
+<%_ } _%>
+            field.isAnnotationPresent(org.springframework.data.annotation.Transient.class)
+        );
     }
 
     private static boolean isCollection(Class<?> type) {
