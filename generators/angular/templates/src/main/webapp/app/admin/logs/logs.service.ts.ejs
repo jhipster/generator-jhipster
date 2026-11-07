@@ -22,7 +22,7 @@ import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { <%- applicationTypeGateway && gatewayServicesApiAvailable ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config';
-import { toLevelChange } from 'app/shared/jhipster/logs';
+import { loggersEndpoint, toLevelChange } from 'app/shared/jhipster/logs';
 import { Level } from 'app/shared/jhipster/logs.model';
 
 @Service()
@@ -35,6 +35,6 @@ export class LogsService {
   }
 
   findAll(<%- applicationTypeGateway && gatewayServicesApiAvailable ? 'service?: string' : '' %>): Observable<unknown> {
-    return this.http.get(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `${microserviceContextPath}${service}/` : ''}" : '' %>management/loggers`);
+    return this.http.get(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `${microserviceContextPath}${service}/` : ''}" : '' %>${loggersEndpoint}`);
   }
 }

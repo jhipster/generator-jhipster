@@ -25,16 +25,15 @@ import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { of } from 'rxjs';
 
-import { MetricsResponse, Thread } from 'app/shared/jhipster/metrics';
+import { metricsResponses } from 'app/shared/jhipster/admin.samples';
+import { MetricDetails, toMetrics } from 'app/shared/jhipster/metrics';
 
-import { MetricsModalThreads } from './blocks/metrics-modal-threads/metrics-modal-threads';
 import Metrics from './metrics';
+import { MetricsDetailsModal } from './metrics-details-modal';
 import { MetricsService } from './metrics.service';
 
-const metrics = { jvm: {}, processMetrics: {} } as MetricsResponse;
-const threads = [{ threadName: 'thread 1' } as Thread];
-
 describe('Metrics', () => {
+  const sections = toMetrics(metricsResponses);
   let comp: Metrics;
   let fixture: ComponentFixture<Metrics>;
   let service: MetricsService;
@@ -51,8 +50,7 @@ describe('Metrics', () => {
     fixture = TestBed.createComponent(Metrics);
     comp = fixture.componentInstance;
     service = TestBed.inject(MetricsService);
-    vi.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
-    vi.spyOn(service, 'threadDump').mockReturnValue(of({ threads }));
+    vi.spyOn(service, 'getMetrics').mockReturnValue(of(sections));
   });
 
   describe('ngOnInit', () => {
@@ -62,25 +60,24 @@ describe('Metrics', () => {
 
       // THEN
       expect(service.getMetrics).toHaveBeenCalled();
-      expect(comp.sections().map(section => section.id)).toEqual(['jvmMetrics']);
-      expect(comp.threads()).toEqual(threads);
+      expect(comp.sections()).toEqual(sections);
       expect(comp.updatingMetrics()).toBe(false);
     });
   });
 
-  describe('openThreadDump', () => {
-    it('should open the threads in a modal', () => {
+  describe('openDetails', () => {
+    it('should open the details in a modal', () => {
       // GIVEN
+      const details = { label: { text: 'Details' } } as MetricDetails;
       const modalRef = { componentInstance: {} };
       const open = vi.spyOn(TestBed.inject(NgbModal), 'open').mockReturnValue(modalRef as never);
-      comp.ngOnInit();
 
       // WHEN
-      comp.openThreadDump();
+      comp.openDetails(details);
 
       // THEN
-      expect(open).toHaveBeenCalledWith(MetricsModalThreads);
-      expect(modalRef.componentInstance).toEqual({ threads });
+      expect(open).toHaveBeenCalledWith(MetricsDetailsModal, { size: 'lg' });
+      expect(modalRef.componentInstance).toEqual({ details });
     });
   });
 });

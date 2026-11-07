@@ -1,0 +1,70 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component, computed, inject, signal } from '@angular/core';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
+
+import { MetricDetails } from 'app/shared/jhipster/metrics';
+<%_ if (enableTranslation) { _%>
+import { LabelPipe } from 'app/shared/language';
+<%_ } _%>
+
+@Component({
+  selector: '<%- jhiPrefixDashed %>-metrics-details-modal',
+  templateUrl: './metrics-details-modal.html',
+  imports: [FontAwesomeModule<%- enableTranslation ? ', LabelPipe' : '' %>],
+})
+export class MetricsDetailsModal {
+  readonly selectedValue = signal<string | undefined>(undefined);
+  readonly term = signal('');
+  readonly shownItems = signal(new Set<string>());
+  readonly detailsValue = signal<MetricDetails | undefined>(undefined);
+  readonly items = computed(() => {
+    const selectedValue = this.selectedValue();
+    const term = this.term().toLowerCase();
+    return (this.detailsValue()?.items ?? []).filter(
+      ({ title, value }) => (!selectedValue || value === selectedValue) && title.toLowerCase().includes(term),
+    );
+  });
+
+  private readonly activeModal = inject(NgbActiveModal);
+
+  get details(): MetricDetails | undefined {
+    return this.detailsValue();
+  }
+
+  set details(details: MetricDetails | undefined) {
+    this.detailsValue.set(details);
+  }
+
+  toggle(title: string): void {
+    this.shownItems.update(shownItems => {
+      const items = new Set(shownItems);
+      if (!items.delete(title)) {
+        items.add(title);
+      }
+      return items;
+    });
+  }
+
+  dismiss(): void {
+    this.activeModal.dismiss();
+  }
+}

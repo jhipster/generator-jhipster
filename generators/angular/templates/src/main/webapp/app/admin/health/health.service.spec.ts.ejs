@@ -22,7 +22,8 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 
 import { serverApiUrl } from 'app/config';
-import { HealthResponse, toHealthChecks } from 'app/shared/jhipster/health';
+import { healthResponse } from 'app/shared/jhipster/admin.samples';
+import { HealthResponse, healthEndpoint, toHealthChecks } from 'app/shared/jhipster/health';
 
 import { HealthService } from './health.service';
 
@@ -44,13 +45,9 @@ describe('HealthService Service', () => {
   });
 
   describe('Service methods', () => {
-    it('should call management/health endpoint with correct values', () => {
+    it('should call the health endpoint', () => {
       // GIVEN
       let expectedResult;
-      const checkHealth = {
-        status: 'UP',
-        components: { ping: { status: 'UP' } },
-      };
 
       // WHEN
       service.checkHealth().subscribe(received => {
@@ -58,18 +55,18 @@ describe('HealthService Service', () => {
       });
       const testRequest = httpMock.expectOne({
         method: 'GET',
-        url: `${serverApiUrl}management/health`,
+        url: `${serverApiUrl}${healthEndpoint}`,
       });
-      testRequest.flush(checkHealth);
+      testRequest.flush(healthResponse);
 
       // THEN
-      expect(expectedResult).toEqual(toHealthChecks(checkHealth as HealthResponse));
+      expect(expectedResult).toEqual(toHealthChecks(healthResponse));
     });
 
     it('should give the health of a 503', () => {
       // GIVEN
       let expectedResult;
-      const health: HealthResponse = { status: 'DOWN', components: { mail: { status: 'DOWN' } } };
+      const health: HealthResponse = healthResponse;
 
       // WHEN
       service.checkHealth().subscribe(received => {

@@ -22,16 +22,13 @@ import { Service, inject } from '@angular/core';
 import { Observable, forkJoin, map } from 'rxjs';
 
 import { serverApiUrl } from 'app/config';
-import { ConfigProps, ConfigurationSection, Env, toConfiguration } from 'app/shared/jhipster/configuration';
+import { ConfigurationSection, configurationEndpoints, toConfiguration } from 'app/shared/jhipster/configuration';
 
 @Service()
 export class ConfigurationService {
   private readonly http = inject(HttpClient);
 
   getConfiguration(): Observable<ConfigurationSection[]> {
-    return forkJoin([
-      this.http.get<ConfigProps>(`${serverApiUrl}management/configprops`),
-      this.http.get<Env>(`${serverApiUrl}management/env`),
-    ]).pipe(map(([configProps, env]) => toConfiguration(configProps, env)));
+    return forkJoin(configurationEndpoints.map(endpoint => this.http.get(`${serverApiUrl}${endpoint}`))).pipe(map(toConfiguration));
   }
 }

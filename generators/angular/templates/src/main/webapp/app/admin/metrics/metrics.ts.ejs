@@ -21,14 +21,14 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
-import { combineLatest, finalize } from 'rxjs';
+import { finalize } from 'rxjs';
 
-import { MetricsSection, Thread, toMetrics } from 'app/shared/jhipster/metrics';
+import { MetricDetails, MetricsSection } from 'app/shared/jhipster/metrics';
 <%_ if (enableTranslation) { _%>
 import { LabelPipe, TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
-import { MetricsModalThreads } from './blocks/metrics-modal-threads/metrics-modal-threads';
+import { MetricsDetailsModal } from './metrics-details-modal';
 import { MetricsService } from './metrics.service';
 
 @Component({
@@ -38,7 +38,6 @@ import { MetricsService } from './metrics.service';
 })
 export default class Metrics implements OnInit {
   readonly sections = signal<MetricsSection[]>([]);
-  readonly threads = signal<Thread[]>([]);
   readonly updatingMetrics = signal(true);
 
   private readonly metricsService = inject(MetricsService);
@@ -50,16 +49,14 @@ export default class Metrics implements OnInit {
 
   refresh(): void {
     this.updatingMetrics.set(true);
-    combineLatest([this.metricsService.getMetrics(), this.metricsService.threadDump()])
+    this.metricsService
+      .getMetrics()
       .pipe(finalize(() => this.updatingMetrics.set(false)))
-      .subscribe(([metrics, { threads }]) => {
-        this.sections.set(toMetrics(metrics, threads));
-        this.threads.set(threads);
-      });
+      .subscribe(sections => this.sections.set(sections));
   }
 
-  openThreadDump(): void {
-    const modalRef = this.modalService.open(MetricsModalThreads);
-    modalRef.componentInstance.threads = this.threads();
+  openDetails(details: MetricDetails): void {
+    const modalRef = this.modalService.open(MetricsDetailsModal, { size: 'lg' });
+    modalRef.componentInstance.details = details;
   }
 }

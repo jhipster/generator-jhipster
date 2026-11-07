@@ -58,8 +58,8 @@
               }
             }
 
-            @if (block.threadDump) {
-              <button class="hand btn btn-primary btn-sm mt-2" (click)="openThreadDump()">
+            @if (block.details; as details) {
+              <button class="hand btn btn-primary btn-sm mt-2" (click)="openDetails(details)">
                 <span>Expand</span>
               </button>
             }
