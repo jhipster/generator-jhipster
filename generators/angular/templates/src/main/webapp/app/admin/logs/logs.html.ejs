@@ -24,7 +24,7 @@
     <div class="float-end">
       <select class="form-select" id="routesSelect" (change)="changeService($event)">
         <option value=""></option>
-        @for (service of services; track $index) {
+        @for (service of services(); track $index) {
           <option [value]="service">
             {{ service }}
           </option>

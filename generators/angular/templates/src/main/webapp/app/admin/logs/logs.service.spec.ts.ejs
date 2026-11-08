@@ -57,5 +57,16 @@ describe('Logs Service', () => {
       httpMock.expectOne({ method: 'GET' }).flush(loggersResponse);
       expect(loggers).toEqual(toLogs(loggersResponse));
     });
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
+
+    it('should call the loggers of a microservice', () => {
+      service.changeLevel('main', 'ERROR', 'blog').subscribe();
+      service.findAll('blog').subscribe();
+
+      const requests = httpMock.match(request => request.url.includes('blog/'));
+      expect(requests.map(request => request.request.method)).toEqual(['POST', 'GET']);
+      requests.forEach(request => request.flush(request.request.method === 'GET' ? loggersResponse : {}));
+    });
+<%_ } _%>
   });
 });

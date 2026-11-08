@@ -73,7 +73,7 @@ export default class Logs implements OnInit {
     return data;
   });
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
-  services: string[] = [];
+  readonly services = signal<string[]>([]);
   selectedService: string | undefined = undefined;
 <%_ } _%>
 
@@ -120,7 +120,7 @@ export default class Logs implements OnInit {
       .findAll()
       .pipe(map(routes => routes.map(route => route.serviceId)))
       .pipe(map(services => services.filter(service => service.endsWith('Service'))))
-      .subscribe(services => (this.services = services));
+      .subscribe(services => this.services.set(services));
   }
 <%_ } _%>
 }

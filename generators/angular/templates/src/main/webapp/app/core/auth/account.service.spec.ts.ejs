@@ -119,6 +119,7 @@ describe('Account Service', () => {
       httpMock.expectOne({ method: 'GET' }).flush(account);
       // Then account signal has account value
       expect(service.account()).toBe(account);
+      expect(service.isAuthenticated()).toBe(true);
     });
 
     it('should call /account only once if last call have not returned', () => {

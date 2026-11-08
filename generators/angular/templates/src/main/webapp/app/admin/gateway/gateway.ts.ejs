@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { KeyValuePipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -35,8 +35,8 @@ import { GatewayRoutesService } from './gateway-routes.service';
   imports: [KeyValuePipe, FontAwesomeModule<%- enableTranslation ? ', TranslateDirective' : '' %>],
 })
 export default class Gateway implements OnInit {
-  gatewayRoutes: GatewayRoute[] = [];
-  updatingRoutes = false;
+  readonly gatewayRoutes = signal<GatewayRoute[]>([]);
+  readonly updatingRoutes = signal(false);
 
   private readonly gatewayRoutesService = inject(GatewayRoutesService);
 
@@ -45,29 +45,31 @@ export default class Gateway implements OnInit {
   }
 
   refresh(): void {
-    this.updatingRoutes = true;
+    this.updatingRoutes.set(true);
     this.gatewayRoutesService.findAll().subscribe(gatewayRoutes => {
 <%_ if (locals.serviceDiscoveryConsul) { _%>
-      this.gatewayRoutes = gatewayRoutes.map(gatewayRoute => {
-        gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
-          if (serviceInstance?.healthService?.checks) {
-            if (
-              serviceInstance.healthService.checks.filter((check: any) => check.status === 'PASSING').length ===
-              serviceInstance.healthService.checks.length
-            ) {
-              serviceInstance.instanceInfo = { status: 'UP' };
-            } else {
-              serviceInstance.instanceInfo = { status: 'DOWN' };
+      this.gatewayRoutes.set(
+        gatewayRoutes.map(gatewayRoute => {
+          gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
+            if (serviceInstance?.healthService?.checks) {
+              if (
+                serviceInstance.healthService.checks.filter((check: any) => check.status === 'PASSING').length ===
+                serviceInstance.healthService.checks.length
+              ) {
+                serviceInstance.instanceInfo = { status: 'UP' };
+              } else {
+                serviceInstance.instanceInfo = { status: 'DOWN' };
+              }
             }
-          }
-          return serviceInstance as object;
-        });
-        return gatewayRoute;
-      });
+            return serviceInstance as object;
+          });
+          return gatewayRoute;
+        }),
+      );
 <%_ } else { _%>
-      this.gatewayRoutes = gatewayRoutes;
+      this.gatewayRoutes.set(gatewayRoutes);
 <%_ } _%>
-      this.updatingRoutes = false;
+      this.updatingRoutes.set(false);
     });
   }
 }

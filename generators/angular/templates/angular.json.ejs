@@ -209,6 +209,12 @@
             "buildTarget": "<%- microfrontend ? `${dasherizedBaseName}:esbuild:development` : '::development' %>",
             "runnerConfig": true,
             "coverageReporters": ["text", "lcov"],
+            "coverageThresholds": {
+              "statements": 95,
+              "branches": 95,
+              "functions": 95,
+              "lines": 95
+            },
 <%_ if (enableTranslation) { _%>
             "coverageExclude": ["<%- clientSrcDir %>i18n/**"],
 <%_ } _%>

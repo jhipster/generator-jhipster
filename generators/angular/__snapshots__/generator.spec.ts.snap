@@ -437,8 +437,8 @@ export class UserManagementDetail {
       <thead>
         <tr
           jhiSort
-          [(sortState)]="sortState"
-          (sortStateChange)="navigateToWithComponentValues($event)"
+          [sortState]="sortState()"
+          (sortStateChange)="sortState.set($event); navigateToWithComponentValues($event)"
         >
           <th scope="col" jhiSortBy="login">
             <div class="d-flex">
@@ -1218,7 +1218,7 @@ export default userManagementResolve;
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it } from "vitest";
+    "contents": "import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   HttpTestingController,
   provideHttpClientTesting,
@@ -1235,6 +1235,7 @@ import {
 
 import {
   UserManagementService,
+  UserManagementsService,
   RestUserManagement,
 } from "./user-management.service";
 
@@ -1312,6 +1313,19 @@ describe("UserManagement Service", () => {
       expect(expectedResult).toMatchObject(expected);
     });
 
+    it("should send null for the dates a partial update does not have", () => {
+      service
+        .partialUpdate({ login: sampleWithRequiredData.login })
+        .subscribe();
+
+      const req = httpMock.expectOne({ method: "PATCH" });
+      expect(req.request.body).toMatchObject({
+        createdDate: null,
+        lastModifiedDate: null,
+      });
+      req.flush(requireRestSample);
+    });
+
     it("should return a list of UserManagement", () => {
       const returnedFromService = { ...requireRestSample };
 
@@ -1322,6 +1336,14 @@ describe("UserManagement Service", () => {
       const req = httpMock.expectOne({ method: "GET" });
       req.flush([returnedFromService]);
       expect(expectedResult).toMatchObject([expected]);
+    });
+
+    it("should return an empty list of UserManagement", () => {
+      let body: IUserManagement[] | null | undefined;
+      service.query().subscribe((resp) => (body = resp.body));
+
+      httpMock.expectOne({ method: "GET" }).flush(null);
+      expect(body).toBeNull();
     });
 
     it("should delete a UserManagement", () => {
@@ -1465,6 +1487,23 @@ describe("UserManagement Service", () => {
     });
   });
 
+  describe("UserManagementsService", () => {
+    it("should list the userManagements of the params", async () => {
+      const userManagementsService = TestBed.inject(UserManagementsService);
+      userManagementsService.userManagementsParams.set({ page: 0 });
+      TestBed.tick();
+
+      httpMock.expectOne({ method: "GET" }).flush([requireRestSample]);
+
+      await vi.waitFor(() => {
+        TestBed.tick();
+        expect(userManagementsService.userManagements()).toMatchObject([
+          sampleWithRequiredData,
+        ]);
+      });
+    });
+  });
+
   afterEach(() => {
     httpMock.verify();
   });
@@ -1589,7 +1628,9 @@ export class UserManagementService extends UserManagementsService {
       })
       .pipe(
         map((res) =>
-          res.clone({ body: this.convertResponseArrayFromServer(res.body!) }),
+          res.clone({
+            body: res.body && this.convertResponseArrayFromServer(res.body),
+          }),
         ),
       );
   }
@@ -1738,6 +1779,19 @@ describe("UserManagement Form Service", () => {
             authorities: expect.any(Object),
           }),
         );
+      });
+
+      it("passing IUserManagement without dates nor relationships should create a new form with empty values", () => {
+        const formGroup = service.createUserManagementFormGroup({
+          ...sampleWithRequiredData,
+          createdDate: null,
+          lastModifiedDate: null,
+          authorities: null,
+        });
+
+        expect(formGroup.controls.createdDate.value).toBeNull();
+        expect(formGroup.controls.lastModifiedDate.value).toBeNull();
+        expect(formGroup.controls.authorities.value).toEqual([]);
       });
     });
 
@@ -3276,6 +3330,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/admin/gateway/gateway.html": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/admin/gateway/gateway.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/admin/gateway/gateway.ts": {
     "stateCleared": "modified",
   },
@@ -3715,6 +3772,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/date/duration.pipe.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/date/duration.pipe.ts": {
@@ -4402,6 +4462,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/admin/gateway/gateway.html": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/admin/gateway/gateway.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/admin/gateway/gateway.ts": {
     "stateCleared": "modified",
   },
@@ -4942,6 +5005,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/layouts/profiles/profile.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/login/login.service.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
@@ -4976,6 +5042,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/date/duration.pipe.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/date/duration.pipe.ts": {
@@ -6162,6 +6231,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/shared/auth/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/date/duration.pipe.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/date/duration.pipe.ts": {
     "stateCleared": "modified",
   },
@@ -7315,6 +7387,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/layouts/profiles/profile.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/login/login.service.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
@@ -7349,6 +7424,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/duration.pipe.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/date/duration.pipe.ts": {
@@ -8878,6 +8956,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/auth/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/date/duration.pipe.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/date/duration.pipe.ts": {
     "stateCleared": "modified",
   },
@@ -10000,6 +10081,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/layouts/profiles/profile.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/login/login.service.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
@@ -10034,6 +10118,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/duration.pipe.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/date/duration.pipe.ts": {
@@ -11131,6 +11218,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/duration.pipe.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/date/duration.pipe.ts": {

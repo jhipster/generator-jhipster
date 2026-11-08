@@ -59,6 +59,29 @@ describe('<%- entityAngularName %> Form Service', () => {
 <%_ } _%>
         }));
       });
+<%_ const timedFields = fields.filter(field => field.fieldTypeTimed); _%>
+<%_ const collectionRelationships = relationships.filter(relationship => relationship.persistableRelationship && relationship.collection); _%>
+<%_ if (timedFields.length > 0 || collectionRelationships.length > 0) { _%>
+
+      it('passing I<%- entityAngularName %> without <%- [timedFields.length > 0 ? 'dates' : '', collectionRelationships.length > 0 ? 'relationships' : ''].filter(Boolean).join(' nor ') %> should create a new form with empty values', () => {
+        const formGroup = service.create<%- entityAngularName %>FormGroup({
+          ...sampleWithRequiredData,
+  <%_ for (const field of timedFields) { _%>
+          <%- field.fieldName %>: null,
+  <%_ } _%>
+  <%_ for (const relationship of collectionRelationships) { _%>
+          <%- relationship.propertyName %>: null,
+  <%_ } _%>
+        });
+
+  <%_ for (const field of timedFields) { _%>
+        expect(formGroup.controls.<%- field.fieldName %>.value).toBeNull();
+  <%_ } _%>
+  <%_ for (const relationship of collectionRelationships) { _%>
+        expect(formGroup.controls.<%- relationship.propertyName %>.value).toEqual([]);
+  <%_ } _%>
+      });
+<%_ } _%>
     });
 
     describe('get<%- entityAngularName %>', () => {
