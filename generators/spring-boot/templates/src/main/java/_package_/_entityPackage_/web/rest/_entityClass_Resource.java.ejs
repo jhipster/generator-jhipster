@@ -33,8 +33,11 @@ _%>
 <%_ for (const { classPath } of injectVariables) { _%>
 import <%- classPath %>;
 <%_ } _%>
-<%_ if (!dtoMapstruct || serviceNo) { _%>
+<%_ if (!dtoMapstruct || serviceNo || !paginationNo) { _%>
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
+<%_ } _%>
+<%_ if (!paginationNo && entityAbsolutePackage !== packageName) { _%>
+import <%- packageName %>.web.rest.SortValidator;
 <%_ } _%>
 import <%- entityAbsolutePackage %>.repository.<%- entityClass %>Repository;
 <%_ if (serviceNo) { _%>

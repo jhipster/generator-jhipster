@@ -47,6 +47,42 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({}, generator);
 
+  describe('with a field and a relationship annotated @NotSortable', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        { name: 'Author', changelogDate: '20220129025419', fields: [{ fieldName: 'name', fieldType: 'String' }] },
+        {
+          name: 'Book',
+          changelogDate: '20220129025420',
+          fields: [
+            { fieldName: 'title', fieldType: 'String' },
+            { fieldName: 'secret', fieldType: 'String', options: { notSortable: true } },
+          ],
+          relationships: [
+            {
+              relationshipName: 'author',
+              otherEntityName: 'author',
+              relationshipType: 'many-to-one',
+              relationshipSide: 'left',
+              options: { notSortable: true },
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should mark them @NotSortable in the entity', () => {
+      const book = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Book.java`;
+      runResult.assertFileContent(book, /@NotSortable\s+(?:@[\w.]+(?:\([^)]*\))?\s+)*private String secret;/);
+      runResult.assertFileContent(book, /@NotSortable\s+(?:@[\w.]+(?:\([^)]*\))?\s+)*private Author author;/);
+      runResult.assertNoFileContent(book, /@NotSortable\s+(?:@[\w.]+(?:\([^)]*\))?\s+)*private String title;/);
+    });
+
+    it('should leave an entity without them unchanged', () => {
+      runResult.assertNoFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Author.java`, 'NotSortable');
+    });
+  });
+
   describe('with graalvm support and an existing cache provider', () => {
     before(async () => {
       await helpers

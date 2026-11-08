@@ -148,6 +148,10 @@ const userDtoFiles = javaWriteFileSection({
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user!.persistClass}.java`),
       templates: ['domain/User.java'],
     },
+    {
+      ...javaMainPackageTemplatesBlock(),
+      templates: ['domain/NotSortable.java'],
+    },
   ],
   dto: [
     {
@@ -204,7 +208,22 @@ const userFiles = javaWriteFileSection({
   ],
 });
 
+const domainFiles = javaWriteFileSection({
+  domainFiles: [
+    {
+      condition: data =>
+        data.entityDomainLayer &&
+        !data.databaseTypeNo &&
+        !data.databaseTypeCassandra &&
+        [...data.fields, ...data.relationships].some((property: { notSortable?: boolean }) => property.notSortable),
+      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['domain/_persistClass_.java.jhi.not_sortable'],
+    },
+  ],
+});
+
 export const serverFiles = javaWriteFileSection({
+  ...domainFiles,
   ...restFiles,
   ...filteringFiles,
   ...filteringReactiveFiles,

@@ -321,6 +321,18 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       renameTo: moveToJavaPackageSrcDir,
       templates: ['domain/AbstractAuditingEntity.java'],
     },
+    {
+      condition: ctx => !ctx.databaseTypeNo && !ctx.databaseTypeCassandra,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['domain/NotSortable.java', 'web/rest/SortValidator.java'],
+    },
+    {
+      condition: ctx => !ctx.databaseTypeNo && !ctx.databaseTypeCassandra,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/SortValidatorTest.java'],
+    },
   ],
   serverJavaWebError: [
     {

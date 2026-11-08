@@ -66,6 +66,8 @@ export type SpringEntity = {
 type SpringBootProperty = {
   propertyJavaFilterType?: string;
   propertyJavaFilteredType?: string;
+  /** Rejects a sort by the property in the REST resources (the `@NotSortable` annotation of the JDL). */
+  notSortable?: boolean;
 };
 
 export type Field = ServerField &

@@ -1102,33 +1102,84 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
         }
     }
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+  <%_ const sortRelationship = relationships.find(relationship => relationship.persistableRelationship && !relationship.collection && !relationship.otherEntity.embedded); _%>
 
-    @Test
+    @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
   <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL + "?sort=doesNotExist,asc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
   <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=doesNotExist,asc"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
   <%_ } _%>
     }
+  <%_ if (sortRelationship) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>SortedByWhatIsNotAPropertyOfARelationship() <%- reactive ? '' : 'throws Exception ' %>{
+    <%_ if (reactive) { _%>
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.doesNotExist,asc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
+    <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.doesNotExist,asc"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
+    <%_ } _%>
+    }
+    <%_ if (sortRelationship.otherEntity.builtInUser && !authenticationTypeOauth2) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>SortedByAPropertyOfARelationshipMarkedNotSortable() <%- reactive ? '' : 'throws Exception ' %>{
+      <%_ if (reactive) { _%>
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.password,asc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
+      <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.password,asc"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
+      <%_ } _%>
+    }
+    <%_ } _%>
+  <%_ } _%>
   <%_ if (searchEngineCouchbase) { _%>
 
-    @Test
+    @Test<%- transactionalAnnotation %>
     void search<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
     <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:doesNotExist&sort=doesNotExist,asc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
     <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:doesNotExist&sort=doesNotExist,asc"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
     <%_ } _%>
     }
   <%_ } _%>
