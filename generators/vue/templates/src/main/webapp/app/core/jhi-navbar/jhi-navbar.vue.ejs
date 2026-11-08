@@ -195,7 +195,7 @@ import { storeToRefs } from 'pinia';
 
 import { accountServiceKey } from '@/account/account.service';
 <%_ if (generateUserManagement) { _%>
-import { useLoginNavigation } from '@/account/login-navigation';
+import { useLoginPage } from '@/account/login-page';
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import { loginServiceKey } from '@/account/login.service';
@@ -236,7 +236,7 @@ const { login } = loginService;
 <%_ } _%>
 
 <%_ if (generateUserManagement) { _%>
-const { showLogin } = useLoginNavigation();
+const { showLogin } = useLoginPage();
 <%_ } _%>
 const accountService = inject(accountServiceKey)!;
 <%_ if (enableTranslation) { _%>

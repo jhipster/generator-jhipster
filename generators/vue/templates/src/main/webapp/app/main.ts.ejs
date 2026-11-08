@@ -29,7 +29,7 @@ import { createPinia, storeToRefs } from 'pinia'
 
 import AccountService, { accountServiceKey } from '@/account/account.service';
 <%_ if (!authenticationTypeOauth2) { _%>
-import { loginRouteName, useLoginNavigation } from '@/account/login-navigation';
+import { loginRouteName, useLoginPage } from '@/account/login-page';
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import LoginService, { loginServiceKey } from '@/account/login.service';
@@ -82,7 +82,7 @@ const app = createApp({
     provide(loginServiceKey, new LoginService());
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
-    const { showLogin } = useLoginNavigation();
+    const { showLogin } = useLoginPage();
 <%_ } _%>
     const store = useStore();
     const accountService = new AccountService(store);

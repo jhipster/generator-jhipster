@@ -23,7 +23,7 @@ export const loginRouteName = 'Login';
 /**
  * Navigates to the login page, which comes back to the current page once signed in.
  */
-export const useLoginNavigation = defineStore('login', () => {
+export const useLoginPage = defineStore('login', () => {
   async function showLogin() {
     const { default: router } = await import('@/router');
     const { fullPath, name } = router.currentRoute.value;

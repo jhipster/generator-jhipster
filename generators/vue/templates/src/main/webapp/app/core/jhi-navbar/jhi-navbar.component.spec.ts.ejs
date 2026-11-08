@@ -26,7 +26,7 @@ import { type AxiosResponse } from 'axios';
 
 import { accountServiceKey } from '@/account/account.service';
 <%_ if (generateUserManagement) { _%>
-import { useLoginNavigation } from '@/account/login-navigation';
+import { useLoginPage } from '@/account/login-page';
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import type LoginService from '@/account/login.service';
@@ -64,7 +64,7 @@ describe('JhiNavbar', () => {
   let loginService: LoginService;
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
-  let login: ReturnType<typeof useLoginNavigation>;
+  let login: ReturnType<typeof useLoginPage>;
 <%_ } _%>
   const accountService = { hasAnyAuthorityAndCheckAuth: vi.fn().mockImplementation(() => Promise.resolve(true)) };
 <%_ if (enableTranslation) { _%>
@@ -105,7 +105,7 @@ describe('JhiNavbar', () => {
     });
     jhiNavbar = wrapper.vm;
 <%_ if (generateUserManagement) { _%>
-    login = useLoginNavigation();
+    login = useLoginPage();
 <%_ } _%>
   });
 

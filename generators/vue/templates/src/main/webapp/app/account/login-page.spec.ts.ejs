@@ -22,13 +22,13 @@ import { createPinia, setActivePinia } from 'pinia';
 
 import router from '@/router';
 
-import { loginRouteName, useLoginNavigation } from './login-navigation';
+import { loginRouteName, useLoginPage } from './login-page';
 
 vi.mock('@/router', () => ({
   default: { currentRoute: { value: {} }, push: vi.fn() },
 }));
 
-describe('useLoginNavigation', () => {
+describe('useLoginPage', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     vi.mocked(router.push).mockClear();
@@ -37,7 +37,7 @@ describe('useLoginNavigation', () => {
   it('should navigate to the login page, back to the current page', async () => {
     router.currentRoute.value = { fullPath: '/admin/health?a=b', name: 'JhiHealthComponent' } as never;
 
-    await useLoginNavigation().showLogin();
+    await useLoginPage().showLogin();
 
     expect(router.push).toHaveBeenCalledWith({ name: loginRouteName, query: { redirect: '/admin/health?a=b' } });
   });
@@ -45,7 +45,7 @@ describe('useLoginNavigation', () => {
   it('should stay on the login page', async () => {
     router.currentRoute.value = { fullPath: '/login', name: loginRouteName } as never;
 
-    await useLoginNavigation().showLogin();
+    await useLoginPage().showLogin();
 
     expect(router.push).not.toHaveBeenCalled();
   });

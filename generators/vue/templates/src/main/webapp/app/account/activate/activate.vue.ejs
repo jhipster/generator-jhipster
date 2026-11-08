@@ -23,12 +23,12 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute } from 'vue-router';
 
-import { useLoginNavigation } from '@/account/login-navigation';
+import { useLoginPage } from '@/account/login-page';
 
 import ActivateService, { activateServiceKey } from './activate.service';
 
 const activateService = inject(activateServiceKey, () => new ActivateService(), true);
-const { showLogin } = useLoginNavigation();
+const { showLogin } = useLoginPage();
 const route = useRoute();
 <%_ if (enableTranslation) { _%>
 const { t: t$ } = useI18n();

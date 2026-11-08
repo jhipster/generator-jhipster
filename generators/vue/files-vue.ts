@@ -156,8 +156,8 @@ export const vueFiles = asWriteFilesSection({
       templates: [
         'account/login-form/login-form.vue',
         'account/login-form/login-form.component.spec.ts',
-        'account/login-navigation.ts',
-        'account/login-navigation.spec.ts',
+        'account/login-page.ts',
+        'account/login-page.spec.ts',
         'router/account.ts',
       ],
     },
