@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { isMap, parseDocument } from 'yaml';
+
 import BaseApplicationGenerator from '../../generators/base-core/index.ts';
 import { parseMavenPom } from '../../generators/java-simple-application/generators/maven/support/dependabot-maven.ts';
 import { getPackageRoot } from '../../lib/index.ts';
@@ -83,6 +85,17 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
       writing() {
         this.writeDestination(`${this.springBootDependenciesFile}.pom`, this.pomContent);
         this.writeDestinationJSON(`${this.springBootDependenciesFile}.json`, this.springBootJson);
+        // The overrides fit the previous version: each one comes back only if the new version still needs it.
+        // The header, the comment of the document, is kept.
+        this.editFile(`${this.springBootDependenciesFile}-overrides.yml`, content => {
+          const document = parseDocument(content);
+          if (isMap(document.contents)) {
+            document.contents.items = [];
+            document.contents.commentBefore = null;
+            document.contents.comment = null;
+          }
+          return document.toString();
+        });
       },
     });
   }

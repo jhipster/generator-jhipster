@@ -65,7 +65,8 @@ export interface CacheMetrics {
 
 export interface GarbageCollector {
   'jvm.gc.max.data.size': number;
-  'jvm.gc.pause': MetricsWithPercentile;
+  /** Missing until a first pause of the garbage collector. */
+  'jvm.gc.pause'?: MetricsWithPercentile;
   'jvm.gc.memory.promoted': number;
   'jvm.gc.memory.allocated': number;
   classesLoaded: number;
@@ -321,6 +322,7 @@ const toGarbageCollectorSection = (garbageCollector: GarbageCollector): MetricsS
   const max = garbageCollector['jvm.gc.max.data.size'];
   const promoted = garbageCollector['jvm.gc.memory.promoted'];
   const allocated = garbageCollector['jvm.gc.memory.allocated'];
+  const pause = garbageCollector['jvm.gc.pause'];
   return {
     id: 'garbageCollectorMetrics',
     label: <%- label('Garbage collections', 'metrics.jvm.gc.title') %>,
@@ -353,7 +355,7 @@ const toGarbageCollectorSection = (garbageCollector: GarbageCollector): MetricsS
     tables: [
       {
         columns: [{ label: { text: '' } }, ...percentileColumns],
-        rows: [toPercentileRow('jvm.gc.pause', garbageCollector['jvm.gc.pause'])],
+        rows: pause ? [toPercentileRow('jvm.gc.pause', pause)] : [],
       },
     ],
   };

@@ -44,7 +44,7 @@ import cleanupTask from './cleanup.ts';
 import command from './command.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
-import springBootDependencies from './resources/spring-boot-dependencies-4.ts';
+import springBootDependencies, { springBootDependenciesOverrides } from './resources/spring-boot-dependencies-4.ts';
 import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
@@ -289,6 +289,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           application.springBootDependencies = this.prepareDependencies(springBootDependencies.versions, 'java');
           application.javaDependencies['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
           Object.assign(application.javaManagedProperties, springBootDependencies.properties);
+          Object.assign(application.javaDependencies, springBootDependenciesOverrides);
           application.javaDependencies.liquibase = application.javaManagedProperties['liquibase.version']!;
         }
       },
