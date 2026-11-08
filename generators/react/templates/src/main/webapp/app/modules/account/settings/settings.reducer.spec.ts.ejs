@@ -121,11 +121,11 @@ describe('Settings reducer tests', () => {
 <%_ if (enableTranslation) { _%>
     it('forgets the locale of the session on saveAccountSettings', async () => {
       Storage.session.set('locale', '<%- nativeLanguage %>');
-      await saveAccountSettings({ langKey: '<%- nativeLanguage %>' })(dispatch, getState, extra);
-      expect(Storage.session.get('locale')).toBeUndefined();
+      saveAccountSettings({ langKey: '<%- nativeLanguage %>' })(dispatch, getState, extra);
+      await vi.waitFor(() => expect(Storage.session.get('locale')).toBeUndefined());
 
-      await saveAccountSettings({ langKey: '<%- nativeLanguage %>' })(dispatch, getState, extra);
-      expect(Storage.session.get('locale')).toBeUndefined();
+      saveAccountSettings({ langKey: '<%- nativeLanguage %>' })(dispatch, getState, extra);
+      await vi.waitFor(() => expect(Storage.session.get('locale')).toBeUndefined());
     });
 <%_ } _%>
   });

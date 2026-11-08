@@ -245,7 +245,7 @@ describe('Authentication reducer tests', () => {
       axios.get = vi.fn().mockResolvedValue({ data: { activated: true } });
       const sessionStore = configureStore({ reducer: { authentication } });
 
-      await sessionStore.dispatch(logout());
+      sessionStore.dispatch(logout());
 
       await vi.waitFor(() => expect(sessionStore.getState().authentication.isAuthenticated).toBe(true));
       expect(axios.get).toHaveBeenCalledWith('api/account');
@@ -260,9 +260,9 @@ describe('Authentication reducer tests', () => {
         preloadedState: { locale: { ...locale(undefined, { type: '' }), loadedKeys: ['<%- nativeLanguage %>'] } },
       });
 
-      await sessionStore.dispatch(getSession());
+      sessionStore.dispatch(getSession());
 
-      expect(sessionStore.getState().locale.currentLocale).toBe('<%- nativeLanguage %>');
+      await vi.waitFor(() => expect(sessionStore.getState().locale.currentLocale).toBe('<%- nativeLanguage %>'));
     });
 
 <%_ } _%>
