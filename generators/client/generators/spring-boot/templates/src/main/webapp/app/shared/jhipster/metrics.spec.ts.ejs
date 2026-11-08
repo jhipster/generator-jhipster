@@ -157,6 +157,23 @@ describe('metrics', () => {
       expect(section.tables[0].rows[0].map(({ text }) => text)).toEqual(['jvm.gc.pause', '2', '1', '0', '1', '2', '3', '3', '3']);
     });
 
+    it('should convert the garbage collector before its first pause', () => {
+      const [, section] = toSections({
+        ...metrics,
+        garbageCollector: {
+          'jvm.gc.max.data.size': 4194304,
+          'jvm.gc.live.data.size': 2097152,
+          'jvm.gc.memory.promoted': 0,
+          'jvm.gc.memory.allocated': 0,
+          classesLoaded: 10,
+          classesUnloaded: 1,
+        },
+      });
+
+      expect(section.id).toBe('garbageCollectorMetrics');
+      expect(section.tables[0].rows).toEqual([]);
+    });
+
     it('should convert the requests, with the share of each code', () => {
       const [, section] = toSections({
           ...metrics,
