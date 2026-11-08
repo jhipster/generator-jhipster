@@ -23,6 +23,7 @@ import { byteSize, openFile, paddingSize, toBase64, toOpenableContentType } from
 describe('data utils', () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
   });
 
   it('should compute the size of a base64 value', () => {
@@ -32,10 +33,26 @@ describe('data utils', () => {
     expect(byteSize('AAAAAAAA')).toBe('6 bytes');
   });
 
-  it('should read a file as base64', async () => {
-    const base64Data = await new Promise(resolve => toBase64(new File(['jhipster'], 'file.txt', { type: 'text/plain' }), resolve));
+  it('should read a file as base64', () => {
+    // The read completes synchronously, independent of the timers a test may have faked.
+    const result = vi.fn<() => unknown>(() => `data:text/plain;base64,${btoa('jhipster')}`);
+    vi.stubGlobal(
+      'FileReader',
+      class {
+        onload?: (event: unknown) => void;
 
-    expect(base64Data).toBe(btoa('jhipster'));
+        readAsDataURL(): void {
+          this.onload?.({ target: { result: result() } });
+        }
+      },
+    );
+    const callback = vi.fn();
+
+    toBase64(new File(['jhipster'], 'file.txt', { type: 'text/plain' }), callback);
+    result.mockReturnValue(null);
+    toBase64(new File(['jhipster'], 'file.txt', { type: 'text/plain' }), callback);
+
+    expect(callback).toHaveBeenCalledExactlyOnceWith(btoa('jhipster'));
   });
 
   it('should open only safe content types', () => {
