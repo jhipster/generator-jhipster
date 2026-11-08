@@ -48,7 +48,12 @@ export default class CommonGenerator extends BaseApplicationGenerator {
             }),
             clientApplicationTemplatesBlock({
               condition: ctx => ctx.clientTestFrameworkVitest,
-              templates: ['shared/jhipster/pagination.spec.ts'],
+              templates: [
+                'shared/jhipster/data-utils.spec.ts',
+                'shared/jhipster/headers.spec.ts',
+                'shared/jhipster/link-header.spec.ts',
+                'shared/jhipster/pagination.spec.ts',
+              ],
             }),
             clientApplicationTemplatesBlock({
               condition: ctx => ctx.withAdminUi,
