@@ -51,13 +51,11 @@ describe('login page', () => {
   it('greets with signin', () => {
     cy.get(titleLoginSelector).should('be.visible');
   });
-<%_ if (clientFrameworkAngular || clientFrameworkReact || clientFrameworkVue) { _%>
 
   it('greets visiting /login directly', () => {
     cy.visit('/login');
     cy.get(titleLoginSelector).should('be.visible');
   });
-<%_ } _%>
 
   it('requires username', () => {
     cy.get(passwordLoginSelector).should('be.visible').type('a-password');
