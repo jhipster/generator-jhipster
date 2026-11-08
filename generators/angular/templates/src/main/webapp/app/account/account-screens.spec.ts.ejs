@@ -34,12 +34,16 @@ import { of } from 'rxjs';
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 
+<%_ if (generateUserRegistration) { _%>
 import Activate from './activate/activate';
+<%_ } _%>
 import PasswordResetFinish from './password-reset/finish/password-reset-finish';
 import PasswordResetInit from './password-reset/init/password-reset-init';
 import PasswordStrengthBar from './password/password-strength-bar/password-strength-bar';
 import Password from './password/password';
+<%_ if (generateUserRegistration) { _%>
 import Register from './register/register';
+<%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
 import { Session } from './sessions/session.model';
 import Sessions from './sessions/sessions';
@@ -118,6 +122,7 @@ describe('Account screens', () => {
     vi.spyOn(accountService, 'identity').mockReturnValue(of(account));
   });
 
+<%_ if (generateUserRegistration) { _%>
   it('should show the register form and its messages', () => {
     const fixture = render(Register);
 
@@ -129,6 +134,7 @@ describe('Account screens', () => {
     expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
   });
 
+<%_ } _%>
   it('should show the settings form and its messages', () => {
     const fixture = render(Settings);
 
@@ -176,6 +182,7 @@ describe('Account screens', () => {
     expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
   });
 
+<%_ if (generateUserRegistration) { _%>
   it('should show the result of the activation', () => {
     const fixture = render(Activate);
 
@@ -184,6 +191,7 @@ describe('Account screens', () => {
     expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
   });
 
+<%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
   it('should show the sessions and invalidate them', () => {
     const service = TestBed.inject(SessionsService);
