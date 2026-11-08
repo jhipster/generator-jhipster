@@ -11,6 +11,14 @@ exports[`generator - client:i18n with defaults options should call source snapsh
       },
     ],
   ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule secrets:S2068 is ignored, the translations hold the label of the password, not a password",
+      "resourceKey": "src/main/webapp/i18n/**/*.json",
+      "ruleId": "S2068-i18n",
+      "ruleKey": "secrets:S2068",
+    },
+  ],
 }
 `;
 

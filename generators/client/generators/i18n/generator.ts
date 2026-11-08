@@ -23,6 +23,7 @@ import { startCase } from '../../../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../../../base-application/generator.ts';
 import { QUEUES } from '../../../base-application/priorities.ts';
 import { getEnumInfo } from '../../../base-application/support/enum.ts';
+import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../../../generator-constants.ts';
 import { type Language, findLanguageForTag } from '../../../languages/support/languages.ts';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from '../../../languages/translation-data.ts';
@@ -324,6 +325,24 @@ export default class I18NGenerator extends ClientApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      sonar({ application, source }) {
+        if (!application.enableTranslation) return;
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S2068-i18n',
+          ruleKey: 'secrets:S2068',
+          resourceKey: `${application.clientI18nDir}**/*.json`,
+          comment: 'Rule secrets:S2068 is ignored, the translations hold the label of the password, not a password',
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get postWritingEntities() {
