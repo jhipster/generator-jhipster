@@ -20,6 +20,16 @@
  * import type from JSON file is not supported in TypeScript.
  * This file is a workaround to be able to import JSON type.
  */
+import { readFileSync } from 'node:fs';
+
+import { parse } from 'yaml';
+
 import springBootDependencies4 from './spring-boot-dependencies-4.json' with { type: 'json' };
+
+/**
+ * Versions that take the place of the ones Spring Boot gives, see spring-boot-dependencies-4-overrides.yml.
+ */
+export const springBootDependenciesOverrides: Record<string, string> =
+  parse(readFileSync(new URL('./spring-boot-dependencies-4-overrides.yml', import.meta.url), 'utf8')) ?? {};
 
 export default springBootDependencies4;

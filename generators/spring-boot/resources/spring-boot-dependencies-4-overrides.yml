@@ -1,0 +1,8 @@
+# Versions of dependencies that take the place of the ones Spring Boot gives, while these do not work.
+# Without an override, a dependency follows the version of Spring Boot it belongs to.
+# .blueprint/update-spring-boot empties this file at each Spring Boot update.
+---
+# liquibase-neo4j 5.0.4 and 5.0.4.1 fail to read the current Neo4j user with the Neo4j driver of Spring Boot 4.1.2.
+liquibase-neo4j: '5.0.0'
+# The Gradle plugin of Hibernate 7.4.13.Final, the Hibernate version of Spring Boot 4.1.2, is not published.
+hibernate-gradle-plugin: '7.4.15.Final'
