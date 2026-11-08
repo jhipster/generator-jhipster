@@ -62,6 +62,15 @@ describe('Alert Component', () => {
     expect(fixture.nativeElement.querySelectorAll('ngb-alert')).toHaveLength(1);
   });
 
+  it('should not render an alert without message', () => {
+    fixture.detectChanges();
+
+    (mockAlertService.alerts as WritableSignal<AlertModel[]>).set([{ id: 0, type: 'success', message: '' }]);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelectorAll('ngb-alert')).toHaveLength(0);
+  });
+
   it('should call alertService.clear on destroy', () => {
     // WHEN
     comp.ngOnDestroy();

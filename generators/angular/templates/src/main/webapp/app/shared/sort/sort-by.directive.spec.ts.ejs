@@ -38,6 +38,7 @@ import { SortDirective } from './sort.directive';
             ID
             <fa-icon [icon]="'sort'" />
           </th>
+          <th id="without-icon" <%- jhiPrefix %>SortBy="id">Name</th>
         </tr>
       </thead>
     </table>
@@ -132,5 +133,16 @@ describe('Directive: SortByDirective', () => {
     expect(sortDirective.sort).toHaveBeenCalledTimes(2);
     expect(sortDirective.sort).toHaveBeenNthCalledWith(1, 'name');
     expect(sortDirective.sort).toHaveBeenNthCalledWith(2, 'name');
+  });
+
+  it('should not sort by a column without icon', () => {
+    const columnWithoutIcon = fixture.debugElement.query(By.css('#without-icon'));
+    const sortDirective = columnWithoutIcon.injector.get(SortDirective as Type<SortDirective>);
+    sortDirective.sort = vi.fn();
+
+    fixture.detectChanges();
+    columnWithoutIcon.triggerEventHandler('click', null);
+
+    expect(sortDirective.sort).not.toHaveBeenCalled();
   });
 });

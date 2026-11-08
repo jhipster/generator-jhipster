@@ -16,13 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it<%- enableTranslation ? ', vi' : '' %> } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 
 <%_ if (enableTranslation) { _%>
-import { provideTranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
 
 <%_ } _%>
 import ErrorPage from './error';
@@ -63,4 +64,31 @@ describe('Error routes', () => {
     expect(errorPage.errorMessage()).toBeTruthy();
     expect(errorPage.errorMessage()).not.toBe(notFound);
   });
+
+  it('should show no message on the error page', async () => {
+    const harness = await RouterTestingHarness.create();
+
+    const errorPage = await harness.navigateByUrl('/error', ErrorPage);
+
+    expect(errorPage.errorMessage()).toBeFalsy();
+    expect(harness.routeNativeElement?.querySelector('.alert-danger')).toBeNull();
+  });
+<%_ if (enableTranslation) { _%>
+
+  it('should translate the message again when the language changes, until the page is left', async () => {
+    const harness = await RouterTestingHarness.create();
+    const errorPage = await harness.navigateByUrl('/accessdenied', ErrorPage);
+    const translateService = TestBed.inject(TranslateService);
+    const get = vi.spyOn(translateService, 'get');
+    const errorKey = errorPage.errorKey;
+    const translationsOfTheError = (): number => get.mock.calls.filter(([key]) => key === errorKey).length;
+
+    await firstValueFrom(translateService.use('<%- nativeLanguage %>-test'));
+    expect(translationsOfTheError()).toBe(1);
+
+    await harness.navigateByUrl('/error', ErrorPage);
+    await firstValueFrom(translateService.use('<%- nativeLanguage %>'));
+    expect(translationsOfTheError()).toBe(1);
+  });
+<%_ } _%>
 });

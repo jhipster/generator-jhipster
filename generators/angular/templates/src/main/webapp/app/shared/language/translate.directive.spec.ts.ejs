@@ -21,6 +21,7 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+import { throwError } from 'rxjs';
 
 import TranslateDirective from './translate.directive';
 
@@ -51,5 +52,13 @@ describe('TranslateDirective Tests', () => {
     fixture.detectChanges();
 
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should keep the HTML when the translation fails', () => {
+    vi.spyOn(translateService, 'get').mockReturnValue(throwError(() => new Error('failed')));
+
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('div').innerHTML).toBe('');
   });
 });
