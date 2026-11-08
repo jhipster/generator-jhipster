@@ -286,7 +286,10 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
             'spring-boot-dependencies': "'SPRING-BOOT-VERSION'",
           };
         } else {
-          application.springBootDependencies = this.prepareDependencies(springBootDependencies.versions, 'java');
+          application.springBootDependencies = this.prepareDependencies(
+            { ...springBootDependencies.versions, ...springBootDependenciesOverrides.versions },
+            'java',
+          );
           application.javaDependencies['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
           Object.assign(application.javaManagedProperties, springBootDependencies.properties, springBootDependenciesOverrides.properties);
           Object.assign(application.javaDependencies, springBootDependenciesOverrides.dependencies);

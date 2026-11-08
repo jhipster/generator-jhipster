@@ -31,18 +31,27 @@ type SpringBootDependenciesOverrides = {
   dependencies: Record<string, string>;
   /** Properties of the versions Spring Boot manages, written in the build. */
   properties: Record<string, string>;
+  /** The versions of the properties, keyed like the versions of Spring Boot: the property without `.version`. */
+  versions: Record<string, string>;
 };
 
 const overrides: Partial<SpringBootDependenciesOverrides> | null = parse(
   readFileSync(new URL('./spring-boot-dependencies-4-overrides.yml', import.meta.url), 'utf8'),
 );
 
+const properties = overrides?.properties ?? {};
+
 /**
  * Versions that take the place of the ones Spring Boot gives, see spring-boot-dependencies-4-overrides.yml.
  */
 export const springBootDependenciesOverrides: SpringBootDependenciesOverrides = {
   dependencies: overrides?.dependencies ?? {},
-  properties: overrides?.properties ?? {},
+  properties,
+  versions: Object.fromEntries(
+    Object.entries(properties)
+      .filter(([property]) => property.endsWith('.version'))
+      .map(([property, value]) => [property.slice(0, -'.version'.length), value]),
+  ),
 };
 
 export default springBootDependencies4;
