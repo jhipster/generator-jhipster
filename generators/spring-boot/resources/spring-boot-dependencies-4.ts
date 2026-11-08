@@ -26,10 +26,23 @@ import { parse } from 'yaml';
 
 import springBootDependencies4 from './spring-boot-dependencies-4.json' with { type: 'json' };
 
+type SpringBootDependenciesOverrides = {
+  /** Versions of the dependencies JHipster adds. */
+  dependencies: Record<string, string>;
+  /** Properties of the versions Spring Boot manages, written in the build. */
+  properties: Record<string, string>;
+};
+
+const overrides: Partial<SpringBootDependenciesOverrides> | null = parse(
+  readFileSync(new URL('./spring-boot-dependencies-4-overrides.yml', import.meta.url), 'utf8'),
+);
+
 /**
  * Versions that take the place of the ones Spring Boot gives, see spring-boot-dependencies-4-overrides.yml.
  */
-export const springBootDependenciesOverrides: Record<string, string> =
-  parse(readFileSync(new URL('./spring-boot-dependencies-4-overrides.yml', import.meta.url), 'utf8')) ?? {};
+export const springBootDependenciesOverrides: SpringBootDependenciesOverrides = {
+  dependencies: overrides?.dependencies ?? {},
+  properties: overrides?.properties ?? {},
+};
 
 export default springBootDependencies4;
