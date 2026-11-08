@@ -51,7 +51,7 @@ describe('login page', () => {
   it('greets with signin', () => {
     cy.get(titleLoginSelector).should('be.visible');
   });
-<%_ if (clientFrameworkAngular) { _%>
+<%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
 
   it('greets visiting /login directly', () => {
     cy.visit('/login');

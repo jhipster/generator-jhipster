@@ -16,34 +16,105 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router';
+import { Alert, Button, Form } from 'react-bootstrap';
+import { Translate, ValidatedField, translate } from 'react-jhipster';
+import { Link, Navigate, useLocation } from 'react-router';
+
+import { type FieldError, type FieldValues, useForm } from 'react-hook-form';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { login } from 'app/shared/reducers/authentication';
-
-import LoginModal from './login-modal';
 
 export const Login = () => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const loginError = useAppSelector(state => state.authentication.loginError);
-  const [showModal, setShowModal] = useState(true);
-  const navigate = useNavigate();
   const pageLocation = useLocation();
 
-  const handleLogin = (username, password, rememberMe = false) => dispatch(login(username, password, rememberMe));
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, touchedFields },
+  } = useForm({ mode: 'onTouched' });
 
-  const handleClose = () => {
-    setShowModal(false);
-    navigate('/');
-  };
+  const handleLogin = ({ username, password, rememberMe }: FieldValues) => dispatch(login(username, password, rememberMe));
 
   const { from } = pageLocation.state || { from: { pathname: '/', search: pageLocation.search } };
   if (isAuthenticated) {
     return <Navigate to={from} replace />;
   }
-  return <LoginModal showModal={showModal} handleLogin={handleLogin} handleClose={handleClose} loginError={loginError} />;
+  return (
+    <div className="d-flex justify-content-center" id="login-page">
+      <div className="col-lg-6 col-md-8 col-sm-10">
+        <h1 id="login-title" data-cy="loginTitle">
+          <Translate contentKey="login.title">Sign in</Translate>
+        </h1>
+        {loginError && (
+          <Alert variant="danger" data-cy="loginError">
+            <Translate contentKey="login.messages.error.authentication">
+              <strong>Failed to sign in!</strong> Please check your credentials and try again.
+            </Translate>
+          </Alert>
+        )}
+        <Form onSubmit={handleSubmit(handleLogin)}>
+          <ValidatedField
+            name="username"
+            label={translate('global.form.username.label')}
+            placeholder={translate('global.form.username.placeholder')}
+            required
+            autoFocus
+            data-cy="username"
+            validate={{ required: 'Username cannot be empty!' }}
+            register={register}
+            error={errors.username as FieldError}
+            isTouched={touchedFields.username}
+          />
+          <ValidatedField
+            name="password"
+            type="password"
+            label={translate('login.form.password')}
+            placeholder={translate('login.form.password.placeholder')}
+            required
+            data-cy="password"
+            validate={{ required: 'Password cannot be empty!' }}
+            register={register}
+            error={errors.password as FieldError}
+            isTouched={touchedFields.password}
+          />
+          <ValidatedField
+            <%- authenticationTypeSession && databaseTypeNo ? ' hidden' : '' %>
+            name="rememberMe"
+            type="checkbox"
+            check
+            label={translate('login.form.rememberme')}
+            value={true}
+            register={register}
+          />
+          <Button variant="primary" type="submit" data-cy="submit">
+            <Translate contentKey="login.form.button">Sign in</Translate>
+          </Button>
+        </Form>
+<%_ if (generateUserManagement) { _%>
+      <Alert variant="warning" className="mt-3">
+        <Link to="/account/reset/request" data-cy="forgetYourPasswordSelector">
+          <Translate contentKey="login.password.forgot">Did you forget your password?</Translate>
+        </Link>
+      </Alert>
+  <%_ if (generateUserRegistration) { _%>
+      <Alert variant="warning">
+        <span>
+          <Translate contentKey="global.messages.info.register.noaccount">You don&apos;t have an account yet?</Translate>
+        </span>
+        {' '}
+        <Link to="/account/register">
+          <Translate contentKey="global.messages.info.register.link">Register a new account</Translate>
+        </Link>
+      </Alert>
+  <%_ } _%>
+<%_ } _%>
+      </div>
+    </div>
+  );
 };
 
 export default Login;
