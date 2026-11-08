@@ -25,9 +25,6 @@ import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
 import { type AxiosResponse } from 'axios';
 
 import { accountServiceKey } from '@/account/account.service';
-<%_ if (generateUserManagement) { _%>
-import { useLoginModal } from '@/account/login-modal';
-<%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import type LoginService from '@/account/login.service';
 import { loginServiceKey } from '@/account/login.service';
@@ -62,9 +59,6 @@ describe('JhiNavbar', () => {
   let jhiNavbar: JhiNavbarComponentType;
 <%_ if (authenticationUsesCsrf) { _%>
   let loginService: LoginService;
-<%_ } _%>
-<%_ if (generateUserManagement) { _%>
-  let login: ReturnType<typeof useLoginModal>;
 <%_ } _%>
   const accountService = { hasAnyAuthorityAndCheckAuth: vi.fn().mockImplementation(() => Promise.resolve(true)) };
 <%_ if (enableTranslation) { _%>
@@ -104,9 +98,6 @@ describe('JhiNavbar', () => {
       },
     });
     jhiNavbar = wrapper.vm;
-<%_ if (generateUserManagement) { _%>
-    login = useLoginModal();
-<%_ } _%>
   });
 
   it('should not have user data set', () => {
@@ -132,15 +123,13 @@ describe('JhiNavbar', () => {
 <%_ } _%>
   });
 
-  it('should use login service', () => {
-    jhiNavbar.<%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>();
-
 <%_ if (authenticationTypeOauth2) { _%>
+  it('should use login service', () => {
+    jhiNavbar.login();
+
     expect(loginService.login).toHaveBeenCalled();
-<%_ } else { _%>
-    expect(login.showLogin).toHaveBeenCalled();
-<%_ } _%>
   });
+<%_ } _%>
 
   it('should use account service', () => {
     jhiNavbar.hasAnyAuthority('auth');
@@ -256,12 +245,12 @@ describe('JhiNavbar', () => {
     await flushPromises();
 
     expect(wrapper.find('#entity-menu').exists()).toBe(false);
+<%_ if (authenticationTypeOauth2) { _%>
     await wrapper.find('#login').trigger('click');
 
-<%_ if (authenticationTypeOauth2) { _%>
     expect(loginService.login).toHaveBeenCalled();
 <%_ } else { _%>
-    expect(login.showLogin).toHaveBeenCalled();
+    expect(wrapper.find('#login').attributes('to')).toBe('/login');
 <%_ } _%>
   });
 });

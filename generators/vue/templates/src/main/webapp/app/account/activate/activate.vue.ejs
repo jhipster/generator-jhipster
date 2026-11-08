@@ -5,7 +5,7 @@
         <h1>{{ t$('activate.title') }}</h1>
         <div class="alert alert-success" v-if="success">
           <span v-html="t$('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>
-          <a class="alert-link" @click="showLogin()">{{ t$('global.messages.info.authenticated.link') }}</a
+          <router-link class="alert-link" to="/login">{{ t$('global.messages.info.authenticated.link') }}</router-link
           >.
         </div>
         <div class="alert alert-danger" v-if="error" v-html="t$('activate.messages.error')">
@@ -23,12 +23,10 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute } from 'vue-router';
 
-import { useLoginModal } from '@/account/login-modal';
 
 import ActivateService, { activateServiceKey } from './activate.service';
 
 const activateService = inject(activateServiceKey, () => new ActivateService(), true);
-const { showLogin } = useLoginModal();
 const route = useRoute();
 <%_ if (enableTranslation) { _%>
 const { t: t$ } = useI18n();

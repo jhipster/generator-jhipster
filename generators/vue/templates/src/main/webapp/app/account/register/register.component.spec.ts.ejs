@@ -19,11 +19,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { computed } from 'vue';
 
-import { createTestingPinia } from '@pinia/testing';
-import { flushPromises, shallowMount } from '@vue/test-utils';
+import { RouterLinkStub, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import { useLoginModal } from '@/account/login-modal';
 import { currentLanguageKey } from '@/shared/config/injection-keys';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
 import { formValues, setAllValues } from '@/shared/testing/stubs';
@@ -52,7 +50,6 @@ describe('Register Component', () => {
 
     const wrapper = shallowMount(Register, {
       global: {
-        plugins: [createTestingPinia()],
         provide: {
           [currentLanguageKey as symbol]: computed(() => '<%- nativeLanguage %>'),
         },
@@ -86,10 +83,10 @@ describe('Register Component', () => {
     expect(register.v$.registerAccount.login.$invalid).toBe(true);
   });
 
-  it('should open login modal when asked to', () => {
-    const login = useLoginModal();
-    register.showLogin();
-    expect(login.showLogin).toHaveBeenCalledOnce();
+  it('should link to the login page', () => {
+    const wrapper = shallowMount(Register, { global: { stubs: { 'router-link': RouterLinkStub } } });
+
+    expect(wrapper.findComponent(RouterLinkStub).props('to')).toBe('/login');
   });
 
   it('should register when password match', async () => {
@@ -163,16 +160,14 @@ describe('Register Component', () => {
     // GIVEN
     axiosStub.post.mockResolvedValue(undefined);
     const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
-    const wrapper = shallowMount(Register, { global: { plugins: [createTestingPinia()] } });
+    const wrapper = shallowMount(Register);
 
     // WHEN
     await setAllValues(wrapper, 'input', formValues);
-    await wrapper.find('a.alert-link').trigger('click');
     await wrapper.find('form').trigger('submit');
     await flushPromises();
 
     // THEN
-    expect(useLoginModal().showLogin).toHaveBeenCalled();
     expect(axiosStub.post).toHaveBeenCalledWith('api/register', {
       email: 'jhi@pster.net',
       langKey: '<%- nativeLanguage %>',

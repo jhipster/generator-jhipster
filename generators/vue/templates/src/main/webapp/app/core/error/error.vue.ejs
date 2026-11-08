@@ -22,11 +22,8 @@ import { inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
-import { useRoute } from 'vue-router';
+import { <%- authenticationTypeOauth2 ? '' : 'useRouter, ' %>useRoute } from 'vue-router';
 
-<%_ if (!authenticationTypeOauth2) { _%>
-import { useLoginModal } from '@/account/login-modal';
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
@@ -40,7 +37,7 @@ const { t: t$ } = useI18n();
 <%_ if (authenticationTypeOauth2) { _%>
 const { login } = inject(loginServiceKey)!;
 <%_ } else { _%>
-const { showLogin } = useLoginModal();
+const router = useRouter();
 <%_ } _%>
 const authenticated = inject(authenticatedKey)!;
 const errorMessage = ref<string | null>(null);
@@ -53,7 +50,7 @@ if (route.meta) {
   error403.value = route.meta.error403 ?? false;
   error404.value = route.meta.error404 ?? false;
   if (!authenticated.value && error403.value) {
-    <%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>();
+    <%- authenticationTypeOauth2 ? 'login()' : "router.push('/login')" %>;
   }
 }
 </script>

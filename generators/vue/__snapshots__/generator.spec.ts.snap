@@ -363,12 +363,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/account/login-form/login-form.vue": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/account/login-modal.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/account/login-modal.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -2231,12 +2225,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/account/login-form/login-form.vue": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/account/login-modal.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/account/login-modal.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4079,12 +4067,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/login-form/login-form.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/login-modal.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/login-modal.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.component.spec.ts": {
@@ -5973,12 +5955,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/login-form/login-form.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/login-modal.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/login-modal.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/login.service.spec.ts": {

@@ -14,7 +14,11 @@
 
         <div class="alert alert-warning" v-if="!authenticated">
           <span>{{ t$('global.messages.info.authenticated.prefix') }}</span>
-          <a class="alert-link" @click="<%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>()">{{ t$('global.messages.info.authenticated.link') }}</a
+<%_ if (authenticationTypeOauth2) { _%>
+          <a class="alert-link" @click="login()">{{ t$('global.messages.info.authenticated.link') }}</a
+<%_ } else { _%>
+          <router-link class="alert-link" to="/login">{{ t$('global.messages.info.authenticated.link') }}</router-link
+<%_ } _%>
           ><span v-html="t$('global.messages.info.authenticated.suffix')"
             >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
             password="user").</span
@@ -65,9 +69,6 @@ import { inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-<%_ if (!authenticationTypeOauth2) { _%>
-import { useLoginModal } from '@/account/login-modal';
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
@@ -78,8 +79,6 @@ const { t: t$ } = useI18n();
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 const { login } = inject(loginServiceKey)!;
-<%_ } else { _%>
-const { showLogin } = useLoginModal();
 <%_ } _%>
 const authenticated = inject(authenticatedKey);
 const username = inject(currentUsernameKey);

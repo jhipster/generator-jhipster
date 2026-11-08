@@ -153,13 +153,7 @@ export const vueFiles = asWriteFilesSection({
     {
       condition: generator => !generator.authenticationTypeOauth2,
       ...clientApplicationTemplatesBlock(),
-      templates: [
-        'account/login-form/login-form.vue',
-        'account/login-form/login-form.component.spec.ts',
-        'account/login-modal.ts',
-        'account/login-modal.spec.ts',
-        'router/account.ts',
-      ],
+      templates: ['account/login-form/login-form.vue', 'account/login-form/login-form.component.spec.ts', 'router/account.ts'],
     },
     {
       condition: generator => generator.generateUserManagement,

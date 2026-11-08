@@ -165,7 +165,7 @@
             <font-awesome-icon icon="sign-out-alt" />
             <span>{{ t$('global.menu.account.logout') }}</span>
           </b-dropdown-item>
-          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="<%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>()" id="login" active-class="active">
+          <b-dropdown-item data-cy="login" v-if="!authenticated" <%- authenticationTypeOauth2 ? '@click="login()"' : 'to="/login"' %> id="login" active-class="active">
             <font-awesome-icon icon="sign-in-alt" />
             <span>{{ t$('global.menu.account.login') }}</span>
           </b-dropdown-item>
@@ -194,9 +194,6 @@ import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enh
 import { storeToRefs } from 'pinia';
 
 import { accountServiceKey } from '@/account/account.service';
-<%_ if (generateUserManagement) { _%>
-import { useLoginModal } from '@/account/login-modal';
-<%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
@@ -235,9 +232,6 @@ const { login } = loginService;
   <%_ } _%>
 <%_ } _%>
 
-<%_ if (generateUserManagement) { _%>
-const { showLogin } = useLoginModal();
-<%_ } _%>
 const accountService = inject(accountServiceKey)!;
 <%_ if (enableTranslation) { _%>
 const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
