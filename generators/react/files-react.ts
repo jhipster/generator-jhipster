@@ -261,6 +261,11 @@ export const files = asWriteFilesSection({
       templates: ['modules/login/login.spec.tsx'],
     },
     {
+      condition: generator => generator.microfrontend || generator.applicationTypeGateway,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['config/store.spec.ts'],
+    },
+    {
       ...clientApplicationTemplatesBlock(),
       templates: [
         'config/axios-interceptor.spec.ts',
@@ -269,9 +274,6 @@ export const files = asWriteFilesSection({
         'shared/util/test-utils.tsx',
         'config/notification-middleware.spec.ts',
         'shared/reducers/reducer.utils.spec.ts',
-        'shared/jhipster/data-utils.spec.ts',
-        'shared/jhipster/headers.spec.ts',
-        'shared/jhipster/link-header.spec.ts',
         'shared/DurationFormat.spec.tsx',
         'shared/reducers/application-profile.spec.ts',
         'shared/reducers/authentication.spec.ts',

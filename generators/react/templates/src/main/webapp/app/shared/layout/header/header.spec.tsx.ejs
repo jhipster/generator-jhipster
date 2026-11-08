@@ -16,14 +16,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it<%- applicationTypeGateway && microfrontend ? ', vi' : '' %> } from 'vitest';
+import { beforeEach, describe, expect, it<%- (applicationTypeGateway && microfrontend) || (enableTranslation && languages.length > 1) ? ', vi' : '' %> } from 'vitest';
+<%_ if (enableTranslation && languages.length > 1) { _%>
+import { Storage } from 'react-jhipster';
+<%_ } _%>
 import { MemoryRouter } from 'react-router';
 
-import { act, render } from '@testing-library/react';
+import { act, <%- enableTranslation && languages.length > 1 ? 'fireEvent, ' : '' %>render<%- enableTranslation && languages.length > 1 ? ', waitFor' : '' %> } from '@testing-library/react';
 import { Provider } from 'react-redux';
 
 import initStore from 'app/config/store';
 import { hideLoading, showLoading } from 'app/shared/reducers/loading-bar';
+<%_ if (enableTranslation && languages.length > 1) { _%>
+import { setLocale } from 'app/shared/reducers/locale';
+<%_ } _%>
 
 import Header from './header';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
@@ -31,6 +37,13 @@ import Header from './header';
 vi.mock('@module-federation/runtime', () => ({
   loadRemote: vi.fn(() => Promise.reject(new Error('Test only'))),
   init: vi.fn(),
+}));
+<%_ } _%>
+<%_ if (enableTranslation && languages.length > 1) { _%>
+
+vi.mock('app/shared/reducers/locale', async importOriginal => ({
+  ...(await importOriginal<typeof import('app/shared/reducers/locale')>()),
+  setLocale: vi.fn(() => ({ type: 'test/setLocale' })),
 }));
 <%_ } _%>
 
@@ -154,4 +167,23 @@ describe('Header', () => {
     expect(store.getState().loadingBar.count).toBe(0);
     expect(container.querySelector('.loading-bar')).not.toBeNull();
   });
+<%_ if (enableTranslation && languages.length > 1) { _%>
+
+  it('should change the language from the locale menu', async () => {
+    const { container } = render(
+      <Provider store={initStore()}>
+        <MemoryRouter>
+          <Header {...prodProps} currentLocale="" />
+        </MemoryRouter>
+      </Provider>,
+    );
+
+    fireEvent.click(container.querySelector('[data-cy="languageMenu"] .dropdown-toggle')!);
+    await waitFor(() => expect(container.querySelector('[data-cy="language-<%- languages[0] %>"]')).not.toBeNull());
+    fireEvent.click(container.querySelector('[data-cy="language-<%- languages[0] %>"]')!);
+
+    expect(Storage.session.get('locale')).toBe('<%- languages[0] %>');
+    expect(setLocale).toHaveBeenCalledWith('<%- languages[0] %>');
+  });
+<%_ } _%>
 });

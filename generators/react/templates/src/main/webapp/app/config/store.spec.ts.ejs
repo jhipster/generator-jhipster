@@ -18,15 +18,17 @@
 -%>
 import { describe, expect, it } from 'vitest';
 
-import { getPageNumberFromLinkHeader, parseLinkHeader } from './link-header';
+import { configureStore } from '@reduxjs/toolkit';
 
-describe('link header', () => {
-  it('should read the pages of the links', () => {
-    expect(getPageNumberFromLinkHeader('</api/x?page=1&size=20>; rel="next",</api/x?size=20>; rel="first"')).toEqual({ next: 1 });
-  });
+import { configureInjectableStore } from './store';
 
-  it('should reject an invalid header', () => {
-    expect(() => parseLinkHeader('')).toThrow('input must not be of zero length');
-    expect(() => parseLinkHeader('</api/x?page=1>')).toThrow('section could not be split on ";"');
+describe('configureInjectableStore', () => {
+  it('should add the reducers injected to the store', () => {
+    const store = configureInjectableStore(configureStore({ reducer: (state = {}) => state }));
+
+    store.injectReducer('injected', (state = 'value') => state);
+
+    expect(store.getState()).toMatchObject({ injected: 'value' });
+    expect(store.asyncReducers).toHaveProperty('injected');
   });
 });

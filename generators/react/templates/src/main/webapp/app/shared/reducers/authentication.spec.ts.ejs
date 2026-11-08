@@ -28,7 +28,8 @@ import axios from 'axios';
 import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
 <%_ } _%>
 import authentication, {
-  getAccount,
+  getAccount,<% if (enableTranslation) { %>
+  getSession,<% } %>
 <%_ if (!authenticationTypeOauth2) { _%>
   authenticate,
   login,<% } %>
@@ -42,6 +43,9 @@ import authentication, {
   clearAuth,
   initialState,
 } from 'app/shared/reducers/authentication';
+<%_ if (enableTranslation) { _%>
+import locale from 'app/shared/reducers/locale';
+<%_ } _%>
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {
@@ -248,6 +252,20 @@ describe('Authentication reducer tests', () => {
     });
 <%_ } _%>
 
+<%_ if (enableTranslation) { _%>
+    it('sets the language of the account on getSession', async () => {
+      axios.get = vi.fn().mockResolvedValue({ data: { activated: true, langKey: '<%- nativeLanguage %>' } });
+      const sessionStore = configureStore({
+        reducer: { authentication, locale },
+        preloadedState: { locale: { ...locale(undefined, { type: '' }), loadedKeys: ['<%- nativeLanguage %>'] } },
+      });
+
+      await sessionStore.dispatch(getSession());
+
+      expect(sessionStore.getState().locale.currentLocale).toBe('<%- nativeLanguage %>');
+    });
+
+<%_ } _%>
     it('dispatches CLEAR_AUTH actions', async () => {
       await store.dispatch(clearAuthentication('message'));
       expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(authError('message')), clearAuth()]);
