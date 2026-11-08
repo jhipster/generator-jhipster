@@ -309,7 +309,7 @@ describe('<%- entityAngularName %> screens', () => {
       expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
     });
 
-  <%_ if (fields.some(field => field.fieldValidate && !field.hidden)) { _%>
+  <%_ if (fields.some(field => field.fieldValidate && !field.hidden) || relationships.some(relationship => relationship.relationshipValidate && relationship.persistableRelationship)) { _%>
     it('should show the messages of the validations', () => {
       TestBed.inject(ActivatedRoute).data = of({});
       const fixture = render();

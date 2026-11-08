@@ -437,8 +437,8 @@ export class UserManagementDetail {
       <thead>
         <tr
           jhiSort
-          [(sortState)]="sortState"
-          (sortStateChange)="navigateToWithComponentValues($event)"
+          [sortState]="sortState()"
+          (sortStateChange)="sortState.set($event); navigateToWithComponentValues($event)"
         >
           <th scope="col" jhiSortBy="login">
             <div class="d-flex">
@@ -1218,7 +1218,7 @@ export default userManagementResolve;
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it } from "vitest";
+    "contents": "import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   HttpTestingController,
   provideHttpClientTesting,
@@ -1235,6 +1235,7 @@ import {
 
 import {
   UserManagementService,
+  UserManagementsService,
   RestUserManagement,
 } from "./user-management.service";
 
@@ -1310,6 +1311,19 @@ describe("UserManagement Service", () => {
       const req = httpMock.expectOne({ method: "PATCH" });
       req.flush(returnedFromService);
       expect(expectedResult).toMatchObject(expected);
+    });
+
+    it("should send null for the dates a partial update does not have", () => {
+      service
+        .partialUpdate({ login: sampleWithRequiredData.login })
+        .subscribe();
+
+      const req = httpMock.expectOne({ method: "PATCH" });
+      expect(req.request.body).toMatchObject({
+        createdDate: null,
+        lastModifiedDate: null,
+      });
+      req.flush(requireRestSample);
     });
 
     it("should return a list of UserManagement", () => {
@@ -1461,6 +1475,23 @@ describe("UserManagement Service", () => {
 
         expect(compareResult1).toEqual(true);
         expect(compareResult2).toEqual(true);
+      });
+    });
+  });
+
+  describe("UserManagementsService", () => {
+    it("should list the userManagements of the params", async () => {
+      const userManagementsService = TestBed.inject(UserManagementsService);
+      userManagementsService.userManagementsParams.set({ page: 0 });
+      TestBed.tick();
+
+      httpMock.expectOne({ method: "GET" }).flush([requireRestSample]);
+
+      await vi.waitFor(() => {
+        TestBed.tick();
+        expect(userManagementsService.userManagements()).toMatchObject([
+          sampleWithRequiredData,
+        ]);
       });
     });
   });
@@ -1738,6 +1769,19 @@ describe("UserManagement Form Service", () => {
             authorities: expect.any(Object),
           }),
         );
+      });
+
+      it("passing IUserManagement without dates nor relationships should create a new form with empty values", () => {
+        const formGroup = service.createUserManagementFormGroup({
+          ...sampleWithRequiredData,
+          createdDate: null,
+          lastModifiedDate: null,
+          authorities: null,
+        });
+
+        expect(formGroup.controls.createdDate.value).toBeNull();
+        expect(formGroup.controls.lastModifiedDate.value).toBeNull();
+        expect(formGroup.controls.authorities.value).toEqual([]);
       });
     });
 
