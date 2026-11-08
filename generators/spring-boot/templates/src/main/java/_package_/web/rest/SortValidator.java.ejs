@@ -23,8 +23,8 @@ import <%- packageName %>.web.rest.errors.BadRequestAlertException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAmount;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -133,8 +133,8 @@ public final class SortValidator {
             Boolean.class == type ||
             Character.class == type ||
             UUID.class == type ||
-            Date.class.isAssignableFrom(type) ||
-            Temporal.class.isAssignableFrom(type)
+            Temporal.class.isAssignableFrom(type) ||
+            TemporalAmount.class.isAssignableFrom(type)
         );
     }
 }

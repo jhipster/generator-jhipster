@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import <%- packageName %>.domain.NotSortable;
 import <%- packageName %>.web.rest.errors.BadRequestAlertException;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -59,6 +60,8 @@ class SortValidatorTest {
 
         Instant createdDate;
 
+        Duration duration;
+
         byte[] picture;
 
         transient String computed;
@@ -84,7 +87,7 @@ class SortValidatorTest {
 
     @Test
     void acceptsTheColumnsAndTheColumnsOfARelationship() {
-        assertThat(SortValidator.isSortable(Sample.class, Sort.by("id", "name", "createdDate", "related.id", "related.name"))).isTrue();
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("id", "name", "createdDate", "duration", "related.id", "related.name"))).isTrue();
     }
 
     @Test
