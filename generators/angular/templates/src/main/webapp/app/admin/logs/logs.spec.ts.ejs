@@ -160,6 +160,27 @@ describe('Logs', () => {
     expect(highlighted.sort()).toEqual(['DEBUG', 'ERROR', 'INFO', 'OFF', 'TRACE', 'WARN']);
   });
 
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
+  it('should list the microservices and load the loggers of the one chosen', () => {
+    vi.spyOn(fixture.debugElement.injector.get(GatewayRoutesService), 'findAll').mockReturnValue(
+      of([
+        { path: 'services/blog/**', serviceId: 'blogService', serviceInstances: [] },
+        { path: 'services/store/**', serviceId: 'store', serviceInstances: [] },
+      ]),
+    );
+    vi.spyOn(service, 'findAll').mockReturnValue(of(loggers));
+
+    comp.ngOnInit();
+    expect(comp.services()).toEqual(['blogService']);
+
+    comp.changeService({ target: { value: 'blogService' } });
+    expect(service.findAll).toHaveBeenLastCalledWith('blog');
+
+    comp.changeService({ target: {} });
+    expect(service.findAll).toHaveBeenLastCalledWith(undefined);
+  });
+
+<%_ } _%>
   it('should have no loggers before they load', () => {
     expect(comp.filteredAndOrderedLoggers()).toEqual([]);
   });

@@ -407,6 +407,11 @@ export const files = asWriteFilesSection({
       ],
     },
     {
+      condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['admin/gateway/gateway.spec.ts'],
+    },
+    {
       ...clientApplicationTemplatesBlock(),
       templates: [
         'shared/auth/has-any-authority.directive.spec.ts',
@@ -421,6 +426,7 @@ export const files = asWriteFilesSection({
         'layouts/profiles/page-ribbon.spec.ts',
         'shared/alert/alert.spec.ts',
         'shared/alert/alert-error.spec.ts',
+        'shared/date/duration.pipe.spec.ts',
         'shared/date/format-medium-date.pipe.spec.ts',
         'shared/date/format-medium-datetime.pipe.spec.ts',
         'shared/pagination/item-count.spec.ts',
@@ -459,6 +465,11 @@ export const files = asWriteFilesSection({
       condition: generator => !generator.authenticationTypeOauth2,
       ...clientApplicationTemplatesBlock(),
       templates: ['login/login.spec.ts'],
+    },
+    {
+      condition: generator => generator.authenticationTypeOauth2,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['login/login.service.spec.ts'],
     },
     {
       condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,

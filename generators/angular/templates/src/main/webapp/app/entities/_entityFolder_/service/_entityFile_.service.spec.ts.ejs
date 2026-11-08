@@ -139,6 +139,16 @@ describe('<%- entityAngularName %> Service', () => {
             req.flush([returnedFromService]);
             expect(expectedResult).toMatchObject([expected]);
         });
+<%_ if (requiresRestTypeConversion) { _%>
+
+        it('should return an empty list of <%- entityAngularName %>', () => {
+            let body: I<%- entityAngularName %>[] | null | undefined;
+            service.query().subscribe(resp => body = resp.body);
+
+            httpMock.expectOne({ method: 'GET' }).flush(null);
+            expect(body).toBeNull();
+        });
+<%_ } _%>
 
 <%_ if (!readOnly) { _%>
         it('should delete a <%- entityAngularName %>', () => {

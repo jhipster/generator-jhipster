@@ -144,7 +144,7 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
     query(req?: any): Observable<HttpResponse<I<%- entityAngularName %>[]>> {
         const options = createRequestOption(req);
         return this.http.get<<%- entityRestName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
-            <%- requiresRestTypeConversion ? '.pipe(map(res => res.clone({ body: this.convertResponseArrayFromServer(res.body!) })))' : '' %>;
+            <%- requiresRestTypeConversion ? '.pipe(map(res => res.clone({ body: res.body && this.convertResponseArrayFromServer(res.body) })))' : '' %>;
     }
 
 <%_ if (!readOnly) { _%>
