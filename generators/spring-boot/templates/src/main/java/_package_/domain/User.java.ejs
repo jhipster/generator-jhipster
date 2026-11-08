@@ -326,6 +326,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
   <%_ if (databaseTypeNeo4j) { _%>
     @Property("image_url")
   <%_ } _%>
+    @NotSortable
     private String imageUrl;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
