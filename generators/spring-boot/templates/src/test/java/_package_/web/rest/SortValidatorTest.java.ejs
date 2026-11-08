@@ -28,6 +28,9 @@ import java.time.Instant;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
+<%_ if (databaseTypeMongodb) { _%>
+import org.springframework.data.mongodb.core.mapping.DBRef;
+<%_ } _%>
 
 /**
  * Test class for the {@link SortValidator} utility class.
@@ -80,6 +83,11 @@ class SortValidatorTest {
         Related hidden;
 
         Set<Related> others;
+<%_ if (databaseTypeMongodb) { _%>
+
+        @DBRef
+        Related referenced;
+<%_ } _%>
     }
 
     @Test
@@ -114,6 +122,14 @@ class SortValidatorTest {
         }
     }
 
+<%_ if (databaseTypeMongodb) { _%>
+    @Test
+    void acceptsOnlyTheIdOfAReferencedDocument() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("referenced.id"))).isTrue();
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("referenced.name"))).isFalse();
+    }
+
+<%_ } _%>
     @Test
     void rejectsAPathDeeperThanARelationship() {
         assertThat(SortValidator.isSortable(Sample.class, Sort.by("related.parent.name"))).isFalse();

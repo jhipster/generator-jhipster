@@ -30,12 +30,18 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.data.domain.Sort;
+<%_ if (databaseTypeMongodb) { _%>
+import org.springframework.data.mongodb.core.mapping.DBRef;
+<%_ } _%>
 
 /**
  * Checks the properties of a sort against the fields of an entity.
  * <p>
  * An entity can be sorted by its columns, and by the columns of an entity it relates to (one level, like
  * {@code relationship.name}), but not by a field marked {@link NotSortable}, nor by a transient or a static field.
+<%_ if (databaseTypeMongodb) { _%>
+ * A referenced document ({@link DBRef}) can only be sorted by its id.
+<%_ } _%>
  */
 public final class SortValidator {
 
@@ -88,10 +94,24 @@ public final class SortValidator {
         }
         return field
             .filter(relationship -> !isColumn(relationship) && !isCollection(relationship.getType()))
+<%_ if (databaseTypeMongodb) { _%>
+            .flatMap(relationship ->
+                sortableField(relationship.getType(), path[1]).filter(
+                    related -> !relationship.isAnnotationPresent(DBRef.class) || isId(related)
+                )
+            )
+<%_ } else { _%>
             .flatMap(relationship -> sortableField(relationship.getType(), path[1]))
+<%_ } _%>
             .filter(SortValidator::isColumn)
             .isPresent();
     }
+<%_ if (databaseTypeMongodb) { _%>
+
+    private static boolean isId(Field field) {
+        return field.isAnnotationPresent(org.springframework.data.annotation.Id.class) || "id".equals(field.getName());
+    }
+<%_ } _%>
 
     private static Optional<Field> sortableField(Class<?> type, String name) {
         for (Class<?> current = type; current != null && current != Object.class; current = current.getSuperclass()) {
