@@ -1,8 +1,18 @@
-# Versions of dependencies that take the place of the ones Spring Boot gives, while these do not work.
-# Without an override, a dependency follows the version of Spring Boot it belongs to.
+# Versions that take the place of the ones Spring Boot gives, while these do not work or have a vulnerability.
+# Without an override, a version follows the one of Spring Boot.
+# - dependencies: versions of the dependencies JHipster adds, which fall back to the Spring Boot version of their library.
+# - properties: properties of the versions Spring Boot manages, written in the build; they install nothing, a library
+#   gets the version when the application has it.
 # .blueprint/update-spring-boot empties this file at each Spring Boot update.
 ---
-# liquibase-neo4j 5.0.4 and 5.0.4.1 fail to read the current Neo4j user with the Neo4j driver of Spring Boot 4.1.2.
-liquibase-neo4j: '5.0.0'
-# The Gradle plugin of Hibernate 7.4.13.Final, the Hibernate version of Spring Boot 4.1.2, is not published.
-hibernate-gradle-plugin: '7.4.15.Final'
+dependencies:
+  # liquibase-neo4j 5.0.4 and 5.0.4.1 fail to read the current Neo4j user with the Neo4j driver of Spring Boot 4.1.2.
+  liquibase-neo4j: '5.0.0'
+  # The Gradle plugin of Hibernate 7.4.13.Final, the Hibernate version of Spring Boot 4.1.2, is not published.
+  hibernate-gradle-plugin: '7.4.15.Final'
+properties:
+  # Jackson 3.1.8 and 2.21.8 fix a vulnerability of 3.1.7 and 2.21.7, the Jackson versions of Spring Boot 4.1.2.
+  jackson-bom.version: '3.1.8'
+  jackson-2-bom.version: '2.21.8'
+  # MariaDB Connector/J 3.5.11 fixes advisories of 3.5.10, the MariaDB version of Spring Boot 4.1.2.
+  mariadb.version: '3.5.11'
