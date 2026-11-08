@@ -337,7 +337,6 @@ _%>
 <%_ if (!databaseTypeNo) { _%>
             if (isInvalidSortProperty(err)) return "Invalid sort property";
             if (err instanceof DataAccessException) return "Failure during data access";
-            if (err instanceof PropertyReferenceException) return "Invalid sort property";
 <%_ } _%>
         }
         String detail = err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
