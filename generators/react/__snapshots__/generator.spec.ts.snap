@@ -375,10 +375,16 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/error-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/config/icon-loader.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/config/loading-bar-middleware.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/config/loading-bar-middleware.ts": {
@@ -534,6 +540,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/DurationFormat.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
@@ -561,13 +570,22 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/data-utils.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/headers.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/link-header.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/link-header.ts": {
@@ -652,6 +670,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/reducers/loading-bar.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/reducers/reducer.utils.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/reducers/reducer.utils.ts": {
@@ -1192,10 +1213,16 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/error-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/config/icon-loader.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/config/loading-bar-middleware.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/config/loading-bar-middleware.ts": {
@@ -1411,6 +1438,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/DurationFormat.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
@@ -1450,10 +1480,16 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/data-utils.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/headers.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
@@ -1469,6 +1505,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/label.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/link-header.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/link-header.ts": {
@@ -1583,6 +1622,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/reducers/locale.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/reducers/reducer.utils.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/reducers/reducer.utils.ts": {
@@ -2392,10 +2434,16 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/error-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/config/icon-loader.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/config/loading-bar-middleware.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/config/loading-bar-middleware.ts": {
@@ -2551,6 +2599,9 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/DurationFormat.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
@@ -2581,13 +2632,22 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/data-utils.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/headers.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/link-header.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/link-header.ts": {
@@ -2672,6 +2732,9 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/reducers/loading-bar.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/reducers/reducer.utils.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/reducers/reducer.utils.ts": {
@@ -3293,10 +3356,16 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/error-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/icon-loader.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/loading-bar-middleware.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/loading-bar-middleware.ts": {
@@ -3488,6 +3557,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/DurationFormat.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
@@ -3530,10 +3602,16 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/data-utils.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/headers.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
@@ -3549,6 +3627,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/label.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/link-header.ts": {
@@ -3660,6 +3741,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/locale.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/reducer.utils.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/reducer.utils.ts": {
@@ -4280,10 +4364,16 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/error-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/icon-loader.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/loading-bar-middleware.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/loading-bar-middleware.ts": {
@@ -4568,6 +4658,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/DurationFormat.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
@@ -4607,10 +4700,16 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/data-utils.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/headers.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
@@ -4626,6 +4725,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/label.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/link-header.ts": {
@@ -4743,6 +4845,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/locale.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/reducer.utils.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/reducer.utils.ts": {
@@ -5297,10 +5402,16 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/error-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/icon-loader.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/loading-bar-middleware.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/loading-bar-middleware.ts": {
@@ -5447,6 +5558,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/DurationFormat.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
@@ -5474,13 +5588,22 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/data-utils.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/headers.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/link-header.ts": {
@@ -5565,6 +5688,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/loading-bar.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/reducer.utils.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/reducer.utils.ts": {
@@ -6115,10 +6241,16 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/error-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/icon-loader.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/loading-bar-middleware.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/loading-bar-middleware.ts": {
@@ -6268,6 +6400,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "src/main/webapp/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/DurationFormat.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
@@ -6295,13 +6430,22 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/data-utils.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/headers.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/link-header.ts": {
@@ -6386,6 +6530,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/loading-bar.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/reducer.utils.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/reducer.utils.ts": {
