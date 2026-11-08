@@ -300,9 +300,18 @@ export const files = asWriteFilesSection({
       ],
     },
     {
+      condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['modules/administration/gateway/gateway.spec.tsx'],
+    },
+    {
       condition: generator => generator.generateUserManagement,
       ...clientApplicationTemplatesBlock(),
-      templates: ['modules/account/password/password.reducer.spec.ts', 'modules/account/settings/settings.reducer.spec.ts'],
+      templates: [
+        'modules/account/password/password.reducer.spec.ts',
+        'modules/account/password-reset/password-reset.reducer.spec.ts',
+        'modules/account/settings/settings.reducer.spec.ts',
+      ],
     },
     {
       condition: generator => generator.generateUserRegistration,

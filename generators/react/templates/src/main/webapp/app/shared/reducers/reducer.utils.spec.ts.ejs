@@ -20,7 +20,7 @@ import { describe, expect, it } from 'vitest';
 
 import { AxiosError } from 'axios';
 
-import { isFulfilledAction, isRejectedAction, serializeAxiosError } from './reducer.utils';
+import { createEntitySlice, isFulfilledAction, isRejectedAction, serializeAxiosError } from './reducer.utils';
 
 describe('reducer utils', () => {
   it('should tell the rejected and the fulfilled actions', () => {
@@ -43,5 +43,30 @@ describe('reducer utils', () => {
   it('should take any other value as the message', () => {
     expect(serializeAxiosError('Failed')).toEqual({ message: 'Failed' });
     expect(serializeAxiosError(null)).toEqual({ message: 'null' });
+  });
+
+  describe('createEntitySlice', () => {
+    const initialState = {
+      loading: true,
+      errorMessage: null,
+      entities: [],
+      entity: {},
+      updating: true,
+      updateSuccess: true,
+    };
+    const rejected = { type: 'entity/fetch/rejected', error: { message: 'Failed' } };
+
+    it('should handle the rejections', () => {
+      const slice = createEntitySlice({ name: 'entity', initialState });
+
+      expect(slice.reducer(initialState, rejected)).toMatchObject({ loading: false, updating: false, updateSuccess: false });
+    });
+
+    it('should leave the rejections to the slice that skips them', () => {
+      const slice = createEntitySlice({ name: 'entity', initialState, skipRejectionHandling: true });
+
+      expect(slice.reducer(initialState, rejected)).toEqual(initialState);
+      expect(slice.reducer({ ...initialState, loading: false }, slice.actions.reset())).toEqual(initialState);
+    });
   });
 });

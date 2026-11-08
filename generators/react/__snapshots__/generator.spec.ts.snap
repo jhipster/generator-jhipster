@@ -510,6 +510,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/modules/administration/docs/docs.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/gateway/gateway.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/gateway/gateway.tsx": {
     "stateCleared": "modified",
   },
@@ -1379,6 +1382,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/docs/docs.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/gateway/gateway.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/gateway/gateway.tsx": {
@@ -4545,6 +4551,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/account/password-reset/init/password-reset-init.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/account/password-reset/password-reset.reducer.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/account/password-reset/password-reset.reducer.ts": {

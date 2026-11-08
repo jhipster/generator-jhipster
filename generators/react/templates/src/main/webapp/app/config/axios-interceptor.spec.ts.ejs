@@ -17,8 +17,15 @@
  limitations under the License.
 -%>
 import { describe, expect, it, vi } from 'vitest';
+<%_ if (authenticationTypeJwt) { _%>
+import { Storage } from 'react-jhipster';
+<%_ } _%>
 
 import axios from 'axios';
+
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
+<%_ } _%>
 
 import setupAxiosInterceptors from './axios-interceptor';
 
@@ -46,5 +53,22 @@ describe('Axios Interceptor', () => {
       await expect((axios.interceptors.response as any).handlers[0].rejected(rejectError)).rejects.toEqual(rejectError);
       expect(onUnauthenticated).toHaveBeenCalledTimes(1);
     });
+    it('onResponseError does not call onUnauthenticated for other errors', async () => {
+      onUnauthenticated.mockClear();
+      const serverError = { status: 500 };
+      await expect((axios.interceptors.response as any).handlers[0].rejected(serverError)).rejects.toBe(serverError);
+      const networkError = {};
+      await expect((axios.interceptors.response as any).handlers[0].rejected(networkError)).rejects.toBe(networkError);
+      expect(onUnauthenticated).not.toHaveBeenCalled();
+    });
+<%_ if (authenticationTypeJwt) { _%>
+    it('onRequestSuccess adds the token of the session', () => {
+      Storage.session.set(AUTHENTICATION_TOKEN_KEY, 'token');
+      expect((axios.interceptors.request as any).handlers[0].fulfilled({ headers: {} })).toMatchObject({
+        headers: { Authorization: 'Bearer token' },
+      });
+      Storage.session.remove(AUTHENTICATION_TOKEN_KEY);
+    });
+<%_ } _%>
   });
 });

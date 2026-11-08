@@ -19,10 +19,11 @@
 import { beforeEach, describe, expect, it<%- applicationTypeGateway && microfrontend ? ', vi' : '' %> } from 'vitest';
 import { MemoryRouter } from 'react-router';
 
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 
 import initStore from 'app/config/store';
+import { hideLoading, showLoading } from 'app/shared/reducers/loading-bar';
 
 import Header from './header';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
@@ -134,5 +135,23 @@ describe('Header', () => {
     expect(html).not.toContain('entity-menu');
     // Find AccountMenu component
     expect(html).toContain('account-menu');
+  });
+
+  it('should follow the requests in progress with the loading bar', () => {
+    const store = initStore();
+    store.dispatch(showLoading());
+    const { container } = render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <Header {...prodProps} />
+        </MemoryRouter>
+      </Provider>,
+    );
+    act(() => {
+      store.dispatch(hideLoading());
+    });
+
+    expect(store.getState().loadingBar.count).toBe(0);
+    expect(container.querySelector('.loading-bar')).not.toBeNull();
   });
 });

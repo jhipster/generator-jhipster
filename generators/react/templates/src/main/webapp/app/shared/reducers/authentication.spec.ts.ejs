@@ -234,6 +234,19 @@ describe('Authentication reducer tests', () => {
       expect(logoutServer.fulfilled.match(result)).toBe(true);
 <%_ } _%>
     });
+<%_ if (!authenticationTypeJwt) { _%>
+
+    it('fetches a new session after the logout', async () => {
+      axios.post = vi.fn().mockResolvedValue({ data: { logoutUrl: 'http://localhost/logout' } });
+      axios.get = vi.fn().mockResolvedValue({ data: { activated: true } });
+      const sessionStore = configureStore({ reducer: { authentication } });
+
+      await sessionStore.dispatch(logout());
+
+      await vi.waitFor(() => expect(sessionStore.getState().authentication.isAuthenticated).toBe(true));
+      expect(axios.get).toHaveBeenCalledWith('api/account');
+    });
+<%_ } _%>
 
     it('dispatches CLEAR_AUTH actions', async () => {
       await store.dispatch(clearAuthentication('message'));
@@ -287,6 +300,18 @@ describe('Authentication reducer tests', () => {
       expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
       expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBe('TestToken');
       clearAuthToken();
+      expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
+      expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
+    });
+    it('keeps no token when the login does not give one', async () => {
+      store = configureStore({
+        reducer: createReducer({ authentication: { account: {} } }, builder => {
+          builder.addDefaultCase(() => {});
+        }),
+      });
+      axios.post = vi.fn().mockResolvedValue({ headers: {} });
+
+      await store.dispatch(login('test', 'test'));
       expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
       expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
     });
