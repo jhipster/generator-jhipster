@@ -261,11 +261,20 @@ export const files = asWriteFilesSection({
       templates: ['modules/login/login.spec.tsx'],
     },
     {
+      condition: generator => generator.microfrontend || generator.applicationTypeGateway,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['config/store.spec.ts'],
+    },
+    {
       ...clientApplicationTemplatesBlock(),
       templates: [
         'config/axios-interceptor.spec.ts',
+        'config/error-middleware.spec.ts',
+        'config/loading-bar-middleware.spec.ts',
         'shared/util/test-utils.tsx',
         'config/notification-middleware.spec.ts',
+        'shared/reducers/reducer.utils.spec.ts',
+        'shared/DurationFormat.spec.tsx',
         'shared/reducers/application-profile.spec.ts',
         'shared/reducers/authentication.spec.ts',
         'shared/util/entity-utils.spec.ts',
@@ -293,9 +302,18 @@ export const files = asWriteFilesSection({
       ],
     },
     {
+      condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['modules/administration/gateway/gateway.spec.tsx'],
+    },
+    {
       condition: generator => generator.generateUserManagement,
       ...clientApplicationTemplatesBlock(),
-      templates: ['modules/account/password/password.reducer.spec.ts', 'modules/account/settings/settings.reducer.spec.ts'],
+      templates: [
+        'modules/account/password/password.reducer.spec.ts',
+        'modules/account/password-reset/password-reset.reducer.spec.ts',
+        'modules/account/settings/settings.reducer.spec.ts',
+      ],
     },
     {
       condition: generator => generator.generateUserRegistration,

@@ -86,6 +86,20 @@ describe('private-route component', () => {
     expect(container.innerHTML).toMatch(/<div class="insufficient-authority"><div class="alert alert-danger">.*<\/div><\/div>/);
   });
 
+  it('should render nothing before the session is fetched', () => {
+    const { container } = wrapper(
+      <PrivateRoute>
+        <TestComp />
+      </PrivateRoute>,
+      {
+        isAuthenticated: false,
+        sessionHasBeenFetched: false,
+        account: {},
+      },
+    );
+    expect(container.innerHTML).toEqual('<div></div>');
+  });
+
   it('should render a route for the component provided when authenticated', () => {
     const { container } = wrapper(
       <PrivateRoute>

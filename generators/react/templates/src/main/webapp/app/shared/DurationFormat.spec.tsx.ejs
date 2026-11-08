@@ -1,0 +1,52 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { afterEach, describe, expect, it } from 'vitest';
+import { TranslatorContext } from 'react-jhipster';
+
+import { render } from '@testing-library/react';
+
+import 'app/config/dayjs';
+
+import { DurationFormat } from './DurationFormat';
+
+describe('DurationFormat', () => {
+  const locale = TranslatorContext.context.locale;
+
+  afterEach(() => {
+    TranslatorContext.context.locale = locale;
+  });
+
+  it('should show a duration in the locale given', () => {
+    const { container } = render(<DurationFormat value="PT1H" locale="en" />);
+
+    expect(container.textContent).toBe('an hour');
+  });
+
+  it('should show a duration in the current locale, or in english without one', () => {
+    TranslatorContext.context.locale = 'en';
+    expect(render(<DurationFormat value="PT1H" />).container.textContent).toBe('an hour');
+
+    TranslatorContext.context.locale = null;
+    expect(render(<DurationFormat value="PT1H" />).container.textContent).toBe('an hour');
+  });
+
+  it('should show nothing for a blank value when asked to', () => {
+    expect(render(<DurationFormat value="" blankOnInvalid />).container.textContent).toBe('');
+  });
+});

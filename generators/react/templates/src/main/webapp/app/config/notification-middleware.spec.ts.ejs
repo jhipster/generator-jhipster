@@ -269,4 +269,64 @@ describe('Notification Middleware', () => {
     expect(store.dispatch(UNKNOWN_ERROR).error.isAxiosError).toEqual(true);
     expect(toast.error).toHaveBeenCalledWith('Unknown error!');
   });
+
+  it('should not trigger a toast message for headers without alert', () => {
+    store.dispatch({ type: SUCCESS_TYPE, payload: { headers: { expires: '0' } } });
+    expect(toast.success).not.toHaveBeenCalled();
+  });
+
+  it('should trigger an error toast message for each invalid field', () => {
+    store.dispatch({
+      type: ERROR_TYPE,
+      error: {
+        isAxiosError: true,
+        response: {
+          status: 400,
+          data: { type: ProblemWithMessageType, message: 'error.validation', fieldErrors: [{ objectName: 'foos', field: 'name', message: 'NotNull' }] },
+        },
+      },
+    });
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- enableTranslation ? '\'error.NotNull\'' : '\'Error on field "Name"\'' %>));
+  });
+
+  it('should trigger a success toast message for header messages', () => {
+    store.dispatch({ type: SUCCESS_TYPE, payload: { headers: { [MESSAGE_ALERT_HEADER_NAME]: 'A foo is created' } } });
+    expect(toast.success).toHaveBeenCalledWith('A foo is created');
+  });
+
+  it('should trigger an error toast message for header messages', () => {
+    store.dispatch({
+      type: ERROR_TYPE,
+      error: { isAxiosError: true, response: { status: 400, headers: { [MESSAGE_ERROR_HEADER_NAME]: 'A foo cannot be created' } } },
+    });
+    expect(toast.error).toHaveBeenCalledWith('A foo cannot be created');
+  });
+
+  it('should trigger an error toast message for the message of a problem', () => {
+    store.dispatch({
+      type: ERROR_TYPE,
+      error: {
+        isAxiosError: true,
+        response: { status: 400, data: { type: ProblemWithMessageType, status: 400, message: 'error.http.400', detail: 'Bad foo' } },
+      },
+    });
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- enableTranslation ? '\'error.http.400\'' : '\'Bad foo\'' %>));
+  });
+
+  it('should not trigger an error toast message for the failures of the account', () => {
+    store.dispatch({ type: ERROR_TYPE, error: { isAxiosError: true, config: { url: 'api/account' }, response: { status: 500 } } });
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it('should trigger an error toast message for an error without a message', () => {
+    store.dispatch({ type: ERROR_TYPE, error: {} });
+    expect(toast.error).toHaveBeenCalledWith('Unknown error!');
+  });
+
+  it('should only log the failure of the account without a response', () => {
+    const log = vi.spyOn(globalThis.console, 'log').mockImplementation(() => undefined);
+    store.dispatch({ type: ERROR_TYPE, error: { isAxiosError: true, message: 'Network Error', config: { url: 'api/account', method: 'get' } } });
+    expect(log).toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
+  });
 });
