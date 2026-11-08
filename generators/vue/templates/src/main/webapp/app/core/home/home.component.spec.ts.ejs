@@ -19,20 +19,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 
-<%_ if (!authenticationTypeOauth2) { _%>
-import { createTestingPinia } from '@pinia/testing';
-<%_ } _%>
-import { type VueWrapper, shallowMount } from '@vue/test-utils';
-
-<%_ if (!authenticationTypeOauth2) { _%>
-import { useLoginPage } from '@/account/login-page';
-<%_ } _%>
+import { RouterLinkStub, type VueWrapper, shallowMount } from '@vue/test-utils';
 
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
 import { authenticatedKey, currentUsernameKey } from '@/shared/config/injection-keys';
-import { routerLinkStub } from '@/shared/testing/stubs';
 
 import Home from './home.vue';
 
@@ -43,9 +35,6 @@ describe('Home', () => {
   let wrapper: VueWrapper<HomeComponentType>;
   let authenticated;
   let currentUsername;
-<%_ if (!authenticationTypeOauth2) { _%>
-  let login: ReturnType<typeof useLoginPage>;
-<%_ } _%>
 
 <%_ if (authenticationTypeOauth2) { _%>
   const loginService = { login: vi.fn(), logout: vi.fn() };
@@ -55,11 +44,8 @@ describe('Home', () => {
     currentUsername = ref('');
     wrapper = shallowMount(Home, {
       global: {
-<%_ if (!authenticationTypeOauth2) { _%>
-        plugins: [createTestingPinia()],
-<%_ } _%>
         stubs: {
-          'router-link': routerLinkStub,
+          'router-link': RouterLinkStub,
         },
         provide: {
 <%_ if (authenticationTypeOauth2) { _%>
@@ -71,9 +57,6 @@ describe('Home', () => {
       },
     });
     home = wrapper.vm;
-<%_ if (!authenticationTypeOauth2) { _%>
-    login = useLoginPage();
-<%_ } _%>
   });
 
   it('should not have user data set', () => {
@@ -89,24 +72,20 @@ describe('Home', () => {
     expect(home.username).toBe('test');
   });
 
-  it('should use login service', () => {
-
 <%_ if (authenticationTypeOauth2) { _%>
+  it('should use login service', () => {
     home.login();
     expect(loginService.login).toHaveBeenCalled();
-<%_ } else { _%>
-    home.showLogin();
-    expect(login.showLogin).toHaveBeenCalled();
-<%_ } _%>
   });
 
   it('should log in from the link of the page', async () => {
     await wrapper.find('a.alert-link').trigger('click');
 
-<%_ if (authenticationTypeOauth2) { _%>
     expect(loginService.login).toHaveBeenCalled();
-<%_ } else { _%>
-    expect(login.showLogin).toHaveBeenCalled();
-<%_ } _%>
   });
+<%_ } else { _%>
+  it('should link to the login page', () => {
+    expect(wrapper.findAllComponents(RouterLinkStub).map(link => link.props('to'))).toContain('/login');
+  });
+<%_ } _%>
 });

@@ -20,12 +20,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { type Ref, ref } from 'vue';
 import { type RouteLocation } from 'vue-router';
 
-import { createTestingPinia } from '@pinia/testing';
 import { type ComponentMountingOptions, shallowMount } from '@vue/test-utils';
 
-<%_ if (generateUserManagement) { _%>
-import { useLoginPage } from '@/account/login-page';
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
@@ -37,8 +33,14 @@ type ErrorComponentType = InstanceType<typeof Error>;
 
 let route: Partial<RouteLocation>;
 
+<%_ if (!authenticationTypeOauth2) { _%>
+const routerPush = vi.fn();
+<%_ } _%>
 vi.mock('vue-router', () => ({
   useRoute: () => route,
+<%_ if (!authenticationTypeOauth2) { _%>
+  useRouter: () => ({ push: routerPush }),
+<%_ } _%>
 }));
 
 const customErrorMsg = 'An error occurred.';
@@ -48,21 +50,20 @@ describe('Error component', () => {
 <%_ if (authenticationTypeOauth2) { _%>
   let loginService: LoginService;
 <%_ } _%>
-<%_ if (generateUserManagement) { _%>
-  let login: ReturnType<typeof useLoginPage>;
-<%_ } _%>
   let authenticated: Ref<boolean>;
   let mountOptions: ComponentMountingOptions<ErrorComponentType>;
 
   beforeEach(() => {
     route = {};
     authenticated = ref(false);
+<%_ if (!authenticationTypeOauth2) { _%>
+    routerPush.mockReset();
+<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
     loginService = { login: vi.fn(), logout: vi.fn() };
 <%_ } _%>
     mountOptions = {
       global: {
-        plugins: [createTestingPinia()],
         provide: {
 <%_ if (authenticationTypeOauth2) { _%>
           [loginServiceKey as symbol]: loginService,
@@ -81,17 +82,14 @@ describe('Error component', () => {
     };
     const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
-<%_ if (generateUserManagement) { _%>
-    login = useLoginPage();
-<%_ } _%>
 
     expect(error.errorMessage).toBe(customErrorMsg);
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeFalsy();
-<%_ if (generateUserManagement) { _%>
-    expect(login.showLogin).not.toHaveBeenCalled();
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     expect(loginService.login).not.toHaveBeenCalled();
+<%_ } else { _%>
+    expect(routerPush).not.toHaveBeenCalled();
 <%_ } _%>
   });
 
@@ -101,17 +99,14 @@ describe('Error component', () => {
     };
     const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
-<%_ if (generateUserManagement) { _%>
-    login = useLoginPage();
-<%_ } _%>
 
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeTruthy();
     expect(error.error404).toBeFalsy();
-<%_ if (generateUserManagement) { _%>
-    expect(login.showLogin).toHaveBeenCalled();
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     expect(loginService.login).toHaveBeenCalled();
+<%_ } else { _%>
+    expect(routerPush).toHaveBeenCalledWith('/login');
 <%_ } _%>
   });
 
@@ -121,34 +116,28 @@ describe('Error component', () => {
     };
     const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
-<%_ if (generateUserManagement) { _%>
-    login = useLoginPage();
-<%_ } _%>
 
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeTruthy();
-<%_ if (generateUserManagement) { _%>
-    expect(login.showLogin).not.toHaveBeenCalled();
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     expect(loginService.login).not.toHaveBeenCalled();
+<%_ } else { _%>
+    expect(routerPush).not.toHaveBeenCalled();
 <%_ } _%>
   });
 
   it('should have set default on no error', () => {
     const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
-<%_ if (generateUserManagement) { _%>
-    login = useLoginPage();
-<%_ } _%>
 
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeFalsy();
-<%_ if (generateUserManagement) { _%>
-    expect(login.showLogin).not.toHaveBeenCalled();
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     expect(loginService.login).not.toHaveBeenCalled();
+<%_ } else { _%>
+    expect(routerPush).not.toHaveBeenCalled();
 <%_ } _%>
   });
 });
