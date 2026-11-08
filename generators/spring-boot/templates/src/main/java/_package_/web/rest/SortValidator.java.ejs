@@ -19,6 +19,7 @@
 package <%- packageName %>.web.rest;
 
 import <%- packageName %>.domain.NotSortable;
+import <%- packageName %>.web.rest.errors.BadRequestAlertException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.time.temporal.Temporal;
@@ -50,12 +51,30 @@ public final class SortValidator {
      * @return {@code true} if the entity can be sorted by every property of the sort.
      */
     public static boolean isSortable(Class<?> entityClass, Sort sort) {
-        return sort
+        return sort.stream().map(Sort.Order::getProperty).allMatch(property -> isSortableProperty(entityClass, property));
+    }
+
+    /**
+     * Checks that the entity can be sorted by every property of the sort.
+     *
+     * @param entityClass the class of the entity.
+     * @param sort the sort.
+     * @param entityName the name of the entity in the error.
+     * @throws BadRequestAlertException for the first property the entity cannot be sorted by.
+     */
+    public static void checkSortable(Class<?> entityClass, Sort sort, String entityName) {
+        sort
             .stream()
             .map(Sort.Order::getProperty)
-            .allMatch(property ->
-                SORTABLE_PROPERTIES.computeIfAbsent(entityClass.getName() + "#" + property, key -> isSortable(entityClass, property))
-            );
+            .filter(property -> !isSortableProperty(entityClass, property))
+            .findFirst()
+            .ifPresent(property -> {
+                throw BadRequestAlertException.notsortable(entityName, property);
+            });
+    }
+
+    private static boolean isSortableProperty(Class<?> entityClass, String property) {
+        return SORTABLE_PROPERTIES.computeIfAbsent(entityClass.getName() + "#" + property, key -> isSortable(entityClass, property));
     }
 
     private static boolean isSortable(Class<?> entityClass, String property) {

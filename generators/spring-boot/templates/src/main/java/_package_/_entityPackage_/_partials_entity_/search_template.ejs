@@ -26,9 +26,7 @@ _%>
 <% } else { %>
     public <%- reactive ? 'Mono<' : '' %>ResponseEntity<<%- listOrFlux %><<%- restClass %>>><%- reactive ? '>' : '' %> search<%- entityClassPlural %>(@RequestParam("query") String query, @org.springdoc.core.annotations.ParameterObject Pageable pageable<%- reactive ? ', ServerHttpRequest request' : '' %>) {
         LOG.debug("REST request to search for a page of <%- entityClassPlural %> for query {}", query);
-        if (!SortValidator.isSortable(<%- persistClass %>.class, pageable.getSort())) {
-            return <%- reactive ? 'Mono.just(ResponseEntity.badRequest().build())' : 'ResponseEntity.badRequest().build()' %>;
-        }
+        SortValidator.checkSortable(<%- persistClass %>.class, pageable.getSort(), <%- readOnly ? `"${entityAlertName}"` : 'ENTITY_NAME' %>);
   <%_ if (reactive) { _%>
         return <%- entityInstance %><%- viaService
                 ? `Service.${searchEngineElasticsearch ? 'searchCount' : 'countAll'}`

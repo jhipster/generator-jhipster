@@ -27,9 +27,7 @@ _%>
     public <% if (reactiveNoPagination) { %>Flux<<%- restClass %>><% } else if (reactivePagination) { %>Mono<ResponseEntity<List<<%- restClass %>>>><% } else { %>ResponseEntity<List<<%- restClass %>>><% } %> getAll<%- entityClassPlural %>(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, @org.springdoc.core.annotations.ParameterObject Pageable pageable<%- reactive ? ', ServerHttpRequest request' : '' %><% } %>) {
         LOG.debug("REST request to get <%- entityClassPlural %> by criteria: {}", criteria);
   <%_ if (!paginationNo) { _%>
-        if (!SortValidator.isSortable(<%- persistClass %>.class, pageable.getSort())) {
-            return <%- reactive ? 'Mono.just(ResponseEntity.badRequest().build())' : 'ResponseEntity.badRequest().build()' %>;
-        }
+        SortValidator.checkSortable(<%- persistClass %>.class, pageable.getSort(), <%- readOnly ? `"${entityAlertName}"` : 'ENTITY_NAME' %>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
@@ -100,9 +98,7 @@ _%>
   <%_ } else { _%>
     public <% if (reactive) { %>Mono<ResponseEntity<List<<%- restClass %>>>><% } else { %>ResponseEntity<List<<%- restClass %>>><% } %> getAll<%- entityClassPlural %>(@org.springdoc.core.annotations.ParameterObject Pageable pageable<%- reactive ? ', ServerHttpRequest request' : '' %><%- fieldsContainNoOwnerOneToOne ? ', @RequestParam(name = "filter", required = false) String filter' : '' %><%- implementsEagerLoadApis ? ', @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload' : '' %>) {<%- include('get_all_stream_template', { viaService }) -%>
         LOG.debug("REST request to get a page of <%- entityClassPlural %>");
-        if (!SortValidator.isSortable(<%- persistClass %>.class, pageable.getSort())) {
-            return <%- reactive ? 'Mono.just(ResponseEntity.badRequest().build())' : 'ResponseEntity.badRequest().build()' %>;
-        }
+        SortValidator.checkSortable(<%- persistClass %>.class, pageable.getSort(), <%- readOnly ? `"${entityAlertName}"` : 'ENTITY_NAME' %>);
     <%_ if (reactive) { _%>
         return <%- entityInstance %><%- viaService ? 'Service.countAll' : 'Repository.count' %>().zipWith(<%- entityInstance %><%- viaService ? 'Service.findAll' : 'Repository.findAllBy' %>(pageable)<%- reactiveEntityToDto %>.collectList())
                 .map(countWithEntities ->

@@ -1113,10 +1113,14 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
   <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=doesNotExist,asc"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
   <%_ } _%>
     }
   <%_ if (sortRelationship) { _%>
@@ -1128,10 +1132,14 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
     <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.doesNotExist,asc"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
     <%_ } _%>
     }
     <%_ if (sortRelationship.otherEntity.builtInUser && !authenticationTypeOauth2) { _%>
@@ -1143,10 +1151,14 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
       <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.password,asc"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
       <%_ } _%>
     }
     <%_ } _%>
@@ -1160,10 +1172,14 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
     <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:doesNotExist&sort=doesNotExist,asc"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
     <%_ } _%>
     }
   <%_ } _%>

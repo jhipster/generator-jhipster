@@ -19,8 +19,11 @@
 package <%- packageName %>.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import <%- packageName %>.domain.NotSortable;
+import <%- packageName %>.web.rest.errors.BadRequestAlertException;
 import java.time.Instant;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -115,5 +118,15 @@ class SortValidatorTest {
     void rejectsAPathDeeperThanARelationship() {
         assertThat(SortValidator.isSortable(Sample.class, Sort.by("related.parent.name"))).isFalse();
         assertThat(SortValidator.isSortable(Sample.class, Sort.by("related.doesNotExist"))).isFalse();
+    }
+
+    @Test
+    void tellsTheFirstPropertyItCannotSortBy() {
+        assertThatCode(() -> SortValidator.checkSortable(Sample.class, Sort.by("name", "related.name"), "sample")).doesNotThrowAnyException();
+        assertThatThrownBy(() -> SortValidator.checkSortable(Sample.class, Sort.by("name", "secret", "picture"), "sample"))
+            .isInstanceOfSatisfying(BadRequestAlertException.class, exception -> {
+                assertThat(exception.getErrorKey()).isEqualTo("notsortable");
+                assertThat(exception.getBody().getTitle()).isEqualTo("A sample cannot be sorted by secret");
+            });
     }
 }
