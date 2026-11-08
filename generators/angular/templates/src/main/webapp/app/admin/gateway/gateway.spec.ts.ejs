@@ -53,7 +53,7 @@ describe('Gateway', () => {
   let fixture: ComponentFixture<Gateway>;
   let httpMock: HttpTestingController;
 
-  const count = (selector: string): number => fixture.nativeElement.querySelectorAll(selector).length;
+  const count = (selector: string): number => (fixture.nativeElement as HTMLElement).querySelectorAll(selector).length;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

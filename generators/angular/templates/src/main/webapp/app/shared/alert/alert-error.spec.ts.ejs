@@ -82,6 +82,7 @@ describe('Alert Error Component', () => {
       expect(comp.alerts()[0].message).toBe('A foo cannot be created');
     });
 
+<%_ if (enableTranslation) { _%>
     it('should display an alert on status 400 for an error key header without entity', () => {
       const response = new HttpErrorResponse({
         url: 'http://localhost:8080/api/foos',
@@ -94,6 +95,7 @@ describe('Alert Error Component', () => {
       expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].translationParams).toBeUndefined();
     });
+<%_ } _%>
 
     it('should display an alert for each invalid field', () => {
       const response = new HttpErrorResponse({
