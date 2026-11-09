@@ -26,9 +26,9 @@ import <%- packageName %>.domain.Authority;
 import <%- user.entityAbsoluteClass %>;
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 import <%- packageName %>.repository.AuthorityRepository;
-    <%_ if (authenticationTypeSession && !reactive) { _%>
+  <%_ } _%>
+  <%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 import <%- packageName %>.repository.PersistentTokenRepository;
-    <%_ } _%>
   <%_ } _%>
 import <%- packageName %>.repository.UserRepository;
   <%_ if (searchEngineElasticsearch) { _%>
@@ -119,11 +119,11 @@ public class UserService {
 
     protected final UserSearchRepository userSearchRepository;
   <%_ } _%>
-  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-    <%_ if (authenticationTypeSession && !reactive) { _%>
+  <%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 
     protected final PersistentTokenRepository persistentTokenRepository;
-    <%_ } _%>
+  <%_ } _%>
+  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 
     protected final AuthorityRepository authorityRepository;
   <%_ } _%>
@@ -132,7 +132,7 @@ public class UserService {
     protected final CacheManager cacheManager;
   <%_ } _%>
 
-    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %><%- authenticationTypeSession && !reactive ? ', PersistentTokenRepository persistentTokenRepository' : '' %>, AuthorityRepository authorityRepository<% } %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %>) {
+    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><%- authenticationTypeSession && authenticationUsesRememberMe ? ', PersistentTokenRepository persistentTokenRepository' : '' %><%- databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase ? ', AuthorityRepository authorityRepository' : '' %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %>) {
         this.userRepository = userRepository;
   <%_ if (!authenticationTypeOauth2) { _%>
         this.passwordEncoder = passwordEncoder;
@@ -140,10 +140,10 @@ public class UserService {
   <%_ if (searchEngineElasticsearch) { _%>
         this.userSearchRepository = userSearchRepository;
   <%_ } _%>
-  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-    <%_ if (authenticationTypeSession && !reactive) { _%>
+  <%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
         this.persistentTokenRepository = persistentTokenRepository;
-    <%_ } _%>
+  <%_ } _%>
+  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
         this.authorityRepository = authorityRepository;
   <%_ } _%>
   <%_ if (cacheProviderAny) { _%>
@@ -175,6 +175,9 @@ public class UserService {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
+      <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
+                removePersistentTokens(user);
+      <%_ } _%>
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
       <%_ } _%>
@@ -337,6 +340,11 @@ public class UserService {
                 user.setImageUrl(userDTO.getImageUrl());
     <%_ } _%>
                 user.setActivated(userDTO.isActivated());
+    <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
+                if (!userDTO.isActivated()) {
+                    removePersistentTokens(user);
+                }
+    <%_ } _%>
                 user.setLangKey(userDTO.getLangKey());
     <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
                 Set<Authority> managedAuthorities = user.getAuthorities();
@@ -415,6 +423,9 @@ public class UserService {
     <%_ } else { _%>
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
+      <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
+            removePersistentTokens(user);
+      <%_ } _%>
             userRepository.delete(user);
       <%_ if (searchEngineElasticsearch) { _%>
             userSearchRepository.deleteFromIndex(user);
@@ -560,6 +571,9 @@ public class UserService {
             .doOnNext(user -> LOG.debug("Changed password for User: {}", user))
             .then();
     <%_ } else { _%>
+      <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
+                removePersistentTokens(user);
+      <%_ } _%>
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
       <%_ } _%>
@@ -644,6 +658,19 @@ public class UserService {
         persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).forEach(token -> {
             LOG.debug("Deleting token {}", token.getSeries());<% if (databaseType === 'sql') { %>
             <%- user.persistClass %> user = token.getUser();
+            user.getPersistentTokens().remove(token);<% } %>
+            persistentTokenRepository.delete(token);
+        });
+    }
+  <%_ } _%>
+  <%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
+
+    /**
+     * Removes the remember-me logins of a user whose credentials changed or who can no longer log in.
+     */
+    private void removePersistentTokens(<%- user.persistClass %> user) {
+        persistentTokenRepository.findByUser(user).forEach(token -> {
+            LOG.debug("Deleting token {}", token.getSeries());<% if (databaseType === 'sql') { %>
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
         });

@@ -29,6 +29,10 @@ export type CommonAddedApplicationProperties = {
 
   endpointPrefix?: string;
   authenticationUsesCsrf: boolean;
+  /**
+   * True if the login keeps the user logged in across sessions on request: the jwt token validity, the session remember-me cookie.
+   */
+  authenticationUsesRememberMe: boolean;
 
   devServerPort: number;
   serverPort: number;
@@ -65,6 +69,10 @@ export const mutateApplication = {
   authenticationTypeOauth2: data => data.authenticationType === 'oauth2',
 
   authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
+  // The session remember-me tokens are stored with the users.
+  authenticationUsesRememberMe: finalizeDefault(
+    (data: CommonApplication) => data.authenticationTypeJwt || (data.authenticationTypeSession && data.generateUserManagement),
+  ),
   endpointPrefix: ({ applicationType, lowercaseBaseName }) => (applicationType === 'microservice' ? `services/${lowercaseBaseName}` : ''),
 
   devServerPort: finalizeDefault(() => 9060),
