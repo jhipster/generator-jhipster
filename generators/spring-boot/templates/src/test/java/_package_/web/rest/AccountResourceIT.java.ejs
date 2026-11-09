@@ -789,14 +789,16 @@ class AccountResourceIT {
         userService.deleteUser("current-sessions")<%- reactorBlock %>;
     }
 
-  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
     @Test
-    <%_ if (databaseTypeSql) { _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional
-    <%_ } _%>
+  <%_ } _%>
     @WithMockUser("change-password-tokens")
     void testChangePasswordRemovesThePersistentTokens() throws Exception {
         <%- user.persistClass %> user = new <%- user.persistClass %>();
+  <%_ if (databaseTypeCassandra) { _%>
+        user.setId(UUID.randomUUID().toString());
+  <%_ } _%>
         String currentPassword = RandomStringUtils.insecure().nextAlphanumeric(60);
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-tokens");
@@ -805,13 +807,19 @@ class AccountResourceIT {
 
         PersistentToken token = new PersistentToken();
         token.setSeries("change-tokens");
-    <%_ if (databaseTypeCouchbase) { _%>
-        token.setLogin(user.getLogin());
-    <%_ } else { _%>
+  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
         token.setUser(user);
-    <%_ } _%>
+  <%_ } else if (databaseTypeCassandra) { _%>
+        token.setUserId(user.getId());
+  <%_ } else { _%>
+        token.setLogin(user.getLogin());
+  <%_ } _%>
         token.setTokenValue("change-password-data");
+  <%_ if (databaseTypeCassandra) { _%>
+        token.setTokenDate(Instant.now());
+  <%_ } else { _%>
         token.setTokenDate(LocalDate.of(2017, 3, 23));
+  <%_ } _%>
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
         persistentTokenRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(token);
@@ -821,9 +829,9 @@ class AccountResourceIT {
                 post("/api/account/change-password")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "new password")))
-    <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
                     .with(csrf())
-    <%_ } _%>
+  <%_ } _%>
             )
             .andExpect(status().isOk());
 
@@ -832,7 +840,6 @@ class AccountResourceIT {
         userService.deleteUser("change-password-tokens");
     }
 
-  <%_ } _%>
     @Test
   <%_ if (databaseTypeSql) { _%>
     @Transactional
