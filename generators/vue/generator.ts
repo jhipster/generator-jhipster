@@ -296,6 +296,11 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               `${application.clientSrcDir}/app/entities/entities.vue`,
               createNeedleCallback({
                 needle: 'jhipster-needle-add-entity-service-to-entities-component-import',
+                contentToAdd: "import { provide } from 'vue';",
+                contentToCheck: /import \{[^}]*\bprovide\b[^}]*\} from 'vue'/,
+              }),
+              createNeedleCallback({
+                needle: 'jhipster-needle-add-entity-service-to-entities-component-import',
                 contentToAdd: `import ${entityAngularName}Service, { ${entityInstance}ServiceKey } from './${entityFolderName}/${entityFileName}.service';`,
               }),
               createNeedleCallback({
