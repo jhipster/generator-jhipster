@@ -40,6 +40,8 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       prettierFolders({ applicationDefaults }) {
+        // At loading, not at preparing: client:bootstrap adds the sources of the client once clientSrcDir is resolved,
+        // at preparing with a Java backend, unless a folder already formats them, like this one.
         applicationDefaults({
           prettierFolders: overrideMutateDataProperty(({ prettierFolders }: JavaApplication) =>
             prettierFolders.includes('src/**/') ? prettierFolders : [...prettierFolders, 'src/**/'],
