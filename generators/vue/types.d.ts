@@ -56,6 +56,10 @@ export interface Entity<F extends ClientField = Field, R extends ClientRelations
   vueFormTimeFields?: boolean;
   /** The sample with the data of every field, its dates written as the strings of the server like the model types them. */
   vueTsSampleWithFullData?: string;
+  /** The sample with the data of the required fields, its dates written as the strings of the server. */
+  vueTsSampleWithRequiredData?: string;
+  /** The sample with the data of some fields, its dates written as the strings of the server. */
+  vueTsSampleWithPartialData?: string;
 }
 
 export type Application = ClientApplication & VueAddedApplicationProperties;

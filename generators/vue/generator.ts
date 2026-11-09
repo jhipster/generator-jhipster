@@ -421,8 +421,11 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     return this.asDefaultTaskGroup({
       prepareEntitySamples({ entities }) {
         for (const entity of entities) {
-          // The model types the dates as the strings of the server, the sample of the client (written at default) as dayjs.
-          entity.vueTsSampleWithFullData = entity.tsSampleWithFullData?.replaceAll(/dayjs\(('[^']*')\)/g, '$1');
+          // The model types the dates as the strings of the server, the samples of the client (written at default) as dayjs.
+          const toVueSample = (sample?: string) => sample?.replaceAll(/dayjs\(('[^']*')\)/g, '$1');
+          entity.vueTsSampleWithFullData = toVueSample(entity.tsSampleWithFullData);
+          entity.vueTsSampleWithRequiredData = toVueSample(entity.tsSampleWithRequiredData);
+          entity.vueTsSampleWithPartialData = toVueSample(entity.tsSampleWithPartialData);
         }
       },
       queueTranslateTransform({ application }) {
