@@ -16,13 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { finalizeDefault, overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
 import { fieldIsEnum } from '../../../base-application/support/field-utils.ts';
 import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
 import { mutateEntity, mutateField } from '../../entity.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
 import { filterEntitiesForClient, filterEntityPropertiesForClient, preparePostEntityClientDerivedProperties } from '../../support/index.ts';
-import type { Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
+import type { Application as ClientApplication, Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
 
 export default class ClientBootstrap extends ClientApplicationGenerator {
   constructor(args?: string[], options?: ClientOptions, features?: ClientFeatures) {
@@ -66,30 +67,27 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
           clientThemeVariant: undefined,
         });
       },
+      prettierFolders({ applicationDefaults }) {
+        applicationDefaults({
+          // Computed at the end, with clientSrcDir and the folders of every bootstrap.
+          // A folder formatted recursively may hold it already, like the 'src/**/' of java:bootstrap.
+          prettierFolders: overrideMutateDataProperty(
+            finalizeDefault(({ clientFrameworkAny, clientSrcDir, prettierFolders }: ClientApplication) =>
+              (
+                clientFrameworkAny &&
+                !prettierFolders.some(folder => folder.endsWith('**/') && clientSrcDir.startsWith(folder.slice(0, -'**/'.length)))
+              ) ?
+                [...prettierFolders, `${clientSrcDir}**/`]
+              : prettierFolders,
+            ),
+          ),
+        });
+      },
     });
   }
 
   get [ClientApplicationGenerator.PREPARING]() {
     return this.preparing;
-  }
-
-  get postPreparing() {
-    return this.asPostPreparingTaskGroup({
-      prettierFolders({ application }) {
-        // clientSrcDir is resolved here. A folder formatted recursively may hold it already, like the 'src/**/' of java:bootstrap.
-        const { clientFrameworkAny, clientSrcDir, prettierFolders } = application;
-        if (
-          clientFrameworkAny &&
-          !prettierFolders.some(folder => folder.endsWith('**/') && clientSrcDir.startsWith(folder.slice(0, -'**/'.length)))
-        ) {
-          prettierFolders.push(`${clientSrcDir}**/`);
-        }
-      },
-    });
-  }
-
-  get [ClientApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get preparingEachEntity() {

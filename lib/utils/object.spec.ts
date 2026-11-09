@@ -31,6 +31,7 @@ import {
   finalizeDefaultOrUndefined,
   finalizeMutations,
   mutateData,
+  overrideMutateDataProperty,
   removeFieldsWithNullishValues,
 } from './object.ts';
 
@@ -248,6 +249,25 @@ describe('utils - object', () => {
         expect(droppedMutationMessage(dropped[0])).toBe(
           'The delayed default of prop2 was dropped: it waited for prop, and another mutation set prop2 ("first") first.',
         );
+      });
+    });
+
+    describe('with an auto-delayed override of a property already set', () => {
+      const mutatedData: { list: string[]; prop?: string } = createDelayedMutationContext({ autoDelay: true });
+
+      before(() => {
+        mutatedData.list = ['first'];
+        mutateData(mutatedData, {
+          __override__: false,
+          list: overrideMutateDataProperty(({ list, prop }: { list: string[]; prop?: string }) => [...list, prop!]),
+        });
+        mutatedData.list.push('second');
+        mutateData(mutatedData, { prop: 'resolved' });
+        finalizeMutations(mutatedData);
+      });
+
+      it('should apply it once the property it reads is set', () => {
+        expect(mutatedData).toEqual({ list: ['first', 'second', 'resolved'], prop: 'resolved' });
       });
     });
 
