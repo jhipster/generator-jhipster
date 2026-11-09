@@ -191,6 +191,11 @@ const userFiles = javaWriteFileSection({
       templates: ['service/UserService.java', 'web/rest/PublicUserResource.java'],
     },
     {
+      condition: data => data.generateUserRegistration,
+      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['service/RegistrationService.java'],
+    },
+    {
       // The cassandra, couchbase and reactive sql UserRepository are written by their database generators
       condition: data =>
         data.generateBuiltInUserEntity &&
@@ -204,6 +209,12 @@ const userFiles = javaWriteFileSection({
       condition: data => data.generateBuiltInUserEntity,
       ...javaTestPackageTemplatesBlock('_entityPackage_/'),
       templates: ['service/UserServiceIT.java', 'web/rest/UserResourceIT.java', 'web/rest/PublicUserResourceIT.java'],
+    },
+    {
+      // The not activated users are removed by every database but Cassandra
+      condition: data => data.generateUserRegistration && !data.databaseTypeCassandra,
+      ...javaTestPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['service/RegistrationServiceIT.java'],
     },
   ],
 });

@@ -78,13 +78,10 @@ import java.time.temporal.ChronoUnit;
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<%_ if (databaseTypeSql && reactive && generateUserRegistration) { _%>
-import java.time.ZoneOffset;
-<%_ } _%>
 <%_ if (databaseTypeSql && !authenticationTypeOauth2) { _%>
 import java.time.LocalDateTime;
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 || generateUserRegistration) { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import java.util.List;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
@@ -103,11 +100,6 @@ import java.util.UUID;
 import static <%- packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
-<%_ if (searchEngineElasticsearch && generateUserRegistration) { _%>
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-<%_ } _%>
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import static org.mockito.Mockito.when;
 <%_ } _%>
@@ -375,71 +367,6 @@ class UserServiceIT {
         userRepository.delete(user)<%- reactive ? '.block()' : '' %>;
     }
 
-  <%_ if (generateUserRegistration) { _%>
-    @Test
-    <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-    <%_ } _%>
-    void assertThatNotActivatedUsersWithNotNullActivationKeyCreatedBefore3DaysAreDeleted() {
-        Instant now = Instant.now();
-    <%_ if (databaseTypeSql && !reactive) { _%>
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
-    <%_ } _%>
-        user.setActivated(false);
-        user.setActivationKey(RandomStringUtils.insecure().next(20));
-        <%- user.persistClass %> dbUser = userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
-        dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
-        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
-    <%_ if (databaseTypeSql && reactive) { _%>
-        LocalDateTime threeDaysAgo = LocalDateTime.ofInstant(now.minus(3, ChronoUnit.DAYS), ZoneOffset.UTC);
-    <%_ } else { _%>
-        Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
-    <%_ } _%>
-        List<<%- user.persistClass %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
-            .collectList().block()<% } %>;
-        assertThat(users).isNotEmpty();
-        userService.removeNotActivatedUsers();
-        users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
-            .collectList().block()<% } %>;
-        assertThat(users).isEmpty();
-    <%_ if (searchEngineElasticsearch) { _%>
-
-        // Verify Elasticsearch mock
-        verify(spiedUserSearchRepository, times(1)).delete<%- reactive ? '' : 'FromIndex' %>(user);
-    <%_ } _%>
-    }
-
-    @Test
-    <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-    <%_ } _%>
-    void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
-        Instant now = Instant.now();
-    <%_ if (databaseTypeSql && !reactive) { _%>
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
-    <%_ } _%>
-        user.setActivated(false);
-        <%- user.persistClass %> dbUser = userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
-        dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
-        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
-    <%_ if (databaseTypeSql && reactive) { _%>
-        LocalDateTime threeDaysAgo = LocalDateTime.ofInstant(now.minus(3, ChronoUnit.DAYS), ZoneOffset.UTC);
-    <%_ } else { _%>
-        Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
-    <%_ } _%>
-        List<<%- user.persistClass %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
-            .collectList().block()<% } %>;
-        assertThat(users).isEmpty();
-        userService.removeNotActivatedUsers();
-        Optional<<%- user.persistClass %>> maybeDbUser = userRepository.findById(dbUser.getId())<%- reactive ? '.blockOptional()' : '' %>;
-        assertThat(maybeDbUser).contains(dbUser);
-    <%_ if (searchEngineElasticsearch) { _%>
-
-        // Verify Elasticsearch mock
-        verify(spiedUserSearchRepository, never()).delete<%- reactive ? '' : 'FromIndex' %>(user);
-    <%_ } _%>
-    }
-  <%_ } _%>
 <%_ } _%>
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 

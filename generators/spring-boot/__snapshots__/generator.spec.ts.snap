@@ -995,6 +995,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/main/java/com/mycompany/myapp/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -1023,6 +1026,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/RegistrationResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/SortValidator.java": {
@@ -1145,6 +1151,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -1161,6 +1170,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/RegistrationResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/SortValidatorTest.java": {
