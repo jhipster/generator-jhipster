@@ -54,6 +54,8 @@ export interface Entity<F extends ClientField = Field, R extends ClientRelations
   entityVueReadAuthorities?: string;
   /** Whether a field of the update form is an Instant or a ZonedDateTime. */
   vueFormTimeFields?: boolean;
+  /** The sample with the data of every field, its dates written as Date like the model types them. */
+  vueTsSampleWithFullData?: string;
 }
 
 export type Application = ClientApplication & VueAddedApplicationProperties;

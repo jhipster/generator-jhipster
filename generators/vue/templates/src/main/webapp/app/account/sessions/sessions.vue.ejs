@@ -90,4 +90,11 @@ const invalidate = (session: string) =>
     });
 
 retrieveSessions();
+
+defineExpose({
+  username,
+  success,
+  error,
+  invalidate,
+});
 </script>

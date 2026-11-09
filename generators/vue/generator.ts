@@ -413,6 +413,12 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 
   get default() {
     return this.asDefaultTaskGroup({
+      prepareEntitySamples({ entities }) {
+        for (const entity of entities) {
+          // The model types the dates as Date, the sample of the client (written at default) as dayjs.
+          entity.vueTsSampleWithFullData = entity.tsSampleWithFullData?.replaceAll('dayjs(', 'new Date(');
+        }
+      },
       queueTranslateTransform({ application }) {
         const { clientI18nDir, enableTranslation, getWebappTranslation } = application;
 

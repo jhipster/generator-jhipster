@@ -32,7 +32,7 @@ const resetStore = (store: AccountStore) => {
   store.logout();
   store.authenticate(null);
   store.profilesLoaded = false;
-  store.activeProfiles = '';
+  store.activeProfiles = [];
   store.ribbonOnProfiles = '';
 };
 

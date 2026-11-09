@@ -30,7 +30,7 @@ import { type RouteLocation } from 'vue-router';
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
 import axios, { CanceledError } from 'axios';
 import { createBootstrap } from 'bootstrap-vue-next';
-<%_ if (anyFieldIsDateDerived) { _%>
+<%_ if (vueFormTimeFields) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
 
@@ -48,6 +48,7 @@ import { DATE_TIME_LONG_FORMAT } from '@/composables/date-format';
 <%_ } _%>
 
 import <%- entityAngularName %>Update from './<%- entityFileName %>-update.vue';
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 
 
@@ -61,7 +62,7 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ go: routerGoMock }),
 }));
 
-const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
+const <%- entityInstance %>Sample: I<%- entityAngularName %> = { ...<%- vueTsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
 <%_ for (const [{ otherEntity }] of allRelationshipsThatNeedSelectOptions) { _%>
 const <%- otherEntity.entityInstance %>Option = { <%- otherEntity.primaryKey.name %>: <%- otherEntity.primaryKey.tsSampleValues[0] %> };
 <%_ } _%>
@@ -79,7 +80,7 @@ const <%- entityInstance %>SampleWithRelationships = {
 <%_ } _%>
 
 describe('Component Tests', () => {
-  let mountOptions: MountingOptions<<%- entityAngularName %>UpdateComponentType>['global'];
+  let mountOptions: NonNullable<MountingOptions<<%- entityAngularName %>UpdateComponentType>['global']>;
   let alertService: AlertService;
 
   describe('<%- entityAngularName %> Management Update Component', () => {

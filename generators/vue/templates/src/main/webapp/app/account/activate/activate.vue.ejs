@@ -46,4 +46,9 @@ onMounted(async () => {
     success.value = false;
   }
 });
+
+defineExpose({
+  success,
+  error,
+});
 </script>

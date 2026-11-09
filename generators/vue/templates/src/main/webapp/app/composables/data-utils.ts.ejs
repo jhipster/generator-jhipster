@@ -37,7 +37,7 @@ const useDataUtils = () => ({
     openFile(data, contentType, blobType);
   },
 
-  setFileData(event: Event, entity: object, field: string, isImage: boolean): void {
+  setFileData(event: Event | undefined, entity: object, field: string, isImage: boolean): void {
     const file = (event?.target as HTMLInputElement | null)?.files?.[0];
     if (file) {
       if (isImage && !file.type.startsWith("image/")) {

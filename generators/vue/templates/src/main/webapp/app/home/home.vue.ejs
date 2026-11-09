@@ -82,4 +82,12 @@ const { login } = inject(loginServiceKey)!;
 <%_ } _%>
 const authenticated = inject(authenticatedKey);
 const username = inject(currentUsernameKey);
+
+defineExpose({
+  authenticated,
+  username,
+<%_ if (authenticationTypeOauth2) { _%>
+  login,
+<%_ } _%>
+});
 </script>

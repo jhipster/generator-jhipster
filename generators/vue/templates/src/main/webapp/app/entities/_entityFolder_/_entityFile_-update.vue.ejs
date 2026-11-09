@@ -335,4 +335,24 @@ const clearInputImage = (field: string, fieldContentType: string, idInput: strin
 const getSelected = <T extends object>(selectedVals: T[] | null | undefined, option: T, pkField = 'id'): T =>
   selectedVals?.find(value => (option as Record<string, unknown>)[pkField] === (value as Record<string, unknown>)[pkField]) ?? option;
 <%_ } _%>
+
+defineExpose({
+  <%- entityInstance %>Service,
+  alertService,
+  <%- entityInstance %>,
+  isLoading,
+  isSaving,
+  save,
+  previousState,
+  v$,
+<%_ if (anyFieldIsLocalDate) { _%>
+  currentLanguage,
+<%_ } _%>
+<%_ if (vueFormTimeFields) { _%>
+  dateFormat,
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
+  clearInputImage,
+<%_ } _%>
+});
 </script>

@@ -150,4 +150,12 @@ const doLogin = async () => {
     authenticationError.value = true;
   }
 };
+
+defineExpose({
+  authenticationError,
+  login,
+  password,
+  rememberMe,
+  doLogin,
+});
 </script>

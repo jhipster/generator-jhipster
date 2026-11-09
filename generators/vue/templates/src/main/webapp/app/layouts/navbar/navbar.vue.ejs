@@ -296,6 +296,25 @@ const logout = async () => {
     await router.push('/');
   }
 };
+
+defineExpose({
+  authenticated,
+  hasAnyAuthority,
+  openAPIEnabled,
+  subIsActive,
+  logout,
+<%_ if (authenticationUsesCsrf && authenticationTypeOauth2) { _%>
+  login,
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+  currentLanguage,
+  changeLanguage,
+  isActiveLanguage,
+<%_ } _%>
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
+  inProduction,
+<%_ } _%>
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

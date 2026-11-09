@@ -178,4 +178,13 @@ const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remov
   onRemoved: () => router.push({ name: '<%- entityAngularName %>' }),
 });
 <%_ } _%>
+
+defineExpose({
+  <%- entityInstance %>,
+  previousState,
+<%_ if (!readOnly) { _%>
+  prepareRemove,
+  remove<%- entityAngularName %>,
+<%_ } _%>
+});
 </script>

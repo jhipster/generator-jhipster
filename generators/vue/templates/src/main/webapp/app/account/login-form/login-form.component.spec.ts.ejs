@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { type ComponentPublicInstance } from 'vue';
 import { type RouteLocation } from 'vue-router';
 
 import { createTestingPinia } from '@pinia/testing';
@@ -190,9 +191,9 @@ describe('LoginForm Component', () => {
     axiosStub.post.mockRejectedValue(new Error());
 
     // WHEN
-    wrapper.findComponent('#username').vm.$emit('update:modelValue', 'login');
-    wrapper.findComponent('#password').vm.$emit('update:modelValue', 'pwd');
-    wrapper.findComponent('#rememberMe').vm.$emit('update:modelValue', false);
+    wrapper.findComponent<ComponentPublicInstance>('#username').vm.$emit('update:modelValue', 'login');
+    wrapper.findComponent<ComponentPublicInstance>('#password').vm.$emit('update:modelValue', 'pwd');
+    wrapper.findComponent<ComponentPublicInstance>('#rememberMe').vm.$emit('update:modelValue', false);
     await wrapper.find('form').trigger('submit');
     await flushPromises();
 

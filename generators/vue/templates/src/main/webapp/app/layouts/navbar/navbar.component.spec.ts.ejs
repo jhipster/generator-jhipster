@@ -69,7 +69,7 @@ describe('JhiNavbar', () => {
   beforeEach(() => {
     router = createRouter();
 <%_ if (authenticationUsesCsrf) { _%>
-    loginService = { login: vi.fn(), logout: vi.fn() };
+    loginService = { <%- authenticationTypeOauth2 ? 'login: vi.fn(), ' : '' %>logout: vi.fn() };
 <%_ } _%>
     wrapper = shallowMount(JhiNavbar, {
       global: {

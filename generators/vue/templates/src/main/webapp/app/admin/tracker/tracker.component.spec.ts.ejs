@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+import { type Mock, type MockInstance, beforeEach, describe, expect, it, vi } from 'vitest';
 import { type Router, createMemoryHistory, createRouter } from 'vue-router';
 
 import { type VueWrapper, shallowMount } from '@vue/test-utils';
@@ -27,6 +27,14 @@ import <%- jhiPrefixCapitalized %>Tracker from './tracker.vue';
 import { type TrackerActivity, trackerServiceKey } from './tracker.service';
 
 type <%- jhiPrefixCapitalized %>TrackerComponentType = InstanceType<typeof <%- jhiPrefixCapitalized %>Tracker>;
+
+const trackerActivity = (sessionId: string, page: string): TrackerActivity => ({
+  sessionId,
+  userLogin: 'user',
+  ipAddress: '127.0.0.1',
+  page,
+  time: '2020-01-01',
+});
 
 let router: Router;
 
@@ -40,7 +48,7 @@ describe('<%- jhiPrefixCapitalized %>Tracker', () => {
 
   let subject: Subject<Partial<TrackerActivity>>;
   let subscription: Subscription;
-  let subscriptionSpy;
+  let subscriptionSpy: MockInstance;
   let trackerServiceStub: { subscribe: Mock; sendActivity: Mock };
 
   beforeEach(() => {
@@ -85,11 +93,11 @@ describe('<%- jhiPrefixCapitalized %>Tracker', () => {
 
   it('should add new activity', () => {
     // GIVEN
-    const activity1 = { time: '2020-01-01', page: 'login', sessionId: '123' };
+    const activity1 = trackerActivity('123', 'login');
     trackerView.activities = [activity1];
 
     // WHEN
-    const activity2 = { time: '2020-01-01', page: 'login', sessionId: '456' };
+    const activity2 = trackerActivity('456', 'login');
     subject.next(activity2);
 
     // THEN
@@ -98,7 +106,7 @@ describe('<%- jhiPrefixCapitalized %>Tracker', () => {
 
   it('should not add logout activity', () => {
     // WHEN
-    subject.next({ time: '2020-01-01', page: 'logout', sessionId: '123' });
+    subject.next(trackerActivity('123', 'logout'));
 
     // THEN
     expect(trackerView.activities).toEqual([]);
@@ -106,10 +114,10 @@ describe('<%- jhiPrefixCapitalized %>Tracker', () => {
 
   it('should update user activity', () => {
     // GIVEN
-    trackerView.activities = [{ time: '2020-01-01', page: 'login', sessionId: '123' }];
+    trackerView.activities = [trackerActivity('123', 'login')];
 
     // WHEN
-    const activity = { time: '2020-01-01', page: 'login', sessionId: '123' };
+    const activity = trackerActivity('123', 'login');
     subject.next(activity);
 
     // THEN
@@ -118,10 +126,10 @@ describe('<%- jhiPrefixCapitalized %>Tracker', () => {
 
   it('should remove user activity', () => {
     // GIVEN
-    trackerView.activities = [{ time: '2020-01-01', page: 'login', sessionId: '123' }];
+    trackerView.activities = [trackerActivity('123', 'login')];
 
     // WHEN
-    subject.next({ time: '2020-01-01', page: 'logout', sessionId: '123' });
+    subject.next(trackerActivity('123', 'logout'));
 
     // THEN
     expect(trackerView.activities).toEqual([]);
