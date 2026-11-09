@@ -63,8 +63,8 @@ describe('useDateFormat', () => {
 
     dateFormat.updateInstantField!('instant', { target: { value: '2019-10-15T11:42' } });
     dateFormat.updateZonedDateTimeField!('zoned', { target: { value: '2019-10-15T11:42' } });
-    expect(entity.value.instant).toEqual(dayjs('2019-10-15T11:42', DATE_TIME_LONG_FORMAT));
-    expect(entity.value.zoned).toEqual(dayjs('2019-10-15T11:42', DATE_TIME_LONG_FORMAT));
+    expect(entity.value.instant).toBe(dayjs('2019-10-15T11:42', DATE_TIME_LONG_FORMAT).toISOString());
+    expect(entity.value.zoned).toBe(dayjs('2019-10-15T11:42', DATE_TIME_LONG_FORMAT).toISOString());
 
     dateFormat.updateInstantField!('instant', { target: { value: '' } });
     dateFormat.updateZonedDateTimeField!('zoned', {});

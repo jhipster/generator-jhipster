@@ -388,7 +388,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           entityVueReadAuthorities: () =>
             asAuthorities([...(entity.entityAuthority?.split(',') ?? []), ...(entity.entityReadAuthority?.split(',') ?? [])]),
           entityClientFields: () =>
-            this.generateEntityClientFields(entity.primaryKey, fieldsWithoutId, entity.relationships, entity.dto, 'Date', entity.embedded),
+            this.generateEntityClientFields(
+              entity.primaryKey,
+              fieldsWithoutId,
+              entity.relationships,
+              entity.dto,
+              'string',
+              entity.embedded,
+            ),
           entityClientImports: () => this.generateEntityClientImports(entity.relationships, entity.dto),
           entityClientFieldDefaultValues: () => this.generateEntityClientFieldDefaultValues(fieldsWithoutId),
           entityModelEnumImports: () => this.generateEntityClientEnumImports(fieldsWithoutId),
@@ -414,8 +421,8 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     return this.asDefaultTaskGroup({
       prepareEntitySamples({ entities }) {
         for (const entity of entities) {
-          // The model types the dates as Date, the sample of the client (written at default) as dayjs.
-          entity.vueTsSampleWithFullData = entity.tsSampleWithFullData?.replaceAll('dayjs(', 'new Date(');
+          // The model types the dates as the strings of the server, the sample of the client (written at default) as dayjs.
+          entity.vueTsSampleWithFullData = entity.tsSampleWithFullData?.replaceAll(/dayjs\(('[^']*')\)/g, '$1');
         }
       },
       queueTranslateTransform({ application }) {

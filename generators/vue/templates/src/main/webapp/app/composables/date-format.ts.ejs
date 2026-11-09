@@ -42,11 +42,11 @@ export const useDateFormat = <T extends object>({ entityRef }: { entityRef?: Ref
     formatDateShort: formatDate,
 <%_ } _%>
   };
-  /** Sets the field of the entity to the date and time of the event of an input, null when empty. */
+  /** Sets the field of the entity to the date and time of the event of an input, as the ISO string the server takes, null when empty. */
   const updateDateTimeField = (field: string, event: Event | { target?: { value?: string } | null }) => {
     const value = (event.target as { value?: string } | null)?.value;
     if (entityRef) {
-      (entityRef.value as Record<string, unknown>)[field] = value ? dayjs(value, DATE_TIME_LONG_FORMAT) : null;
+      (entityRef.value as Record<string, unknown>)[field] = value ? dayjs(value, DATE_TIME_LONG_FORMAT).toISOString() : null;
     }
   };
   const entityUtils = {
