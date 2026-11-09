@@ -40,8 +40,8 @@ vi.mock('../administration.reducer', async importOriginal => ({
 
 const sections: ConfigurationSection[] = [
   {
-    label: { text: 'Beans', translationKey: 'known' },
-    columns: [{ text: 'Prefix', translationKey: 'unknown' }, { text: 'Properties' }],
+    label: { text: 'Beans'<%- enableTranslation ? ", translationKey: 'known'" : '' %> },
+    columns: [{ text: 'Prefix'<%- enableTranslation ? ", translationKey: 'unknown'" : '' %> }, { text: 'Properties' }],
     rows: [
       { key: 'beta', properties: [{ key: 'name', value: 'app' }] },
       { key: 'alpha', value: 'plain' },

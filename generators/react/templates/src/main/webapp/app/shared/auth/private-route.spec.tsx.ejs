@@ -144,7 +144,7 @@ describe('private-route component', () => {
 
 describe('hasAnyAuthority', () => {
   it('should return false when authorities is invalid', () => {
-    expect(hasAnyAuthority(undefined, undefined)).toEqual(false);
+    expect(hasAnyAuthority(undefined, [])).toEqual(false);
     expect(hasAnyAuthority(null, [])).toEqual(false);
     expect(hasAnyAuthority([], [])).toEqual(false);
     expect(hasAnyAuthority([], [Authority.USER])).toEqual(false);

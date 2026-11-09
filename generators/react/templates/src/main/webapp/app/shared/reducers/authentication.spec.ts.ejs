@@ -276,7 +276,7 @@ describe('Authentication reducer tests', () => {
       const loginResponse = { headers: { authorization: 'auth' } };
       axios.post = vi.fn().mockResolvedValue(loginResponse);
 
-      const result = await authenticate('test', 'test')(dispatch, getState, extra);
+      const result = await authenticate(<%- authenticationTypeSession ? "'username=test&password=test'" : "{ username: 'test', password: 'test' }" %>)(dispatch, getState, extra);
 
       expect(dispatch).toHaveBeenCalledWith(
         expect.objectContaining({

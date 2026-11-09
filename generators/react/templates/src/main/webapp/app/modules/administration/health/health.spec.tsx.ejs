@@ -41,13 +41,13 @@ vi.mock('../administration.reducer', async importOriginal => ({
 const checks: HealthCheck[] = [
   {
     id: 'db',
-    label: { text: 'Database', translationKey: 'known' },
+    label: { text: 'Database'<%- enableTranslation ? ", translationKey: 'known'" : '' %> },
     sublabel: 'H2',
     status: { text: 'UP' },
     healthy: true,
     details: [{ key: 'database', value: 'H2' }],
   },
-  { id: 'mail', label: { text: 'Email' }, status: { text: 'DOWN', translationKey: 'unknown' }, healthy: false, error: 'refused' },
+  { id: 'mail', label: { text: 'Email' }, status: { text: 'DOWN'<%- enableTranslation ? ", translationKey: 'unknown'" : '' %> }, healthy: false, error: 'refused' },
   { id: 'ping', label: { text: 'Ping' }, status: { text: 'UP' }, healthy: true },
 ];
 
