@@ -105,53 +105,6 @@ public class AccountResource {
         this.persistentTokenRepository = persistentTokenRepository;
 <%_ } _%>
     }
-<%_ if (generateUserRegistration) { _%>
-
-    /**
-     * {@code POST  /register} : register the user.
-     *
-     * @param managedUserVM the managed user View Model.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
-     */
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public <%- reactive ? 'Mono<Void>' : 'void' %> registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        LOG.debug("REST request to register account");
-        if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
-            throw new InvalidPasswordException();
-        }
-  <%_ if (reactive) { _%>
-        return userService.registerUser(managedUserVM, managedUserVM.getPassword()).doOnSuccess(mailService::sendActivationEmail).then();
-  <%_ } else { _%>
-        <%- user.persistClass %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
-  <%_ } _%>
-    }
-
-    /**
-     * {@code GET  /activate} : activate the registered user.
-     *
-     * @param key the activation key.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
-     */
-    @GetMapping("/activate")
-    public <%- reactive ? 'Mono<Void>' : 'void' %> activateAccount(@RequestParam(value = "key") String key) {
-        LOG.debug("REST request to activate account");
-  <%_ if (reactive) { _%>
-        return userService
-            .activateRegistration(key)
-            .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
-            .then();
-  <%_ } else { _%>
-        Optional<<%- user.persistClass %>> user = userService.activateRegistration(key);
-        if (user.isEmpty()) {
-            throw new AccountResourceException("No user was found for this activation key");
-        }
-  <%_ } _%>
-    }
-<%_ } _%>
 
 <%_ if (!authenticationTypeJwt) { _%>
     /**
@@ -371,7 +324,7 @@ public class AccountResource {
 <%_ } _%>
     }
 
-    private static boolean isPasswordLengthInvalid(String password) {
+    static boolean isPasswordLengthInvalid(String password) {
         return (
             StringUtils.isEmpty(password) ||
             password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||

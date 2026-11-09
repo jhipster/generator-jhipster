@@ -128,6 +128,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -171,6 +174,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -353,6 +359,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
   "src/test/java/tech/jhipster/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -378,6 +387,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
@@ -2225,6 +2237,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -2268,6 +2283,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -2450,6 +2468,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -2475,6 +2496,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
@@ -3616,6 +3640,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -3659,6 +3686,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -3835,6 +3865,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -3860,6 +3893,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {

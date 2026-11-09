@@ -122,6 +122,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/main/java/tech/jhipster/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -165,6 +168,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -323,6 +329,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/test/java/tech/jhipster/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -348,6 +357,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
@@ -2051,6 +2063,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/java/tech/jhipster/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -2094,6 +2109,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -2252,6 +2270,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/test/java/tech/jhipster/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -2277,6 +2298,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
@@ -3331,6 +3355,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -3374,6 +3401,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -3526,6 +3556,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -3551,6 +3584,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {

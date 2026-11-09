@@ -82,6 +82,12 @@ const accountFiles = asWriteFilesSection<SpringBootApplication>({
       templates: ['web/rest/vm/ManagedUserVM.java'],
     },
     {
+      condition: data => data.generateUserRegistration,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/RegistrationResource.java'],
+    },
+    {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
@@ -91,6 +97,12 @@ const accountFiles = asWriteFilesSection<SpringBootApplication>({
           return 'web/rest/AccountResourceIT_skipUserManagement.java';
         },
       ],
+    },
+    {
+      condition: data => data.generateUserRegistration,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/RegistrationResourceIT.java'],
     },
   ],
 });
