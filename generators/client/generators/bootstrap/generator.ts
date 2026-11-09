@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { finalizeDefault, overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
+import { overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
 import { fieldIsEnum } from '../../../base-application/support/field-utils.ts';
 import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
@@ -72,14 +72,14 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
           // Computed at the end, with clientSrcDir and the folders of every bootstrap.
           // A folder formatted recursively may hold it already, like the 'src/**/' of java:bootstrap.
           prettierFolders: overrideMutateDataProperty(
-            finalizeDefault(({ clientFrameworkAny, clientSrcDir, prettierFolders }: ClientApplication) =>
+            ({ clientFrameworkAny, clientSrcDir, prettierFolders }: ClientApplication) =>
               (
                 clientFrameworkAny &&
                 !prettierFolders.some(folder => folder.endsWith('**/') && clientSrcDir.startsWith(folder.slice(0, -'**/'.length)))
               ) ?
                 [...prettierFolders, `${clientSrcDir}**/`]
               : prettierFolders,
-            ),
+            { delayed: true },
           ),
         });
       },
