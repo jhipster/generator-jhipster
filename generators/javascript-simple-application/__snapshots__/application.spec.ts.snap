@@ -14,6 +14,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "nodeVersion": "nodeVersion",
   "nodeWebappBuildTarget": "webapp:build",
   "packageJsonScripts": {},
+  "prettierClientSources": false,
   "prettierExtensions": [
     "md",
     "json",

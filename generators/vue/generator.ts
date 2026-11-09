@@ -32,7 +32,6 @@ import {
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
 import type { Field as ClientField } from '../client/types.ts';
-import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
@@ -194,16 +193,11 @@ export default class VueGenerator extends VueApplicationGenerator {
           this.fetchFromInstalledJHipster('vue', 'resources', 'package.json'),
         );
       },
-      applicationDefaults({ application, applicationDefaults }) {
+      applicationDefaults({ applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
         });
-
-        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
-          // When we have a java backend, 'src/**' is already added by java:bootstrap
-          application.prettierFolders.push(`${application.clientSrcDir}**/`);
-        }
       },
       javaNodeBuildPaths({ application }) {
         const { clientBundlerRsbuild, clientBundlerVite, microfrontend, enableTranslation, enableI18nRTL, javaNodeBuildPaths } =

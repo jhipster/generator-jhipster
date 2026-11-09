@@ -801,6 +801,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "packageJsonScripts": {},
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
+  "prettierClientSources": false,
   "prettierExtensions": [
     "md",
     "json",
@@ -1714,6 +1715,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "packageJsonScripts": {},
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
+  "prettierClientSources": false,
   "prettierExtensions": [
     "md",
     "json",

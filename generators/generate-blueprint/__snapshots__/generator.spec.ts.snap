@@ -154,6 +154,7 @@ exports[`generator - generate-blueprint with all option should match application
   "nodeWebappBuildTarget": "webapp:build",
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
+  "prettierClientSources": false,
   "prettierExtensions": [
     "md",
     "json",
@@ -2044,6 +2045,7 @@ exports[`generator - generate-blueprint with default config should match applica
   "nodeWebappBuildTarget": "webapp:build",
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
+  "prettierClientSources": false,
   "prettierExtensions": [
     "md",
     "json",
@@ -2263,6 +2265,7 @@ exports[`generator - generate-blueprint with local-blueprint option and app gene
   "nodeWebappBuildTarget": "webapp:build",
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
+  "prettierClientSources": false,
   "prettierExtensions": [
     "md",
     "json",
@@ -2410,6 +2413,7 @@ exports[`generator - generate-blueprint with local-blueprint option should match
   "nodeWebappBuildTarget": "webapp:build",
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
+  "prettierClientSources": false,
   "prettierExtensions": [
     "md",
     "json",

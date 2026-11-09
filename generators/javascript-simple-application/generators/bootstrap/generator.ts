@@ -67,4 +67,23 @@ export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplic
   get [JavascriptSimpleApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      prettierClientSources({ application }) {
+        // clientSrcDir is resolved here. A folder formatted recursively may hold it already, like the 'src/**/' of java:bootstrap.
+        const { clientSrcDir, prettierClientSources, prettierFolders } = application;
+        if (
+          prettierClientSources &&
+          !prettierFolders.some(folder => folder.endsWith('**/') && clientSrcDir.startsWith(folder.slice(0, -'**/'.length)))
+        ) {
+          prettierFolders.push(`${clientSrcDir}**/`);
+        }
+      },
+    });
+  }
+
+  get [JavascriptSimpleApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
 }

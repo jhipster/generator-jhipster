@@ -30,6 +30,8 @@ export type JavascriptSimpleApplicationLoadingAddedApplicationProperties = {
 
   prettierFolders: string[];
   prettierExtensions: string[];
+  /** Whether prettier formats the sources of the client too, in clientSrcDir. */
+  prettierClientSources: boolean;
 };
 
 export type JavascriptSimpleApplicationPreparingAddedApplicationProperties = {
@@ -58,6 +60,7 @@ export const mutateApplicationLoading = {
   clientPackageJsonScripts: () => ({}),
 
   prettierFolders: () => ['', '.blueprint/**/'],
+  prettierClientSources: () => false,
   prettierExtensions: () => 'md,json,yml,js,cjs,mjs,ts,cts,mts'.split(','),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<JavascriptSimpleApplicationApplication>,

@@ -208,6 +208,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": Any<Object>,
   "packageName": "com.mycompany.myapp",
+  "prettierClientSources": false,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
   "prettierTabWidth": 2,
