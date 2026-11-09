@@ -1,8 +1,6 @@
 import js from '@eslint/js';
-import stylistic from '@stylistic/eslint-plugin';
 import { defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
-import ejs from 'eslint-plugin-ejs-templates';
 import imports from 'eslint-plugin-import-x';
 import n from 'eslint-plugin-n';
 import prettier from 'eslint-plugin-prettier/recommended';
@@ -10,7 +8,7 @@ import globals from 'globals';
 import ts from 'typescript-eslint';
 
 import { ECMASCRIPT_VERSION } from './lib/constants/jhipster.ts';
-import { jsRules } from './lib/eslint/base.ts';
+import { ejsTemplates } from './lib/eslint/ejs-templates.ts';
 import jhipster, { plugin as jhipsterPlugin } from './lib/eslint/index.ts';
 
 const tsFiles = ['**/*.{ts,mts,cts}'];
@@ -159,30 +157,5 @@ export default defineConfig(
     },
   },
   prettier,
-  ejs.configs.customize(
-    {
-      html: 'never',
-      prettierBlocklist: true,
-      stylisticBlocklist: true,
-      experimental: true,
-      allowedGlobals: ['wrapMono', 'relativeDir'],
-    },
-    js.configs.recommended,
-    stylistic.configs.customize({
-      jsx: false,
-      semi: true,
-    }),
-    {
-      rules: {
-        ...jsRules,
-        'no-negated-condition': 'error',
-        'no-nested-ternary': 'error',
-        'no-useless-concat': 'error',
-        '@stylistic/no-extra-parens': ['error', 'all', { nestedBinaryExpressions: false, ternaryOperandBinaryExpressions: false }],
-        '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
-        '@stylistic/comma-dangle': ['error', 'always-multiline'],
-        '@stylistic/no-mixed-operators': 'off',
-      },
-    },
-  ),
+  ejsTemplates({ allowedGlobals: ['wrapMono', 'relativeDir'] }),
 );
