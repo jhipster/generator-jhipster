@@ -21,6 +21,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": true,
   "authority": Any<Object>,
   "backendType": "Java",
   "backendTypeJavaAny": true,

@@ -27,7 +27,7 @@ import <%- user.entityAbsoluteClass %>;
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 import <%- packageName %>.repository.AuthorityRepository;
   <%_ } _%>
-  <%_ if (authenticationTypeSession && !reactive) { _%>
+  <%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 import <%- packageName %>.repository.PersistentTokenRepository;
   <%_ } _%>
 import <%- packageName %>.repository.UserRepository;
@@ -117,7 +117,7 @@ public class UserService {
 
     protected final UserSearchRepository userSearchRepository;
   <%_ } _%>
-  <%_ if (authenticationTypeSession && !reactive) { _%>
+  <%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 
     protected final PersistentTokenRepository persistentTokenRepository;
   <%_ } _%>
@@ -130,7 +130,7 @@ public class UserService {
     protected final CacheManager cacheManager;
   <%_ } _%>
 
-    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><%- authenticationTypeSession && !reactive ? ', PersistentTokenRepository persistentTokenRepository' : '' %><%- databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase ? ', AuthorityRepository authorityRepository' : '' %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %>) {
+    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><%- authenticationTypeSession && authenticationUsesRememberMe ? ', PersistentTokenRepository persistentTokenRepository' : '' %><%- databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase ? ', AuthorityRepository authorityRepository' : '' %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %>) {
         this.userRepository = userRepository;
   <%_ if (!authenticationTypeOauth2) { _%>
         this.passwordEncoder = passwordEncoder;
@@ -138,7 +138,7 @@ public class UserService {
   <%_ if (searchEngineElasticsearch) { _%>
         this.userSearchRepository = userSearchRepository;
   <%_ } _%>
-  <%_ if (authenticationTypeSession && !reactive) { _%>
+  <%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
         this.persistentTokenRepository = persistentTokenRepository;
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
@@ -173,7 +173,7 @@ public class UserService {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
-      <%_ if (!databaseTypeNo && authenticationTypeSession && !reactive) { _%>
+      <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
                 removePersistentTokens(user);
       <%_ } _%>
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
@@ -338,7 +338,7 @@ public class UserService {
                 user.setImageUrl(userDTO.getImageUrl());
     <%_ } _%>
                 user.setActivated(userDTO.isActivated());
-    <%_ if (!databaseTypeNo && authenticationTypeSession && !reactive) { _%>
+    <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
                 if (!userDTO.isActivated()) {
                     removePersistentTokens(user);
                 }
@@ -421,7 +421,7 @@ public class UserService {
     <%_ } else { _%>
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
-      <%_ if (!databaseTypeNo && authenticationTypeSession && !reactive) { _%>
+      <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
             removePersistentTokens(user);
       <%_ } _%>
             userRepository.delete(user);
@@ -569,7 +569,7 @@ public class UserService {
             .doOnNext(user -> LOG.debug("Changed password for User: {}", user))
             .then();
     <%_ } else { _%>
-      <%_ if (!databaseTypeNo && authenticationTypeSession && !reactive) { _%>
+      <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
                 removePersistentTokens(user);
       <%_ } _%>
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
@@ -661,7 +661,7 @@ public class UserService {
         });
     }
   <%_ } _%>
-  <%_ if (authenticationTypeSession && !reactive) { _%>
+  <%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 
     /**
      * Removes the remember-me logins of a user whose credentials changed or who can no longer log in.

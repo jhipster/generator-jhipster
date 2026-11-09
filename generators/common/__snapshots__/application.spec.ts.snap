@@ -6,6 +6,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "authenticationTypeOauth2": false,
   "authenticationTypeSession": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": false,
   "defaultAdminPassword": "admin",
   "defaultAdminRoles": [
     "ADMIN",

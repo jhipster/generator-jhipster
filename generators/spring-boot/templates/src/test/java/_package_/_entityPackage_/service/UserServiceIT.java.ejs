@@ -20,13 +20,13 @@ package <%- packageName %>.service;
 
 import <%- packageName %>.IntegrationTest;
 import <%- packageName %>.config.Constants;
-<%_ if (authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 import <%- packageName %>.domain.PersistentToken;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
 import <%- user.entityAbsoluteClass %>;
 <%_ } _%>
-<%_ if (authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 import <%- packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -39,7 +39,7 @@ import <%- packageName %>.repository.UserRepository;
 import <%- packageName %>.security.AuthoritiesConstants;
 <%_ } _%>
 import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
-<%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) || (authenticationTypeSession && !reactive)) { _%>
+<%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) || (authenticationTypeSession && authenticationUsesRememberMe)) { _%>
 
 import tech.jhipster.security.RandomUtil;
 <%_ } _%>
@@ -71,7 +71,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 
-<%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) || (authenticationTypeSession && !reactive)) { _%>
+<%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) || (authenticationTypeSession && authenticationUsesRememberMe)) { _%>
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
@@ -144,7 +144,7 @@ class UserServiceIT {
 <%_ } _%>
     private static final String DEFAULT_LANGKEY = "dummy";
 
-<%_ if (authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
 
@@ -281,7 +281,7 @@ class UserServiceIT {
         assertThat(persistentTokenRepository.findByUser(user)).hasSize(existingCount + 1);
     }
 <%_ } _%>
-<%_ if (authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 
     @Test
   <%_ if (databaseTypeSql) { _%>
@@ -418,7 +418,7 @@ class UserServiceIT {
     }
 
 <%_ } _%>
-<%_ if (authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 
     private void generateUserToken(<%- user.persistClass %> user, String tokenSeries, <%- databaseTypeCassandra ? 'Instant' : 'LocalDate' %> tokenDate) {
         PersistentToken token = new PersistentToken();

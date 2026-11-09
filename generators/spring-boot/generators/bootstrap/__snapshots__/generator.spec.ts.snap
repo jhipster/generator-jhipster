@@ -17,6 +17,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": true,
   "authority": Any<Object>,
   "backendType": "Java",
   "backendTypeJavaAny": true,

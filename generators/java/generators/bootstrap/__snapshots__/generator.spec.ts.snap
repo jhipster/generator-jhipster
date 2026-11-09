@@ -17,6 +17,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": true,
   "authority": Any<Object>,
   "backendType": "Java",
   "backendTypeJavaAny": true,

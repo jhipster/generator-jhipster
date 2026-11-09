@@ -51,6 +51,9 @@ export const mutateApplicationPreparing = {
   cassandraKeyspaceName({ baseName, databaseTypeCassandra }) {
     return databaseTypeCassandra ? baseName.toLowerCase().replace(/[^a-z0-9_]/g, '') : undefined;
   },
+  // Spring WebFlux has no remember-me; else the default of the common application.
+  authenticationUsesRememberMe: ({ reactive, authenticationTypeSession }, { undefinedMarker }) =>
+    reactive && authenticationTypeSession ? false : undefinedMarker,
   // Populated by the data generators
   springDataDescription: undefined,
   springBootBaseRepositoryClass: undefined,
