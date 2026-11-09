@@ -1,0 +1,610 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ const reactiveBlockOrElseNull = reactive ? '.block()' : '.orElse(null)'; _%>
+<%_ const reactiveBlockOrElseThrow = reactive ? '.block()' : '.orElseThrow()'; _%>
+package <%- packageName %>.web.rest;
+
+import <%- packageName %>.IntegrationTest;
+import <%- packageName %>.config.Constants;
+import <%- user.entityAbsoluteClass %>;
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+import <%- packageName %>.repository.AuthorityRepository;
+<%_ } _%>
+import <%- packageName %>.repository.UserRepository;
+import <%- packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.service.UserService;
+import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
+import <%- packageName %>.web.rest.vm.ManagedUserVM;
+
+import tools.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (reactive) { _%>
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
+<%_ } else { _%>
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+<%_ } _%>
+import org.springframework.http.MediaType;
+<%_ if (reactive) { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } else { _%>
+import org.springframework.test.web.servlet.MockMvc;
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
+import java.util.*;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (reactive) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
+  <%_ } _%>
+<%_ } else { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+  <%_ } _%>
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultHandlers.exportTestSecurityContext;
+<%_ } _%>
+
+/**
+ * Integration tests for the {@link RegistrationResource} REST controller.
+ */
+<%_ if (reactive) { _%>
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
+<%_ } else { _%>
+@AutoConfigureMockMvc
+<%_ } _%>
+@IntegrationTest
+class RegistrationResourceIT {
+
+    @Autowired
+    private ObjectMapper om;
+
+    @Autowired
+    private UserRepository userRepository;
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
+<%_ } _%>
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+<%_ if (reactive) { _%>
+    private WebTestClient accountWebTestClient;
+<%_ } else { _%>
+    private MockMvc restAccountMockMvc;
+<%_ } _%>
+
+<%_ if (!databaseTypeCassandra) { _%>
+    private Long numberOfUsers;
+
+    @BeforeEach
+    void countUsers() {
+        numberOfUsers = userRepository.count()<%- reactorBlock %>;
+    }
+
+<%_ } _%>
+<%_ if (reactive && authenticationUsesCsrf) { _%>
+    @BeforeEach
+    void setupCsrf() {
+        accountWebTestClient = accountWebTestClient.mutateWith(csrf());
+    }
+
+<%_ } _%>
+<%_ if (!databaseTypeCassandra) { _%>
+    @AfterEach
+    void checkUsers() {
+        assertThat(userRepository.count()<%- reactorBlock %>).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
+    }
+
+<%_ } _%>
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void testRegisterValid() throws Exception {
+        ManagedUserVM validUser = new ManagedUserVM();
+        validUser.setLogin("test-register-valid");
+        validUser.setPassword("password");
+        validUser.setFirstName("Alice");
+        validUser.setLastName("Test");
+        validUser.setEmail("test-register-valid@example.com");
+<%_ if (user.hasImageField) { _%>
+        validUser.setImageUrl("https://placehold.co/50x50");
+<%_ } _%>
+        validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        validUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
+        assertThat(userRepository.findOneByLogin("test-register-valid")<%- reactive ? '.blockOptional()' : '' %>).isEmpty();
+
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(validUser))
+            .exchange()
+            .expectStatus()
+            .isCreated();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(validUser))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+            .andExpect(status().isCreated());
+<%_ } _%>
+
+        assertThat(userRepository.findOneByLogin("test-register-valid")<%- reactive ? '.blockOptional()' : '' %>).isPresent();
+
+        userService.deleteUser("test-register-valid")<%- reactorBlock %>;
+    }
+
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void testRegisterInvalidLogin() throws Exception {
+        ManagedUserVM invalidUser = new ManagedUserVM();
+        invalidUser.setLogin("funky-log(n"); // <-- invalid
+        invalidUser.setPassword("password");
+        invalidUser.setFirstName("Funky");
+        invalidUser.setLastName("One");
+        invalidUser.setEmail("funky@example.com");
+        invalidUser.setActivated(true);
+<%_ if (user.hasImageField) { _%>
+        invalidUser.setImageUrl("https://placehold.co/50x50");
+<%_ } _%>
+        invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        invalidUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
+
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(invalidUser))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+  <%_ if (databaseTypeCouchbase) { _%>
+            .andDo(exportTestSecurityContext())
+  <%_ } _%>
+            .andExpect(status().isBadRequest());
+<%_ } _%>
+
+        Optional<<%- user.persistClass %>> user = userRepository.findOneByEmailIgnoreCase("funky@example.com")<%- reactive ? '.blockOptional()' : '' %>;
+        assertThat(user).isEmpty();
+    }
+
+    static Stream<ManagedUserVM> invalidUsers() {
+        return Stream.of(
+            createInvalidUser("bob", "password", "Bob", "Green", "invalid", true), // <-- invalid
+            createInvalidUser("bob", "123", "Bob", "Green", "bob@example.com", true), // password with only 3 digits
+            createInvalidUser("bob", null, "Bob", "Green", "bob@example.com", true) // invalid null password
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidUsers")
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void testRegisterInvalidUsers(ManagedUserVM invalidUser) throws Exception {
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(invalidUser))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+            .andExpect(status().isBadRequest());
+<%_ } _%>
+
+        Optional<<%- user.persistClass %>> user = userRepository.findOneByLogin("bob")<%- reactive ? '.blockOptional()' : '' %>;
+        assertThat(user).isEmpty();
+    }
+
+    private static ManagedUserVM createInvalidUser(
+        String login,
+        String password,
+        String firstName,
+        String lastName,
+        String email,
+        boolean activated
+    ) {
+        ManagedUserVM invalidUser = new ManagedUserVM();
+        invalidUser.setLogin(login);
+        invalidUser.setPassword(password);
+        invalidUser.setFirstName(firstName);
+        invalidUser.setLastName(lastName);
+        invalidUser.setEmail(email);
+        invalidUser.setActivated(activated);
+<%_ if (user.hasImageField) { _%>
+        invalidUser.setImageUrl("https://placehold.co/50x50");
+<%_ } _%>
+        invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        invalidUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
+        return invalidUser;
+    }
+
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void testRegisterDuplicateLogin() throws Exception {
+        // First registration
+        ManagedUserVM firstUser = new ManagedUserVM();
+        firstUser.setLogin("alice");
+        firstUser.setPassword("password");
+        firstUser.setFirstName("Alice");
+        firstUser.setLastName("Something");
+        firstUser.setEmail("alice@example.com");
+<%_ if (user.hasImageField) { _%>
+        firstUser.setImageUrl("https://placehold.co/50x50");
+<%_ } _%>
+        firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        firstUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
+
+        // Duplicate login, different email
+        ManagedUserVM secondUser = new ManagedUserVM();
+        secondUser.setLogin(firstUser.getLogin());
+        secondUser.setPassword(firstUser.getPassword());
+        secondUser.setFirstName(firstUser.getFirstName());
+        secondUser.setLastName(firstUser.getLastName());
+        secondUser.setEmail("alice2@example.com");
+<%_ if (user.hasImageField) { _%>
+        secondUser.setImageUrl(firstUser.getImageUrl());
+<%_ } _%>
+        secondUser.setLangKey(firstUser.getLangKey());
+<%_ if (generateSpringAuditor) { _%>
+        secondUser.setCreatedBy(firstUser.getCreatedBy());
+        secondUser.setCreatedDate(firstUser.getCreatedDate());
+        secondUser.setLastModifiedBy(firstUser.getLastModifiedBy());
+        secondUser.setLastModifiedDate(firstUser.getLastModifiedDate());
+<%_ } _%>
+        secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
+
+        // First user
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(firstUser))
+            .exchange()
+            .expectStatus()
+            .isCreated();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(firstUser))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+            .andExpect(status().isCreated());
+<%_ } _%>
+
+        // Second (non activated) user
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(secondUser))
+            .exchange()
+            .expectStatus()
+            .isCreated();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+  <%_ if (databaseTypeCouchbase) { _%>
+            .andDo(exportTestSecurityContext())
+  <%_ } _%>
+            .andExpect(status().isCreated());
+<%_ } _%>
+
+        Optional<<%- user.persistClass %>> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com")<%- reactive ? '.blockOptional()' : '' %>;
+        assertThat(testUser).isPresent();
+        testUser.orElseThrow().setActivated(true);
+        userRepository.save(testUser.orElseThrow())<%- reactive ? '.block()' : '' %>;
+
+        // Second (already activated) user
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(secondUser))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+            .andExpect(status().is4xxClientError());
+<%_ } _%>
+
+        userService.deleteUser("alice")<%- reactorBlock %>;
+    }
+
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void testRegisterDuplicateEmail() throws Exception {
+        // First user
+        ManagedUserVM firstUser = new ManagedUserVM();
+        firstUser.setLogin("test-register-duplicate-email");
+        firstUser.setPassword("password");
+        firstUser.setFirstName("Alice");
+        firstUser.setLastName("Test");
+        firstUser.setEmail("test-register-duplicate-email@example.com");
+<%_ if (user.hasImageField) { _%>
+        firstUser.setImageUrl("https://placehold.co/50x50");
+<%_ } _%>
+        firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        firstUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
+
+        // Register first user
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(firstUser))
+            .exchange()
+            .expectStatus()
+            .isCreated();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(firstUser))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+            .andExpect(status().isCreated());
+<%_ } _%>
+
+        Optional<<%- user.persistClass %>> testUser1 = userRepository.findOneByLogin("test-register-duplicate-email")<%- reactive ? '.blockOptional()' : '' %>;
+        assertThat(testUser1).isPresent();
+
+        // Duplicate email, different login
+        ManagedUserVM secondUser = new ManagedUserVM();
+        secondUser.setLogin("test-register-duplicate-email-2");
+        secondUser.setPassword(firstUser.getPassword());
+        secondUser.setFirstName(firstUser.getFirstName());
+        secondUser.setLastName(firstUser.getLastName());
+        secondUser.setEmail(firstUser.getEmail());
+<%_ if (user.hasImageField) { _%>
+        secondUser.setImageUrl(firstUser.getImageUrl());
+<%_ } _%>
+        secondUser.setLangKey(firstUser.getLangKey());
+        secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
+
+        // Register second (non activated) user
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(secondUser))
+            .exchange()
+            .expectStatus()
+            .isCreated();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+            .andExpect(status().isCreated());
+<%_ } _%>
+
+        Optional<<%- user.persistClass %>> testUser2 = userRepository.findOneByLogin("test-register-duplicate-email")<%- reactive ? '.blockOptional()' : '' %>;
+        assertThat(testUser2).isEmpty();
+
+        Optional<<%- user.persistClass %>> testUser3 = userRepository.findOneByLogin("test-register-duplicate-email-2")<%- reactive ? '.blockOptional()' : '' %>;
+        assertThat(testUser3).isPresent();
+
+        // Duplicate email - with uppercase email address
+        ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM();
+        userWithUpperCaseEmail.setId(firstUser.getId());
+        userWithUpperCaseEmail.setLogin("test-register-duplicate-email-3");
+        userWithUpperCaseEmail.setPassword(firstUser.getPassword());
+        userWithUpperCaseEmail.setFirstName(firstUser.getFirstName());
+        userWithUpperCaseEmail.setLastName(firstUser.getLastName());
+        userWithUpperCaseEmail.setEmail("TEST-register-duplicate-email@example.com");
+<%_ if (user.hasImageField) { _%>
+        userWithUpperCaseEmail.setImageUrl(firstUser.getImageUrl());
+<%_ } _%>
+        userWithUpperCaseEmail.setLangKey(firstUser.getLangKey());
+        userWithUpperCaseEmail.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
+
+        // Register third (not activated) user
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(userWithUpperCaseEmail))
+            .exchange()
+            .expectStatus()
+            .isCreated();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(userWithUpperCaseEmail))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+            .andExpect(status().isCreated());
+<%_ } _%>
+
+        Optional<<%- user.persistClass %>> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3")<%- reactive ? '.blockOptional()' : '' %>;
+        assertThat(testUser4).isPresent();
+        assertThat(testUser4.orElseThrow().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
+
+        testUser4.orElseThrow().setActivated(true);
+        userService.updateUser((new <%- user.adminUserDto %>(testUser4.orElseThrow())))<%- reactive ? '.block()' : '' %>;
+
+        // Register 4th (already activated) user
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(secondUser))
+            .exchange()
+            .expectStatus()
+            .is4xxClientError();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+            .andExpect(status().is4xxClientError());
+<%_ } _%>
+
+        userService.deleteUser("test-register-duplicate-email-3")<%- reactorBlock %>;
+    }
+
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void testRegisterAdminIsIgnored() throws Exception {
+        ManagedUserVM validUser = new ManagedUserVM();
+        validUser.setLogin("badguy");
+        validUser.setPassword("password");
+        validUser.setFirstName("Bad");
+        validUser.setLastName("Guy");
+        validUser.setEmail("badguy@example.com");
+        validUser.setActivated(true);
+<%_ if (user.hasImageField) { _%>
+        validUser.setImageUrl("https://placehold.co/50x50");
+<%_ } _%>
+        validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        validUser.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
+
+<%_ if (reactive) { _%>
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(validUser))
+            .exchange()
+            .expectStatus()
+            .isCreated();
+<%_ } else { _%>
+        restAccountMockMvc.perform(
+            post("/api/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(validUser))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+            .andExpect(status().isCreated());
+<%_ } _%>
+
+        Optional<<%- user.persistClass %>> userDup = userRepository.findOne<%- databaseTypeSql ? 'WithAuthorities' : '' %>ByLogin("badguy")<%- reactive ? '.blockOptional()' : '' %>;
+        assertThat(userDup).isPresent();
+        assertThat(userDup.orElseThrow().getAuthorities())
+            .hasSize(1)
+            .containsExactly(<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>authorityRepository.findById(AuthoritiesConstants.USER)<%- reactiveBlockOrElseThrow %><% } %><%- databaseTypeCassandra || databaseTypeCouchbase ? 'AuthoritiesConstants.USER' : '' %>);
+
+        userService.deleteUser("badguy")<%- reactorBlock %>;
+    }
+
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void testActivateAccount()<%- reactive ? '' : ' throws Exception' %> {
+        final String activationKey = "some activation key";
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
+<%_ if (databaseTypeCassandra) { _%>
+        user.setId(UUID.randomUUID().toString());
+<%_ } _%>
+        user.setLogin("activate-account");
+        user.setEmail("activate-account@example.com");
+        user.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+<%_ if (databaseTypeSql && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM);
+<%_ } _%>
+
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
+
+<%_ if (reactive) { _%>
+        accountWebTestClient.get().uri("/api/activate?key={activationKey}", activationKey).exchange().expectStatus().isOk();
+<%_ } else { _%>
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}", activationKey)).andExpect(status().isOk());
+<%_ } _%>
+
+        user = userRepository.findOneByLogin(user.getLogin())<%- reactiveBlockOrElseNull %>;
+        assertThat(user.isActivated()).isTrue();
+
+        userService.deleteUser("activate-account")<%- reactorBlock %>;
+    }
+
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void testActivateAccountWithWrongKey() <%- reactive ? '' : 'throws Exception ' %>{
+<%_ if (reactive) { _%>
+        accountWebTestClient.get().uri("/api/activate?key=wrongActivationKey").exchange().expectStatus().isBadRequest();
+<%_ } else { _%>
+        restAccountMockMvc.perform(get("/api/activate?key=wrongActivationKey")).andExpect(status().isBadRequest());
+<%_ } _%>
+    }
+
+}

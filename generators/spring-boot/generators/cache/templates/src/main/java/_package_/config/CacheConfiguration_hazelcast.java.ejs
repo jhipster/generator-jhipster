@@ -120,7 +120,8 @@ public class CacheConfiguration {
                     LOG.debug("Adding Hazelcast (dev) cluster member {}", clusterMember);
                     config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
                 }
-            } else { // Production configuration, one host per instance all using port 5701
+            } else {
+                // Production configuration, one host per instance all using port 5701
                 config.getNetworkConfig().setPort(5701);
                 config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
                 for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {

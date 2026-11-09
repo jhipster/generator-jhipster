@@ -75,11 +75,13 @@ public class LoggingAspect {
     /**
      * Pointcut that matches all Spring beans in the application's main packages.
      */
-    @Pointcut("""
+    @Pointcut(
+        """
         within(<%- packageName %>.repository..*)
         || within(<%- packageName %>.service..*)
         || within(<%- packageName %>.web.rest..*)
-        """)
+        """
+    )
     public void applicationPackagePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advice methods.
     }

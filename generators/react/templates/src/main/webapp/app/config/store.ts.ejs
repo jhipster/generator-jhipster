@@ -17,24 +17,27 @@
  limitations under the License.
 -%>
 import {
-  UnknownAction,
-  configureStore,
-  ThunkAction,
 <%_ if (microfrontend || applicationTypeGateway) { _%>
   Action,
-  Store,
   Reducer,
   ReducersMapObject,
+  Store,
+<%_ } _%>
+  ThunkAction,
+  UnknownAction,
+<%_ if (microfrontend || applicationTypeGateway) { _%>
   combineReducers,
 <%_ } _%>
+  configureStore,
 } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 import sharedReducers from 'app/shared/reducers';
+
 import errorMiddleware from './error-middleware';
 import loadingBarMiddleware from './loading-bar-middleware';
-import notificationMiddleware from './notification-middleware';
 import loggerMiddleware from './logger-middleware';
+import notificationMiddleware from './notification-middleware';
 <%_ if (communicationSpringWebsocket) { _%>
 import websocketMiddleware from './websocket-middleware';
 <%_ } _%>

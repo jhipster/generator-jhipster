@@ -68,7 +68,10 @@ public class GatewayResource {
             String predicate = route.getPredicate().toString();
             String path = predicate.substring(predicate.indexOf("[") + 1, predicate.indexOf("]"));
             routeVM.setPath(path);
-            String serviceId = route.getId().substring(route.getId().indexOf("_") + 1).toLowerCase();
+            String serviceId = route
+                .getId()
+                .substring(route.getId().indexOf("_") + 1)
+                .toLowerCase();
             routeVM.setServiceId(serviceId);
             // Exclude gateway app from routes
             if (!serviceId.equalsIgnoreCase(appName)) {

@@ -17,10 +17,14 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { signal, WritableSignal } from '@angular/core';
+import { WritableSignal, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 <%_ if (enableTranslation) { _%>
-import { TranslateService, MissingTranslationHandler, provideTranslateService } from '@ngx-translate/core';
+import { MissingTranslationHandler, TranslateService, provideTranslateService } from '@ngx-translate/core';
+<%_ } _%>
+
+<%_ if (enableTranslation) { _%>
 import { missingTranslationHandler } from 'app/config';
 <%_ } _%>
 

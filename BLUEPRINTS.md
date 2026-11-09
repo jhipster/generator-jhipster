@@ -68,9 +68,9 @@ For this reason try to _avoid exact version at blueprint dependencies_ and disab
 
 - `entity-*` generators were dropped and the replacements are entity's specific priorities at the technology specific generator (server, angular, spring-data-relational, ...).
   Motivation can be found at https://github.com/jhipster/generator-jhipster/blob/main/rfcs/4-jhipster-rfc-entity-as-core.md.
-- priorities names are static constants at the generator class.
+- priority names are static constants at the generator class.
   `get initializing() {}` -> `get [Generator.INITIALIZING]() {}`
   Motivation can be found at https://github.com/jhipster/generator-jhipster/blob/main/rfcs/3-jhipster-rfc-unambiguous-priorities.md.
-- many property migration can be warned by enabling `jhipster7Migration` feature at the constructor.
+- many property migrations can be reported as warnings by enabling `jhipster7Migration` feature at the constructor.
 - needles are not implemented in the generator base anymore.
   They are injected at source object provided at some priorities and used like https://github.com/jhipster/generator-jhipster/blob/6373c9c76e57d01c4c1451a276f0d78bfbdd2c42/generators/spring-cache/generator.mts#L97-L101

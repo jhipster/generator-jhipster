@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing with byte fields should create fake data file with required content 1`] = `
+exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing with byte fields should create fake data file with required content - snapshot 1`] = `
 {
   "src/main/resources/config/liquibase/fake-data/20200101000100_entity_smarty.csv": {
     "contents": "id;name;price;description;picture;picture_content_type;specification;specification_content_type;category;inventory
@@ -40,7 +40,7 @@ exports[`generator - app - --incremental-changelog entities with/without byte fi
 }
 `;
 
-exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing without byte fields should create fake data file with required content 1`] = `
+exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing without byte fields should create fake data file with required content - snapshot 1`] = `
 {
   "src/main/resources/config/liquibase/fake-data/20200101000100_entity_smarty.csv": {
     "contents": "id;name;age;height;income;expense;savings;category;happy;dob;exact_time;travel_time;moment
@@ -421,6 +421,10 @@ exports[`generator - app - --incremental-changelog when adding a field with cons
         Added the field constraints for entity Customer.
     -->
     <changeSet id="20200102000100-fields-constraints" author="jhipster">
+        <!-- The existing rows need a value for the required columns added, filled by a changelog before this one -->
+        <preConditions onFail="HALT" onFailMessage="Fill foo of the existing rows of customer before adding their not null constraints">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM customer WHERE foo IS NULL</sqlCheck>
+        </preConditions>
         <addNotNullConstraint tableName="customer"
             columnName="foo"
             columnDataType="varchar(255)"/>

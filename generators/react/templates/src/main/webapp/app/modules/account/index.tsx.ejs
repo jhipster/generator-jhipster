@@ -20,11 +20,11 @@ import { Route } from 'react-router';
 
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
-import Settings from './settings/settings';
 import Password from './password/password';
 <%_ if (authenticationTypeSession) { _%>
 import Sessions from './sessions/sessions';
 <%_ } _%>
+import Settings from './settings/settings';
 
 const AccountRoutes = () => (
   <div>

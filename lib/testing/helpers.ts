@@ -19,7 +19,7 @@
 
 import assert from 'node:assert';
 import { randomInt } from 'node:crypto';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, extname, isAbsolute, join, relative } from 'node:path';
 import { mock } from 'node:test';
@@ -47,12 +47,13 @@ import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../gen
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
-import { getPackageRoot } from '../index.ts';
+import { getPackageRoot, packageJson } from '../index.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
 import { getJHipsterStore } from '../resolver/lookups.ts';
 import type { ApplicationAll } from '../types/application-all.ts';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.ts';
+import { normalizeBlueprintName } from '../utils/blueprint-name.ts';
 import getGenerator from '../utils/get-generator.ts';
 import {
   createDelayedMutationContext,
@@ -61,6 +62,7 @@ import {
   normalizePath,
   normalizePathEnd,
 } from '../utils/index.ts';
+import { packageNameToNamespace } from '../utils/namespace.ts';
 import { snakeCase } from '../utils/string-utils.ts';
 
 type WithJHipsterGenerators = {
@@ -132,7 +134,12 @@ const allGenerators: (keyof GeneratorsByNamespace)[] = lookupGeneratorsWithNames
   .map(gen => `jhipster:${gen.namespace}`)
   .sort() as (keyof GeneratorsByNamespace)[];
 const filterBootstrapGenerators = (gen: keyof GeneratorsByNamespace): boolean =>
-  !gen.startsWith('jhipster:bootstrap-') && !gen.endsWith(':bootstrap') && gen !== 'jhipster:project-name';
+  !gen.startsWith('jhipster:bootstrap-') &&
+  !gen.endsWith(':bootstrap') &&
+  // A generator whose name ends in `-bootstrap` prepares the application, like one whose namespace is `:bootstrap`: a
+  // mock of it drops the properties every generator composing it reads, and the failure surfaces far from its cause.
+  !gen.endsWith('-bootstrap') &&
+  gen !== 'jhipster:project-name';
 const composedGeneratorsToCheck = allGenerators
   .filter(filterBootstrapGenerators)
   .filter(gen => !['jhipster:bootstrap', 'jhipster:project-name'].includes(gen));
@@ -310,7 +317,21 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
   }
 
   /**
-   * Use configured default blueprint.
+   * Runs with the blueprint configured by `defineDefaults`, from its package at `blueprintPackagePath` instead of an installed one.
+   *
+   * The generators of the package are registered (lookup) and the blueprint is passed as the `blueprint` option, so JHipster
+   * composes with them as it does with an installed blueprint.
+   *
+   * JHipster looks the generators of a blueprint up by the namespace of the blueprint name: `jhipster-foo:app` for the
+   * blueprint `generator-jhipster-foo`. Yeoman registers the generators of the package by the namespace of the name of its
+   * package.json. Both are the same for a checkout of the blueprint itself, but not for a checkout published under another
+   * name, like `@scope/jhipster-foo`, whose generators Yeoman registers as `@scope/jhipster-foo:app`.
+   * In that case the namespaces of the package are renamed to the ones of the blueprint: `@scope/jhipster-foo:app` is
+   * registered as `jhipster-foo:app`.
+   *
+   * @example
+   * await defineDefaults({ blueprint: 'generator-jhipster-foo', blueprintPackagePath: process.cwd() });
+   * await helpers.runJHipster('app').withConfiguredBlueprint();
    */
   withConfiguredBlueprint(): this {
     const { blueprint, blueprintPackagePath, entrypointGenerator } = helpersDefaults;
@@ -321,9 +342,22 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
       this.withOptions({ entrypointGenerator });
     }
 
+    // The namespace Yeoman registers the generators of the package with, like `@scope/jhipster-foo`.
+    const packageName: string | undefined = JSON.parse(readFileSync(join(blueprintPackagePath, 'package.json'), 'utf8')).name;
+    const packageNamespace = packageName ? packageNameToNamespace(packageName) : undefined;
+    // The namespace JHipster looks the generators of the blueprint up with, like `jhipster-foo`.
+    const blueprintNamespace = packageNameToNamespace(normalizeBlueprintName(blueprint));
+    // When they differ, `@scope/jhipster-foo:<generator>` is registered as `jhipster-foo:<generator>`, other namespaces unchanged.
+    const customizeNamespace =
+      packageNamespace && packageNamespace !== blueprintNamespace ?
+        (namespace?: string) =>
+          namespace?.startsWith(`${packageNamespace}:`) ? `${blueprintNamespace}${namespace.slice(packageNamespace.length)}` : namespace
+      : undefined;
+
     return this.withLookups([
       {
         packagePaths: [blueprintPackagePath],
+        ...(customizeNamespace ? { customizeNamespace } : {}),
       },
     ]).withOptions({
       blueprint: [blueprint],
@@ -707,7 +741,7 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
 
       rootGeneratorName(): string {
         // Force fromBlueprint to be false.
-        return 'generator-jhipster';
+        return packageJson.name;
       }
 
       get [BaseGenerator.INITIALIZING]() {
@@ -746,11 +780,11 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
     });
   }
 
-  async createEnv({ jhipsterStore, ...options }: JHipsterEnvironmentOptions): Promise<Environment> {
+  createEnv({ jhipsterStore, ...options }: JHipsterEnvironmentOptions): Promise<Environment> {
     // Only the generators of the test, unless it asks for the jhipster ones. The environment works on a clone of the
     // store: the environment options are passed on to the next run of a run result, the generators a run registers are not.
     const store = getJHipsterStore({ empty: !jhipsterStore });
-    return EnvironmentBuilder.create({ store, ...options }).getEnvironment();
+    return Promise.resolve(EnvironmentBuilder.create({ store, ...options }).getEnvironment());
   }
 }
 

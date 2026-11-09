@@ -69,8 +69,7 @@ public class JacksonNativeConfiguration {
         }
 
         @Override
-        public void serializeAsProperty(Object pojo, JsonGenerator gen, SerializationContext ctxt, PropertyWriter writer)
-            throws Exception {
+        public void serializeAsProperty(Object pojo, JsonGenerator gen, SerializationContext ctxt, PropertyWriter writer) throws Exception {
             var initialized = isPropertyInitialized((BeanPropertyWriter) writer, pojo);
             if (initialized) {
                 writer.serializeAsProperty(pojo, gen, ctxt);

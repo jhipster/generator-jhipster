@@ -61,9 +61,6 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should set the client theme variant option to undefined', () => {
         expect(options.clientThemeVariant).toBeUndefined();
       });
-      it('should set withAdminUI option to true', () => {
-        expect(options.withAdminUi).toBe(true);
-      });
     });
     describe('when passing a custom client theme and no variant', () => {
       let clientThemeVariantOption: string | undefined;
@@ -140,9 +137,6 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
       it('should set the client theme variant option to undefined', () => {
         expect(options.clientThemeVariant).toBeUndefined();
-      });
-      it('should set the withAdminUi option to true', () => {
-        expect(options.withAdminUi).toBe(true);
       });
       it('should set the service discovery type to consul', () => {
         expect(options.serviceDiscoveryType).toBe('consul');
@@ -240,9 +234,6 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should unset the client theme variant option', () => {
         expect(options.clientThemeVariant).toBeUndefined();
       });
-      it('should unset the withAdminUi option', () => {
-        expect(options.withAdminUi).toBe(false);
-      });
       it('should unset the server skipping option', () => {
         expect(options.skipServer).toBeUndefined();
       });
@@ -289,9 +280,6 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
       it('should remove the client theme variant option', () => {
         expect(options.clientThemeVariant).toBe('dark');
-      });
-      it('should remove the withAdminUi option', () => {
-        expect(options.withAdminUi).toBe(false);
       });
       it('should not remove the server skipping option', () => {
         expect(options.skipServer).toBeDefined();

@@ -1,0 +1,56 @@
+<template>
+  <div>
+    <div class="row">
+      <div class="col-md-4">
+        <span class="hipster img-fluid rounded"></span>
+      </div>
+      <div class="col-md-8">
+        <h1>{{ t$('error.title') }}</h1>
+
+        <div v-if="errorMessage">
+          <div class="alert alert-danger">{{ errorMessage }}</div>
+        </div>
+        <div v-if="error403" class="alert alert-danger">{{ t$('error.http.403') }}</div>
+        <div v-if="error404" class="alert alert-danger">{{ t$('error.http.404') }}</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { inject, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { <%- authenticationTypeOauth2 ? '' : 'useRouter, ' %>useRoute } from 'vue-router';
+
+<%_ if (authenticationTypeOauth2) { _%>
+import { loginServiceKey } from '@/account/login.service';
+<%_ } _%>
+import { authenticatedKey } from '@/config/injection-keys';
+
+defineOptions({ name: 'Error' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+const { login } = inject(loginServiceKey)!;
+<%_ } else { _%>
+const router = useRouter();
+<%_ } _%>
+const authenticated = inject(authenticatedKey)!;
+const errorMessage = ref<string | null>(null);
+const error403 = ref<boolean>(false);
+const error404 = ref<boolean>(false);
+const route = useRoute();
+
+if (route.meta) {
+  errorMessage.value = route.meta.errorMessage ?? null;
+  error403.value = route.meta.error403 ?? false;
+  error404.value = route.meta.error404 ?? false;
+  if (!authenticated.value && error403.value) {
+    <%- authenticationTypeOauth2 ? 'login()' : "router.push('/login')" %>;
+  }
+}
+</script>

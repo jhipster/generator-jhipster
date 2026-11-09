@@ -24,8 +24,10 @@ import { githubSamplesGroupFolder } from '../../constants.ts';
 import { samplesGroups } from './samples-groups.ts';
 
 describe('samples-groups', () => {
-  it('should list every samples group of the folder', async () => {
-    expect(Object.keys(samplesGroups).sort()).toEqual((await getGithubSamplesGroups(githubSamplesGroupFolder)).sort());
+  it('should give every samples group of the folder, the ones getGithubSamplesGroups reads', async () => {
+    const groups = await getGithubSamplesGroups(githubSamplesGroupFolder);
+    expect(groups.length).toBeGreaterThan(0);
+    expect(Object.keys(samplesGroups).sort()).toEqual(groups.sort());
   });
 
   it('should give the samples getGithubSamplesGroup reads', async () => {

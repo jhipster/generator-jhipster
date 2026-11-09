@@ -19,6 +19,7 @@
 import type { ESLint } from 'eslint';
 
 import noUnregisteredTaskGroup from './rules/no-unregistered-task-group.ts';
+import snapshotTestName from './rules/snapshot-test-name.ts';
 import taskGroupOrder from './rules/task-group-order.ts';
 
 /**
@@ -27,6 +28,7 @@ import taskGroupOrder from './rules/task-group-order.ts';
 const plugin: ESLint.Plugin = {
   rules: {
     'no-unregistered-task-group': noUnregisteredTaskGroup,
+    'snapshot-test-name': snapshotTestName,
     'task-group-order': taskGroupOrder,
   },
 };

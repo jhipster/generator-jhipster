@@ -139,7 +139,7 @@ This structure allows for a clear organization of feature-specific files, with e
 
 **commands.d.ts**: This file defines the CLI commands that the feature generator will provide. It includes the command names, descriptions, configuration storage, and any parameters required for each command.
 
-**files.ts**: This file contains the file templates and their associated metadata that the feature generator will use to generate files in the target application. It includes the file names, templates, and any parameters required for each file. **RULE**: the list of file to generate should have contextual information (application, entities, etc.) injected in the file data and never use the generator as a context.
+**files.ts**: This file contains the file templates and their associated metadata that the feature generator will use to generate files in the target application. It includes the file names, templates, and any parameters required for each file. **RULE**: the list of files to generate should have contextual information (application, entities, etc.) injected in the file data and never use the generator as a context.
 
 **resources/**: This directory contains any static resources required by the feature generator, such as configuration files, images, or other assets. These resources can be used by the generator during the generation process.
 
@@ -149,7 +149,7 @@ This structure allows for a clear organization of feature-specific files, with e
 
 - It additionally contains the phase methods that will be executed in the generation process (i.e. `preparing`, `writing`, `post-processing`).
 - It does not need to load the contextual objects (application, entities, etc.) as they are already loaded by the base generator.
-- It can use the upstream base and feature generator's support methods and functions directly (i.e. `this.write()`) without the need to call `support/anysupport`. This will ease the refactoring of the `support`and `mutation` files, methods and functions in the future because it will not be necessary to change the import paths in the downstream feature generators.
+- It can use the upstream base and feature generator's support methods and functions directly (i.e. `this.write()`) without the need to call `support/anysupport`. This will ease the refactoring of the `support` and `mutation` files, methods and functions in the future because it will not be necessary to change the import paths in the downstream feature generators.
 
 ##### PROs
 
@@ -170,7 +170,7 @@ It includes a lot of changes to the current file structure and conventions, whic
 
 [unresolved-questions]: #unresolved-questions
 
-The fine grained implementation details of each file has not been discussed yet, such as:
+The fine grained implementation details of each file have not been discussed yet, such as:
 
 - The amount and granularity of methods in the mutate (by file, by component, etc.) and support files.
 

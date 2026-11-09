@@ -20,54 +20,34 @@
   <div>
     <h2 id="configuration-page-heading" data-cy="configurationPageHeading">{{ t$('configuration.title') }}</h2>
 
-    <div v-if="allConfiguration && configuration">
+    <div>
       <span>{{ t$('configuration.filter') }}</span> <input type="text" v-model="filtered" class="form-control" />
-      <h3>Spring configuration</h3>
-      <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="Configuration">
-        <thead>
-          <tr>
-            <th class="w-40" @click="changeOrder('prefix')" scope="col">
-              <span>{{ t$('configuration.table.prefix') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="prefix"></jhi-sort-indicator>
-            </th>
-            <th class="w-60" @click="changeOrder('properties')" scope="col">
-              <span>{{ t$('configuration.table.properties') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="properties"></jhi-sort-indicator>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="entry in filteredConfiguration" :key="entry.prefix">
-            <td>
-              <span>{{ entry.prefix }}</span>
-            </td>
-            <td>
-              <div class="row" v-for="key in keys(entry.properties)" :key="key">
-                <div class="col-md-4">{{ key }}</div>
-                <div class="col-md-8">
-                  <span class="float-end badge bg-secondary break">{{ entry.properties[key] }}</span>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div v-for="key in keys(allConfiguration)" :key="key">
-        <h4>
-          <span>{{ key }}</span>
-        </h4>
-        <table class="table table-sm table-striped table-bordered table-responsive d-table" aria-describedby="Properties">
+      <div v-for="(section, i) in sections" :key="section.label.text">
+        <h3 :id="'configuration-section-' + i">{{ labelText(section.label) }}</h3>
+        <table class="table table-striped table-bordered table-responsive d-table" :aria-describedby="'configuration-section-' + i">
           <thead>
             <tr>
-              <th class="w-40" scope="col">Property</th>
-              <th class="w-60" scope="col">Value</th>
+              <jhi-sort-header class="w-40" field-name="key" :current-order="orderProp" :reverse="reverse" @sort="changeOrder">
+                <span>{{ labelText(section.columns[0]) }}</span>
+              </jhi-sort-header>
+              <th class="w-60" scope="col">{{ labelText(section.columns[1]) }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item of allConfiguration[key]" :key="item.key">
-              <td class="break">{{ item.key }}</td>
+            <tr v-for="row in section.rows" :key="row.key">
               <td class="break">
-                <span class="float-end badge bg-secondary break">{{ item.val }}</span>
+                <span>{{ row.key }}</span>
+              </td>
+              <td class="break">
+                <template v-if="row.properties">
+                  <div class="row" v-for="property in row.properties" :key="property.key">
+                    <div class="col-md-4">{{ property.key }}</div>
+                    <div class="col-md-8">
+                      <span class="float-end badge bg-secondary break">{{ property.value }}</span>
+                    </div>
+                  </div>
+                </template>
+                <span v-else class="float-end badge bg-secondary break">{{ row.value }}</span>
               </td>
             </tr>
           </tbody>
@@ -77,4 +57,55 @@
   </div>
 </template>
 
-<script lang="ts" src="./configuration.component.ts"></script>
+<script setup lang="ts">
+import { computed, inject, onMounted, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { orderAndFilterBy } from '@/utils';
+import { type ConfigurationSection } from '@/shared/jhipster/configuration.model';
+import { type Label } from '@/shared/jhipster/label';
+
+import ConfigurationService, { configurationServiceKey } from './configuration.service';
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>Configuration' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$, te } = useI18n();
+<%_ } _%>
+const configurationService = inject(configurationServiceKey, () => new ConfigurationService(), true);
+
+<%_ if (enableTranslation) { _%>
+const labelText = ({ text, translationKey }: Label): string => (translationKey && te(translationKey) ? t$(translationKey) : text);
+<%_ } else { _%>
+const labelText = ({ text }: Label): string => text;
+<%_ } _%>
+
+const orderProp = ref('key');
+const reverse = ref(false);
+const allSections = ref<ConfigurationSection[]>([]);
+const filtered = ref('');
+
+const sections = computed(() =>
+  allSections.value.map(section => ({
+    ...section,
+    rows: orderAndFilterBy(section.rows, { filterByTerm: filtered.value, orderByProp: orderProp.value, reverse: reverse.value }),
+  })),
+);
+
+const init = (): void => {
+  configurationService.loadConfiguration().then(res => {
+    allSections.value = res;
+  });
+};
+
+const changeOrder = (prop: string): void => {
+  orderProp.value = prop;
+  reverse.value = !reverse.value;
+};
+
+onMounted(() => {
+  init();
+});
+</script>

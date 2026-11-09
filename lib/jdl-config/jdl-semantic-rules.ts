@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { APPLICATION_TYPE_MICROSERVICE } from '../core/application-types.ts';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../core/application-types.ts';
 import { type JDLApplicationStatement, type JDLSemanticRule, type JDLStatement, getStatements } from '../jdl/core/parsing/index.ts';
 
 export const deploymentType: JDLSemanticRule = {
@@ -88,7 +88,7 @@ export const microfrontendClientFramework: JDLSemanticRule = {
     ast.applications.flatMap(({ config, location }) => {
       const microfrontend = config.microfrontend === true;
       const servesMicrofrontends =
-        config.applicationType === 'gateway' && ((config.microfrontends as string[] | undefined) ?? []).length > 0;
+        config.applicationType === APPLICATION_TYPE_GATEWAY && ((config.microfrontends as string[] | undefined) ?? []).length > 0;
       if ((!microfrontend && !servesMicrofrontends) || (config.clientFramework !== undefined && config.clientFramework !== 'no')) {
         return [];
       }
@@ -113,7 +113,7 @@ export const gatewayMicrofrontendsClientFramework: JDLSemanticRule = {
   check: ast => {
     const applications = new Map(ast.applications.map(application => [application.config.baseName, application]));
     return ast.applications
-      .filter(({ config }) => config.applicationType === 'gateway' && config.clientFramework !== undefined)
+      .filter(({ config }) => config.applicationType === APPLICATION_TYPE_GATEWAY && config.clientFramework !== undefined)
       .flatMap(({ config: gateway }) =>
         ((gateway.microfrontends as string[] | undefined) ?? [])
           .map(baseName => applications.get(baseName)?.config)

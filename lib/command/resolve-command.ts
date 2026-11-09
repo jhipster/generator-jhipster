@@ -20,6 +20,7 @@
 import type { StoreGeneratorMeta } from 'yeoman-environment';
 
 import { requireGeneratorCommand } from '../resolver/generator-command.ts';
+import { JHIPSTER_NAMESPACE_PREFIX } from '../resolver/generator-commands.ts';
 import {
   type GeneratorDependency,
   type ResolveGeneratorDependenciesOptions,
@@ -48,7 +49,7 @@ export const resolveCommand = (
   options: ResolveGeneratorDependenciesOptions,
 ): ResolvedCommand | undefined => {
   const generator = blueprint ? `${packageNameToNamespace(blueprint)}:${command}` : command;
-  const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
+  const namespace = generator.includes(':') ? generator : `${JHIPSTER_NAMESPACE_PREFIX}${generator}`;
   const meta = options.getGeneratorMeta(namespace);
   if (!meta) return undefined;
   const dependencies = resolveCommandDependencies({ command, generator, entrypointGenerator }, options);

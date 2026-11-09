@@ -27,7 +27,7 @@
             </button>
 <%_ if (!readOnly) { _%>
 
-            <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%- entityUrl %>" [routerLink]="['/<%- entityPage %>/new']">
+            <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary" [routerLink]="['/<%- entityPage %>/new']">
                 <fa-icon icon="plus" />
                 <span <%- searchEngineAny ? 'class="hidden-sm-down" ' : '' %>>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createLabel')</span>
             </button>
@@ -72,7 +72,7 @@
     <div class="table-responsive table-entities" id="entities">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortStateChange)="navigateToWithComponentValues($event)">
+                <tr <%- jhiPrefix %>Sort [sortState]="sortState()" (sortStateChange)="sortState.set($event); navigateToWithComponentValues($event)">
 <%_ for (const field of fields.filter(field => !field.hidden && !field.hideListView)) { _%>
   <%_ const { fieldSupportsSortBy } = field; _%>
   <%_ if (builtInUserManagement && field.fieldName === 'activated') { _%>
@@ -228,7 +228,7 @@
                                     [disabled]="!currentAccount() || currentAccount()?.login === <%- entityInstance %>.login"
   <%_ } _%>
                                     data-cy="entityDeleteButton">
-                                <fa-icon icon="times" />
+                                <fa-icon icon="trash" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.delete')</span>
                             </button>
 <%_ } _%>

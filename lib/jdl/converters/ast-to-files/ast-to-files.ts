@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { GENERATOR_JHIPSTER } from '../../../constants/jhipster.ts';
 import { capitalize, customCamelCase, kebabCase, lowerFirst, upperFirst } from '../../../utils/string-utils.ts';
 import { asJdlRelationshipType } from '../../core/basic-types/relationship-types.ts';
 import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.ts';
@@ -39,8 +40,6 @@ import {
 import { formatComment } from '../../core/utils/format-utils.ts';
 
 import { jhipsterCustomizations } from './jhipster-customizations.ts';
-
-const GENERATOR_JHIPSTER = 'generator-jhipster';
 const {
   Validations: { PATTERN, REQUIRED, UNIQUE },
 } = validations;

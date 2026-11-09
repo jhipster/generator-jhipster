@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - generate-sample with daily-builds/ngx-oauth2 (daily-builds sample) should match matrix value 1`] = `
+exports[`generator - generate-sample with daily-builds/ngx-oauth2 (daily-builds sample) should match matrix value snapshot 1`] = `
 {
   ".jhipster/BankAccount.json": {
     "stateCleared": "modified",
@@ -137,7 +137,7 @@ exports[`generator - generate-sample with daily-builds/ngx-oauth2 (daily-builds 
 }
 `;
 
-exports[`generator - generate-sample with ng-default should match matrix value 1`] = `
+exports[`generator - generate-sample with ng-default should match matrix value snapshot 1`] = `
 {
   ".jhipster/BankAccount.json": {
     "stateCleared": "modified",
@@ -274,7 +274,7 @@ exports[`generator - generate-sample with ng-default should match matrix value 1
 }
 `;
 
-exports[`generator - generate-sample with ng-default-additional (star jdl-entity) should match matrix value 1`] = `
+exports[`generator - generate-sample with ng-default-additional (star jdl-entity) should match matrix value snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -306,7 +306,7 @@ exports[`generator - generate-sample with ng-default-additional (star jdl-entity
 }
 `;
 
-exports[`generator - generate-sample with ng-default-additional-playwright (star jdl-entity) should match matrix value 1`] = `
+exports[`generator - generate-sample with ng-default-additional-playwright (star jdl-entity) should match matrix value snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -338,7 +338,7 @@ exports[`generator - generate-sample with ng-default-additional-playwright (star
 }
 `;
 
-exports[`generator - generate-sample with ng-webflux-psql-additional (specific jdl-samples) should match matrix value 1`] = `
+exports[`generator - generate-sample with ng-webflux-psql-additional (specific jdl-samples) should match matrix value snapshot 1`] = `
 {
   "custom-domain.jdl": {
     "stateCleared": "modified",
@@ -349,12 +349,33 @@ exports[`generator - generate-sample with ng-webflux-psql-additional (specific j
 }
 `;
 
-exports[`generator - generate-sample with vue-default-additional (specific jdl-entity) should match matrix value 1`] = `
+exports[`generator - generate-sample with vue-default-additional (specific jdl-entity) should match matrix value snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "01-non-updatable-entity.jdl": {
+    "stateCleared": "modified",
+  },
+  "02-authority-relationship.jdl": {
+    "stateCleared": "modified",
+  },
+  "custom-domain.jdl": {
+    "stateCleared": "modified",
+  },
   "custom-id.jdl": {
+    "stateCleared": "modified",
+  },
+  "cyclic.jdl": {
+    "stateCleared": "modified",
+  },
+  "entities.jdl": {
+    "stateCleared": "modified",
+  },
+  "string-id.jdl": {
+    "stateCleared": "modified",
+  },
+  "user-management.jdl": {
     "stateCleared": "modified",
   },
 }

@@ -111,6 +111,7 @@
               "sourceMap": false,
               "namedChunks": <%- new Boolean(microfrontend) %>,
               "extractLicenses": true,
+              "serviceWorker": "ngsw-config.json",
               "budgets": [
                 {
                   "type": "initial",
@@ -208,6 +209,15 @@
             "buildTarget": "<%- microfrontend ? `${dasherizedBaseName}:esbuild:development` : '::development' %>",
             "runnerConfig": true,
             "coverageReporters": ["text", "lcov"],
+            "coverageThresholds": {
+              "statements": 95,
+              "branches": 95,
+              "functions": 95,
+              "lines": 95
+            },
+<%_ if (enableTranslation) { _%>
+            "coverageExclude": ["<%- clientSrcDir %>i18n/**"],
+<%_ } _%>
             "reporters": [
               "default",
               ["vitest-sonar-reporter", { "outputFile": "./<%- relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-sonar-vitest.xml" }]

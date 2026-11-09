@@ -47,6 +47,56 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({}, generator);
 
+  describe('with a field and a relationship annotated @NotSortable', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        { name: 'Author', changelogDate: '20220129025419', fields: [{ fieldName: 'name', fieldType: 'String' }] },
+        {
+          name: 'Book',
+          changelogDate: '20220129025420',
+          fields: [
+            { fieldName: 'title', fieldType: 'String' },
+            { fieldName: 'secret', fieldType: 'String', options: { notSortable: true } },
+          ],
+          relationships: [
+            {
+              relationshipName: 'author',
+              otherEntityName: 'author',
+              relationshipType: 'many-to-one',
+              relationshipSide: 'left',
+              options: { notSortable: true },
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should mark them @NotSortable in the entity', () => {
+      const book = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Book.java`;
+      runResult.assertFileContent(book, /@NotSortable\s+(?:@[\w.]+(?:\([^)]*\))?\s+)*private String secret;/);
+      runResult.assertFileContent(book, /@NotSortable\s+(?:@[\w.]+(?:\([^)]*\))?\s+)*private Author author;/);
+      runResult.assertNoFileContent(book, /@NotSortable\s+(?:@[\w.]+(?:\([^)]*\))?\s+)*private String title;/);
+    });
+
+    it('should leave an entity without them unchanged', () => {
+      runResult.assertNoFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Author.java`, 'NotSortable');
+    });
+  });
+
+  describe('with graalvm support and an existing cache provider', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ graalvmSupport: true, cacheProvider: 'ehcache' })
+        .withMockedJHipsterGenerators()
+        .withSkipWritingPriorities();
+    });
+
+    it('should compose with the cache generator', () => {
+      expect(runResult.composedMockedGenerators).toContain('jhipster:spring-boot:cache');
+    });
+  });
+
   describe('addTestSpringFactory', () => {
     before(async () => {
       await helpers
@@ -65,7 +115,7 @@ describe(`generator - ${generator}`, () => {
         );
     });
 
-    it('should add a test spring factory', () => {
+    it('should add a test spring factory - snapshot', () => {
       expect(runResult.getSnapshot('**/spring.factories')).toMatchSnapshot();
     });
   });
@@ -122,6 +172,27 @@ describe(`generator - ${generator}`, () => {
 
       it('should write it back as a write once file', () => {
         expect(runResult.memFs.get(join(runResult.cwd, keyStoreFile)).editorMetadata).toMatchObject({ writeOnce: true });
+      });
+    });
+
+    describe('with the KeyStore of a project generated before 9.4.1', () => {
+      const oldKeyStoreFile = 'src/main/resources/config/tls/keystore.p12';
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ skipClient: true, jhipsterVersion: '9.4.0' })
+          .commitFiles()
+          .doInDir(cwd => {
+            mkdirSync(join(cwd, dirname(oldKeyStoreFile)), { recursive: true });
+            writeFileSync(join(cwd, oldKeyStoreFile), 'existing');
+          })
+          .withOptions({ fakeKeytool: false });
+      });
+
+      it('should move it to the new name', () => {
+        runResult.assertFileContent(keyStoreFile, /^existing$/);
+        runResult.assertNoFile(oldKeyStoreFile);
       });
     });
   });
@@ -543,4 +614,33 @@ describe(`generator - ${generator}`, () => {
       runResult.assertNoFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/BarService.java`);
     });
   });
+
+  for (const [buildTool, command] of [
+    ['maven', './mvnw -Pprod clean verify sonar:sonar'],
+    ['gradle', './gradlew -Pprod clean check jacocoTestReport sonar'],
+  ] as const) {
+    describe(`README with ${buildTool}`, () => {
+      before(async () => {
+        await helpers.runJHipster('app').withJHipsterConfig({ buildTool, skipClient: true });
+      });
+
+      it('should run the Sonar analysis with a token', () => {
+        runResult.assertFileContent('README.md', 'export SONAR_TOKEN=<your-token>');
+        runResult.assertFileContent('README.md', `${command}\n`);
+        runResult.assertNoFileContent('README.md', 'sonar.password');
+      });
+    });
+  }
+
+  for (const serviceDiscoveryType of ['no', 'consul'] as const) {
+    describe(`gradle with ${serviceDiscoveryType} service discovery`, () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ buildTool: 'gradle', serviceDiscoveryType, skipClient: true });
+      });
+
+      it('should replace the placeholders in every configuration file - snapshot', () => {
+        expect(runResult.getSnapshot('**/gradle/profile_*.gradle')).toMatchSnapshot();
+      });
+    });
+  }
 });

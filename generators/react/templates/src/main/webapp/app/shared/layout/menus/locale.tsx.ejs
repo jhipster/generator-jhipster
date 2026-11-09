@@ -17,14 +17,16 @@
  limitations under the License.
 -%>
 import { DropdownItem } from 'react-bootstrap';
+
+import { languages, locales } from 'app/config/translation';
+
 import { NavDropdown } from './menu-components';
-import { locales, languages } from 'app/config/translation';
 
 export const LocaleMenu = ({ currentLocale, onClick }: { currentLocale: string; onClick: (locale: string) => void }) =>
   Object.keys(languages).length > 1 && (
-    <NavDropdown icon="flag" name={currentLocale ? languages[currentLocale].name : undefined}>
+    <NavDropdown icon="flag" name={currentLocale ? languages[currentLocale].name : undefined} data-cy="languageMenu">
       {locales.map(locale => (
-        <DropdownItem key={locale} eventKey={locale} onClick={() => onClick(locale)}>
+        <DropdownItem key={locale} eventKey={locale} onClick={() => onClick(locale)} data-cy={`language-${locale}`}>
           {languages[locale].name}
         </DropdownItem>
       ))}

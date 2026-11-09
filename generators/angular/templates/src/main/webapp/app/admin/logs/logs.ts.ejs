@@ -16,7 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { SlicePipe } from '@angular/common';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   finalize,
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
@@ -24,17 +27,16 @@ import {
 <%_ } _%>
 } from 'rxjs';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Level, Log } from 'app/shared/jhipster/logs.model';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
-import { SlicePipe } from '@angular/common';
-import { SortDirective, SortByDirective, sortStateSignal, SortService } from 'app/shared/sort';
-import { Log, LoggersResponse, Level } from './log.model';
-import { LogsService } from './logs.service';
+import { SortByDirective, SortDirective, SortService, sortStateSignal } from 'app/shared/sort';
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
 import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ } _%>
+
+import { LogsService } from './logs.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-logs',
@@ -71,7 +73,7 @@ export default class Logs implements OnInit {
     return data;
   });
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
-  services: string[] = [];
+  readonly services = signal<string[]>([]);
   selectedService: string | undefined = undefined;
 <%_ } _%>
 
@@ -107,8 +109,7 @@ export default class Logs implements OnInit {
         }),
       )
       .subscribe({
-        next: (response: LoggersResponse) =>
-          this.loggers.set(Object.entries(response.loggers).map(([key, logger]) => new Log(key, logger.effectiveLevel))),
+        next: loggers => this.loggers.set(loggers),
         error: () => this.loggers.set([]),
       });
   }
@@ -119,7 +120,7 @@ export default class Logs implements OnInit {
       .findAll()
       .pipe(map(routes => routes.map(route => route.serviceId)))
       .pipe(map(services => services.filter(service => service.endsWith('Service'))))
-      .subscribe(services => (this.services = services));
+      .subscribe(services => this.services.set(services));
   }
 <%_ } _%>
 }

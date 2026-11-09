@@ -58,7 +58,7 @@ MAX = 43`);
         ({ constants } = content);
       });
 
-      it('should parse them', () => {
+      it('should parse them - snapshot', () => {
         expect(constants).toMatchInlineSnapshot(`
 {
   "MAX": "43",
@@ -75,7 +75,7 @@ MAX = 43`);
         ({ constants } = content);
       });
 
-      it('should parse them', () => {
+      it('should parse them - snapshot', () => {
         expect(constants).toMatchInlineSnapshot(`
 {
   "MIN": "42.42",
@@ -93,7 +93,7 @@ MAX = 43`);
         application = content.applications[0];
       });
 
-      it('should parse it', () => {
+      it('should parse it - snapshot', () => {
         expect(application).toMatchInlineSnapshot(`
 {
   "config": {},
@@ -122,7 +122,7 @@ MAX = 43`);
           application = content.applications[0];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(application).toMatchInlineSnapshot(`
 {
   "config": {
@@ -152,7 +152,7 @@ MAX = 43`);
           application = content.applications[0];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(application).toMatchInlineSnapshot(`
 {
   "config": {
@@ -182,7 +182,7 @@ MAX = 43`);
           application = content.applications[0];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(application).toMatchInlineSnapshot(`
 {
   "config": {
@@ -225,7 +225,7 @@ application {
         ({ applications } = content);
       });
 
-      it('should parse them', () => {
+      it('should parse them - snapshot', () => {
         expect(applications).toMatchInlineSnapshot(`
 [
   {
@@ -418,7 +418,7 @@ entity C
         parsedEntity = content.entities[0];
       });
 
-      it('should parse it', () => {
+      it('should parse it - snapshot', () => {
         expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
@@ -438,7 +438,7 @@ entity C
         parsedEntity = content.entities[0];
       });
 
-      it('should parse it', () => {
+      it('should parse it - snapshot', () => {
         expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
@@ -492,7 +492,7 @@ entity A`);
         parsedEntity = content.entities[0];
       });
 
-      it('should parse it', () => {
+      it('should parse it - snapshot', () => {
         expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [
@@ -553,7 +553,7 @@ entity A`);
           parsedEntity = content.entities[0];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
@@ -577,7 +577,7 @@ entity A`);
           parsedEntity = content.entities[0];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
@@ -607,7 +607,7 @@ entity A`);
           parsedEntity = content.entities[0];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [
@@ -654,7 +654,7 @@ entity A`);
             parsedEntity = content.entities[0];
           });
 
-          it('should parse it', () => {
+          it('should parse it - snapshot', () => {
             expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
@@ -1078,7 +1078,7 @@ entity A {
         parsedEnum = content.enums[0];
       });
 
-      it('should parse them', () => {
+      it('should parse them - snapshot', () => {
         expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
@@ -1112,7 +1112,7 @@ entity A {
         parsedEnum = content.enums[0];
       });
 
-      it('should parse them', () => {
+      it('should parse them - snapshot', () => {
         expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
@@ -1151,7 +1151,7 @@ entity A {
         parsedEnum = content.enums[0];
       });
 
-      it('should parse it', () => {
+      it('should parse it - snapshot', () => {
         expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
@@ -1192,7 +1192,7 @@ entity A {
         parsedEnum = content.enums[0];
       });
 
-      it('should parse it', () => {
+      it('should parse it - snapshot', () => {
         expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": "country enum",
@@ -1247,7 +1247,7 @@ entity A {
         parsedEnum = content.enums[0];
       });
 
-      it('should parse it', () => {
+      it('should parse it - snapshot', () => {
         expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": "country enum",
@@ -1303,7 +1303,7 @@ entity A {
         parsedEnum = content.enums[0];
       });
 
-      it('should parse it', () => {
+      it('should parse it - snapshot', () => {
         expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
@@ -1357,7 +1357,7 @@ entity A {
           parsedEnum = content.enums[0];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
@@ -1394,7 +1394,7 @@ entity A {
           parsedEnum = content.enums[0];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
@@ -1441,7 +1441,7 @@ entity A {
         relationship = content.relationships[0];
       });
 
-      it('should parse them', () => {
+      it('should parse them - snapshot', () => {
         expect(relationship).toMatchInlineSnapshot(`
 {
   "cardinality": "OneToOne",
@@ -1640,7 +1640,7 @@ entity A {
           ({ relationships } = content);
         });
 
-        it('should add them', () => {
+        it('should add them - snapshot', () => {
           expect(relationships).toMatchInlineSnapshot(`
 [
   {
@@ -1721,7 +1721,7 @@ entity A {
           ({ relationships } = content);
         });
 
-        it('should parse them', () => {
+        it('should parse them - snapshot', () => {
           expect(relationships).toMatchInlineSnapshot(`
 [
   {
@@ -1759,7 +1759,7 @@ entity A {
           ({ relationships } = content);
         });
 
-        it('should parse them', () => {
+        it('should parse them - snapshot', () => {
           expect(relationships).toMatchInlineSnapshot(`
 [
   {
@@ -1797,7 +1797,7 @@ entity A {
           ({ relationships } = content);
         });
 
-        it('should parse them', () => {
+        it('should parse them - snapshot', () => {
           expect(relationships).toMatchInlineSnapshot(`
 [
   {
@@ -2044,7 +2044,7 @@ relationship OneToMany {
           parsedOption = content.options.skipClient;
         });
 
-        it('should add the exclusions', () => {
+        it('should add the exclusions - snapshot', () => {
           expect(parsedOption).toMatchInlineSnapshot(`
 {
   "excluded": [
@@ -2085,7 +2085,7 @@ relationship OneToMany {
             parsedOption = content.options.clientRootFolder;
           });
 
-          it('should parse it', () => {
+          it('should parse it - snapshot', () => {
             expect(parsedOption).toMatchInlineSnapshot(`
 {
   "client": {
@@ -2106,7 +2106,7 @@ relationship OneToMany {
             parsedOption = content.options.clientRootFolder;
           });
 
-          it('should parse it', () => {
+          it('should parse it - snapshot', () => {
             expect(parsedOption).toMatchInlineSnapshot(`
 {
   ""../../toto"": {
@@ -2128,7 +2128,7 @@ relationship OneToMany {
           parsedOption = content.options.dto;
         });
 
-        it('should add the exclusions', () => {
+        it('should add the exclusions - snapshot', () => {
           expect(parsedOption).toMatchInlineSnapshot(`
 {
   "mapstruct": {
@@ -2190,7 +2190,7 @@ relationship OneToMany {
         parsedOption = content.options.clientRootFolder;
       });
 
-      it("should parse it as '*'", () => {
+      it("should parse it as '*' - snapshot", () => {
         expect(parsedOption).toMatchInlineSnapshot(`
 {
   "client": {
@@ -2211,7 +2211,7 @@ relationship OneToMany {
         parsedOption = content.options.clientRootFolder;
       });
 
-      it('should parse it', () => {
+      it('should parse it - snapshot', () => {
         expect(parsedOption).toMatchInlineSnapshot(`
 {
   "client": {
@@ -2281,7 +2281,7 @@ relationship OneToMany {
           parsedDeployment = content.deployments[0];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(parsedDeployment).toMatchInlineSnapshot(`
 {
   "kubernetesStorageClassName": "",
@@ -2302,7 +2302,7 @@ relationship OneToMany {
           parsedDeployment = content.deployments[0];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(parsedDeployment).toMatchInlineSnapshot(`
 {
   "kubernetesStorageClassName": "SetValue",

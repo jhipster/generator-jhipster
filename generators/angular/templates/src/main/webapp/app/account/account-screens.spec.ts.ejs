@@ -1,0 +1,222 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { Type } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AbstractControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, provideRouter } from '@angular/router';
+
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+<%_ if (enableTranslation) { _%>
+import { provideTranslateService } from '@ngx-translate/core';
+<%_ } _%>
+import { of } from 'rxjs';
+
+import { Account } from 'app/core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
+
+<%_ if (generateUserRegistration) { _%>
+import Activate from './activate/activate';
+<%_ } _%>
+import PasswordResetFinish from './password-reset/finish/password-reset-finish';
+import PasswordResetInit from './password-reset/init/password-reset-init';
+import PasswordStrengthBar from './password/password-strength-bar/password-strength-bar';
+import Password from './password/password';
+<%_ if (generateUserRegistration) { _%>
+import Register from './register/register';
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
+import { Session } from './sessions/session.model';
+import Sessions from './sessions/sessions';
+import { SessionsService } from './sessions/sessions.service';
+<%_ } _%>
+import Settings from './settings/settings';
+
+const account: Account = {
+  activated: true,
+  authorities: [],
+  email: 'user@localhost',
+  firstName: 'first',
+  langKey: 'en',
+  lastName: 'last',
+  login: 'user',
+  imageUrl: null,
+};
+
+const validationErrors = { required: true, minlength: {}, maxlength: {}, pattern: {}, email: true };
+
+describe('Account screens', () => {
+  const showValidations = <T>(fixture: ComponentFixture<T>, form: FormGroup): void => {
+    for (const control of Object.values<AbstractControl>(form.controls)) {
+      control.markAsDirty();
+      control.setErrors(validationErrors);
+    }
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('small.text-danger')).not.toBeNull();
+
+    const controls = Object.values<AbstractControl>(form.controls);
+    controls.forEach(control => control.setErrors({ other: true }));
+    fixture.detectChanges();
+    controls.forEach(control => {
+      control.markAsPristine();
+      control.markAsTouched();
+    });
+    fixture.detectChanges();
+    controls.forEach(control => control.markAsUntouched());
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('small.text-danger')).toBeNull();
+  };
+
+  const render = <T>(component: Type<T>): ComponentFixture<T> => {
+    const fixture = TestBed.createComponent(component);
+    fixture.detectChanges();
+    return fixture;
+  };
+
+  const submit = <T>(fixture: ComponentFixture<T>): void => {
+    fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
+    fixture.detectChanges();
+  };
+
+  const showStates = <T>(fixture: ComponentFixture<T>, states: (keyof T)[]): void => {
+    for (const state of states) {
+      (fixture.componentInstance[state] as any).set(true);
+    }
+    fixture.detectChanges();
+  };
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+<%_ if (enableTranslation) { _%>
+        provideTranslateService(),
+<%_ } _%>
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: ActivatedRoute, useValue: { queryParams: of({ key: 'key' }) } },
+      ],
+    });
+    TestBed.inject(FaIconLibrary).addIconPacks(fas);
+    const accountService = TestBed.inject(AccountService);
+    accountService.authenticate(account);
+    vi.spyOn(accountService, 'identity').mockReturnValue(of(account));
+  });
+
+<%_ if (generateUserRegistration) { _%>
+  it('should show the register form and its messages', () => {
+    const fixture = render(Register);
+
+    submit(fixture);
+    showValidations(fixture, fixture.componentInstance.registerForm);
+    showStates(fixture, ['error', 'errorEmailExists', 'errorUserExists', 'doNotMatch']);
+    showStates(fixture, ['success']);
+
+    expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
+  });
+
+<%_ } _%>
+  it('should show the settings form and its messages', () => {
+    const fixture = render(Settings);
+
+    submit(fixture);
+    showValidations(fixture, fixture.componentInstance.settingsForm);
+    showStates(fixture, ['success']);
+
+    expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
+  });
+
+  it('should show the password form and its messages', () => {
+    const fixture = render(Password);
+
+    submit(fixture);
+    showValidations(fixture, fixture.componentInstance.passwordForm);
+    showStates(fixture, ['error', 'doNotMatch', 'success']);
+
+    expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
+  });
+
+  it('should show the form to finish the password reset and its messages', () => {
+    const fixture = render(PasswordResetFinish);
+
+    submit(fixture);
+    showValidations(fixture, fixture.componentInstance.passwordForm);
+    showStates(fixture, ['error', 'doNotMatch', 'success']);
+
+    expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
+  });
+
+  it('should tell when the key of the password reset is missing', () => {
+    TestBed.inject(ActivatedRoute).queryParams = of({});
+    const fixture = render(PasswordResetFinish);
+
+    expect(fixture.nativeElement.querySelector('.alert-danger')).not.toBeNull();
+  });
+
+  it('should show the form to request a password reset and its messages', () => {
+    const fixture = render(PasswordResetInit);
+
+    submit(fixture);
+    showValidations(fixture, fixture.componentInstance.resetRequestForm);
+    showStates(fixture, ['success']);
+
+    expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
+  });
+
+<%_ if (generateUserRegistration) { _%>
+  it('should show the result of the activation', () => {
+    const fixture = render(Activate);
+
+    showStates(fixture, ['success', 'error']);
+
+    expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
+  });
+
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
+  it('should show the sessions and invalidate them', () => {
+    const service = TestBed.inject(SessionsService);
+    vi.spyOn(service, 'findAll').mockReturnValue(of([new Session('series', new Date(), '127.0.0.1', 'agent')]));
+    const remove = vi.spyOn(service, 'delete').mockReturnValue(of({}));
+    const fixture = render(Sessions);
+
+    fixture.nativeElement.querySelector('tbody button').click();
+    fixture.componentInstance.error = true;
+    fixture.changeDetectorRef.markForCheck();
+    fixture.detectChanges();
+
+    expect(remove).toHaveBeenCalledWith('series');
+    expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
+  });
+
+<%_ } _%>
+  it('should show the strength of a password', () => {
+    const fixture = TestBed.createComponent(PasswordStrengthBar);
+
+    for (const passwordToCheck of ['', 'a', 'password', 'P4ssw0rd!long-enough-to-be-strong']) {
+      fixture.componentRef.setInput('passwordToCheck', passwordToCheck);
+      fixture.detectChanges();
+    }
+
+    expect(fixture.nativeElement.querySelector('ul')).not.toBeNull();
+  });
+});

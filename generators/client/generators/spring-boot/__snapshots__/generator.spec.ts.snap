@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - client:spring-boot with defaults options should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/configuration.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/configuration.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/health.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/health.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/logs.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/logs.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/metrics.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/metrics.ts": {
+    "stateCleared": "modified",
+  },
+}
+`;

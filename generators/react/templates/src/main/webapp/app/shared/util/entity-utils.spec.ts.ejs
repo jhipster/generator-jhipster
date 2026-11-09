@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { cleanEntity, mapIdList } from './entity-utils';
 import { describe, expect, it } from 'vitest';
+
+import { cleanEntity, mapIdList, overridePaginationStateWithQueryParams } from './entity-utils';
 
 describe('Entity utils', () => {
   describe('cleanEntity', () => {
@@ -70,6 +71,26 @@ describe('Entity utils', () => {
       const ids = [];
 
       expect(mapIdList(ids)).toEqual([]);
+    });
+  });
+
+  describe('overridePaginationStateWithQueryParams', () => {
+    it('should take the page and the sort of the query', () => {
+      expect(overridePaginationStateWithQueryParams({ itemsPerPage: 20, activePage: 1, sort: 'id', order: 'asc' }, '?page=3&sort=name,desc')).toEqual({
+        itemsPerPage: 20,
+        activePage: 3,
+        sort: 'name',
+        order: 'desc',
+      });
+    });
+
+    it('should keep the state without a query', () => {
+      expect(overridePaginationStateWithQueryParams({ itemsPerPage: 20, activePage: 1, sort: 'id', order: 'asc' }, '')).toEqual({
+        itemsPerPage: 20,
+        activePage: 1,
+        sort: 'id',
+        order: 'asc',
+      });
     });
   });
 });

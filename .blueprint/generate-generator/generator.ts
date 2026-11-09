@@ -61,7 +61,7 @@ export default class extends BaseCoreGenerator {
     return this.asAnyTaskGroup({
       async updateGenerators() {
         const envBuilder = new EnvironmentBuilder(this.env);
-        await envBuilder.updateJHipsterGenerators();
+        envBuilder.updateJHipsterGenerators();
         await this.composeWithJHipster('@jhipster/jhipster-dev:update-generators');
       },
     });

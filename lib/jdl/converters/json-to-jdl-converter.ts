@@ -20,10 +20,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { GENERATOR_JHIPSTER } from '../../constants/jhipster.ts';
 import type { YoRcFileContent } from '../../constants/yeoman.ts';
 import type { YoRcJHipsterApplicationConfigValue, YoRcJHipsterApplicationContent } from '../../jhipster/types/yo-rc.ts';
 import { removeFieldsWithNullishValues } from '../../utils/object.ts';
-import { YO_RC_CONFIG_KEY, readEntityFile, readYoRcFile } from '../../utils/yo-rc.ts';
+import { readEntityFile, readYoRcFile } from '../../utils/yo-rc.ts';
 import type JDLApplication from '../core/models/jdl-application.ts';
 import mergeJDLObjects from '../core/models/jdl-object-merger.ts';
 import JDLObject from '../core/models/jdl-object.ts';
@@ -115,13 +116,13 @@ export function getJDLObjectFromSingleApplication(
 
 function cleanYoRcFileContent(yoRcFileContent: YoRcFileContent): RawJDLJSONApplication {
   yoRcFileContent = structuredClone(yoRcFileContent);
-  const blueprints = (yoRcFileContent as YoRcJHipsterApplicationContent)[YO_RC_CONFIG_KEY].blueprints?.map(blueprint => blueprint.name);
-  const microfrontends = (yoRcFileContent as YoRcJHipsterApplicationContent)[YO_RC_CONFIG_KEY].microfrontends?.map(
+  const blueprints = (yoRcFileContent as YoRcJHipsterApplicationContent)[GENERATOR_JHIPSTER].blueprints?.map(blueprint => blueprint.name);
+  const microfrontends = (yoRcFileContent as YoRcJHipsterApplicationContent)[GENERATOR_JHIPSTER].microfrontends?.map(
     ({ baseName }) => baseName,
   );
   const result: RawJDLJSONApplication = {
     ...yoRcFileContent,
-    [YO_RC_CONFIG_KEY]: removeFieldsWithNullishValues({ ...yoRcFileContent[YO_RC_CONFIG_KEY], blueprints, microfrontends }),
+    [GENERATOR_JHIPSTER]: removeFieldsWithNullishValues({ ...yoRcFileContent[GENERATOR_JHIPSTER], blueprints, microfrontends }),
   };
   for (const key of Object.keys(result)) {
     result[key as keyof RawJDLJSONApplication] = removeFieldsWithNullishValues(result[key as keyof RawJDLJSONApplication]!);

@@ -26,6 +26,8 @@ export type EditorMetadata = {
   writeOnce?: boolean;
   /** The multi-step template (`.jhi`) and fragment (`.jhi.*`) files merged into the file. */
   mergedFiles?: string[];
+  /** The namespace of the generator that wrote the file. */
+  namespace?: string;
 };
 
 export type CascadedEditFileCallback<Generator = CoreGenerator> = (

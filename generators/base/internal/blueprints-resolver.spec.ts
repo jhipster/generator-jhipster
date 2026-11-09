@@ -35,7 +35,7 @@ describe('generator - base - internal - blueprints-resolver', () => {
         .withMockedGenerators(['jhipster-foo:other', 'jhipster-bar:other', 'jhipster-baz:other'])
         .withJHipsterConfig({ blueprints: [{ name: 'generator-jhipster-bar' }] })
         .withOptions({ blueprints: 'foo' });
-      generator = runResult.generator as unknown as BaseGenerator;
+      ({ generator } = runResult);
       resolver = getBlueprintsResolver(generator);
     });
 

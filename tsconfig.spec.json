@@ -3,9 +3,6 @@
   "exclude": [],
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "noEmit": true,
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noEmit": true
   }
 }

@@ -44,8 +44,43 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
+
+  describe('without a sample name, the workflow and the sample asked', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withAnswers({ workflow: 'vue', sampleName: 'vue-default' })
+        .withOptions({
+          sampleOnly: true,
+        });
+    });
+
+    it('should ask the workflow, then a sample of it', () => {
+      expect(runResult.askedQuestions.map(({ name }) => name)).toEqual(['workflow', 'sampleName']);
+    });
+
+    it('should copy the sample answered', () => {
+      expect((runResult.generator as unknown as Generator).sample?.name).toBe('vue-default');
+    });
+  });
+
+  describe('with a workflow, the sample asked among its samples', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withAnswers({ sampleName: 'react-default' })
+        .withOptions({
+          workflow: 'react',
+          sampleOnly: true,
+        });
+    });
+
+    it('should ask only the sample', () => {
+      expect(runResult.askedQuestions.map(({ name }) => name)).toEqual(['sampleName']);
     });
   });
 
@@ -59,8 +94,11 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should fix the database password of the deployments for every generator of the sample', () => {
-      expect(runResult.env.sharedOptions).toMatchObject({ dbRandomPassword: 'sample-db-password' });
+    it('should fix the database password and the consul gossip key of the deployments for every generator of the sample', () => {
+      expect(runResult.env.sharedOptions).toMatchObject({
+        dbRandomPassword: 'sample-db-password',
+        consulGossipKey: 'c2FtcGxlLWNvbnN1bC1nb3NzaXAta2V5LS0tLS0tLS0=',
+      });
     });
   });
 
@@ -100,7 +138,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -115,7 +153,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -130,7 +168,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -145,7 +183,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -212,7 +250,7 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should match matrix value', () => {
+    it('should match matrix value snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });

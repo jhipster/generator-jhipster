@@ -303,7 +303,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isCreated()
+            .expectStatus()
+            .isCreated()
             .expectBody(<%- user.adminUserDto %>.class)
             .returnResult()
             .getResponseBody();
@@ -368,7 +369,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -408,11 +410,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         // Create the User
   <%_ if (reactive) { _%>
-        webTestClient.post().uri("/api/admin/users")
+        webTestClient
+            .post()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -452,11 +457,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         // Create the User
   <%_ if (reactive) { _%>
-        webTestClient.post().uri("/api/admin/users")
+        webTestClient
+            .post()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(user))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -508,6 +516,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
   <%_ } _%>
     }
+  <%_ if (!databaseTypeCassandra) { _%>
+
+    @Test
+    void getAllUsersSortedByWhatIsNotSortable()<%- reactive ? '' : ' throws Exception' %> {
+        for (String property : new String[] { "password"<%- user.hasImageField ? ', "imageUrl"' : '' %> }) {
+    <%_ if (reactive) { _%>
+        webTestClient
+            .get()
+            .uri("/api/admin/users?sort=" + property + ",desc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
+    <%_ } else { _%>
+        restUserMockMvc
+            .perform(get("/api/admin/users?sort=" + property + ",desc").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
+    <%_ } _%>
+        }
+    }
+  <%_ } _%>
 
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>
@@ -541,7 +574,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     <%_ } _%>
             .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY);
   <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/admin/users/{login}", user.getLogin()))
+        restUserMockMvc
+            .perform(get("/api/admin/users/{login}", user.getLogin()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(user.getLogin()))
@@ -569,12 +603,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ } _%>
     void getNonExistingUser()<%- reactive ? '' : ' throws Exception' %> {
   <%_ if (reactive) { _%>
-        webTestClient.get().uri("/api/admin/users/unknown")
-            .exchange()
-            .expectStatus().isNotFound();
+        webTestClient.get().uri("/api/admin/users/unknown").exchange().expectStatus().isNotFound();
   <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/admin/users/unknown"))
-            .andExpect(status().isNotFound());
+        restUserMockMvc.perform(get("/api/admin/users/unknown")).andExpect(status().isNotFound());
   <%_ } _%>
     }
 
@@ -611,11 +642,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri("/api/admin/users")
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus()
+            .isOk();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -671,11 +705,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri("/api/admin/users")
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus()
+            .isOk();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -755,11 +792,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri("/api/admin/users")
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -825,11 +865,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri("/api/admin/users")
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -854,7 +897,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         webTestClient.delete().uri("/api/admin/users/{login}", user.getLogin())
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().isNoContent();
+            .expectStatus()
+            .isNoContent();
   <%_ } else { _%>
         restUserMockMvc.perform(delete("/api/admin/users/{login}", user.getLogin())
             .accept(MediaType.APPLICATION_JSON)<% if (authenticationUsesCsrf) { %>

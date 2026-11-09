@@ -1,9 +1,6 @@
 {
   "extends": "@tsconfig/node24/tsconfig.json",
-  "include": [
-    "vite.config.*",
-    "vitest.config.*"
-  ],
+  "include": ["vite.config.*", "vitest.config.*"<%- enableTranslation ? ', "build-plugins/*"' : '' %>],
   "compilerOptions": {
     "composite": true,
     "lib": ["ES2025"],

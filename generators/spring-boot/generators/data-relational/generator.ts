@@ -75,7 +75,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async preparing({ application, applicationDefaults }) {
+      preparing({ application, applicationDefaults }) {
         applicationDefaults({
           springDataDescription: ({ reactive }) => `Spring Data ${reactive ? 'R2DBC' : 'JPA'}`,
           springBootBaseRepositoryClass: ({ reactive }) => (reactive ? 'R2dbcRepository' : 'JpaRepository'),
@@ -356,17 +356,20 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           publicMethods: ['com.zaxxer.hikari.HikariDataSource.class'],
         });
       },
-      async nativeMavenBuildTool({ application, source }) {
+      nativeMavenBuildTool({ application, source }) {
         if (!application.buildToolMaven || !application.graalvmSupport) return;
 
         source.addMavenProperty!({ property: 'spring.h2.console.enabled', value: 'true' });
       },
-      async nativeGradleBuildTool({ application, source }) {
+      nativeGradleBuildTool({ application, source }) {
         if (!application.buildToolGradle || !application.graalvmSupport) return;
 
-        const { reactive, javaManagedProperties } = application;
+        const { reactive, javaDependencies, javaManagedProperties } = application;
         if (!reactive) {
-          source.addGradleDependencyCatalogVersion!({ name: 'hibernate', version: javaManagedProperties['hibernate.version']! });
+          source.addGradleDependencyCatalogVersion!({
+            name: 'hibernate',
+            version: javaDependencies['hibernate-gradle-plugin'] ?? javaManagedProperties['hibernate.version']!,
+          });
           source.addGradleDependencyCatalogPlugin!({
             addToBuild: true,
             pluginName: 'hibernate',
@@ -375,7 +378,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           });
         }
       },
-      async blockHound({ application, source }) {
+      blockHound({ application, source }) {
         if (!application.reactive) return;
 
         if (application.prodDatabaseTypeMariadb) {
@@ -399,10 +402,10 @@ export default class SqlGenerator extends BaseApplicationGenerator<
               'setAutoCommit',
               // `receive` and `sendCommand` acquire the lock inside their `Flux.create` lambdas, which run at
               // subscribe time, so the enclosing method is no longer on the stack and BlockHound only sees the
-              // synthetic lambda. Names are tied to r2dbc-mariadb 1.4.1 and must be rechecked on driver upgrades.
-              'lambda$receive$14',
-              'lambda$sendCommand$16',
-              'lambda$sendCommand$19',
+              // synthetic lambda. Names are tied to r2dbc-mariadb 1.4.2 and must be rechecked on driver upgrades.
+              'lambda$receive$15',
+              'lambda$sendCommand$17',
+              'lambda$sendCommand$20',
             ],
           });
 
@@ -428,9 +431,11 @@ export default class SqlGenerator extends BaseApplicationGenerator<
 
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
-      async jsonFilter({ application, entities, source }) {
+      jsonFilter({ application, entities, source }) {
         if (application.reactive || !application.graalvmSupport) return;
-        for (const entity of entities.filter(({ builtIn, builtInUser, embedded }) => builtInUser || (!builtIn && !embedded))) {
+        for (const entity of entities.filter(
+          ({ builtInUser, embedded, entityDomainLayer }) => builtInUser || (entityDomainLayer && !embedded),
+        )) {
           source.editJavaFile!(`${application.srcMainJava}/${entity.entityAbsoluteFolder}/domain/${entity.entityClass}.java`, {
             annotations: [
               {

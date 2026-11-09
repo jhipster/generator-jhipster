@@ -18,9 +18,10 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
+
 import { of, throwError } from 'rxjs';
 
-import { AccountService, Account } from 'app/core/auth';
+import { Account, AccountService } from 'app/core/auth';
 
 import { Session } from './session.model';
 import Sessions from './sessions';

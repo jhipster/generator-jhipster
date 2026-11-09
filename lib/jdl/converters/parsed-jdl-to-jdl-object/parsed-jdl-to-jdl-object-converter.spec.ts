@@ -477,7 +477,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           parsedConfig = jdlObject.applications.toto;
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(parsedConfig).toMatchInlineSnapshot(`
 JDLApplication {
   "config": JDLApplicationConfiguration {
@@ -527,7 +527,7 @@ JDLApplication {
           deployment = jdlObject.deployments['docker-compose'];
         });
 
-        it('should parse it', () => {
+        it('should parse it - snapshot', () => {
           expect(deployment.appsFolders).toEqual(new Set(['tata', 'titi']));
           delete deployment.appsFolders;
           delete deployment.clusteredDbApps;
@@ -656,7 +656,7 @@ JDLDeployment {
           entityNames = jdlObject.applications.MyApp.getEntityNames();
         });
 
-        it('should add the application entities in the application object', () => {
+        it('should add the application entities in the application object - snapshot', () => {
           expect(entityNames).toMatchInlineSnapshot(`
 [
   "BankAccount",
@@ -713,7 +713,7 @@ JDLDeployment {
             relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}')!.options.destination;
           });
 
-          it('should set the annotations as options', () => {
+          it('should set the annotations as options - snapshot', () => {
             expect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
@@ -774,7 +774,7 @@ JDLDeployment {
             relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}')!.options.destination;
           });
 
-          it('should set the annotations as options with lower-case letters first', () => {
+          it('should set the annotations as options with lower-case letters first - snapshot', () => {
             expect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
@@ -831,7 +831,7 @@ JDLDeployment {
         });
 
         describe('correctly should set the options', () => {
-          it('should set the annotations as options with lower-case letters first', () => {
+          it('should set the annotations as options with lower-case letters first - snapshot', () => {
             expect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",

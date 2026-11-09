@@ -35,6 +35,14 @@ const command = {
       },
       scope: 'storage',
     },
+    consulGossipKey: {
+      description:
+        'Key encrypting the gossip traffic of the Consul servers of the deployment, a random one is generated when it is not given',
+      internal: {
+        type: String,
+      },
+      scope: 'storage',
+    },
   },
   import: [],
 } as const satisfies JHipsterCommandDefinition;

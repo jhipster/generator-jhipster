@@ -20,7 +20,7 @@
   <h2>
     <span id="gateway-page-heading">__jhiTranslateTag__('gateway.title')</span>
 
-    <button class="btn btn-primary float-end" (click)="refresh()" (disabled)="(updatingRoutes)">
+    <button class="btn btn-primary float-end" (click)="refresh()" [disabled]="updatingRoutes()">
       <fa-icon icon="sync" /> <span>__jhiTranslateTag__('gateway.refresh.button')</span>
     </button>
   </h2>
@@ -37,7 +37,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (route of gatewayRoutes; track route.path) {
+        @for (route of gatewayRoutes(); track route.path) {
           <tr>
             <td>{{ route.path }}</td>
             <td>{{ route.serviceId }}</td>

@@ -54,7 +54,9 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
 <%_ if (prodDatabaseType === devDatabaseType) { _%>
                 if (null != sqlAnnotation) {
 <%_ } else { _%>
-                boolean usingTestProdProfile = List.of(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION);
+                boolean usingTestProdProfile = List.of(context.getEnvironment().getActiveProfiles()).contains(
+                    "test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION
+                );
                 if (null != sqlAnnotation && usingTestProdProfile) {
 <%_ } _%>
                     log.debug("detected the EmbeddedSQL annotation on class {}", testClass.getName());

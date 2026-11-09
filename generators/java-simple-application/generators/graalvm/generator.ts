@@ -51,7 +51,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
       load({ application }) {
         this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies);
       },
-      async packageJson({ application }) {
+      packageJson({ application }) {
         const { buildToolGradle, packageJsonScripts } = application;
         const scripts =
           buildToolGradle ?
@@ -80,7 +80,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
   get default() {
     return this.asDefaultTaskGroup({
       // workaround for https://github.com/spring-projects/spring-boot/issues/32195
-      async disabledInAotModeAnnotation({ application }) {
+      disabledInAotModeAnnotation({ application }) {
         this.queueTransformStream(
           {
             name: 'adding @DisabledInAotMode annotations',
@@ -133,7 +133,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      async customizeGradle({ application, source }) {
+      customizeGradle({ application, source }) {
         const { buildToolGradle, javaDependencies } = application;
         if (!buildToolGradle) return;
 
@@ -147,7 +147,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
         source.applyFromGradle!({ script: 'gradle/native.gradle' });
       },
 
-      async customizeMaven({ application, source }) {
+      customizeMaven({ application, source }) {
         const { buildToolMaven, reactive, databaseTypeSql, javaDependencies, graalvmReachabilityMetadata } = application;
         if (!buildToolMaven) return;
         const { nativeLanguageDefinition, languagesDefinition } = application as unknown as LanguagesApplication;

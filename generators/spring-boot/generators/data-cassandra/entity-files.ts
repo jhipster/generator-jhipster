@@ -78,7 +78,7 @@ export const cleanupCassandraEntityFilesTask = asWritingEntitiesTask<SpringBootE
   control,
 }) {
   if (!application.databaseMigrationLiquibase) return;
-  for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+  for (const entity of entities.filter(entity => !entity.skipServer && !entity.skipDbChangelog)) {
     await control.cleanupFiles({
       // The custom cql migration was replaced with liquibase
       '9.3.1': [`${application.srcMainResources}config/cql/changelog/${entity.changelogDate}_added_entity_${entity.entityClass}.cql`],
@@ -91,7 +91,7 @@ export default asWritingEntitiesTask(async function writeEntityCassandraFiles({ 
     let sections = entityFiles;
     if (entity.builtInUser) {
       sections = { domainFiles, userFiles };
-    } else if (entity.builtIn) {
+    } else if (entity.builtInAuthority) {
       sections = { domainFiles };
     }
     await this.writeFiles({

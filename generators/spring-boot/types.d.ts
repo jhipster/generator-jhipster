@@ -66,6 +66,8 @@ export type SpringEntity = {
 type SpringBootProperty = {
   propertyJavaFilterType?: string;
   propertyJavaFilteredType?: string;
+  /** Rejects a sort by the property in the REST resources (the `@NotSortable` annotation of the JDL). */
+  notSortable?: boolean;
 };
 
 export type Field = ServerField &
@@ -96,7 +98,6 @@ export interface Relationship extends ServerRelationship, SpringBootAddedPropert
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
   extends ServerEntity<F, R>, SpringEntity, CommandEntity {
-  skipDbChangelog?: boolean;
   entityJavaFilterableProperties: any[];
   entityJavaCustomFilters: any[];
 

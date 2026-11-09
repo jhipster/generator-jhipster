@@ -16,8 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
@@ -63,7 +63,7 @@ export const RegisterSlice = createSlice({
 <%_ if (enableTranslation) { _%>
         successMessage: 'register.messages.success',
 <%_ } else { _%>
-        successMessage: 'Registration saved! Please check your email for confirmation.'
+        successMessage: 'Registration saved! Please check your email for confirmation.',
 <%_ } _%>
       }));
   },

@@ -1,0 +1,151 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.web.rest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import <%- packageName %>.domain.NotSortable;
+import <%- packageName %>.web.rest.errors.BadRequestAlertException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Set;
+import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Sort;
+<%_ if (databaseTypeMongodb) { _%>
+import org.springframework.data.mongodb.core.mapping.DBRef;
+<%_ } _%>
+
+/**
+ * Test class for the {@link SortValidator} utility class.
+ */
+class SortValidatorTest {
+
+    static class Related {
+
+        Long id;
+
+        String name;
+
+        @NotSortable
+        String secret;
+
+        Related parent;
+    }
+
+    static class Base {
+
+        Long id;
+    }
+
+    static class Sample extends Base {
+
+        static final String CONSTANT = "constant";
+
+        String name;
+
+        Instant createdDate;
+
+        Duration duration;
+
+        byte[] picture;
+
+        transient String computed;
+
+        @org.springframework.data.annotation.Transient
+        String notStored;
+<%_ if (databaseTypeSql && !reactive) { _%>
+
+        @jakarta.persistence.Transient
+        String notPersisted;
+<%_ } _%>
+
+        @NotSortable
+        String secret;
+
+        Related related;
+
+        @NotSortable
+        Related hidden;
+
+        Set<Related> others;
+<%_ if (databaseTypeMongodb) { _%>
+
+        @DBRef
+        Related referenced;
+<%_ } _%>
+    }
+
+    @Test
+    void acceptsTheColumnsAndTheColumnsOfARelationship() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("id", "name", "createdDate", "duration", "related.id", "related.name"))).isTrue();
+    }
+
+    @Test
+    void acceptsNoSort() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.unsorted())).isTrue();
+    }
+
+    @Test
+    void rejectsAFieldMarkedNotSortable() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("name", "secret"))).isFalse();
+    }
+
+    @Test
+    void rejectsAFieldOfARelationshipMarkedNotSortable() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("related.secret"))).isFalse();
+    }
+
+    @Test
+    void rejectsARelationshipMarkedNotSortable() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("hidden.name"))).isFalse();
+    }
+
+    @Test
+    void rejectsWhatIsNotAColumn() {
+        for (String property : new String[] { "doesNotExist", "CONSTANT", "computed", <%- (databaseTypeSql && !reactive) ? '"notPersisted", ' : '' %>"notStored", "picture", "related", "others", "others.name" }) {
+            assertThat(SortValidator.isSortable(Sample.class, Sort.by(property))).as(property).isFalse();
+        }
+    }
+
+<%_ if (databaseTypeMongodb) { _%>
+    @Test
+    void acceptsOnlyTheIdOfAReferencedDocument() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("referenced.id"))).isTrue();
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("referenced.name"))).isFalse();
+    }
+
+<%_ } _%>
+    @Test
+    void rejectsAPathDeeperThanARelationship() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("related.parent.name"))).isFalse();
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("related.doesNotExist"))).isFalse();
+    }
+
+    @Test
+    void tellsTheFirstPropertyItCannotSortBy() {
+        assertThatCode(() -> SortValidator.checkSortable(Sample.class, Sort.by("name", "related.name"), "sample")).doesNotThrowAnyException();
+        assertThatThrownBy(() -> SortValidator.checkSortable(Sample.class, Sort.by("name", "secret", "picture"), "sample"))
+            .isInstanceOfSatisfying(BadRequestAlertException.class, exception -> {
+                assertThat(exception.getErrorKey()).isEqualTo("notsortable");
+                assertThat(exception.getBody().getTitle()).isEqualTo("A sample cannot be sorted by secret");
+            });
+    }
+}

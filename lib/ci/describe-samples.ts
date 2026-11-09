@@ -19,7 +19,8 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 
-import { createImporterFromContent } from '../jdl/jdl-importer.ts';
+import { parse } from '../jdl/core/parsing/index.ts';
+import { getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
 
 import { getGithubSamplesGroup, getGithubSamplesGroups } from './github-group.ts';
 import { type GitHubMatrix, type GitHubMatrixGroup, type GitHubMatrixGroupItem, convertToGitHubMatrix } from './github-matrix.ts';
@@ -158,9 +159,10 @@ export const readSampleConfig = (yoRcFile: string | undefined): Record<string, u
 /** The configuration the first application of a JDL declares, worth showing. */
 export const readSampleJDLConfig = (jdl: string): Record<string, unknown> | undefined => {
   try {
-    // Describing a sample tells nothing about its jdl: its warnings, a deprecated option for instance, are not logged.
-    const importer = createImporterFromContent(jdl, { onWarning: () => {} });
-    return pickConfig(importer.import().exportedApplications[0]?.['generator-jhipster'] ?? {});
+    // The config as the jdl writes it, parsed only: describing a sample writes no file, and tells nothing about its jdl,
+    // its warnings, a deprecated option for instance, are not logged.
+    const { applications } = parse(jdl, getDefaultRuntime(), { onWarning: () => {} });
+    return pickConfig(applications[0]?.config ?? {});
   } catch {
     // A template JDL completed by the generator options.
     return undefined;

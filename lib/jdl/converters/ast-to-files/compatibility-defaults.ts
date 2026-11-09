@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { GENERATOR_JHIPSTER } from '../../../constants/jhipster.ts';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { getDefaultJDLDeploymentDefaults } from '../../../jdl-config/jhipster-jdl-config.ts';
 import { customCamelCase } from '../../../utils/string-utils.ts';
@@ -25,8 +26,6 @@ import { binaryOptions } from '../../core/built-in-options/index.ts';
 import logger from '../../core/utils/objects/logger.ts';
 
 import type { JDLFiles } from './ast-to-files.ts';
-
-const GENERATOR_JHIPSTER = 'generator-jhipster';
 const { SERVICE_CLASS } = binaryOptions.Values.service;
 
 /*

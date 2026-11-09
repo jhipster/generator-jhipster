@@ -192,7 +192,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      async dockerServices({ application, source }) {
+      dockerServices({ application, source }) {
         if (application.dockerServices.includes('cassandra')) {
           const serviceName = application.databaseType!;
           if (application.databaseMigrationLoader) {
@@ -252,39 +252,22 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
       packageJsonScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const { databaseType, databaseTypeSql, prodDatabaseType, prodDatabaseTypeOracle } = application;
+        const { databaseType, databaseTypeSql, prodDatabaseType } = application;
         let postServicesSleep;
 
-        if (databaseTypeSql) {
-          if (prodDatabaseTypeOracle) {
-            scriptsStorage.set(
-              'docker:db:up',
-              `echo "Docker for db ${prodDatabaseType} not configured for application ${application.baseName}"`,
-            );
-          } else {
-            const dockerFile = `${application.dockerServicesDir}${prodDatabaseType}.yml`;
-            scriptsStorage.set({
-              'docker:db:up': `docker compose -f ${dockerFile} up --wait`,
-              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
-            });
+        const dbType = databaseTypeSql ? prodDatabaseType : databaseType;
+        if (application.dockerServices.includes(dbType!)) {
+          const dockerFile = `${application.dockerServicesDir}${dbType}.yml`;
+          scriptsStorage.set({
+            'docker:db:up': `docker compose -f ${dockerFile} up --wait`,
+            'docker:db:down': `docker compose -f ${dockerFile} down -v`,
+          });
+          if (application.databaseTypeCassandra) {
+            // Wait for migration
+            postServicesSleep = 10;
           }
         } else {
-          const dockerFile = `${application.dockerServicesDir}${databaseType}.yml`;
-          if (this.fs.exists(this.destinationPath(dockerFile))) {
-            scriptsStorage.set({
-              'docker:db:up': `docker compose -f ${dockerFile} up --wait`,
-              'docker:db:down': `docker compose -f ${dockerFile} down -v`,
-            });
-            if (application.databaseTypeCassandra) {
-              // Wait for migration
-              postServicesSleep = 10;
-            }
-          } else {
-            scriptsStorage.set(
-              'docker:db:up',
-              `echo "Docker for db ${databaseType} not configured for application ${application.baseName}"`,
-            );
-          }
+          scriptsStorage.set('docker:db:up', `echo "Docker for db ${dbType} not configured for application ${application.baseName}"`);
         }
 
         ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(dockerConfig => {
@@ -322,7 +305,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
   get end() {
     return this.asEndTaskGroup({
-      async dockerComposeUp({ control }) {
+      dockerComposeUp({ control }) {
         if (!this.skipChecks && !control.environmentHasDockerCompose) {
           this.log('');
           this.log.warn(

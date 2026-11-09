@@ -72,7 +72,7 @@ export default class MavenGenerator extends JavaSimpleApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async verify({ application }) {
+      verify({ application }) {
         assert.equal(application.buildTool, MAVEN);
       },
       addSourceNeedles({ application, source }) {

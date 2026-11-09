@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const formatAsBytes = (size: number): string =>
-  `${size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} bytes`; // NOSONAR
+const formatAsBytes = (size: number): string => `${size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} bytes`; // NOSONAR
 
 export const paddingSize = (value: string): number => {
   if (value.endsWith('==')) {
@@ -27,10 +26,9 @@ export const paddingSize = (value: string): number => {
     return 1;
   }
   return 0;
-}
+};
 
-const size = (value: string): number =>
-  (value.length / 4) * 3 - paddingSize(value);
+const size = (value: string): number => (value.length / 4) * 3 - paddingSize(value);
 
 export const toBase64 = (file: File, callback: (base64Data: string) => void): void => {
   const fileReader: FileReader = new FileReader();
@@ -41,7 +39,7 @@ export const toBase64 = (file: File, callback: (base64Data: string) => void): vo
     }
   };
   fileReader.readAsDataURL(file);
-}
+};
 
 export type BlobType = 'image' | 'text' | 'any';
 
@@ -82,7 +80,6 @@ export const openFile = (data: string, contentType: string | null | undefined, b
   if (win) {
     win.onload = () => URL.revokeObjectURL(fileURL);
   }
-}
+};
 
-export const byteSize = (base64String: string): string =>
-  formatAsBytes(size(base64String));
+export const byteSize = (base64String: string): string => formatAsBytes(size(base64String));

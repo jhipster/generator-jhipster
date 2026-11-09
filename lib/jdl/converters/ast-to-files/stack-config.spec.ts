@@ -18,9 +18,10 @@
  */
 import { describe, expect, it } from 'expect-node';
 
+import { GENERATOR_JHIPSTER } from '../../../constants/jhipster.ts';
+
 import { applyStackConfig } from './stack-config.ts';
 
-const GENERATOR_JHIPSTER = 'generator-jhipster';
 const yoRc = (config: Record<string, any>) => ({ [GENERATOR_JHIPSTER]: config });
 
 describe('jdl - applyStackConfig', () => {

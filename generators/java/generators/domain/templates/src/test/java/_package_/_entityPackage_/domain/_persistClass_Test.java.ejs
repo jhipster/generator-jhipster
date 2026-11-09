@@ -19,7 +19,7 @@
 package <%- entityAbsolutePackage %>.domain;
 
 import static <%- entityAbsolutePackage %>.domain.<%- persistClass %>TestSamples.*;
-<%_ for (const otherEntity of otherEntities.filter(otherEntity => !otherEntity.builtIn)) { _%>
+<%_ for (const otherEntity of otherEntities.filter(otherEntity => otherEntity.entityDomainLayer)) { _%>
 import static <%- otherEntity.entityAbsolutePackage %>.domain.<%- otherEntity.persistClass %>TestSamples.*;
 <%_ } _%>
 <%_ for (const otherEntity of otherEntities.filter(otherEntity => entityPackage !== otherEntity.entityPackage)) { _%>
@@ -62,7 +62,7 @@ class <%- persistClass %>Test {
         assertThat(<%- persistInstance %>).hasSameHashCodeAs(<%- persistInstance %>1);
     }
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.builtIn && (!embedded || rel.otherEntity.embedded && rel.ownerSide))) { _%>
+<%_ for (const relationship of relationships.filter(rel => rel.otherEntity.entityDomainLayer && (!embedded || rel.otherEntity.embedded && rel.ownerSide))) { _%>
 
     @Test
     void <%- relationship.relationshipName %>Test() {

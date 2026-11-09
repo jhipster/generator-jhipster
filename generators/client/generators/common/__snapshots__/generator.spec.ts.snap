@@ -7,7 +7,13 @@ exports[`generator - client:common with defaults options should match files snap
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/configuration.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/data-utils.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
@@ -16,10 +22,34 @@ exports[`generator - client:common with defaults options should match files snap
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/headers.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/health.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/label.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/link-header.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/logs.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/metrics.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/pagination.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/pagination.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {

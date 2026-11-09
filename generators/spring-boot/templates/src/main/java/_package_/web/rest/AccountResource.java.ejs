@@ -57,8 +57,8 @@ import java.util.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
-<%_ if (authenticationTypeSession && !reactive) { _%>
 import java.nio.charset.StandardCharsets;
+<%_ if (authenticationTypeSession && !reactive) { _%>
 import java.net.URLDecoder;
 <%_ } _%>
 
@@ -106,53 +106,6 @@ public class AccountResource {
 <%_ } _%>
     }
 
-    /**
-     * {@code POST  /register} : register the user.
-     *
-     * @param managedUserVM the managed user View Model.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
-     */
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public <%- reactive ? 'Mono<Void>' : 'void' %> registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        LOG.debug("REST request to register account");
-        if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
-            throw new InvalidPasswordException();
-        }
-<%_ if (reactive) { _%>
-        return userService.registerUser(managedUserVM, managedUserVM.getPassword())
-            .doOnSuccess(mailService::sendActivationEmail)
-            .then();
-<%_ } else { _%>
-        <%- user.persistClass %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
-<%_ } _%>
-    }
-
-    /**
-     * {@code GET  /activate} : activate the registered user.
-     *
-     * @param key the activation key.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
-     */
-    @GetMapping("/activate")
-    public <%- reactive ? 'Mono<Void>' : 'void' %> activateAccount(@RequestParam(value = "key") String key) {
-        LOG.debug("REST request to activate account");
-<%_ if (reactive) { _%>
-        return userService
-            .activateRegistration(key)
-            .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
-            .then();
-<%_ } else { _%>
-        Optional<<%- user.persistClass %>> user = userService.activateRegistration(key);
-        if (user.isEmpty()) {
-            throw new AccountResourceException("No user was found for this activation key");
-        }
-<%_ } _%>
-    }
-
 <%_ if (!authenticationTypeJwt) { _%>
     /**
      * {@code GET  /authenticate} : check if the user is authenticated.
@@ -176,7 +129,8 @@ public class AccountResource {
     @GetMapping("/account")
     public <%- wrapMono(user.adminUserDto) %> getAccount() {
         LOG.debug("REST request to get account");
-        return userService.getUserWithAuthorities()
+        return userService
+            .getUserWithAuthorities()
             .map(<%- user.adminUserDto %>::new)
 <%_ if (reactive) { _%>
             .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")));
@@ -302,7 +256,7 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
 <%_ if (reactive) { _%>
-    public Mono<Void> requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 254) String mail) {
+    public Mono<Void> requestPasswordReset(@RequestBody @Email @Size(min = <%- user.fieldsByName.email.fieldValidateRulesMinlength %>, max = <%- user.fieldsByName.email.fieldValidateRulesMaxlength %>) String mail) {
         LOG.debug("REST request to request password reset");
         return userService
             .requestPasswordReset(mail)
@@ -317,7 +271,7 @@ public class AccountResource {
             })
             .then();
 <%_ } else { _%>
-    public void requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 254) String mail) {
+    public void requestPasswordReset(@RequestBody @Email @Size(min = <%- user.fieldsByName.email.fieldValidateRulesMinlength %>, max = <%- user.fieldsByName.email.fieldValidateRulesMaxlength %>) String mail) {
         LOG.debug("REST request to request password reset");
         Optional<<%- user.persistClass %>> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
@@ -370,11 +324,11 @@ public class AccountResource {
 <%_ } _%>
     }
 
-    private static boolean isPasswordLengthInvalid(String password) {
+    static boolean isPasswordLengthInvalid(String password) {
         return (
             StringUtils.isEmpty(password) ||
             password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
-            password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
+            password.getBytes(StandardCharsets.UTF_8).length > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
     }
 }

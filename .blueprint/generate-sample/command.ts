@@ -21,13 +21,41 @@ import process from 'node:process';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { defaultSamplesFolder } from '../constants.ts';
+import { describeSampleGroups } from '../describe-samples/support.ts';
+
+/** The choice of the samples of every workflow. */
+const ALL_WORKFLOWS = '*';
 
 const command = {
   configs: {
+    workflow: {
+      description: 'Workflow of the sample, to choose it from',
+      cli: {
+        type: String,
+      },
+      prompt: gen => ({
+        when: !gen.sampleName && !gen.workflow,
+        type: 'select',
+        message: 'Which workflow is the sample of?',
+        choices: () => [{ name: 'All workflows', value: ALL_WORKFLOWS }, ...Object.keys(describeSampleGroups())],
+        default: ALL_WORKFLOWS,
+      }),
+      scope: 'generator',
+    },
     sampleName: {
       argument: {
         type: String,
       },
+      prompt: gen => ({
+        when: !gen.sampleName,
+        type: 'select',
+        message: 'Which sample do you want to generate?',
+        choices: answers => {
+          const groups = describeSampleGroups();
+          const workflow = answers.workflow ?? gen.workflow ?? ALL_WORKFLOWS;
+          return workflow === ALL_WORKFLOWS ? Object.values(groups).flatMap(group => group.samples) : groups[workflow].samples;
+        },
+      }),
       scope: 'generator',
     },
     global: {

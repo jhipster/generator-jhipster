@@ -16,17 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { Component, OnDestroy, inject, signal } from '@angular/core';
+
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap/alert';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
+import { Subscription } from 'rxjs';
 
-import { AlertErrorModel } from './alert-error.model';
 import { AlertModel, AlertService, EventManager, EventWithContent } from 'app/core/util';
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
+
+import { AlertErrorModel } from './alert-error.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-alert-error',
@@ -134,11 +136,11 @@ export class AlertError implements OnDestroy {
       }
       // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
       const convertedField: string = fieldError.field.replaceAll(/\[\d*\]/g, '[]');
-      const fieldName: string =
 <%_ if (enableTranslation) { _%>
+      const fieldName: string =
         this.translateService.instant(`<%- frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
 <%_ } else { _%>
-        convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
+      const fieldName: string = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
 <%_ } _%>
       this.addErrorAlert(`Error on field "${fieldName}"`<%- enableTranslation ? ', `error.${fieldError.message as string}`, { fieldName }' : '' %>);
     }

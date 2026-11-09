@@ -26,26 +26,17 @@
 <%_ if (!clientThemeNone) { _%>
 @import 'bootswatch/dist/<%- clientTheme %>/bootswatch';
 <%_ } _%>
-body {
-<%_ if (clientThemeNone) { _%>
-  background: #fafafa;
-<%_ } _%>
-  margin: 0;
+body,
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 300;
 }
 
 a {
   color: #533f03;
   font-weight: bold;
-}
-
-* {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  &:after,
-  &::before {
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
 }
 
 .app-container {
@@ -55,46 +46,12 @@ a {
     height: calc(100% - 40px);
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 1rem;
-    .card {
-      padding: 1rem;
-    }
     .view-routes {
       height: 100%;
       > div {
         height: 100%;
       }
     }
-  }
-}
-
-.fullscreen {
-  position: fixed;
-  top: 100px;
-  left: 0;
-  width: 99% !important;
-  height: calc(100vh - 110px) !important;
-  margin: 5px;
-  z-index: 1000;
-  padding: 5px 25px 50px 25px !important;
-}
-
-/* ==========================================================================
-Custom button styles
-========================================================================== */
-
-.icon-button > .btn {
-  background-color: transparent;
-  border-color: transparent;
-  padding: 0.5rem;
-  line-height: 1rem;
-  &:hover {
-    background-color: transparent;
-    border-color: transparent;
-  }
-  &:focus {
-    -webkit-box-shadow: none;
-    box-shadow: none;
   }
 }
 
@@ -109,6 +66,16 @@ Generic styles
 
 /* other generic styles */
 
+.footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.jh-card {
+  padding: 1.5%;
+  margin-top: 20px;
+  border: none;
+}
+
 .title {
   font-size: 1.25em;
   margin: 1px 10px 1px 10px;
@@ -117,13 +84,6 @@ Generic styles
 .description {
   font-size: 0.9em;
   margin: 1px 10px 1px 10px;
-}
-
-.shadow {
-  box-shadow:
-    rgba(0, 0, 0, 0.12) 0 1px 6px,
-    rgba(0, 0, 0, 0.12) 0 1px 4px;
-  border-radius: 2px;
 }
 
 .error {
@@ -144,132 +104,13 @@ Generic styles
   word-break: break-all;
 }
 
-.break-word {
-  white-space: normal;
-  word-break: keep-all;
-}
-
 .preserve-space {
   white-space: pre-wrap;
 }
 
-/* padding helpers */
-
-@mixin pad($size, $side) {
-  @if $size== '' {
-    @if $side== '' {
-      .pad {
-        padding: 10px !important;
-      }
-    } @else {
-      .pad {
-        padding-#{$side}: 10px !important;
-      }
-    }
-  } @else {
-    @if $side== '' {
-      .pad-#{$size} {
-        padding: #{$size}px !important;
-      }
-    } @else {
-      .pad-#{$side}-#{$size} {
-        padding-#{$side}: #{$size}px !important;
-      }
-    }
-  }
+.pad {
+  padding: 10px !important;
 }
-
-@include pad('', '');
-@include pad('2', '');
-@include pad('3', '');
-@include pad('5', '');
-@include pad('10', '');
-@include pad('20', '');
-@include pad('25', '');
-@include pad('30', '');
-@include pad('50', '');
-@include pad('75', '');
-@include pad('100', '');
-@include pad('4', 'top');
-@include pad('5', 'top');
-@include pad('10', 'top');
-@include pad('20', 'top');
-@include pad('25', 'top');
-@include pad('30', 'top');
-@include pad('50', 'top');
-@include pad('75', 'top');
-@include pad('100', 'top');
-@include pad('4', 'bottom');
-@include pad('5', 'bottom');
-@include pad('10', 'bottom');
-@include pad('20', 'bottom');
-@include pad('25', 'bottom');
-@include pad('30', 'bottom');
-@include pad('50', 'bottom');
-@include pad('75', 'bottom');
-@include pad('100', 'bottom');
-@include pad('5', 'right');
-@include pad('10', 'right');
-@include pad('20', 'right');
-@include pad('25', 'right');
-@include pad('30', 'right');
-@include pad('50', 'right');
-@include pad('75', 'right');
-@include pad('100', 'right');
-@include pad('5', 'left');
-@include pad('10', 'left');
-@include pad('20', 'left');
-@include pad('25', 'left');
-@include pad('30', 'left');
-@include pad('50', 'left');
-@include pad('75', 'left');
-@include pad('100', 'left');
-
-@mixin no-padding($side) {
-  @if $side== 'all' {
-    .no-padding {
-      padding: 0 !important;
-    }
-  } @else {
-    .no-padding-#{$side} {
-      padding-#{$side}: 0 !important;
-    }
-  }
-}
-
-@include no-padding('left');
-@include no-padding('right');
-@include no-padding('top');
-@include no-padding('bottom');
-@include no-padding('all');
-
-/* end of padding helpers */
-
-.no-margin {
-  margin: 0;
-}
-@mixin voffset($size) {
-  @if $size== '' {
-    .voffset {
-      margin-top: 2px !important;
-    }
-  } @else {
-    .voffset-#{$size} {
-      margin-top: #{$size}px !important;
-    }
-  }
-}
-
-@include voffset('');
-@include voffset('5');
-@include voffset('10');
-@include voffset('15');
-@include voffset('30');
-@include voffset('40');
-@include voffset('60');
-@include voffset('80');
-@include voffset('100');
-@include voffset('150');
 
 .readonly {
   background-color: #eee;
@@ -288,17 +129,33 @@ a:hover {
   cursor: pointer;
 }
 
-button.anchor-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  align-items: initial;
-  text-align: initial;
-  width: 100%;
+/* ==========================================================================
+entity detail page css
+========================================================================== */
+.row-md.jh-entity-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  line-height: 1.5;
 }
 
-a.anchor-btn:hover {
-  text-decoration: none;
+@media screen and (min-width: 768px) {
+  .row-md.jh-entity-details > {
+    dt {
+      float: left;
+      overflow: hidden;
+      clear: left;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0.5em 0;
+    }
+    dd {
+      border-bottom: 1px solid #eee;
+      padding: 0.5em 0;
+      margin-left: 0;
+    }
+  }
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */

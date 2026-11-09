@@ -33,7 +33,7 @@ services:
       test: ['CMD-SHELL', 'a command that is longer than eighty characters, which must not be folded by the merge']
 `;
 
-  it('should add the keys and keep the rest as written', () => {
+  it('should add the keys and keep the rest as written - snapshot', () => {
     expect(
       mergeYamlContent(content, {
         services: {

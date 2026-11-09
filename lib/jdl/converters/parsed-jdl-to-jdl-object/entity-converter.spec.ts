@@ -50,7 +50,7 @@ describe('jdl - EntityConverter', () => {
         );
       });
 
-      it('should convert them', () => {
+      it('should convert them - snapshot', () => {
         expect(convertedEntities).toMatchInlineSnapshot(`
 [
   JDLEntity {

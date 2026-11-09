@@ -16,9 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { configureStore } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 import activate, { activateAction, reset } from './activate.reducer';
 
@@ -31,7 +32,7 @@ describe('Activate reducer tests', () => {
   });
 
   it('should reset', () => {
-    expect(activate({ activationSuccess: true, activationFailure: false }, reset)).toMatchObject({
+    expect(activate({ activationSuccess: true, activationFailure: false }, reset())).toMatchObject({
       activationSuccess: false,
       activationFailure: false,
     });
@@ -63,7 +64,7 @@ describe('Activate reducer tests', () => {
       activationSuccess: false,
       activationFailure: false,
     };
-    expect(activate({ activationSuccess: true, activationFailure: true }, reset)).toEqual({
+    expect(activate({ activationSuccess: true, activationFailure: true }, reset())).toEqual({
       ...initialState,
     });
   });

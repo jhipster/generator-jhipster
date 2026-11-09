@@ -16,7 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios, { type AxiosInstance } from 'axios';
+import { type InjectionKey } from 'vue';
+
+import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 
 export default class ActivateService {
   private readonly axios: AxiosInstance;
@@ -25,7 +27,9 @@ export default class ActivateService {
     this.axios = axios;
   }
 
-  activateAccount(key: string): Promise<any> {
+  activateAccount(key: string | null): Promise<AxiosResponse<void>> {
     return this.axios.get(`api/activate?key=${key}`);
   }
 }
+
+export const activateServiceKey: InjectionKey<ActivateService> = Symbol.for('jhipster:activateService');

@@ -46,27 +46,19 @@ const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 
 const testSamples = buildClientSamples(commonConfig);
 
 const clientAdminFiles = (clientSrcDir: string) => [
-  `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.component.spec.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.vue`,
   `${clientSrcDir}app/admin/configuration/configuration.service.ts`,
 
-  `${clientSrcDir}app/admin/health/health.component.ts`,
   `${clientSrcDir}app/admin/health/health.component.spec.ts`,
   `${clientSrcDir}app/admin/health/health.vue`,
   `${clientSrcDir}app/admin/health/health-modal.vue`,
-  `${clientSrcDir}app/admin/health/health-modal.component.ts`,
   `${clientSrcDir}app/admin/health/health-modal.component.spec.ts`,
   `${clientSrcDir}app/admin/health/health.service.ts`,
   `${clientSrcDir}app/admin/health/health.service.spec.ts`,
-
-  `${clientSrcDir}app/admin/logs/logs.component.ts`,
   `${clientSrcDir}app/admin/logs/logs.component.spec.ts`,
   `${clientSrcDir}app/admin/logs/logs.service.ts`,
-
-  `${clientSrcDir}app/admin/metrics/metrics.component.ts`,
   `${clientSrcDir}app/admin/metrics/metrics.component.spec.ts`,
-  `${clientSrcDir}app/admin/metrics/metrics-modal.component.ts`,
   `${clientSrcDir}app/admin/metrics/metrics-modal.component.spec.ts`,
   `${clientSrcDir}app/admin/metrics/metrics.vue`,
   `${clientSrcDir}app/admin/metrics/metrics-modal.vue`,
@@ -76,6 +68,26 @@ const clientAdminFiles = (clientSrcDir: string) => [
 describe(`generator - ${clientFramework}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('backend type', () => {
+    const run = (config: Record<string, unknown>) =>
+      helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withJHipsterConfig({ clientFramework, ...config });
+
+    it('should compose with client:spring-boot for Spring Boot', async () => {
+      await run({});
+      expect(runResult.getComposedGenerators()).toContain('jhipster:client:spring-boot');
+    });
+
+    it('should not compose with client:spring-boot for another backend', async () => {
+      await run({ backendType: 'Other' });
+      expect(runResult.getComposedGenerators()).not.toContain('jhipster:client:spring-boot');
+    });
+  });
   checkEnforcements({ client: true }, generator);
 
   describe('migration', () => {
@@ -247,7 +259,7 @@ describe(`generator - ${clientFramework}`, () => {
             );
             if (enableTranslation) {
               assertion(
-                `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
+                `${clientSrcDir}app/layouts/navbar/navbar.vue`,
                 '<b-dropdown-item to="/admin/metrics" active-class="active">\n' +
                   '            <font-awesome-icon icon="tachometer-alt" />\n' +
                   "            <span>{{ t$('global.menu.admin.metrics') }}</span>\n" +
@@ -272,6 +284,21 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('vite microfrontend', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ ...commonConfig, applicationType: 'microservice', clientBundler: 'vite', enableTranslation: true }, entities)
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should share application modules by absolute path', () => {
+      runResult.assertFileContent('module-federation.config.ts', 'import: fileURLToPath(new URL(`./');
+    });
+  });
+
   describe('entity with a relationship to an embedded entity', () => {
     before(async () => {
       await helpers
@@ -283,7 +310,7 @@ describe(`generator - ${clientFramework}`, () => {
     });
 
     it('should generate the embedded entity model', () => {
-      runResult.assertFile(`${CLIENT_MAIN_SRC_DIR}app/shared/model/embedded-entity.model.ts`);
+      runResult.assertFile(`${CLIENT_MAIN_SRC_DIR}app/entities/embedded-entity/embedded-entity.model.ts`);
     });
 
     it('should not generate ui files for the embedded entity', () => {
@@ -296,7 +323,7 @@ describe(`generator - ${clientFramework}`, () => {
 
     it('should not use the embedded entity service at the update component', () => {
       runResult.assertNoFileContent(
-        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.vue`,
         'embedded-entity.service',
       );
       runResult.assertNoFileContent(

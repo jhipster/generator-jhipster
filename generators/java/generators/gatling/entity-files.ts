@@ -18,6 +18,7 @@
  */
 import { asWriteEntityFilesSection, asWritingEntitiesTask } from '../../../base-application/support/task-type-inference.ts';
 import { TEST_DIR } from '../../../generator-constants.ts';
+import type { Entity as SpringBootEntity } from '../../../spring-boot/types.ts';
 
 export const gatlingFiles = asWriteEntityFilesSection({
   gatlingFiles: [
@@ -36,7 +37,7 @@ export const gatlingFiles = asWriteEntityFilesSection({
 export function cleanupEntitiesTask() {}
 
 export default asWritingEntitiesTask(async function writeEntitiesTask({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
+  for (const entity of entities.filter(entity => (entity as Partial<SpringBootEntity>).entityRestLayer && !entity.skipServer)) {
     await this.writeFiles({
       sections: gatlingFiles,
       context: { ...application, ...entity },

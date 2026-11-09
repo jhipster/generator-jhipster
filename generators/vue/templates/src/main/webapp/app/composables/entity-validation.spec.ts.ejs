@@ -1,0 +1,96 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it } from 'vitest';
+import { defineComponent, ref } from 'vue';
+
+import { flushPromises, mount } from '@vue/test-utils';
+
+import { type PropertyRules, useEntityValidation } from './entity-validation';
+
+// The validation of a form, mounted for the translations.
+const mountValidation = (entity: Record<string, unknown>, rules: Record<string, PropertyRules>) => {
+  let v$!: ReturnType<typeof useEntityValidation>;
+  const entityRef = ref(entity);
+  mount(
+    defineComponent({
+      setup() {
+        v$ = useEntityValidation(entityRef, rules);
+        return () => null;
+      },
+    }),
+  );
+  return { v$, entity: entityRef };
+};
+
+describe('useEntityValidation', () => {
+  it('should validate each rule of the properties', async () => {
+    const { v$ } = mountValidation(
+      { name: '', email: 'a', short: 'a', long: 'abc', count: 1.5, small: 1, big: 3, code: 'b', login: 'b', free: 'any' },
+      {
+        name: { required: true },
+        email: { email: true },
+        short: { minLength: 2 },
+        long: { maxLength: 2 },
+        count: { integer: true },
+        small: { min: 2 },
+        big: { max: 2 },
+        code: { pattern: { regex: /^a+$/, name: 'Code' } },
+        login: { pattern: { regex: /^a+$/, name: 'Login', login: true } },
+        free: {},
+      },
+    );
+    await flushPromises();
+
+    expect(v$.value.$errors.map(({ $property, $validator }) => [$property, $validator])).toEqual([
+      ['name', 'required'],
+      ['email', 'email'],
+      ['short', 'minLength'],
+      ['long', 'maxLength'],
+      ['count', 'integer'],
+      ['small', 'min'],
+      ['big', 'max'],
+      ['code', 'pattern'],
+      ['login', 'pattern'],
+    ]);
+    expect(v$.value.$errors.every(({ $message }) => typeof $message === 'string' && $message.length > 0)).toBe(true);
+  });
+
+  it('should accept the valid values', async () => {
+    const { v$ } = mountValidation(
+      { name: 'name', count: 2, code: 'aa' },
+      {
+        name: { required: true, maxLength: 4 },
+        count: { integer: true, min: 1, max: 2 },
+        code: { pattern: { regex: /^a+$/, name: 'Code' } },
+      },
+    );
+    await flushPromises();
+
+    expect(v$.value.$invalid).toBe(false);
+  });
+
+  it('should validate the changes of the entity', async () => {
+    const { v$, entity } = mountValidation({ name: 'name' }, { name: { required: true } });
+
+    entity.value.name = '';
+    await flushPromises();
+
+    expect(v$.value.name.$invalid).toBe(true);
+  });
+});

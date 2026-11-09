@@ -24,7 +24,7 @@ Cypress.Commands.add('getOauth2Data', () => {
     followRedirect: false,
   }).then(response => {
     const data = {
-      url : response.headers['location']
+      url: response.headers['location'],
     };
     cy.wrap(data).as('oauth2Data');
   });
@@ -67,11 +67,10 @@ Cypress.Commands.add('keycloakLogin', (oauth2Data, username: string, password: s
       cy.request({
         url: '/oauth2/authorization/oidc',
         followRedirect: true,
-    })
-    .then(() => {
-      cy.visit('/');
+      }).then(() => {
+        cy.visit('/');
+      });
     });
-  })
 });
 
 Cypress.Commands.add('auth0Login', (oauth2Data, username: string, password: string) => {
@@ -119,28 +118,30 @@ Cypress.Commands.add('oktaLogin', (oauth2Data, username, password) => {
   })
     .its('body.sessionToken')
     .as('sessionToken')
-    .then(function() {
+    .then(function () {
       cy.request({
         url: `${oauth2Data.url}&sessionToken=${this.sessionToken}`,
         followRedirect: true,
-    })
-    .then(() => {
-      cy.visit('/');
+      }).then(() => {
+        cy.visit('/');
+      });
     });
-  });
 });
 
 Cypress.Commands.add('oauthLogout', () => {
   cy.getCookie('XSRF-TOKEN')
-    .then(csrfCookie => cy.location().then(loc$ => cy.request({
+    .then(csrfCookie =>
+      cy.location().then(loc$ =>
+        cy.request({
           method: 'POST',
           url: `api/logout`,
           headers: {
             'X-XSRF-TOKEN': csrfCookie?.value,
             origin: loc$.origin,
           },
-        })
-    ))
+        }),
+      ),
+    )
     .then(res => {
       expect(res.status).to.eq(200);
       return cy.request({

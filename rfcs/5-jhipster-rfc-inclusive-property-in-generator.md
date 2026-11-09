@@ -8,7 +8,7 @@
 
 [summary]: #summary
 
-This RFC to define the standard structure of the option's data model that should be used within the generator (not necessary the jdl or cli, which should only be encouraged for new ones).
+This RFC to define the standard structure of the option's data model that should be used within the generator (not necessary the JDL or CLI, which should only be encouraged for new ones).
 
 ## Motivation
 
@@ -26,7 +26,7 @@ Basically, options should always be inclusive and follow these simple rules:
 - If the option is not defined by the end user: we'll take a reasonable default.
 - If the option is specified, we'll take the decision of the end user.
 
-For example, let's say that we want to remove the jhipster `skipClient` option in the jdl syntax by an option that would be compliant with this spec:
+For example, let's say that we want to replace the JHipster `skipClient` option in the JDL syntax with an option that would be compliant with this spec:
 
 - A JDL `application`, defined without any `generateClient` attribute declaration will generate a frontend for that app (use of reasonable default).
 - A JDL `application`, defined with any `generateClient` attribute declaration will take the end user's choice into consideration (if `generateClient: false` is set, the frontend won't be generated).
@@ -35,9 +35,9 @@ For example, let's say that we want to remove the jhipster `skipClient` option i
 
 [reference-level-explanation]: #reference-level-explanation
 
-At a technical level, the presence of the option should result in an attribute at the json object level.
+At a technical level, the presence of the option should result in an attribute at the JSON object level.
 
-i.e.: if we take the following jdl
+i.e.: if we take the following JDL
 
 ```
 application {
@@ -54,7 +54,7 @@ paginate * with pager except E
 
 ```
 
-the resulting (simplified) json object used by the generator
+the resulting (simplified) JSON object used by the generator
 
 `.yo-rc.json`:
 
@@ -92,7 +92,7 @@ the resulting (simplified) json object used by the generator
 
 [drawbacks]: #drawbacks
 
-Blueprint with additional options will have to override objects definition: an overridable api should be provided at the generator-core level to let the blueprint developer to add its own attributes at each level
+Blueprint with additional options will have to override objects definition: an overridable api should be provided at the generator-core level to let the blueprint developer add its own attributes at each level
 
 ## Rationale and alternatives
 

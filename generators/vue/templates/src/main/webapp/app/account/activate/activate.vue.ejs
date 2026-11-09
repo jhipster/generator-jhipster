@@ -5,7 +5,8 @@
         <h1>{{ t$('activate.title') }}</h1>
         <div class="alert alert-success" v-if="success">
           <span v-html="t$('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>
-          <a class="alert-link" @click="showLogin()">{{ t$('global.messages.info.authenticated.link') }}</a>.
+          <router-link class="alert-link" to="/login">{{ t$('global.messages.info.authenticated.link') }}</router-link
+          >.
         </div>
         <div class="alert alert-danger" v-if="error" v-html="t$('activate.messages.error')">
           <strong>Your user could not be activated.</strong> Please use the registration form to sign up.
@@ -15,4 +16,34 @@
   </div>
 </template>
 
-<script lang="ts" src="./activate.component.ts"></script>
+<script setup lang="ts">
+import { inject, onMounted, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRoute } from 'vue-router';
+
+
+import ActivateService, { activateServiceKey } from './activate.service';
+
+const activateService = inject(activateServiceKey, () => new ActivateService(), true);
+const route = useRoute();
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const success = ref(false);
+const error = ref(false);
+
+onMounted(async () => {
+  const key = Array.isArray(route.query.key) ? route.query.key[0] : route.query.key;
+  try {
+    await activateService.activateAccount(key);
+    success.value = true;
+    error.value = false;
+  } catch {
+    error.value = true;
+    success.value = false;
+  }
+});
+</script>

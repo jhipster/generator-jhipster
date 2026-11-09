@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`helpers run using withJHipsterGenerators should register jhipster generators namespaces 1`] = `
+exports[`helpers run using withJHipsterGenerators should register jhipster generators namespaces - snapshot 1`] = `
 [
   "jhipster:angular",
   "jhipster:angular:bootstrap",
@@ -9,6 +9,8 @@ exports[`helpers run using withJHipsterGenerators should register jhipster gener
   "jhipster:base",
   "jhipster:base-application",
   "jhipster:base-application:bootstrap",
+  "jhipster:base-application:database-bootstrap",
+  "jhipster:base-application:database-changelogs",
   "jhipster:base-core",
   "jhipster:base-entity-changes",
   "jhipster:base-simple-application",
@@ -30,6 +32,7 @@ exports[`helpers run using withJHipsterGenerators should register jhipster gener
   "jhipster:client:common",
   "jhipster:client:encode-csrf-token",
   "jhipster:client:i18n",
+  "jhipster:client:spring-boot",
   "jhipster:common",
   "jhipster:common:bootstrap",
   "jhipster:cypress",
@@ -117,7 +120,7 @@ exports[`helpers run using withJHipsterGenerators should register jhipster gener
 ]
 `;
 
-exports[`helpers runJHipster defaults should register jhipster generators namespaces 1`] = `
+exports[`helpers runJHipster defaults should register jhipster generators namespaces - snapshot 1`] = `
 [
   "jhipster:angular",
   "jhipster:angular:bootstrap",
@@ -126,6 +129,8 @@ exports[`helpers runJHipster defaults should register jhipster generators namesp
   "jhipster:base",
   "jhipster:base-application",
   "jhipster:base-application:bootstrap",
+  "jhipster:base-application:database-bootstrap",
+  "jhipster:base-application:database-changelogs",
   "jhipster:base-core",
   "jhipster:base-entity-changes",
   "jhipster:base-simple-application",
@@ -147,6 +152,7 @@ exports[`helpers runJHipster defaults should register jhipster generators namesp
   "jhipster:client:common",
   "jhipster:client:encode-csrf-token",
   "jhipster:client:i18n",
+  "jhipster:client:spring-boot",
   "jhipster:common",
   "jhipster:common:bootstrap",
   "jhipster:cypress",
@@ -234,7 +240,7 @@ exports[`helpers runJHipster defaults should register jhipster generators namesp
 ]
 `;
 
-exports[`helpers runJHipster with useDefaultMocks should register jhipster generators namespaces 1`] = `
+exports[`helpers runJHipster with useDefaultMocks should register jhipster generators namespaces - snapshot 1`] = `
 [
   "jhipster:angular",
   "jhipster:angular:bootstrap",
@@ -243,6 +249,8 @@ exports[`helpers runJHipster with useDefaultMocks should register jhipster gener
   "jhipster:base",
   "jhipster:base-application",
   "jhipster:base-application:bootstrap",
+  "jhipster:base-application:database-bootstrap",
+  "jhipster:base-application:database-changelogs",
   "jhipster:base-core",
   "jhipster:base-entity-changes",
   "jhipster:base-simple-application",
@@ -264,6 +272,7 @@ exports[`helpers runJHipster with useDefaultMocks should register jhipster gener
   "jhipster:client:common",
   "jhipster:client:encode-csrf-token",
   "jhipster:client:i18n",
+  "jhipster:client:spring-boot",
   "jhipster:common",
   "jhipster:common:bootstrap",
   "jhipster:cypress",

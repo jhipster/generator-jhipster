@@ -16,92 +16,38 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
+
 import { shallowMount } from '@vue/test-utils';
 
 import HealthModal from './health-modal.vue';
 
-type HealthModalComponentType = InstanceType<typeof HealthModal>;
-
-const healthService = { getBaseName: vi.fn(), getSubSystemName: vi.fn() };
-
-describe('Health Modal Component', () => {
-  let healthModal: HealthModalComponentType;
-
-  beforeEach(() => {
+describe('Health Modal view', () => {
+  it('should show the details and the error of a health', () => {
+    // WHEN
     const wrapper = shallowMount(HealthModal, {
       props: {
-        currentHealth: {},
-      },
-      global: {
-        stubs: {
-          'font-awesome-icon': true,
-        },
-        provide: {
-          healthService,
-        },
-      },
-    });
-    healthModal = wrapper.vm;
-  });
-
-  describe('baseName and subSystemName', () => {
-    it('should use healthService to get base name', () => {
-      healthModal.baseName('base');
-
-      expect(healthService.getBaseName).toHaveBeenCalled();
-    });
-
-    it('should use healthService to get sub system name', () => {
-      healthModal.subSystemName('base');
-
-      expect(healthService.getSubSystemName).toHaveBeenCalled();
-    });
-  });
-
-  describe('readableValue should transform data', () => {
-    it('to string when is an object', () => {
-      const result = healthModal.readableValue({ data: 1000 });
-
-      expect(result).toBe('{"data":1000}');
-    });
-
-    it('to string when is a string', () => {
-      const result = healthModal.readableValue('data');
-
-      expect(result).toBe('data');
-    });
-  });
-});
-
-describe('Health Modal Component for diskSpace', () => {
-  let healthModal: HealthModalComponentType;
-
-  beforeEach(() => {
-    const wrapper = shallowMount(HealthModal, {
-      props: {
-        currentHealth: { name: 'diskSpace' },
-      },
-      global: {
-        provide: {
-          healthService,
+        currentCheck: {
+          id: 'db',
+          label: { text: 'db' },
+          status: { text: 'DOWN' },
+          healthy: false,
+          details: [{ key: 'database', value: 'H2' }],
+          error: 'failed',
         },
       },
     });
-    healthModal = wrapper.vm;
+
+    // THEN
+    expect(wrapper.text()).toContain('H2');
+    expect(wrapper.text()).toContain('failed');
   });
 
-  describe('readableValue should transform data', () => {
-    it('to GB when needed', () => {
-      const result = healthModal.readableValue(2147483648);
+  it('should show nothing without a health', () => {
+    // WHEN
+    const wrapper = shallowMount(HealthModal);
 
-      expect(result).toBe('2.00 GB');
-    });
-
-    it('to MB when needed', () => {
-      const result = healthModal.readableValue(214748);
-
-      expect(result).toBe('0.20 MB');
-    });
+    // THEN
+    expect(wrapper.text()).not.toContain('failed');
   });
 });

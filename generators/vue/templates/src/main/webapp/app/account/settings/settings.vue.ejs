@@ -22,7 +22,7 @@
 
         <form name="form" id="settings-form" @submit.prevent="save()" v-if="settingsAccount" novalidate>
           <div class="mb-3">
-            <label class="form-control-label" for="firstName">{{ t$('settings.form.firstname') }}</label>
+            <label class="form-label" for="firstName">{{ t$('settings.form.firstname') }}</label>
             <input
               type="text"
               class="form-control"
@@ -31,28 +31,22 @@
               :placeholder="t$('settings.form[\'firstname.placeholder\']')"
               :class="{ 'is-valid': !v$.settingsAccount.firstName.$invalid, 'is-invalid': v$.settingsAccount.firstName.$invalid }"
               v-model="v$.settingsAccount.firstName.$model"
-              minlength="1"
-              maxlength="50"
-              required
               data-cy="firstname"
             />
             <div v-if="v$.settingsAccount.firstName.$anyDirty && v$.settingsAccount.firstName.$invalid">
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.firstName.required.$invalid"
-              >{{ t$('settings.messages.validate.firstname.required') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.firstName.minLength.$invalid"
-              >{{ t$('settings.messages.validate.firstname.minlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.firstName.maxLength.$invalid"
-              >{{ t$('settings.messages.validate.firstname.maxlength') }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.firstName.required?.$invalid">{{
+                t$('settings.messages.validate.firstname.required')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.firstName.minLength?.$invalid">{{
+                t$('settings.messages.validate.firstname.minlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.firstName.maxLength?.$invalid">{{
+                t$('settings.messages.validate.firstname.maxlength')
+              }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="lastName">{{ t$('settings.form.lastname') }}</label>
+            <label class="form-label" for="lastName">{{ t$('settings.form.lastname') }}</label>
             <input
               type="text"
               class="form-control"
@@ -61,28 +55,22 @@
               :placeholder="t$('settings.form[\'lastname.placeholder\']')"
               :class="{ 'is-valid': !v$.settingsAccount.lastName.$invalid, 'is-invalid': v$.settingsAccount.lastName.$invalid }"
               v-model="v$.settingsAccount.lastName.$model"
-              minlength="1"
-              maxlength="50"
-              required
               data-cy="lastname"
             />
             <div v-if="v$.settingsAccount.lastName.$anyDirty && v$.settingsAccount.lastName.$invalid">
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.lastName.required.$invalid"
-              >{{ t$('settings.messages.validate.lastname.required') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.lastName.minLength.$invalid"
-              >{{ t$('settings.messages.validate.lastname.minlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.lastName.maxLength.$invalid"
-              >{{ t$('settings.messages.validate.lastname.maxlength') }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.lastName.required?.$invalid">{{
+                t$('settings.messages.validate.lastname.required')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.lastName.minLength?.$invalid">{{
+                t$('settings.messages.validate.lastname.minlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.lastName.maxLength?.$invalid">{{
+                t$('settings.messages.validate.lastname.maxlength')
+              }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="email">{{ t$('global.form[\'email.label\']') }}</label>
+            <label class="form-label" for="email">{{ t$('global.form[\'email.label\']') }}</label>
             <input
               type="email"
               class="form-control"
@@ -91,34 +79,26 @@
               :placeholder="t$('global.form[\'email.placeholder\']')"
               :class="{ 'is-valid': !v$.settingsAccount.email.$invalid, 'is-invalid': v$.settingsAccount.email.$invalid }"
               v-model="v$.settingsAccount.email.$model"
-              minlength="5"
-              maxlength="254"
-              email
-              required
               data-cy="email"
             />
             <div v-if="v$.settingsAccount.email.$anyDirty && v$.settingsAccount.email.$invalid">
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.email.required.$invalid"
-              >{{ t$('global.messages.validate.email.required') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.email.email.$invalid"
-              >{{ t$('global.messages.validate.email.invalid') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.email.minLength.$invalid"
-              >{{ t$('global.messages.validate.email.minlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.email.maxLength.$invalid"
-              >{{ t$('global.messages.validate.email.maxlength') }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.email.required?.$invalid">{{
+                t$('global.messages.validate.email.required')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.email.email?.$invalid">{{
+                t$('global.messages.validate.email.invalid')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.email.minLength?.$invalid">{{
+                t$('global.messages.validate.email.minlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.email.maxLength?.$invalid">{{
+                t$('global.messages.validate.email.maxlength')
+              }}</small>
             </div>
           </div>
 <%_ if (enableTranslation) { _%>
           <div class="mb-3" v-if="languages && Object.keys(languages).length > 1">
-            <label for="langKey">{{ t$('settings.form.language') }}</label>
+            <label class="form-label" for="langKey">{{ t$('settings.form.language') }}</label>
             <select class="form-select" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langKey">
               <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{ language.name }}
               </option>
@@ -132,4 +112,64 @@
   </div>
 </template>
 
-<script lang="ts" src="./settings.component.ts"></script>
+<script setup lang="ts">
+import { computed, inject, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { useVuelidate } from '@vuelidate/core';
+import axios from 'axios';
+
+import { accountValidations } from '@/account/account-validations';
+import { currentUsernameKey } from '@/config/injection-keys';
+<%_ if (enableTranslation) { _%>
+import getLanguages from '@/config/languages';
+<%_ } _%>
+import { EMAIL_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
+import { useStore } from '@/stores';
+
+defineOptions({ name: 'Settings' });
+
+const store = useStore();
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+const languages = getLanguages();
+<%_ } _%>
+
+const success = ref<string | null>(null);
+const error = ref<string | null>(null);
+const errorEmailExists = ref<string | null>(null);
+
+const settingsAccount = computed(() => store.account);
+const username = inject(currentUsernameKey, () => computed(() => store.account?.login), true);
+
+const rules = {
+  settingsAccount: {
+    firstName: accountValidations.firstName,
+    lastName: accountValidations.lastName,
+    email: accountValidations.email,
+  },
+};
+const v$ = useVuelidate(rules, { settingsAccount });
+
+const save = () => {
+  error.value = null;
+  errorEmailExists.value = null;
+  return axios
+    .post('api/account', settingsAccount.value)
+    .then(() => {
+      error.value = null;
+      success.value = 'OK';
+      errorEmailExists.value = null;
+    })
+    .catch(ex => {
+      success.value = null;
+      error.value = 'ERROR';
+      if (ex.response.status === 400 && ex.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+        errorEmailExists.value = 'ERROR';
+        error.value = null;
+      }
+    });
+};
+</script>

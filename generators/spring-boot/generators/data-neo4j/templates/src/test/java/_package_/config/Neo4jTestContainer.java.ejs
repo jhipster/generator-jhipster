@@ -43,11 +43,7 @@ public class Neo4jTestContainer {
 
     @Bean
     DynamicPropertyRegistrar neo4jProperties(Neo4jContainer neo4jContainer) {
-        return registry ->
-            registry.add(
-                "spring.liquibase.url",
-                () -> "jdbc:neo4j:" + neo4jContainer.getBoltUrl()
-            );
+        return registry -> registry.add("spring.liquibase.url", () -> "jdbc:neo4j:" + neo4jContainer.getBoltUrl());
     }
 <%_ } _%>
 }

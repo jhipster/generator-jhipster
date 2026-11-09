@@ -63,7 +63,7 @@ exports[`generator - java-simple-application:openapi-generator gradle-addOpenapi
 }
 `;
 
-exports[`generator - java-simple-application:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
+exports[`generator - java-simple-application:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should compose with generators - snapshot 1`] = `
 [
   "jhipster:java-simple-application:build-tool",
 ]
@@ -158,7 +158,7 @@ exports[`generator - java-simple-application:openapi-generator gradle-addOpenapi
 }
 `;
 
-exports[`generator - java-simple-application:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
+exports[`generator - java-simple-application:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should compose with generators - snapshot 1`] = `
 [
   "jhipster:java-simple-application:build-tool",
 ]
@@ -241,7 +241,7 @@ exports[`generator - java-simple-application:openapi-generator maven-addOpenapiG
 }
 `;
 
-exports[`generator - java-simple-application:openapi-generator maven-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
+exports[`generator - java-simple-application:openapi-generator maven-addOpenapiGeneratorPlugin(false) should compose with generators - snapshot 1`] = `
 [
   "jhipster:java-simple-application:build-tool",
 ]
@@ -321,7 +321,7 @@ exports[`generator - java-simple-application:openapi-generator maven-addOpenapiG
 }
 `;
 
-exports[`generator - java-simple-application:openapi-generator maven-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
+exports[`generator - java-simple-application:openapi-generator maven-addOpenapiGeneratorPlugin(true) should compose with generators - snapshot 1`] = `
 [
   "jhipster:java-simple-application:build-tool",
 ]

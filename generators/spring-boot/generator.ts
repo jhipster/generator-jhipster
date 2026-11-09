@@ -44,7 +44,7 @@ import cleanupTask from './cleanup.ts';
 import command from './command.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
-import springBootDependencies from './resources/spring-boot-dependencies-4.ts';
+import springBootDependencies, { springBootDependenciesOverrides } from './resources/spring-boot-dependencies-4.ts';
 import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
@@ -286,9 +286,13 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
             'spring-boot-dependencies': "'SPRING-BOOT-VERSION'",
           };
         } else {
-          application.springBootDependencies = this.prepareDependencies(springBootDependencies.versions, 'java');
+          application.springBootDependencies = this.prepareDependencies(
+            { ...springBootDependencies.versions, ...springBootDependenciesOverrides.versions },
+            'java',
+          );
           application.javaDependencies['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
-          Object.assign(application.javaManagedProperties, springBootDependencies.properties);
+          Object.assign(application.javaManagedProperties, springBootDependencies.properties, springBootDependenciesOverrides.properties);
+          Object.assign(application.javaDependencies, springBootDependenciesOverrides.dependencies);
           application.javaDependencies.liquibase = application.javaManagedProperties['liquibase.version']!;
         }
       },
@@ -546,7 +550,11 @@ ${classProperties
         }
       },
       checkDtoRelationships({ entity, entityName, relationship }) {
-        if (entity.dto !== relationship.otherEntity.dto && !relationship.otherEntity.builtIn) {
+        if (
+          entity.dto !== relationship.otherEntity.dto &&
+          !relationship.otherEntity.builtInUser &&
+          !relationship.otherEntity.builtInAuthority
+        ) {
           this.log.warn(
             `Relationship between entities with different DTO configurations can cause unexpected results. Check ${relationship.relationshipName} in the ${entityName} entity.`,
           );
@@ -666,8 +674,17 @@ ${classProperties
             [application.applicationTypeMicroservice && application.microfrontend, `${application.srcMainResources}static/index.html`],
             `${application.javaPackageSrcDir}config/JacksonConfiguration.java`,
           ],
-          '9.4.1': [`${application.srcMainResources}config/tls/keystore.p12`],
         });
+        if (control.isJhipsterVersionLessThan('9.4.1')) {
+          // The sample KeyStore was renamed: the one of the project is kept, under its new name.
+          const oldKeyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
+          const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore-samples.p12`);
+          if (this.fs.exists(oldKeyStoreFile) && !this.fs.exists(keyStoreFile)) {
+            this.fs.move(oldKeyStoreFile, keyStoreFile);
+          } else {
+            this.removeFile(oldKeyStoreFile);
+          }
+        }
       },
       resetFakeDataSeed() {
         this.resetEntitiesFakeData('server');
@@ -715,6 +732,12 @@ ${classProperties
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      overrideManagedVersions({ source }) {
+        if (this.useVersionPlaceholders) return;
+        for (const [property, value] of Object.entries(springBootDependenciesOverrides.properties)) {
+          source.addJavaProperty!({ property, value });
+        }
+      },
       baseDependencies({ application, source }) {
         source.addSpringBootModule!(
           'spring-boot-configuration-processor',

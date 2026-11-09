@@ -16,17 +16,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
 <%_ if (enableTranslation) { _%>
-import { TranslateService, TranslatePipe } from '@ngx-translate/core';
-import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
-import { AlertError } from 'app/shared/alert';
-import { AccountService, Account } from 'app/core/auth';
 <%_ if (enableTranslation) { _%>
 import { LANGUAGES } from 'app/config';
+<%_ } _%>
+import { Account, AccountService } from 'app/core/auth';
+import { AlertError } from 'app/shared/alert';
+<%_ if (enableTranslation) { _%>
+import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
 const initialAccount: Account = {} as Account;
@@ -53,15 +56,15 @@ export default class Settings implements OnInit {
   settingsForm = new FormGroup({
     firstName: new FormControl(initialAccount.firstName, {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
+      validators: [Validators.maxLength(<%- user.fieldsByName.firstName.fieldValidateRulesMaxlength %>)],
     }),
     lastName: new FormControl(initialAccount.lastName, {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
+      validators: [Validators.maxLength(<%- user.fieldsByName.lastName.fieldValidateRulesMaxlength %>)],
     }),
     email: new FormControl(initialAccount.email, {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
+      validators: [<%- user.fieldsByName.email.fieldValidationRequired ? 'Validators.required, ' : '' %>Validators.minLength(<%- user.fieldsByName.email.fieldValidateRulesMinlength %>), Validators.maxLength(<%- user.fieldsByName.email.fieldValidateRulesMaxlength %>)<%- user.fieldsByName.email.fieldValidationEmail ? ', Validators.email' : '' %>],
     }),
     langKey: new FormControl(initialAccount.langKey, { nonNullable: true }),
     activated: new FormControl(initialAccount.activated, { nonNullable: true }),

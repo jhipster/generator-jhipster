@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - generate-blueprint help should print expected information 1`] = `
+exports[`generator - generate-blueprint help should print expected information - snapshot 1`] = `
 "Usage: jhipster generate-blueprint [options]
 
 Generate a blueprint
@@ -89,6 +89,7 @@ exports[`generator - generate-blueprint with all option should match application
   "dockerImage": undefined,
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dynamic": false,
+  "ecmaVersion": 2024,
   "generators": Any<Object>,
   "gitDependency": undefined,
   "githubActions": {
@@ -141,10 +142,14 @@ exports[`generator - generate-blueprint with all option should match application
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
+    "pnpm": "PNPM_VERSION",
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",
+  "nodePackageManagerAny": true,
   "nodePackageManagerCommand": "npm",
+  "nodePackageManagerNpm": true,
+  "nodePackageManagerPnpm": false,
   "nodeVersion": "NODE_VERSION",
   "nodeWebappBuildTarget": "webapp:build",
   "packageJsonNodeEngine": undefined,
@@ -296,6 +301,36 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/base-application/generators/bootstrap/templates/template-file-base-application:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-bootstrap/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-bootstrap/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-bootstrap/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-bootstrap/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-bootstrap/templates/template-file-base-application:database-bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-changelogs/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-changelogs/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-changelogs/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-changelogs/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-changelogs/templates/template-file-base-application:database-changelogs.ejs": {
     "stateCleared": "modified",
   },
   "generators/base-application/index.ts": {
@@ -629,6 +664,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/client/generators/i18n/templates/template-file-client:i18n.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/spring-boot/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/spring-boot/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/spring-boot/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/spring-boot/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/spring-boot/templates/template-file-client:spring-boot.ejs": {
     "stateCleared": "modified",
   },
   "generators/client/index.ts": {
@@ -1930,6 +1980,7 @@ exports[`generator - generate-blueprint with default config should match applica
   "dockerImage": undefined,
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dynamic": false,
+  "ecmaVersion": 2024,
   "gitDependency": undefined,
   "githubActions": {
     "actions/checkout": "actions/checkout@VERSION",
@@ -1981,10 +2032,14 @@ exports[`generator - generate-blueprint with default config should match applica
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
+    "pnpm": "PNPM_VERSION",
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",
+  "nodePackageManagerAny": true,
   "nodePackageManagerCommand": "npm",
+  "nodePackageManagerNpm": true,
+  "nodePackageManagerPnpm": false,
   "nodeVersion": "NODE_VERSION",
   "nodeWebappBuildTarget": "webapp:build",
   "packageJsonNodeEngine": undefined,
@@ -2196,10 +2251,14 @@ exports[`generator - generate-blueprint with local-blueprint option and app gene
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
+    "pnpm": "PNPM_VERSION",
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",
+  "nodePackageManagerAny": true,
   "nodePackageManagerCommand": "npm",
+  "nodePackageManagerNpm": true,
+  "nodePackageManagerPnpm": false,
   "nodeVersion": "NODE_VERSION",
   "nodeWebappBuildTarget": "webapp:build",
   "packageJsonNodeEngine": undefined,
@@ -2339,10 +2398,14 @@ exports[`generator - generate-blueprint with local-blueprint option should match
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
+    "pnpm": "PNPM_VERSION",
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",
+  "nodePackageManagerAny": true,
   "nodePackageManagerCommand": "npm",
+  "nodePackageManagerNpm": true,
+  "nodePackageManagerPnpm": false,
   "nodeVersion": "NODE_VERSION",
   "nodeWebappBuildTarget": "webapp:build",
   "packageJsonNodeEngine": undefined,

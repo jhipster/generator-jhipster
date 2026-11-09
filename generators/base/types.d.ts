@@ -44,6 +44,9 @@ export type Control = {
 export type Config = CoreConfig &
   ExportStoragePropertiesFromCommand<typeof Command> & {
     jhipsterVersion?: string;
+    /** The last changelog date given to an entity, as a timestamp, see `nextTimestamp`. */
+    lastChangelogTimestamp?: number;
+    /** @deprecated The former name of `lastChangelogTimestamp`, read from the projects that have it. */
     lastLiquibaseTimestamp?: number;
     creationTimestamp?: number;
     blueprints?: { name: string; version?: string }[];

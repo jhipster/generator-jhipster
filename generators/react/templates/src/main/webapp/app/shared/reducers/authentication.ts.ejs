@@ -16,20 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios, { AxiosResponse } from 'axios';
 <%_ if (authenticationTypeJwt || enableTranslation) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { serializeAxiosError } from './reducer.utils';
 
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios, { AxiosResponse } from 'axios';
+
+import { AppThunk } from 'app/config/store';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
 <%_ } _%>
-import { AppThunk } from 'app/config/store';
 <%_ if (enableTranslation) { _%>
 import { setLocale } from 'app/shared/reducers/locale';
 <%_ } _%>
+
+import { serializeAxiosError } from './reducer.utils';
 
 export const initialState = {
   loading: false,
@@ -73,9 +75,13 @@ export const getAccount = createAsyncThunk('authentication/get_account', async (
 });
 
 <%_ if (authenticationTypeSession) { _%>
-export const authenticate = createAsyncThunk('authentication/login', async (data: string) => axios.post<any>('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }), {
-  serializeError: serializeAxiosError,
-});
+export const authenticate = createAsyncThunk(
+  'authentication/login',
+  async (data: string) => axios.post<any>('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }),
+  {
+    serializeError: serializeAxiosError,
+  },
+);
 
 export const login: (username: string, password: string, rememberMe?: boolean) => AppThunk =
   (username, password, rememberMe = false) =>
@@ -163,14 +169,14 @@ export const AuthenticationSlice = createSlice({
     authError(state, action) {
       return {
         ...state,
-        redirectMessage: action.payload
+        redirectMessage: action.payload,
       };
     },
     clearAuth(state) {
       return {
         ...state,
         loading: false,
-        isAuthenticated: false
+        isAuthenticated: false,
       };
     },
   },
@@ -210,7 +216,7 @@ export const AuthenticationSlice = createSlice({
   <%_ if (authenticationTypeOauth2) { _%>
       .addCase(logoutServer.fulfilled, (state, action) => ({
         ...initialState,
-        logoutUrl: action.payload.data.logoutUrl
+        logoutUrl: action.payload.data.logoutUrl,
       }))
   <%_ } else { _%>
       .addCase(logoutServer.fulfilled, () => initialState)

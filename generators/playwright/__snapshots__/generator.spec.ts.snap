@@ -35,6 +35,9 @@ exports[`generator - playwright jwt-vue-withAdminUi(true)- should match generate
   "src/test/javascript/playwright/e2e/administration/administration.pw.ts": {
     "stateCleared": "modified",
   },
+  "src/test/javascript/playwright/e2e/entity/authority.pw.ts": {
+    "stateCleared": "modified",
+  },
   "src/test/javascript/playwright/e2e/entity/entity-a.pw.ts": {
     "stateCleared": "modified",
   },

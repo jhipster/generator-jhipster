@@ -1,0 +1,79 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+
+import AlertService from '@/shared/alert/alert.service';
+
+import { useEntitySave } from './entity-save';
+
+describe('useEntitySave', () => {
+  const setup = (isUpdate: boolean, saved: Promise<{ id: number }>) => {
+    const alertService = new AlertService({ <%- enableTranslation ? 'i18n: { t: vi.fn() }, ' : '' %>toast: { create: vi.fn() } });
+    vi.spyOn(alertService, 'showInfo').mockImplementation(() => {});
+    vi.spyOn(alertService, 'showSuccess').mockImplementation(() => {});
+    vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+    const create = vi.fn().mockReturnValue(saved);
+    const update = vi.fn().mockReturnValue(saved);
+    const onSaved = vi.fn();
+    const entitySave = useEntitySave({
+      alertService,
+      isUpdate: () => isUpdate,
+      create,
+      update,
+      getId: entity => entity.id,
+      createdMessage: id => `created ${id}`,
+      updatedMessage: id => `updated ${id}`,
+      onSaved,
+    });
+    return { alertService, create, update, onSaved, ...entitySave };
+  };
+
+  it('should create a new entity', async () => {
+    const { alertService, create, update, onSaved, save, isSaving } = setup(false, Promise.resolve({ id: 1 }));
+
+    const saving = save();
+    expect(isSaving.value).toBe(true);
+    await saving;
+
+    expect({ create: create.mock.calls.length, update: update.mock.calls.length }).toEqual({ create: 1, update: 0 });
+    expect(alertService.showSuccess).toHaveBeenCalledWith('created 1');
+    expect(onSaved).toHaveBeenCalled();
+    expect(isSaving.value).toBe(false);
+  });
+
+  it('should update an existing entity', async () => {
+    const { alertService, create, update, onSaved, save } = setup(true, Promise.resolve({ id: 2 }));
+
+    await save();
+
+    expect({ create: create.mock.calls.length, update: update.mock.calls.length }).toEqual({ create: 0, update: 1 });
+    expect(alertService.showInfo).toHaveBeenCalledWith('updated 2');
+    expect(onSaved).toHaveBeenCalled();
+  });
+
+  it('should show the error of a failed save', async () => {
+    const { alertService, onSaved, save, isSaving } = setup(true, Promise.reject({ response: { status: 500 } }));
+
+    await save();
+
+    expect(alertService.showHttpError).toHaveBeenCalledWith({ status: 500 });
+    expect(onSaved).not.toHaveBeenCalled();
+    expect(isSaving.value).toBe(false);
+  });
+});

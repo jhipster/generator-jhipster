@@ -23,7 +23,7 @@ import type { Application as ClientApplication, Entity as ClientEntity } from '.
  * Removes files that were generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask<ClientEntity, ClientApplication>(function cleanupOldFilesTask({ application, control }) {
+export default asWritingTask<ClientEntity, ClientApplication>(async function cleanupOldFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('6.3.0')) {
     this.removeFile('tslint.json');
   }
@@ -90,4 +90,18 @@ export default asWritingTask<ClientEntity, ClientApplication>(function cleanupOl
     this.removeFile('jest.conf.js');
     this.removeFile('tsconfig.test.json');
   }
+
+  await control.cleanupFiles({
+    '9.5.0': [
+      `${application.clientSrcDir}app/shared/layout/footer/footer.scss`,
+      `${application.clientSrcDir}app/modules/administration/user-management/index.tsx`,
+      `${application.clientSrcDir}app/modules/administration/user-management/user-management.tsx`,
+      `${application.clientSrcDir}app/modules/administration/user-management/user-management-update.tsx`,
+      `${application.clientSrcDir}app/modules/administration/user-management/user-management-detail.tsx`,
+      `${application.clientSrcDir}app/modules/administration/user-management/user-management-delete-dialog.tsx`,
+      `${application.clientSrcDir}app/modules/administration/user-management/user-management-delete-dialog.spec.tsx`,
+      `${application.clientSrcDir}app/modules/administration/user-management/user-management.reducer.ts`,
+      `${application.clientSrcDir}app/modules/administration/user-management/user-management.reducer.spec.ts`,
+    ],
+  });
 });

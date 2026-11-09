@@ -1,6 +1,6 @@
 <template>
   <div>
-<%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
+<%_ for (entity of entities.filter(entity => !entity.embedded && !entity.adminEntity)) { _%>
     <b-dropdown-item to="/<%- entity.entityPage %>">
       <font-awesome-icon icon="asterisk" />
       <span>{{ t$('global.menu.entities.<%- entity.entityTranslationKeyMenu %>') }}</span>
@@ -10,4 +10,18 @@
   </div>
 </template>
 
-<script lang="ts" src="./entities-menu.component.ts"></script>
+<script setup lang="ts">
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+
+<%_ } _%>
+defineOptions({ name: 'EntitiesMenu' });
+<%_ if (enableTranslation) { _%>
+
+  <%_ if (!entities.some(entity => !entity.embedded && !entity.adminEntity)) { _%>
+// The entities the needle adds to the menu translate with it.
+// eslint-disable-next-line no-unused-vars
+  <%_ } _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+</script>

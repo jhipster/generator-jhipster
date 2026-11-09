@@ -164,7 +164,7 @@ exports[`git-changes generators/base-entity-changes/index.ts should match change
   "ci": false,
   "client": false,
   "common": false,
-  "databaseChangelogWorkflow": false,
+  "databaseChangelogWorkflow": true,
   "devBlueprint": false,
   "devserverWorkflow": false,
   "e2e": false,

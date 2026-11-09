@@ -69,7 +69,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
 
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
-      async configuringEachEntity({ entityConfig }) {
+      configuringEachEntity({ entityConfig }) {
         if (entityConfig.dto && entityConfig.dto !== 'no') {
           this.log.warn(
             `The DTO option is not supported for Neo4j database. Neo4j persists the entire constellation, DTO causes the constellation to be incomplete. DTO is found in entity ${entityConfig.name}.`,
@@ -100,7 +100,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
-      async checkUserRelationship({ entities }) {
+      checkUserRelationship({ entities }) {
         entities.forEach(entity => {
           if (entity.relationships.some(relationship => relationship.otherEntity.builtInUser)) {
             this.log.warn(

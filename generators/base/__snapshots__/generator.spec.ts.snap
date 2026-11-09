@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - base help should print expected information 1`] = `
+exports[`generator - base help should print expected information - snapshot 1`] = `
 "Usage: jhipster [options] [command]
 
 Options:
@@ -27,7 +27,7 @@ Options:
   --defaults                      Execute jhipster with default config
   --reproducible                  Try to reproduce changelog
   --reproducible-secrets          Derive the generated secrets (jwtSecretKey, rememberMeKey, development KeyStore) from the creation timestamp
-  --node-package-manager <value>  Force an unsupported client package manager
+  --node-package-manager <value>  Node.js package manager of the application (choices: "npm", "pnpm")
   --ignore-errors                 Don't fail on prettier errors.
   --creation-timestamp <value>    Project creation timestamp (used for reproducible builds)
   --remove-needles                Remove needles; they are used by entity and language generators to inject code into files

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`jdl - OptionConverter convertOptions when passing options such as angularSuffix should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as angularSuffix should convert it - snapshot 1`] = `
 [
   JDLBinaryOption {
     "entityNames": Set {
@@ -15,7 +15,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as angul
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as clientRootFolder should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as clientRootFolder should convert it - snapshot 1`] = `
 [
   JDLBinaryOption {
     "entityNames": Set {
@@ -30,7 +30,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as clien
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as dto should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as dto should convert it - snapshot 1`] = `
 [
   JDLBinaryOption {
     "entityNames": Set {
@@ -45,7 +45,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as dto s
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as embedded should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as embedded should convert it - snapshot 1`] = `
 [
   JDLUnaryOption {
     "entityNames": Set {
@@ -59,7 +59,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as embed
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as filter should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as filter should convert it - snapshot 1`] = `
 [
   JDLUnaryOption {
     "entityNames": Set {
@@ -73,7 +73,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as filte
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as microservice should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as microservice should convert it - snapshot 1`] = `
 [
   JDLBinaryOption {
     "entityNames": Set {
@@ -88,7 +88,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as micro
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as noFluentMethod should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as noFluentMethod should convert it - snapshot 1`] = `
 [
   JDLUnaryOption {
     "entityNames": Set {
@@ -102,7 +102,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as noFlu
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as pagination should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as pagination should convert it - snapshot 1`] = `
 [
   JDLBinaryOption {
     "entityNames": Set {
@@ -117,7 +117,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as pagin
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as readOnly should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as readOnly should convert it - snapshot 1`] = `
 [
   JDLUnaryOption {
     "entityNames": Set {
@@ -131,7 +131,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as readO
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as search should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as search should convert it - snapshot 1`] = `
 [
   JDLBinaryOption {
     "entityNames": Set {
@@ -146,7 +146,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as searc
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as service should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as service should convert it - snapshot 1`] = `
 [
   JDLBinaryOption {
     "entityNames": Set {
@@ -161,7 +161,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as servi
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as skipClient should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as skipClient should convert it - snapshot 1`] = `
 [
   JDLUnaryOption {
     "entityNames": Set {
@@ -175,7 +175,7 @@ exports[`jdl - OptionConverter convertOptions when passing options such as skipC
 ]
 `;
 
-exports[`jdl - OptionConverter convertOptions when passing options such as skipServer should convert it 1`] = `
+exports[`jdl - OptionConverter convertOptions when passing options such as skipServer should convert it - snapshot 1`] = `
 [
   JDLUnaryOption {
     "entityNames": Set {

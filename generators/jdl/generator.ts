@@ -147,7 +147,7 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
           this.jdlContents.push(this.readDestination(jdlFile, { allowOutsideRoot: true }) ?? '');
         }
       },
-      async parseJDL() {
+      parseJDL() {
         // The blueprints option, which the base command declares.
         const { blueprints } = this.options as { blueprints?: string };
         const importer = createImporterFromContent(
@@ -259,7 +259,8 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
             generatorOptions: {
               /** TODO types contains appsFolders which is not correctly handled, {@see file:../workspaces/command.ts} */
               workspacesFolders: this.applications.map(app => app.folder!),
-              generateApplications: async () => this.runNonInteractive(this.applications, generatorOptions),
+              generateApplications: async (workspacesOptions: Record<string, unknown>) =>
+                this.runNonInteractive(this.applications, { ...generatorOptions, ...workspacesOptions }),
             } as any,
           });
         } else {

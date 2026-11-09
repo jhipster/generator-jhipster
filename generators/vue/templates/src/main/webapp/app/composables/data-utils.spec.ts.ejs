@@ -1,0 +1,167 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { paddingSize } from '@/shared/jhipster/data-utils';
+
+import useDataUtils from './data-utils';
+
+describe('DataUtils Service', () => {
+  let dataUtilsService: ReturnType<typeof useDataUtils>;
+
+  beforeEach(() => {
+    dataUtilsService = useDataUtils();
+  });
+
+  it('should retrieve byteSize', () => {
+    const result = dataUtilsService.byteSize('JHipster rocks!');
+
+    expect(result).toBe('11.25 bytes');
+  });
+
+  it('should open file', () => {
+    window.open = vi.fn().mockReturnValue({});
+    const objectURL = 'blob:http://localhost:9000/xxx';
+    URL.createObjectURL = vi.fn().mockImplementationOnce(() => {
+      return objectURL;
+    });
+
+    dataUtilsService.openFile('text', 'data');
+
+    expect(window.open).toHaveBeenCalledWith(objectURL);
+  });
+
+  it('should open an image blob in a new window', () => {
+    window.open = vi.fn().mockReturnValue({});
+    URL.createObjectURL = vi.fn().mockReturnValue('blob:http://localhost:9000/xxx');
+
+    dataUtilsService.openFile('image/png', 'data', 'image');
+
+    expect(URL.createObjectURL).toHaveBeenCalledWith(expect.objectContaining({ type: 'image/png' }));
+  });
+
+  it('should open an xml image blob as a download', () => {
+    window.open = vi.fn().mockReturnValue({});
+    URL.createObjectURL = vi.fn().mockReturnValue('blob:http://localhost:9000/xxx');
+
+    dataUtilsService.openFile('image/svg+xml', 'data', 'image');
+
+    expect(URL.createObjectURL).toHaveBeenCalledWith(expect.objectContaining({ type: 'application/octet-stream' }));
+  });
+
+  it('should open any blob as a download', () => {
+    window.open = vi.fn().mockReturnValue({});
+    URL.createObjectURL = vi.fn().mockReturnValue('blob:http://localhost:9000/xxx');
+
+    dataUtilsService.openFile('application/pdf', 'data');
+
+    expect(URL.createObjectURL).toHaveBeenCalledWith(expect.objectContaining({ type: 'application/octet-stream' }));
+  });
+
+  it('should paddingSize to 0', () => {
+    const result = paddingSize('toto');
+
+    expect(result).toBe(0);
+  });
+
+  it('should paddingSize to 1', () => {
+    const result = paddingSize('toto=');
+
+    expect(result).toBe(1);
+  });
+
+  it('should paddingSize to 2', () => {
+    const result = paddingSize('toto==');
+
+    expect(result).toBe(2);
+  });
+
+  it('should parse links', () => {
+    const result = dataUtilsService.parseLinks(
+      '<http://localhost/api/entities?' +
+        'sort=date%2Cdesc&sort=id&page=1&size=12>; rel="next",<http://localhost/api' +
+        '/entities?sort=date%2Cdesc&sort=id&page=2&size=12>; rel="last",<http://localhost' +
+        '/api/entities?sort=date%2Cdesc&sort=id&page=0&size=12>; rel="first"',
+    );
+
+    expect(result.last).toBe(2);
+  });
+
+  it('should return empty JSON object for empty string', () => {
+    const result = dataUtilsService.parseLinks('');
+
+    expect(result).toStrictEqual({});
+  });
+
+  it('should return empty JSON object for text with no link header', () => {
+    const result = dataUtilsService.parseLinks('JHipster rocks!');
+
+    expect(result).toStrictEqual({});
+  });
+
+  it('should return empty JSON object for text without >;', () => {
+    const result = dataUtilsService.parseLinks(
+      '<http://localhost/api/entities?' +
+        'sort=date%2Cdesc&sort=id&page=1&size=12> rel="next",<http://localhost/api' +
+        '/entities?sort=date%2Cdesc&sort=id&page=2&size=12> rel="last",<http://localhost' +
+        '/api/entities?sort=date%2Cdesc&sort=id&page=0&size=12> rel="first"',
+    );
+
+    expect(result).toStrictEqual({});
+  });
+
+  it('should return empty JSON object for text with no comma separated link header', () => {
+    const result = dataUtilsService.parseLinks(
+      '<http://localhost/api/entities?' +
+        'sort=id%2Cdesc&sort=id&page=1&size=12>; rel="next"<http://localhost/api' +
+        '/entities?sort=id%2Cdesc&sort=id&page=2&size=12>; rel="last"<http://localhost' +
+        '/api/entities?sort=id%2Cdesc&sort=id&page=0&size=12>; rel="first"',
+    );
+
+    expect(result).toStrictEqual({});
+  });
+
+  it('should set the data of a file and its content type', async () => {
+    const entity: Record<string, unknown> = {};
+    const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
+
+    dataUtilsService.setFileData({ target: { files: [file] } }, entity, 'data', false);
+
+    await vi.waitFor(() => expect(entity.data).toBe(btoa('hello')));
+    expect(entity.dataContentType).toBe('text/plain');
+  });
+
+  it('should not set the data of a file that is not an image as an image', () => {
+    const entity: Record<string, unknown> = {};
+    const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
+
+    dataUtilsService.setFileData({ target: { files: [file] } }, entity, 'data', true);
+
+    expect(entity).toEqual({});
+  });
+
+  it('should not set the data without a file', () => {
+    const entity: Record<string, unknown> = {};
+
+    dataUtilsService.setFileData({ target: { files: [] } }, entity, 'data', false);
+    dataUtilsService.setFileData(undefined, entity, 'data', false);
+
+    expect(entity).toEqual({});
+  });
+});

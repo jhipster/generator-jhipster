@@ -20,6 +20,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { requireNamespace } from '@yeoman/namespace';
 import type { BaseEnvironmentOptions, LookupOptions } from '@yeoman/types';
 import chalk from 'chalk';
 import didYouMean from 'didyoumean';
@@ -230,14 +231,31 @@ export const buildCommands = ({
         const command = this;
 
         if (cmdName === 'run') {
+          // The first operand is the generator, the following ones are its arguments.
+          operands = (Array.isArray(operands) ? operands : [operands]).slice(0, 1);
           command.usage(`${operands} [options]`);
-          operands = Array.isArray(operands) ? operands : [operands];
-          command.generatorNamespaces = operands.map(
-            namespace => `${namespace.startsWith(JHIPSTER_NS) ? '' : `${JHIPSTER_NS}-`}${namespace}`,
-          );
-          await envBuilder?.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
+          // A scoped namespace (`@scope/jhipster-foo:bar`) is used as it is.
+          command.generatorNamespaces = operands.map(operand => {
+            const namespace = requireNamespace(operand);
+            return namespace.scope || namespace.unscoped.startsWith(JHIPSTER_NS) ?
+                namespace.toString()
+              : namespace.with({ unscoped: `${JHIPSTER_NS}-${namespace.unscoped}` }).toString();
+          });
+          // The registered generators, like the ones of the dev blueprint, are not looked up.
+          const packagesToLookup = command.generatorNamespaces
+            .filter(namespace => !namespace.includes(':') || !env.getGeneratorMeta(namespace))
+            .map(namespace => requireNamespace(namespace).generatorHint);
+          if (packagesToLookup.length > 0) {
+            envBuilder?.lookupGenerators(packagesToLookup);
+          }
           for (const namespace of command.generatorNamespaces) {
-            const resolved = resolveCommand({ command: namespace }, { getGeneratorMeta: namespace => env.getGeneratorMeta(namespace) });
+            const resolved = resolveCommand(
+              { command: namespace },
+              {
+                getGeneratorMeta: namespace => env.getGeneratorMeta(namespace),
+                blueprintNamespaces: envBuilder?.getBlueprintsNamespaces(),
+              },
+            );
             if (!resolved) {
               logger.fatal(chalk.red(`\nGenerator ${namespace} not found.\n`));
             }

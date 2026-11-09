@@ -143,9 +143,15 @@ public class LiquibaseConfiguration {
 <%_ if (databaseTypeNeo4j) { _%>
 
     public DataSource createLiquibaseDataSource(LiquibaseProperties liquibaseProperties, Neo4jProperties dataSourceProperties) {
-        String url = Optional.ofNullable(liquibaseProperties.getUrl()).orElseGet(() -> "jdbc:neo4j:" + dataSourceProperties.getUri().toString());
-        String user = Optional.ofNullable(liquibaseProperties.getUser()).orElseGet(() -> dataSourceProperties.getAuthentication().getUsername());
-        String password = Optional.ofNullable(liquibaseProperties.getPassword()).orElseGet(() -> dataSourceProperties.getAuthentication().getPassword());
+        String url = Optional.ofNullable(liquibaseProperties.getUrl()).orElseGet(
+            () -> "jdbc:neo4j:" + dataSourceProperties.getUri().toString()
+        );
+        String user = Optional.ofNullable(liquibaseProperties.getUser()).orElseGet(() ->
+            dataSourceProperties.getAuthentication().getUsername()
+        );
+        String password = Optional.ofNullable(liquibaseProperties.getPassword()).orElseGet(() ->
+            dataSourceProperties.getAuthentication().getPassword()
+        );
 
         return new SimpleDriverDataSource(new Neo4jDriver(), url, user, password);
     }
@@ -161,7 +167,9 @@ public class LiquibaseConfiguration {
             String keyspaceName = session
                 .getKeyspace()
                 .map(CqlIdentifier::asInternal)
-                .orElseThrow(() -> new IllegalStateException("The Cassandra session is not bound to a keyspace, configure spring.cassandra.keyspace-name"));
+                .orElseThrow(() ->
+                    new IllegalStateException("The Cassandra session is not bound to a keyspace, configure spring.cassandra.keyspace-name")
+                );
             return (
                 "jdbc:cassandra://" +
                 contactPoint.host() +

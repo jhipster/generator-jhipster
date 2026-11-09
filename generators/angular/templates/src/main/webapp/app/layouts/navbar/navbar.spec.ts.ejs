@@ -17,16 +17,17 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
+import { of } from 'rxjs';
 
-import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
 import { Account, AccountService } from 'app/core/auth';
+import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginService } from 'app/login/login.service';
 
@@ -48,23 +49,21 @@ describe('Navbar Component', () => {
     imageUrl: '',
   };
 
-  beforeEach(
-    () => {
-      TestBed.configureTestingModule({
-        providers: [
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
 <%_ if (enableTranslation) { _%>
         provideTranslateService(),
 <%_ } _%>
-          {
-            provide: ActivatedRoute,
-            useValue: {}
-          },
-          provideHttpClientTesting(),
-          LoginService
-        ],
-      });
-    }
-  );
+        {
+          provide: ActivatedRoute,
+          useValue: {},
+        },
+        provideHttpClientTesting(),
+        LoginService,
+      ],
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(Navbar);

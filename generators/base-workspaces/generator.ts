@@ -27,7 +27,7 @@ import { getDefaultJDLDeploymentDefaults } from '../../lib/jdl-config/jhipster-j
 import { createDelayedMutationContext, droppedMutationMessage, removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import BaseGenerator from '../base/index.ts';
 import { POST_WRITING_OBJECTS, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
-import type { GenericTask } from '../base-core/types.ts';
+import type { GenericTask, TaskGroup } from '../base-core/types.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.ts';
 import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
 
@@ -126,9 +126,14 @@ export default abstract class BaseWorkspacesGenerator<
         let composePort = 8080;
         return Object.entries(this.resolveApplicationFolders()).map(([appFolder, resolvedFolder]) => {
           const contextMap = this.env.getContextMap(resolvedFolder) as Map<string, WorkspacesApplication>;
-          const application = contextMap.get(CONTEXT_DATA_APPLICATION_KEY);
+          let application = contextMap.get(CONTEXT_DATA_APPLICATION_KEY);
           if (!application) {
-            throw new Error(`No application found in ${resolvedFolder}`);
+            // JHipster does not bootstrap an application of a blueprint: without the blueprint, only its type is known.
+            const { applicationType } = (this.fs.readJSON(join(resolvedFolder, '.yo-rc.json')) as any)?.['generator-jhipster'] ?? {};
+            if (isOfficialApplicationType(applicationType)) {
+              throw new Error(`No application found in ${resolvedFolder}`);
+            }
+            application = { applicationType } as WorkspacesApplication;
           }
           application.appFolder = appFolder;
           if (isOfficialApplicationType(application.applicationType)) {
@@ -246,7 +251,7 @@ export default abstract class BaseWorkspacesGenerator<
    */
   asPromptingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PromptingWorkspacesTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PromptingWorkspacesTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -255,7 +260,7 @@ export default abstract class BaseWorkspacesGenerator<
    */
   asConfiguringWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ConfiguringWorkspacesTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['ConfiguringWorkspacesTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -264,7 +269,7 @@ export default abstract class BaseWorkspacesGenerator<
    */
   asLoadingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['LoadingWorkspacesTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['LoadingWorkspacesTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -273,7 +278,7 @@ export default abstract class BaseWorkspacesGenerator<
    */
   asPreparingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PreparingWorkspacesTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PreparingWorkspacesTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 }

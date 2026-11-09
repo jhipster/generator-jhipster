@@ -1,0 +1,226 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.service;
+
+import <%- packageName %>.IntegrationTest;
+<%_ if (databaseTypeSql && reactive) { _%>
+import <%- packageName %>.config.Constants;
+<%_ } _%>
+import <%- user.entityAbsoluteClass %>;
+<%_ if (searchEngineElasticsearch) { _%>
+import <%- packageName %>.repository.search.UserSearchRepository;
+<%_ } _%>
+import <%- packageName %>.repository.UserRepository;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (searchEngineElasticsearch) { _%>
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.data.auditing.AuditingHandler;
+import org.springframework.data.auditing.DateTimeProvider;
+import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+<%_ if (databaseTypeSql) { _%>
+import java.time.LocalDateTime;
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
+import java.time.ZoneOffset;
+<%_ } _%>
+import java.util.List;
+import java.util.Optional;
+
+<%_ if (databaseTypeCouchbase) { _%>
+import static <%- packageName %>.web.rest.TestUtil.mockAuthentication;
+<%_ } _%>
+import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (searchEngineElasticsearch) { _%>
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+import static org.mockito.Mockito.when;
+<%_ } _%>
+<%_ if (cacheProviderAny) { _%>
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.Cache;
+import java.util.Objects;
+<%_ } _%>
+
+/**
+ * Integration tests for {@link RegistrationService}.
+ */
+@IntegrationTest
+<%_ if (databaseTypeSql && !reactive) { _%>
+@Transactional
+<%_ } _%>
+class RegistrationServiceIT {
+
+    private static final String DEFAULT_LOGIN = "johndoe_registration";
+
+    private static final String DEFAULT_EMAIL = "johndoe_registration@localhost";
+<%_ if (cacheProviderAny) { _%>
+
+    @Autowired
+    private CacheManager cacheManager;
+<%_ } _%>
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RegistrationService registrationService;
+<%_ if (searchEngineElasticsearch) { _%>
+
+    /**
+     * This repository is mocked in the <%- packageName %>.repository.search test package.
+     *
+     * @see <%- packageName %>.repository.search.UserSearchRepositoryMockConfiguration
+     */
+    @MockitoSpyBean
+    private UserSearchRepository spiedUserSearchRepository;
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+
+    @Autowired
+    private AuditingHandler auditingHandler;
+
+    @MockitoBean
+    private DateTimeProvider dateTimeProvider;
+<%_ } _%>
+
+    private <%- user.persistClass %> user;
+
+    private Long numberOfUsers;
+
+    @BeforeEach
+    void init() {
+<%_ if (databaseTypeCouchbase) { _%>
+        mockAuthentication();
+<%_ } _%>
+        numberOfUsers = userRepository.count()<%- reactorBlock %>;
+        user = new <%- user.persistClass %>();
+        user.setLogin(DEFAULT_LOGIN);
+        user.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
+        user.setActivated(true);
+        user.setEmail(DEFAULT_EMAIL);
+        user.setFirstName("john");
+        user.setLastName("doe");
+        user.setLangKey("dummy");
+<%_ if (databaseTypeSql && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM);
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(LocalDateTime.now()));
+        auditingHandler.setDateTimeProvider(dateTimeProvider);
+<%_ } _%>
+    }
+
+    @AfterEach
+    void cleanupAndCheck() {
+<%_ if (cacheProviderAny) { _%>
+        cacheManager
+            .getCacheNames()
+            .stream()
+            .map(cacheName -> this.cacheManager.getCache(cacheName))
+            .filter(Objects::nonNull)
+            .forEach(Cache::clear);
+<%_ } _%>
+        userService.deleteUser(DEFAULT_LOGIN)<%- reactorBlock %>;
+        assertThat(userRepository.count()<%- reactorBlock %>).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
+    }
+
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void assertThatNotActivatedUsersWithNotNullActivationKeyCreatedBefore3DaysAreDeleted() {
+        Instant now = Instant.now();
+<%_ if (databaseTypeSql && !reactive) { _%>
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
+<%_ } _%>
+        user.setActivated(false);
+        user.setActivationKey(RandomStringUtils.insecure().next(20));
+        <%- user.persistClass %> dbUser = userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
+        dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
+<%_ if (databaseTypeSql && reactive) { _%>
+        LocalDateTime threeDaysAgo = LocalDateTime.ofInstant(now.minus(3, ChronoUnit.DAYS), ZoneOffset.UTC);
+<%_ } else { _%>
+        Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
+<%_ } _%>
+        List<<%- user.persistClass %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
+            .collectList().block()<% } %>;
+        assertThat(users).isNotEmpty();
+        registrationService.removeNotActivatedUsers();
+        users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
+            .collectList().block()<% } %>;
+        assertThat(users).isEmpty();
+<%_ if (searchEngineElasticsearch) { _%>
+
+        // Verify Elasticsearch mock
+        verify(spiedUserSearchRepository, times(1)).delete<%- reactive ? '' : 'FromIndex' %>(user);
+<%_ } _%>
+    }
+
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
+        Instant now = Instant.now();
+<%_ if (databaseTypeSql && !reactive) { _%>
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
+<%_ } _%>
+        user.setActivated(false);
+        <%- user.persistClass %> dbUser = userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
+        dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
+<%_ if (databaseTypeSql && reactive) { _%>
+        LocalDateTime threeDaysAgo = LocalDateTime.ofInstant(now.minus(3, ChronoUnit.DAYS), ZoneOffset.UTC);
+<%_ } else { _%>
+        Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
+<%_ } _%>
+        List<<%- user.persistClass %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
+            .collectList().block()<% } %>;
+        assertThat(users).isEmpty();
+        registrationService.removeNotActivatedUsers();
+        Optional<<%- user.persistClass %>> maybeDbUser = userRepository.findById(dbUser.getId())<%- reactive ? '.blockOptional()' : '' %>;
+        assertThat(maybeDbUser).contains(dbUser);
+<%_ if (searchEngineElasticsearch) { _%>
+
+        // Verify Elasticsearch mock
+        verify(spiedUserSearchRepository, never()).delete<%- reactive ? '' : 'FromIndex' %>(user);
+<%_ } _%>
+    }
+}

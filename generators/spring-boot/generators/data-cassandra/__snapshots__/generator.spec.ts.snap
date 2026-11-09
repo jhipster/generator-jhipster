@@ -68,6 +68,9 @@ exports[`generator - cassandra gateway-jwt-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
@@ -105,6 +108,9 @@ exports[`generator - cassandra gateway-jwt-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/UserService.java": {
@@ -147,6 +153,9 @@ exports[`generator - cassandra gateway-jwt-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -317,6 +326,9 @@ exports[`generator - cassandra gateway-jwt-reactive(false)-maven-enableTranslati
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -330,6 +342,9 @@ exports[`generator - cassandra gateway-jwt-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -640,6 +655,9 @@ exports[`generator - cassandra gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
@@ -766,6 +784,9 @@ exports[`generator - cassandra gateway-oauth2-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/Simple.java": {
@@ -964,6 +985,9 @@ exports[`generator - cassandra gateway-oauth2-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -1212,6 +1236,9 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -1504,6 +1531,9 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
@@ -1794,6 +1824,9 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
@@ -1883,6 +1916,9 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
@@ -1920,6 +1956,9 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/UserService.java": {
@@ -1962,6 +2001,9 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -2132,6 +2174,9 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -2145,6 +2190,9 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -2446,6 +2494,9 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
@@ -2701,6 +2752,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -2999,6 +3053,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
@@ -3088,6 +3145,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/PersistentToken.java": {
     "stateCleared": "modified",
   },
@@ -3136,6 +3196,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -3176,6 +3239,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
@@ -3340,6 +3406,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -3353,6 +3422,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -3658,6 +3730,9 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {

@@ -30,7 +30,7 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
-      async generateVscodeLaunch() {
+      generateVscodeLaunch() {
         const vscodeLaunch = join(getPackageRoot(), '.vscode/launch.json');
 
         const baseFile: { version: string; inputs: any[]; configurations: any } = {

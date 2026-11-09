@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - app:bootstrap with default config should prepare EntityA 1`] = `
+exports[`generator - app:bootstrap with default config should prepare EntityA - snapshot 1`] = `
 {
   "adminEntity": undefined,
   "annotations": {
@@ -95,6 +95,7 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
       "blobContentTypeImage": false,
       "blobContentTypeText": false,
       "columnName": "id",
+      "columnRequired": false,
       "entity": Any<Object>,
       "fieldApiDescription": undefined,
       "fieldInJavaBeanMethod": "Id",
@@ -106,7 +107,7 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
       "fieldNameCapitalized": "Id",
       "fieldNameHumanized": "Id",
       "fieldNameUnderscored": "id",
-      "fieldSupportsSortBy": true,
+      "fieldSupportsSortBy": false,
       "fieldTranslationKey": "jhipsterApp.entityA.id",
       "fieldType": "UUID",
       "fieldTypeAnyBlob": false,
@@ -183,19 +184,14 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
       "transient": undefined,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": [
-        "189bcd33-1d2c-4426-a20c-948f41d0b0a6",
-        "22ccb613-6f9d-4043-9a1b-63de682c25f1",
-        "19b8e903-b097-46b3-a65a-778acb6d87e9",
-        "6fe41aa2-077f-41d3-b692-28efde354481",
-        "6e13b9b6-a70d-4146-9d4c-ef8f187a1a20",
-      ],
+      "uniqueValue": [],
     },
     {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
       "blobContentTypeText": false,
       "columnName": "name",
+      "columnRequired": false,
       "entity": Any<Object>,
       "fieldApiDescription": undefined,
       "fieldInJavaBeanMethod": "Name",
@@ -285,6 +281,7 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
       "blobContentTypeImage": false,
       "blobContentTypeText": false,
       "columnName": "details",
+      "columnRequired": false,
       "entity": Any<Object>,
       "fieldApiDescription": undefined,
       "fieldInJavaBeanMethod": "Details",
@@ -461,6 +458,7 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
   "relationshipsByOtherEntity": {},
   "relationshipsContainEagerLoad": false,
   "relationshipsContainOtherSideIgnore": false,
+  "requiredRelationships": [],
   "requiresPersistableImplementation": false,
   "resetFakerSeed": Any<Function>,
   "restClass": "EntityADTO",
@@ -494,7 +492,7 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
 }
 `;
 
-exports[`generator - app:bootstrap with default config should prepare User 1`] = `
+exports[`generator - app:bootstrap with default config should prepare User - snapshot 1`] = `
 {
   "adminEntity": undefined,
   "adminUserDto": "AdminUserDTO",
@@ -598,6 +596,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "id",
+      "columnRequired": false,
       "entity": Any<Object>,
       "fieldApiDescription": undefined,
       "fieldInJavaBeanMethod": "Id",
@@ -690,13 +689,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "transient": undefined,
       "tsType": "number",
       "unique": false,
-      "uniqueValue": [
-        966,
-        24814,
-        5440,
-        3944,
-        6275,
-      ],
+      "uniqueValue": [],
     },
     {
       "blobContentTypeAny": false,
@@ -704,6 +697,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "login",
+      "columnRequired": true,
       "entity": Any<Object>,
       "fakerTemplate": "{{internet.username}}",
       "fieldApiDescription": undefined,
@@ -797,12 +791,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "tsType": "string",
       "unique": true,
       "uniqueConstraintName": "ux_jhi_user__login",
-      "uniqueValue": [
-        "Hudson_Senger",
-        "Luke36",
-        "Jovanny.Dietrich20",
-        "Frederick.Rath49",
-      ],
+      "uniqueValue": [],
     },
     {
       "blobContentTypeAny": false,
@@ -810,6 +799,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "first_name",
+      "columnRequired": false,
       "entity": Any<Object>,
       "fakerTemplate": "{{person.firstName}}",
       "fieldApiDescription": undefined,
@@ -906,6 +896,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "last_name",
+      "columnRequired": false,
       "entity": Any<Object>,
       "fakerTemplate": "{{person.lastName}}",
       "fieldApiDescription": undefined,
@@ -1002,6 +993,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "email",
+      "columnRequired": true,
       "entity": Any<Object>,
       "fakerTemplate": "{{internet.email}}",
       "fieldApiDescription": undefined,
@@ -1105,6 +1097,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "activated",
+      "columnRequired": false,
       "defaultValue": true,
       "entity": Any<Object>,
       "fieldApiDescription": undefined,
@@ -1196,6 +1189,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "lang_key",
+      "columnRequired": false,
       "entity": Any<Object>,
       "fieldApiDescription": undefined,
       "fieldInJavaBeanMethod": "LangKey",
@@ -1237,9 +1231,11 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "fieldTypeZonedDateTime": false,
       "fieldValidate": true,
       "fieldValidateRules": [
+        "minlength",
         "maxlength",
       ],
       "fieldValidateRulesMaxlength": 10,
+      "fieldValidateRulesMinlength": 2,
       "fieldValidateRulesPatternJava": undefined,
       "fieldValidationEmail": false,
       "fieldValidationMax": false,
@@ -1249,9 +1245,9 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "fieldValidationMaxlength": true,
       "fieldValidationMin": false,
       "fieldValidationMinBytes": false,
-      "fieldValidationMinLength": false,
+      "fieldValidationMinLength": true,
       "fieldValidationMinbytes": false,
-      "fieldValidationMinlength": false,
+      "fieldValidationMinlength": true,
       "fieldValidationPattern": false,
       "fieldValidationRequired": false,
       "fieldValidationUnique": false,
@@ -1291,6 +1287,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "image_url",
+      "columnRequired": false,
       "entity": Any<Object>,
       "fieldApiDescription": undefined,
       "fieldInJavaBeanMethod": "ImageUrl",
@@ -1381,7 +1378,9 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "uniqueValue": [],
     },
   ],
+  "fieldsByName": Any<Object>,
   "fieldsContainNoOwnerOneToOne": false,
+  "fixedServerProperties": true,
   "fluentMethods": true,
   "generateFakeData": Any<Function>,
   "hasCyclicRequiredRelationship": false,
@@ -1468,6 +1467,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
   "relationshipsByOtherEntity": {},
   "relationshipsContainEagerLoad": false,
   "relationshipsContainOtherSideIgnore": false,
+  "requiredRelationships": [],
   "requiresPersistableImplementation": false,
   "resetFakerSeed": Any<Function>,
   "restClass": "UserDTO",
@@ -1505,7 +1505,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
 }
 `;
 
-exports[`generator - app:bootstrap with skipUserManagement should prepare EntityA 1`] = `
+exports[`generator - app:bootstrap with skipUserManagement should prepare EntityA - snapshot 1`] = `
 {
   "adminEntity": undefined,
   "angularJSSuffix": "js-suffix",
@@ -1602,6 +1602,7 @@ exports[`generator - app:bootstrap with skipUserManagement should prepare Entity
       "blobContentTypeImage": false,
       "blobContentTypeText": false,
       "columnName": "id",
+      "columnRequired": false,
       "entity": Any<Object>,
       "fieldApiDescription": undefined,
       "fieldInJavaBeanMethod": "Id",
@@ -1613,7 +1614,7 @@ exports[`generator - app:bootstrap with skipUserManagement should prepare Entity
       "fieldNameCapitalized": "Id",
       "fieldNameHumanized": "Id",
       "fieldNameUnderscored": "id",
-      "fieldSupportsSortBy": true,
+      "fieldSupportsSortBy": false,
       "fieldTranslationKey": "jhipsterApp.entityA.id",
       "fieldType": "UUID",
       "fieldTypeAnyBlob": false,
@@ -1690,13 +1691,7 @@ exports[`generator - app:bootstrap with skipUserManagement should prepare Entity
       "transient": undefined,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": [
-        "2189bcd3-31d2-4c42-9620-c948f41d0b0a",
-        "22ccb613-6f9d-4043-9a1b-63de682c25f1",
-        "19b8e903-b097-46b3-a65a-778acb6d87e9",
-        "6fe41aa2-077f-41d3-b692-28efde354481",
-        "6e13b9b6-a70d-4146-9d4c-ef8f187a1a20",
-      ],
+      "uniqueValue": [],
     },
   ],
   "fieldsContainNoOwnerOneToOne": false,
@@ -1785,6 +1780,7 @@ exports[`generator - app:bootstrap with skipUserManagement should prepare Entity
   "relationshipsByOtherEntity": {},
   "relationshipsContainEagerLoad": false,
   "relationshipsContainOtherSideIgnore": false,
+  "requiredRelationships": [],
   "requiresPersistableImplementation": false,
   "resetFakerSeed": Any<Function>,
   "restClass": "EntityA",

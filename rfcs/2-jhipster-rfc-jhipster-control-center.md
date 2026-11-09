@@ -110,13 +110,13 @@ Compared to today's situation, the proposed solution would have the following ad
 - Reduce the generated code as code related to management screens will no longer be generated
 - Faster build times for the front end resulting from less front-end code to compile
 - Stop developing the same management UI with 3 different frontend frameworks (Angular, React and Vue)
-- Improve security as management endpoint will no longer be exposed to the outside but only internally on a separate port. Also the **JHipster Control Center** can have proper authentication (JWT, OAuth) rather than the basic authentication scheme that is present on the JHipster registry (which is the only scheme supported by the Eureka server).
+- Improve security as management endpoints will no longer be exposed to the outside but only internally on a separate port. Also the **JHipster Control Center** can have proper authentication (JWT, OAuth) rather than the basic authentication scheme that is present on the JHipster registry (which is the only scheme supported by the Eureka server).
 
 ## Prior art
 
 [prior-art]: #prior-art
 
-Some existing similar or related solutions :
+Some existing similar or related solutions:
 
 - [JHipster Registry](https://www.jhipster.tech/jhipster-registry/)
 - [Spring Boot Admin](https://docs.spring-boot-admin.com/)
@@ -127,7 +127,7 @@ Some existing similar or related solutions :
 
 [unresolved-questions]: #unresolved-questions
 
-- How do we help transition legacy JHipster applications (version lower than 7.0) to be supported by the **JHipster Control Center** ?
+- How do we help transition legacy JHipster applications (version lower than 7.0) to be supported by the **JHipster Control Center**?
 
 ## Future possibilities
 

@@ -1,0 +1,72 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it } from 'vitest';
+
+import { AxiosError } from 'axios';
+
+import { createEntitySlice, isFulfilledAction, isRejectedAction, serializeAxiosError } from './reducer.utils';
+
+describe('reducer utils', () => {
+  it('should tell the rejected and the fulfilled actions', () => {
+    expect(isRejectedAction({ type: 'entity/fetch/rejected' })).toBe(true);
+    expect(isRejectedAction({ type: 'entity/fetch/fulfilled' })).toBe(false);
+    expect(isFulfilledAction({ type: 'entity/fetch/fulfilled' })).toBe(true);
+    expect(isFulfilledAction({ type: 'entity/fetch/pending' })).toBe(false);
+  });
+
+  it('should keep an axios error', () => {
+    const error = new AxiosError('Request failed');
+
+    expect(serializeAxiosError(error)).toBe(error);
+  });
+
+  it('should keep the string properties of an error', () => {
+    expect(serializeAxiosError({ name: 'Error', message: 'Failed', stack: 1 })).toEqual({ name: 'Error', message: 'Failed' });
+  });
+
+  it('should take any other value as the message', () => {
+    expect(serializeAxiosError('Failed')).toEqual({ message: 'Failed' });
+    expect(serializeAxiosError(null)).toEqual({ message: 'null' });
+  });
+
+  describe('createEntitySlice', () => {
+    const initialState = {
+      loading: true,
+      errorMessage: null,
+      entities: [],
+      entity: {},
+      updating: true,
+      updateSuccess: true,
+    };
+    const rejected = { type: 'entity/fetch/rejected', error: { message: 'Failed' } };
+
+    it('should handle the rejections', () => {
+      const slice = createEntitySlice({ name: 'entity', initialState });
+
+      expect(slice.reducer(initialState, rejected)).toMatchObject({ loading: false, updating: false, updateSuccess: false });
+    });
+
+    it('should leave the rejections to the slice that skips them', () => {
+      const slice = createEntitySlice({ name: 'entity', initialState, skipRejectionHandling: true });
+
+      expect(slice.reducer(initialState, rejected)).toEqual(initialState);
+      expect(slice.reducer({ ...initialState, loading: false }, slice.actions.reset())).toEqual(initialState);
+    });
+  });
+});

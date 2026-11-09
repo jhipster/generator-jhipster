@@ -20,14 +20,18 @@ import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from
 
 import type { Application, Entity } from './types.ts';
 
-type UserManagementProperties<Entity> = {
+type UserManagementProperties<Entity extends { fields: unknown[] }> = {
   authenticationTypeUsesRemoteAuthorization: boolean;
   skipUserManagement: boolean;
   generateAuthenticationApi: boolean;
   generateUserManagement: boolean;
+  skipUserRegistration?: boolean;
+  /** Users register and activate their account themselves. */
+  generateUserRegistration: boolean;
   generateBuiltInUserEntity?: boolean;
   generateBuiltInAuthorityEntity: boolean;
-  user?: Entity & { adminUserDto?: string };
+  /** The user entity, with its fields by their name, the source of the validations of the user in every layer. */
+  user?: Entity & { adminUserDto?: string; fieldsByName?: Record<string, Entity['fields'][number]> };
   userManagement?: Entity;
   authority?: Entity;
   anyEntityHasRelationshipWithUser?: boolean;
@@ -41,6 +45,7 @@ export const mutateUserManagementApplication = {
   skipUserManagement: data =>
     !data.generateAuthenticationApi || data.authenticationTypeUsesRemoteAuthorization || data.databaseType === 'no',
   generateUserManagement: data => !data.skipUserManagement && data.generateAuthenticationApi,
+  generateUserRegistration: data => data.generateUserManagement && !data.skipUserRegistration,
 
   syncUserWithIdp: data =>
     Boolean(

@@ -6,22 +6,26 @@ basedir=$(dirname "$0")
 if [ -f "$basedir/mvnw" ]; then
   bindir="$basedir/target/node"
   repodir="$basedir/target/node/node_modules"
-  installCommand="$basedir/mvnw --batch-mode -ntp -Pwebapp frontend:install-node-and-npm@install-node-and-npm"
+  installCommand="$basedir/mvnw --batch-mode -ntp -Pwebapp frontend:install-node-and-<%- nodePackageManager %>@install-node-and-<%- nodePackageManager %>"
 <%_ } else if (buildToolGradle) { _%>
 if [ -f "$basedir/gradlew" ]; then
   bindir="$basedir/build/node/bin"
   repodir="$basedir/build/node/lib/node_modules"
-  installCommand="$basedir/gradlew npmSetup --no-daemon"
+  installCommand="$basedir/gradlew <%- nodePackageManager %>Setup --no-daemon"
 <%_ } _%>
 else
-  echo "Using npm installed globally"
-  exec npm "$@"
+  echo "Using <%- nodePackageManager %> installed globally"
+  exec <%- nodePackageManager %> "$@"
 fi
 
+<%_ if (nodePackageManagerPnpm) { _%>
+NPM_EXE="$repodir/pnpm/bin/pnpm.mjs"
+<%_ } else { _%>
 NPM_EXE="$repodir/npm/bin/npm-cli.js"
+<%_ } _%>
 NODE_EXE="$bindir/node"
 
-if [ ! -x "$NPM_EXE" ] || [ ! -x "$NODE_EXE" ]; then
+if [ ! -f "$NPM_EXE" ] || [ ! -x "$NODE_EXE" ]; then
   $installCommand || true
 fi
 
@@ -32,10 +36,10 @@ else
   NODE_EXE='node'
 fi
 
-if [ ! -x "$NPM_EXE" ]; then
-  echo "Local npm not found, using npm installed globally"
-  npm "$@"
+if [ ! -f "$NPM_EXE" ]; then
+  echo "Local <%- nodePackageManager %> not found, using <%- nodePackageManager %> installed globally"
+  <%- nodePackageManager %> "$@"
 else
-  echo "Using npm installed locally $($NODE_EXE $NPM_EXE --version)"
+  echo "Using <%- nodePackageManager %> installed locally $($NODE_EXE $NPM_EXE --version)"
   $NODE_EXE $NPM_EXE "$@"
 fi

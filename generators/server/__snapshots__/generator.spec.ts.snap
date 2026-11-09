@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - server composing databaseType option no with jwt should match generated files 1`] = `
+exports[`generator - server composing databaseType option no with jwt should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -153,6 +153,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -170,7 +173,7 @@ exports[`generator - server composing databaseType option no with jwt should mat
 }
 `;
 
-exports[`generator - server composing databaseType option no with oauth2 should match generated files 1`] = `
+exports[`generator - server composing databaseType option no with oauth2 should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -323,6 +326,9 @@ exports[`generator - server composing databaseType option no with oauth2 should 
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -340,7 +346,7 @@ exports[`generator - server composing databaseType option no with oauth2 should 
 }
 `;
 
-exports[`generator - server composing databaseType option no with session should match generated files 1`] = `
+exports[`generator - server composing databaseType option no with session should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -493,6 +499,9 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -683,6 +692,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/main/java/com/mycompany/myapp/domain/Foo.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/domain/User.java": {
     "stateCleared": "modified",
   },
@@ -740,6 +752,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/main/java/com/mycompany/myapp/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -792,6 +807,12 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/RegistrationResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/UserResource.java": {
@@ -998,6 +1019,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -1028,6 +1052,12 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/test/java/com/mycompany/myapp/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/web/rest/RegistrationResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -1038,6 +1068,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {

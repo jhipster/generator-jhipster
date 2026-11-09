@@ -23,6 +23,7 @@ import { startCase } from '../../../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../../../base-application/generator.ts';
 import { QUEUES } from '../../../base-application/priorities.ts';
 import { getEnumInfo } from '../../../base-application/support/enum.ts';
+import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../../../generator-constants.ts';
 import { type Language, findLanguageForTag } from '../../../languages/support/languages.ts';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from '../../../languages/translation-data.ts';
@@ -105,7 +106,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
             // Generate native language + English as fallback, ensuring no duplicates if native language is English. Translation will fallback to English if a translation is missing for the native language.
           : [...new Set([application.nativeLanguage, 'en'])].map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
       },
-      async loadNativeLanguage({ application }) {
+      loadNativeLanguage({ application }) {
         // eslint-disable-next-line logical-assignment-operators -- translations is not declared as optional, ??= would not type-check
         application.translations = application.translations ?? {};
         this.translationData = new TranslationData({ generator: this, translations: application.translations });
@@ -140,7 +141,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
               templates: [
                 {
                   condition: (data: any) => data.enableTranslation && (data.clientFrameworkVue || data.clientFrameworkReact),
-                  sourceFile: data => `${CLIENT_MAIN_SRC_DIR}/i18n/index_${data.clientBundler}.js`,
+                  sourceFile: `${CLIENT_MAIN_SRC_DIR}/i18n/index.js`,
                   destinationFile: data => `${data.clientI18nDir}${data.lang}/${data.lang}.js`,
                 },
               ],
@@ -151,6 +152,16 @@ export default class I18NGenerator extends ClientApplicationGenerator {
             }),
           ),
         );
+        await this.writeFiles({
+          templates: [
+            {
+              condition: (data: any) => data.enableTranslation && (data.clientFrameworkVue || data.clientFrameworkReact),
+              sourceFile: 'build-plugins/i18n.ts',
+              destinationFile: data => `${data.clientRootDir}build-plugins/i18n.ts`,
+            },
+          ],
+          context: application,
+        });
       },
     });
   }
@@ -186,7 +197,13 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                   {
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
                     to: context => `${context.clientI18nDir}${context.lang}/`,
-                    templates: ['activate.json', 'global.json', 'home.json', 'reset.json'],
+                    templates: ['global.json', 'home.json', 'reset.json'],
+                  },
+                  {
+                    condition: context => context.generateUserRegistration,
+                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
+                    to: context => `${context.clientI18nDir}${context.lang}/`,
+                    templates: ['activate.json'],
                   },
                   {
                     condition: context => context.withAdminUi,
@@ -308,6 +325,24 @@ export default class I18NGenerator extends ClientApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      sonar({ application, source }) {
+        if (!application.enableTranslation) return;
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S2068-i18n',
+          ruleKey: 'secrets:S2068',
+          resourceKey: `${application.clientI18nDir}**/*.json`,
+          comment: 'Rule secrets:S2068 is ignored, the translations hold the label of the password, not a password',
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get postWritingEntities() {

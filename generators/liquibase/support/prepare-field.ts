@@ -24,6 +24,7 @@ import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../lib/utils/index.ts';
 import { escape } from '../../../lib/utils/string-utils.ts';
+import { prepareFieldForDatabase } from '../../base-application/generators/database-bootstrap/support/index.ts';
 import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Field as LiquibaseField } from '../types.d.ts';
 
 import formatAsLiquibaseRemarks from './formatting.ts';
@@ -106,6 +107,8 @@ function parseLiquibaseLoadColumnType(application: LiquibaseApplication<Liquibas
 }
 
 export default function prepareField(application: LiquibaseApplication<LiquibaseEntity>, field: LiquibaseField): LiquibaseField {
+  // The fields of a previous entity never go through the priorities, so the database prepares them here too.
+  prepareFieldForDatabase({ field });
   mutateData(field, {
     __override__: false,
     columnType: data => parseLiquibaseColumnType(data),
@@ -127,8 +130,6 @@ export default function prepareField(application: LiquibaseApplication<Liquibase
     shouldDropDefaultValue: data =>
       !data.liquibaseDefaultValueAttributeValue && (data.fieldType === ZONED_DATE_TIME || data.fieldType === INSTANT),
     shouldCreateContentType: data => data.fieldType === BYTES && data.fieldTypeBlobContent !== TEXT,
-    columnRequired: data => data.nullable === false || (data.fieldValidate && data.fieldValidateRules?.includes('required')),
-    nullable: data => !data.columnRequired,
     liquibaseGenerateFakeData: true,
   });
 

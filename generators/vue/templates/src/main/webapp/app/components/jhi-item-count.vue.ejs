@@ -1,0 +1,25 @@
+<template>
+  <div class="info">
+    <span>{{ t$('global.item-count', { first, second, total }) }}</span>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+const props = withDefaults(defineProps<{ page?: number; total?: number; itemsPerPage?: number }>(), {
+  page: 1,
+  total: 0,
+  itemsPerPage: 20,
+});
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const first = computed(() => ((props.page - 1) * props.itemsPerPage === 0 ? 1 : (props.page - 1) * props.itemsPerPage + 1));
+const second = computed(() => Math.min(props.page * props.itemsPerPage, props.total));
+</script>

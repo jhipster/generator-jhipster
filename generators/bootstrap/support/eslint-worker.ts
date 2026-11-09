@@ -24,6 +24,9 @@ import ts from 'typescript-eslint';
 
 import jhipster from '../../../lib/eslint/index.ts';
 
+/** The lints of a file at most, each applying at most 10 passes of fixes. */
+const MAX_LINTS = 10;
+
 let eslintInstance: eslint.ESLint;
 /** What the instance was created for: a thread of the pool of the process lints the files of several commits. */
 let eslintInstanceKey: string | undefined;
@@ -72,8 +75,19 @@ export default async ({
     return { result: fileContents };
   }
   try {
-    const [result] = await eslintInstance.lintText(fileContents, { filePath });
-    return { result: result.output ?? fileContents };
+    let output = fileContents;
+    // A lint applies at most 10 passes of fixes: lint again while fixable problems remain, like the import order of a long import block.
+    for (let lint = 0; lint < MAX_LINTS; lint++) {
+      const [result] = await eslintInstance.lintText(output, { filePath });
+      if (result.output === undefined || result.output === output) {
+        break;
+      }
+      ({ output } = result);
+      if (result.fixableErrorCount + result.fixableWarningCount === 0) {
+        break;
+      }
+    }
+    return { result: output };
   } catch (error) {
     return { error: `${error}` };
   }

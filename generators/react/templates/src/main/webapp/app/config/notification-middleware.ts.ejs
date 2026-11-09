@@ -19,11 +19,13 @@
 <%_ if (enableTranslation) { _%>
 import { translate } from 'react-jhipster';
 <%_ } _%>
-import { toast } from 'react-toastify';
-import { isFulfilledAction, isRejectedAction } from 'app/shared/reducers/reducer.utils';
+
 import { isAxiosError } from 'axios';
-import { FieldErrorVM, isProblemWithMessage } from 'app/shared/jhipster/problem-details';
+import { toast } from 'react-toastify';
+
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
+import { FieldErrorVM, isProblemWithMessage } from 'app/shared/jhipster/problem-details';
+import { isFulfilledAction, isRejectedAction } from 'app/shared/reducers/reducer.utils';
 
 type ToastMessage = {
   message?: string;
@@ -35,7 +37,7 @@ type ToastMessage = {
 
 const addErrorAlert = (message: ToastMessage) => {
 <%_ if (enableTranslation) { _%>
-  toast.error(message.key ? translate(message.key, message.data) ?? message.message : message.message);
+  toast.error(message.key ? (translate(message.key, message.data) ?? message.message) : message.message);
 <%_ } else { _%>
   toast.error(message.message);
 <%_ } _%>
@@ -88,19 +90,19 @@ export default () => next => action => {
         // Ignore, authentication status check and authentication are treated differently.
       } else if (response.status === 0) {
         // connection refused, server not reachable
-          addErrorAlert({
-            message: 'Server not reachable',
+        addErrorAlert({
+          message: 'Server not reachable',
 <%_ if (enableTranslation) { _%>
-            key: 'error.server.not.reachable',
+          key: 'error.server.not.reachable',
 <%_ } _%>
-          });
+        });
       } else if (response.status === 404) {
-          addErrorAlert({
-            message: 'Not found',
+        addErrorAlert({
+          message: 'Not found',
 <%_ if (enableTranslation) { _%>
-            key: 'error.url.not.found',
+          key: 'error.url.not.found',
 <%_ } _%>
-          });
+        });
       } else {
         const { data } = response;
         const problem = isProblemWithMessage(data) ? data : null;

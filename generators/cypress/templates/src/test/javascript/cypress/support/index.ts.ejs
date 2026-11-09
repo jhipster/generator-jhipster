@@ -50,3 +50,7 @@ import './oauth2';
 import installLogsCollector from 'cypress-terminal-report/src/installLogsCollector';
 
 installLogsCollector();
+
+// The browser reports a ResizeObserver loop as an error of the page, though nothing fails:
+// it does not fail the test, any other uncaught exception still does.
+Cypress.on('uncaught:exception', error => !error.message.includes('ResizeObserver loop'));

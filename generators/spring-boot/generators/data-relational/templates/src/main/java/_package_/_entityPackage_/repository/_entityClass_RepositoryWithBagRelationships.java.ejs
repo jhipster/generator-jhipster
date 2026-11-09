@@ -23,9 +23,7 @@ import java.util.Optional;
 <%_ if (anyFieldIsUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
-
 import org.springframework.data.domain.Page;
-
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 
 public interface <%- entityClass %>RepositoryWithBagRelationships {

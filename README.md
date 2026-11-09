@@ -14,7 +14,7 @@ Before running the generator on a project you did not author, read [the trust mo
 
 ## Contributing
 
-We are honored by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md) for any information about contributing to the project.
+We are honored by any contributions you may have, small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md) for any information about contributing to the project.
 
 ## Supported Java and Node versions
 

@@ -17,25 +17,28 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { type MountingOptions, shallowMount } from '@vue/test-utils';
-import axios from 'axios';
 import { type RouteLocation } from 'vue-router';
+
 import { createTestingPinia } from '@pinia/testing';
+import { type MountingOptions, type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
+import axios from 'axios';
+
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
+import { bFormStub, slotsStub } from '@/testing/stubs';
+import { useStore } from '@/stores';
+import AccountService, { accountServiceKey } from '../account.service';
 
-import AccountService from '../account.service';
 import LoginForm from './login-form.vue';
-import { useStore } from '@/store';
 
 type LoginFormComponentType = InstanceType<typeof LoginForm>;
 
 let route: Partial<RouteLocation>;
-const routerGoMock = vi.fn();
+const routerReplaceMock = vi.fn();
 vi.mock('vue-router', () => ({
   useRoute: () => route,
-  useRouter: () => ({ go: routerGoMock }),
+  useRouter: () => ({ replace: routerReplaceMock }),
 }));
 
 const axiosStub = {
@@ -44,10 +47,12 @@ const axiosStub = {
 };
 
 describe('LoginForm Component', () => {
+  let wrapper: VueWrapper<LoginFormComponentType>;
   let loginForm: LoginFormComponentType;
 
   beforeEach(() => {
-    route = {};
+    route = { query: {} };
+    routerReplaceMock.mockReset();
     axiosStub.get.mockResolvedValue({});
     axiosStub.post.mockReset();
 
@@ -56,20 +61,20 @@ describe('LoginForm Component', () => {
 
     const globalOptions: MountingOptions<LoginFormComponentType>['global'] = {
       stubs: {
-        'b-alert': true,
-        'b-button': true,
-        'b-form': true,
-        'b-form-input': true,
-        'b-form-group': true,
-        'b-form-checkbox': true,
-        'b-link': true,
+        'b-alert': slotsStub,
+        'b-button': slotsStub,
+        'b-form': bFormStub,
+        'b-form-input': slotsStub,
+        'b-form-group': slotsStub,
+        'b-form-checkbox': slotsStub,
+        'b-link': slotsStub,
       },
       plugins: [pinia],
       provide: {
-        accountService: new AccountService(store),
+        [accountServiceKey as symbol]: new AccountService(store),
       },
     };
-    const wrapper = shallowMount(LoginForm, { global: globalOptions });
+    wrapper = shallowMount(LoginForm, { global: globalOptions });
 
     loginForm = wrapper.vm;
   });
@@ -180,4 +185,49 @@ describe('LoginForm Component', () => {
   });
 <%_ } _%>
 
+  it('should log in with the values of the form', async () => {
+    // GIVEN
+    axiosStub.post.mockRejectedValue(new Error());
+
+    // WHEN
+    wrapper.findComponent('#username').vm.$emit('update:modelValue', 'login');
+    wrapper.findComponent('#password').vm.$emit('update:modelValue', 'pwd');
+    wrapper.findComponent('#rememberMe').vm.$emit('update:modelValue', false);
+    await wrapper.find('form').trigger('submit');
+    await flushPromises();
+
+    // THEN
+    expect(loginForm.login).toBe('login');
+    expect(loginForm.password).toBe('pwd');
+    expect(loginForm.rememberMe).toBe(false);
+    expect(axiosStub.post).toHaveBeenCalled();
+  });
+
+  describe('once signed in', () => {
+    beforeEach(() => {
+      axiosStub.post.mockResolvedValue({ headers: {} });
+    });
+
+    it('should go back to the page it came from', async () => {
+      route.query = { redirect: '/admin/health' };
+
+      await loginForm.doLogin();
+
+      expect(routerReplaceMock).toHaveBeenCalledWith('/admin/health');
+    });
+
+    it('should go home without a page to go back to', async () => {
+      await loginForm.doLogin();
+
+      expect(routerReplaceMock).toHaveBeenCalledWith('/');
+    });
+
+    it('should go home instead of leaving the application', async () => {
+      route.query = { redirect: '//example.com' };
+
+      await loginForm.doLogin();
+
+      expect(routerReplaceMock).toHaveBeenCalledWith('/');
+    });
+  });
 });

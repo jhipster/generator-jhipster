@@ -109,7 +109,7 @@ describe('/account/settings', () => {
         originalAdminAccount = account;
 
         // need to modify email because default email does not match regex in some frameworks
-        cy.saveAccount({ ...account, email: testAdminEmail})
+        cy.saveAccount({ ...account, email: testAdminEmail })
           .its('status')
           .should('eq', 200);
       });

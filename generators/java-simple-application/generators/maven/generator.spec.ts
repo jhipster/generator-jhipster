@@ -36,7 +36,7 @@ describe(`generator - ${generator}`, () => {
         packageName: 'tech.jhipster',
       });
     });
-    it('should generate only maven files', () => {
+    it('should generate only maven files - snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -44,7 +44,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig();
     });
-    it('should generate only maven files', () => {
+    it('should generate only maven files - snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
@@ -143,7 +143,7 @@ describe(`generator - ${generator}`, () => {
 `,
       );
     });
-    it('should match generated pom', () => {
+    it('should match generated pom snapshot', () => {
       expect(runResult.getSnapshot('**/pom.xml')).toMatchSnapshot();
     });
   });

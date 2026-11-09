@@ -49,5 +49,53 @@
     </div>
 </template>
 
-<script lang="ts" src="./gateway.component.ts">
+<script setup lang="ts">
+import { type Ref, inject, onMounted, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import GatewayService, { type GatewayRoute, gatewayServiceKey } from './gateway.service';
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>GatewayComponent' });
+
+const gatewayService = inject(gatewayServiceKey, () => new GatewayService(), true);
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const gatewayRoutes: Ref<GatewayRoute[]> = ref([]);
+const updatingRoutes = ref(false);
+
+const refresh = () => {
+  updatingRoutes.value = true;
+  gatewayService.findAll().then((res) => {
+<%_ if (serviceDiscoveryConsul) { _%>
+    gatewayRoutes.value = res.data.map(gatewayRoute => {
+      gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
+        if (serviceInstance.healthService?.checks) {
+          if (
+            serviceInstance.healthService.checks.filter(check => check.status === 'PASSING').length ===
+            serviceInstance.healthService.checks.length
+          ) {
+            serviceInstance.instanceInfo = { status: 'UP' };
+          } else {
+            serviceInstance.instanceInfo = { status: 'DOWN' };
+          }
+        }
+        return serviceInstance;
+      });
+      return gatewayRoute;
+    });
+<%_ } else { _%>
+    gatewayRoutes.value = res.data;
+<%_ } _%>
+    updatingRoutes.value = false;
+  });
+};
+
+onMounted(() => {
+  refresh();
+});
+
 </script>

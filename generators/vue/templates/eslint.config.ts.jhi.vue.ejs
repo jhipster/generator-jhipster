@@ -18,6 +18,7 @@
 -%>
 <&_ if (fragment.importsSection) { -&>
 import js from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
 import vue from 'eslint-plugin-vue';
 import tseslint from 'typescript-eslint';
 import vitest from '@vitest/eslint-plugin';
@@ -41,22 +42,27 @@ import vitest from '@vitest/eslint-plugin';
       parserOptions: { parser: '@typescript-eslint/parser' },
       globals: { ...globals.browser },
     },
+    rules: {
+      // TypeScript checks the undefined names, as typescript-eslint leaves it to it in .ts files.
+      'no-undef': 'off',
+    },
   },
   {
     files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.vue', '<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.ts'],
+    plugins: {
+      '@stylistic': stylistic,
+    },
     languageOptions: {
       globals: { ...globals.browser },
     },
     rules: {
-      'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
       'vue/multi-word-component-names': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
-      '@typescript-eslint/no-var-requires': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
       'vue/no-v-text-v-html-on-component': [
         'error',
@@ -64,6 +70,25 @@ import vitest from '@vitest/eslint-plugin';
       ],
       'vue/no-reserved-component-names': 'off',
       'vue/attributes-order': 'off',
+      '@typescript-eslint/member-ordering': [
+        'error',
+        {
+          default: ['static-field', 'instance-field', 'constructor', 'static-method', 'instance-method'],
+        },
+      ],
+      '@typescript-eslint/no-shadow': 'error',
+      '@stylistic/spaced-comment': ['warn', 'always'],
+      'guard-for-in': 'error',
+      'no-labels': 'error',
+      'no-caller': 'error',
+      'no-bitwise': 'error',
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+      'no-new-wrappers': 'error',
+      'no-eval': 'error',
+      'no-new': 'error',
+      radix: 'error',
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
+      'object-shorthand': ['error', 'always', { avoidExplicitReturnArrows: true }],
     },
   },
   {

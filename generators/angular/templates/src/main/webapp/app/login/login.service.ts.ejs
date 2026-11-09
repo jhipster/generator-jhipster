@@ -16,13 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { Service, inject } from '@angular/core';
+
+<%_ if (!authenticationTypeOauth2) { _%>
+import { Observable, mergeMap } from 'rxjs';
+<%_ } _%>
+
 import { serverApiUrl } from 'app/config';
-import { inject, Service } from '@angular/core';
 <%_ if (authenticationTypeOauth2) { _%>
 import { AuthServerProvider, Logout } from 'app/core/auth';
 <%_ } else { _%>
-import { mergeMap, Observable } from 'rxjs';
-
 import { Account, AccountService, AuthServerProvider, Login } from 'app/core/auth';
 <%_ } _%>
 

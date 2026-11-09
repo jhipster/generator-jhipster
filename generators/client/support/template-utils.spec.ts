@@ -110,6 +110,25 @@ describe('generator - client - support - template-utils', () => {
         });
       });
     });
+
+    describe('with vue', () => {
+      const relationships = [
+        {
+          otherEntity: {
+            clientRootFolder: 'root',
+            entityAngularName: 'AnEntity',
+            entityFolderName: 'root/an-entity',
+            entityFileName: 'an-entity',
+          },
+          persistableRelationship: true,
+        },
+      ];
+
+      it('imports the model next to the service of the entity', () => {
+        const imports = generateEntityClientImports(relationships as any, NO_DTO, 'vue');
+        expect(Object.fromEntries(imports)).toEqual({ IAnEntity: '@/entities/root/an-entity/an-entity.model' });
+      });
+    });
   });
 
   describe('generateTestEntityId', () => {

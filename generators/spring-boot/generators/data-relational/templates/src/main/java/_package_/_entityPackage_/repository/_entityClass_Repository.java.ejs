@@ -85,7 +85,18 @@ public interface <%- entityClass %>Repository extends <% if (containsBagRelation
     @Query("select <%- entityJpqlInstance %> from <%- persistClass %> <%- entityJpqlInstance %><%- relationships.filter(r => r.relationshipEagerLoad && !r.bagRelationship).map(r => ` left join fetch ${entityJpqlInstance}.${r.propertyName}`).join('') %>")
     List<<%- persistClass %>> findAllWithToOneRelationships();
 
-    @Query("select <%- entityJpqlInstance %> from <%- persistClass %> <%- entityJpqlInstance %><%- relationships.filter(r => r.relationshipEagerLoad && !r.bagRelationship).map(r => ` left join fetch ${entityJpqlInstance}.${r.propertyName}`).join('') %> where <%- entityJpqlInstance %>.id =:id")
+<%#
+ Elasticsearch indexes the entity on another thread, after the session is closed, and serializes the user's lazy authorities,
+ so fetch them with the user.
+-%>
+    <%_ const oneWithToOneJoins = relationships
+          .filter(r => r.relationshipEagerLoad && !r.bagRelationship)
+          .map(r => searchEngineElasticsearch && r.otherEntity.builtInUser
+            ? ` left join fetch ${entityJpqlInstance}.${r.propertyName} ${r.propertyName}_ left join fetch ${r.propertyName}_.authorities`
+            : ` left join fetch ${entityJpqlInstance}.${r.propertyName}`)
+          .join('');
+    _%>
+    @Query("select <%- entityJpqlInstance %> from <%- persistClass %> <%- entityJpqlInstance %><%- oneWithToOneJoins %> where <%- entityJpqlInstance %>.id =:id")
     Optional<<%- persistClass %>> findOneWithToOneRelationships(@Param("id") <%- primaryKey.type %> id);
   <%_ } _%>
 <%_ } _%>

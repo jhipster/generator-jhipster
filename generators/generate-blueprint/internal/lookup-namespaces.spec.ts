@@ -21,7 +21,7 @@ import { describe, expect, it } from 'expect-node';
 import { lookupGeneratorsNamespaces } from './lookup-namespaces.ts';
 
 describe('lookupGeneratorsNamespaces', () => {
-  it('should return the correct generator namespaces', () => {
+  it('should return the correct generator namespaces - snapshot', () => {
     expect(lookupGeneratorsNamespaces()).toMatchInlineSnapshot(`
 [
   "angular",
@@ -31,6 +31,8 @@ describe('lookupGeneratorsNamespaces', () => {
   "base",
   "base-application",
   "base-application:bootstrap",
+  "base-application:database-bootstrap",
+  "base-application:database-changelogs",
   "base-core",
   "base-entity-changes",
   "base-simple-application",
@@ -52,6 +54,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "client:common",
   "client:encode-csrf-token",
   "client:i18n",
+  "client:spring-boot",
   "common",
   "common:bootstrap",
   "cypress",

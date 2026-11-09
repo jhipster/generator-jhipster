@@ -62,6 +62,8 @@ const expectedEntity = (entity: any) => ({
   restProperties: expect.any(Array),
 
   fields: entity?.fields?.map(expectedField),
+  // The fields of the user by their name, which the fields above print.
+  ...(entity?.fieldsByName ? { fieldsByName: expect.any(Object) } : {}),
   relationships: expect.any(Array),
   primaryKey: expectedPrimaryKey(entity.primaryKey),
   reactiveOtherEntities: expect.any(Set),
@@ -116,7 +118,7 @@ describe(`generator - ${generator}`, () => {
         ]);
       });
 
-      it('should write files', () => {
+      it('should write files - snapshot', () => {
         expect(runResult.getSnapshot('**/{.jhipster/**, entities.json}')).toMatchInlineSnapshot(`
 {
   ".jhipster/EntityA.json": {
@@ -168,21 +170,21 @@ describe(`generator - ${generator}`, () => {
 }
 `);
       });
-      it('should prepare entities', () => {
+      it('should prepare entities - snapshot', () => {
         expect(Object.keys(runResult.entities!)).toMatchInlineSnapshot(`
 [
-  "User",
   "UserManagement",
   "Authority",
   "EntityA",
+  "User",
 ]
 `);
       });
-      it('should prepare User', () => {
+      it('should prepare User - snapshot', () => {
         const entity = runResult.entities!.User;
         expect(entity).toMatchSnapshot(expectedEntity(entity));
       });
-      it('should prepare EntityA', () => {
+      it('should prepare EntityA - snapshot', () => {
         const entity = runResult.entities!.EntityA;
         expect(entity).toMatchSnapshot(expectedEntity(entity));
       });
@@ -212,7 +214,7 @@ describe(`generator - ${generator}`, () => {
         );
       });
 
-      it('should write files', () => {
+      it('should write files - snapshot', () => {
         expect(runResult.getSnapshot('**/{.jhipster/**, entities.json}')).toMatchInlineSnapshot(`
 {
   ".jhipster/EntityA.json": {
@@ -236,14 +238,14 @@ describe(`generator - ${generator}`, () => {
 }
 `);
       });
-      it('should prepare entities', () => {
+      it('should prepare entities - snapshot', () => {
         expect(Object.keys(runResult.entities!)).toMatchInlineSnapshot(`
 [
   "EntityA",
 ]
 `);
       });
-      it('should prepare EntityA', () => {
+      it('should prepare EntityA - snapshot', () => {
         const entity = runResult.entities!.EntityA;
         expect(entity).toMatchSnapshot(expectedEntity(entity));
       });

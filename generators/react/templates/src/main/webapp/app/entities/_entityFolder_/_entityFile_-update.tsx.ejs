@@ -16,30 +16,50 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
+    // A primary key the user gives, like the name of an authority, is a field of the form, read only once created.
+    const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
+    const formFieldsNoId = formFields.filter(field => !field.id);
+    const clientConstantImports = [...new Set(formFields.map(field => field.reactFieldClientConstant?.reactConstantImport).filter(Boolean))];
+_%>
 import { useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
 import {
   Button,
-  Row,
   Col,
   FormText,
-  <%- anyFieldHasDocumentation ? 'OverlayTrigger, Tooltip,' : '' %>
+<%_ if (anyFieldHasDocumentation) { _%>
+  OverlayTrigger,
+<%_ } _%>
+  Row,
+<%_ if (anyFieldHasDocumentation) { _%>
+  Tooltip,
+<%_ } _%>
 } from 'react-bootstrap';
 import {
-  isNumber,
   Translate,
-  translate,
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+  ValidatedBlobField,
+<%_ } _%>
   ValidatedField,
   ValidatedForm,
-  <%- anyFieldHasFileBasedContentType ? 'ValidatedBlobField,' : '' %>
+<%_ if (builtInUserManagement) { _%>
+  isEmail,
+<%_ } _%>
+  isNumber,
+  translate,
 } from 'react-jhipster';
+import { Link, useNavigate, useParams } from 'react-router';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+<%_ for (const clientConstantImport of clientConstantImports) { _%>
+<%- clientConstantImport %>
+<%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 <%_ if (relationships.filter(e => e.relationshipManyToMany) !== undefined) { _%>
 import { mapIdList } from 'app/shared/util/entity-utils';
 <%_ } _%>
-import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 <%_ const otherEntityActions = new Set(); _%>
 <%_ for (const otherEntity of otherEntitiesWithPersistableRelationship.filter(otherEntity => !otherEntity.embedded)) { _%>
@@ -47,15 +67,11 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
         action: `get${otherEntity.entityNamePlural}`,
         instance: otherEntity.entityInstancePlural,
         entity: otherEntity.entityAngularName,
-        reducer: otherEntity.builtInUser ? `userManagement.${otherEntity.entityInstancePlural}` : `${otherEntity.entityReactState}.entities`,
+        reducer: otherEntity.builtInUser ? `users.${otherEntity.entityInstancePlural}` : `${otherEntity.entityReactState}.entities`,
       });
   _%>
   <%_ if (otherEntity.builtInUser) { _%>
-    <%_ if (authenticationTypeOauth2) { _%>
 import { getUsers } from 'app/shared/reducers/user-management';
-    <%_ } else { _%>
-import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
-    <%_ } _%>
   <%_ } else { _%>
 import { getEntities as get<%- otherEntity.entityNamePlural %> } from 'app/entities/<%- otherEntity.entityFolderName %>/<%- otherEntity.entityFileName %>.reducer';
   <%_ } _%>
@@ -89,6 +105,9 @@ export const <%- entityReactName %>Update = () => {
 <%_ for (const enumField of enumTypeFields) { _%>
   const <%- enumField.enumInstance %>Values = Object.keys(<%- enumField.fieldType %>);
 <%_ } _%>
+<%_ for (const field of formFields.filter(field => field.clientConstantsAsValues)) { _%>
+  const <%- field.fieldName %>Values = <%- field.reactFieldClientConstant.reactConstantValues %>;
+<%_ } _%>
 
   const handleClose = () => {
     navigate('/<%- entityPage %>'<%- paginationPagination ? ' + location.search' : '' %>);
@@ -119,7 +138,7 @@ export const <%- entityReactName %>Update = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
-<%_ for (field of fields) { _%>
+<%_ for (field of formFields) { _%>
   <%_ const { fieldName } = field; _%>
   <%_ if (field.fieldTypeTimed) { _%>
     values.<%- fieldName %> = convertDateTimeToServer(values.<%- fieldName %>);
@@ -133,14 +152,14 @@ export const <%- entityReactName %>Update = () => {
     const entity = {
       ...<%- entityInstance %>Entity,
       ...values,
-<%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+<%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded && !rel.relationshipSerializePrimaryKeyOnly)) { _%>
   <%_ if (rel.collection) { _%>
       <%- rel.propertyName %>: mapIdList(values.<%- rel.propertyName %>),
   <%_ } else { _%>
       <%- rel.propertyName %>: <%- rel.otherEntity.entityInstancePlural %>.find(it => it.<%- rel.otherEntity.primaryKey.name %>.toString() === values.<%- rel.propertyName %>?.toString()),
   <%_ } _%>
 <%_ } _%>
-    }
+    };
 
     if (isNew) {
       dispatch(createEntity(entity));
@@ -152,23 +171,27 @@ export const <%- entityReactName %>Update = () => {
   const defaultValues = () =>
     isNew
       ? {
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ for (field of formFieldsNoId) { _%>
   <%_ const { fieldName } = field; _%>
   <%_ if (field.fieldTypeTimed) { _%>
           <%- fieldName %>: displayDefaultDateTime(),
+  <%_ } else if (field.fieldTypeBoolean && (field.fieldTsDefaultValue === 'true' || field.defaultValue === true)) { _%>
+          <%- fieldName %>: true,
+  <%_ } else if (field.clientConstantsAsValues && field.defaultValue) { _%>
+          <%- fieldName %>: '<%- field.defaultValue %>',
   <%_ } _%>
 <%_ } _%>
         }
       : {
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ for (field of formFieldsNoId) { _%>
   <%_ const { fieldName } = field; _%>
-  <%_ if (field.fieldIsEnum) { _%>
+  <%_ if (field.fieldIsEnum && !field.clientConstantsAsValues) { _%>
     <%_ const { enumValues } = field; _%>
 <%- fieldName %>: '<%- enumValues[0].name %>',
   <%_ } _%>
 <%_ } _%>
           ...<%- entityInstance %>Entity,
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ for (field of formFieldsNoId) { _%>
   <%_ const { fieldName } = field; _%>
   <%_ if (field.fieldTypeTimed) { _%>
           <%- fieldName %>: convertDateTimeFromServer(<%- entityInstance %>Entity.<%- fieldName %>),
@@ -178,7 +201,9 @@ export const <%- entityReactName %>Update = () => {
   <%_ const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
       const { relationshipFieldName, relationshipFieldNamePlural } = rel;
   _%>
-  <%_ if (rel.collection) { _%>
+  <%_ if (rel.relationshipSerializePrimaryKeyOnly) { _%>
+          <%- relationshipFieldNamePlural %>: <%- entityInstance %>Entity?.<%- relationshipFieldNamePlural %>,
+  <%_ } else if (rel.collection) { _%>
           <%- relationshipFieldNamePlural %>: <%- entityInstance %>Entity?.<%- relationshipFieldNamePlural %>?.map(e => e.<%- otherEntityPkName %>.toString()),
   <%_ } else { _%>
           <%- relationshipFieldName %>: <%- entityInstance %>Entity?.<%- relationshipFieldName %>?.<%- otherEntityPkName %>,
@@ -199,6 +224,7 @@ export const <%- entityReactName %>Update = () => {
       <Col md="8">
         { loading ? <p>Loading...</p> :
         <ValidatedForm mode="all" defaultValues={defaultValues()} onSubmit={saveEntity}>
+<%_ if (!builtInUserManagement && !userProvidedPrimaryKey) { _%>
           { !isNew &&
             <ValidatedField
               name="<%- primaryKey.fields[0].fieldName %>" required readOnly
@@ -207,7 +233,8 @@ export const <%- entityReactName %>Update = () => {
               validate={{ required: true }}
             />
           }
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ } _%>
+<%_ for (field of formFields) { _%>
   <%_ const { fieldType, fieldName, fieldNameHumanized } = field; _%>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
           <ValidatedBlobField
@@ -222,7 +249,22 @@ export const <%- entityReactName %>Update = () => {
             id="<%- entityFileName %>-<%- fieldName %>"
             name="<%- fieldName %>"
             data-cy="<%- fieldName %>"
-  <%_ if (field.fieldTypeBoolean) { _%>
+  <%_ if (field.clientConstantsAsValues) { _%>
+    <%_ if (userProvidedPrimaryKey && field.id) { _%>
+            disabled={!isNew}
+    <%_ } _%>
+            type="select"
+    <%_ if (field.collection) { _%>
+            multiple
+    <%_ } _%>
+          >
+            {<%- field.fieldName %>Values.map(value => (
+              <option value={value} key={value}>
+                {value}
+              </option>
+            ))}
+          </ValidatedField>
+  <%_ } else if (field.fieldTypeBoolean) { _%>
             check
             type="checkbox"
           />
@@ -259,7 +301,7 @@ export const <%- entityReactName %>Update = () => {
           />
   <%_ } else if (field.fieldTypeBinary) { _%>
     <%_ if (field.blobContentTypeText) { _%>
-            type="textarea"
+            inputTag="textarea"
             <%- include('react_validators') %>
           />
     <%_ } else { _%>
@@ -272,6 +314,9 @@ export const <%- entityReactName %>Update = () => {
           />
     <%_ } _%>
   <%_ } else { _%>
+    <%_ if (userProvidedPrimaryKey && field.id) { _%>
+           readOnly={!isNew}
+    <%_ } _%>
            type="text"
            <%- include('react_validators') %>
         />
@@ -291,12 +336,12 @@ export const <%- entityReactName %>Update = () => {
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
       const { relationshipName, relationshipNameHumanized, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = rel;
-      const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
+      const translationKey = rel.propertyTranslationKey;
   _%>
   <%_ if (rel.collection) { _%>
           <ValidatedField
     <%_ if (enableTranslation) { _%>
-            label={translate('<%- i18nKeyPrefix %>.<%- relationshipName %>')}
+            label={translate('<%- translationKey %>')}
     <%_ } else { _%>
             label="<%- relationshipNameHumanized %>"
     <%_ } _%>
@@ -306,16 +351,16 @@ export const <%- entityReactName %>Update = () => {
             multiple
             name="<%- relationshipFieldNamePlural %>"
             >
+    <%_ if (!rel.relationshipSerializePrimaryKeyOnly) { _%>
               <option value="" key="0" />
-              {
-                (<%- rel.otherEntity.entityInstancePlural %>) ? <%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
+    <%_ } _%>
+              {<%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
                 <option
                     value={otherEntity.<%- otherEntityPkName %>}
                     key={otherEntity.<%- otherEntityPkName %>}>
                     {otherEntity.<%- otherEntityField %>}
                 </option>
-                ) : null
-              }
+              )}
           </ValidatedField>
   <%_ } else { _%>
           <ValidatedField
@@ -333,24 +378,22 @@ export const <%- entityReactName %>Update = () => {
     <%_ } _%>
           >
               <option value="" key="0" />
-              {
-                <%- rel.otherEntity.entityInstancePlural %> ? <%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
+              {<%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
                   <option
                     value={otherEntity.<%- otherEntityPkName %>}
                     key={otherEntity.<%- otherEntityPkName %>}>
                     {otherEntity.<%- otherEntityField %>}
                   </option>
-                ) : null
-              }
+              )}
           </ValidatedField>
     <%_ if (relationshipRequired) { _%>
             <FormText><Translate contentKey="entity.validation.required">This field is required.</Translate></FormText>
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
-          <Button as={Link as any} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%- entityPage %>" replace variant="info">
-            <FontAwesomeIcon icon="arrow-left" />&nbsp;
-            <span className="d-none d-md-inline"><Translate contentKey="entity.action.back">Back</Translate></span>
+          <Button as={Link as any} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%- entityPage %>" replace variant="secondary">
+            <FontAwesomeIcon icon="ban" />&nbsp;
+            <Translate contentKey="entity.action.cancel">Cancel</Translate>
           </Button>
           &nbsp;
           <Button variant="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>

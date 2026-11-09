@@ -24,8 +24,8 @@ import type { EntityAll, EntityAll as ApplicationEntity, UserEntity } from '../.
 import { type MutateDataParam, mutateData } from '../../../lib/utils/object.ts';
 import { formatDateForChangelog } from '../../base/support/timestamp.ts';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../../generator-constants.ts';
-import { getDatabaseTypeData } from '../../server/support/database.ts';
 import type BaseApplicationGenerator from '../generator.ts';
+import { getDatabaseTypeData } from '../generators/database-bootstrap/support/index.ts';
 import { loadRequiredConfigIntoEntity } from '../support/index.ts';
 import type {
   Application as BaseApplicationApplication,
@@ -43,11 +43,12 @@ const authorityEntityName = 'Authority';
 export const getChangelogDateForBuiltInEntities = (
   creationTimestamp: number = Date.now(),
 ): { User: string; UserManagement: string; Authority: string } => {
+  // Before the creation timestamp, so the built-in entities come before the entities of the application.
   const date = new Date(creationTimestamp);
   return {
-    User: formatDateForChangelog(date),
-    UserManagement: formatDateForChangelog(new Date(date.getTime() + 1 * 60000)),
-    Authority: formatDateForChangelog(new Date(date.getTime() + 2 * 60000)),
+    User: formatDateForChangelog(new Date(date.getTime() - 3 * 60000)),
+    UserManagement: formatDateForChangelog(new Date(date.getTime() - 2 * 60000)),
+    Authority: formatDateForChangelog(new Date(date.getTime() - 1 * 60000)),
   };
 };
 
@@ -69,6 +70,7 @@ export function createUserEntity(
   const user: Partial<UserEntity> = {
     name: 'User',
     builtIn: true,
+    fixedServerProperties: true,
     changelogDate: getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp).User,
     entityTableName: `${application.jhiTablePrefix}_user`,
     relationships: [],
@@ -159,7 +161,8 @@ export function createUserEntity(
         {
           fieldName: 'langKey',
           fieldType: TYPE_STRING,
-          fieldValidateRules: [Validations.MAXLENGTH],
+          fieldValidateRules: [Validations.MINLENGTH, Validations.MAXLENGTH],
+          fieldValidateRulesMinlength: 2,
           fieldValidateRulesMaxlength: 10,
           builtIn: true,
         },
@@ -224,7 +227,7 @@ export function createUserManagementEntity(
   const userManagement = {
     ...user,
     name: 'UserManagement',
-    skipClient: !application.clientFrameworkAngular,
+    skipClient: false,
     skipServer: true,
     changelogDate: getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp).UserManagement,
     clientRootFolder: 'admin',
@@ -241,7 +244,7 @@ export function createUserManagementEntity(
   };
 
   mutateData(userManagement, {
-    entityPage: ({ skipClient }) => (skipClient && !application.clientFrameworkAngular ? 'admin/user-management' : undefined),
+    entityPage: () => (application.clientFrameworkAngular || application.clientFrameworkVue ? undefined : 'admin/user-management'),
   });
 
   mutateFields(userManagement.fields!, [
@@ -300,7 +303,7 @@ export function createUserManagementEntity(
     ]);
   }
 
-  if (!application.generateBuiltInAuthorityEntity && application.clientFrameworkAngular) {
+  if (!application.generateBuiltInAuthorityEntity) {
     // Without an Authority entity the server exposes the authorities as a string array, expose it as a constants backed enum collection.
     addOrExtendFields(userManagement.fields!, [
       {
@@ -346,7 +349,9 @@ export function createAuthorityEntity(
     relationships: [],
     fields: customAuthorityData.fields ?? [],
     builtInAuthority: true,
-    skipClient: !application.backendTypeSpringBoot || application.clientFrameworkReact || application.clientFrameworkVue,
+    skipClient:
+      !application.backendTypeSpringBoot ||
+      ((application.clientFrameworkReact || application.clientFrameworkVue) && application.applicationTypeMicroservice),
     searchEngine: 'no',
     service: 'no',
     dto: 'no',

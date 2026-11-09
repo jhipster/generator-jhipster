@@ -43,7 +43,7 @@ describe('jdl - FieldConverter', () => {
           });
         });
 
-        it('should convert it', () => {
+        it('should convert it - snapshot', () => {
           expect(convertedField).toMatchInlineSnapshot(`
 JDLField {
   "comment": undefined,

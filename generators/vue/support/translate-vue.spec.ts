@@ -31,6 +31,9 @@ const FULL_BODY = String.raw`
 <span>{{ t$('login.password.forgot1')}}"</span>
 <span>{{t$('login.password.forgot2') }}"</span>
 <span>{{t$('login.password.forgot3')}}"</span>
+<b-link to="/account/reset/request" class="alert-link">{{
+  t$('login.password.forgot4')
+}}</b-link>
 <b-form-group :label="t$('login.form.password')" label-for="password">
   <b-form-input
     id="password"
@@ -63,7 +66,7 @@ const getWebappTranslation: GetWebappTranslationCallback = (s, data) => `getWeba
 
 describe('generator - vue - transform', () => {
   describe('removeDeclarations', () => {
-    it('should remove i18n declarations', () => {
+    it('should remove i18n declarations - snapshot', () => {
       expect(
         removeDeclarations({
           content: `
@@ -85,7 +88,7 @@ return {
     });
   });
   describe('replaceTranslations', () => {
-    it('should replace t$ and interpolate at ts file', () => {
+    it('should replace t$ and interpolate at ts file - snapshot', () => {
       expect(
         replaceTranslations({
           getWebappTranslation,
@@ -108,7 +111,7 @@ t$('msg', {  exp:foo,num : 1 , str  :  'a'  }).toString();
 "
 `);
     });
-    it('should replace t$ and interpolate at vue file', () => {
+    it('should replace t$ and interpolate at vue file - snapshot', () => {
       expect(
         replaceTranslations({
           type: 'vue',
@@ -133,6 +136,25 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
     });
   });
   describe('replaceVueTranslations', () => {
+    it('should translate the script of a component written with script setup', () => {
+      const body = `<template>
+  <span>{{ t$('global.title') }}</span>
+</template>
+
+<script setup lang="ts">
+const message = t$('entity.validation.required').toString();
+</script>
+`;
+      expect(replaceVueTranslations({ body, enableTranslation: false, getWebappTranslation: key => `translated ${key}` })).toBe(`<template>
+  <span>translated global.title</span>
+</template>
+
+<script setup lang="ts">
+const message = 'translated entity.validation.required';
+</script>
+`);
+    });
+
     describe('with nested tag', () => {
       it('should throw', () => {
         expect(() =>
@@ -145,7 +167,7 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
       });
     });
     describe('with translation disabled', () => {
-      it('should return the body without translation attributes', () => {
+      it('should return the body without translation attributes - snapshot', () => {
         expect(replaceVueTranslations({ getWebappTranslation, body: FULL_BODY, enableTranslation: false })).toMatchInlineSnapshot(`
 "
 <span>getWebappTranslation('activate.messages.success')</span>
@@ -155,6 +177,7 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
 <span>getWebappTranslation('login.password.forgot1')"</span>
 <span>getWebappTranslation('login.password.forgot2')"</span>
 <span>getWebappTranslation('login.password.forgot3')"</span>
+<b-link to="/account/reset/request" class="alert-link">getWebappTranslation('login.password.forgot4')</b-link>
 <b-form-group label="getWebappTranslation('login.form.password')" label-for="password">
   <b-form-input
     id="password"
@@ -188,7 +211,7 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
     });
 
     describe('with translation enabled', () => {
-      it('should return the body without translation tags contents', () => {
+      it('should return the body without translation tags contents - snapshot', () => {
         expect(replaceVueTranslations({ getWebappTranslation, body: FULL_BODY, enableTranslation: true })).toMatchInlineSnapshot(String.raw`
 "
 <span v-html="t$('activate.messages.success')"></span>
@@ -198,6 +221,9 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
 <span>{{ t$('login.password.forgot1') }}"</span>
 <span>{{ t$('login.password.forgot2') }}"</span>
 <span>{{ t$('login.password.forgot3') }}"</span>
+<b-link to="/account/reset/request" class="alert-link">{{
+  t$('login.password.forgot4')
+}}</b-link>
 <b-form-group :label="t$('login.form.password')" label-for="password">
   <b-form-input
     id="password"

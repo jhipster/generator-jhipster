@@ -1,0 +1,118 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+import { effectScope, ref } from 'vue';
+
+import { flushPromises } from '@vue/test-utils';
+import { CanceledError } from 'axios';
+
+import { useControlledRequest } from './controlled-request';
+
+// A load that ends when told, or rejects when it is aborted.
+const pendingLoader = () => {
+  const loads: { params: unknown; signal: AbortSignal; resolve: (value: string) => void }[] = [];
+  const loader = vi.fn(
+    (params: unknown, { signal }: { signal: AbortSignal }) =>
+      new Promise<string>((resolve, reject) => {
+        loads.push({ params, signal, resolve });
+        signal.addEventListener('abort', () => reject(new CanceledError()));
+      }),
+  );
+  return { loader, loads };
+};
+
+describe('useControlledRequest', () => {
+  it('should load the value of the parameters', async () => {
+    const { loader, loads } = pendingLoader();
+    const request = effectScope().run(() => useControlledRequest(loader, { params: () => 'a', initialData: () => '' }))!;
+
+    expect(request.isLoading.value).toBe(true);
+    loads[0].resolve('value of a');
+    await flushPromises();
+
+    expect({ data: request.data.value, isLoading: request.isLoading.value }).toEqual({ data: 'value of a', isLoading: false });
+  });
+
+  it('should abort the previous load when the parameters change, and keep loading', async () => {
+    const { loader, loads } = pendingLoader();
+    const params = ref('a');
+    const request = effectScope().run(() => useControlledRequest(loader, { params: () => params.value, initialData: () => '' }))!;
+
+    params.value = 'b';
+    await flushPromises();
+
+    expect(loads.map(({ params: loadParams, signal }) => [loadParams, signal.aborted])).toEqual([
+      ['a', true],
+      ['b', false],
+    ]);
+    expect({ isLoading: request.isLoading.value, error: request.error.value }).toEqual({ isLoading: true, error: undefined });
+  });
+
+  it('should give the initial data without parameters, and load nothing', () => {
+    const { loader } = pendingLoader();
+    const request = effectScope().run(() => useControlledRequest(loader, { params: () => undefined, initialData: () => 'initial' }))!;
+
+    expect({ data: request.data.value, isLoading: request.isLoading.value }).toEqual({ data: 'initial', isLoading: false });
+    expect(loader).not.toHaveBeenCalled();
+  });
+
+  it('should load once without a parameters option, and again on execute', () => {
+    const { loader } = pendingLoader();
+    const request = effectScope().run(() => useControlledRequest(loader, { initialData: () => '' }))!;
+
+    request.execute();
+
+    expect(loader.mock.calls.map(([, { signal }]) => signal.aborted)).toEqual([true, false]);
+  });
+
+  it('should give the error of a failed load', async () => {
+    const onError = vi.fn();
+    const request = effectScope().run(() =>
+      useControlledRequest(() => Promise.reject(new Error('failed')), { initialData: () => '', onError }),
+    )!;
+    await flushPromises();
+
+    expect(request.error.value).toEqual(new Error('failed'));
+    expect(onError).toHaveBeenCalledWith(new Error('failed'));
+  });
+
+  it('should abort the load when told', async () => {
+    const { loader, loads } = pendingLoader();
+    const request = effectScope().run(() => useControlledRequest(loader, { initialData: () => '' }))!;
+
+    request.abort();
+    await flushPromises();
+
+    expect({ aborted: loads[0].signal.aborted, isLoading: request.isLoading.value, error: request.error.value }).toEqual({
+      aborted: true,
+      isLoading: false,
+      error: undefined,
+    });
+  });
+
+  it('should abort the load when the component unmounts', () => {
+    const { loader, loads } = pendingLoader();
+    const scope = effectScope();
+    scope.run(() => useControlledRequest(loader, { initialData: () => '' }));
+
+    scope.stop();
+
+    expect(loads[0].signal.aborted).toBe(true);
+  });
+});

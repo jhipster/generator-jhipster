@@ -82,6 +82,8 @@ export default abstract class BaseEntityChangesGenerator<
   >,
 > extends BaseApplicationGenerator<Entity, Application, Config, Options, Source, Features, Tasks> {
   recreateInitialChangelog!: boolean;
+  /** The changes of the entities, computed once for the priorities giving them. */
+  #entityChanges?: BaseEntityChangesChangelog<Entity>[];
 
   abstract isChangelogNew({ entityName, changelogDate }: { entityName: string; changelogDate: string }): boolean;
 
@@ -93,7 +95,8 @@ export default abstract class BaseEntityChangesGenerator<
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       const { application, entities } = firstArg as Tasks['DefaultTaskParam'];
-      return { ...firstArg, entityChanges: this.generateIncrementalChanges({ application, entities }) };
+      this.#entityChanges ??= this.generateIncrementalChanges({ application, entities });
+      return { ...firstArg, entityChanges: this.#entityChanges };
     }
     return firstArg;
   }
@@ -107,7 +110,7 @@ export default abstract class BaseEntityChangesGenerator<
   }: Pick<Tasks['DefaultTaskParam'], 'application' | 'entities'>): BaseEntityChangesChangelog<Entity>[] {
     const { recreateInitialChangelog } = this;
     const { incrementalChangelog } = application;
-    const entityNames = paramEntities.filter(e => !e.builtIn).map(e => e.name);
+    const entityNames = paramEntities.filter(e => !e.skipDbChangelog).map(e => e.name);
 
     const entitiesByName = Object.fromEntries(paramEntities.map(entity => [entity.name, entity]));
     const entitiesWithExistingChangelog = new Set(
@@ -122,15 +125,21 @@ export default abstract class BaseEntityChangesGenerator<
           { name: entityName, ...JSON.parse(readFileSync(entityConfigPath).toString()) } as Entity,
         ]),
     );
+    // The primary keys as the entity files declare them, before the entities are prepared.
+    const previousIdSignatures = Object.fromEntries(
+      Object.entries(previousEntitiesByName).map(([entityName, entity]) => [entityName, this.#idSignature(entity)]),
+    );
 
     for (const [entityName, entity] of Object.entries(entitiesByName)) {
-      if (entity.builtIn) {
+      // The server properties of an entity with fixed ones never change, and a built-in entity without file has no
+      // previous state: its current one stands for it.
+      if (entity.fixedServerProperties || (entity.builtIn && !previousEntitiesByName[entityName])) {
         previousEntitiesByName[entityName] = entity;
       }
     }
 
     if (application.generateBuiltInUserEntity && !previousEntitiesByName.User) {
-      previousEntitiesByName.User = { name: 'User', builtIn: true } as any;
+      previousEntitiesByName.User = { name: 'User', builtIn: true, fixedServerProperties: true } as Entity;
     }
 
     const entities = Object.values(previousEntitiesByName);
@@ -168,13 +177,20 @@ export default abstract class BaseEntityChangesGenerator<
       const newFieldNames: string[] = newFields.filter(field => !field.id).map(field => field.fieldName);
 
       // Calculate new fields
-      const addedFieldNames = newFieldNames.filter(fieldName => !oldFieldNames.includes(fieldName));
-      const addedFields = addedFieldNames.map(fieldName => newFields.find(field => fieldName === field.fieldName)!);
+      const addedFieldNames = new Set(newFieldNames.filter(fieldName => !oldFieldNames.includes(fieldName)));
+      const addedFields = newFields.filter(field => addedFieldNames.has(field.fieldName));
       // Calculate removed fields
-      const removedFieldNames = oldFieldNames.filter(fieldName => !newFieldNames.includes(fieldName));
-      const removedFields = removedFieldNames.map(fieldName => oldFields.find(field => fieldName === field.fieldName)!);
+      const removedFieldNames = new Set(oldFieldNames.filter(fieldName => !newFieldNames.includes(fieldName)));
+      const removedFields = oldFields.filter(field => removedFieldNames.has(field.fieldName));
 
       const oldRelationships = oldConfig.relationships || [];
+
+      if (previousIdSignatures[entityName] !== this.#idSignature(this.fs.readJSON(this.getEntityConfigPath(entityName)))) {
+        // The changes of the primary key are not written to the incremental changelog.
+        this.log.warn(
+          `The primary key of the entity ${entityName} changed: the incremental changelog does not migrate it, the database has to be changed by hand.`,
+        );
+      }
 
       // Calculate changed/newly added relationships
       const addedRelationships = newRelationships.filter(
@@ -212,27 +228,21 @@ export default abstract class BaseEntityChangesGenerator<
 
       // find the old fields that have not been deleted anyway or otherwise where the default value is different on the same new field
       const removedDefaultValueFields = oldFieldsWithDefaultValues
-        .filter(oldField => !removedFieldNames.includes(oldField.fieldName))
-        .filter(
+        .filter(oldField => !removedFieldNames.has(oldField.fieldName))
+        .filter(oldField => {
           // field was not removed, so check its default value
-          oldField =>
-            this.doDefaultValuesDiffer(
-              oldField,
-              newFields.find(newField => newField.fieldName === oldField.fieldName)!,
-            ),
-        );
+          const newField = newFields.find(field => field.fieldName === oldField.fieldName);
+          return newField !== undefined && this.doDefaultValuesDiffer(oldField, newField);
+        });
 
       // find the new fields that have not been added newly anyway or otherwise where the old field had a different default value
       const addedDefaultValueFields = newFieldsWithDefaultValues
-        .filter(newField => !addedFieldNames.includes(newField.fieldName))
-        .filter(
+        .filter(newField => !addedFieldNames.has(newField.fieldName))
+        .filter(newField => {
           // field was not added newly, so check its default value
-          newField =>
-            this.doDefaultValuesDiffer(
-              oldFields.find(oldField => oldField.fieldName === newField.fieldName)!,
-              newField,
-            ),
-        );
+          const oldField = oldFields.find(field => field.fieldName === newField.fieldName);
+          return oldField !== undefined && this.doDefaultValuesDiffer(oldField, newField);
+        });
 
       return {
         ...baseChangelog(),
@@ -250,6 +260,24 @@ export default abstract class BaseEntityChangesGenerator<
         addedDefaultValueFields,
       } satisfies BaseEntityChangesChangelog<Entity>;
     });
+  }
+
+  /** The fields and the relationships an entity file declares as its primary key. */
+  #idSignature(entity: unknown): string {
+    type Declared = { id?: boolean; options?: { id?: boolean } };
+    const { fields = [], relationships = [] } = (entity ?? {}) as {
+      fields?: (Declared & { fieldName: string; fieldType?: string })[];
+      relationships?: (Declared & { relationshipName: string; otherEntityName: string; relationshipType?: string })[];
+    };
+    const isId = ({ id, options }: Declared) => Boolean(id ?? options?.id);
+    return [
+      ...fields.filter(field => isId(field) || field.fieldName === 'id').map(field => `${field.fieldName}:${field.fieldType}`),
+      ...relationships
+        .filter(relationship => isId(relationship))
+        .map(relationship => `${relationship.relationshipName}:${relationship.otherEntityName}:${relationship.relationshipType}`),
+    ]
+      .sort()
+      .join();
   }
 
   private hasAnyDefaultValue(field: BaseEntityChangesField): boolean {

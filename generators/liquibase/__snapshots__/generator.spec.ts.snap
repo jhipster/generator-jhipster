@@ -1,0 +1,233 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - liquibase with gradle and a reactive application should match the gradle liquibase file snapshot 1`] = `
+{
+  "gradle/liquibase.gradle": {
+    "contents": "configurations {
+    liquibaseRuntime.extendsFrom sourceSets.main.compileClasspath
+}
+
+dependencies {
+  implementation "org.liquibase:liquibase-core"
+  liquibaseRuntime "org.liquibase:liquibase-core"
+  // Dependency required to parse options. Refer to https://github.com/liquibase/liquibase-gradle-plugin/tree/Release_2.2.0#news.
+  liquibaseRuntime "info.picocli:picocli:'PICOCLI-VERSION'"
+  liquibaseRuntime "org.postgresql:postgresql"
+  // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+project.ext.diffChangelogFile = "src/main/resources/config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
+if (!project.hasProperty("runList")) {
+ project.ext.runList = "main"
+}
+
+liquibase {
+  activities {
+    main {
+      driver "org.postgresql.Driver"
+      url "jdbc:postgresql://localhost:5432/jhipster"
+      username "jhipster"
+      changelogFile "src/main/resources/config/liquibase/master.xml"
+      logLevel "debug"
+      classpath "src/main/resources/"
+      // Liquibase 5 resolves the changelog and its includes from the search path.
+      searchPath ".,src/main/resources/"
+    }
+    diffLog {
+      driver "org.postgresql.Driver"
+      url "jdbc:postgresql://localhost:5432/jhipster"
+      username "jhipster"
+      changelogFile project.ext.diffChangelogFile
+      logLevel "debug"
+      classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
+    }
+  }
+
+  runList = project.ext.runList
+}
+
+tasks.named('liquibaseDiff').configure { dependsOn(tasks.named('compileJava')) }
+tasks.named('liquibaseDiffChangelog').configure { dependsOn(tasks.named('compileJava')) }
+
+ext {
+  if (project.hasProperty("no-liquibase")) {
+    springProfiles += ",no-liquibase"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - liquibase with gradle should match the gradle liquibase file snapshot 1`] = `
+{
+  "gradle/liquibase.gradle": {
+    "contents": "configurations {
+    liquibaseRuntime.extendsFrom sourceSets.main.compileClasspath
+}
+
+dependencies {
+  implementation "org.liquibase:liquibase-core"
+  liquibaseRuntime "org.liquibase:liquibase-core"
+  // Dependency required to parse options. Refer to https://github.com/liquibase/liquibase-gradle-plugin/tree/Release_2.2.0#news.
+  liquibaseRuntime "info.picocli:picocli:'PICOCLI-VERSION'"
+  liquibaseRuntime "org.postgresql:postgresql"
+  // The diffLog activity's hibernate:spring reference reads the compiled entities.
+  liquibaseRuntime sourceSets.main.output
+  liquibaseRuntime "org.liquibase.ext:liquibase-hibernate7:\${dependencyManagement.importedProperties['liquibase.version']}"
+  // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+project.ext.diffChangelogFile = "src/main/resources/config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
+if (!project.hasProperty("runList")) {
+ project.ext.runList = "main"
+}
+
+liquibase {
+  activities {
+    main {
+      driver "org.postgresql.Driver"
+      url "jdbc:postgresql://localhost:5432/jhipster"
+      username "jhipster"
+      changelogFile "src/main/resources/config/liquibase/master.xml"
+      logLevel "debug"
+      classpath "src/main/resources/"
+      // Liquibase 5 resolves the changelog and its includes from the search path.
+      searchPath ".,src/main/resources/"
+    }
+    diffLog {
+      driver "org.postgresql.Driver"
+      url "jdbc:postgresql://localhost:5432/jhipster"
+      username "jhipster"
+      changelogFile project.ext.diffChangelogFile
+      referenceUrl "hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.hibernate.SpringImplicitNamingStrategy"
+      logLevel "debug"
+      classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
+    }
+  }
+
+  runList = project.ext.runList
+}
+
+tasks.named('liquibaseDiff').configure { dependsOn(tasks.named('compileJava')) }
+tasks.named('liquibaseDiffChangelog').configure { dependsOn(tasks.named('compileJava')) }
+
+ext {
+  if (project.hasProperty("no-liquibase")) {
+    springProfiles += ",no-liquibase"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - liquibase with maven and a reactive application should match the liquibase-maven-plugin snapshot 1`] = `
+"<plugin>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
+                    <version>\${liquibase.version}</version>
+                    <configuration>
+                        <changeLogFile>config/liquibase/master.xml</changeLogFile>
+                        <diffChangeLogFile>\${project.basedir}/src/main/resources/config/liquibase/changelog/\${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
+                        <driver>org.postgresql.Driver</driver>
+                        <url>\${liquibase-plugin.url}</url>
+                        <defaultSchemaName/>
+                        <username>\${liquibase-plugin.username}</username>
+                        <password>\${liquibase-plugin.password}</password>
+                        <verbose>true</verbose>
+                        <contexts>!test</contexts>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.liquibase</groupId>
+                            <artifactId>liquibase-core</artifactId>
+                            <version>\${liquibase.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>jakarta.persistence</groupId>
+                            <artifactId>jakarta.persistence-api</artifactId>
+                            <version>\${jakarta-persistence.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>jakarta.validation</groupId>
+                            <artifactId>jakarta.validation-api</artifactId>
+                            <version>\${jakarta-validation.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                            <version>\${jboss-logging.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-starter-data-jpa</artifactId>
+                            <version>\${spring-boot.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>"
+`;
+
+exports[`generator - liquibase with maven should match the liquibase-maven-plugin snapshot 1`] = `
+"<plugin>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
+                    <version>\${liquibase.version}</version>
+                    <configuration>
+                        <changeLogFile>config/liquibase/master.xml</changeLogFile>
+                        <diffChangeLogFile>\${project.basedir}/src/main/resources/config/liquibase/changelog/\${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
+                        <driver>org.postgresql.Driver</driver>
+                        <url>\${liquibase-plugin.url}</url>
+                        <defaultSchemaName/>
+                        <username>\${liquibase-plugin.username}</username>
+                        <password>\${liquibase-plugin.password}</password>
+                        <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                        <verbose>true</verbose>
+                        <contexts>!test</contexts>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.liquibase</groupId>
+                            <artifactId>liquibase-core</artifactId>
+                            <version>\${liquibase.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.liquibase.ext</groupId>
+                            <artifactId>liquibase-hibernate7</artifactId>
+                            <version>\${liquibase.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.hibernate.orm</groupId>
+                            <artifactId>hibernate-core</artifactId>
+                            <version>\${hibernate.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.hibernate.orm</groupId>
+                            <artifactId>hibernate-envers</artifactId>
+                            <version>\${hibernate.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>jakarta.persistence</groupId>
+                            <artifactId>jakarta.persistence-api</artifactId>
+                            <version>\${jakarta-persistence.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>jakarta.validation</groupId>
+                            <artifactId>jakarta.validation-api</artifactId>
+                            <version>\${jakarta-validation.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                            <version>\${jboss-logging.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-starter-data-jpa</artifactId>
+                            <version>\${spring-boot.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>"
+`;

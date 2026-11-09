@@ -32,6 +32,18 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator, { bootstrapGenerator: true }));
 
+  describe('with a relational database it does not support', () => {
+    it('should fail', async () => {
+      await expect(
+        helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withMockedSource()
+          .withJHipsterConfig({ prodDatabaseType: 'sqlite', devDatabaseType: 'sqlite' } as any),
+      ).rejects.toThrow('Database sqlite is not supported by Spring Boot');
+    });
+  });
+
   describe('with defaults options', () => {
     before(async () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();
@@ -45,7 +57,7 @@ describe(`generator - ${generator}`, () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
 
-    it('should compose with generators', () => {
+    it('should compose with generators - snapshot', () => {
       expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
     });
   });

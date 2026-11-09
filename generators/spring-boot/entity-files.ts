@@ -148,6 +148,10 @@ const userDtoFiles = javaWriteFileSection({
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user!.persistClass}.java`),
       templates: ['domain/User.java'],
     },
+    {
+      ...javaMainPackageTemplatesBlock(),
+      templates: ['domain/NotSortable.java'],
+    },
   ],
   dto: [
     {
@@ -187,6 +191,11 @@ const userFiles = javaWriteFileSection({
       templates: ['service/UserService.java', 'web/rest/PublicUserResource.java'],
     },
     {
+      condition: data => data.generateUserRegistration,
+      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['service/RegistrationService.java'],
+    },
+    {
       // The cassandra, couchbase and reactive sql UserRepository are written by their database generators
       condition: data =>
         data.generateBuiltInUserEntity &&
@@ -201,10 +210,31 @@ const userFiles = javaWriteFileSection({
       ...javaTestPackageTemplatesBlock('_entityPackage_/'),
       templates: ['service/UserServiceIT.java', 'web/rest/UserResourceIT.java', 'web/rest/PublicUserResourceIT.java'],
     },
+    {
+      // The not activated users are removed by every database but Cassandra
+      condition: data => data.generateUserRegistration && !data.databaseTypeCassandra,
+      ...javaTestPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['service/RegistrationServiceIT.java'],
+    },
+  ],
+});
+
+const domainFiles = javaWriteFileSection({
+  domainFiles: [
+    {
+      condition: data =>
+        data.entityDomainLayer &&
+        !data.databaseTypeNo &&
+        !data.databaseTypeCassandra &&
+        [...data.fields, ...data.relationships].some((property: { notSortable?: boolean }) => property.notSortable),
+      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['domain/_persistClass_.java.jhi.not_sortable'],
+    },
   ],
 });
 
 export const serverFiles = javaWriteFileSection({
+  ...domainFiles,
   ...restFiles,
   ...filteringFiles,
   ...filteringReactiveFiles,

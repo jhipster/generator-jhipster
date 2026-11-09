@@ -86,9 +86,8 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
         );
       },
       loadDefaults({ application, applicationDefaults }) {
-        let { applyDefaults } = this.options;
-        applyDefaults ??= getConfigWithDefaults as any;
-        applicationDefaults(applyDefaults!(application));
+        const applyDefaults = this.options.applyDefaults ?? getConfigWithDefaults;
+        applicationDefaults(applyDefaults(application));
       },
     });
   }

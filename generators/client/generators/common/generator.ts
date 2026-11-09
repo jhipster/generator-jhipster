@@ -42,7 +42,27 @@ export default class CommonGenerator extends BaseApplicationGenerator {
                 'shared/jhipster/error.constants.ts',
                 'shared/jhipster/headers.ts',
                 'shared/jhipster/link-header.ts',
+                'shared/jhipster/pagination.ts',
                 'shared/jhipster/problem-details.ts',
+              ],
+            }),
+            clientApplicationTemplatesBlock({
+              condition: ctx => ctx.clientTestFrameworkVitest,
+              templates: [
+                'shared/jhipster/data-utils.spec.ts',
+                'shared/jhipster/headers.spec.ts',
+                'shared/jhipster/link-header.spec.ts',
+                'shared/jhipster/pagination.spec.ts',
+              ],
+            }),
+            clientApplicationTemplatesBlock({
+              condition: ctx => ctx.withAdminUi,
+              templates: [
+                'shared/jhipster/configuration.model.ts',
+                'shared/jhipster/health.model.ts',
+                'shared/jhipster/label.ts',
+                'shared/jhipster/logs.model.ts',
+                'shared/jhipster/metrics.model.ts',
               ],
             }),
           ],

@@ -3,8 +3,8 @@
   "exclude": ["**/*.spec.*", "**/__*/**", "**/node_modules", "**/.*/"],
   "compilerOptions": {
     /* Language and Environment */
-    "target": "ES2025" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-    "lib": ["ES2025"] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
+    "target": "ES2024" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "lib": ["ES2024"] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
     "types": ["node"],
 
     /* Modules */

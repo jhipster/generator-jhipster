@@ -33,13 +33,11 @@ test.describe('login page', () => {
   test('greets with signin', async ({ page }) => {
     await expect(page.locator(titleLoginSelector)).toBeVisible();
   });
-<%_ if (clientFrameworkAngular) { _%>
 
   test('greets visiting /login directly', async ({ page }) => {
     await page.goto('/login');
     await expect(page.locator(titleLoginSelector)).toBeVisible();
   });
-<%_ } _%>
 
   test('requires username', async ({ page }) => {
 <%_ if (!clientFrameworkReact) { _%>

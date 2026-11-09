@@ -1,0 +1,17 @@
+<template>
+  <div class="footer">
+    <p>{{ t$('footer') }}</p>
+  </div>
+</template>
+
+<script setup lang="ts">
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>Footer' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+</script>

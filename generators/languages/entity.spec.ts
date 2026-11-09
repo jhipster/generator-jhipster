@@ -28,7 +28,7 @@ describe('mutation object test', () => {
     it(`expects ${name} to match snapshot`, () => {
       expect(mutateMockedData(...data)).toMatchSnapshot();
     });
-    it(`expects ${name} to don't override existing properties`, () => {
+    it(`expects ${name} not to override existing properties`, () => {
       expect(Object.keys(mutateMockedCompleteData(...data))).toHaveLength(0);
     });
   }

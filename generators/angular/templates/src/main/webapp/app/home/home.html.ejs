@@ -29,14 +29,14 @@
     <div>
       @if (account(); as accountRef) {
         <div class="alert alert-success">
-          <span id="home-logged-message">__jhiTranslateTag__('home.logged.message', { "username": "accountRef.login" })</span>
+          <span>__jhiTranslateTag__('home.logged.message', { "username": "accountRef.login" })</span>
         </div>
       } @else {
         <div class="alert alert-warning">
           <span>__jhiTranslateTag__('global.messages.info.authenticated.prefix')</span>
           <a class="alert-link" (click)="login()">__jhiTranslateTag__('global.messages.info.authenticated.link')</a><span>__jhiTranslateTag__('global.messages.info.authenticated.suffix')</span>
         </div>
-<%_ if (generateUserManagement) { _%>
+<%_ if (generateUserRegistration) { _%>
 
           <div class="alert alert-warning">
             <span>__jhiTranslateTag__('global.messages.info.register.noaccount')</span>&nbsp;

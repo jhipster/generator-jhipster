@@ -1,0 +1,65 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { createTestingPinia } from '@pinia/testing';
+import { shallowMount } from "@vue/test-utils";
+
+import { type AccountStore, useStore } from '@/stores';
+
+import Ribbon from './ribbon.vue';
+
+type RibbonComponentType = InstanceType<typeof Ribbon>;
+
+const pinia = createTestingPinia({ stubActions: false });
+
+describe('Ribbon', () => {
+  let ribbon: RibbonComponentType;
+  let store: AccountStore;
+
+  beforeEach(async () => {
+    const wrapper = shallowMount(Ribbon, {
+      global: {
+        plugins: [pinia],
+      },
+    });
+    ribbon = wrapper.vm;
+    await ribbon.$nextTick();
+    store = useStore();
+    store.setRibbonOnProfiles(null);
+  });
+
+  it('should not have ribbonEnabled when no data', () => {
+    expect(ribbon.ribbonEnabled).toBeFalsy();
+  });
+
+  it('should have ribbonEnabled set to value in store', () => {
+    const profile = 'dev';
+    store.setActiveProfiles(['foo', profile, 'bar']);
+    store.setRibbonOnProfiles(profile);
+    expect(ribbon.ribbonEnabled).toBeTruthy();
+  });
+
+  it('should not have ribbonEnabled when profile not activated', () => {
+    const profile = 'dev';
+    store.setActiveProfiles(['foo', 'bar']);
+    store.setRibbonOnProfiles(profile);
+    expect(ribbon.ribbonEnabled).toBeFalsy();
+  });
+});

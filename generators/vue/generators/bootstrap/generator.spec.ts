@@ -47,7 +47,7 @@ describe(`generator - ${generator}`, () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
 
-    it('should compose with generators', () => {
+    it('should compose with generators - snapshot', () => {
       expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
     });
   });

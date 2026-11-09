@@ -16,22 +16,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { <%- applicationTypeGateway && gatewayServicesApiAvailable ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config';
-import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Service, inject } from '@angular/core';
 
-import { LoggersResponse, Level } from './log.model';
+import { Observable, map } from 'rxjs';
+
+import { <%- applicationTypeGateway && gatewayServicesApiAvailable ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config';
+import { loggersEndpoint, toLevelChange, toLogs } from 'app/shared/jhipster/logs';
+import { Level, Log } from 'app/shared/jhipster/logs.model';
 
 @Service()
 export class LogsService {
   private readonly http = inject(HttpClient);
 
-  changeLevel(name: string, configuredLevel: Level<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service?: string' : '' %>): Observable<{}> {
-    return this.http.post(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `${microserviceContextPath}${service}/` : ''}" : '' %>management/loggers/${name}`, { configuredLevel });
+  changeLevel(name: string, level: Level<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service?: string' : '' %>): Observable<{}> {
+    const { url, body } = toLevelChange(name, level);
+    return this.http.post(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `${microserviceContextPath}${service}/` : ''}" : '' %>${url}`, body);
   }
 
-  findAll(<%- applicationTypeGateway && gatewayServicesApiAvailable ? 'service?: string' : '' %>): Observable<LoggersResponse> {
-    return this.http.get<LoggersResponse>(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `${microserviceContextPath}${service}/` : ''}" : '' %>management/loggers`);
+  findAll(<%- applicationTypeGateway && gatewayServicesApiAvailable ? 'service?: string' : '' %>): Observable<Log[]> {
+    return this.http
+      .get(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `${microserviceContextPath}${service}/` : ''}" : '' %>${loggersEndpoint}`)
+      .pipe(map(toLogs));
   }
 }

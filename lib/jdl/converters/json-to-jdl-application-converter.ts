@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 
+import { GENERATOR_JHIPSTER } from '../../constants/jhipster.ts';
 import { createJDLApplication } from '../core/models/jdl-application-factory.ts';
 import type JDLApplication from '../core/models/jdl-application.ts';
 import JDLObject from '../core/models/jdl-object.ts';
 import type { JDLRuntime } from '../core/parsing/index.ts';
 import type { RawJDLJSONApplication } from '../core/types/exporter.ts';
-
-const GENERATOR_NAME = 'generator-jhipster';
 
 export type JHipsterYoRcContentAndJDLWrapper = {
   applications: RawJDLJSONApplication[];
@@ -40,5 +39,5 @@ export function convertApplicationsToJDL({ applications, jdl }: JHipsterYoRcCont
 }
 
 export function convertApplicationToJDL(application: RawJDLJSONApplication, runtime: JDLRuntime): JDLApplication {
-  return createJDLApplication(application[GENERATOR_NAME], runtime);
+  return createJDLApplication(application[GENERATOR_JHIPSTER], runtime);
 }

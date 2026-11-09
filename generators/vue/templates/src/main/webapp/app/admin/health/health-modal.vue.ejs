@@ -1,9 +1,9 @@
 <template>
   <div class="modal-body pad">
-    <div v-if="currentHealth?.details">
+    <div v-if="currentCheck?.details">
       <h5>{{ t$('health.details.properties') }}</h5>
       <div class="table-responsive">
-        <table class="table table-striped" aria-describedby="Health">
+        <table class="table table-striped" aria-describedby="showHealthLabel">
           <thead>
             <tr>
               <th class="text-start" scope="col">{{ t$('health.details.name') }}</th>
@@ -11,19 +11,34 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in currentHealth.details.details" :key="index">
-              <td class="text-start">{{ index }}</td>
-              <td class="text-start">{{ readableValue(item) }}</td>
+            <tr v-for="detail in currentCheck.details" :key="detail.key">
+              <td class="text-start">{{ detail.key }}</td>
+              <td class="text-start">{{ detail.value }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div v-if="currentHealth?.error">
+    <div v-if="currentCheck?.error">
       <h4>{{ t$('health.details.error') }}</h4>
-      <pre>{{ currentHealth.error }}</pre>
+      <pre>{{ currentCheck.error }}</pre>
     </div>
   </div>
 </template>
 
-<script lang="ts" src="./health-modal.component.ts"></script>
+<script setup lang="ts">
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { type HealthCheck } from '@/shared/jhipster/health.model';
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>HealthModal' });
+
+defineProps<{ currentCheck?: HealthCheck | null }>();
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+</script>

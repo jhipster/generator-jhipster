@@ -105,7 +105,7 @@ const noLanguageFiles = (languageValue: string) => {
 const containsLanguageInVueStore = (languageValue: string) => {
   it(`add language ${languageValue} into translation-store.ts`, () => {
     const langKey = languageValue.includes('-') ? `'${languageValue}'` : languageValue;
-    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/config/languages.ts`, `${langKey}: { name:`);
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/languages.ts`, `${langKey}: { name:`);
   });
 };
 

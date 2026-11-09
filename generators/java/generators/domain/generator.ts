@@ -69,7 +69,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
         }
       },
       prepareEntity({ entity, field }) {
-        if (entity.dtoMapstruct || entity.builtIn) {
+        if (entity.dtoMapstruct || entity.builtInUser || entity.builtInAuthority) {
           field.propertyDtoJavaType = field.fieldTypeBlobContent === 'text' ? 'String' : field.fieldType;
         }
       },

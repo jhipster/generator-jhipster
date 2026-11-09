@@ -66,7 +66,7 @@ export default class extends GenerateBlueprintBaseGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      async loadOptions() {
+      loadOptions() {
         if (this.allGenerators) {
           this.config.set(allGeneratorsConfig());
         }

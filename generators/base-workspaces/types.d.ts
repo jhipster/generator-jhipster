@@ -30,6 +30,7 @@ type DeploymentConfig = {
   adminPassword: string;
   adminPasswordBase64: string;
   dbRandomPassword: string;
+  consulGossipKey: string;
 
   deploymentType: string;
   serviceDiscoveryType: string;

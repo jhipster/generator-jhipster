@@ -17,38 +17,44 @@
  limitations under the License.
 -%>
 import { Component, <%- anyFieldIsBlobDerived || !readOnly || builtInUserManagement ? 'inject, ' : '' %>input } from '@angular/core';
-<%_ if (!readOnly) { _%>
-import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
-import { filter, tap } from 'rxjs';
-<%_ } _%>
-<%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
-import { RouterLink } from '@angular/router';
-<%_ } _%>
-<%_ if (builtInUserManagement) { _%>
-import { AccountService } from 'app/core/auth';
+<%_ if (!readOnly || (entityFileName !== 'authority' && updatableEntity)) { _%>
+import { <%- [readOnly ? undefined : 'Router', entityFileName !== 'authority' && updatableEntity ? 'RouterLink' : undefined].filter(Boolean).join(', ') %> } from '@angular/router';
 <%_ } _%>
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { Alert, AlertError } from 'app/shared/alert';
+<%_ if (!readOnly) { _%>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+<%_ } _%>
 <%_ if (anyFieldHasDocumentation) { _%>
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
-<%_ } _%>
-<%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 <%_ if (angularEntityDetailsRequiresTranslationPipe) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
-import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
+<%_ if (!readOnly) { _%>
+import { filter, tap } from 'rxjs';
+<%_ } _%>
+
 <%_ if (!readOnly) { _%>
 import { ITEM_DELETED_EVENT } from 'app/config';
-import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+import { AccountService } from 'app/core/auth';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util';
+<%_ } _%>
+import { Alert, AlertError } from 'app/shared/alert';
+import { DurationPipe, FormatMediumDatePipe, FormatMediumDatetimePipe } from 'app/shared/date';
+<%_ if (anyFieldIsBlobDerived) { _%>
 import { type BlobType } from 'app/shared/jhipster/data-utils';
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
+import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
+<%_ if (!readOnly) { _%>
+import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
 <%_ } _%>
 
 @Component({

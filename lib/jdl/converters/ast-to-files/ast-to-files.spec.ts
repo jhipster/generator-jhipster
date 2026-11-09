@@ -29,7 +29,7 @@ const runtime = getDefaultRuntime();
 const convert = (jdl: string) => astToFiles(performJDLPostParsingTasks(parse(jdl, runtime, { onWarning: () => {} })), runtime);
 
 describe('jdl - astToFiles', () => {
-  it('should put an application in its folder, its deployments beside it, and run in its folder', () => {
+  it('should put an application in its folder, its deployments beside it, and run in its folder - snapshot', () => {
     expect(
       convert(`
 application {
@@ -99,7 +99,7 @@ microservice Order with orders
     ]);
   });
 
-  it('should put the entities of a jdl without application in .jhipster, as the jdl declares them', () => {
+  it('should put the entities of a jdl without application in .jhipster, as the jdl declares them - snapshot', () => {
     expect(convert('entity Product\nentity Order\nmicroservice Order with orders')).toMatchInlineSnapshot(`
 {
   "files": {
@@ -138,7 +138,7 @@ microservice Order with orders
     expect(convert('')).toEqual({ files: {}, relativeRoot: '' });
   });
 
-  it('should convert the entities, their fields, enums and validations', () => {
+  it('should convert the entities, their fields, enums and validations - snapshot', () => {
     const { files } = convert(`
 /** An entity. */
 @ChangelogDate("20200101000000")
@@ -200,7 +200,7 @@ enum Kind {
 `);
   });
 
-  it('should make a relationship without injected field bidirectional', () => {
+  it('should make a relationship without injected field bidirectional - snapshot', () => {
     const { files } = convert('entity A\nentity B\nrelationship OneToMany { A to B }');
     expect(Object.values(files).map(entity => entity.relationships)).toMatchInlineSnapshot(`
 [
@@ -226,7 +226,7 @@ enum Kind {
 `);
   });
 
-  it('should convert the relationship options, the required sides and the built-in entities', () => {
+  it('should convert the relationship options, the required sides and the built-in entities - snapshot', () => {
     const { files } = convert(`
 entity A
 relationship ManyToOne {
@@ -299,7 +299,7 @@ paginate * with pagination
     expect(files['two/.jhipster/A.json'].dto).toBeUndefined();
   });
 
-  it('should give a deployment the options it declares, each list item once', () => {
+  it('should give a deployment the options it declares, each list item once - snapshot', () => {
     const { files } = convert('deployment { deploymentType kubernetes appsFolders [one, two, one] }');
     expect(files).toMatchInlineSnapshot(`
 {
@@ -330,6 +330,38 @@ application {
         blueprints: [{ name: 'generator-jhipster-foo' }, { name: 'generator-jhipster-bar' }],
         entities: [],
       },
+    });
+  });
+
+  it('should name a scoped blueprint and its namespace config after its package', () => {
+    const { files } = convert(`
+application {
+  config { baseName shop blueprints [@scope/foo] }
+  config(@scope/generator-jhipster-foo) { flag true }
+}
+`);
+    expect(files['shop/.yo-rc.json']).toEqual({
+      '@scope/generator-jhipster-foo': { flag: true },
+      'generator-jhipster': {
+        baseName: 'shop',
+        blueprints: [{ name: '@scope/generator-jhipster-foo' }],
+        entities: [],
+      },
+    });
+  });
+
+  it('should write the namespace config of a generator and of an instance in the config of its package, as yeoman stores them', () => {
+    const { files } = convert(`
+application {
+  config { baseName shop blueprints [@scope/foo] }
+  config(@scope/generator-jhipster-foo) { top true }
+  config(@scope/generator-jhipster-foo:app) { generator true }
+  config(@scope/generator-jhipster-foo:app#bar) { flag true }
+}
+`);
+    expect(files['shop/.yo-rc.json']).toEqual({
+      '@scope/generator-jhipster-foo': { top: true, ':app': { generator: true, '#bar': { flag: true } } },
+      'generator-jhipster': { baseName: 'shop', blueprints: [{ name: '@scope/generator-jhipster-foo' }], entities: [] },
     });
   });
 

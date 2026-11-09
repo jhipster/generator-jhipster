@@ -39,11 +39,11 @@ export const applicationTypesChoices = [
 
 export type ApplicationType = (typeof applicationTypesChoices)[number]['value'];
 
-const officialApplicationTypes: readonly string[] = applicationTypesChoices.map(choice => choice.value);
+const officialApplicationTypes: ReadonlySet<string> = new Set(applicationTypesChoices.map(choice => choice.value));
 
 /**
  * Whether the application type is an official one, which JHipster generates: a monolith (the default), a gateway or a microservice. Another
  * type, which a blueprint declares by adding it to the choices of `applicationType`, is left to that blueprint.
  */
 export const isOfficialApplicationType = (applicationType: string | undefined): boolean =>
-  applicationType === undefined || officialApplicationTypes.includes(applicationType);
+  applicationType === undefined || officialApplicationTypes.has(applicationType);

@@ -1,0 +1,79 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+
+import { fireEvent, screen } from '@testing-library/react';
+
+import { renderWithStore } from 'app/shared/util/test-utils';
+import { getGatewayRoutes } from '../administration.reducer';
+import { administrationState } from '../admin-test-utils';
+
+import GatewayPage from './gateway';
+
+vi.mock('../administration.reducer', async importOriginal => ({
+  ...(await importOriginal<typeof import('../administration.reducer')>()),
+  getGatewayRoutes: vi.fn(() => ({ type: 'test/getGatewayRoutes' })),
+}));
+
+const routes = [
+  {
+    path: 'services/blog/**',
+    serviceId: 'blog',
+    serviceInstances: [
+<%_ if (serviceDiscoveryConsul) { _%>
+      { uri: 'http://blog-up', healthService: { checks: [{ status: 'PASSING' }] }, metadata: { zone: 'primary' } },
+      { uri: 'http://blog-down', healthService: { checks: [{ status: 'PASSING' }, { status: 'CRITICAL' }] }, metadata: {} },
+<%_ } else { _%>
+      { uri: 'http://blog-up', instanceInfo: { status: 'UP' }, metadata: { zone: 'primary' } },
+      { uri: 'http://blog-down', instanceInfo: { status: 'DOWN' }, metadata: {} },
+<%_ } _%>
+      { uri: 'http://blog-unknown', metadata: {} },
+    ],
+  },
+];
+
+describe('GatewayPage', () => {
+  it('should load the routes and render the status of their servers', () => {
+    renderWithStore(<GatewayPage />, '/', administrationState({ gateway: { routes } }));
+
+    expect(getGatewayRoutes).toHaveBeenCalledTimes(1);
+    expect(screen.getByText('blog')).not.toBeNull();
+    expect(document.querySelectorAll('tbody a')).toHaveLength(3);
+    expect(screen.getByText('UP').className).toContain('bg-success');
+    expect(screen.getByText('DOWN').className).toContain('bg-danger');
+    expect(screen.getByText('?').className).toContain('bg-warning');
+    expect(screen.getByText('primary')).not.toBeNull();
+  });
+
+  it('should refresh the routes', () => {
+    renderWithStore(<GatewayPage />, '/', administrationState({ gateway: { routes } }));
+
+    fireEvent.click(document.querySelector('p button')!);
+
+    expect(getGatewayRoutes).toHaveBeenCalledTimes(2);
+  });
+
+  it('should not refresh the routes while they load', () => {
+    renderWithStore(<GatewayPage />, '/', administrationState({ loading: true, gateway: { routes: [] } }));
+
+    fireEvent.click(document.querySelector('p button')!);
+
+    expect(getGatewayRoutes).toHaveBeenCalledTimes(1);
+  });
+});

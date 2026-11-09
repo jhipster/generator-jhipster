@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { IPaginationBaseState, ISortBaseState } from 'react-jhipster';
+
 import { SORT } from 'app/shared/util/pagination.constants';
 
 /**
@@ -52,7 +53,10 @@ export const overrideSortStateWithQueryParams = (paginationBaseState: ISortBaseS
 };
 
 export const overridePaginationStateWithQueryParams = (paginationBaseState: IPaginationBaseState, locationSearch: string) => {
-  const sortedPaginationState: IPaginationBaseState = overrideSortStateWithQueryParams(paginationBaseState, locationSearch) as IPaginationBaseState;
+  const sortedPaginationState: IPaginationBaseState = overrideSortStateWithQueryParams(
+    paginationBaseState,
+    locationSearch,
+  ) as IPaginationBaseState;
   const params = new URLSearchParams(locationSearch);
   const page = params.get('page');
   if (page) {

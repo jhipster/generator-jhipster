@@ -52,9 +52,7 @@ public interface UserRepository extends JHipsterCouchbaseRepository<<%- user.per
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
     default <%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey) {
-        return findIdByActivationKey(activationKey)
-            .map(User::getId)
-            .flatMap(this::findById);
+        return findIdByActivationKey(activationKey).map(User::getId).flatMap(this::findById);
     }
 
     @Query(FIND_IDS_QUERY + " AND activationKey = $1")
@@ -68,9 +66,7 @@ public interface UserRepository extends JHipsterCouchbaseRepository<<%- user.per
     <%- listOrFlux %><User> findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
 
     default <%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey) {
-        return findIdByResetKey(resetKey)
-            .map(User::getId)
-            .flatMap(this::findById);
+        return findIdByResetKey(resetKey).map(User::getId).flatMap(this::findById);
     }
 
     @Query(FIND_IDS_QUERY + " AND resetKey = $1")
@@ -80,9 +76,7 @@ public interface UserRepository extends JHipsterCouchbaseRepository<<%- user.per
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
   <%_ } _%>
     default <%- optionalOrMono %><<%- user.persistClass %>> findOneByEmailIgnoreCase(String email) {
-        return findIdByEmailIgnoreCase(email)
-            .map(User::getId)
-            .flatMap(this::findById);
+        return findIdByEmailIgnoreCase(email).map(User::getId).flatMap(this::findById);
     }
 
     @Query(FIND_IDS_QUERY + " AND LOWER(email) = LOWER($1)")

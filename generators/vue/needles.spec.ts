@@ -70,7 +70,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
 
   it('menu contains the item in router import', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.routes.ts`,
       `
 const entityName = () => import('@/entities/entityFolderName/entityFileName.vue');
 const entityNameDetails = () => import('@/entities/entityFolderName/entityFileName-details.vue');
@@ -81,31 +81,31 @@ const entityNameUpdate = () => import('@/entities/entityFolderName/entityFileNam
 
   it('menu contains the item in router', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.routes.ts`,
       `
     {
       path: 'routerName',
       name: 'entityName',
       component: entityName,
-      meta: { authorities: [Authority.USER] },
+      meta: { authorities: ['ROLE_USER'] },
     },
     {
       path: 'routerName/:entityInstanceId/view',
       name: 'entityNameView',
       component: entityNameDetails,
-      meta: { authorities: [Authority.USER] },
+      meta: { authorities: ['ROLE_USER'] },
     },
     {
       path: 'routerName/new',
       name: 'entityNameCreate',
       component: entityNameUpdate,
-      meta: { authorities: [Authority.USER] },
+      meta: { authorities: ['ROLE_USER'] },
     },
     {
       path: 'routerName/:entityInstanceId/edit',
       name: 'entityNameEdit',
       component: entityNameUpdate,
-      meta: { authorities: [Authority.USER] },
+      meta: { authorities: ['ROLE_USER'] },
     },
 `,
     );
@@ -113,15 +113,15 @@ const entityNameUpdate = () => import('@/entities/entityFolderName/entityFileNam
 
   it('menu contains the item in service import', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
-      "import entityNameService from './entityFolderName/entityFileName.service';",
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.vue`,
+      "import entityNameService, { entityInstanceServiceKey } from './entityFolderName/entityFileName.service';",
     );
   });
 
   it('menu contains the item in service', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
-      "provide('entityInstanceService', () => new entityNameService());",
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.vue`,
+      'provide(entityInstanceServiceKey, () => new entityNameService());',
     );
   });
 });

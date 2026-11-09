@@ -251,8 +251,7 @@ public class PersistentTokenRememberMeServices extends AbstractRememberMeService
 <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
             persistentTokenRepository.delete(token);
 <%_ } _%>
-            throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous " +
-                "cookie theft attack.");
+            throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous " + "cookie theft attack.");
         }
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
         if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {

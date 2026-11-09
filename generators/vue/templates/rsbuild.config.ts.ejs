@@ -18,13 +18,18 @@
 -%>
 import path from 'node:path';
 
+<%_ if (microfrontend) { _%>
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+<%_ } _%>
 import { defineConfig } from '@rsbuild/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginVue } from '@rsbuild/plugin-vue';
 import { getAbsoluteFSPath } from 'swagger-ui-dist';
-<%_ if (microfrontend) { _%>
-import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 
+<%_ if (enableTranslation) { _%>
+import { i18nRsbuildPlugin } from './build-plugins/i18n.ts';
+<%_ } _%>
+<%_ if (microfrontend) { _%>
 import mfConfig from './module-federation.config.ts';
 <%_ } _%>
 
@@ -32,7 +37,6 @@ export default defineConfig({
   root: path.join(import.meta.dirname, '<%- relativeDir(clientRootDir, clientSrcDir) %>'),
   resolve: {
     alias: {
-      vue$: 'vue/dist/vue.esm-bundler.js',
       '@content': path.resolve(import.meta.dirname, './<%- relativeDir(clientRootDir, clientSrcDir) %>content'),
       '@': path.resolve(import.meta.dirname, './<%- relativeDir(clientRootDir, clientSrcDir) %>app'),
     },
@@ -40,6 +44,9 @@ export default defineConfig({
   plugins: [
     pluginVue(),
     pluginSass(),
+<%_ if (enableTranslation) { _%>
+    i18nRsbuildPlugin(),
+<%_ } _%>
 <%_ if (microfrontend) { _%>
     pluginModuleFederation(mfConfig),
 <%_ } _%>
@@ -108,8 +115,9 @@ export default defineConfig({
       index: './app/<%- microfrontend ? 'index' : 'main' %>.ts',
     },
     define: {
-      SERVER_API_URL: '"/"',
-      APP_VERSION: `"${process.env.APP_VERSION ? process.env.APP_VERSION : 'DEV'}"`,
+      SERVER_API_URL: '""',
+      // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
+      VERSION: JSON.stringify(process.env.APP_VERSION || 'DEV'),
     },
   },
   server: {

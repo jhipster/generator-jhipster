@@ -238,14 +238,21 @@ public class SecurityConfiguration {
                 .logoutUrl("/api/logout")
                 .logoutSuccessHandler(new HttpStatusReturningServerLogoutSuccessHandler()))
 <%_ } _%>
-            .headers(headers -> headers
-                .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
-                .frameOptions(frameOptions -> frameOptions.mode(Mode.SAMEORIGIN))
-                .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
-                .permissionsPolicy(permissions ->
-                    permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")))
+            .headers(headers ->
+                headers
+                    .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
+                    .frameOptions(frameOptions -> frameOptions.mode(Mode.SAMEORIGIN))
+                    .referrerPolicy(referrer ->
+                        referrer.policy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+                    )
+                    .permissionsPolicy(permissions ->
+                        permissions.policy(
+                            "camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()"
+                        )
+                    )
+            )
 <%_ if (applicationTypeMicroservice) { _%>
-                .requestCache(cache -> cache.requestCache(NoOpServerRequestCache.getInstance()))
+            .requestCache(cache -> cache.requestCache(NoOpServerRequestCache.getInstance()))
 <%_ } _%>
             .authorizeExchange(authz ->
                 // prettier-ignore
@@ -268,8 +275,10 @@ public class SecurityConfiguration {
 <%_ } _%>
                     .pathMatchers("/api/authenticate").permitAll()
 <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
                     .pathMatchers("/api/register").permitAll()
                     .pathMatchers("/api/activate").permitAll()
+  <%_ } _%>
                     .pathMatchers("/api/account/reset-password/init").permitAll()
                     .pathMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>
@@ -306,9 +315,7 @@ public class SecurityConfiguration {
             .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint()))
   <%_ } _%>
             .oauth2Client(withDefaults())
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt
-                    .jwtAuthenticationConverter(jwtAuthenticationConverter())));
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
 <%_ } else if (authenticationTypeJwt) { _%>
             .httpBasic(basic -> basic.disable())
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));

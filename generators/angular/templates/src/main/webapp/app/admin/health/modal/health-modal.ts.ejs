@@ -17,44 +17,28 @@
  limitations under the License.
 -%>
 import { Component, inject } from '@angular/core';
-import { KeyValuePipe } from '@angular/common';
+
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
 
+import { HealthCheck } from 'app/shared/jhipster/health.model';
 <%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language';
+import { LabelPipe, TranslateDirective } from 'app/shared/language';
 <%_ } _%>
-import { HealthKey, HealthDetails } from '../health.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-health-modal',
   templateUrl: './health-modal.html',
   imports: [
 <%_ if (enableTranslation) { _%>
+    LabelPipe,
     TranslateDirective,
 <%_ } _%>
-    KeyValuePipe,
   ],
 })
 export default class HealthModal {
-  health?: { key: HealthKey; value: HealthDetails };
+  check?: HealthCheck;
 
   private readonly activeModal = inject(NgbActiveModal);
-
-  readableValue(value: any): string {
-    if (this.health?.key === 'diskSpace') {
-      // should display storage space in a human-readable unit
-      const val = value / 1073741824;
-      if (val > 1) {
-        return `${val.toFixed(2)} GB`;
-      }
-      return `${(value / 1048576).toFixed(2)} MB`;
-    }
-
-    if (typeof value === 'object') {
-      return JSON.stringify(value);
-    }
-    return String(value);
-  }
 
   dismiss(): void {
     this.activeModal.dismiss();

@@ -19,26 +19,29 @@
 import './header.scss';
 
 import { useEffect, useRef } from 'react';
-import { Translate<%- enableTranslation ? ', Storage' : '' %> } from 'react-jhipster';
 import {
-  Navbar,
+  Container,
   Nav,
+  Navbar,
 } from 'react-bootstrap';
+import { <%- enableTranslation ? 'Storage, ' : '' %>Translate } from 'react-jhipster';
+
 import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 
-import { Home, Brand } from './header-components';
-import {
-  AdminMenu,
-  EntitiesMenu,
-  AccountMenu,
-<%_ if (enableTranslation) { _%>
-  LocaleMenu,
-<%_ } _%>
-} from '../menus';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 <%_ if (enableTranslation) { _%>
 import { setLocale } from 'app/shared/reducers/locale';
 <%_ } _%>
+import {
+  AccountMenu,
+  AdminMenu,
+  EntitiesMenu,
+<%_ if (enableTranslation) { _%>
+  LocaleMenu,
+<%_ } _%>
+} from '../menus';
+
+import { Brand, Home } from './header-components';
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
@@ -73,17 +76,18 @@ const Header = (props: IHeaderProps) => {
     }
   }, [loadingCount]);
 
-  const renderDevRibbon = () => !props.isInProduction && (
-    <div className="ribbon dev">
-      <a href="">
+  const renderDevRibbon = () =>
+    !props.isInProduction && (
+      <div className="ribbon dev">
+        <a href="">
 <%_ if (enableTranslation) { _%>
-        <Translate contentKey={`global.ribbon.${props.ribbonEnv}`} />
+          <Translate contentKey={`global.ribbon.${props.ribbonEnv}`} />
 <%_ } else { _%>
-        Development
+          Development
 <%_ } _%>
-      </a>
-    </div>
-  );
+        </a>
+      </div>
+    );
 
   /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 
@@ -91,9 +95,10 @@ const Header = (props: IHeaderProps) => {
     <div id="app-header">
       {renderDevRibbon()}
       <LoadingBar ref={loadingBarRef} className="loading-bar" color="#009cd8" />
-      <Navbar data-cy="navbar" data-bs-theme="<%- reactBootstrapBsTheme %>" expand="md" fixed="top" className="<% if (clientThemeNone) { %>jh-navbar<% } else { %>bg-<%- reactBootstrapVariant %><% } %>" collapseOnSelect>
-        <Navbar.Toggle aria-controls="header-tabs" aria-label="Menu" />
+      <Navbar data-cy="navbar" data-bs-theme="<%- reactBootstrapBsTheme %>" expand="md" className="<%- clientThemeNone ? 'jh-navbar ' : '' %>bg-<%- reactBootstrapVariant %>" collapseOnSelect>
+        <Container fluid>
         <Brand />
+        <Navbar.Toggle aria-controls="header-tabs" aria-label="Menu" />
         <Navbar.Collapse id="header-tabs">
           <Nav className="ms-auto">
             <Home />
@@ -106,6 +111,7 @@ const Header = (props: IHeaderProps) => {
             <AccountMenu isAuthenticated={props.isAuthenticated} />
           </Nav>
         </Navbar.Collapse>
+        </Container>
       </Navbar>
     </div>
   );

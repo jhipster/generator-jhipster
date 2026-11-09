@@ -400,8 +400,50 @@ entity Customer {
     it('should not create the entity constraint update changelog', () => {
       runResult.assertNoFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_Customer.xml`]);
     });
+    it('should not warn about the primary key', () => {
+      const warnings = (runResult.env.adapter.log as any).warn.mock.calls
+        .map(({ arguments: [message] }: { arguments: [string] }) => message)
+        .filter((message: string) => message.includes('primary key'));
+      expect(warnings).toEqual([]);
+    });
     it('should match snapshot', () => {
       expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
+  });
+
+  describe('when changing the primary key', () => {
+    before(async () => {
+      await helpers.runJDL(`
+${jdlApplication}
+entity Customer {
+    original String
+}
+`);
+
+      await helpers
+        .runJDLInApplication(
+          `
+${jdlApplication}
+entity Customer {
+    @id code String
+    original String
+}
+`,
+        )
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
+        .withOptions({
+          creationTimestamp: '2020-01-02',
+        });
+    });
+
+    it('should warn that the incremental changelog does not migrate it, once', () => {
+      const warnings = (runResult.env.adapter.log as any).warn.mock.calls
+        .map(({ arguments: [message] }: { arguments: [string] }) => message)
+        .filter((message: string) => message.includes('primary key'));
+      expect(warnings).toEqual([
+        'The primary key of the entity Customer changed: the incremental changelog does not migrate it, the database has to be changed by hand.',
+      ]);
     });
   });
 
@@ -1441,7 +1483,7 @@ entity Customer {
         it('should create entity initial fake data file', () => {
           runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`]);
         });
-        it('should create fake data file with required content', () => {
+        it('should create fake data file with required content - snapshot', () => {
           expect(
             runResult.getSnapshot(`**/${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`),
           ).toMatchSnapshot();

@@ -17,11 +17,12 @@
  limitations under the License.
 -%>
 
-import { configureStore } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import userManagement, { getUsers } from 'app/shared/reducers/user-management';
+import { configureStore } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+import userManagement, { getUsers, reset } from 'app/shared/reducers/user-management';
 
 describe('User management reducer tests', () => {
   const initialState = {
@@ -32,6 +33,10 @@ describe('User management reducer tests', () => {
   describe('Common', () => {
     it('should return the initial state', () => {
       expect(userManagement(undefined, { type: 'unknown' })).toEqual({ ...initialState });
+    });
+
+    it('should reset the state', () => {
+      expect(userManagement({ users: [{ login: 'user' }], errorMessage: 'error' }, reset())).toEqual(initialState);
     });
   });
 
@@ -44,6 +49,10 @@ describe('User management reducer tests', () => {
           error: { message: 'error happened' },
         }),
       ).toEqual({ ...initialState, errorMessage: 'error happened' });
+    });
+
+    it('should clear the error message of a failure without message', () => {
+      expect(userManagement({ ...initialState, errorMessage: 'old' }, { type: getUsers.rejected.type, error: {} })).toEqual(initialState);
     });
   });
 

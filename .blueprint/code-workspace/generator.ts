@@ -36,7 +36,7 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
-      async generateCodeWorkspace() {
+      generateCodeWorkspace() {
         this.addSampleToCodeWorkspace(this.samplePath);
       },
     });

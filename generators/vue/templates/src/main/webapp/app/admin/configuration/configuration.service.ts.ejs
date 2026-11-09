@@ -16,58 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
+
 import axios from 'axios';
 
+import { type ConfigurationSection } from '@/shared/jhipster/configuration.model';
+import { configurationEndpoints, toConfiguration } from '@/shared/jhipster/configuration';
+
 export default class ConfigurationService {
-  async loadConfiguration(): Promise<any> {
-    const res = await axios.get('management/configprops');
-    const properties = [];
-    const propertiesObject = this.getConfigPropertiesObjects(res.data);
-    for (const key in propertiesObject) {
-      if (Object.hasOwn(propertiesObject, key)) {
-        properties.push(propertiesObject[key]);
-      }
-    }
-
-    properties.sort((propertyA, propertyB) => {
-      const comparePrefix = propertyA.prefix < propertyB.prefix ? -1 : 1;
-      return propertyA.prefix === propertyB.prefix ? 0 : comparePrefix;
-    });
-    return properties;
-  }
-
-  async loadEnvConfiguration(): Promise<any> {
-    const res = await axios.get<any>('management/env');
-    const properties = {};
-    const propertySources = res.data.propertySources;
-
-    for (const propertyObject of propertySources) {
-      const name = propertyObject.name;
-      const detailProperties = propertyObject.properties;
-      const vals = [];
-      for (const keyDetail in detailProperties) {
-        if (Object.hasOwn(detailProperties, keyDetail)) {
-          vals.push({ key: keyDetail, val: detailProperties[keyDetail].value });
-        }
-      }
-      properties[name] = vals;
-    }
-    return properties;
-  }
-
-  private getConfigPropertiesObjects(res): any {
-    // This code is for Spring Boot 2
-    if (res.contexts !== undefined) {
-      for (const key in res.contexts) {
-        // If the key is not bootstrap, it will be the ApplicationContext ID
-        // For default app, it is baseName
-        // For microservice, it is baseName-1
-        if (!key.startsWith('bootstrap')) {
-          return res.contexts[key].beans;
-        }
-      }
-    }
-    // by default, use the default ApplicationContext ID
-    return res['contexts']['<%- baseName %>']['beans'];
+  async loadConfiguration(): Promise<ConfigurationSection[]> {
+    const responses = await Promise.all(configurationEndpoints.map(endpoint => axios.get(endpoint)));
+    return toConfiguration(responses.map(({ data }) => data));
   }
 }
+
+export const configurationServiceKey: InjectionKey<ConfigurationService> = Symbol.for('jhipster:configurationService');

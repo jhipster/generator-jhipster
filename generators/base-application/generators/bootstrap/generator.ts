@@ -41,6 +41,8 @@ import {
 import {
   addFakerToEntity,
   derivedPrimaryKeyProperties,
+  hasCyclicRequiredRelationship,
+  isRequiredRelationship,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
   prepareCommonFieldForTemplates,
@@ -50,7 +52,21 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../../support/index.ts';
+import type { EntityToLoad } from '../../tasks.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.ts';
+
+/**
+ * Adds a built-in entity to the entities to load, in place of the entry of its `.jhipster` file, which customizes it.
+ */
+function addBuiltInEntityToLoad(entitiesToLoad: EntityToLoad<any>[], entity: any): any {
+  const entry = entitiesToLoad.find(({ entityName }) => entityName === entity.name);
+  if (entry) {
+    // Keep the object of the entry, the one of the tasks.
+    return Object.assign(entry.entityBootstrap, entity);
+  }
+  entitiesToLoad.push({ entityName: entity.name, entityBootstrap: entity });
+  return entity;
+}
 
 export default class BootstrapBaseApplicationGenerator extends BaseApplicationGenerator<BaseApplicationEntity, BaseApplicationApplication> {
   async beforeQueue() {
@@ -217,65 +233,61 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
     return this.asLoadingEntitiesTaskGroup({
       loadUser({ application, entitiesToLoad }) {
         if (application.generateBuiltInUserEntity) {
-          const User = 'User';
-
-          const customUser = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === User);
-          const bootstrap = customUser?.entityBootstrap;
-          if (!bootstrap) {
-            throw new Error('User entity should already be passed.');
-          }
-
-          const customUserData = customUser?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
-          application.user = bootstrap;
+          // The .jhipster file of User customizes it.
+          const customUserData: any = this.getEntityConfig('User')?.getAll() ?? {};
+          application.user = addBuiltInEntityToLoad(
+            entitiesToLoad,
+            createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application),
+          );
         }
       },
       loadUserManagement({ application, entitiesToLoad }) {
         if (application.generateBuiltInUserEntity && application.generateUserManagement) {
-          const UserManagement = 'UserManagement';
-          const customUserManagement = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === UserManagement);
-          const bootstrap = customUserManagement?.entityBootstrap;
-          if (!bootstrap) {
-            throw new Error('UserManagement entity should already be passed.');
-          }
-
-          const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
-          Object.assign(
-            bootstrap,
+          const customUserManagementData: any = this.getEntityConfig('UserManagement')?.getAll() ?? {};
+          application.userManagement = addBuiltInEntityToLoad(
+            entitiesToLoad,
             createUserManagementEntity.call(
               this,
               { ...customUserManagementData, ...customUserManagementData.annotations },
               application as any,
             ),
           );
-          application.userManagement = bootstrap;
         }
       },
       loadAuthority({ application, entitiesToLoad }) {
         if (application.generateBuiltInAuthorityEntity) {
-          const authority = 'Authority';
-
-          const customEntity = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === authority);
-          const bootstrap = customEntity?.entityBootstrap;
-          if (!bootstrap) {
-            throw new Error('Authority entity should already be passed.');
-          }
-
-          const customEntityData = customEntity?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap, createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application));
-          application.authority = bootstrap;
+          const customEntityData: any = this.getEntityConfig('Authority')?.getAll() ?? {};
+          application.authority = addBuiltInEntityToLoad(
+            entitiesToLoad,
+            createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application),
+          );
         }
       },
-      loadingEntities({ application, entitiesToLoad }) {
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING_ENTITIES]() {
+    return this.loadingEntities;
+  }
+
+  get postLoadingEntities() {
+    return this.asPostLoadingEntitiesTaskGroup({
+      loadEntities({ application, entitiesToLoad }) {
         for (const { entityName, entityBootstrap, entityStorage } of entitiesToLoad) {
           if (!entityBootstrap.builtIn) {
-            let entity = entityStorage.getAll() as BaseEntity;
+            let entity = (entityStorage?.getAll() ?? {}) as BaseEntity;
             entity.name ??= entityName;
             entity = { ...entity, ...entity.annotations };
             entity.changelogDate ??= entity.incrementalChangelogDate;
             Object.assign(entityBootstrap, entity);
           }
         }
+        // The entities in the order they were created, by their changelog date: the built-in ones, dated before the
+        // creation of the application, first, also at the same date.
+        const changelogDate = ({ entityBootstrap }: EntityToLoad<any>): number => Number(entityBootstrap.changelogDate ?? Infinity);
+        const builtInFirst = ({ entityBootstrap }: EntityToLoad<any>): number => (entityBootstrap.builtIn ? 0 : 1);
+        // Two entities without date compare as equal (Infinity - Infinity is NaN).
+        entitiesToLoad.sort((a, b) => changelogDate(a) - changelogDate(b) || builtInFirst(a) - builtInFirst(b));
 
         const entities = entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap);
         loadEntitiesAnnotations(entities);
@@ -317,8 +329,8 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
     });
   }
 
-  get [BaseApplicationGenerator.LOADING_ENTITIES]() {
-    return this.loadingEntities;
+  get [BaseApplicationGenerator.POST_LOADING_ENTITIES]() {
+    return this.postLoadingEntities;
   }
 
   get preparingEachEntity() {
@@ -326,6 +338,14 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
       async preparingEachEntity({ application, entity }) {
         await addFakerToEntity(entity, application.nativeLanguage);
         prepareEntityForTemplates(entity, this);
+      },
+      requiredRelationships({ entityDefaults }) {
+        // Delayed: the relationships are prepared after the entity, these are set once the entities are prepared.
+        entityDefaults({
+          requiredRelationships: ({ relationships }, { delayMarker }) => delayMarker ?? relationships.filter(isRequiredRelationship),
+          anyRelationshipIsRequired: ({ requiredRelationships }, { delayMarker }) => delayMarker ?? requiredRelationships!.length > 0,
+          hasCyclicRequiredRelationship: (entity, { delayMarker }) => delayMarker ?? hasCyclicRequiredRelationship(entity),
+        });
       },
       preparePrimaryKey({ entity, application }) {
         // If primaryKey doesn't exist, create it.
@@ -384,19 +404,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           finalizeMutations(relationship);
         }
       },
-      hasRequiredRelationship({ entity }) {
-        entity.anyRelationshipIsRequired = entity.relationships.some(rel => rel.relationshipRequired || rel.id);
-      },
-      checkForCircularRelationships({ entity }) {
-        const detectCyclicRequiredRelationship = (entity: BaseApplicationEntity, relatedEntities: Set<BaseApplicationEntity>): boolean => {
-          if (relatedEntities.has(entity)) return true;
-          relatedEntities.add(entity);
-          return entity.relationships
-            ?.filter(rel => rel.relationshipRequired || rel.id)
-            .some(rel => detectCyclicRequiredRelationship(rel.otherEntity, new Set(relatedEntities)));
-        };
-        entity.hasCyclicRequiredRelationship = detectCyclicRequiredRelationship(entity, new Set());
-      },
       processEntityPrimaryKeysDerivedProperties({ entity }) {
         if (!entity.primaryKey) return;
         derivedPrimaryKeyProperties(entity.primaryKey);
@@ -453,6 +460,12 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
             }
           }),
         );
+      },
+      prepareUserFieldsByName({ application }) {
+        // The validations of the user in every layer are read from its fields.
+        if (application.user) {
+          application.user.fieldsByName = Object.fromEntries(application.user.fields.map(field => [field.fieldName, field]));
+        }
       },
       checkProperties({ entities }) {
         for (const entity of entities) {

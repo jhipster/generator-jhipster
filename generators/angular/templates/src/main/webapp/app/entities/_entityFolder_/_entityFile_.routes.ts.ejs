@@ -18,9 +18,10 @@
 -%>
 import { Routes } from '@angular/router';
 
-import { userRouteAccessService } from 'app/core/auth';
-import <%- entityAngularName %>Resolve from './route/<%- entityFileName %>-routing-resolve.service';
 import { ASC } from 'app/config';
+import { userRouteAccessService } from 'app/core/auth';
+
+import <%- entityAngularName %>Resolve from './route/<%- entityFileName %>-routing-resolve.service';
 
 const <%- entityInstance %>Route: Routes = [
   {
@@ -47,7 +48,7 @@ const <%- entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularReadAuthorities %>],
     },
 <%_ } _%>
-    canActivate: [userRouteAccessService]
+    canActivate: [userRouteAccessService],
   },
 <%_ if (!readOnly) { _%>
   {
@@ -61,7 +62,7 @@ const <%- entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularAuthorities %>],
     },
   <%_ } _%>
-    canActivate: [userRouteAccessService]
+    canActivate: [userRouteAccessService],
   },
 <%_ } _%>
 <%_ if (!readOnly && updatableEntity) { _%>
@@ -76,7 +77,7 @@ const <%- entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularAuthorities %>],
     },
   <%_ } _%>
-    canActivate: [userRouteAccessService]
+    canActivate: [userRouteAccessService],
   },
 <%_ } _%>
 ];

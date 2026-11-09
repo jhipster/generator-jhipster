@@ -18,12 +18,14 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { computed } from 'vue';
-import { shallowMount } from '@vue/test-utils';
-import { createTestingPinia } from '@pinia/testing';
+
+import { RouterLinkStub, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
+import { currentLanguageKey } from '@/config/injection-keys';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
-import { useLoginModal } from '@/account/login-modal';
+import { formValues, setAllValues } from '@/testing/stubs';
+
 import Register from './register.vue';
 
 type RegisterComponentType = InstanceType<typeof Register>;
@@ -48,9 +50,8 @@ describe('Register Component', () => {
 
     const wrapper = shallowMount(Register, {
       global: {
-        plugins: [createTestingPinia()],
         provide: {
-          currentLanguage: computed(() => '<%- nativeLanguage %>'),
+          [currentLanguageKey as symbol]: computed(() => '<%- nativeLanguage %>'),
         },
       },
     });
@@ -68,10 +69,24 @@ describe('Register Component', () => {
     expect(register.registerAccount.email).toBeUndefined();
   });
 
-  it('should open login modal when asked to', () => {
-    const login = useLoginModal();
-    register.showLogin();
-    expect(login.showLogin).toHaveBeenCalledOnce();
+  it.each(['jhi', 'jhi@pster.net', 'jhi+tag@pster.net', 'jhi.pster@mail.pster.net'])('should accept the login %s', async login => {
+    register.registerAccount.login = login;
+    await register.$nextTick();
+
+    expect(register.v$.registerAccount.login.$invalid).toBe(false);
+  });
+
+  it('should reject a login with invalid characters', async () => {
+    register.registerAccount.login = 'jhi pster';
+    await register.$nextTick();
+
+    expect(register.v$.registerAccount.login.$invalid).toBe(true);
+  });
+
+  it('should link to the login page', () => {
+    const wrapper = shallowMount(Register, { global: { stubs: { 'router-link': RouterLinkStub } } });
+
+    expect(wrapper.findComponent(RouterLinkStub).props('to')).toBe('/login');
   });
 
   it('should register when password match', async () => {
@@ -139,5 +154,27 @@ describe('Register Component', () => {
     expect(register.errorEmailExists).toBeNull();
     expect(register.errorUserExists).toBeNull();
     expect(register.error).toBe('ERROR');
+  });
+
+  it('should show the errors of the form and register with the browser language', async () => {
+    // GIVEN
+    axiosStub.post.mockResolvedValue(undefined);
+    const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
+    const wrapper = shallowMount(Register);
+
+    // WHEN
+    await setAllValues(wrapper, 'input', formValues);
+    await wrapper.find('form').trigger('submit');
+    await flushPromises();
+
+    // THEN
+    expect(axiosStub.post).toHaveBeenCalledWith('api/register', {
+      email: 'jhi@pster.net',
+      langKey: '<%- nativeLanguage %>',
+      login: 'jhi@pster.net',
+      password: 'jhi@pster.net',
+    });
+    expect(wrapper.vm.success).toBe(true);
+    language.mockRestore();
   });
 });

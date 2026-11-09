@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { isMap, parseDocument } from 'yaml';
+
 import BaseApplicationGenerator from '../../generators/base-core/index.ts';
 import { parseMavenPom } from '../../generators/java-simple-application/generators/maven/support/dependabot-maven.ts';
 import { getPackageRoot } from '../../lib/index.ts';
@@ -45,7 +47,7 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
         if (this.version.endsWith('-SNAPSHOT')) {
           this.repository = 'https://repo.spring.io/snapshot/';
         }
-        const pomUrl = `${this.repository}org/springframework/boot/spring-boot-dependencies/${this.version}/spring-boot-dependencies-${this.version}.pom`;
+        const pomUrl = `${this.repository.replace(/\/+$/, '')}/org/springframework/boot/spring-boot-dependencies/${this.version}/spring-boot-dependencies-${this.version}.pom`;
         const response = await fetch(pomUrl);
 
         if (!response.ok) {
@@ -80,9 +82,20 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.asAnyTaskGroup({
-      async writing() {
+      writing() {
         this.writeDestination(`${this.springBootDependenciesFile}.pom`, this.pomContent);
         this.writeDestinationJSON(`${this.springBootDependenciesFile}.json`, this.springBootJson);
+        // The overrides fit the previous version: each one comes back only if the new version still needs it.
+        // The header, the comment of the document, is kept.
+        this.editFile(`${this.springBootDependenciesFile}-overrides.yml`, content => {
+          const document = parseDocument(content);
+          if (isMap(document.contents)) {
+            document.contents.items = [];
+            document.contents.commentBefore = null;
+            document.contents.comment = null;
+          }
+          return document.toString();
+        });
       },
     });
   }

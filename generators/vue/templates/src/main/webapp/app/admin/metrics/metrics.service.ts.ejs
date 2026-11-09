@@ -16,14 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios, { type AxiosPromise } from 'axios';
+import { type InjectionKey } from 'vue';
+
+import axios from 'axios';
+
+import { type MetricsSection } from '@/shared/jhipster/metrics.model';
+import { metricsEndpoints, toMetrics } from '@/shared/jhipster/metrics';
 
 export default class MetricsService {
-  getMetrics(): AxiosPromise<any> {
-    return axios.get('management/jhimetrics');
-  }
-
-  retrieveThreadDump(): AxiosPromise<any> {
-    return axios.get('management/threaddump');
+  async getMetrics(): Promise<MetricsSection[]> {
+    const responses = await Promise.all(metricsEndpoints.map(endpoint => axios.get(endpoint)));
+    return toMetrics(responses.map(({ data }) => data));
   }
 }
+
+export const metricsServiceKey: InjectionKey<MetricsService> = Symbol.for('jhipster:metricsService');

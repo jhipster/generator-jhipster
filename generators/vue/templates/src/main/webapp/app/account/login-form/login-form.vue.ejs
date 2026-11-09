@@ -17,9 +17,10 @@
  limitations under the License.
 -%>
 <template>
-  <div class="d-flex justify-content-center">
-    <div class="row-md">
-      <div class="col-md-12">
+  <div class="d-flex justify-content-center" id="login-page">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <h1 id="login-title" data-cy="loginTitle">{{ t$('login.title') }}</h1>
+      <div>
         <b-alert
           data-cy="loginError"
           variant="danger"
@@ -27,7 +28,7 @@
           v-html="t$('login.messages.error.authentication')"
         ></b-alert>
       </div>
-      <div class="col-md-12">
+      <div>
         <b-form @submit.prevent="doLogin()">
           <b-form-group :label="t$('global.form[\'username.label\']')" label-for="username">
             <b-form-input
@@ -37,6 +38,7 @@
               :placeholder="t$('global.form[\'username.placeholder\']')"
               v-model="login"
               data-cy="username"
+              autofocus
             >
             </b-form-input>
           </b-form-group>
@@ -62,23 +64,90 @@
 <%_ if (generateUserManagement) { _%>
         <div>
           <b-alert :model-value="true" variant="warning">
-            <b-link
-              to="/account/reset/request"
-              class="alert-link"
-              data-cy="forgetYourPasswordSelector"
-            >{{ t$('login.password.forgot') }}</b-link>
+            <b-link to="/account/reset/request" class="alert-link" data-cy="forgetYourPasswordSelector">{{
+              t$('login.password.forgot')
+            }}</b-link>
           </b-alert>
         </div>
+  <%_ if (generateUserRegistration) { _%>
         <div>
           <b-alert :model-value="true" variant="warning">
             <span>{{ t$('global.messages.info.register.noaccount') }}</span>
             <b-link to="/register" class="alert-link ms-1">{{ t$('global.messages.info.register.link') }}</b-link>
           </b-alert>
         </div>
+  <%_ } _%>
 <%_ } _%>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" src="./login-form.component.ts"></script>
+<script setup lang="ts">
+import { inject, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRoute, useRouter } from 'vue-router';
+
+import axios from 'axios';
+
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
+import { accountServiceKey } from '../account.service';
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const authenticationError = ref(false);
+const login = ref<string | null>(null);
+const password = ref<string | null>(null);
+const rememberMe = ref(false);
+
+const route = useRoute();
+const router = useRouter();
+
+/** The page to go back to: a path of the application, else home. */
+const redirectPath = (): string => {
+  const { redirect } = route.query;
+  return typeof redirect === 'string' && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/';
+};
+
+const accountService = inject(accountServiceKey)!;
+
+const doLogin = async () => {
+<%_ if (authenticationTypeJwt) { _%>
+  const data = { username: login.value, password: password.value, rememberMe: rememberMe.value };
+  try {
+    const result = await axios.post('api/authenticate', data);
+    const bearerToken = result.headers.authorization;
+    if (bearerToken?.startsWith('Bearer ')) {
+      const jwt = bearerToken.slice(7, bearerToken.length);
+      if (rememberMe.value) {
+        localStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
+        sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+      } else {
+        sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
+        localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+      }
+    }
+<%_ } else { _%>
+  const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}&remember-me=${rememberMe.value}&submit=Login`;
+  try {
+    await axios.post('api/authentication', data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+<%_ } _%>
+
+    authenticationError.value = false;
+    await accountService.retrieveAccount();
+    await router.replace(redirectPath());
+  } catch {
+    authenticationError.value = true;
+  }
+};
+</script>

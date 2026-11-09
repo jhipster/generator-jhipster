@@ -47,8 +47,8 @@ JHipster configuration is stored in this file at `generator-jhipster` key. You m
 Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if omitted) or force. Lines starting with `#` are considered comments and are ignored.
 - `.jhipster/*.json` - JHipster entity configuration files
 <%_ if (!skipClient) { _%>
-- `npmw` - wrapper to use locally installed npm.
-JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop or test your application.
+- `<%- nodePackageManager %>w` - wrapper to use locally installed <%- nodePackageManager %>.
+JHipster installs Node and <%- nodePackageManager %> locally using the build tool by default. This wrapper makes sure <%- nodePackageManager %> is installed locally and uses it avoiding some differences different versions can cause. By using `./<%- nodePackageManager %>w` instead of the traditional `<%- nodePackageManager %>` you can configure a Node-less environment to develop or test your application.
 <%_ } _%>
 - `/<%- dockerServicesDir %>` - Docker configurations for the application and services that the application depends on
 
@@ -294,30 +294,29 @@ Note: we have turned off forced authentication redirect for UI in [<%- dockerSer
 
 You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarsource.com/sonarqube-server/latest/analyzing-source-code/scanners/sonarscanner/)<% if (buildTool) { %> or by using the <%- buildTool === 'maven' ? 'maven' : '' %><%- buildTool === 'gradle' ? 'gradle' : '' %> plugin<% } %>.
 
+The scanner needs a token. Log in at http://localhost:9001 as `admin`/`admin`, create a global analysis token under **My Account > Security**, and export it:
+
+```bash
+export SONAR_TOKEN=<your-token>
+```
+
 Then, run a Sonar analysis:
 
 <%_ if (buildToolMaven) { _%>
 ```bash
-./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
+./mvnw -Pprod clean verify sonar:sonar
 ```
 
 If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
 
 ```bash
-./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
+./mvnw initialize sonar:sonar
 ```
 <%_ } else if (buildToolGradle) { _%>
 ```bash
-./gradlew -Pprod clean check jacocoTestReport sonarqube -Dsonar.login=admin -Dsonar.password=admin
+./gradlew -Pprod clean check jacocoTestReport sonar
 ```
 <%_ } _%>
-
-Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
-
-```bash
-sonar.login=admin
-sonar.password=admin
-```
 
 For more information, refer to the [Code quality page][].
 

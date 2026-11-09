@@ -102,7 +102,15 @@ export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, 
     // We use a dedicated Chrome instance via chrome-launcher instead.
     lighthouse: async ({ url, thresholds }: { url: string; thresholds: Record<string, number> }) => {
       const { launch } = await import('chrome-launcher');
-      const lighthouseFn = ((await import('lighthouse')) as unknown as { default: (url: string, options?: Record<string, unknown>, config?: Record<string, unknown>) => Promise<import('lighthouse').RunnerResult> }).default;
+      const lighthouseFn = (
+        (await import('lighthouse')) as unknown as {
+          default: (
+            url: string,
+            options?: Record<string, unknown>,
+            config?: Record<string, unknown>,
+          ) => Promise<import('lighthouse').RunnerResult>;
+        }
+      ).default;
       const { ReportGenerator } = await import('lighthouse/report/generator/report-generator.js');
 
       const chrome = await launch({
@@ -148,4 +156,4 @@ export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, 
   });
 <%_ } _%>
   return config;
-}
+};

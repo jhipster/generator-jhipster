@@ -20,5 +20,5 @@ import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 
 export const replaceSensitiveConfig = (yoRc: any) => ({
   ...yoRc,
-  [GENERATOR_JHIPSTER]: { ...yoRc[GENERATOR_JHIPSTER], jwtSecretKey: undefined, rememberMeKey: undefined },
+  [GENERATOR_JHIPSTER]: { ...yoRc[GENERATOR_JHIPSTER], jwtSecretKey: undefined, rememberMeKey: undefined, consulGossipKey: undefined },
 });

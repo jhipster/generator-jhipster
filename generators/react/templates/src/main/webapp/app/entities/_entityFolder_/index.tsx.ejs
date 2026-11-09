@@ -21,10 +21,12 @@ import { Route } from 'react-router';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
 import <%- entityReactName %> from './<%- entityFileName %>';
+<%_ if (!readOnly) { _%>
+import <%- entityReactName %>DeleteDialog from './<%- entityFileName %>-delete-dialog';
+<%_ } _%>
 import <%- entityReactName %>Detail from './<%- entityFileName %>-detail';
 <%_ if (!readOnly) { _%>
 import <%- entityReactName %>Update from './<%- entityFileName %>-update';
-import <%- entityReactName %>DeleteDialog from './<%- entityFileName %>-delete-dialog';
 <%_ } _%>
 
 const <%- entityReactName %>Routes = () => (

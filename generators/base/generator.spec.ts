@@ -33,7 +33,7 @@ const generator = basename(import.meta.dirname);
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(BaseGenerator);
   describe('help', () => {
-    it('should print expected information', async () => {
+    it('should print expected information - snapshot', async () => {
       expect(await getCommandHelpOutput()).toMatchSnapshot();
     });
   });
@@ -211,7 +211,7 @@ describe(`generator - ${generator}`, () => {
           });
       });
 
-      it('should call removeFiles', async () => {
+      it('should call removeFiles - snapshot', async () => {
         expect(removeFiles.mock.lastCall).toMatchInlineSnapshot(`
 [
   {
@@ -414,6 +414,29 @@ describe(`generator - ${generator}`, () => {
         expect(editorMetadataOf('written.txt')).toEqual({ removeNeedles: true });
         expect(editorMetadataOf('edited.txt')).toEqual({ removeNeedles: true });
       });
+    });
+  });
+  describe('nextTimestamp', () => {
+    // A future timestamp, the next one is a second after it.
+    const last = Math.floor((Date.now() + 86_400_000) / 1000) * 1000;
+
+    it('should store the timestamp as lastChangelogTimestamp', async () => {
+      const generator = await helpers.instantiateDummyGenerator(BaseGenerator);
+      generator.jhipsterConfig.lastChangelogTimestamp = last;
+
+      generator.nextTimestamp();
+
+      expect(generator.config.get('lastChangelogTimestamp')).toBe(last + 1000);
+    });
+
+    it('should continue after the lastLiquibaseTimestamp of a project and replace it', async () => {
+      const generator = await helpers.instantiateDummyGenerator(BaseGenerator);
+      generator.config.set('lastLiquibaseTimestamp', last);
+
+      generator.nextTimestamp();
+
+      expect(generator.config.get('lastChangelogTimestamp')).toBe(last + 1000);
+      expect(generator.config.get('lastLiquibaseTimestamp')).toBeUndefined();
     });
   });
 });

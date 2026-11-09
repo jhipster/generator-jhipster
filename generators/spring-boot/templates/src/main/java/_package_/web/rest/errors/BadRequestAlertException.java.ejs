@@ -83,4 +83,8 @@ public class BadRequestAlertException extends ErrorResponseException {
     public static BadRequestAlertException idexists(String entityName) {
         return new BadRequestAlertException("A " + entityName + " with this id already exists", entityName, "idexists");
     }
+
+    public static BadRequestAlertException notsortable(String entityName, String property) {
+        return new BadRequestAlertException("A " + entityName + " cannot be sorted by " + property, entityName, "notsortable");
+    }
 }

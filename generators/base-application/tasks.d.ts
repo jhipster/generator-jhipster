@@ -48,11 +48,11 @@ type ConfiguringEachEntityTaskParam<
 
 type EntityToLoad<E> = {
   entityName: string;
-  /** Entity storage */
-  entityStorage: Storage;
-  /** Proxy object for the entitystorage */
-  entityConfig: Partial<E>;
-  /** Initial entity object */
+  /** Entity storage, absent for a built-in entity that is not stored */
+  entityStorage?: Storage;
+  /** Proxy object for the entitystorage, absent for a built-in entity that is not stored */
+  entityConfig?: Partial<E>;
+  /** Initial entity object, the definition of a built-in entity (`builtIn: true`) */
   entityBootstrap: E;
 };
 
@@ -130,6 +130,7 @@ export type TaskTypes<
 > = SimpleTaskTypes<A, S> & {
   ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
   LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
+  PostLoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
   PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A> & EntityDefaultsTaskParam<E>;
   PreparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<E, A> & FieldDefaultsTaskParam<GetFieldType<E>>;
   PreparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<E, A> &

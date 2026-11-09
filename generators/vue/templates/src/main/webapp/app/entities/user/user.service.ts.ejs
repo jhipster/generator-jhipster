@@ -16,12 +16,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
+import { type InjectionKey } from 'vue';
+
+import axios, { type AxiosResponse } from 'axios';
+
+import { type RequestOptions } from '@/composables';
+
+import { type IUser } from './user.model';
 
 const baseApiUrl = 'api/users';
 
 export default class UserService {
-  retrieve(): Promise<any> {
-    return axios.get(baseApiUrl);
+  retrieve({ signal }: RequestOptions = {}): Promise<AxiosResponse<IUser[]>> {
+    return axios.get(baseApiUrl, { signal });
   }
 }
+
+export const userServiceKey: InjectionKey<() => UserService> = Symbol.for('jhipster:userService');

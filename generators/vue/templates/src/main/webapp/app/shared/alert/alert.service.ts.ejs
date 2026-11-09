@@ -16,17 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type BToastProps, useToast } from 'bootstrap-vue-next';
+import { type InjectionKey } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { type Composer, useI18n } from 'vue-i18n';
 <%_ } _%>
+
+import { type BToastProps, useToast } from 'bootstrap-vue-next';
+
 import { getMessageFromHeaders } from '@/shared/jhipster/headers';
 
 export const useAlertService = () => {
+  // Throws without the plugin of BootstrapVue.
   const toast = useToast();
-  if (!toast) {
-    throw new Error('BootstrapVue toast component was not found');
-  }
 <%_ if (enableTranslation) { _%>
   const i18n = useI18n();
 <%_ } _%>
@@ -39,9 +40,9 @@ export const useAlertService = () => {
 };
 
 export default class AlertService {
-  private readonly toast: ReturnType<typeof useToast>;
+  private readonly toast: Pick<ReturnType<typeof useToast>, 'create'>;
 <%_ if (enableTranslation) { _%>
-  private readonly i18n: Composer;
+  private readonly i18n: Pick<Composer, 't'>;
 <%_ } _%>
 
   constructor({
@@ -50,9 +51,9 @@ export default class AlertService {
     i18n,
 <%_ } _%>
   }: {
-    toast: ReturnType<typeof useToast>;
+    toast: Pick<ReturnType<typeof useToast>, 'create'>;
 <%_ if (enableTranslation) { _%>
-    i18n: Composer,
+    i18n: Pick<Composer, 't'>,
 <%_ } _%>
   }) {
     this.toast = toast;
@@ -87,15 +88,23 @@ export default class AlertService {
     });
   }
 
-  showHttpError({ data, status, headers }: any) {
+  showHttpError(response?: { data?: unknown; status?: number; headers?: Record<string, unknown> }) {
+    // Without a response, the server was not reached.
+    const { data: body, status = 0, headers } = response ?? {};
+    // The body of an error of the server, a problem detail.
+    const data = body as { message?: string; fieldErrors?: unknown } | undefined;
     let errorMessage: string | null = null;
     switch (status) {
+      case 401:
+        // The login is asked for again.
+        return;
+
       case 0:
         errorMessage = this.i18n.t('error.server.not.reachable').toString();
         break;
 
       case 400: {
-        const message = getMessageFromHeaders(headers);
+        const message = getMessageFromHeaders(headers!);
 <%_ if (enableTranslation) { _%>
         if (message.errorKey && message.param) {
           errorMessage = this.i18n.t(message.errorKey, { entityName: this.i18n.t(`global.menu.entities.${message.param}`) }).toString();
@@ -105,7 +114,7 @@ export default class AlertService {
 <%_ } _%>
         if (message.errorMessage) {
           errorMessage = message.errorMessage;
-        } else if (data.message) {
+        } else if (data?.message) {
 <%_ if (enableTranslation) { _%>
           errorMessage = this.i18n.t(data.message).toString();
 <%_ } else { _%>
@@ -123,11 +132,13 @@ export default class AlertService {
 
       default:
 <%_ if (enableTranslation) { _%>
-        errorMessage = this.i18n.t(data.message).toString();
+        errorMessage = this.i18n.t(data?.message ?? 'error.http.500').toString();
 <%_ } else { _%>
-        errorMessage = data.message;
+        errorMessage = data?.message ?? 'Internal server error.';
 <%_ } _%>
     }
     this.showError(errorMessage!);
   }
 }
+
+export const alertServiceKey: InjectionKey<AlertService> = Symbol.for('jhipster:alertService');

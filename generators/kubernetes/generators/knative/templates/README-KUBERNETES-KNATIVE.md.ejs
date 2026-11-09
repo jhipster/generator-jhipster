@@ -39,4 +39,35 @@ bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 ```
 <%_ } _%>
 
+<%_ if (serviceDiscoveryConsul) { _%>
+  <%_ const namespaceOption = kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}`;
+      const consulApps = appConfigs.filter(app => app.serviceDiscoveryConsul).map(app => app.baseName.toLowerCase());
+  _%>
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the `consul-gossip-key` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart `consul-config-loader`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+```
+kubectl delete statefulset consul<%- namespaceOption %>
+kubectl get pvc -o name<%- namespaceOption %> | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete<%- namespaceOption %>
+  <%_ if (generatorTypeHelm) { _%>
+bash helm-knative-upgrade.sh
+  <%_ } else { _%>
+kubectl delete secret gossip-key --ignore-not-found<%- namespaceOption %>
+kubectl apply -f registry-knative/
+  <%_ } _%>
+kubectl rollout status statefulset/consul<%- namespaceOption %>
+kubectl rollout restart deployment/consul-config-loader<%- namespaceOption %>
+kubectl rollout status deployment/consul-config-loader<%- namespaceOption %>
+until kubectl exec consul-0<%- namespaceOption %> -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+  <%_ if (consulApps.length > 0) { _%>
+kubectl delete pod -l 'serving.knative.dev/service in (<%- consulApps.join(',') %>)'<%- namespaceOption %>
+  <%_ } _%>
+```
+  <%_ if (generatorTypeHelm) { _%>
+
+`helm-knative-upgrade.sh` recreates the StatefulSet and removes the old `gossip-key` Secret of the `csvc` chart.
+  <%_ } _%>
+
+<%_ } _%>
 For Kubernetes specific more information, refer to the `kubernetes` sub-generator Readme instructions.

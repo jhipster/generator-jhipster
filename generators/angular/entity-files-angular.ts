@@ -44,6 +44,7 @@ export const angularFiles = {
       condition: generator => !generator.embedded,
       templates: [
         'entities/_entityFolder_/_entityFile_.routes.ts',
+        'entities/_entityFolder_/_entityFile_-screens.spec.ts',
         'entities/_entityFolder_/detail/_entityFile_-detail.html',
         'entities/_entityFolder_/detail/_entityFile_-detail.ts',
         'entities/_entityFolder_/detail/_entityFile_-detail.spec.ts',

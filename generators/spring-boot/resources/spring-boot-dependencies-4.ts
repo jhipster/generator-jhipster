@@ -20,6 +20,38 @@
  * import type from JSON file is not supported in TypeScript.
  * This file is a workaround to be able to import JSON type.
  */
+import { readFileSync } from 'node:fs';
+
+import { parse } from 'yaml';
+
 import springBootDependencies4 from './spring-boot-dependencies-4.json' with { type: 'json' };
+
+type SpringBootDependenciesOverrides = {
+  /** Versions of the dependencies JHipster adds. */
+  dependencies: Record<string, string>;
+  /** Properties of the versions Spring Boot manages, written in the build. */
+  properties: Record<string, string>;
+  /** The versions of the properties, keyed like the versions of Spring Boot: the property without `.version`. */
+  versions: Record<string, string>;
+};
+
+const overrides: Partial<SpringBootDependenciesOverrides> | null = parse(
+  readFileSync(new URL('./spring-boot-dependencies-4-overrides.yml', import.meta.url), 'utf8'),
+);
+
+const properties = overrides?.properties ?? {};
+
+/**
+ * Versions that take the place of the ones Spring Boot gives, see spring-boot-dependencies-4-overrides.yml.
+ */
+export const springBootDependenciesOverrides: SpringBootDependenciesOverrides = {
+  dependencies: overrides?.dependencies ?? {},
+  properties,
+  versions: Object.fromEntries(
+    Object.entries(properties)
+      .filter(([property]) => property.endsWith('.version'))
+      .map(([property, value]) => [property.slice(0, -'.version'.length), value]),
+  ),
+};
 
 export default springBootDependencies4;

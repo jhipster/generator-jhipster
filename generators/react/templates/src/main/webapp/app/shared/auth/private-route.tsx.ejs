@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 import type { ReactNode } from 'react';
-import { useLocation, Navigate, PathRouteProps } from 'react-router';
 import { Translate } from 'react-jhipster';
+import { Navigate, PathRouteProps, useLocation } from 'react-router';
 
 import { useAppSelector } from 'app/config/store';
 import ErrorBoundary from 'app/shared/error/error-boundary';
@@ -69,7 +69,7 @@ const PrivateRoute = ({ children, hasAnyAuthorities = [], ...rest }: IOwnProps) 
   );
 };
 
-export const hasAnyAuthority = (authorities: string[], hasAnyAuthorities: string[]) => {
+export const hasAnyAuthority = (authorities: string[] | null | undefined, hasAnyAuthorities: string[]) => {
   if (authorities && authorities.length !== 0) {
     if (hasAnyAuthorities.length === 0) {
       return true;

@@ -3,8 +3,11 @@
     "title": "Konfigurering",
     "filter": "Filter (via prefix)",
     "table": {
+      "title": "Konfigurationsegenskaper",
       "prefix": "Prefix",
-      "properties": "Egenskaper"
+      "properties": "Egenskaper",
+      "property": "Egenskap",
+      "value": "Värde"
     }
   }
 }

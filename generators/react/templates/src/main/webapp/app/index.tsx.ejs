@@ -16,11 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+import { registerRemotes } from '@module-federation/runtime';
+<%_ } _%>
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-import { registerRemotes } from '@module-federation/runtime';
 
 registerRemotes([
   <%_ for (const remote of microfrontends) { _%>

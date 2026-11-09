@@ -16,14 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
+<%_ if (enableTranslation) { _%>
+import { Storage } from 'react-jhipster';
+<%_ } _%>
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-<%- enableTranslation ? 'import { Storage } from \'react-jhipster\';' : '' %>
+import axios from 'axios';
+
+import { AppThunk } from 'app/config/store';
 <%_ if (enableTranslation && enableI18nRTL) { _%>
 import { isRTL } from 'app/config/translation';
 <%_ } _%>
 import { getSession } from 'app/shared/reducers/authentication';
-import { AppThunk } from 'app/config/store';
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 const initialState = {

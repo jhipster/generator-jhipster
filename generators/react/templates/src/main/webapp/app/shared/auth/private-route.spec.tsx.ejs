@@ -16,17 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { <%- enableTranslation ? 'beforeAll, ' : '' %>describe, expect, it, vi } from 'vitest';
 import type { JSX } from 'react';
-import { MemoryRouter, Route, Routes } from 'react-router';
-import { render } from '@testing-library/react';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
+import { MemoryRouter, Route, Routes } from 'react-router';
+
 import { configureStore } from '@reduxjs/toolkit';
+import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { <%- enableTranslation ? 'beforeAll, ' : '' %>describe, expect, it, vi } from 'vitest';
 
 import { Authority } from 'app/shared/jhipster/constants';
+
 import PrivateRoute, { hasAnyAuthority } from './private-route';
 
 const TestComp = () => <div>Test</div>;
@@ -84,6 +86,20 @@ describe('private-route component', () => {
     expect(container.innerHTML).toMatch(/<div class="insufficient-authority"><div class="alert alert-danger">.*<\/div><\/div>/);
   });
 
+  it('should render nothing before the session is fetched', () => {
+    const { container } = wrapper(
+      <PrivateRoute>
+        <TestComp />
+      </PrivateRoute>,
+      {
+        isAuthenticated: false,
+        sessionHasBeenFetched: false,
+        account: {},
+      },
+    );
+    expect(container.innerHTML).toEqual('<div></div>');
+  });
+
   it('should render a route for the component provided when authenticated', () => {
     const { container } = wrapper(
       <PrivateRoute>
@@ -128,7 +144,7 @@ describe('private-route component', () => {
 
 describe('hasAnyAuthority', () => {
   it('should return false when authorities is invalid', () => {
-    expect(hasAnyAuthority(undefined, undefined)).toEqual(false);
+    expect(hasAnyAuthority(undefined, [])).toEqual(false);
     expect(hasAnyAuthority(null, [])).toEqual(false);
     expect(hasAnyAuthority([], [])).toEqual(false);
     expect(hasAnyAuthority([], [Authority.USER])).toEqual(false);

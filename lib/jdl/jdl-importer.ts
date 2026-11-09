@@ -18,6 +18,7 @@
  */
 import { join } from 'node:path';
 
+import { GENERATOR_JHIPSTER } from '../constants/jhipster.ts';
 import type { ApplicationType } from '../core/application-types.ts';
 import { createJDLRuntime, getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
 import type { YoRcJHipsterContent } from '../jhipster/types/yo-rc.ts';
@@ -33,8 +34,6 @@ import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.ts';
 import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.ts';
 import type { JSONEntity } from './core/types/json-config.ts';
 import { createFolderIfItDoesNotExist, doesFileExist } from './core/utils/file-utils.ts';
-
-const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the generator as it circles
 
 type JDLApplicationConfiguration = {
   applicationName?: string;

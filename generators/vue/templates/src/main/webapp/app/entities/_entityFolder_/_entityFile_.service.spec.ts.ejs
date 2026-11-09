@@ -18,6 +18,7 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import axios from 'axios';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
@@ -31,18 +32,19 @@ import {
   <%_ if (anyFieldIsInstant || anyFieldIsZonedDateTime) { _%>
   DATE_TIME_FORMAT,
   <%_ } _%>
-} from '@/shared/composables/date-format';
+} from '@/composables/date-format';
 <%_ } _%>
+import { <%- entityAngularName %> } from './<%- entityFileName %>.model';
+
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
-import { <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
 
 const error = {
   response: {
     status: null,
     data: {
-      type: null
-    }
-  }
+      type: null,
+    },
+  },
 };
 
 const axiosStub = {
@@ -108,6 +110,20 @@ describe('Service Tests', () => {
           .find(<%- tsKeyId %>).then((res) => {
             expect(res).toMatchObject(elemDefault);
         });
+      });
+
+      it('should pass the signal of the request', async () => {
+        const { signal } = new AbortController();
+        axiosStub.get.mockResolvedValue({ data: {} });
+
+        await service.find(<%- tsKeyId %>, { signal });
+        expect(axiosStub.get).toHaveBeenLastCalledWith(expect.any(String), { signal });
+        await service.retrieve({ signal });
+        expect(axiosStub.get).toHaveBeenLastCalledWith(expect.any(String), { signal });
+<%_ if (searchEngineAny) { _%>
+        await service.search('query', { signal });
+        expect(axiosStub.get).toHaveBeenLastCalledWith(expect.any(String), { signal });
+<%_ } _%>
       });
 
       it('should not find an element', async () => {
@@ -232,9 +248,9 @@ describe('Service Tests', () => {
       });
 
       it('should not partial update a <%- entityAngularName %>', async () => {
-          axiosStub.patch.mockRejectedValue(error);
+        axiosStub.patch.mockRejectedValue(error);
 
-          await expect(service.partialUpdate({})).rejects.toMatchObject(error);
+        await expect(service.partialUpdate({})).rejects.toMatchObject(error);
       });
 
 <%_ } _%>
@@ -273,6 +289,17 @@ describe('Service Tests', () => {
         });
       });
 
+<%_ if (searchEngineAny) { _%>
+      it('should search the <%- entityAngularName %>', async () => {
+        axiosStub.get.mockResolvedValue({ data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
+
+        const res = await service.search('query'<%- paginationNo ? '' : ', { sort: {}, page: 0, size: 10 }' %>);
+
+        expect(res.data).toEqual([{ <%- primaryKey.name %>: <%- tsKeyId %> }]);
+        expect(axiosStub.get).toHaveBeenCalledWith(expect.stringContaining('_search?query=query'), { signal: undefined });
+      });
+
+<%_ } _%>
       it('should not return a list of <%- entityAngularName %>', async () => {
         axiosStub.get.mockRejectedValue(error);
 

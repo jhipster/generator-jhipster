@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 import { describe, exnode, expect, it } from 'expect-node';
+import { mkdtempSync, readdirSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import jdlLogger from '../jdl/core/utils/objects/logger.ts';
@@ -28,7 +30,14 @@ import {
   readSampleDefaultCommand,
   readSampleJDLConfig,
 } from './describe-samples.ts';
-import { getGithubSamples, getGithubSamplesGroup } from './github-group.ts';
+import {
+  getGithubSamples,
+  getGithubSamplesFolderGroup,
+  getGithubSamplesGroup,
+  getGithubSamplesGroupSync,
+  getGithubSamplesGroups,
+  getGithubSamplesGroupsSync,
+} from './github-group.ts';
 
 const fixtures = join(import.meta.dirname, '__test-support__/samples-groups');
 const valid = join(fixtures, 'valid');
@@ -70,6 +79,24 @@ describe('ci samples groups', () => {
         warn.mockRestore();
       }
     });
+
+    it('writes no file of the deployments of a jdl', () => {
+      const cwd = process.cwd();
+      const folder = mkdtempSync(join(tmpdir(), 'describe-samples-'));
+      process.chdir(folder);
+      try {
+        expect(
+          readSampleJDLConfig(
+            'application { config { baseName gateway applicationType gateway buildTool gradle } }\n' +
+              'deployment { deploymentType docker-compose appsFolders [gateway] }',
+          ),
+        ).toEqual({ applicationType: 'gateway', buildTool: 'gradle' });
+        expect(readdirSync(folder)).toEqual([]);
+      } finally {
+        process.chdir(cwd);
+        rmSync(folder, { recursive: true });
+      }
+    });
   });
 
   describe('getGithubSamples', () => {
@@ -90,14 +117,44 @@ describe('ci samples groups', () => {
     });
   });
 
+  describe('getGithubSamplesFolderGroup', () => {
+    it('gives each jdl file and folder of the group as a sample, synchronously', () => {
+      expect(getGithubSamplesFolderGroup(valid, 'files')).toEqual({
+        'app-jdl': { 'samples-group': 'files', 'sample-type': 'jdl' },
+        'app-yo-rc': { 'samples-group': 'files', 'sample-type': 'yo-rc' },
+      });
+    });
+    it('gives the samples getGithubSamplesGroup gives', async () => {
+      const { samples } = await getGithubSamplesGroup(valid, 'files');
+      expect(getGithubSamplesFolderGroup(valid, 'files')).toEqual(samples);
+    });
+    it('refuses a group outside its folder', () => {
+      expect(() => getGithubSamplesFolderGroup(valid, '../duplicated')).toThrow('is not inside');
+    });
+  });
+
   describe('getGithubSamplesGroup', () => {
     it('refuses a group outside its folder', async () => {
       await expect(getGithubSamplesGroup(valid, '../duplicated/first')).rejects.toThrow('is not inside');
     });
   });
 
+  describe('getGithubSamplesGroupSync', () => {
+    // The groups defined by a module are read with require: the samples-groups of the dev blueprint, read synchronously
+    // from its `.ts` groups, are the ones getGithubSamplesGroup imports (its spec).
+    it('gives the groups and the samples of the asynchronous readers', async () => {
+      expect(getGithubSamplesGroupsSync(valid).sort()).toEqual((await getGithubSamplesGroups(valid)).sort());
+      for (const group of getGithubSamplesGroupsSync(valid)) {
+        expect(getGithubSamplesGroupSync(valid, group)).toEqual(await getGithubSamplesGroup(valid, group));
+      }
+    });
+    it('refuses a group outside its folder', () => {
+      expect(() => getGithubSamplesGroupSync(valid, '../duplicated/first')).toThrow('is not inside');
+    });
+  });
+
   describe('describeGithubSamples', () => {
-    it('describes the samples of every group', async () => {
+    it('describes the samples of every group - snapshot', async () => {
       const samples = await describeGithubSamples({ samplesGroupFolder: valid, root: fixtures });
       expect(
         samples.map(({ name, config, generatorOptions, matrix, ...sample }) => ({

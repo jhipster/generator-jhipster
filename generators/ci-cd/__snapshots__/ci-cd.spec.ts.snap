@@ -1054,7 +1054,7 @@ jobs:
                   HEROKU_API_KEY: \${{ secrets.HEROKU_API_KEY }}
               run: |
                   if [ ! -z "$HEROKU_API_KEY" ]; then
-                      ./gradlew deployHeroku --no-daemon
+                      ./gradlew stage -Pprod deployHeroku --no-daemon
                   else
                       echo No HEROKU_API_KEY, skipping...
                   fi

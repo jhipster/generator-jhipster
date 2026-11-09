@@ -17,8 +17,11 @@
  limitations under the License.
 -%>
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+
+import { loggersResponse } from 'app/shared/jhipster/admin.samples';
+import { toLevelChange, toLogs } from 'app/shared/jhipster/logs';
 
 import { LogsService } from './logs.service';
 
@@ -44,7 +47,26 @@ describe('Logs Service', () => {
       service.changeLevel('main', 'ERROR').subscribe();
 
       const req = httpMock.expectOne({ method: 'POST' });
-      expect(req.request.body).toEqual({ configuredLevel: 'ERROR' });
+      expect(req.request.body).toEqual(toLevelChange('main', 'ERROR').body);
     });
+
+    it('should find all the loggers', () => {
+      let loggers: unknown;
+      service.findAll().subscribe(result => (loggers = result));
+
+      httpMock.expectOne({ method: 'GET' }).flush(loggersResponse);
+      expect(loggers).toEqual(toLogs(loggersResponse));
+    });
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
+
+    it('should call the loggers of a microservice', () => {
+      service.changeLevel('main', 'ERROR', 'blog').subscribe();
+      service.findAll('blog').subscribe();
+
+      const requests = httpMock.match(request => request.url.includes('blog/'));
+      expect(requests.map(request => request.request.method)).toEqual(['POST', 'GET']);
+      requests.forEach(request => request.flush(request.request.method === 'GET' ? loggersResponse : {}));
+    });
+<%_ } _%>
   });
 });

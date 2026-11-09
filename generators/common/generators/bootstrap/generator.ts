@@ -114,7 +114,10 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
         }
       },
       hasNonBuiltInEntity({ application, entities }) {
-        application.hasNonBuiltInEntity = entities.some(e => !e.builtIn);
+        // An entity of the entities menu of the client.
+        application.hasNonBuiltInEntity = entities.some(
+          e => !e.builtInUser && !e.builtInUserManagement && !e.builtInAuthority && !e.embedded && !e.skipClient,
+        );
       },
     });
   }

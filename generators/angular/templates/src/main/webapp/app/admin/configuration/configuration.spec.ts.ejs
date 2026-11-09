@@ -18,11 +18,19 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+
+<%_ if (enableTranslation) { _%>
+import { provideTranslateService } from '@ngx-translate/core';
+<%_ } _%>
+import { EMPTY, of } from 'rxjs';
+
+import { fontAwesomeIcons } from 'app/config/font-awesome-icons';
+import { ConfigurationSection } from 'app/shared/jhipster/configuration.model';
 
 import Configuration from './configuration';
 import { ConfigurationService } from './configuration.service';
-import { Bean, PropertySource } from './configuration.model';
 
 describe('Configuration', () => {
   let comp: Configuration;
@@ -31,11 +39,12 @@ describe('Configuration', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ConfigurationService],
+      providers: [ConfigurationService<%- enableTranslation ? ', provideTranslateService()' : '' %>],
     });
   });
 
   beforeEach(() => {
+    TestBed.inject(FaIconLibrary).addIcons(...fontAwesomeIcons);
     fixture = TestBed.createComponent(Configuration);
     comp = fixture.componentInstance;
     service = TestBed.inject(ConfigurationService);
@@ -44,38 +53,93 @@ describe('Configuration', () => {
   describe('OnInit', () => {
     it('should call load all on init', () => {
       // GIVEN
-      const beans: Bean[] = [
+      const sections: ConfigurationSection[] = [
         {
-          prefix: 'jhipster',
-          properties: {
-            clientApp: {
-              name: 'jhipsterApp',
-            },
-          },
+          label: { text: 'beans' },
+          columns: [{ text: 'Prefix' }, { text: 'Properties' }],
+          rows: [
+            { key: 'b', properties: [] },
+            { key: 'a', properties: [] },
+          ],
         },
+        { label: { text: 'source' }, columns: [{ text: 'Property' }, { text: 'Value' }], rows: [{ key: 'port', value: '8080' }] },
       ];
-      const propertySources: PropertySource[] = [
-        {
-          name: 'server.ports',
-          properties: {
-            'local.server.port': {
-              value: '8080',
-            },
-          },
-        },
-      ];
-      vi.spyOn(service, 'getBeans').mockReturnValue(of(beans));
-      vi.spyOn(service, 'getPropertySources').mockReturnValue(of(propertySources));
+      vi.spyOn(service, 'getConfiguration').mockReturnValue(of(sections));
 
       // WHEN
       comp.ngOnInit();
 
       // THEN
-      expect(service.getBeans).toHaveBeenCalled();
-      expect(service.getPropertySources).toHaveBeenCalled();
-      expect(comp.allBeans()).toEqual(beans);
-      expect(comp.beans()).toEqual(beans);
-      expect(comp.propertySources()).toEqual(propertySources);
+      expect(service.getConfiguration).toHaveBeenCalled();
+      expect(comp.allSections()).toEqual(sections);
+      expect(comp.sections()[0].rows.map(row => row.key)).toEqual(['a', 'b']);
+
+      // WHEN
+      comp.filter.set('PORT');
+
+      // THEN
+      expect(comp.sections().map(section => section.rows.length)).toEqual([0, 1]);
     });
+  });
+
+  describe('view', () => {
+    const sections: ConfigurationSection[] = [
+      {
+        label: { text: 'Beans'<%- enableTranslation ? ", translationKey: 'configuration.table.prefix'" : '' %> },
+        columns: [{ text: 'Prefix'<%- enableTranslation ? ", translationKey: 'configuration.table.prefix'" : '' %> }, { text: 'Properties' }],
+        rows: [
+          { key: 'beta', properties: [{ key: 'name', value: 'app' }] },
+          { key: 'alpha', value: 'plain' },
+        ],
+      },
+      {
+        label: { text: 'Sources' },
+        columns: [{ text: 'Property' }, { text: 'Value'<%- enableTranslation ? ", translationKey: 'configuration.table.value'" : '' %> }],
+        rows: [],
+      },
+    ];
+    const keys = (): (string | null)[] =>
+      Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('tbody tr td:first-child')).map(cell => cell.textContent.trim());
+
+    beforeEach(() => {
+      vi.spyOn(service, 'getConfiguration').mockReturnValue(of(sections));
+      fixture.detectChanges();
+    });
+
+    it('should render the sections', () => {
+      const text = (fixture.nativeElement as HTMLElement).textContent;
+      expect(text).toContain('<%- enableTranslation ? 'configuration.table.prefix' : 'Beans' %>');
+      expect(text).toContain('Properties');
+      expect(text).toContain('app');
+      expect(text).toContain('plain');
+      expect(keys()).toEqual(['alpha', 'beta']);
+    });
+
+    it('should reverse the order and filter the rows', () => {
+      (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('th')!.click();
+      fixture.detectChanges();
+      expect(keys()).toEqual(['beta', 'alpha']);
+
+      const input = (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>('#configuration-filter')!;
+      input.value = 'ALP';
+      input.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      expect(keys()).toEqual(['alpha']);
+    });
+
+    it('should keep the order of the rows without a sort', () => {
+      comp.sortState.set({});
+      fixture.detectChanges();
+
+      expect(keys()).toEqual(['beta', 'alpha']);
+    });
+  });
+
+  it('should render nothing before the configuration loads', () => {
+    vi.spyOn(service, 'getConfiguration').mockReturnValue(EMPTY);
+    fixture.detectChanges();
+
+    expect(comp.sections()).toEqual([]);
+    expect((fixture.nativeElement as HTMLElement).querySelector('h2')).toBeNull();
   });
 });

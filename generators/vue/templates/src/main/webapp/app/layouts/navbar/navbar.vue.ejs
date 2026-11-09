@@ -1,0 +1,349 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<template>
+  <b-navbar data-cy="navbar" toggleable="md" variant="<%- vueBootstrapVariant %>" data-bs-theme="<%- vueBootstrapBsTheme %>">
+    <b-navbar-brand class="logo" to="/">
+      <span class="logo-img"></span>&nbsp;<span class="navbar-title">{{ t$('global.title') }}</span>&nbsp;<span class="navbar-version">{{ version }}</span>
+    </b-navbar-brand>
+    <b-navbar-toggle class="jh-navbar-toggler d-lg-none" target="header-tabs" aria-expanded="false" aria-label="Toggle navigation">
+      <font-awesome-icon icon="bars" />
+    </b-navbar-toggle>
+
+    <b-collapse is-nav id="header-tabs">
+      <b-navbar-nav class="ms-auto">
+        <b-nav-item to="/" exact>
+          <span>
+            <font-awesome-icon icon="fa-solid fa-home" />
+            <span>{{ t$('global.menu.home') }}</span>
+          </span>
+        </b-nav-item>
+        <b-nav-item-dropdown
+          :no-size="true"
+          end
+          id="entity-menu"
+          v-if="authenticated"
+          active-class="active"
+          class="pointer"
+          data-cy="entity"
+        >
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="th-list" />
+              <span class="no-bold">{{ t$('global.menu.entities.main') }}</span>
+            </span>
+          </template>
+<%_ if (exposeMicrofrontend) { _%>
+          <!-- Load entities menu exposed by microfrontend -->
+<%_ } _%>
+          <%- exposeMicrofrontend ? '<!-- ' : '' %><entities-menu></entities-menu><%- exposeMicrofrontend ? ' -->' : '' %>
+<%_ if (microfrontend) { _%>
+  <%_ for (const microfrontend of microfrontends) { _%>
+          <<%- microfrontend.moduleFederationName %>-menu></<%- microfrontend.moduleFederationName %>-menu>
+  <%_ } _%>
+<%_ } _%>
+          <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
+        </b-nav-item-dropdown>
+        <b-nav-item-dropdown
+          id="admin-menu"
+          v-if="hasAnyAuthority('ROLE_ADMIN') && authenticated"
+          :class="{ 'router-link-active': subIsActive('/admin') }"
+          active-class="active"
+          class="pointer"
+          data-cy="adminMenu"
+        >
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="users-cog" />
+              <span class="no-bold">{{ t$('global.menu.admin.main') }}</span>
+            </span>
+          </template>
+          <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
+          <b-dropdown-item to="/admin/gateway" active-class="active">
+            <font-awesome-icon icon="road" />
+            <span>{{ t$('global.menu.admin.gateway') }}</span>
+          </b-dropdown-item>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
+          <b-dropdown-item to="/admin/tracker" active-class="active">
+            <font-awesome-icon icon="eye" />
+            <span>{{ t$('global.menu.admin.tracker') }}</span>
+          </b-dropdown-item>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+          <b-dropdown-item to="/admin/metrics" active-class="active">
+            <font-awesome-icon icon="tachometer-alt" />
+            <span>{{ t$('global.menu.admin.metrics') }}</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/admin/health" active-class="active">
+            <font-awesome-icon icon="heart" />
+            <span>{{ t$('global.menu.admin.health') }}</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/admin/configuration" active-class="active">
+            <font-awesome-icon icon="cogs" />
+            <span>{{ t$('global.menu.admin.configuration') }}</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/admin/logs" active-class="active">
+            <font-awesome-icon icon="tasks" />
+            <span>{{ t$('global.menu.admin.logs') }}</span>
+          </b-dropdown-item>
+<%_ } _%>
+          <b-dropdown-item v-if="openAPIEnabled" to="/admin/docs" active-class="active">
+            <font-awesome-icon icon="book" />
+            <span>{{ t$('global.menu.admin.apidocs') }}</span>
+          </b-dropdown-item>
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
+          <b-dropdown-item v-if="!inProduction" href='<%- locals.databaseTypeCouchbase || locals.reactive ? 'http://localhost:8092/' : './h2-console/' %>' target="_blank">
+            <font-awesome-icon icon="database" />
+            <span>{{ t$('global.menu.admin.database') }}</span>
+          </b-dropdown-item>
+<%_ } _%>
+        </b-nav-item-dropdown>
+<%_ if (enableTranslation) { _%>
+        <b-nav-item-dropdown id="languagesnavBarDropdown" data-cy="languageMenu" end v-if="languages && Object.keys(languages).length > 1">
+          <template #button-content>
+            <font-awesome-icon icon="flag" />
+            <span class="no-bold">{{ t$('global.menu.language') }}</span>
+          </template>
+          <b-dropdown-item
+            v-for="(value, key) in languages"
+            :key="`lang-${key}`"
+            :data-cy="`language-${key}`"
+            @click="changeLanguage(key)"
+            :class="{ active: isActiveLanguage(key) }"
+          >
+            {{ value.name }}
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
+<%_ } _%>
+        <b-nav-item-dropdown
+          id="account-menu"
+          :class="{ 'router-link-active': subIsActive('/account') }"
+          active-class="active"
+          class="pointer"
+          data-cy="accountMenu"
+        >
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="user" />
+              <span class="no-bold">{{ t$('global.menu.account.main') }}</span>
+            </span>
+          </template>
+<%_ if (generateUserManagement) { _%>
+          <b-dropdown-item data-cy="settings" to="/account/settings" v-if="authenticated" active-class="active">
+            <font-awesome-icon icon="wrench" />
+            <span>{{ t$('global.menu.account.settings') }}</span>
+          </b-dropdown-item>
+          <b-dropdown-item data-cy="passwordItem" to="/account/password" v-if="authenticated" active-class="active">
+            <font-awesome-icon icon="lock" />
+            <span>{{ t$('global.menu.account.password') }}</span>
+          </b-dropdown-item>
+<%_ } _%>
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
+          <b-dropdown-item to="/account/sessions" v-if="authenticated" active-class="active">
+            <font-awesome-icon icon="cloud" />
+            <span>{{ t$('global.menu.account.sessions') }}</span>
+          </b-dropdown-item>
+<%_ } _%>
+          <b-dropdown-item data-cy="logout" v-if="authenticated" @click="logout()" id="logout" active-class="active">
+            <font-awesome-icon icon="sign-out-alt" />
+            <span>{{ t$('global.menu.account.logout') }}</span>
+          </b-dropdown-item>
+          <b-dropdown-item data-cy="login" v-if="!authenticated" <%- authenticationTypeOauth2 ? '@click="login()"' : 'to="/login"' %> id="login" active-class="active">
+            <font-awesome-icon icon="sign-in-alt" />
+            <span>{{ t$('global.menu.account.login') }}</span>
+          </b-dropdown-item>
+<%_ if (generateUserRegistration) { _%>
+          <b-dropdown-item data-cy="register" to="/register" id="register" v-if="!authenticated" active-class="active">
+            <font-awesome-icon icon="user-plus" />
+            <span>{{ t$('global.menu.account.register') }}</span>
+          </b-dropdown-item>
+<%_ } _%>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
+</template>
+
+<script setup lang="ts">
+import { <%- microfrontend ? 'type Component, ' : '' %>computed, <%- microfrontend ? 'defineAsyncComponent, ' : '' %>inject, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRouter } from 'vue-router';
+
+<%_ if (microfrontend) { _%>
+import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
+<%_ } _%>
+import { storeToRefs } from 'pinia';
+
+import { accountServiceKey } from '@/account/account.service';
+<%_ if (authenticationUsesCsrf) { _%>
+import { loginServiceKey } from '@/account/login.service';
+<%_ } _%>
+<%- exposeMicrofrontend ? '// ' : '' %>import EntitiesMenu from '@/entities/entities-menu.vue';
+<%_ if (enableTranslation) { _%>
+import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
+import getLanguages from '@/config/languages';
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
+import { useStore } from '@/stores';
+
+defineOptions({
+  name: 'JhiNavbar',
+  components: {
+<%_ if (exposeMicrofrontend) { _%>
+    // Load entities menu exposed by microfrontend
+<%_ } _%>
+    <%- exposeMicrofrontend ? '// ' : '' %>'entities-menu': EntitiesMenu,
+<%_ if (microfrontend) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+    '<%- remote.moduleFederationName %>-menu': defineAsyncComponent(() => {
+      return (loadRemote<{ default: Component }>('<%- remote.moduleFederationName %>/entities-menu') as Promise<{ default: Component }>)
+        .catch(() => import('@/layouts/error/error-loading.vue'));
+    }),
+  <%_ } _%>
+<%_ } _%>
+  },
+});
+
+<%_ if (authenticationUsesCsrf) { _%>
+const loginService = inject(loginServiceKey)!;
+  <%_ if (authenticationTypeOauth2) { _%>
+const { login } = loginService;
+  <%_ } _%>
+<%_ } _%>
+
+const accountService = inject(accountServiceKey)!;
+<%_ if (enableTranslation) { _%>
+const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
+const changeLanguage = inject(changeLanguageKey)!;
+const languages = computed(() => getLanguages());
+const { t: t$ } = useI18n();
+
+const isActiveLanguage = (key: string) => key === currentLanguage.value;
+<%_ } _%>
+
+const router = useRouter();
+const store = useStore();
+
+const version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
+const hasAnyAuthorityValues = ref<Record<string, boolean>>({});
+
+const openAPIEnabled = computed(() => store.activeProfiles.includes('api-docs'));
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
+const inProduction = computed(() => store.activeProfiles.includes('prod'));
+<%_ } _%>
+const { authenticated } = storeToRefs(store);
+
+const subIsActive = (input: string | string[]) => {
+  const paths = Array.isArray(input) ? input : [input];
+  // current path starts with this path string
+  return paths.some(path => router.currentRoute.value.path.startsWith(path));
+};
+
+const hasAnyAuthority = (authorities: string): boolean => {
+  accountService.hasAnyAuthorityAndCheckAuth(authorities).then(value => {
+    if (hasAnyAuthorityValues.value[authorities] !== value) {
+      hasAnyAuthorityValues.value = { ...hasAnyAuthorityValues.value, [authorities]: value };
+    }
+  });
+  return hasAnyAuthorityValues.value[authorities] ?? false;
+};
+
+const logout = async () => {
+<%_ if (authenticationTypeJwt) { _%>
+  localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+  sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+  store.logout();
+<%_ } else { _%>
+  <%- authenticationTypeOauth2 ? 'const response = ' : '' %>await loginService.logout();
+  store.logout();
+
+  <%_ if (authenticationTypeOauth2) { _%>
+  const next = response.data?.logoutUrl;
+
+  if (next) {
+    if (/^https?:\/\//i.test(next)) {
+      window.location.href = next;
+      return;
+    }
+    await router.push(next);
+    return;
+  }
+
+  <%_ } _%>
+<%_ } _%>
+  if (router.currentRoute.value.path !== '/') {
+    await router.push('/');
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+/* ==========================================================================
+  Navbar
+  ========================================================================== */
+.navbar-version {
+  font-size: 0.65em;
+<%_ if (clientThemeNone) { _%>
+  color: rgba(255, 255, 255, 0.55);
+<%_ } _%>
+}
+
+.navbar {
+  padding: 0.2rem 1rem;
+}
+
+.navbar :deep(a.nav-link) {
+  font-weight: 400;
+}
+
+.navbar :deep(.navbar-nav .nav-item) {
+  margin-left: 0.5em;
+}
+
+@media screen and (min-width: 768px) {
+  .jh-navbar-toggler {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1150px) {
+  span span {
+    display: none;
+  }
+}
+
+
+/* ==========================================================================
+  Logo styles
+  ========================================================================== */
+.logo-img {
+  height: 45px;
+  width: 45px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url('<%- clientBundlerRsbuild ? '@' : '/' %>content/images/logo-jhipster.png') no-repeat center center;
+  background-size: contain;
+}
+</style>

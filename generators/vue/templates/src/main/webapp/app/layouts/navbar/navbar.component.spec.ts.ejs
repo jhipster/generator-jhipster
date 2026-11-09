@@ -1,0 +1,256 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { computed } from 'vue';
+import { type Router } from 'vue-router';
+
+import { createTestingPinia } from '@pinia/testing';
+import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
+import { type AxiosResponse } from 'axios';
+
+import { accountServiceKey } from '@/account/account.service';
+<%_ if (authenticationUsesCsrf) { _%>
+import type LoginService from '@/account/login.service';
+import { loginServiceKey } from '@/account/login.service';
+<%_ } _%>
+import { createRouter } from '@/router';
+import { <%- enableTranslation ? 'changeLanguageKey, ' : '' %>currentLanguageKey } from '@/config/injection-keys';
+import { slotsStub } from '@/testing/stubs';
+import { useStore } from '@/stores';
+
+import JhiNavbar from './navbar.vue';
+<%_ if (microfrontend) { _%>
+
+vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime', () => ({
+  loadRemote: vi.fn(() => Promise.reject(new Error('Test only'))),
+}));
+<%_ } _%>
+
+type JhiNavbarComponentType = InstanceType<typeof JhiNavbar>;
+
+const pinia = createTestingPinia({ stubActions: false });
+const store = useStore();
+
+<%_ if (enableTranslation) { _%>
+// Two languages show the menu of the languages.
+vi.mock('@/config/languages', () => ({
+  default: () => ({ en: { name: 'English' }, fr: { name: 'Français' } }),
+}));
+
+<%_ } _%>
+describe('JhiNavbar', () => {
+  let wrapper: VueWrapper<JhiNavbarComponentType>;
+  let jhiNavbar: JhiNavbarComponentType;
+<%_ if (authenticationUsesCsrf) { _%>
+  let loginService: LoginService;
+<%_ } _%>
+  const accountService = { hasAnyAuthorityAndCheckAuth: vi.fn().mockImplementation(() => Promise.resolve(true)) };
+<%_ if (enableTranslation) { _%>
+  const changeLanguage = vi.fn();
+<%_ } _%>
+  let router: Router;
+
+  beforeEach(() => {
+    router = createRouter();
+<%_ if (authenticationUsesCsrf) { _%>
+    loginService = { login: vi.fn(), logout: vi.fn() };
+<%_ } _%>
+    wrapper = shallowMount(JhiNavbar, {
+      global: {
+        plugins: [pinia, router],
+        stubs: {
+          'font-awesome-icon': true,
+          'b-navbar': slotsStub,
+          'b-navbar-nav': slotsStub,
+          'b-dropdown-item': slotsStub,
+          'b-collapse': slotsStub,
+          'b-nav-item': slotsStub,
+          'b-nav-item-dropdown': slotsStub,
+          'b-navbar-toggle': slotsStub,
+          'b-navbar-brand': slotsStub,
+        },
+        provide: {
+<%_ if (authenticationUsesCsrf) { _%>
+          [loginServiceKey as symbol]: loginService,
+<%_ } _%>
+          [currentLanguageKey as symbol]: computed(() => 'foo'),
+<%_ if (enableTranslation) { _%>
+          [changeLanguageKey as symbol]: changeLanguage,
+<%_ } _%>
+          [accountServiceKey as symbol]: accountService,
+        },
+      },
+    });
+    jhiNavbar = wrapper.vm;
+  });
+
+  it('should not have user data set', () => {
+    expect(jhiNavbar.authenticated).toBeFalsy();
+    expect(jhiNavbar.openAPIEnabled).toBeFalsy();
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
+    expect(jhiNavbar.inProduction).toBeFalsy();
+<%_ } _%>
+  });
+
+  it('should have user data set after authentication', () => {
+    store.setAuthentication({ login: 'test' });
+
+    expect(jhiNavbar.authenticated).toBeTruthy();
+  });
+
+  it('should have profile info set after info retrieved', () => {
+    store.setActiveProfiles(['prod', 'api-docs']);
+
+    expect(jhiNavbar.openAPIEnabled).toBeTruthy();
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
+    expect(jhiNavbar.inProduction).toBeTruthy();
+<%_ } _%>
+  });
+
+<%_ if (authenticationTypeOauth2) { _%>
+  it('should use login service', () => {
+    jhiNavbar.login();
+
+    expect(loginService.login).toHaveBeenCalled();
+  });
+<%_ } _%>
+
+  it('should use account service', () => {
+    jhiNavbar.hasAnyAuthority('auth');
+
+    expect(accountService.hasAnyAuthorityAndCheckAuth).toHaveBeenCalled();
+  });
+
+  it('logout should clear credentials and return to the home page when no provider URL is returned', async () => {
+    store.setAuthentication({ login: 'test' });
+    await router.push('/forbidden');
+<%_ if (authenticationUsesCsrf) { _%>
+    vi.mocked(loginService.logout).mockResolvedValue({} as AxiosResponse);
+<%_ } _%>
+    await flushPromises();
+
+    await wrapper.find('#logout').trigger('click');
+    await flushPromises();
+
+<%_ if (authenticationUsesCsrf) { _%>
+    expect(loginService.logout).toHaveBeenCalled();
+<%_ } _%>
+    expect(jhiNavbar.authenticated).toBeFalsy();
+    expect(router.currentRoute.value.path).toBe('/');
+  });
+<%_ if (authenticationTypeOauth2) { _%>
+
+  it('logout should not navigate with router for external url', async () => {
+    store.setAuthentication({ login: 'test' });
+    const logoutUrl = 'http://keycloak:9080/logout';
+    vi.mocked(loginService.logout).mockResolvedValue({ data: { logoutUrl } } as AxiosResponse);
+    const routerPushSpy = vi.spyOn(router, 'push');
+
+    await jhiNavbar.logout();
+
+    expect(loginService.logout).toHaveBeenCalled();
+    expect(routerPushSpy).not.toHaveBeenCalled();
+  });
+
+  it('logout should navigate with router to a relative url', async () => {
+    store.setAuthentication({ login: 'test' });
+    vi.mocked(loginService.logout).mockResolvedValue({ data: { logoutUrl: '/forbidden' } } as AxiosResponse);
+
+    await jhiNavbar.logout();
+
+    expect(router.currentRoute.value.path).toBe('/forbidden');
+  });
+<%_ } _%>
+
+  it('logout should stay at the home page', async () => {
+    store.setAuthentication({ login: 'test' });
+<%_ if (authenticationUsesCsrf) { _%>
+    vi.mocked(loginService.logout).mockResolvedValue({} as AxiosResponse);
+<%_ } _%>
+    await router.push('/');
+    const routerPushSpy = vi.spyOn(router, 'push');
+
+    await jhiNavbar.logout();
+
+    expect(routerPushSpy).not.toHaveBeenCalled();
+    expect(jhiNavbar.authenticated).toBeFalsy();
+  });
+
+  it('should determine active route', async () => {
+    await router.push('/forbidden');
+
+    expect(jhiNavbar.subIsActive('/titi')).toBeFalsy();
+    expect(jhiNavbar.subIsActive('/forbidden')).toBeTruthy();
+    expect(jhiNavbar.subIsActive(['/forbidden', 'forbidden'])).toBeTruthy();
+  });
+
+<%_ if (enableTranslation) { _%>
+  it('should call translationService when changing language', () => {
+    jhiNavbar.changeLanguage('fr');
+
+    expect(changeLanguage).toHaveBeenCalled();
+  });
+
+  it('should check for correct language', () => {
+    expect(jhiNavbar.isActiveLanguage('en')).toBeFalsy();
+    expect(jhiNavbar.isActiveLanguage('foo')).toBeTruthy();
+  });
+<%_ } _%>
+
+  it('should render the menus of an authenticated user', async () => {
+    store.setAuthentication({ login: 'test' });
+    store.setActiveProfiles(['api-docs']);
+    await flushPromises();
+
+    expect(wrapper.find('#entity-menu').exists()).toBe(true);
+    expect(wrapper.find('#admin-menu').exists()).toBe(true);
+    expect(wrapper.find('#logout').exists()).toBe(true);
+    expect(wrapper.find('#login').exists()).toBe(false);
+<%_ if (enableTranslation) { _%>
+
+    // The items of the languages, after the content of the button.
+    await wrapper.findAll('#languagesnavBarDropdown > div')[0].trigger('click');
+    expect(changeLanguage).toHaveBeenCalledWith('en');
+<%_ } _%>
+  });
+
+<%_ if (enableTranslation) { _%>
+  it('should default to the native language', () => {
+    const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
+    const navbar = shallowMount(JhiNavbar, { global: { plugins: [pinia, router], provide: { [accountServiceKey as symbol]: accountService<%- authenticationUsesCsrf ? ', [loginServiceKey as symbol]: loginService' : '' %> } } });
+
+    expect(navbar.vm.currentLanguage).toBe('<%- nativeLanguage %>');
+    language.mockRestore();
+  });
+<%_ } _%>
+
+  it('should log in from the menu of an anonymous user', async () => {
+    store.logout();
+    await flushPromises();
+
+    expect(wrapper.find('#entity-menu').exists()).toBe(false);
+<%_ if (authenticationTypeOauth2) { _%>
+    await wrapper.find('#login').trigger('click');
+
+    expect(loginService.login).toHaveBeenCalled();
+<%_ } else { _%>
+    expect(wrapper.find('#login').attributes('to')).toBe('/login');
+<%_ } _%>
+  });
+});

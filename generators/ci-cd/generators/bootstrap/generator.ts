@@ -65,7 +65,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<C
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async preparing({ application }) {
+      preparing({ application }) {
         const dependabotConfig = parseYaml(this.readJHipsterResource('dependabot/action.yml')!);
         mutateData(
           application.githubActions,

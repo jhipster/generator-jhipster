@@ -16,16 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useState, useEffect } from 'react';
-<%_ if (paginationInfiniteScroll) { _%>
-import InfiniteScroll from 'react-infinite-scroll-component';
-<%_ } _%>
-import { Link, useLocation, useNavigate } from 'react-router';
-import { Button, <%- searchEngineAny ? 'FormControl, InputGroup, Form, Row, Col, ' : '' %>Table } from 'react-bootstrap';
+<%_ const listFields = fields.filter(field => !field.id && !field.hidden && !field.hideListView); _%>
+import { useEffect, useState } from 'react';
+import { <%- builtInUserManagement ? 'Badge, ' : '' %>Button, <%- searchEngineAny ? 'Col, Form, FormControl, InputGroup, Row, ' : '' %>Table } from 'react-bootstrap';
 import {
-<%_ if (anyFieldIsBlobDerived) { _%>
-  byteSize,
-<%_ } _%>
   Translate<%- searchEngineAny ? ', translate' : '' %>
   <%- anyFieldIsDateDerived ? ', TextFormat' : '' %>
 <%_ if (paginationNo) { _%>
@@ -37,13 +31,28 @@ import {
   <%_ } _%>
 <%_ } _%>
 } from 'react-jhipster';
-<%_ if (anyFieldHasFileBasedContentType) { _%>
-import { openFile } from 'app/shared/jhipster/data-utils';
-<%_ } _%>
+import { Link, useLocation, useNavigate } from 'react-router';
+
+import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+<%_ if (paginationInfiniteScroll) { _%>
+import InfiniteScroll from 'react-infinite-scroll-component';
+<%_ } _%>
+
 <%_ if (anyFieldIsInstant || anyFieldIsZonedDateTime || anyFieldIsLocalDate) { _%>
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+<%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+<%_ if (anyFieldIsDuration) { _%>
+import { DurationFormat } from 'app/shared/DurationFormat';
+<%_ } _%>
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+import { byteSize, openFile } from 'app/shared/jhipster/data-utils';
+<%_ } _%>
+<%_ if (paginationNo) { _%>
+import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
+<%_ } else { _%>
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 <%_ } _%>
 import {
   ASC,
@@ -53,21 +62,15 @@ import {
 <%_ } _%>
   SORT,
 } from 'app/shared/util/pagination.constants';
-<%_ if (paginationNo) { _%>
-import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
-<%_ } else { _%>
-import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-<%_ } _%>
-import { useAppDispatch, useAppSelector } from 'app/config/store';
-<%_ if (anyFieldIsDuration) { _%>
-import { DurationFormat } from 'app/shared/DurationFormat';
-<%_ } _%>
 
 import {
 <%_ if (searchEngineAny) { _%>
   searchEntities,
 <%_ } _%>
   getEntities,
+<%_ if (builtInUserManagement) { _%>
+  updateEntity,
+<%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   reset,
 <%_ } _%>
@@ -93,6 +96,9 @@ export const <%- entityReactName %> = () => {
   const [sorting, setSorting] = useState(false);
 <%_ } _%>
 
+<%_ if (builtInUserManagement) { _%>
+  const account = useAppSelector(state => state.authentication.account);
+<%_ } _%>
   const <%- entityInstance %>List = useAppSelector(state => state.<%- entityReactState %>.entities);
   const loading = useAppSelector(state => state.<%- entityReactState %>.loading);
 <%_ if (paginationPagination) { _%>
@@ -110,13 +116,13 @@ export const <%- entityReactName %> = () => {
         searchEntities({
           query: search,
   <%_ if (paginationNo) { _%>
-          sort: `${sortState.sort},${sortState.order}`
+          sort: `${sortState.sort},${sortState.order}`,
   <%_ } else { _%>
           page: paginationState.activePage - 1,
           size: paginationState.itemsPerPage,
-          sort: `${paginationState.sort},${paginationState.order}`
+          sort: `${paginationState.sort},${paginationState.order}`,
   <%_ } _%>
-        })
+        }),
       );
     } else {
       dispatch(
@@ -128,21 +134,21 @@ export const <%- entityReactName %> = () => {
           size: paginationState.itemsPerPage,
           sort: `${paginationState.sort},${paginationState.order}`,
   <%_ } _%>
-        })
+        }),
       );
     }
 <%_ } else { _%>
-      dispatch(
-        getEntities({
+    dispatch(
+      getEntities({
   <%_ if (paginationNo) { _%>
-          sort: `${sortState.sort},${sortState.order}`,
+        sort: `${sortState.sort},${sortState.order}`,
   <%_ } else { _%>
-          page: paginationState.activePage - 1,
-          size: paginationState.itemsPerPage,
-          sort: `${paginationState.sort},${paginationState.order}`,
+        page: paginationState.activePage - 1,
+        size: paginationState.itemsPerPage,
+        sort: `${paginationState.sort},${paginationState.order}`,
   <%_ } _%>
-        })
-      );
+      }),
+    );
 <%_ } _%>
   };
 
@@ -151,7 +157,7 @@ export const <%- entityReactName %> = () => {
     dispatch(reset());
     setPaginationState({
       ...paginationState,
-      activePage: 1
+      activePage: 1,
     });
     dispatch(getEntities({}));
   };
@@ -175,7 +181,7 @@ export const <%- entityReactName %> = () => {
   <%_ } else { _%>
       setPaginationState({
         ...paginationState,
-        activePage: 1
+        activePage: 1,
       });
       dispatch(
         searchEntities({
@@ -183,7 +189,7 @@ export const <%- entityReactName %> = () => {
           page: paginationState.activePage - 1,
           size: paginationState.itemsPerPage,
           sort: `${paginationState.sort},${paginationState.order}`,
-        })
+        }),
       );
   <%_ } _%>
     }
@@ -198,7 +204,7 @@ export const <%- entityReactName %> = () => {
   <%_ if (!paginationNo) { _%>
     setPaginationState({
       ...paginationState,
-      activePage: 1
+      activePage: 1,
     });
   <%_ } _%>
     dispatch(getEntities({}));
@@ -215,14 +221,14 @@ export const <%- entityReactName %> = () => {
   }, [updateSuccess]);
 
   useEffect(() => {
-    getAllEntities()
+    getAllEntities();
   }, [paginationState.activePage]);
 
   const handleLoadMore = () => {
     if (globalThis.scrollY > 0) {
       setPaginationState({
         ...paginationState,
-        activePage: paginationState.activePage + 1
+        activePage: paginationState.activePage + 1,
       });
     }
   };
@@ -264,7 +270,7 @@ export const <%- entityReactName %> = () => {
         ...paginationState,
         activePage: +page,
         sort: sortSplit[0],
-        order: sortSplit[1]
+        order: sortSplit[1],
       });
     }
   }, [pageLocation.search]);
@@ -277,20 +283,20 @@ export const <%- entityReactName %> = () => {
       ...paginationState,
       activePage: 1,
       order: paginationState.order === ASC ? DESC : ASC,
-      sort: p
+      sort: p,
     });
     setSorting(true);
 <%_ } else if (paginationPagination) { _%>
     setPaginationState({
       ...paginationState,
       order: paginationState.order === ASC ? DESC : ASC,
-      sort: p
+      sort: p,
     });
 <%_ } else { _%>
     setSortState({
       ...sortState,
       order: sortState.order === ASC ? DESC : ASC,
-      sort: p
+      sort: p,
     });
 <%_ } _%>
   };
@@ -299,13 +305,13 @@ export const <%- entityReactName %> = () => {
   const handlePagination = currentPage =>
     setPaginationState({
       ...paginationState,
-      activePage: currentPage
+      activePage: currentPage,
     });
 <%_ } _%>
 
   const handleSyncList = () => {
 <%_ if (paginationNo || paginationPagination) { _%>
-      sortEntities();
+    sortEntities();
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
       resetAll();
@@ -327,19 +333,25 @@ export const <%- entityReactName %> = () => {
     }
   };
 
+<%_ if (builtInUserManagement) { _%>
+  const toggleActive = <%- entityInstance %> => () => {
+    dispatch(updateEntity({ ...<%- entityInstance %>, activated: !<%- entityInstance %>.activated }));
+  };
+
+<%_ } _%>
   return (
     <div>
       <h2 id="<%- entityFileName %>-heading" data-cy="<%- entityNameCapitalized %>Heading">
         <Translate contentKey="<%- i18nKeyPrefix %>.home.title"><%- entityNamePluralHumanized %></Translate>
         <div className="d-flex justify-content-end">
           <Button className="me-2" variant="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%- i18nKeyPrefix %>.home.refreshListLabel">Refresh List</Translate>
+            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%- i18nKeyPrefix %>.home.refreshListLabel">Refresh list</Translate>
           </Button>
 <%_ if (!readOnly) { _%>
-            <Link to="/<%- entityPage %>/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+            <Link to="/<%- entityPage %>/new" className="btn btn-primary" id="jh-create-entity" data-cy="entityCreateButton">
               <FontAwesomeIcon icon="plus" />&nbsp;
               <Translate contentKey="<%- i18nKeyPrefix %>.home.createLabel">
-                Create new <%- entityNameHumanized %>
+                Create a new <%- entityNameHumanized %>
               </Translate>
             </Link>
 <%_ } _%>
@@ -365,22 +377,22 @@ export const <%- entityReactName %> = () => {
 <%_ } _%>
       <div className="table-responsive">
 <%_ if (paginationInfiniteScroll) { _%>
-        <InfiniteScroll dataLength={<%- entityInstance %>List ? <%- entityInstance %>List.length : 0}
+        <InfiniteScroll dataLength={<%- entityInstance %>List.length}
                         next={handleLoadMore}
                         hasMore={paginationState.activePage - 1 < links.next}
                         loader={<div className="loader">Loading ...</div>}>
 <%_ } _%>
         {
           <%- entityInstance %>List?.length > 0 ? (
-            <Table responsive>
+            <Table striped>
               <thead>
                 <tr>
-<%_ for (field of fields) { _%>
+<%_ for (field of [primaryKey.fields[0], ...listFields]) { _%>
                   <th className="hand" onClick={sort('<%- field.fieldName %>')}><Translate contentKey="<%- `${i18nKeyPrefix}.${field.fieldName}` %>"><%- field.fieldNameHumanized %></Translate> <FontAwesomeIcon icon={getSortIconByFieldName('<%- field.fieldName %>')} /></th>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
-                  <th><Translate contentKey="<%- `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- relationship.relationshipNameHumanized %></Translate> <FontAwesomeIcon icon="sort" /></th>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly || (relationship.persistableRelationship && (paginationNo || !relationship.collection))) { _%>
+                  <th><Translate contentKey="<%- relationship.propertyTranslationKey %>"><%- relationship.relationshipNameHumanized %></Translate> <FontAwesomeIcon icon="sort" /></th>
   <%_ } _%>
 <%_ } _%>
                   <th />
@@ -391,15 +403,27 @@ export const <%- entityReactName %> = () => {
                   <%- entityInstance %>List.map(<%- entityInstance %> => (
                   <tr key={`entity-${<%- entityInstance %>.<%- primaryKey.name %>}`} data-cy="entityTable">
                     <td>
-                      <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}`} variant="link" size="sm">
+                      <Link to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}`}>
                         {<%- entityInstance %>.<%- primaryKey.name %>}
-                      </Button>
+                      </Link>
                     </td>
-<%_ for (field of fields) { _%>
+<%_ for (field of listFields) { _%>
   <%_ const { fieldType, fieldName, fieldIsEnum } = field; _%>
   <%_ if (fieldName !== primaryKey.name) { _%>
                     <td>
-    <%_ if (field.fieldTypeBoolean) { _%>
+    <%_ if (builtInUserManagement && fieldName === 'activated') { _%>
+                      {<%- entityInstance %>.activated ? (
+                        <Button variant="success" size="sm" onClick={toggleActive(<%- entityInstance %>)} disabled={account.login === <%- entityInstance %>.login}>
+                          <Translate contentKey="userManagement.activated">Activated</Translate>
+                        </Button>
+                      ) : (
+                        <Button variant="danger" size="sm" onClick={toggleActive(<%- entityInstance %>)}>
+                          <Translate contentKey="userManagement.deactivated">Deactivated</Translate>
+                        </Button>
+                      )}
+    <%_ } else if (field.clientConstantsAsValues) { _%>
+                      {<%- entityInstance %>.<%- fieldName %><%- field.collection ? "?.join(', ')" : '' %>}
+    <%_ } else if (field.fieldTypeBoolean) { _%>
                       {<%- entityInstance %>.<%- field.fieldName %> ? 'true' : 'false'}
     <%_ } else if (field.fieldTypeTimed) { _%>
                       {<%- entityInstance %>.<%- fieldName %> ? <TextFormat type="date" value={<%- entityInstance %>.<%- fieldName %>} format={APP_DATE_FORMAT} /> : null}
@@ -407,7 +431,7 @@ export const <%- entityReactName %> = () => {
                       {<%- entityInstance %>.<%- fieldName %> ? <DurationFormat value={<%- entityInstance %>.<%- fieldName %>} /> : null}
     <%_ } else if (field.fieldTypeLocalDate) { _%>
                       {<%- entityInstance %>.<%- fieldName %> ? <TextFormat type="date" value={<%- entityInstance %>.<%- fieldName %>} format={APP_LOCAL_DATE_FORMAT} /> : null}
-    <%_ } else if (fieldIsEnum && enableTranslation) { _%>
+    <%_ } else if (fieldIsEnum && !field.clientConstantsAsValues && enableTranslation) { _%>
                       <Translate contentKey={`<%- frontendAppName %>.<%- fieldType %>.${<%- entityInstance %>.<%- fieldName %>}`} />
     <%_ } else if (field.fieldTypeBinary) { _%>
       <%_ // blobFields _%>
@@ -442,7 +466,15 @@ export const <%- entityReactName %> = () => {
       const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
       const { otherEntityField } = relationship;
   _%>
-  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
+                    <td>
+                      {<%- entityInstance %>.<%- relationshipFieldNamePlural %>?.map(<%- relationshipFieldName %> => (
+                        <div key={<%- relationshipFieldName %>}>
+                          <Badge bg="info">{<%- relationshipFieldName %>}</Badge>
+                        </div>
+                      ))}
+                    </td>
+  <%_ } else if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
@@ -484,7 +516,7 @@ export const <%- entityReactName %> = () => {
                           <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} variant="primary" size="sm" data-cy="entityEditButton">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
-                          <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} variant="danger" size="sm" data-cy="entityDeleteButton">
+                          <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} <% if (builtInUserManagement) { %>disabled={account.login === <%- entityInstance %>.login} <% } %>variant="danger" size="sm" data-cy="entityDeleteButton">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
 <%_ } _%>
@@ -527,7 +559,10 @@ export const <%- entityReactName %> = () => {
               totalItems={totalItems}
             />
           </div>
-        </div>) : '' }
+        </div>
+      ) : (
+        ''
+      )}
   <%_ } _%>
 <%_ } _%>
     </div>

@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 
-import type { JDLFiles } from './ast-to-files.ts';
+import { GENERATOR_JHIPSTER } from '../../../constants/jhipster.ts';
+import { APPLICATION_TYPE_GATEWAY } from '../../../core/application-types.ts';
 
-const GENERATOR_JHIPSTER = 'generator-jhipster';
+import type { JDLFiles } from './ast-to-files.ts';
 
 /** An application of the json files: its folder, its config, and the names of the microservices of its entities. */
 type StackApplication = { folder: string; config: Record<string, any>; microserviceNames: string[] };
@@ -48,7 +49,7 @@ export function applyStackConfig({ files, relativeRoot }: JDLFiles): JDLFiles {
     }
   }
   const byBaseName = new Map(applications.map(application => [application.config.baseName, application]));
-  const isGateway = ({ config }: StackApplication) => config.applicationType === 'gateway';
+  const isGateway = ({ config }: StackApplication) => config.applicationType === APPLICATION_TYPE_GATEWAY;
 
   if (applications.length > 1) {
     [...applications.filter(isGateway), ...applications.filter(application => !isGateway(application))].forEach((application, index) => {

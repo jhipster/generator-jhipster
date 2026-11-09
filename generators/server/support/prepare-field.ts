@@ -18,17 +18,15 @@
  */
 import assert from 'node:assert';
 
-import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.ts';
+import { databaseTypes, entityOptions, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { snakeCase } from '../../../lib/utils/string-utils.ts';
+import { prepareFieldColumnForDatabase } from '../../base-application/generators/database-bootstrap/support/index.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import type { Field as LiquibaseField } from '../../liquibase/types.d.ts';
 import type { Field as SpringDataRelationalField } from '../../spring-boot/generators/data-relational/types.d.ts';
 import type { Field as SpringBootField } from '../../spring-boot/types.d.ts';
 import type { Application as ServerApplication, Entity as ServerEntity, Field as ServerField } from '../types.d.ts';
 
-import { getUXConstraintName } from './database.ts';
-
-const { isReservedTableName } = reservedKeywords;
 const { CommonDBTypes } = fieldTypes;
 const { MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
@@ -101,26 +99,6 @@ export default function prepareField(
     }
   }
 
-  if (field.fieldNameAsDatabaseColumn === undefined) {
-    const fieldNameUnderscored = snakeCase(field.fieldName);
-    if (isReservedTableName(fieldNameUnderscored, entityProdDatabaseType ?? entityWithConfig.databaseType)) {
-      if (application.jhiTablePrefix) {
-        field.fieldNameAsDatabaseColumn = `${application.jhiTablePrefix}_${fieldNameUnderscored}`;
-      } else {
-        generator.log.warn(
-          `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`,
-        );
-        field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
-      }
-    } else {
-      field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
-    }
-  }
-
-  field.columnName = field.fieldNameAsDatabaseColumn;
-  if (field.unique) {
-    field.uniqueConstraintName = getUXConstraintName(entityWithConfig.entityTableName, field.columnName, {
-      prodDatabaseType: entityProdDatabaseType,
-    }).value;
-  }
+  // The column, which the generator of the database prepared already: kept for a blueprint calling this function alone.
+  prepareFieldColumnForDatabase({ application, entity: entityWithConfig, field, log: generator.log });
 }

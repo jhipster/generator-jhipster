@@ -77,6 +77,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
@@ -117,6 +120,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/UserService.java": {
@@ -164,7 +170,13 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserResource.java": {
@@ -317,6 +329,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/test/java/tech/jhipster/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -344,7 +359,13 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
@@ -357,6 +378,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -499,6 +523,9 @@ exports[`generator - neo4j gateway-jwt-reactive(true)-gradle-enableTranslation(t
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
@@ -539,6 +566,9 @@ exports[`generator - neo4j gateway-jwt-reactive(true)-gradle-enableTranslation(t
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -655,6 +685,9 @@ exports[`generator - neo4j gateway-jwt-reactive(true)-gradle-enableTranslation(t
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -662,6 +695,9 @@ exports[`generator - neo4j gateway-jwt-reactive(true)-gradle-enableTranslation(t
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -801,6 +837,9 @@ exports[`generator - neo4j gateway-oauth2-reactive(true)-gradle-enableTranslatio
   "src/main/java/com/mycompany/domain/Authority.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
@@ -868,6 +907,9 @@ exports[`generator - neo4j gateway-oauth2-reactive(true)-gradle-enableTranslatio
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -1005,6 +1047,9 @@ exports[`generator - neo4j gateway-oauth2-reactive(true)-gradle-enableTranslatio
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -1015,6 +1060,9 @@ exports[`generator - neo4j gateway-oauth2-reactive(true)-gradle-enableTranslatio
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -1109,6 +1157,9 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
@@ -1143,6 +1194,9 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
@@ -1253,6 +1307,9 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -1260,6 +1317,9 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -1396,6 +1456,9 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
@@ -1430,6 +1493,9 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -1540,6 +1606,9 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -1547,6 +1616,9 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -1683,6 +1755,9 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
@@ -1717,6 +1792,9 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -1827,6 +1905,9 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -1834,6 +1915,9 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -1934,6 +2018,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
@@ -1974,6 +2061,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/UserService.java": {
@@ -2021,7 +2111,13 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserResource.java": {
@@ -2174,6 +2270,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/test/java/tech/jhipster/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -2201,7 +2300,13 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
@@ -2214,6 +2319,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -2353,6 +2461,9 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
@@ -2393,6 +2504,9 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -2503,6 +2617,9 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -2510,6 +2627,9 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -2601,6 +2721,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
@@ -2641,6 +2764,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
@@ -2757,6 +2883,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -2764,6 +2893,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -2894,6 +3026,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
@@ -2934,6 +3069,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -3050,6 +3188,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -3057,6 +3198,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -3157,6 +3301,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/PersistentToken.java": {
     "stateCleared": "modified",
   },
@@ -3208,6 +3355,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -3253,7 +3403,13 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/RegistrationResource.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserResource.java": {
@@ -3400,6 +3556,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
@@ -3427,7 +3586,13 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/web/rest/RegistrationResourceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
@@ -3440,6 +3605,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -3579,6 +3747,9 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
@@ -3619,6 +3790,9 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
@@ -3735,6 +3909,9 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/web/rest/SortValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -3742,6 +3919,9 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {

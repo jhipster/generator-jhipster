@@ -29,6 +29,8 @@ import {
   mutateRelationship as mutateBaseApplicationRelationship,
   mutateRelationshipWithEntity as mutateBaseApplicationRelationshipWithEntity,
 } from '../base-application/entity.ts';
+import { default as prepareSqlApplicationProperties } from '../base-application/generators/database-bootstrap/support/application-properties.ts';
+import { getJdbcUrl } from '../base-application/generators/database-bootstrap/support/database-url.ts';
 import {
   loadRequiredConfigIntoEntity,
   prepareCommonFieldForTemplates,
@@ -38,7 +40,7 @@ import {
 } from '../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication, DerivedField } from '../base-application/types.ts';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
-import type { BaseChangelog } from '../base-entity-changes/types.ts';
+import type { BaseChangelog, BaseChangelogData } from '../base-entity-changes/types.ts';
 import { mutateField as commonMutateField } from '../common/entity.ts';
 import type { Field as CommonField } from '../common/types.ts';
 import { mutateField as mutateJavaField } from '../java/application.ts';
@@ -46,7 +48,6 @@ import { prepareEntity as prepareEntityForServer } from '../java/support/index.t
 import type { MavenProperty } from '../java-simple-application/generators/maven/types.ts';
 import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
 import type { Entity as ServerEntity } from '../server/types.ts';
-import { getJdbcUrl, prepareSqlApplicationProperties } from '../spring-boot/generators/data-relational/support/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../spring-boot/generators/data-relational/types.ts';
 
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.ts';
@@ -152,12 +153,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
         });
         this.numberOfRows = application.clientFrameworkReact ? 10 : 30;
       },
-      liquibaseNeo4j({ application }) {
-        // TODO drop hardcoded version
-        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.3') {
-          application.javaDependencies['liquibase-neo4j'] = '5.0.0';
-        }
-      },
       addNeedles({ source, application }) {
         source.addLiquibaseChangelog = changelog =>
           this.editFile(`${application.srcMainResources}config/liquibase/master.xml`, addLiquibaseChangelogCallback(changelog));
@@ -240,7 +235,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
   get default() {
     return this.asDefaultTaskGroup({
-      async calculateChangelogs({ application, entities, entityChanges }) {
+      calculateChangelogs({ application, entities, entityChanges }) {
         if (!application.databaseTypeSql || this.options.skipDbChangelog || !entityChanges) {
           return;
         }
@@ -284,7 +279,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
         }
 
         const entitiesToWrite =
-          this.options.entities ?? entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
+          this.options.entities ?? entities.filter(entity => !entity.skipDbChangelog && !entity.skipServer).map(entity => entity.name);
         // Write only specified entities changelogs.
         const changes = entityChanges.filter(
           databaseChangelog => entitiesToWrite.length === 0 || entitiesToWrite.includes(databaseChangelog.entityName),
@@ -498,6 +493,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 hibernateDialect: liquibasePluginHibernateDialect!,
                 defaultSchemaName: application.liquibaseDefaultSchemaName,
+                addLiquibaseHibernate: application.databaseTypeSql && !application.reactive,
                 // eslint-disable-next-line no-template-curly-in-string
                 url: '${liquibase-plugin.url}',
                 // eslint-disable-next-line no-template-curly-in-string
@@ -586,7 +582,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             {
               scope: 'liquibaseRuntime',
               groupId: 'org.liquibase.ext',
-              artifactId: 'liquibase-hibernate6',
+              artifactId: 'liquibase-hibernate7',
               // eslint-disable-next-line no-template-curly-in-string
               version: liquibaseVersion ? '${liquibaseVersion}' : "${dependencyManagement.importedProperties['liquibase.version']}",
             },
@@ -613,7 +609,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       postWriteChangelogs({ source }) {
         return Promise.all(
           this.databaseChangelogs.map(databaseChangelog => {
-            const { entity, changelogData } = databaseChangelog;
+            const { entity } = databaseChangelog;
+            // A changelog prepared for writing has its data.
+            const changelogData = databaseChangelog.changelogData!;
             if (entity.skipServer) {
               return undefined;
             }
@@ -621,7 +619,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             if (databaseChangelog.newEntity) {
               return this._addLiquibaseFilesReferences({ entity, databaseChangelog, source });
             }
-            if (changelogData!.requiresUpdateChangelogs) {
+            if (changelogData.requiresUpdateChangelogs) {
               return this._addUpdateFilesReferences({ entity, databaseChangelog, changelogData, source });
             }
             return undefined;
@@ -654,7 +652,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   /**
    * Write files for new entities.
    */
-  _writeLiquibaseFiles({ context: writeContext, changelogData }: { context: any; changelogData: any }) {
+  _writeLiquibaseFiles({ context: writeContext, changelogData }: { context: any; changelogData: BaseChangelogData<LiquibaseEntity> }) {
     const promises: any[] = [];
     const context = {
       ...writeContext,
@@ -699,7 +697,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   /**
    * Write files for updated entities.
    */
-  _writeUpdateFiles({ context: writeContext, changelogData }: { context: any; changelogData: any }) {
+  _writeUpdateFiles({ context: writeContext, changelogData }: { context: any; changelogData: BaseChangelogData<LiquibaseEntity> }) {
     const {
       addedFields,
       allFields,
@@ -707,6 +705,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       addedRelationships,
       removedRelationships,
       hasFieldConstraint,
+      requiredAddedColumnNames,
       hasRelationshipConstraint,
       shouldWriteAnyRelationship,
       relationshipsToRecreateForeignKeysOnly,
@@ -723,6 +722,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       fields: addedFields,
       allFields,
       hasFieldConstraint,
+      requiredAddedColumnNames,
       addedRelationships,
       removedRelationships,
       relationships: addedRelationships,
@@ -749,15 +749,15 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     return Promise.all(promises);
   }
 
-  private _requiresConstraintUpdates(changelogData: any) {
+  private _requiresConstraintUpdates(changelogData: BaseChangelogData<LiquibaseEntity>) {
     return changelogData.hasFieldConstraint || changelogData.addedRelationships.length > 0 || changelogData.hasDefaultValueChange;
   }
 
-  private _isBasicEntityUpdate(changelogData: any) {
+  private _isBasicEntityUpdate(changelogData: BaseChangelogData<LiquibaseEntity>) {
     return changelogData.addedFields.length > 0 || changelogData.removedFields.length > 0 || changelogData.shouldWriteAnyRelationship;
   }
 
-  private _requiresWritingFakeData(changelogData: any) {
+  private _requiresWritingFakeData(changelogData: BaseChangelogData<LiquibaseEntity>) {
     return !changelogData.skipFakeData && (changelogData.addedFields.length || changelogData.addedRelationships.length);
   }
 
@@ -772,7 +772,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }: {
     entity: LiquibaseEntity;
     databaseChangelog: BaseChangelog<LiquibaseEntity>;
-    changelogData: any;
+    changelogData: BaseChangelogData<LiquibaseEntity>;
     source: LiquibaseSource;
   }) {
     if (this._isBasicEntityUpdate(changelogData)) {
@@ -947,7 +947,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     /* Required by the templates */
     databaseChangelog.writeContext = {
       entity,
-      databaseChangelog: databaseChangelog as any,
+      databaseChangelog,
       changelogDate: databaseChangelog.changelogDate,
       databaseType,
       prodDatabaseType,
@@ -974,6 +974,15 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       entityChanges.hasFieldConstraint = entityChanges.addedFields.some(
         field => field.unique || (field.columnRequired && !field.liquibaseDefaultValueAttributeValue) || field.shouldCreateContentType,
       );
+      // The required columns added without a default value: the existing rows have none, Liquibase stops at their constraints.
+      entityChanges.requiredAddedColumnNames = entityChanges.addedFields
+        .filter(field => field.columnRequired && !field.liquibaseDefaultValueAttributeValue)
+        .flatMap(field => (field.shouldCreateContentType ? [field.columnName!, `${field.columnName}_content_type`] : [field.columnName!]));
+      if (entityChanges.requiredAddedColumnNames.length > 0) {
+        this.log.warn(
+          `The required columns ${entityChanges.requiredAddedColumnNames.join(', ')} added to ${entity.entityTableName} have no value in its existing rows: fill them in a changelog before ${databaseChangelog.changelogDate}_updated_entity_constraints_${entity.entityClass}.xml, Liquibase stops at it otherwise.`,
+        );
+      }
       entityChanges.hasDefaultValueChange =
         entityChanges.addedDefaultValueFields.length > 0 || entityChanges.removedDefaultValueFields.length > 0;
       entityChanges.hasRelationshipConstraint = entityChanges.addedRelationships.some(
@@ -989,11 +998,13 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   writeChangelog({ databaseChangelog }: { databaseChangelog: BaseChangelog<LiquibaseEntity> }): Promise<any[]> | undefined {
-    const { writeContext: context, changelogData } = databaseChangelog;
+    const { writeContext: context } = databaseChangelog;
+    // A changelog prepared for writing has its data.
+    const changelogData = databaseChangelog.changelogData!;
     if (databaseChangelog.newEntity) {
       return this._writeLiquibaseFiles({ context, changelogData });
     }
-    if (changelogData!.requiresUpdateChangelogs) {
+    if (changelogData.requiresUpdateChangelogs) {
       return this._writeUpdateFiles({ context, changelogData });
     }
     return undefined;

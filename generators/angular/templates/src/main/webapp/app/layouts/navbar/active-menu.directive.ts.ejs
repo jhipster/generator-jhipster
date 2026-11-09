@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Directive, OnInit, ElementRef, Renderer2, inject, input } from '@angular/core';
-import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { Directive, ElementRef, OnInit, Renderer2, inject, input } from '@angular/core';
+
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Directive({
   selector: '[<%- jhiPrefix %>ActiveMenu]',

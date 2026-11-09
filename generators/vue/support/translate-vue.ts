@@ -60,7 +60,8 @@ export function replaceVueTranslations(
   },
 ) {
   body = body
-    .replaceAll(/{{ *(?<translate>t\$\([^)]*\)) *}}/g, (complete, ...args) => {
+    // A translation alone in its interpolation, on one line or on several as prettier breaks a long one.
+    .replaceAll(/{{\s*(?<translate>t\$\([^)]*\))\s*}}/g, (complete, ...args) => {
       const groups: Record<string, string> = args.pop();
       if (!enableTranslation && groups.translate) {
         if (groups.translate.includes('+')) {
@@ -77,8 +78,8 @@ export function replaceVueTranslations(
           throw new Error(`${translated}, ${groups.translate}`);
         }
       } else if (groups.translate) {
-        // Normalize white spaces
-        return `{{ ${groups.translate} }}`;
+        // Normalize white spaces, the line breaks of an interpolation on several lines kept.
+        return complete.includes('\n') ? complete : `{{ ${groups.translate} }}`;
       }
       return complete;
     })
@@ -113,6 +114,12 @@ export function replaceVueTranslations(
   if (enableTranslation) {
     return body;
   }
+  // The script of a component written with script setup is translated like a .ts file.
+  body = body.replaceAll(/(?<open><script\b[^>]*>)(?<script>[\s\S]*?)(?<close><\/script>)/g, (_complete, ...args) => {
+    const groups: Record<string, string> = args.pop();
+    const script = removeDeclarations({ content: replaceTranslations({ type: 'ts', content: groups.script, getWebappTranslation }) });
+    return `${groups.open}${script}${groups.close}`;
+  });
   return replaceTranslationAttributes({ content: body, getWebappTranslation });
 }
 

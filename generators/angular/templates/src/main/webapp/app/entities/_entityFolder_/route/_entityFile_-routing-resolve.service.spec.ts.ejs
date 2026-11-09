@@ -18,10 +18,10 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, convertToParamMap } from '@angular/router';
+
 import { lastValueFrom, of, throwError } from 'rxjs';
 
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
@@ -109,7 +109,9 @@ describe('<%- entityAngularName %> routing resolve service', () => {
 
     it('should route to error page if server returns an error other than 404', async () => {
       // GIVEN
-      vi.spyOn(service, 'find').mockReturnValue(throwError(() => new HttpErrorResponse({ status: 500, statusText: 'Internal Server Error' })));
+      vi.spyOn(service, 'find').mockReturnValue(
+        throwError(() => new HttpErrorResponse({ status: 500, statusText: 'Internal Server Error' })),
+      );
       mockActivatedRouteSnapshot.params = { <%- primaryKey.name %>: <%- tsKeyId %> };
 
       // WHEN

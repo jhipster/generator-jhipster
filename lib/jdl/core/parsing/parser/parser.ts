@@ -575,7 +575,10 @@ export default class JDLParser extends CstParser {
     this.RULE('applicationSubNamespaceConfig', () => {
       this.CONSUME(this.tokens.CONFIG);
       this.CONSUME(this.tokens.LPAREN);
-      this.CONSUME(this.tokens.NAME, { LABEL: 'namespace' });
+      this.OR1([
+        { ALT: () => this.CONSUME(this.tokens.NAME, { LABEL: 'namespace' }) },
+        { ALT: () => this.CONSUME(this.tokens.SCOPED_NAME, { LABEL: 'namespace' }) },
+      ]);
       this.CONSUME(this.tokens.RPAREN);
       this.CONSUME(this.tokens.LCURLY);
       this.MANY(() => {
@@ -668,7 +671,11 @@ export default class JDLParser extends CstParser {
       this.MANY_SEP({
         SEP: this.tokens.COMMA,
         DEF: () => {
-          this.CONSUME(this.tokens.NAME);
+          this.OR([
+            { ALT: () => this.CONSUME(this.tokens.NAME) },
+            // A scoped package, like a blueprint: a name of the list.
+            { ALT: () => this.CONSUME(this.tokens.SCOPED_NAME, { LABEL: 'NAME' }) },
+          ]);
         },
       });
       this.CONSUME(this.tokens.RSQUARE);

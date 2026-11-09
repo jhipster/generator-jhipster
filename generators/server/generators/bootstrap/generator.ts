@@ -20,17 +20,16 @@
 import { getEntityDerivedPropertyMutations } from '../../../../lib/command/mutations.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import { upperFirst } from '../../../../lib/utils/string-utils.ts';
+import prepareSqlApplicationProperties from '../../../base-application/generators/database-bootstrap/support/application-properties.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication } from '../../../base-application/types.d.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import javaDomainCommand from '../../../java/generators/domain/command.ts';
-import prepareSqlApplicationProperties from '../../../spring-boot/generators/data-relational/support/application-properties.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
 import {
   addEntitiesOtherRelationships,
   getPrimaryKeyValue,
-  hibernateSnakeCase,
   loadRequiredConfigDerivedProperties,
   prepareField as prepareServerFieldForTemplates,
   preparePostEntityServerDerivedProperties,
@@ -49,6 +48,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     }
 
     await this.dependsOnBootstrap('common');
+    // The database preparation the backend reads, composed before it so its tasks of a priority run first.
+    await this.dependsOnJHipster('jhipster:base-application:database-bootstrap');
   }
 
   get composingBootstrap() {
@@ -84,18 +85,13 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           prodDatabasePassword: undefined,
         });
       },
-      async loadDockerDependencies({ application }) {
+      loadDockerDependencies({ application }) {
         loadDockerDependenciesTask.call(this, { context: application });
       },
       checkSuffix({ application }) {
         if (application.entitySuffix === application.dtoSuffix) {
           throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equal!');
         }
-      },
-      prepareForTemplates({ applicationDefaults }) {
-        applicationDefaults({
-          jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
-        });
       },
     });
   }
@@ -106,7 +102,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
-      async loadDockerDependencies({ application }) {
+      loadDockerDependencies({ application }) {
         loadDockerElasticsearchVersion.call(this, {
           dockerContainers: application.dockerContainers,
         });
@@ -118,8 +114,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     return this.postPreparing;
   }
 
-  get loadingEntities() {
-    return this.asLoadingEntitiesTaskGroup({
+  get postLoadingEntities() {
+    return this.asPostLoadingEntitiesTaskGroup({
       loadingEntities({ entitiesToLoad }) {
         for (const { entityBootstrap } of entitiesToLoad) {
           loadRequiredConfigIntoEntity.call(this, entityBootstrap, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
@@ -131,8 +127,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     });
   }
 
-  get [BaseApplicationGenerator.LOADING_ENTITIES]() {
-    return this.loadingEntities;
+  get [BaseApplicationGenerator.POST_LOADING_ENTITIES]() {
+    return this.postLoadingEntities;
   }
 
   get preparingEachEntity() {
@@ -142,8 +138,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           entitySuffix: application.entitySuffix ?? '',
           dtoSuffix: application.dtoSuffix ?? 'DTO',
           entityClassPlural: ({ entityNamePlural }) => upperFirst(entityNamePlural),
-          entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
-
           persistClass: ({ entityClass, entitySuffix }) => `${entityClass}${entitySuffix ?? ''}`,
           persistInstance: ({ entityInstance, entitySuffix }) => `${entityInstance}${entitySuffix ?? ''}`,
           // Even if dto is not used, we need to generate the dtoClass and dtoInstance is added to avoid errors in rendered relationships templates. The resulting class will not exist then.
@@ -178,8 +172,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
-      prepareRelationship({ application, entity, relationship }) {
-        prepareRelationship({ application, entity, relationship });
+      prepareRelationship({ relationship }) {
+        prepareRelationship({ relationship });
       },
     });
   }
@@ -202,7 +196,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get default() {
     return this.asDefaultTaskGroup({
-      async postPreparingEntity({ application, entities }) {
+      postPreparingEntity({ application, entities }) {
         if (!application.backendTypeJavaAny) return;
         for (const entity of entities) {
           if (entity.primaryKey) {

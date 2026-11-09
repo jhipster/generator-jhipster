@@ -21,6 +21,7 @@ import assert from 'node:assert';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { normalizePathEnd } from '../../../lib/utils/path.ts';
+import { generateJsonSample, generateTsSample } from '../../base-application/internal/fake-data.ts';
 import type {
   Field as BaseApplicationField,
   PrimaryKey,
@@ -32,7 +33,7 @@ import type { Entity as ClientEntity, Field as ClientField, Relationship as Clie
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.ts';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
-const { ANGULAR, VUE } = clientFrameworkTypes;
+const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 
 /**
  * @private
@@ -62,11 +63,17 @@ export const generateEntityClientImports = (
   const relevantRelationships = filterRelevantRelationships(relationships);
 
   relevantRelationships.forEach(relationship => {
+    // A relationship serialized as the primary keys of the other entity needs no type of it.
+    if (relationship.relationshipSerializePrimaryKeyOnly && (clientFramework === VUE || clientFramework === REACT)) return;
     const importType = `I${relationship.otherEntity.entityAngularName}`;
     let importPath: string;
     const prefix = clientFramework === VUE ? '@' : 'app';
     const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
-    if (relationship.otherEntity?.builtInUser) {
+    if (clientFramework === VUE) {
+      // The model of an entity is next to its service.
+      const { entityFolderName, entityFileName } = relationship.otherEntity;
+      importPath = `${prefix}/entities/${entityFolderName}/${entityFileName}.model`;
+    } else if (relationship.otherEntity?.builtInUser) {
       importPath = `${prefix}/${modelPath}/user.model`;
     } else {
       importPath = `${prefix}/${modelPath}/${normalizePathEnd(relationship.otherEntity.clientRootFolder)}${relationship.otherEntity.entityFileName}.model`;
@@ -93,7 +100,7 @@ export const generateEntityClientEnumImports = (fields: BaseApplicationField[], 
     ) {
       const importType = fieldType;
       const basePath = clientFramework === VUE ? '@' : 'app';
-      const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
+      const modelPath = clientFramework === ANGULAR || clientFramework === VUE ? 'entities' : 'shared/model';
       const importPath = `${basePath}/${modelPath}/enumerations/${enumFileName}.model`;
       uniqueEnums[fieldType] = field.fieldType;
       typeImports.set(importType, importPath);
@@ -131,27 +138,10 @@ export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: 
 
 /**
  * Generate a test entity, according to the type
+ * @deprecated use generateEntitySamples of base-application
  */
-export const generateTsTestEntityForFields = (fields: ClientField[]): Record<string, string | number | boolean> => {
-  const entries = fields.flatMap(field => {
-    const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate, collection } = field;
-    let fakeData = field.generateFakeData!('ts');
-    if (collection) {
-      fakeData = fakeData === undefined ? '[]' : `[${fakeData}]`;
-    }
-    if (fieldWithContentType) {
-      return [
-        [field.propertyName, fakeData],
-        [contentTypeFieldName, "'unknown'"],
-      ];
-    }
-    if (fieldTypeTimed || fieldTypeLocalDate) {
-      return [[field.propertyName, `dayjs(${fakeData})`]];
-    }
-    return [[field.propertyName, fakeData]];
-  });
-  return Object.fromEntries(entries);
-};
+export const generateTsTestEntityForFields = (fields: ClientField[]): Record<string, string | number | boolean> =>
+  generateTsSample(fields, field => field.generateFakeData!('ts'));
 
 export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: string } = {}): string => {
   const entries = Object.entries(data);
@@ -161,26 +151,12 @@ export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: st
 
 /**
  * @private
- * @deprecated
+ * @deprecated use generateEntitySamples of base-application
  * Generate a test entity, according to the type
  */
 export const generateTestEntity = (fields: BaseApplicationField[], index: 0 | 1 | 'random' = 'random') => {
-  const entries = fields.flatMap(field => {
-    if (index === 'random') {
-      const { fieldWithContentType, contentTypeFieldName, collection } = field;
-      let fakeData = field.generateFakeData!('json-serializable');
-      if (collection) {
-        fakeData = fakeData === undefined ? [] : [fakeData];
-      }
-      if (fieldWithContentType) {
-        return [
-          [field.propertyName, fakeData],
-          [contentTypeFieldName, 'unknown'],
-        ];
-      }
-      return [[field.propertyName, fakeData]];
-    }
-    return [[field.propertyName, generateTestEntityId(field.fieldType as FieldType, index, false)]];
-  });
-  return Object.fromEntries(entries);
+  if (index === 'random') {
+    return generateJsonSample(fields, field => field.generateFakeData!('json-serializable'));
+  }
+  return Object.fromEntries(fields.map(field => [field.propertyName, generateTestEntityId(field.fieldType as FieldType, index, false)]));
 };

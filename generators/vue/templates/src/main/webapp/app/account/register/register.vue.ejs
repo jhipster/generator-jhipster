@@ -25,7 +25,7 @@
       <div class="col-md-8">
         <form id="register-form" name="registerForm" novalidate @submit.prevent="register()" v-if="!success">
           <div class="mb-3">
-            <label class="form-control-label" for="username">{{ t$('global.form[\'username.label\']') }}</label>
+            <label class="form-label" for="username">{{ t$('global.form[\'username.label\']') }}</label>
             <input
               type="text"
               class="form-control"
@@ -33,34 +33,26 @@
               id="username"
               name="login"
               :class="{ 'is-valid': !v$.registerAccount.login.$invalid, 'is-invalid': v$.registerAccount.login.$invalid }"
-              required
-              minlength="1"
-              maxlength="50"
-              pattern="^[a-zA-Z0-9!#$&'*+=?^_`{|}~.-]+@?[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
               :placeholder="t$('global.form[\'username.placeholder\']')"
               data-cy="username"
             />
             <div v-if="v$.registerAccount.login.$anyDirty && v$.registerAccount.login.$invalid">
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.login.required.$invalid"
-              >{{ t$('register.messages.validate.login.required') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.login.minLength.$invalid"
-              >{{ t$('register.messages.validate.login.minlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.login.maxLength.$invalid"
-              >{{ t$('register.messages.validate.login.maxlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.login.pattern.$invalid"
-              >{{ t$('register.messages.validate.login.pattern') }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.login.required?.$invalid">{{
+                t$('register.messages.validate.login.required')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.login.minLength?.$invalid">{{
+                t$('register.messages.validate.login.minlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.login.maxLength?.$invalid">{{
+                t$('register.messages.validate.login.maxlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.login.pattern?.$invalid">{{
+                t$('register.messages.validate.login.pattern')
+              }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="email">{{ t$('global.form[\'email.label\']') }}</label>
+            <label class="form-label" for="email">{{ t$('global.form[\'email.label\']') }}</label>
             <input
               type="email"
               class="form-control"
@@ -68,34 +60,26 @@
               name="email"
               :class="{ 'is-valid': !v$.registerAccount.email.$invalid, 'is-invalid': v$.registerAccount.email.$invalid }"
               v-model="v$.registerAccount.email.$model"
-              minlength="5"
-              maxlength="254"
-              email
-              required
               :placeholder="t$('global.form[\'email.placeholder\']')"
               data-cy="email"
             />
             <div v-if="v$.registerAccount.email.$anyDirty && v$.registerAccount.email.$invalid">
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.email.required.$invalid"
-              >{{ t$('global.messages.validate.email.required') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.email.email.$invalid"
-              >{{ t$('global.messages.validate.email.invalid') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.email.minLength.$invalid"
-              >{{ t$('global.messages.validate.email.minlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.email.maxLength.$invalid"
-              >{{ t$('global.messages.validate.email.maxlength') }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.email.required?.$invalid">{{
+                t$('global.messages.validate.email.required')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.email.email?.$invalid">{{
+                t$('global.messages.validate.email.invalid')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.email.minLength?.$invalid">{{
+                t$('global.messages.validate.email.minlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.email.maxLength?.$invalid">{{
+                t$('global.messages.validate.email.maxlength')
+              }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="firstPassword">{{ t$('global.form[\'newpassword.label\']') }}</label>
+            <label class="form-label" for="firstPassword">{{ t$('global.form[\'newpassword.label\']') }}</label>
             <input
               type="password"
               class="form-control"
@@ -103,29 +87,23 @@
               name="password"
               :class="{ 'is-valid': !v$.registerAccount.password.$invalid, 'is-invalid': v$.registerAccount.password.$invalid }"
               v-model="v$.registerAccount.password.$model"
-              minlength="4"
-              maxlength="50"
-              required
               :placeholder="t$('global.form[\'newpassword.placeholder\']')"
               data-cy="firstPassword"
             />
             <div v-if="v$.registerAccount.password.$anyDirty && v$.registerAccount.password.$invalid">
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.password.required.$invalid"
-              >{{ t$('global.messages.validate.newpassword.required') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.password.minLength.$invalid"
-              >{{ t$('global.messages.validate.newpassword.minlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.registerAccount.password.maxLength.$invalid"
-              >{{ t$('global.messages.validate.newpassword.maxlength') }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.password.required.$invalid">{{
+                t$('global.messages.validate.newpassword.required')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.password.minLength.$invalid">{{
+                t$('global.messages.validate.newpassword.minlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.registerAccount.password.maxLength.$invalid">{{
+                t$('global.messages.validate.newpassword.maxlength')
+              }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="secondPassword"
+            <label class="form-label" for="secondPassword"
               >{{ t$('global.form[\'confirmpassword.label\']') }}</label
             >
             <input
@@ -135,26 +113,22 @@
               name="confirmPasswordInput"
               :class="{ 'is-valid': !v$.confirmPassword.$invalid, 'is-invalid': v$.confirmPassword.$invalid }"
               v-model="v$.confirmPassword.$model"
-              minlength="4"
-              maxlength="50"
-              required
               :placeholder="t$('global.form[\'confirmpassword.placeholder\']')"
               data-cy="secondPassword"
             />
             <div v-if="v$.confirmPassword.$dirty && v$.confirmPassword.$invalid">
-              <small
-                class="form-text text-danger"
-                v-if="v$.confirmPassword.required.$invalid"
-              >{{ t$('global.messages.validate.confirmpassword.required') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.confirmPassword.minLength.$invalid"
-              >{{ t$('global.messages.validate.confirmpassword.minlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.confirmPassword.maxLength.$invalid"
-              >{{ t$('global.messages.validate.confirmpassword.maxlength') }}</small>
-              <small class="form-text text-danger" v-if="v$.confirmPassword.sameAsPassword">{{ t$('global.messages.error.dontmatch') }}</small>
+              <small class="form-text text-danger" v-if="v$.confirmPassword.required.$invalid">{{
+                t$('global.messages.validate.confirmpassword.required')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.confirmPassword.minLength.$invalid">{{
+                t$('global.messages.validate.confirmpassword.minlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.confirmPassword.maxLength.$invalid">{{
+                t$('global.messages.validate.confirmpassword.maxlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.confirmPassword.sameAsPassword.$invalid">{{
+                t$('global.messages.error.dontmatch')
+              }}</small>
             </div>
           </div>
 
@@ -163,7 +137,7 @@
         <p></p>
         <div class="alert alert-warning">
           <span>{{ t$('global.messages.info.authenticated.prefix') }}</span>
-          <a class="alert-link" @click="showLogin()">{{ t$('global.messages.info.authenticated.link') }}</a
+          <router-link class="alert-link" to="/login">{{ t$('global.messages.info.authenticated.link') }}</router-link
           ><span v-html="t$('global.messages.info.authenticated.suffix')"
             >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
             password="user").</span
@@ -174,4 +148,72 @@
   </div>
 </template>
 
-<script lang="ts" src="./register.component.ts"></script>
+<script setup lang="ts">
+import { computed, inject, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { useVuelidate } from '@vuelidate/core';
+import { sameAs } from '@vuelidate/validators';
+
+import { accountValidations, passwordValidations } from '@/account/account-validations';
+import RegisterService, { registerServiceKey } from '@/account/register/register.service';
+import { currentLanguageKey } from '@/config/injection-keys';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
+
+defineOptions({ name: 'Register' });
+
+const registerService = inject(registerServiceKey, () => new RegisterService(), true);
+const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const error = ref<string | null>('');
+const errorEmailExists = ref<string | null>('');
+const errorUserExists = ref<string | null>('');
+const success = ref<boolean | null>(false);
+
+const confirmPassword = ref<string | null>(null);
+const registerAccount = ref<{ login?: string; email?: string; password?: string; langKey?: string }>({
+  login: undefined,
+  email: undefined,
+  password: undefined,
+});
+
+const rules = computed(() => ({
+  registerAccount: {
+    login: accountValidations.login,
+    email: accountValidations.email,
+    password: passwordValidations,
+  },
+  confirmPassword: {
+    ...passwordValidations,
+    sameAsPassword: sameAs(registerAccount.value.password),
+  },
+}));
+const v$ = useVuelidate(rules, { registerAccount, confirmPassword });
+
+const register = (): void => {
+  error.value = null;
+  errorUserExists.value = null;
+  errorEmailExists.value = null;
+  registerAccount.value.langKey = currentLanguage.value;
+  registerService
+    .processRegistration(registerAccount.value)
+    .then(() => {
+      success.value = true;
+    })
+    .catch(error_ => {
+      success.value = null;
+      if (error_.response.status === 400 && error_.response.data.type === LOGIN_ALREADY_USED_TYPE) {
+        errorUserExists.value = 'ERROR';
+      } else if (error_.response.status === 400 && error_.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+        errorEmailExists.value = 'ERROR';
+      } else {
+        error.value = 'ERROR';
+      }
+    });
+};
+</script>

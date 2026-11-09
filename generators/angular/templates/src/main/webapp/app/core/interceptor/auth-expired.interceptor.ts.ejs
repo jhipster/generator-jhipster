@@ -19,6 +19,7 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { tap } from 'rxjs';
 
 <%_ if (authenticationTypeOauth2) { _%>
@@ -47,12 +48,12 @@ export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
           return;
         }
 <%_ } _%>
-        stateStorageService.storeUrl(router.routerState.snapshot.url);
+          stateStorageService.storeUrl(router.routerState.snapshot.url);
 <%_ if (authenticationTypeSession || authenticationTypeJwt) { _%>
-        loginService.logout();
-        void router.navigate(['/login']);
+          loginService.logout();
+          void router.navigate(['/login']);
 <%_ } else { _%>
-        authServerProvider.login();
+          authServerProvider.login();
 <%_ } _%>
         }
       },

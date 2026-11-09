@@ -76,7 +76,7 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async loadJavaDependencies({ application }) {
+      loadJavaDependencies({ application }) {
         const gradleLibsVersions = this.readTemplate(this.fetchFromInstalledJHipster('spring-cloud/resources/gradle/libs.versions.toml'));
         const applicationJavaDependencies = this.prepareDependencies(getGradleLibsVersionsProperties(gradleLibsVersions), 'java');
 

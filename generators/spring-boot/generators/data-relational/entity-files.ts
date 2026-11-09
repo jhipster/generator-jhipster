@@ -105,9 +105,7 @@ export const cleanupEntitiesTask = asWritingEntitiesTask<Entity, Application>(as
   entities,
 }) {
   if (!application.reactive) return;
-  for (const entity of entities.filter(
-    entity => !entity.builtIn && !entity.skipServer && !entity.embedded && entity.entityPersistenceLayer,
-  )) {
+  for (const entity of entities.filter(entity => !entity.skipServer && !entity.embedded && entity.entityPersistenceLayer)) {
     await control.cleanupFiles({
       '9.3.1': [
         `${application.srcMainJava}/${entity.entityAbsoluteFolder}/repository/${entity.entityClass}SqlHelper.java`,
@@ -149,8 +147,7 @@ export default asWritingEntitiesTask<Entity, Application>(async function writeEn
 
   if (application.reactive) {
     const customRepositoryEntities = entities.filter(
-      entity =>
-        !entity.skipServer && !entity.builtIn && !entity.embedded && entity.entityPersistenceLayer && !useSimpleR2dbcRepository(entity),
+      entity => !entity.skipServer && !entity.embedded && entity.entityPersistenceLayer && !useSimpleR2dbcRepository(entity),
     );
     if (customRepositoryEntities.length > 0) {
       await this.writeFiles({

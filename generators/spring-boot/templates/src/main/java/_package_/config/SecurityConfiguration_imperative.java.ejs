@@ -172,12 +172,17 @@ public class SecurityConfiguration {
 <%_ } _%>
 <%_ if (!skipClient) { _%>
             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
-            .headers(headers -> headers
-                .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
-                .frameOptions(FrameOptionsConfig::sameOrigin)
-                .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
-                .permissionsPolicyHeader(permissions ->
-                    permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")))
+            .headers(headers ->
+                headers
+                    .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
+                    .frameOptions(FrameOptionsConfig::sameOrigin)
+                    .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                    .permissionsPolicyHeader(permissions ->
+                        permissions.policy(
+                            "camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()"
+                        )
+                    )
+            )
 <%_ } _%>
             .authorizeHttpRequests(authz ->
                 // prettier-ignore
@@ -206,8 +211,10 @@ public class SecurityConfiguration {
                     .requestMatchers("/api/authenticate").permitAll()
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
                     .requestMatchers("/api/register").permitAll()
                     .requestMatchers("/api/activate").permitAll()
+  <%_ } _%>
                     .requestMatchers("/api/account/reset-password/init").permitAll()
                     .requestMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>
@@ -275,7 +282,8 @@ public class SecurityConfiguration {
                     .permitAll()
             )
             .logout(logout ->
-                logout.logoutUrl("/api/logout").logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()).permitAll());
+                logout.logoutUrl("/api/logout").logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()).permitAll()
+            );
 <%_ } else if (authenticationTypeJwt) { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling((exceptions) -> exceptions
@@ -299,9 +307,7 @@ public class SecurityConfiguration {
             })
     <%_ } _%>
   <%_ } _%>
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt
-                    .jwtAuthenticationConverter(authenticationConverter())))
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter())))
             .oauth2Client(withDefaults());
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>

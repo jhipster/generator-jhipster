@@ -236,6 +236,20 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      async composeSpringBoot({ application }) {
+        if (application.backendTypeSpringBoot) {
+          await this.composeWithJHipster('jhipster:client:spring-boot');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
+
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
@@ -450,6 +464,31 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientRootDir}webpack/webpack.custom.js`,
             `${application.clientRootDir}webpack/logo-jhipster.png`,
             [application.microfrontend, `${application.clientRootDir}webpack/webpack.microfrontend.js`],
+          ],
+          '9.5.0': [
+            `${application.clientSrcDir}app/admin/configuration/configuration.model.ts`,
+            `${application.clientSrcDir}app/admin/health/health.model.ts`,
+            `${application.clientSrcDir}app/admin/logs/log.model.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.ts`,
+            `${application.clientSrcDir}app/admin/metrics/metrics.model.ts`,
           ],
         });
       },

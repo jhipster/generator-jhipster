@@ -1,0 +1,264 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { defineComponent } from 'vue';
+import { type Router, createMemoryHistory, createRouter } from 'vue-router';
+
+import { flushPromises, mount } from '@vue/test-utils';
+
+import { type UseEntityListOptions, useEntityList } from './entity-list';
+
+const intersection = vi.hoisted(() => ({
+  callback: undefined as unknown as (entries: Partial<IntersectionObserverEntry>[]) => void,
+  observer: { isActive: { value: false }, pause: vi.fn(), resume: vi.fn() },
+}));
+
+vi.mock('@vueuse/core', () => ({
+  useIntersectionObserver(_target: unknown, callback: typeof intersection.callback) {
+    intersection.callback = callback;
+    return intersection.observer;
+  },
+}));
+
+type Item = { id: number };
+
+const response = (data?: Item[], headers: Record<string, string> = {}) => ({ data, headers }) as never;
+
+describe('useEntityList', () => {
+  let router: Router;
+
+  beforeEach(async () => {
+    router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/', component: { render: () => null } }] });
+    await router.push('/');
+    intersection.observer.isActive.value = false;
+    intersection.observer.pause.mockClear();
+    intersection.observer.resume.mockClear();
+  });
+
+  // The list of a component, mounted with the router.
+  const mountList = (options: UseEntityListOptions<Item>) => {
+    let list!: ReturnType<typeof useEntityList<Item>>;
+    const wrapper = mount(
+      defineComponent({
+        setup() {
+          list = useEntityList(options);
+          return () => null;
+        },
+      }),
+      { global: { plugins: [router] } },
+    );
+    return { list, wrapper };
+  };
+
+  describe('without pagination', () => {
+    it('should load the whole list', async () => {
+      const retrieve = vi.fn().mockResolvedValue(response([{ id: 1 }]));
+      const { list } = mountList({ retrieve });
+      await flushPromises();
+
+      expect(retrieve).toHaveBeenCalledExactlyOnceWith({ signal: expect.any(AbortSignal) });
+      expect(list.items.value).toEqual([{ id: 1 }]);
+    });
+
+    it('should search, load the same search again and clear it', async () => {
+      const retrieve = vi.fn().mockResolvedValue(response([]));
+      const search = vi.fn().mockResolvedValue(response([{ id: 2 }]));
+      const { list } = mountList({ retrieve, search });
+      await flushPromises();
+
+      list.search('text');
+      await flushPromises();
+      list.search('text');
+      await flushPromises();
+
+      expect(search).toHaveBeenCalledTimes(2);
+      expect(search).toHaveBeenLastCalledWith('text', { signal: expect.any(AbortSignal) });
+      expect({ items: list.items.value, currentSearch: list.currentSearch.value }).toEqual({ items: [{ id: 2 }], currentSearch: 'text' });
+
+      list.search('');
+      await flushPromises();
+
+      expect(list.currentSearch.value).toBe('');
+      expect(retrieve).toHaveBeenCalledTimes(2);
+    });
+
+    it('should retrieve the list when there is no search', async () => {
+      const retrieve = vi.fn().mockResolvedValue(response([]));
+      const { list } = mountList({ retrieve });
+      await flushPromises();
+
+      list.search('text');
+      await flushPromises();
+
+      expect(retrieve).toHaveBeenCalledTimes(2);
+    });
+
+    it('should reload the list', async () => {
+      const retrieve = vi.fn().mockResolvedValue(response([]));
+      const { list } = mountList({ retrieve });
+      await flushPromises();
+
+      list.reload();
+      await flushPromises();
+
+      expect(retrieve).toHaveBeenCalledTimes(2);
+    });
+
+    it('should give the error of a failed load', async () => {
+      const onError = vi.fn();
+      mountList({ retrieve: vi.fn().mockRejectedValue('error'), onError });
+      await flushPromises();
+
+      expect(onError).toHaveBeenCalledWith('error');
+    });
+  });
+
+  describe('with pagination', () => {
+    it('should load the page and the sort of the route', async () => {
+      await router.push({ query: { page: '3', sort: 'name,desc' } });
+      const retrieve = vi.fn().mockResolvedValue(response([{ id: 1 }], { 'x-total-count': '41' }));
+      const { list } = mountList({ retrieve, pagination: 'pagination' });
+      await flushPromises();
+
+      expect(retrieve).toHaveBeenCalledExactlyOnceWith({ page: 2, size: 20, sort: ['name,desc', 'id,asc'], signal: expect.any(AbortSignal) });
+      expect({
+        page: list.page.value,
+        totalItems: list.totalItems.value,
+        propOrder: list.propOrder.value,
+        reverse: list.reverse.value,
+      }).toEqual({ page: 3, totalItems: 41, propOrder: 'name', reverse: true });
+    });
+
+    it('should sort by the id when the sort of the route has no column', async () => {
+      await router.push({ query: { sort: ',desc' } });
+      const { list } = mountList({ retrieve: vi.fn().mockResolvedValue(response([])), pagination: 'pagination' });
+
+      expect({ propOrder: list.propOrder.value, reverse: list.reverse.value }).toEqual({ propOrder: 'id', reverse: false });
+    });
+
+    it('should keep the page in the route', async () => {
+      const retrieve = vi.fn().mockResolvedValue(response([]));
+      const { list } = mountList({ retrieve, pagination: 'pagination' });
+      await flushPromises();
+
+      list.page.value = 2;
+      await flushPromises();
+
+      expect(router.currentRoute.value.query).toEqual({ page: '2' });
+      expect(retrieve).toHaveBeenLastCalledWith(expect.objectContaining({ page: 1, sort: ['id,asc'] }));
+    });
+
+    it('should change the order from the first page, and reverse it', async () => {
+      const retrieve = vi.fn().mockResolvedValue(response([]));
+      const { list } = mountList({ retrieve, pagination: 'pagination' });
+      await flushPromises();
+      list.page.value = 2;
+      await flushPromises();
+
+      list.changeOrder('name');
+      await flushPromises();
+
+      expect(router.currentRoute.value.query).toEqual({ page: '1', sort: ['name,asc'] });
+
+      list.changeOrder('name');
+      await flushPromises();
+
+      expect(router.currentRoute.value.query).toEqual({ page: '1', sort: ['name,desc'] });
+      expect(retrieve).toHaveBeenLastCalledWith(expect.objectContaining({ page: 0, sort: ['name,desc', 'id,asc'] }));
+    });
+
+    it('should search from the first page', async () => {
+      const retrieve = vi.fn().mockResolvedValue(response([]));
+      const search = vi.fn().mockResolvedValue(response([]));
+      const { list } = mountList({ retrieve, search, pagination: 'pagination' });
+      await flushPromises();
+      list.page.value = 2;
+      await flushPromises();
+
+      list.search('text');
+      await flushPromises();
+      list.clear();
+      await flushPromises();
+
+      // The search starts before the route goes back to the first page: that load is aborted.
+      expect(search).toHaveBeenLastCalledWith('text', expect.objectContaining({ page: 0 }));
+      expect({ page: list.page.value, retrieve: retrieve.mock.calls.length }).toEqual({ page: 1, retrieve: 3 });
+    });
+  });
+
+  describe('with infinite scroll', () => {
+    const nextLink = { link: '<http://localhost/api?page=1&size=20>; rel="next"' };
+
+    it('should load the next page when the end of the list is visible', async () => {
+      const retrieve = vi.fn().mockResolvedValueOnce(response([{ id: 1 }], nextLink)).mockResolvedValue(response([{ id: 2 }]));
+      const { list } = mountList({ retrieve, pagination: 'infinite-scroll' });
+      await flushPromises();
+      expect(intersection.observer.resume).toHaveBeenCalled();
+      intersection.observer.isActive.value = true;
+
+      intersection.callback([{ isIntersecting: true }]);
+      await flushPromises();
+
+      expect({ page: list.page.value, items: list.items.value }).toEqual({ page: 2, items: [{ id: 1 }, { id: 2 }] });
+      expect(intersection.observer.pause).toHaveBeenCalled();
+    });
+
+    it('should not load a page while the list is fetched or the end is not visible', async () => {
+      const retrieve = vi.fn().mockResolvedValue(response());
+      const { list } = mountList({ retrieve, pagination: 'infinite-scroll' });
+
+      intersection.callback([{ isIntersecting: true }]);
+      await flushPromises();
+      intersection.callback([{ isIntersecting: false }]);
+      await flushPromises();
+
+      expect({ page: list.page.value, items: list.items.value, calls: retrieve.mock.calls.length }).toEqual({ page: 1, items: [], calls: 1 });
+      expect(intersection.observer.pause).not.toHaveBeenCalled();
+    });
+
+    it('should reload from the first page', async () => {
+      const retrieve = vi.fn().mockResolvedValue(response([{ id: 1 }], nextLink));
+      const { list } = mountList({ retrieve, pagination: 'infinite-scroll' });
+      await flushPromises();
+      list.page.value = 2;
+      await flushPromises();
+
+      list.reload();
+      await flushPromises();
+      list.reload();
+      await flushPromises();
+
+      expect({ page: list.page.value, items: list.items.value, calls: retrieve.mock.calls.length }).toEqual({ page: 1, items: [{ id: 1 }], calls: 4 });
+    });
+
+    it('should change the order from the first page', async () => {
+      const retrieve = vi.fn().mockResolvedValueOnce(response([{ id: 1 }], nextLink)).mockResolvedValue(response());
+      const { list } = mountList({ retrieve, pagination: 'infinite-scroll' });
+      await flushPromises();
+      list.page.value = 2;
+      await flushPromises();
+
+      list.changeOrder('name');
+      await flushPromises();
+
+      expect(router.currentRoute.value.query).toEqual({ sort: ['name,asc'] });
+      expect({ page: list.page.value, items: list.items.value }).toEqual({ page: 1, items: [] });
+    });
+  });
+});

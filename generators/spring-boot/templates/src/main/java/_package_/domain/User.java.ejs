@@ -193,11 +193,11 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = <%- user.fieldsByName.login.fieldValidateRulesMaxlength %>)
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("login")
 <%_ } else if (databaseTypeSql) { _%>
-    @Column(name = "login", length = 50, unique = true, nullable = false)
+    @Column(name = "login", length = <%- user.fieldsByName.login.fieldValidateRulesMaxlength %>, unique = true, nullable = false)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Indexed
@@ -220,12 +220,13 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
   <%_ if (databaseTypeNeo4j && databaseMigrationLiquibase) { _%>
     @Property("password_hash")
   <%_ } _%>
+    @NotSortable
     private String password;
 <%_ } _%>
 
-    @Size(max = 50)
+    @Size(max = <%- user.fieldsByName.firstName.fieldValidateRulesMaxlength %>)
 <%_ if (databaseTypeSql && !reactive) { _%>
-    @Column(name = "first_name", length = 50)
+    @Column(name = "first_name", length = <%- user.fieldsByName.firstName.fieldValidateRulesMaxlength %>)
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("first_name")
@@ -244,9 +245,9 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
 <%_ } _%>
     private String firstName;
 
-    @Size(max = 50)
+    @Size(max = <%- user.fieldsByName.lastName.fieldValidateRulesMaxlength %>)
 <%_ if (databaseTypeSql && !reactive) { _%>
-    @Column(name = "last_name", length = 50)
+    @Column(name = "last_name", length = <%- user.fieldsByName.lastName.fieldValidateRulesMaxlength %>)
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("last_name")
@@ -266,11 +267,11 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     private String lastName;
 
     @Email
-    @Size(min = 5, max = 254)
+    @Size(min = <%- user.fieldsByName.email.fieldValidateRulesMinlength %>, max = <%- user.fieldsByName.email.fieldValidateRulesMaxlength %>)
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("email")
 <%_ } else if (databaseTypeSql) { _%>
-    @Column(name = "email", length = 254, unique = true)
+    @Column(name = "email", length = <%- user.fieldsByName.email.fieldValidateRulesMaxlength %>, unique = true)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Indexed
@@ -325,6 +326,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
   <%_ if (databaseTypeNeo4j) { _%>
     @Property("image_url")
   <%_ } _%>
+    @NotSortable
     private String imageUrl;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -349,6 +351,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @Column("activation_key")
   <%_ } _%>
     @JsonIgnore
+    @NotSortable
     private String activationKey;
 
     @Size(max = 20)
@@ -371,6 +374,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @Column("reset_key")
   <%_ } _%>
     @JsonIgnore
+    @NotSortable
     private String resetKey;
 
   <%_ if (databaseTypeSql || databaseTypeCassandra && reactive) { _%>
@@ -382,6 +386,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
   <%_ } else if (databaseTypeNeo4j) { _%>
     @Property("reset_date")
   <%_ } _%>
+    @NotSortable
     private Instant resetDate = null;
 <%_ } _%>
 
@@ -393,8 +398,9 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @ManyToMany
     @JoinTable(
         name = "<%- user.entityTableName %>_authority",
-        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
+        joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
+        inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
+    )
   <%_ if (enableHibernateCache && cacheProviderInfinispan) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
   <%_ } else if (enableHibernateCache) { _%>

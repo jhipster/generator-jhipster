@@ -62,7 +62,7 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
-      async loadDefaults({ deployment }) {
+      loadDefaults({ deployment }) {
         defaults(deployment, removeFieldsWithNullishValues(this.jhipsterConfig));
       },
     });
@@ -74,7 +74,7 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
-      async loadDefaults({ deployment }) {
+      loadDefaults({ deployment }) {
         defaults(deployment, this.jhipsterConfigWithDefaults);
       },
       derivedProperties({ deployment }) {

@@ -79,7 +79,7 @@ type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType
 
     generateFakeDataFromPattern?: () => string | undefined;
 
-    generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts') => any;
+    generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts', options?: FakeDataOptions) => any;
 
     transient?: boolean;
     id?: boolean;
@@ -135,6 +135,14 @@ export type Field = Property &
         fieldIsEnum: false;
       }
   );
+
+/** How a field generates a value that must not repeat. */
+export type FakeDataOptions = {
+  /** The values already used, the generated one is added: `field.uniqueValue` by default. */
+  uniqueValues?: unknown[];
+  /** The value must not repeat, even if the field is not unique. */
+  unique?: boolean;
+};
 
 export const mutateField = {
   __override__: false,
@@ -317,6 +325,10 @@ type BaseApplicationAddedEntityProperties = {
   /** @experimental */
   auditableEntity?: boolean;
   builtIn?: boolean;
+  /** The server properties of the entity are fixed by its templates: the fields and relationships added to it are ignored at the backend. */
+  fixedServerProperties?: boolean;
+  /** The entity has no database changelog. */
+  skipDbChangelog?: boolean;
   builtInUser?: boolean;
   builtInUserManagement?: boolean;
   builtInAuthority?: boolean;
@@ -367,6 +379,8 @@ type BaseApplicationAddedEntityProperties = {
    */
   anyFieldHasFileBasedContentType?: boolean;
 
+  /** The relationships required to create the entity: required, or part of its id. */
+  requiredRelationships?: RelationshipWithEntity<Relationship, Entity>[];
   /**
    * Any relationship is required or id
    */

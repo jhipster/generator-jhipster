@@ -26,7 +26,9 @@ const TRANSLATE_IMPORT_1 = /import { ?[Tt]ranslate(?:, ?[Tt]ranslate)? ?} from '
 const TRANSLATE_IMPORT_2 = / *[Tt]ranslate,|, ?[Tt]ranslate/.source; // Translate import
 const TRANSLATE_IMPORT = [TRANSLATE_IMPORT_1, TRANSLATE_IMPORT_2].join('|');
 
-const TRANSLATE_FUNCTION = /translate\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{[^}]*\}))?\s*\)/g.source;
+// A closing brace inside a string, like in a pattern, does not close the interpolation.
+const TRANSLATE_FUNCTION = /translate\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{(?:[^}'"]|'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")*\}))?\s*\)/g
+  .source;
 
 const CONTENT_TYPE_ATTRIBUTE = String.raw`contentKey=(?:"(?<key>[^\"]+)"|\{[^\}]+\})\s*`;
 const INTERPOLATE_ATTRIBUTE = String.raw`interpolate=\{(?<interpolate>\{[^\}]+\})\}\s*`;
@@ -65,7 +67,7 @@ const replaceTranslationKeysWithText = (
 
     let data: Record<string, unknown> | undefined;
     if (interpolate) {
-      const interpolateMatches = interpolate.matchAll(/(?<field>[^{\s:,}]+)(?::\s*(?<value>[^,}]+))?/g);
+      const interpolateMatches = interpolate.matchAll(/(?<field>[^{\s:,}]+)(?::\s*(?<value>'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|[^,}]+))?/g);
       data = {};
       for (const interpolateMatch of interpolateMatches) {
         const field = interpolateMatch?.groups?.field;
@@ -76,8 +78,11 @@ const replaceTranslationKeysWithText = (
           // convert integer
           value = Number.parseInt(value, 10);
         } else if (/^'.*'$/.test(value) || /^".*"$/.test(value)) {
-          // extract string value
-          value = value.slice(1, -2);
+          // extract string value, the translation is written in double quotes
+          value = value.slice(1, -2).replaceAll(String.raw`\'`, "'");
+          if (wrapTranslation) {
+            value = value.replace(/(?<!\\)"/g, String.raw`\"`);
+          }
         } else {
           // wrap expression
           value = `{${value}}`;
@@ -97,7 +102,8 @@ const replaceTranslationKeysWithText = (
       // Escape specific chars
       replacement = replacement.replace(/'/g, '&apos;').replace(/"/g, '&quot;');
     }
-    body = body.replace(target, replacement);
+    // A function keeps the replacement patterns, like `$&`, of a translation as text.
+    body = body.replace(target, () => replacement);
   }
   return body;
 };

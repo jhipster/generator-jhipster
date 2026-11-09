@@ -20,12 +20,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Component, DebugElement, Type, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
 import { FaIconComponent, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { fas, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortDown, faSortUp, fas } from '@fortawesome/free-solid-svg-icons';
 
 import { SortByDirective } from './sort-by.directive';
-import { SortDirective } from './sort.directive';
 import { sortStateSignal } from './sort-state';
+import { SortDirective } from './sort.directive';
 
 @Component({
   imports: [SortDirective, SortByDirective, FaIconComponent],
@@ -37,6 +38,7 @@ import { sortStateSignal } from './sort-state';
             ID
             <fa-icon [icon]="'sort'" />
           </th>
+          <th id="without-icon" <%- jhiPrefix %>SortBy="id">Name</th>
         </tr>
       </thead>
     </table>
@@ -131,5 +133,16 @@ describe('Directive: SortByDirective', () => {
     expect(sortDirective.sort).toHaveBeenCalledTimes(2);
     expect(sortDirective.sort).toHaveBeenNthCalledWith(1, 'name');
     expect(sortDirective.sort).toHaveBeenNthCalledWith(2, 'name');
+  });
+
+  it('should not sort by a column without icon', () => {
+    const columnWithoutIcon = fixture.debugElement.query(By.css('#without-icon'));
+    const sortDirective = columnWithoutIcon.injector.get(SortDirective as Type<SortDirective>);
+    sortDirective.sort = vi.fn();
+
+    fixture.detectChanges();
+    columnWithoutIcon.triggerEventHandler('click', null);
+
+    expect(sortDirective.sort).not.toHaveBeenCalled();
   });
 });

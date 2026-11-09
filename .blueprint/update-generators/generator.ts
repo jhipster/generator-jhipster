@@ -77,7 +77,7 @@ export type { ${typesToExport.toSorted().join(', ')} } from '${typesExportSource
           );
         }
       },
-      async writeTypes() {
+      writeTypes() {
         const generators = lookupGeneratorsWithNamespace().map(({ namespace, generator }) => ({
           namespace: `jhipster:${namespace}`,
           generator: getSourceRoot(generator),

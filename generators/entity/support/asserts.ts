@@ -27,8 +27,8 @@
  * @returns {number} parsed number if valid input; <code>NaN</code> otherwise
  */
 const filterNumber = (input: any, isSigned = false, isDecimal = false) => {
-  const signed = isSigned ? '(-|+)?' : '';
-  const decimal = isDecimal ? '(.[0-9]+)?' : '';
+  const signed = isSigned ? '(-|\\+)?' : '';
+  const decimal = isDecimal ? '(\\.[0-9]+)?' : '';
   const regex = new RegExp(`^${signed}([0-9]+${decimal})$`);
 
   if (regex.test(input)) return Number(input);

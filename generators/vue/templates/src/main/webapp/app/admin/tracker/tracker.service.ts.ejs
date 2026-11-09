@@ -16,28 +16,30 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type ComputedRef, inject, ref, watch } from 'vue';
+import { type InjectionKey, type Ref, inject, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import SockJS from 'sockjs-client';
-import { map } from 'rxjs';
+
 import { RxStomp, RxStompState } from '@stomp/rx-stomp';
 import Cookies from 'js-cookie';
+import { map } from 'rxjs';
+import SockJS from 'sockjs-client';
 
+import { authenticatedKey } from '@/config/injection-keys';
 import {
-  CSRF_TOKEN_COOKIE_NAME,
-  CSRF_TOKEN_HEADER_NAME,
 <%_ if (authenticationTypeJwt) { _%>
   AUTHENTICATION_TOKEN_KEY,
 <%_ } _%>
+  CSRF_TOKEN_COOKIE_NAME,
+  CSRF_TOKEN_HEADER_NAME,
 } from '@/shared/jhipster/constants';
 import { encodeCsrfToken } from '@/shared/jhipster/encode-csrf-token';
 
 const DESTINATION_TRACKER = '/topic/tracker';
 const DESTINATION_ACTIVITY = '/topic/activity';
 
-export const useTrackerService = ({ stomp, authenticated }: { stomp?: RxStomp; authenticated?: ComputedRef<boolean> } = {}) => {
+export const useTrackerService = ({ stomp, authenticated }: { stomp?: RxStomp; authenticated?: Readonly<Ref<boolean>> } = {}) => {
   const router = useRouter();
-  authenticated = authenticated ?? inject('authenticated');
+  authenticated = authenticated ?? inject(authenticatedKey)!;
   const trackerService = new TrackerService({ stomp });
 
   router.afterEach(to => trackerService.sendActivity(to.fullPath));
@@ -58,14 +60,23 @@ export const useTrackerService = ({ stomp, authenticated }: { stomp?: RxStomp; a
         trackerService.disconnect();
       }
     },
-    { immediate: true }
+    { immediate: true },
   );
   return trackerService;
 };
 
+/** An activity of a user, sent by the tracker. */
+export interface TrackerActivity {
+  sessionId: string;
+  userLogin: string;
+  ipAddress: string;
+  page: string;
+  time: string;
+}
+
 export default class TrackerService {
   status = ref<'open' | 'connecting' | 'closing' | 'closed'>('closed');
-  private rxStomp: RxStomp;
+  private rxStomp!: RxStomp;
 
   constructor({ stomp }: { stomp?: RxStomp }) {
     this.stomp = stomp ?? new RxStomp();
@@ -78,9 +89,8 @@ export default class TrackerService {
   set stomp(rxStomp) {
     this.rxStomp = rxStomp;
     this.rxStomp.configure({
-      debug: (msg: string): void => {
-        console.log(new Date(), msg);
-      },
+      // eslint-disable-next-line no-console
+      debug: (msg: string): void => console.log(new Date(), msg),
     });
 
     this.rxStomp.connectionState$.subscribe(state => {
@@ -151,10 +161,12 @@ export default class TrackerService {
     });
   }
 
-  subscribe(observer) {
+  subscribe(observer: (activity: TrackerActivity) => void) {
     return this.rxStomp
       .watch(DESTINATION_TRACKER)
-      .pipe(map(imessage => JSON.parse(imessage.body)))
+      .pipe(map(imessage => JSON.parse(imessage.body) as TrackerActivity))
       .subscribe(observer);
   }
 }
+
+export const trackerServiceKey: InjectionKey<TrackerService> = Symbol.for('jhipster:trackerService');

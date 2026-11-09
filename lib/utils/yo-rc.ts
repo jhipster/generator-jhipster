@@ -23,13 +23,12 @@ import { join } from 'node:path';
 import mergeWith from 'lodash-es/mergeWith.js';
 import type { Merge } from 'type-fest';
 
+import { GENERATOR_JHIPSTER } from '../constants/jhipster.ts';
 import { YO_RC_FILE, type YoRcConfigValue, type YoRcFileContent } from '../constants/yeoman.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { YoRcJHipsterContent } from '../jhipster/types/yo-rc.ts';
 
 import { upperFirst } from './string-utils.ts';
-
-export const YO_RC_CONFIG_KEY = 'generator-jhipster';
 
 type ConfigWithCreationTimestamp = {
   creationTimestamp?: number;
@@ -49,10 +48,10 @@ export const mergeYoRcContent = <const OldConfig extends YoRcFileContent, const 
   oldConfig: OldConfig,
   newConfig: NewConfig,
 ): Merge<OldConfig, NewConfig> => {
-  const merged: YoRcFileContent = { [YO_RC_CONFIG_KEY]: {}, ...mergeConfigContent(oldConfig, newConfig) };
-  if ((oldConfig[YO_RC_CONFIG_KEY] as ConfigWithCreationTimestamp)?.creationTimestamp) {
-    (merged[YO_RC_CONFIG_KEY] as ConfigWithCreationTimestamp).creationTimestamp = (
-      oldConfig[YO_RC_CONFIG_KEY] as ConfigWithCreationTimestamp
+  const merged: YoRcFileContent = { [GENERATOR_JHIPSTER]: {}, ...mergeConfigContent(oldConfig, newConfig) };
+  if ((oldConfig[GENERATOR_JHIPSTER] as ConfigWithCreationTimestamp)?.creationTimestamp) {
+    (merged[GENERATOR_JHIPSTER] as ConfigWithCreationTimestamp).creationTimestamp = (
+      oldConfig[GENERATOR_JHIPSTER] as ConfigWithCreationTimestamp
     ).creationTimestamp;
   }
   return merged as Merge<OldConfig, NewConfig>;

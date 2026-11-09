@@ -25,17 +25,15 @@
 
       <span>{{ t$('logs.filter') }}</span> <input type="text" v-model="filtered" class="form-control" />
 
-      <table class="table table-sm table-striped table-bordered" aria-describedby="Logs">
+      <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
         <thead>
           <tr title="click to order">
-            <th @click="changeOrder('name')" scope="col">
+            <jhi-sort-header field-name="name" :current-order="orderProp" :reverse="reverse" @sort="changeOrder">
               <span>{{ t$('logs.table.name') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="name"></jhi-sort-indicator>
-            </th>
-            <th @click="changeOrder('level')" scope="col">
+            </jhi-sort-header>
+            <jhi-sort-header field-name="level" :current-order="orderProp" :reverse="reverse" @sort="changeOrder">
               <span>{{ t$('logs.table.level') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="level"></jhi-sort-indicator>
-            </th>
+            </jhi-sort-header>
           </tr>
         </thead>
         <tbody>
@@ -72,4 +70,52 @@
   </div>
 </template>
 
-<script lang="ts" src="./logs.component.ts"></script>
+<script setup lang="ts">
+import { computed, inject, onMounted, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { orderAndFilterBy } from '@/utils';
+import { type Level, type Log } from '@/shared/jhipster/logs.model';
+
+import LogsService, { logsServiceKey } from './logs.service';
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>Logs' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+const logsService = inject(logsServiceKey, () => new LogsService(), true);
+
+const loggers = ref<Log[]>([]);
+const filtered = ref('');
+const orderProp = ref('name');
+const reverse = ref(false);
+const filteredLoggers = computed(() =>
+  orderAndFilterBy(loggers.value, {
+    filterByTerm: filtered.value,
+    orderByProp: orderProp.value,
+    reverse: reverse.value,
+  }),
+);
+
+const init = (): void => {
+  logsService.findAll().then(found => {
+    loggers.value = found;
+  });
+};
+const updateLevel = (name: string, level: Level): void => {
+  logsService.changeLevel(name, level).then(() => {
+    init();
+  });
+};
+const changeOrder = (prop: string): void => {
+  orderProp.value = prop;
+  reverse.value = !reverse.value;
+};
+
+onMounted(() => {
+  init();
+});
+</script>

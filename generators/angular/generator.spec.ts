@@ -39,39 +39,19 @@ const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/admin/configuration/configuration.html`,
   `${clientSrcDir}app/admin/configuration/configuration.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.service.ts`,
-  `${clientSrcDir}app/admin/configuration/configuration.model.ts`,
   `${clientSrcDir}app/admin/health/modal/health-modal.html`,
   `${clientSrcDir}app/admin/health/modal/health-modal.ts`,
   `${clientSrcDir}app/admin/health/health.html`,
   `${clientSrcDir}app/admin/health/health.ts`,
   `${clientSrcDir}app/admin/health/health.service.ts`,
-  `${clientSrcDir}app/admin/health/health.model.ts`,
-  `${clientSrcDir}app/admin/logs/log.model.ts`,
   `${clientSrcDir}app/admin/logs/logs.html`,
   `${clientSrcDir}app/admin/logs/logs.ts`,
   `${clientSrcDir}app/admin/logs/logs.service.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.html`,
+  `${clientSrcDir}app/admin/metrics/metrics-details-modal.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics-details-modal.html`,
   `${clientSrcDir}app/admin/metrics/metrics.html`,
   `${clientSrcDir}app/admin/metrics/metrics.ts`,
   `${clientSrcDir}app/admin/metrics/metrics.service.ts`,
-  `${clientSrcDir}app/admin/metrics/metrics.model.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.spec.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.service.spec.ts`,
   `${clientSrcDir}app/admin/health/modal/health-modal.spec.ts`,
@@ -86,6 +66,26 @@ const clientAdminFiles = (clientSrcDir: string) => [
 describe(`generator - ${clientFramework}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('backend type', () => {
+    const run = (config: Record<string, unknown>) =>
+      helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withJHipsterConfig({ clientFramework, ...config });
+
+    it('should compose with client:spring-boot for Spring Boot', async () => {
+      await run({});
+      expect(runResult.getComposedGenerators()).toContain('jhipster:client:spring-boot');
+    });
+
+    it('should not compose with client:spring-boot for another backend', async () => {
+      await run({ backendType: 'Other' });
+      expect(runResult.getComposedGenerators()).not.toContain('jhipster:client:spring-boot');
+    });
+  });
 
   checkEnforcements({ client: true }, generator);
 
@@ -225,6 +225,25 @@ describe(`generator - ${clientFramework}`, () => {
         runResult.assertJHipsterConfigContent({
           clientBundler: undefined,
         });
+      });
+    });
+  });
+
+  describe('service worker', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ clientFramework })
+        .withSharedApplication({ getWebappTranslation: () => 'translated-value' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should build the service worker that app.config.ts can enable', () => {
+      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/app.config.ts`, "provideServiceWorker('ngsw-worker.js'");
+      runResult.assertFile('ngsw-config.json');
+      runResult.assertJsonFileContent('angular.json', {
+        projects: { jhipster: { architect: { build: { configurations: { production: { serviceWorker: 'ngsw-config.json' } } } } } },
       });
     });
   });

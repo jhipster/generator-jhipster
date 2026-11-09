@@ -16,15 +16,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { fileURLToPath, URL } from 'node:url';
 import path from 'node:path';
+import { URL, fileURLToPath } from 'node:url';
 
-import { defineConfig, normalizePath } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ if (microfrontend && clientBundlerVite) { _%>
 import { federation } from '@module-federation/vite';
+<%_ } _%>
+import vue from '@vitejs/plugin-vue';
+import { defineConfig, normalizePath } from 'vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
+<%_ if (enableTranslation) { _%>
+import { i18nVitePlugin } from './build-plugins/i18n.ts';
+<%_ } _%>
+<%_ if (microfrontend && clientBundlerVite) { _%>
 import federationConfig from './module-federation.config.ts';
 <%_ } _%>
 
@@ -35,6 +40,9 @@ const webappDir = fileURLToPath(new URL('./<%- relativeDir(clientRootDir, client
 const config = defineConfig({
   plugins: [
     vue(),
+<%_ if (enableTranslation) { _%>
+    i18nVitePlugin(),
+<%_ } _%>
     viteStaticCopy({
       targets: [
         {
@@ -82,13 +90,11 @@ const config = defineConfig({
   },
   resolve: {
     tsconfigPaths: true,
-    alias: {
-      vue: 'vue/dist/vue.esm-bundler.js',
-    },
   },
   define: {
-    SERVER_API_URL: '"/"',
-    APP_VERSION: `"${process.env.APP_VERSION ? process.env.APP_VERSION : 'DEV'}"`,
+    SERVER_API_URL: '""',
+    // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
+    VERSION: JSON.stringify(process.env.APP_VERSION || 'DEV'),
   },
   server: {
     host: true,

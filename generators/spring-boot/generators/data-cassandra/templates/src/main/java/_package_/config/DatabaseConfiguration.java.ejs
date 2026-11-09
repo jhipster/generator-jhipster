@@ -64,16 +64,19 @@ public class DatabaseConfiguration {
      */
     @Bean
     @ConditionalOnProperty(name = "application.cassandra.create-keyspace", havingValue = "true", matchIfMissing = true)
-    public CqlSessionBuilderCustomizer keyspaceCreator(CassandraProperties cassandraProperties, ApplicationProperties applicationProperties) {
+    public CqlSessionBuilderCustomizer keyspaceCreator(
+        CassandraProperties cassandraProperties,
+        ApplicationProperties applicationProperties
+    ) {
         return builder -> {
             String keyspaceName = cassandraProperties.getKeyspaceName();
             try (CqlSession session = builder.withKeyspace((CqlIdentifier) null).build()) {
                 session.execute(
                     SimpleStatement.newInstance(
                         "CREATE KEYSPACE IF NOT EXISTS " +
-                        keyspaceName +
-                        " WITH replication = " +
-                        applicationProperties.getCassandra().getKeyspaceReplication()
+                            keyspaceName +
+                            " WITH replication = " +
+                            applicationProperties.getCassandra().getKeyspaceReplication()
                     ).setTimeout(Duration.ofSeconds(KEYSPACE_CREATION_TIMEOUT_SECONDS))
                 );
             }

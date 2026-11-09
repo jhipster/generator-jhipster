@@ -20,17 +20,17 @@
     const requiresRestTypeConversion = anyFieldIsDateDerived || builtInUserManagement;
     const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
 _%>
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 
 <%_ if (anyFieldIsLocalDate) { _%>
 import { DATE_FORMAT } from 'app/config';
 <%_ } _%>
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
-import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../<%- entityFileName %>.test-samples';
+import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../<%- entityFileName %>.test-samples';
 
-import { <%- entityAngularName %>Service<% if (requiresRestTypeConversion) { %>, <%- entityRestName %><% } %> } from './<%- entityFileName %>.service';
+import { <%- entityAngularName %>Service, <%- entityAngularNamePlural %>Service<% if (requiresRestTypeConversion) { %>, <%- entityRestName %><% } %> } from './<%- entityFileName %>.service';
 
 const requireRestSample: <% if (requiresRestTypeConversion) { %><%- entityRestName %><% } else { %>I<%- entityAngularName %><% } %> = {
   ...sampleWithRequiredData,
@@ -111,6 +111,21 @@ describe('<%- entityAngularName %> Service', () => {
             req.flush(returnedFromService);
             expect(expectedResult).toMatchObject(expected);
         });
+  <%_ const dateFields = fields.filter(field => field.fieldTypeTimed || field.fieldTypeLocalDate); _%>
+  <%_ if (dateFields.length > 0) { _%>
+
+        it('should send null for the dates a partial update does not have', () => {
+            service.partialUpdate({ <%- primaryKey.name %>: sampleWithRequiredData.<%- primaryKey.name %> }).subscribe();
+
+            const req = httpMock.expectOne({ method: 'PATCH' });
+            expect(req.request.body).toMatchObject({
+    <%_ for (const field of dateFields) { _%>
+                <%- field.fieldName %>: null,
+    <%_ } _%>
+            });
+            req.flush(requireRestSample);
+        });
+  <%_ } _%>
 <%_ } _%>
 
         it('should return a list of <%- entityAngularName %>', () => {
@@ -124,6 +139,16 @@ describe('<%- entityAngularName %> Service', () => {
             req.flush([returnedFromService]);
             expect(expectedResult).toMatchObject([expected]);
         });
+<%_ if (requiresRestTypeConversion) { _%>
+
+        it('should return an empty list of <%- entityAngularName %>', () => {
+            let body: I<%- entityAngularName %>[] | null | undefined;
+            service.query().subscribe(resp => body = resp.body);
+
+            httpMock.expectOne({ method: 'GET' }).flush(null);
+            expect(body).toBeNull();
+        });
+<%_ } _%>
 
 <%_ if (!readOnly) { _%>
         it('should delete a <%- entityAngularName %>', () => {
@@ -242,6 +267,21 @@ describe('<%- entityAngularName %> Service', () => {
 
                 expect(compareResult1).toEqual(true);
                 expect(compareResult2).toEqual(true);
+            });
+        });
+    });
+
+    describe('<%- entityAngularNamePlural %>Service', () => {
+        it('should list the <%- entityInstancePlural %> of the params', async () => {
+            const <%- entityInstancePlural %>Service = TestBed.inject(<%- entityAngularNamePlural %>Service);
+            <%- entityInstancePlural %>Service.<%- entityInstancePlural %>Params.set({ page: 0 });
+            TestBed.tick();
+
+            httpMock.expectOne({ method: 'GET' }).flush([requireRestSample]);
+
+            await vi.waitFor(() => {
+                TestBed.tick();
+                expect(<%- entityInstancePlural %>Service.<%- entityInstancePlural %>()).toMatchObject([sampleWithRequiredData]);
             });
         });
     });
