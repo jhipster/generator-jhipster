@@ -2,7 +2,7 @@
   "devDependencies": {
     "concurrently": "10.0.6",
     "npm": "12.2.1",
-    "pnpm": "12.17.0",
+    "pnpm": "12.18.0",
     "wait-on": "9.5.1"
   },
   "packageManager": "npm@12"
