@@ -26,23 +26,24 @@ import { jsRules } from './base.ts';
 
 export { jsRules };
 
-export type TemplatesConfigOptions = {
-  /** The globals the templates use besides the ones of the template data, like the helpers a generator adds. */
-  allowedGlobals?: string[];
+export type EjsTemplatesConfigOptions = Parameters<typeof ejs.configs.customize>[0] & {
+  /** Rules added to the ones of JHipster, overriding them. */
+  rules?: NonNullable<Config['rules']>;
 };
 
 /**
  * Config of the EJS templates, the one generator-jhipster lints its own templates with, for blueprints to lint theirs.
+ * Takes the options of the customize config of eslint-plugin-ejs-templates, with the defaults of JHipster, and rules.
  * Needs the optional peer dependencies eslint-plugin-ejs-templates and @stylistic/eslint-plugin.
  */
-export const templates = ({ allowedGlobals = [] }: TemplatesConfigOptions = {}): Config[] =>
+export const ejsTemplates = ({ rules, ...options }: EjsTemplatesConfigOptions = {}): Config[] =>
   ejs.configs.customize(
     {
       html: 'never',
       prettierBlocklist: true,
       stylisticBlocklist: true,
       experimental: true,
-      allowedGlobals,
+      ...options,
     },
     js.configs.recommended,
     stylistic.configs.customize({
@@ -59,8 +60,9 @@ export const templates = ({ allowedGlobals = [] }: TemplatesConfigOptions = {}):
         '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
         '@stylistic/comma-dangle': ['error', 'always-multiline'],
         '@stylistic/no-mixed-operators': 'off',
+        ...rules,
       },
     },
   );
 
-export default templates;
+export default ejsTemplates;

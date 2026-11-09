@@ -53,9 +53,9 @@
       "types": "./dist/lib/eslint/recommended.d.ts",
       "default": "./dist/lib/eslint/recommended.js"
     },
-    "./eslint/templates": {
-      "types": "./dist/lib/eslint/templates.d.ts",
-      "default": "./dist/lib/eslint/templates.js"
+    "./eslint/ejs-templates": {
+      "types": "./dist/lib/eslint/ejs-templates.d.ts",
+      "default": "./dist/lib/eslint/ejs-templates.js"
     },
     "./eslint": {
       "types": "./dist/lib/eslint/index.d.ts",

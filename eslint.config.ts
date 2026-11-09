@@ -8,8 +8,8 @@ import globals from 'globals';
 import ts from 'typescript-eslint';
 
 import { ECMASCRIPT_VERSION } from './lib/constants/jhipster.ts';
+import { ejsTemplates } from './lib/eslint/ejs-templates.ts';
 import jhipster, { plugin as jhipsterPlugin } from './lib/eslint/index.ts';
-import { templates } from './lib/eslint/templates.ts';
 
 const tsFiles = ['**/*.{ts,mts,cts}'];
 const jsFiles = ['**/*.{js,cjs,mjs}'];
@@ -157,5 +157,5 @@ export default defineConfig(
     },
   },
   prettier,
-  templates({ allowedGlobals: ['wrapMono', 'relativeDir'] }),
+  ejsTemplates({ allowedGlobals: ['wrapMono', 'relativeDir'] }),
 );
