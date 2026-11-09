@@ -3,9 +3,10 @@
   "exclude": [],
   "compilerOptions": {
     "composite": true,
-    // The declarations of some libraries import packages the app does not install,
-    // like @module-federation/sdk importing webpack, so they are not checked.
+<%_ if (microfrontend) { _%>
+    // The declarations of @module-federation/sdk import webpack, which the app does not install, so they are not checked.
     "skipLibCheck": true,
+<%_ } _%>
     "tsBuildInfoFile": "./<%- relativeDir(clientRootDir, temporaryDir) %>tsconfig.vitest.tsbuildinfo",
     "types": ["node"]
   }
