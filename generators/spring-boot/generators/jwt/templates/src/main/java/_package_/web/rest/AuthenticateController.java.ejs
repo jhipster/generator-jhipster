@@ -22,6 +22,7 @@ import static <%- packageName %>.security.SecurityUtils.AUTHORITIES_CLAIM;
 import static <%- packageName %>.security.SecurityUtils.JWT_ALGORITHM;
 import static <%- packageName %>.security.SecurityUtils.USER_ID_CLAIM;
 
+import <%- packageName %>.security.SecurityUtils;
 import <%- packageName %>.web.rest.vm.LoginVM;
 import <%- packageName %>.security.DomainUserDetailsService.UserWithId;
 
@@ -39,7 +40,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -127,7 +127,7 @@ public class AuthenticateController {
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
-        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+        String authorities = SecurityUtils.getUserAuthorities(authentication).collect(Collectors.joining(" "));
 
         var now = Instant.now();
         Instant validity;

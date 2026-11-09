@@ -65,8 +65,10 @@ import org.springframework.scheduling.annotation.Scheduled;
   <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (databaseTypeNo) { _%>
+import <%- packageName %>.security.SecurityUtils;
+  <%_ } _%>
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 <%_ } else { _%>
@@ -777,8 +779,7 @@ public class UserService {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }
         <%- databaseTypeNo ? user.adminUserDto : user.persistClass %> user = getUser(attributes);
-        user.setAuthorities(authToken.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
+        user.setAuthorities(SecurityUtils.getUserAuthorities(authToken)
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
             .map(authority -> {
                 Authority auth = new Authority();
