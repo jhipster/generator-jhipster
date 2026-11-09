@@ -271,26 +271,6 @@ describe('utils - object', () => {
       });
     });
 
-    describe('with a delayed override of a property already set', () => {
-      const mutatedData: { list: string[]; prop: string } = createDelayedMutationContext({ autoDelay: true });
-
-      before(() => {
-        mutatedData.list = ['first'];
-        mutatedData.prop = 'set';
-        mutateData(mutatedData, {
-          __override__: false,
-          list: overrideMutateDataProperty(({ list, prop }: { list: string[]; prop: string }) => [...list, prop], { delayed: true }),
-        });
-        mutatedData.list.push('second');
-      });
-
-      it('should wait for finalizeMutations, even if what it reads is set', () => {
-        expect(mutatedData.list).toEqual(['first', 'second']);
-        finalizeMutations(mutatedData);
-        expect(mutatedData.list).toEqual(['first', 'second', 'set']);
-      });
-    });
-
     describe('with auto-delayed mutations disabled', () => {
       const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({ autoDelay: false });
 

@@ -36,9 +36,23 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
     }
   }
 
+  get loading() {
+    return this.asLoadingTaskGroup({
+      prettierFolders({ application }) {
+        if (application.prettierFolders && !application.prettierFolders.includes('src/**/')) {
+          application.prettierFolders.push('src/**/');
+        }
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
-      preparing({ application, applicationDefaults }) {
+      preparing({ applicationDefaults }) {
         applicationDefaults(
           {
             __override__: false,
@@ -51,9 +65,6 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
           },
           mutateApplicationPreparing,
         );
-        if (application.prettierFolders && !application.prettierFolders.includes('src/**/')) {
-          application.prettierFolders.push('src/**/');
-        }
       },
     });
   }

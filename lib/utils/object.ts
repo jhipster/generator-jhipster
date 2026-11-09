@@ -124,18 +124,9 @@ type MutationContextOptions = {
 };
 type ContextWithMutationOptions<T extends object = object> = T & { [MUTATION_CONTEXT_SYMBOL]: MutationContextOptions };
 
-/**
- * Marks a mutation to override the value of the property. In a mutation context, it can wait for a property it reads even if
- * the property it overrides has a value. With `delayed`, it is computed by `finalizeMutations`, like `finalizeDefault`,
- * over what was set meanwhile.
- */
-export const overrideMutateDataProperty = <const T extends MutateDataFunction>(
-  fn: T,
-  { delayed = false }: { delayed?: boolean } = {},
-): T => {
-  const mutation = (delayed ? (data: any, opts: any) => opts.delayMarker ?? fn(data, opts) : fn) as T;
-  mutation[OverrideMutation] = true;
-  return mutation;
+export const overrideMutateDataProperty = <const T extends MutateDataFunction>(fn: T): T => {
+  fn[OverrideMutation] = true;
+  return fn;
 };
 
 export const dontOverrideMutateDataProperty = <const T extends MutateDataFunction>(fn: T): T => {

@@ -69,17 +69,14 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
       },
       prettierFolders({ applicationDefaults }) {
         applicationDefaults({
-          // Computed at the end, with clientSrcDir and the folders of every bootstrap.
-          // A folder formatted recursively may hold it already, like the 'src/**/' of java:bootstrap.
-          prettierFolders: overrideMutateDataProperty(
-            ({ clientFrameworkAny, clientSrcDir, prettierFolders }: ClientApplication) =>
-              (
-                clientFrameworkAny &&
-                !prettierFolders.some(folder => folder.endsWith('**/') && clientSrcDir.startsWith(folder.slice(0, -'**/'.length)))
-              ) ?
-                [...prettierFolders, `${clientSrcDir}**/`]
-              : prettierFolders,
-            { delayed: true },
+          // Waits for clientSrcDir. A folder formatted recursively may hold it already, like the 'src/**/' of java:bootstrap.
+          prettierFolders: overrideMutateDataProperty(({ clientFrameworkAny, clientSrcDir, prettierFolders }: ClientApplication) =>
+            (
+              clientFrameworkAny &&
+              !prettierFolders.some(folder => folder.endsWith('**/') && clientSrcDir.startsWith(folder.slice(0, -'**/'.length)))
+            ) ?
+              [...prettierFolders, `${clientSrcDir}**/`]
+            : prettierFolders,
           ),
         });
       },
