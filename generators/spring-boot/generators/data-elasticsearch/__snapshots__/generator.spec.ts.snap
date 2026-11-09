@@ -4087,6 +4087,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/domain/MicroserviceEntityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/PersistentTokenTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/SimpleEntityAsserts.java": {
     "stateCleared": "modified",
   },
