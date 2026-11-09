@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'expect-node';
+import { before, describe, expect, it } from 'expect-node';
 
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.ts';
@@ -119,6 +119,52 @@ const entityNameUpdate = () => import('@/entities/entityFolderName/entityFileNam
   });
 
   it('menu contains the item in service', () => {
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.vue`,
+      'provide(entityInstanceServiceKey, () => new entityNameService());',
+    );
+  });
+
+  it('imports provide once', () => {
+    const content = runResult.fs.read(`${runResult.cwd}/${CLIENT_MAIN_SRC_DIR}app/entities/entities.vue`);
+    expect(content.match(/import \{ provide \} from 'vue';/g)).toHaveLength(1);
+  });
+});
+
+describe('needle API Vue: entities added to an application without entities services', () => {
+  before(() =>
+    helpers
+      .runJHipster('vue')
+      .withJHipsterConfig({
+        clientFramework: 'vue',
+        skipServer: true,
+        skipUserManagement: true,
+        enableTranslation: false,
+      })
+      .withTask(
+        'postWriting',
+        asPostWritingTask<ClientEntity, ClientApplication>(function ({ application, source }) {
+          source.addEntitiesToClient({
+            application,
+            entities: [
+              {
+                entityInstance: 'entityInstance',
+                entityAngularName: 'entityName',
+                entityFolderName: 'entityFolderName',
+                entityFileName: 'entityFileName',
+                entityUrl: 'entityUrl',
+                microserviceName: 'microserviceName',
+                entityPage: 'routerName',
+                entityNameHumanized: 'Router Name',
+              } as ClientEntity,
+            ],
+          });
+        }),
+      ),
+  );
+
+  it('adds the provide import with the service', () => {
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/entities.vue`, "import { provide } from 'vue';");
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/entities/entities.vue`,
       'provide(entityInstanceServiceKey, () => new entityNameService());',
