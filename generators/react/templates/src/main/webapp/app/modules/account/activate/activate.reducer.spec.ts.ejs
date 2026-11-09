@@ -32,7 +32,7 @@ describe('Activate reducer tests', () => {
   });
 
   it('should reset', () => {
-    expect(activate({ activationSuccess: true, activationFailure: false }, reset)).toMatchObject({
+    expect(activate({ activationSuccess: true, activationFailure: false }, reset())).toMatchObject({
       activationSuccess: false,
       activationFailure: false,
     });
@@ -64,7 +64,7 @@ describe('Activate reducer tests', () => {
       activationSuccess: false,
       activationFailure: false,
     };
-    expect(activate({ activationSuccess: true, activationFailure: true }, reset)).toEqual({
+    expect(activate({ activationSuccess: true, activationFailure: true }, reset())).toEqual({
       ...initialState,
     });
   });

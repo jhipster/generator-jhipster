@@ -42,13 +42,13 @@ const gauge = { percent: 50, text: '50%', status: 'success' as const };
 const sections: MetricsSection[] = [
   {
     id: 'jvm',
-    label: { text: 'JVM', translationKey: 'known' },
+    label: { text: 'JVM'<%- enableTranslation ? ", translationKey: 'known'" : '' %> },
     blocks: [
       {
         label: { text: 'Memory' },
         items: [
           { label: { text: 'Heap' }, value: '1 MB', note: 'of 2 MB', gauge },
-          { label: { text: 'Classes', translationKey: 'unknown' }, value: '10' },
+          { label: { text: 'Classes'<%- enableTranslation ? ", translationKey: 'unknown'" : '' %> }, value: '10' },
         ],
         details: {
           label: { text: 'Threads' },

@@ -37,7 +37,7 @@ const initialState = {
   errorMessage: null as string | null,
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   gateway: {
-    routes: [],
+    routes: [] as any[],
   },
 <%_ } _%>
 <%_ if (withAdminUi) { _%>

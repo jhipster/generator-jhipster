@@ -96,9 +96,10 @@
 <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
 <%_ } _%>
-    "pretest": "<%- nodePackageManager %> run lint",
+    "pretest": "<%- nodePackageManager %> run lint && <%- nodePackageManager %> run type-check",
     "test": "<%- nodePackageManager %> run vitest-run --",
     "test:watch": "<%- nodePackageManager %> run vitest --",
+    "type-check": "tsc --noEmit -p tsconfig.vitest.json",
     "vitest": "vitest",
     "vitest-run": "vitest run --coverage",
     "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev --",
