@@ -118,4 +118,14 @@ const changeOrder = (prop: string): void => {
 onMounted(() => {
   init();
 });
+
+defineExpose({
+  filtered,
+  filteredLoggers,
+  orderProp,
+  reverse,
+  changeOrder,
+  init,
+  updateLevel,
+});
 </script>

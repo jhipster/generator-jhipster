@@ -53,4 +53,10 @@ if (route.meta) {
     <%- authenticationTypeOauth2 ? 'login()' : "router.push('/login')" %>;
   }
 }
+
+defineExpose({
+  errorMessage,
+  error403,
+  error404,
+});
 </script>

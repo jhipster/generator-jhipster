@@ -44,9 +44,9 @@ describe('Axios interceptor', () => {
     const result = setupAxiosConfig.onRequestSuccess({});
 
 <%_ if (authenticationTypeJwt) { _%>
-    expect(result.headers.Authorization).toBe('Bearer auth');
+    expect(result.headers?.Authorization).toBe('Bearer auth');
 <%_ } _%>
-    expect(result.url.indexOf(SERVER_API_URL)).toBeGreaterThan(-1);
+    expect(result.url).toContain(SERVER_API_URL);
   });
 
   it('should use sessionStorage to provide bearer', () => {
@@ -56,9 +56,9 @@ describe('Axios interceptor', () => {
     const result = setupAxiosConfig.onRequestSuccess({});
 
 <%_ if (authenticationTypeJwt) { _%>
-    expect(result.headers.Authorization).toBe('Bearer auth');
+    expect(result.headers?.Authorization).toBe('Bearer auth');
 <%_ } _%>
-    expect(result.url.indexOf(SERVER_API_URL)).toBeGreaterThan(-1);
+    expect(result.url).toContain(SERVER_API_URL);
   });
 <%_ if (authenticationTypeJwt) { _%>
 

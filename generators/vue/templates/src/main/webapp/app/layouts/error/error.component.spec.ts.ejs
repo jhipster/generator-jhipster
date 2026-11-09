@@ -23,6 +23,7 @@ import { type RouteLocation } from 'vue-router';
 import { type ComponentMountingOptions, shallowMount } from '@vue/test-utils';
 
 <%_ if (authenticationTypeOauth2) { _%>
+import type LoginService from '@/account/login.service';
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
 import { authenticatedKey } from '@/config/injection-keys';
@@ -51,7 +52,7 @@ describe('Error component', () => {
   let loginService: LoginService;
 <%_ } _%>
   let authenticated: Ref<boolean>;
-  let mountOptions: ComponentMountingOptions<ErrorComponentType>;
+  let mountOptions: ComponentMountingOptions<typeof Error>;
 
   beforeEach(() => {
     route = {};
