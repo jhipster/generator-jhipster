@@ -3367,6 +3367,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/PersistentTokenTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/SimpleEntityAsserts.java": {
     "stateCleared": "modified",
   },

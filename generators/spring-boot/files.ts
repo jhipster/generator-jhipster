@@ -251,6 +251,12 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       templates: ['security/PersistentTokenRememberMeServices.java', 'domain/PersistentToken.java'],
     },
     {
+      condition: generator => generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['domain/PersistentTokenTest.java'],
+    },
+    {
       condition: generator =>
         generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive && !generator.databaseTypeCouchbase,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,

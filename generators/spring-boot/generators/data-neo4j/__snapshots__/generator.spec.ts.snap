@@ -3538,6 +3538,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/domain/AuthorityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/PersistentTokenTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/SimpleEntityAsserts.java": {
     "stateCleared": "modified",
   },

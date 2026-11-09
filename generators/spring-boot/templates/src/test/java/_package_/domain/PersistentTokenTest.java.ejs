@@ -1,0 +1,102 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.domain;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+<%_ if (databaseTypeCassandra) { _%>
+import java.time.Instant;
+<%_ } else { _%>
+import java.time.LocalDate;
+<%_ } _%>
+import org.junit.jupiter.api.Test;
+
+class PersistentTokenTest {
+
+    @Test
+    void shouldKeepTheValues() {
+        PersistentToken token = new PersistentToken();
+<%_ if (databaseTypeCassandra) { _%>
+        Instant tokenDate = Instant.parse("2017-03-28T15:25:57.123Z");
+<%_ } else { _%>
+        LocalDate tokenDate = LocalDate.of(2017, 3, 23);
+<%_ } _%>
+        token.setSeries("series");
+        token.setTokenValue("token-value");
+        token.setTokenDate(tokenDate);
+        token.setIpAddress("127.0.0.1");
+        token.setUserAgent("Test agent");
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
+        token.setUser(user);
+<%_ } else { _%>
+        token.setLogin("login");
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+        token.setUserId("user-id");
+<%_ } _%>
+
+        assertThat(token.getSeries()).isEqualTo("series");
+        assertThat(token.getTokenValue()).isEqualTo("token-value");
+        assertThat(token.getTokenDate()).isEqualTo(tokenDate);
+        assertThat(token.getIpAddress()).isEqualTo("127.0.0.1");
+        assertThat(token.getUserAgent()).isEqualTo("Test agent");
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+        assertThat(token.getUser()).isSameAs(user);
+<%_ } else { _%>
+        assertThat(token.getLogin()).isEqualTo("login");
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+        assertThat(token.getUserId()).isEqualTo("user-id");
+<%_ } _%>
+    }
+
+    @Test
+    void shouldAcceptNoUserAgent() {
+        PersistentToken token = new PersistentToken();
+        token.setUserAgent(null);
+        assertThat(token.getUserAgent()).isNull();
+    }
+
+    @Test
+    void shouldTruncateALongUserAgent() {
+        PersistentToken token = new PersistentToken();
+        token.setUserAgent("a".repeat(300));
+        assertThat(token.getUserAgent()).hasSize(254);
+    }
+
+    @Test
+    void shouldBeEqualBySeries() {
+        PersistentToken token1 = new PersistentToken();
+        token1.setSeries("series1");
+        PersistentToken token2 = new PersistentToken();
+        token2.setSeries(token1.getSeries());
+        assertThat(token1).isEqualTo(token1).isEqualTo(token2).hasSameHashCodeAs(token2);
+        token2.setSeries("series2");
+        assertThat(token1).isNotEqualTo(token2).isNotEqualTo(new Object());
+    }
+
+    @Test
+    void shouldDescribeItself() {
+        PersistentToken token = new PersistentToken();
+        token.setSeries("series");
+        token.setIpAddress("127.0.0.1");
+        assertThat(token.toString()).contains("series='series'").contains("ipAddress='127.0.0.1'");
+    }
+}

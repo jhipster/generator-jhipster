@@ -3529,6 +3529,9 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/test/java/tech/jhipster/domain/AuthorityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/PersistentTokenTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/SimpleEntityAsserts.java": {
     "stateCleared": "modified",
   },
