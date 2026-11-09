@@ -39,7 +39,7 @@ type CommonAddedFieldProperties = {
   fieldTypeCharSequence: boolean;
   /** @deprecated replace with technology-specific implementation */
   fieldTypeNumeric: boolean;
-  /** @deprecated replace with technology-specific implementation */
+  /** Whether the lists of the entity can be sorted by the field: a stored field that is not a collection. */
   fieldSupportsSortBy?: boolean;
 };
 
@@ -53,6 +53,8 @@ export const mutateField = {
   fieldTypeTimed: ({ fieldType }) => fieldType === ZONED_DATE_TIME || fieldType === INSTANT,
   fieldTypeCharSequence: ({ fieldType }) => fieldType === STRING || fieldType === UUID || fieldType === TEXT_BLOB,
   fieldTypeTemporal: ({ fieldType }) => fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
+  // A backend sets it first for the fields it cannot sort by.
+  fieldSupportsSortBy: ({ transient, collection }) => !transient && !collection,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Field>, CommonAddedFieldProperties>;
 
 export type { BaseApplicationRelationship as Relationship };

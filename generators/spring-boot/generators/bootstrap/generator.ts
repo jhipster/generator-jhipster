@@ -207,10 +207,6 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
           // Disable update form.
           field.readonly = true;
         }
-
-        mutateData(field, {
-          fieldSupportsSortBy: !field.transient && !field.collection,
-        });
       },
     });
   }

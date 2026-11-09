@@ -50,5 +50,29 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with entities', () => {
+    // A transient field, as a JDL @Transient annotation gives it.
+    const orderNote = { fieldName: 'orderNote', fieldType: 'String', transient: true };
+
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({})
+        .withJHipsterConfig({}, [
+          { name: 'CustomerOrder', changelogDate: '20200101000100', fields: [{ fieldName: 'orderCode', fieldType: 'String' }, orderNote] },
+        ]);
+    });
+
+    it('should sort the lists by the stored fields only', () => {
+      const entity = result.entities!.CustomerOrder as Record<string, any>;
+      const fieldSupportsSortBy = (fieldName: string) =>
+        entity.fields.find((field: Record<string, any>) => field.fieldName === fieldName).fieldSupportsSortBy;
+      expect(fieldSupportsSortBy('orderCode')).toBe(true);
+      expect(fieldSupportsSortBy('orderNote')).toBe(false);
+    });
+  });
+
   testBootstrapEntities(generator);
 });
