@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.FactorGrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -59,6 +60,16 @@ import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParamet
  * Test class for the {@link SecurityUtils} utility class.
  */
 class SecurityUtilsUnitTest {
+
+    @Test
+    void testGetUserAuthoritiesLeavesTheFactorsOut() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        authorities.add(FactorGrantedAuthority.fromAuthority(FactorGrantedAuthority.PASSWORD_AUTHORITY));
+        assertThat(SecurityUtils.getUserAuthorities(new UsernamePasswordAuthenticationToken("user", "user", authorities))).containsExactly(
+            AuthoritiesConstants.USER
+        );
+    }
 
     @BeforeEach
     @AfterEach
