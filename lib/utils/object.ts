@@ -119,8 +119,6 @@ type MutationContextOptions = {
   /** Called when a delayed mutation is dropped because another mutation defined its key first. */
   onDroppedMutation?: (dropped: DroppedMutation) => void;
   delayContext: Record<string, MutateDataFunction[]>;
-  /** While finalizing a context without `autoDelay`: a delayed mutation reading the property of another one waits for it. */
-  waitForDelayed?: boolean;
   /** The property each delayed mutation was waiting for. */
   waitingFor?: Record<string, string>;
 };
@@ -221,23 +219,12 @@ const createNotYetDefinedProxy = (target: Record<string | number, any>): any =>
     },
   });
 
-const createWaitForDelayedProxy = (target: Record<string | number, any>, delayContext: Record<string, unknown>, key: string): any =>
-  new Proxy(target, {
-    get: (obj: any, prop) => {
-      if (prop !== key && Object.hasOwn(delayContext, prop) && obj[prop] === undefined) {
-        throw new PropertyNotYetDefined(prop.toString());
-      }
-      return obj[prop];
-    },
-  });
-
 const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaults, key }: { defaults?: boolean; key: string }): any => {
   const mutationContext = isMutationContext(context);
-  const { autoDelay = false, waitForDelayed = false, delayContext = {} } = mutationContext ? (context[MUTATION_CONTEXT_SYMBOL] ?? {}) : {};
-  const contextOfMutation = waitForDelayed ? createWaitForDelayedProxy(context, delayContext, key) : context;
+  const { autoDelay = false } = mutationContext ? (context[MUTATION_CONTEXT_SYMBOL] ?? {}) : {};
   try {
     return fn(
-      autoDelay ? createNotYetDefinedProxy(context) : contextOfMutation,
+      autoDelay ? createNotYetDefinedProxy(context) : context,
       mutationContext && !defaults ?
         { delayMarker: DelayedMutation, undefinedMarker: UndefinedMutation, data: context }
       : { undefinedMarker: UndefinedMutation, data: context },
@@ -253,11 +240,14 @@ const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaul
   }
 };
 
-const applyDelayedMutations = (context: ContextWithMutationOptions, opts?: { defaults?: boolean; throwOnDelay?: boolean }): boolean => {
+const applyDelayedMutations = (
+  context: ContextWithMutationOptions,
+  opts?: { defaults?: boolean; throwOnDelay?: boolean; waitForDelayed?: boolean },
+): boolean => {
   let mutationApplied = false;
   const delayedContext = context[MUTATION_CONTEXT_SYMBOL].delayContext;
   if (delayedContext) {
-    const { defaults = true, throwOnDelay = false } = opts ?? {};
+    const { defaults = true, throwOnDelay = false, waitForDelayed = false } = opts ?? {};
     for (const [key, value] of Object.entries(delayedContext)) {
       if (key in context && (context as any)[key] !== undefined) {
         delete delayedContext[key];
@@ -270,7 +260,8 @@ const applyDelayedMutations = (context: ContextWithMutationOptions, opts?: { def
           result = handleMutateDataCallback(fn, context, { defaults, key });
           if (
             (result !== DelayedMutation && result !== undefined) ||
-            (result === DelayedMutation && context[MUTATION_CONTEXT_SYMBOL].waitForDelayed)
+            // A mutation waiting for a pending property does not give way to one of the same key registered before it.
+            (result === DelayedMutation && waitForDelayed)
           ) {
             break;
           }
@@ -300,13 +291,16 @@ const applyDelayedMutations = (context: ContextWithMutationOptions, opts?: { def
 
 export const finalizeMutations = (context: any): void => {
   if (isMutationContext(context)) {
-    context[MUTATION_CONTEXT_SYMBOL].waitForDelayed = !context[MUTATION_CONTEXT_SYMBOL].autoDelay;
-    while (applyDelayedMutations(context, { defaults: true })) {
+    const options = context[MUTATION_CONTEXT_SYMBOL];
+    // Without autoDelay (an entity, a field, a relationship), it is turned on while finalizing: a mutation reading a
+    // property still pending waits for it, whichever was declared first.
+    const waitForDelayed = !options.autoDelay;
+    options.autoDelay = true;
+    while (applyDelayedMutations(context, { defaults: true, waitForDelayed })) {
       // Apply mutations until there is no more mutation to apply, this is to handle mutations that depend on other mutations.
     }
     // The ones still delayed wait for each other, or for a property not set: computed with it undefined.
-    context[MUTATION_CONTEXT_SYMBOL].waitForDelayed = false;
-    context[MUTATION_CONTEXT_SYMBOL].autoDelay = false;
+    options.autoDelay = false;
     // In case there is still delayed mutations, it means that some required properties are missing, we throw an error to avoid silent issues.
     applyDelayedMutations(context, { defaults: true, throwOnDelay: true });
     delete context[MUTATION_CONTEXT_SYMBOL];
