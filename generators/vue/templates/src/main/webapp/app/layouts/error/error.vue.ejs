@@ -27,7 +27,7 @@ import { <%- authenticationTypeOauth2 ? '' : 'useRouter, ' %>useRoute } from 'vu
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
-import { authenticatedKey } from '@/shared/config/injection-keys';
+import { authenticatedKey } from '@/config/injection-keys';
 
 defineOptions({ name: 'Error' });
 

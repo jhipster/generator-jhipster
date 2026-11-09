@@ -23,8 +23,8 @@ import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import { EMAIL_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
-import { formValues, setAllValues } from '@/shared/testing/stubs';
-import { useStore } from '@/store';
+import { formValues, setAllValues } from '@/testing/stubs';
+import { useStore } from '@/stores';
 
 import Settings from './settings.vue';
 

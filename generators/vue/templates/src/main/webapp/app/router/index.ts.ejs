@@ -22,8 +22,8 @@ import { createRouter as createVueRouter, createWebHistory<%- microfrontend ? ',
 import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 <%_ } _%>
 
-const Home = () => import('@/core/home/home.vue');
-const Error = () => import('@/core/error/error.vue');
+const Home = () => import('@/home/home.vue');
+const Error = () => import('@/layouts/error/error.vue');
 <%_ if (!authenticationTypeOauth2) { _%>
 const Login = () => import('@/account/login-form/login-form.vue');
 <%_ } _%>

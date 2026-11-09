@@ -192,12 +192,12 @@ import { type AxiosError } from 'axios';
 
 import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
 <%_ const composables = ['useControlledRequest', ...vueFormTimeFields ? ['useDateFormat'] : [], ...allRelationshipsThatNeedSelectOptions.length > 0 ? ['useEntityOptions'] : [], 'useEntitySave', 'useEntityValidation']; _%>
-import { <%- composables.join(', ') %> } from '@/shared/composables';
+import { <%- composables.join(', ') %> } from '@/composables';
 <%_ if (anyFieldIsLocalDate) { _%>
-import { currentLanguageKey } from '@/shared/config/injection-keys';
+import { currentLanguageKey } from '@/config/injection-keys';
 <%_ } _%>
 <%_ if (anyFieldHasFileBasedContentType) { _%>
-import useDataUtils from '@/shared/data/data-utils.service';
+import useDataUtils from '@/composables/data-utils';
 <%_ } _%>
 
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>

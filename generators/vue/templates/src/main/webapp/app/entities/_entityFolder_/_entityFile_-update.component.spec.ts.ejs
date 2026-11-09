@@ -42,9 +42,9 @@ import { <%- relationship.otherEntity.entityInstance %>ServiceKey } from '@/enti
   <%_ } _%>
 <%_ } _%>
 import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
-import { contentStub, modelInputStub, triggerAll } from '@/shared/testing/stubs';
+import { contentStub, modelInputStub, triggerAll } from '@/testing/stubs';
 <%_ if (vueFormTimeFields) { _%>
-import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
+import { DATE_TIME_LONG_FORMAT } from '@/composables/date-format';
 <%_ } _%>
 
 import <%- entityAngularName %>Update from './<%- entityFileName %>-update.vue';
