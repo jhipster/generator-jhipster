@@ -223,7 +223,7 @@ To try the <%- baseName %> application in production, run:
 <%- nodePackageManagerCommand %> run try-it
 ```
 
-It builds the production jar (`npm run java:jar:prod`) and runs it with the `prod` and `secret-samples` profiles: `<%- packageJsonScripts['try-it'] %>`.
+It cleans the build, builds the production jar (`npm run java:jar:prod`) and runs it with the `prod` and `secret-samples` profiles: `<%- packageJsonScripts['try-it'] %>`.
 
 To build the final jar and optimize the <%- baseName %> application for production, run:
 
@@ -242,12 +242,7 @@ This will concatenate and minify the client CSS and JavaScript files. It will al
 To ensure everything worked, run:
 
 ```bash
-<%_ if (buildToolMaven) { _%>
-java -jar target/*.jar --spring.profiles.active=prod,secret-samples
-<%_ } _%>
-<%_ if (buildToolGradle) { _%>
-java -jar build/libs/*.jar --spring.profiles.active=prod,secret-samples
-<%_ } _%>
+java -jar <%- javaPackagingDestDir %>*.jar --spring.profiles.include=secret-samples
 ```
 
 The `secret-samples` profile, in `<%- srcMainResources %>config/application-secret-samples.yml`, holds sample passwords and secrets, for development and tests only.

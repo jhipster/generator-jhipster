@@ -20,7 +20,6 @@ import assert from 'node:assert';
 
 import { mutateData } from '../../../../lib/utils/object.ts';
 import databaseData from '../../../base-application/generators/database-bootstrap/support/database-data.ts';
-import { javaJarStartCommand } from '../../../java-simple-application/internal/java-jar-start-command.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../data-relational/support/database-url.ts';
@@ -65,17 +64,6 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
           springBoot4: true,
         });
       },
-      packageJsonScripts({ application }) {
-        // Tries the application, in a demonstration: builds the jar of the production profile, then runs it with the sample secrets.
-        mutateData(application.packageJsonScripts as any, {
-          'pretry-it': 'npm run java:jar:prod',
-          'try-it': javaJarStartCommand({
-            destDir: application.javaPackagingDestDir,
-            jarName: '*.jar',
-            profiles: 'prod,secret-samples',
-          }),
-        });
-      },
       hibernate({ application, applicationDefaults }) {
         if (application.databaseTypeSql && !application.reactive) {
           applicationDefaults({
@@ -93,6 +81,14 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
+      packageJsonScripts({ application }) {
+        // Tries the application, in a demonstration: builds the jar of the production profile, then runs it with the sample secrets.
+        // Cleans first, so the only jar is the one to run: e2e builds and older versions would match the wildcard too.
+        mutateData(application.packageJsonScripts as any, {
+          'pretry-it': `./${application.buildToolGradle ? 'gradlew' : 'mvnw'} clean && npm run java:jar:prod`,
+          'try-it': `java -jar ${application.javaPackagingDestDir}*.jar --spring.profiles.include=secret-samples`,
+        });
+      },
       dockerEnvironment({ application }) {
         const { baseName, dockerApplicationEnvironment } = application;
 
