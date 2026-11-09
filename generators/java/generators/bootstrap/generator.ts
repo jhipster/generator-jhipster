@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 
-import { mutateData } from '../../../../lib/utils/index.ts';
+import { mutateData, overrideMutateDataProperty } from '../../../../lib/utils/index.ts';
 import { pluralize, upperFirst } from '../../../../lib/utils/string-utils.ts';
 import { mutateApplicationPreparing, mutateField, mutateRelationship } from '../../application.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import { prepareEntity } from '../../support/index.ts';
+import type { Application as JavaApplication } from '../../types.d.ts';
 
 export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
@@ -38,10 +39,12 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      prettierFolders({ application }) {
-        if (application.prettierFolders && !application.prettierFolders.includes('src/**/')) {
-          application.prettierFolders.push('src/**/');
-        }
+      prettierFolders({ applicationDefaults }) {
+        applicationDefaults({
+          prettierFolders: overrideMutateDataProperty(({ prettierFolders }: JavaApplication) =>
+            prettierFolders.includes('src/**/') ? prettierFolders : [...prettierFolders, 'src/**/'],
+          ),
+        });
       },
     });
   }
