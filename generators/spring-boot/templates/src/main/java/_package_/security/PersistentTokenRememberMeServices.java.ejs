@@ -242,7 +242,6 @@ public class PersistentTokenRememberMeServices extends AbstractRememberMeService
         }
         PersistentToken token = optionalToken.orElseThrow();
         // We have a match for this user/series combination
-        LOG.info("presentedToken={} / tokenValue={}", presentedToken, token.getTokenValue());
         if (!presentedToken.equals(token.getTokenValue())) {
             // Token doesn't match series value. Delete this session and throw an exception.
 <%_ if (databaseTypeSql) { _%>
