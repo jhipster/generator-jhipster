@@ -51,8 +51,9 @@ describe(`generator - ${generator}`, () => {
   });
 
   describe('with entities', () => {
-    // A transient field, as a JDL @Transient annotation gives it.
+    // A transient and a @NotSortable field, as the JDL annotations give them.
     const orderNote = { fieldName: 'orderNote', fieldType: 'String', transient: true };
+    const orderSecret = { fieldName: 'orderSecret', fieldType: 'String', notSortable: true };
 
     before(async () => {
       await helpers
@@ -61,16 +62,37 @@ describe(`generator - ${generator}`, () => {
         .withMockedSource()
         .withSharedApplication({})
         .withJHipsterConfig({}, [
-          { name: 'CustomerOrder', changelogDate: '20200101000100', fields: [{ fieldName: 'orderCode', fieldType: 'String' }, orderNote] },
+          { name: 'Reference', changelogDate: '20200101000000', fields: [{ fieldName: 'id', fieldType: 'UUID' }] },
+          {
+            name: 'CustomerOrder',
+            changelogDate: '20200101000100',
+            fields: [
+              { fieldName: 'orderCode', fieldType: 'String' },
+              { fieldName: 'orderReference', fieldType: 'UUID' },
+              { fieldName: 'orderText', fieldType: 'TextBlob' },
+              { fieldName: 'orderFile', fieldType: 'Blob' },
+              orderNote,
+              orderSecret,
+            ],
+          },
         ]);
     });
 
-    it('should sort the lists by the stored fields only', () => {
+    it('should not offer to sort the lists by a UUID primary key', () => {
+      const entity = result.entities!.Reference as Record<string, any>;
+      expect(entity.fields.find((field: Record<string, any>) => field.id).fieldSupportsSortBy).toBe(false);
+    });
+
+    it('should sort the lists by the stored fields that can be sorted', () => {
       const entity = result.entities!.CustomerOrder as Record<string, any>;
       const fieldSupportsSortBy = (fieldName: string) =>
         entity.fields.find((field: Record<string, any>) => field.fieldName === fieldName).fieldSupportsSortBy;
       expect(fieldSupportsSortBy('orderCode')).toBe(true);
+      expect(fieldSupportsSortBy('orderReference')).toBe(false);
+      expect(fieldSupportsSortBy('orderText')).toBe(true);
+      expect(fieldSupportsSortBy('orderFile')).toBe(false);
       expect(fieldSupportsSortBy('orderNote')).toBe(false);
+      expect(fieldSupportsSortBy('orderSecret')).toBe(false);
     });
   });
 
