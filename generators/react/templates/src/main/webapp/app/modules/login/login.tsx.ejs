@@ -23,7 +23,7 @@ import { Link, Navigate, useLocation } from 'react-router';
 import { type FieldError, type FieldValues, useForm } from 'react-hook-form';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { login } from 'app/shared/reducers/authentication';
+import { type IAuthParams, login } from 'app/shared/reducers/authentication';
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -37,7 +37,7 @@ export const Login = () => {
     formState: { errors, touchedFields },
   } = useForm({ mode: 'onTouched' });
 
-  const handleLogin = ({ username, password, rememberMe }: FieldValues) => dispatch(login(username, password, rememberMe));
+  const handleLogin = (credentials: FieldValues) => dispatch(login(credentials as IAuthParams));
 
   const { from } = pageLocation.state || { from: { pathname: '/', search: pageLocation.search } };
   if (isAuthenticated) {

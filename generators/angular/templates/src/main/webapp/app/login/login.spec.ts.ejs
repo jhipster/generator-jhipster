@@ -131,13 +131,17 @@ describe('Login', () => {
       const credentials = {
         username: 'admin',
         password: 'admin',
+<%_ if (authenticationUsesRememberMe) { _%>
         rememberMe: true,
+<%_ } _%>
       };
 
       comp.loginForm.patchValue({
         username: 'admin',
         password: 'admin',
+<%_ if (authenticationUsesRememberMe) { _%>
         rememberMe: true,
+<%_ } _%>
       });
 
       // WHEN

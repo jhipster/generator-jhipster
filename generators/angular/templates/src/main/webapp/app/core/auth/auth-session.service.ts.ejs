@@ -62,7 +62,9 @@ export class AuthServerProvider {
     const data =
       `username=${encodeURIComponent(credentials.username)}` +
       `&password=${encodeURIComponent(credentials.password)}` +
+  <%_ if (authenticationUsesRememberMe) { _%>
       `&remember-me=${credentials.rememberMe ? 'true' : 'false'}` +
+  <%_ } _%>
       '&submit=Login';
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

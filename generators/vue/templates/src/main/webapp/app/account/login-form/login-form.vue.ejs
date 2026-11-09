@@ -106,7 +106,9 @@ const { t: t$ } = useI18n();
 const authenticationError = ref(false);
 const login = ref<string | null>(null);
 const password = ref<string | null>(null);
+<%_ if (authenticationUsesRememberMe) { _%>
 const rememberMe = ref(false);
+<%_ } _%>
 
 const route = useRoute();
 const router = useRouter();
@@ -136,7 +138,7 @@ const doLogin = async () => {
       }
     }
 <%_ } else { _%>
-  const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}&remember-me=${rememberMe.value}&submit=Login`;
+  const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}<%- authenticationUsesRememberMe ? '&remember-me=${rememberMe.value}' : '' %>&submit=Login`;
   try {
     await axios.post('api/authentication', data, {
       headers: {
