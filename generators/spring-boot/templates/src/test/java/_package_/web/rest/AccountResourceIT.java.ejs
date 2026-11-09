@@ -789,6 +789,50 @@ class AccountResourceIT {
         userService.deleteUser("current-sessions")<%- reactorBlock %>;
     }
 
+  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
+    @Test
+    <%_ if (databaseTypeSql) { _%>
+    @Transactional
+    <%_ } _%>
+    @WithMockUser("change-password-tokens")
+    void testChangePasswordRemovesThePersistentTokens() throws Exception {
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
+        String currentPassword = RandomStringUtils.insecure().nextAlphanumeric(60);
+        user.setPassword(passwordEncoder.encode(currentPassword));
+        user.setLogin("change-password-tokens");
+        user.setEmail("change-password-tokens@example.com");
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+
+        PersistentToken token = new PersistentToken();
+        token.setSeries("change-tokens");
+    <%_ if (databaseTypeCouchbase) { _%>
+        token.setLogin(user.getLogin());
+    <%_ } else { _%>
+        token.setUser(user);
+    <%_ } _%>
+        token.setTokenValue("change-password-data");
+        token.setTokenDate(LocalDate.of(2017, 3, 23));
+        token.setIpAddress("127.0.0.1");
+        token.setUserAgent("Test agent");
+        persistentTokenRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(token);
+
+        restAccountMockMvc
+            .perform(
+                post("/api/account/change-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "new password")))
+    <%_ if (authenticationUsesCsrf) { _%>
+                    .with(csrf())
+    <%_ } _%>
+            )
+            .andExpect(status().isOk());
+
+        assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
+
+        userService.deleteUser("change-password-tokens");
+    }
+
+  <%_ } _%>
     @Test
   <%_ if (databaseTypeSql) { _%>
     @Transactional

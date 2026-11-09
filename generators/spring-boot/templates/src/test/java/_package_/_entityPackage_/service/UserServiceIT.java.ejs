@@ -280,6 +280,54 @@ class UserServiceIT {
         userService.removeOldPersistentTokens();
         assertThat(persistentTokenRepository.findByUser(user)).hasSize(existingCount + 1);
     }
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    void assertThatResetPasswordRemovesThePersistentTokens() {
+        user.setActivated(true);
+        user.setResetDate(Instant.now().minus(2, ChronoUnit.HOURS));
+        user.setResetKey(RandomUtil.generateResetKey());
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+        generateUserToken(user, "1111-1111", LocalDate.now());
+
+        assertThat(userService.completePasswordReset("johndoe2", user.getResetKey())).isPresent();
+
+        assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
+    }
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    void assertThatDeactivatingAUserRemovesThePersistentTokens() {
+        user.setActivated(true);
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+        generateUserToken(user, "1111-1111", LocalDate.now());
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>(user);
+
+        userDTO.setActivated(true);
+        assertThat(userService.updateUser(userDTO)).isPresent();
+        assertThat(persistentTokenRepository.findByUser(user)).hasSize(1);
+
+        userDTO.setActivated(false);
+        assertThat(userService.updateUser(userDTO)).isPresent();
+        assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
+    }
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    void assertThatDeletingAUserRemovesThePersistentTokens() {
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+        generateUserToken(user, "1111-1111", LocalDate.now());
+
+        userService.deleteUser(user.getLogin());
+
+        assertThat(persistentTokenRepository.findById("1111-1111")).isEmpty();
+    }
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
 

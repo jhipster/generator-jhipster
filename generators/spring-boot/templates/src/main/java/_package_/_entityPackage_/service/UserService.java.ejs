@@ -173,6 +173,9 @@ public class UserService {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
+      <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
+                removePersistentTokens(user);
+      <%_ } _%>
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
       <%_ } _%>
@@ -335,6 +338,11 @@ public class UserService {
                 user.setImageUrl(userDTO.getImageUrl());
     <%_ } _%>
                 user.setActivated(userDTO.isActivated());
+    <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
+                if (!userDTO.isActivated()) {
+                    removePersistentTokens(user);
+                }
+    <%_ } _%>
                 user.setLangKey(userDTO.getLangKey());
     <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
                 Set<Authority> managedAuthorities = user.getAuthorities();
@@ -413,6 +421,9 @@ public class UserService {
     <%_ } else { _%>
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
+      <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
+            removePersistentTokens(user);
+      <%_ } _%>
             userRepository.delete(user);
       <%_ if (searchEngineElasticsearch) { _%>
             userSearchRepository.deleteFromIndex(user);
@@ -558,6 +569,9 @@ public class UserService {
             .doOnNext(user -> LOG.debug("Changed password for User: {}", user))
             .then();
     <%_ } else { _%>
+      <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
+                removePersistentTokens(user);
+      <%_ } _%>
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
       <%_ } _%>
@@ -642,6 +656,17 @@ public class UserService {
         persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).forEach(token -> {
             LOG.debug("Deleting token {}", token.getSeries());<% if (databaseType === 'sql') { %>
             <%- user.persistClass %> user = token.getUser();
+            user.getPersistentTokens().remove(token);<% } %>
+            persistentTokenRepository.delete(token);
+        });
+    }
+
+    /**
+     * Removes the remember-me logins of a user whose credentials changed or who can no longer log in.
+     */
+    private void removePersistentTokens(<%- user.persistClass %> user) {
+        persistentTokenRepository.findByUser(user).forEach(token -> {
+            LOG.debug("Deleting token {}", token.getSeries());<% if (databaseType === 'sql') { %>
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
         });
