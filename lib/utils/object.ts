@@ -245,7 +245,8 @@ const applyDelayedMutations = (context: ContextWithMutationOptions, opts?: { def
   if (delayedContext) {
     const { defaults = true, throwOnDelay = false } = opts ?? {};
     for (const [key, value] of Object.entries(delayedContext)) {
-      if (key in context && (context as any)[key] !== undefined) {
+      // A mutation overriding the property waits for what it reads, the value set meanwhile does not take its place.
+      if (key in context && (context as any)[key] !== undefined && !value.some(fn => fn[OverrideMutation] === true)) {
         delete delayedContext[key];
         const { onDroppedMutation, waitingFor } = context[MUTATION_CONTEXT_SYMBOL];
         onDroppedMutation?.({ key, waitingFor: waitingFor?.[key], value: (context as any)[key] });
