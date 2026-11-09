@@ -174,10 +174,12 @@ public class AccountResource {
 <%_ } _%>
         }
 
+<%_ if (!authenticationTypeOauth2 && !authenticationTypeJwt) { _%>
         public boolean isActivated() {
             return true;
         }
 
+<%_ } _%>
         public Set<String> getAuthorities() {
             return authorities;
         }
@@ -187,6 +189,7 @@ public class AccountResource {
         }
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
 
+        /** The details of the token, activated included. */
         @JsonAnyGetter
         public Map<String, Object> getDetails() {
             return details;

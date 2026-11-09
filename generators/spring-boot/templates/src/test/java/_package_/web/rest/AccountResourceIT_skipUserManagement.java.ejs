@@ -18,6 +18,7 @@
 -%>
 package <%- packageName %>.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 <%_ if (authenticationTypeJwt) { _%>
 import static <%- packageName %>.security.jwt.JwtAuthenticationTestUtils.createValidTokenForUser;
@@ -30,6 +31,9 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import <%- packageName %>.IntegrationTest;
 import <%- packageName %>.security.AuthoritiesConstants;
+<%_ if (reactive) { _%>
+import java.nio.charset.StandardCharsets;
+<%_ } _%>
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
@@ -88,7 +92,9 @@ class AccountResourceIT {
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.login").isEqualTo(TEST_USER_LOGIN)
-            .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
+            .jsonPath("$.activated").isEqualTo(true)
+            .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN)
+            .consumeWith(result -> assertThat(new String(result.getResponseBodyContent(), StandardCharsets.UTF_8)).containsOnlyOnce("\"activated\""));
 <%_ } else { _%>
         restAccountMockMvc.perform(
                 get("/api/account")
@@ -100,7 +106,9 @@ class AccountResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(TEST_USER_LOGIN))
-            .andExpect(jsonPath("$.authorities", hasItem(AuthoritiesConstants.ADMIN)));
+            .andExpect(jsonPath("$.activated").value(true))
+            .andExpect(jsonPath("$.authorities", hasItem(AuthoritiesConstants.ADMIN)))
+            .andExpect(result -> assertThat(result.getResponse().getContentAsString()).containsOnlyOnce("\"activated\""));
 <%_ } _%>
     }
 
