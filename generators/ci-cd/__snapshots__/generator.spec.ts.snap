@@ -396,7 +396,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
   "pkType": undefined,
-  "prettierClientSources": false,
   "prettierExtensions": [
     "md",
     "json",

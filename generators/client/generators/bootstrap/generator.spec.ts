@@ -63,6 +63,26 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('prettierFolders', () => {
+    const prettierFoldersFor = async (config: Record<string, unknown>, application: Record<string, unknown> = {}) => {
+      await helpers.runJHipster(generator).withSharedApplication(application).withJHipsterConfig(config);
+      return runResult.application!.prettierFolders;
+    };
+
+    it('should format the sources of the client', async () => {
+      expect(await prettierFoldersFor({ clientFramework: 'angular' })).toContain('src/main/webapp/**/');
+      expect(await prettierFoldersFor({ clientFramework: 'angular', clientRootDir: 'client/' })).toContain('client/src/**/');
+    });
+
+    it('should not format them without a client', async () => {
+      expect(await prettierFoldersFor({ clientFramework: 'no' })).not.toContain('src/main/webapp/**/');
+    });
+
+    it('should not add the sources a folder already formats', async () => {
+      expect(await prettierFoldersFor({ clientFramework: 'angular' }, { prettierFolders: ['', 'src/**/'] })).toEqual(['', 'src/**/']);
+    });
+  });
+
   describe('with', () => {
     describe('default config', () => {
       before(async () => {

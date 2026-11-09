@@ -202,7 +202,6 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "packageJsonScripts": Any<Object>,
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
-  "prettierClientSources": false,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
   "prettierTabWidth": 2,

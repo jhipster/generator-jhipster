@@ -73,6 +73,25 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
     return this.preparing;
   }
 
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      prettierFolders({ application }) {
+        // clientSrcDir is resolved here. A folder formatted recursively may hold it already, like the 'src/**/' of java:bootstrap.
+        const { clientFrameworkAny, clientSrcDir, prettierFolders } = application;
+        if (
+          clientFrameworkAny &&
+          !prettierFolders.some(folder => folder.endsWith('**/') && clientSrcDir.startsWith(folder.slice(0, -'**/'.length)))
+        ) {
+          prettierFolders.push(`${clientSrcDir}**/`);
+        }
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
+
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       preparing({ application, entityDefaults }) {

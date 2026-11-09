@@ -164,7 +164,6 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": Any<Object>,
   "packageName": "com.mycompany.myapp",
-  "prettierClientSources": false,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
   "prettierTabWidth": 2,

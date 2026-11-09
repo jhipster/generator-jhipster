@@ -124,12 +124,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prettierClientSources({ application }) {
-        // javascript-simple-application:bootstrap adds clientSrcDir once resolved.
-        if (application.clientFrameworkAny) {
-          application.prettierClientSources = true;
-        }
-      },
       loadPackageJson({ application }) {
         // Load common client package.json into packageJson
         this.loadNodeDependenciesFromPackageJson(

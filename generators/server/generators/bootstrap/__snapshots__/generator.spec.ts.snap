@@ -203,7 +203,6 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "packageJsonScripts": Any<Object>,
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
-  "prettierClientSources": false,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
   "prettierTabWidth": 2,

@@ -58,34 +58,5 @@ describe(`generator - ${generator}`, () => {
     });
   }
 
-  describe('prettierClientSources', () => {
-    const prettierFoldersFor = async (application: Record<string, unknown>, config: Record<string, unknown> = {}) => {
-      await helpers
-        .runJHipster(generator)
-        .withMockedJHipsterGenerators()
-        .withMockedSource()
-        .withSharedApplication({ dasherizedBaseName: 'dasherizedBaseName', projectDescription: 'projectDescription', ...application })
-        .withJHipsterConfig(config);
-      return result.application!.prettierFolders;
-    };
-
-    it('should not format the sources of a client by default', async () => {
-      expect(await prettierFoldersFor({})).toEqual(['', '.blueprint/**/']);
-    });
-
-    it('should format the sources of the client once resolved', async () => {
-      expect(await prettierFoldersFor({ prettierClientSources: true })).toEqual(['', '.blueprint/**/', 'src/main/webapp/**/']);
-      expect(await prettierFoldersFor({ prettierClientSources: true }, { clientRootDir: 'client/' })).toEqual([
-        '',
-        '.blueprint/**/',
-        'client/src/**/',
-      ]);
-    });
-
-    it('should not add the sources of the client a folder already formats', async () => {
-      expect(await prettierFoldersFor({ prettierClientSources: true, prettierFolders: ['', 'src/**/'] })).toEqual(['', 'src/**/']);
-    });
-  });
-
   testBootstrapApplication(generator);
 });
