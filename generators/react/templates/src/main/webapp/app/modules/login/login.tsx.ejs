@@ -81,8 +81,8 @@ export const Login = () => {
             error={errors.password as FieldError}
             isTouched={touchedFields.password}
           />
+<%_ if (authenticationUsesRememberMe) { _%>
           <ValidatedField
-            <%- authenticationUsesRememberMe ? '' : ' hidden' %>
             name="rememberMe"
             type="checkbox"
             check
@@ -90,6 +90,7 @@ export const Login = () => {
             value={true}
             register={register}
           />
+<%_ } _%>
           <Button variant="primary" type="submit" data-cy="submit">
             <Translate contentKey="login.form.button">Sign in</Translate>
           </Button>

@@ -193,14 +193,18 @@ describe('LoginForm Component', () => {
     // WHEN
     wrapper.findComponent<ComponentPublicInstance>('#username').vm.$emit('update:modelValue', 'login');
     wrapper.findComponent<ComponentPublicInstance>('#password').vm.$emit('update:modelValue', 'pwd');
+<%_ if (authenticationUsesRememberMe) { _%>
     wrapper.findComponent<ComponentPublicInstance>('#rememberMe').vm.$emit('update:modelValue', false);
+<%_ } _%>
     await wrapper.find('form').trigger('submit');
     await flushPromises();
 
     // THEN
     expect(loginForm.login).toBe('login');
     expect(loginForm.password).toBe('pwd');
+<%_ if (authenticationUsesRememberMe) { _%>
     expect(loginForm.rememberMe).toBe(false);
+<%_ } _%>
     expect(axiosStub.post).toHaveBeenCalled();
   });
 
