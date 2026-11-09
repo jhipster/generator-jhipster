@@ -82,7 +82,7 @@ export const Login = () => {
             isTouched={touchedFields.password}
           />
           <ValidatedField
-            <%- authenticationTypeSession && databaseTypeNo ? ' hidden' : '' %>
+            <%- authenticationUsesRememberMe ? '' : ' hidden' %>
             name="rememberMe"
             type="checkbox"
             check
