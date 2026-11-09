@@ -19,7 +19,7 @@
 import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.ts';
 import type { ExportEntityDerivedPropertiesFromCommand } from '../../lib/command/types.ts';
 import { CommonDBTypes, RelationalOnlyDBTypes } from '../../lib/jhipster/field-types.ts';
-import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, finalizeDefault } from '../../lib/utils/object.ts';
 import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
@@ -39,7 +39,7 @@ type CommonAddedFieldProperties = {
   fieldTypeCharSequence: boolean;
   /** @deprecated replace with technology-specific implementation */
   fieldTypeNumeric: boolean;
-  /** @deprecated replace with technology-specific implementation */
+  /** Whether the lists of the entity offer to sort by the field: a stored field that is neither a collection, a binary but a TextBlob, @NotSortable nor a UUID. */
   fieldSupportsSortBy?: boolean;
 };
 
@@ -53,6 +53,17 @@ export const mutateField = {
   fieldTypeTimed: ({ fieldType }) => fieldType === ZONED_DATE_TIME || fieldType === INSTANT,
   fieldTypeCharSequence: ({ fieldType }) => fieldType === STRING || fieldType === UUID || fieldType === TEXT_BLOB,
   fieldTypeTemporal: ({ fieldType }) => fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
+  // No transient, collection, binary (but a TextBlob), @NotSortable or UUID field. The default sort of the lists by the primary key
+  // does not depend on it. A backend sets it first for the fields it cannot sort by.
+  // Computed once the field is prepared: java:bootstrap makes a field with a mapstruct expression transient after it.
+  fieldSupportsSortBy: finalizeDefault(
+    (data: Field) =>
+      !data.transient &&
+      !data.collection &&
+      !(data.fieldTypeBinary && data.fieldTypeBlobContent !== 'text') &&
+      !(data as { notSortable?: boolean }).notSortable &&
+      data.fieldType !== UUID,
+  ),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Field>, CommonAddedFieldProperties>;
 
 export type { BaseApplicationRelationship as Relationship };
