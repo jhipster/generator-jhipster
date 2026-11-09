@@ -53,6 +53,10 @@
       "types": "./dist/lib/eslint/recommended.d.ts",
       "default": "./dist/lib/eslint/recommended.js"
     },
+    "./eslint/templates": {
+      "types": "./dist/lib/eslint/templates.d.ts",
+      "default": "./dist/lib/eslint/templates.js"
+    },
     "./eslint": {
       "types": "./dist/lib/eslint/index.d.ts",
       "default": "./dist/lib/eslint/index.js"
@@ -202,9 +206,17 @@
     "yeoman-test": "11.8.2"
   },
   "peerDependencies": {
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint-plugin-ejs-templates": "^0.6.1",
     "yeoman-test": "11.8.2"
   },
   "peerDependenciesMeta": {
+    "@stylistic/eslint-plugin": {
+      "optional": true
+    },
+    "eslint-plugin-ejs-templates": {
+      "optional": true
+    },
     "yeoman-test": {
       "optional": true
     }
