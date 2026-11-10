@@ -9,6 +9,7 @@
       "500": "Internal server error."
     },
     "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+    "dataIntegrityViolation": "Podaci su u sukobu sa postojećim podacima ili nisu ispravni. Vaše izmene su odbijene.",
     "validation": "Validation error on the server."
   }
 }

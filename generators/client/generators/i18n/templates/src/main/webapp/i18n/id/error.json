@@ -9,6 +9,7 @@
       "500": "Kesalahan internal server."
     },
     "concurrencyFailure": "Pengguna lain melakukan modifikasi data ini disaat bersamaan. Perubahan anda ditolak.",
+    "dataIntegrityViolation": "Data bertentangan dengan data yang sudah ada atau tidak valid. Perubahan anda ditolak.",
     "validation": "Kesalahan validasi pada server."
   }
 }

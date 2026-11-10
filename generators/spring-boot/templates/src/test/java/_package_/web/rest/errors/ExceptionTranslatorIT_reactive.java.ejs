@@ -71,6 +71,40 @@ class ExceptionTranslatorIT {
             .isEqualTo(ErrorConstants.ERR_CONCURRENCY_FAILURE);
     }
 <%_ } _%>
+<%_ if (!databaseTypeNo) { _%>
+
+    @Test
+    void testDataIntegrityViolation() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/data-integrity-violation")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_DATA_INTEGRITY_VIOLATION);
+    }
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+
+    @Test
+    void testDataException() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/data-exception")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_DATA_INTEGRITY_VIOLATION);
+    }
+<%_ } _%>
 
     @Test
     void testUnreadableBody() {
