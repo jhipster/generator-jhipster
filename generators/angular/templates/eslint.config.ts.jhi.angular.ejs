@@ -33,7 +33,6 @@ import stylistic from '@stylistic/eslint-plugin';
     },
   },
   {
-    // For a detailed explanation, visit: https://github.com/angular-eslint/angular-eslint/blob/main/docs/CONFIGURING_ESLINT.md
     files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.ts'],
     extends: [...tseslint.configs.strictTypeChecked, ...tseslint.configs.stylistic, ...angular.configs.tsRecommended],
     plugins: {
