@@ -18,8 +18,14 @@
  */
 import { before, describe, expect, it } from 'expect-node';
 import { basename } from 'node:path';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+
+import { setModifiedFileState } from 'mem-fs-editor/state';
+import { transform } from 'p-transform';
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { createESLintTransform } from '../bootstrap/support/eslint-transform.ts';
 
 import Generator from './generator.ts';
 
@@ -68,6 +74,25 @@ describe(`generator - ${generator}`, () => {
 
   it('samples matrix should match snapshot', () => {
     expect(e2eSamples).toMatchSnapshot();
+  });
+
+  describe('eslint.config.ts of an Angular application', () => {
+    before(async () => {
+      await helpers.runJHipster('app').withJHipsterConfig({ clientFramework: ANGULAR, skipServer: true, testFrameworks: [CYPRESS] });
+    });
+
+    it('should import typescript-eslint once after eslint fixes the imports of the templates', async () => {
+      // The Angular and the Cypress templates both import typescript-eslint, eslint merges them while it orders the imports.
+      const file = { path: 'eslint.config.ts', contents: Buffer.from(runResult.fs.read(`${runResult.cwd}/eslint.config.ts`)) };
+      expect(file.contents.toString().match(/^import tseslint from 'typescript-eslint';$/gm)).toHaveLength(2);
+      setModifiedFileState(file);
+      await pipeline(
+        Readable.from([file]),
+        await createESLintTransform(),
+        transform(() => undefined),
+      );
+      expect(file.contents.toString().match(/^import tseslint from 'typescript-eslint';$/gm)).toHaveLength(1);
+    });
   });
 
   describe('language', () => {
