@@ -51,6 +51,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 <%_ } _%>
 import org.springframework.http.MediaType;
+<%_ if (authenticationTypeSession && !reactive) { _%>
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+<%_ } _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
@@ -114,6 +119,9 @@ class AccountResourceIT {
 
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
+
+    @Autowired
+    private SessionRegistry sessionRegistry;
 <%_ } _%>
 
     @Autowired
@@ -838,6 +846,53 @@ class AccountResourceIT {
         assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
 
         userService.deleteUser("change-password-tokens");
+    }
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    @WithMockUser("change-password-sessions")
+    void testChangePasswordExpiresTheOtherSessions() throws Exception {
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
+  <%_ if (databaseTypeCassandra) { _%>
+        user.setId(UUID.randomUUID().toString());
+  <%_ } _%>
+        String currentPassword = RandomStringUtils.insecure().nextAlphanumeric(60);
+        user.setPassword(passwordEncoder.encode(currentPassword));
+        user.setLogin("change-password-sessions");
+        user.setEmail("change-password-sessions@example.com");
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+
+        MockHttpSession currentSession = new MockHttpSession();
+        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(
+            user.getLogin(),
+            "password",
+            List.of()
+        );
+        sessionRegistry.registerNewSession(currentSession.getId(), principal);
+        sessionRegistry.registerNewSession("change-password-other-session", principal);
+
+        restAccountMockMvc
+            .perform(
+                post("/api/account/change-password")
+                    .session(currentSession)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "new password")))
+  <%_ if (authenticationUsesCsrf) { _%>
+                    .with(csrf())
+  <%_ } _%>
+            )
+            .andExpect(status().isOk());
+
+        SessionInformation current = sessionRegistry.getSessionInformation(currentSession.getId());
+        SessionInformation other = sessionRegistry.getSessionInformation("change-password-other-session");
+        assertThat(current.isExpired()).isFalse();
+        assertThat(other.isExpired()).isTrue();
+
+        sessionRegistry.removeSessionInformation(currentSession.getId());
+        sessionRegistry.removeSessionInformation("change-password-other-session");
+        userService.deleteUser("change-password-sessions");
     }
 
     @Test

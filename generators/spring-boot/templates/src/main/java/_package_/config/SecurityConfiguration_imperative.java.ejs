@@ -93,7 +93,10 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 <%_ if (authenticationTypeSession) { _%>
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
   <%_ if (generateUserManagement) { _%>
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
   <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
@@ -154,6 +157,25 @@ public class SecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+<%_ } _%>
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
+
+    /**
+     * The sessions of each user, to end them when the user can no longer log in with them.
+     * It is kept in memory: with several instances, the sessions are to be shared, with Spring Session for instance.
+     */
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    /**
+     * Removes the sessions that end from the {@link SessionRegistry}.
+     */
+    @Bean
+    public static HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 <%_ } _%>
 
@@ -252,6 +274,20 @@ public class SecurityConfiguration {
                     .rememberMeServices(rememberMeServices)
                     .rememberMeParameter("remember-me")
                     .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
+            )
+            .sessionManagement(session ->
+                session
+                    .maximumSessions(-1)
+                    .sessionRegistry(sessionRegistry())
+                    .expiredSessionStrategy(event -> {
+                        String path = event.getRequest().getRequestURI().substring(event.getRequest().getContextPath().length());
+                        if (new AntPathMatcher().match("/api/**", path)) {
+                            event.getResponse().setStatus(HttpStatus.UNAUTHORIZED.value());
+                        } else {
+                            // The session ended, the page is requested again without it.
+                            event.getResponse().sendRedirect(event.getRequest().getRequestURI());
+                        }
+                    })
             )
 <%_ } _%>
 <%_ if (authenticationTypeSession || (authenticationTypeOauth2 && !applicationTypeMicroservice)) { _%>
