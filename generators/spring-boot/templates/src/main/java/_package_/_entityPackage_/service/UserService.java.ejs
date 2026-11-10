@@ -64,6 +64,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
   <%_ } _%>
 <%_ } _%>
+<%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.context.request.RequestContextHolder;
+<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
   <%_ if (databaseTypeNo) { _%>
 import <%- packageName %>.security.SecurityUtils;
@@ -131,8 +137,12 @@ public class UserService {
 
     protected final CacheManager cacheManager;
   <%_ } _%>
+  <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
 
-    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><%- authenticationTypeSession && authenticationUsesRememberMe ? ', PersistentTokenRepository persistentTokenRepository' : '' %><%- databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase ? ', AuthorityRepository authorityRepository' : '' %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %>) {
+    protected final SessionRegistry sessionRegistry;
+  <%_ } _%>
+
+    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><%- authenticationTypeSession && authenticationUsesRememberMe ? ', PersistentTokenRepository persistentTokenRepository' : '' %><%- databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase ? ', AuthorityRepository authorityRepository' : '' %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %><%- authenticationTypeSession && generateUserManagement && !reactive ? ', SessionRegistry sessionRegistry' : '' %>) {
         this.userRepository = userRepository;
   <%_ if (!authenticationTypeOauth2) { _%>
         this.passwordEncoder = passwordEncoder;
@@ -148,6 +158,9 @@ public class UserService {
   <%_ } _%>
   <%_ if (cacheProviderAny) { _%>
         this.cacheManager = cacheManager;
+  <%_ } _%>
+  <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+        this.sessionRegistry = sessionRegistry;
   <%_ } _%>
     }
   <%_ if (!authenticationTypeOauth2) { _%>
@@ -177,6 +190,9 @@ public class UserService {
                 user.setResetDate(null);
       <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
                 removePersistentTokens(user);
+      <%_ } _%>
+      <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+                expireSessions(user.getLogin(), false);
       <%_ } _%>
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
@@ -330,6 +346,9 @@ public class UserService {
     <%_ if (cacheProviderAny) { _%>
                 this.clearUserCaches(user);
     <%_ } _%>
+    <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+                <%- user.adminUserDto %> previousUser = new <%- user.adminUserDto %>(user);
+    <%_ } _%>
                 user.setLogin(userDTO.getLogin().toLowerCase());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
@@ -386,6 +405,16 @@ public class UserService {
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
       <%_ } _%>
+      <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+                if (
+                    !user.isActivated() ||
+                    !previousUser.getLogin().equals(user.getLogin()) ||
+                    !Objects.equals(previousUser.getAuthorities(), new <%- user.adminUserDto %>(user).getAuthorities())
+                ) {
+                    // The sessions keep the login and the authorities they started with.
+                    expireSessions(previousUser.getLogin(), false);
+                }
+      <%_ } _%>
                 userRepository.save(user);
       <%_ if (searchEngineElasticsearch) { _%>
                 userSearchRepository.index(user);
@@ -425,6 +454,9 @@ public class UserService {
         userRepository.findOneByLogin(login).ifPresent(user -> {
       <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
             removePersistentTokens(user);
+      <%_ } _%>
+      <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+            expireSessions(user.getLogin(), false);
       <%_ } _%>
             userRepository.delete(user);
       <%_ if (searchEngineElasticsearch) { _%>
@@ -574,6 +606,9 @@ public class UserService {
       <%_ if (!databaseTypeNo && authenticationTypeSession && authenticationUsesRememberMe) { _%>
                 removePersistentTokens(user);
       <%_ } _%>
+      <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+                expireSessions(user.getLogin(), true);
+      <%_ } _%>
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
       <%_ } _%>
@@ -674,6 +709,27 @@ public class UserService {
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
         });
+    }
+  <%_ } _%>
+  <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+
+    /**
+     * Ends the sessions of a user whose credentials changed or who can no longer log in.
+     *
+     * @param login the login of the user.
+     * @param keepCurrentSession whether the session of the current request stays, the one of the user changing its own password.
+     */
+    protected void expireSessions(String login, boolean keepCurrentSession) {
+        String currentSessionId = keepCurrentSession && RequestContextHolder.getRequestAttributes() != null
+            ? RequestContextHolder.getRequestAttributes().getSessionId()
+            : null;
+        sessionRegistry
+            .getAllPrincipals()
+            .stream()
+            .filter(principal -> principal instanceof UserDetails userDetails && userDetails.getUsername().equals(login))
+            .flatMap(principal -> sessionRegistry.getAllSessions(principal, false).stream())
+            .filter(session -> !session.getSessionId().equals(currentSessionId))
+            .forEach(SessionInformation::expireNow);
     }
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
