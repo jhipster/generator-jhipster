@@ -65,6 +65,7 @@ import org.springframework.scheduling.annotation.Scheduled;
   <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+import <%- packageName %>.security.OpenSessions;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -140,9 +141,11 @@ public class UserService {
   <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
 
     protected final SessionRegistry sessionRegistry;
+
+    protected final OpenSessions openSessions;
   <%_ } _%>
 
-    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><%- authenticationTypeSession && authenticationUsesRememberMe ? ', PersistentTokenRepository persistentTokenRepository' : '' %><%- databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase ? ', AuthorityRepository authorityRepository' : '' %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %><%- authenticationTypeSession && generateUserManagement && !reactive ? ', SessionRegistry sessionRegistry' : '' %>) {
+    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><%- authenticationTypeSession && authenticationUsesRememberMe ? ', PersistentTokenRepository persistentTokenRepository' : '' %><%- databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase ? ', AuthorityRepository authorityRepository' : '' %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %><%- authenticationTypeSession && generateUserManagement && !reactive ? ', SessionRegistry sessionRegistry, OpenSessions openSessions' : '' %>) {
         this.userRepository = userRepository;
   <%_ if (!authenticationTypeOauth2) { _%>
         this.passwordEncoder = passwordEncoder;
@@ -161,6 +164,7 @@ public class UserService {
   <%_ } _%>
   <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
         this.sessionRegistry = sessionRegistry;
+        this.openSessions = openSessions;
   <%_ } _%>
     }
   <%_ if (!authenticationTypeOauth2) { _%>
@@ -729,7 +733,12 @@ public class UserService {
             .filter(principal -> principal instanceof UserDetails userDetails && userDetails.getUsername().equals(login))
             .flatMap(principal -> sessionRegistry.getAllSessions(principal, false).stream())
             .filter(session -> !session.getSessionId().equals(currentSessionId))
-            .forEach(SessionInformation::expireNow);
+            .toList()
+            .forEach(session -> {
+                session.expireNow();
+                // Ends it now, closing its WebSocket connections, instead of at its next request.
+                openSessions.invalidate(session.getSessionId());
+            });
     }
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>

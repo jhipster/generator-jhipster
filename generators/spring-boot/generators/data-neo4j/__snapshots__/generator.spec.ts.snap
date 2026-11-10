@@ -3334,6 +3334,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/security/DomainUserDetailsService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/security/OpenSessions.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/security/PersistentTokenRememberMeServices.java": {
     "stateCleared": "modified",
   },
@@ -3551,6 +3554,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/OpenSessionsTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
