@@ -45,6 +45,7 @@ import org.springframework.stereotype.Component;
 <%_ if (databaseTypeSql && !reactive) { _%>
 import org.hibernate.TransientObjectException;
 import org.hibernate.query.sqm.UnknownPathException;
+import org.springframework.orm.ObjectRetrievalFailureException;
 <%_ } _%>
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -423,6 +424,8 @@ _%>
         for (Throwable cause = err; cause != null; cause = cause.getCause()) {
             if (cause instanceof TransientObjectException) return true;
         }
+        // A reference to an unknown entity may fail when the referenced entity is loaded.
+        if (err instanceof ObjectRetrievalFailureException) return true;
   <%_ } _%>
   <%_ if (databaseTypeSql && reactive) { _%>
         // A data exception (class 22 of the SQL states), like a value too long, has no exception of its own.

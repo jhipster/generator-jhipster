@@ -32,6 +32,7 @@ import org.springframework.r2dbc.UncategorizedR2dbcException;
 import org.hibernate.TransientObjectException;
 import org.hibernate.query.sqm.UnknownPathException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.orm.ObjectRetrievalFailureException;
 <%_ } _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -77,6 +78,11 @@ public class ExceptionTranslatorTestController {
             "test transient reference",
             new IllegalStateException(new TransientObjectException("test transient object"))
         );
+    }
+
+    @GetMapping("/unknown-reference")
+    public void unknownReference() {
+        throw new ObjectRetrievalFailureException(Object.class, 1L);
     }
 
     @GetMapping("/invalid-sort")
