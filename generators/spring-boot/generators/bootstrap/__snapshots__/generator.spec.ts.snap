@@ -243,6 +243,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "serverTestFrameworksAny": false,
   "serverTestFrameworksCucumber": false,
   "serverTestFrameworksGatling": false,
+  "serverUsesCsrf": false,
   "serviceDiscovery": "no",
   "serviceDiscoveryAny": false,
   "serviceDiscoveryConsul": false,
