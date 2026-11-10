@@ -9,6 +9,7 @@
       "500": "Вътрешна грешка в сървъра."
     },
     "concurrencyFailure": "Друг потребител е променил данните едновременно с вас. Вашите промени са отхвърлени.",
+    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
     "validation": "Грешка при валидиране на данните на сървъра."
   }
 }

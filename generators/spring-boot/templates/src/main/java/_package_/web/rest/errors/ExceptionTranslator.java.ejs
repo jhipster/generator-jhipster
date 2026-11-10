@@ -33,14 +33,17 @@ import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.core.PropertyReferenceException;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 <%_ if (reactive && databaseTypeSql) { _%>
+import io.r2dbc.spi.R2dbcException;
 import org.springframework.stereotype.Component;
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
+import org.hibernate.TransientObjectException;
 import org.hibernate.query.sqm.UnknownPathException;
 <%_ } _%>
 import org.springframework.web.ErrorResponseException;
@@ -312,6 +315,10 @@ _%>
         } else if (err instanceof ConcurrencyFailureException || err.getCause() instanceof ConcurrencyFailureException) {
             return ErrorConstants.ERR_CONCURRENCY_FAILURE;
 <%_ } _%>
+<%_ if (!databaseTypeNo) { _%>
+        } else if (isDataIntegrityViolation(err)) {
+            return ErrorConstants.ERR_DATA_INTEGRITY_VIOLATION;
+<%_ } _%>
 <%_ if (reactive) { _%>
         } else if (err instanceof WebExchangeBindException) {
             return ErrorConstants.ERR_VALIDATION;
@@ -336,6 +343,7 @@ _%>
             if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
 <%_ if (!databaseTypeNo) { _%>
             if (isInvalidSortProperty(err)) return "Invalid sort property";
+            if (isDataIntegrityViolation(err)) return "Data integrity violation";
             if (err instanceof DataAccessException) return "Failure during data access";
 <%_ } _%>
         }
@@ -355,6 +363,7 @@ _%>
         if (err instanceof ConstraintViolationException) return HttpStatus.BAD_REQUEST;
 <%_ if (!databaseTypeNo) { _%>
         if (isInvalidSortProperty(err)) return HttpStatus.BAD_REQUEST;
+        if (isDataIntegrityViolation(err)) return HttpStatus.BAD_REQUEST;
 <%_ } _%>
         return null;
     }
@@ -406,6 +415,25 @@ _%>
         }
   <%_ } _%>
         return err instanceof PropertyReferenceException;
+    }
+
+    private boolean isDataIntegrityViolation(Throwable err) {
+  <%_ if (databaseTypeSql && !reactive) { _%>
+        // A reference to an entity without id fails before a statement is sent to the database.
+        for (Throwable cause = err; cause != null; cause = cause.getCause()) {
+            if (cause instanceof TransientObjectException) return true;
+        }
+  <%_ } _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
+        // A data exception (class 22 of the SQL states), like a value too long, has no exception of its own.
+        for (Throwable cause = err; cause != null; cause = cause.getCause()) {
+            if (cause instanceof R2dbcException r2dbcException) {
+                String sqlState = r2dbcException.getSqlState();
+                if (sqlState != null && sqlState.startsWith("22")) return true;
+            }
+        }
+  <%_ } _%>
+        return err instanceof DataIntegrityViolationException;
     }
 
 <%_ } _%>

@@ -9,6 +9,7 @@
       "500": "সার্ভার এ সমস্যা"
     },
     "concurrencyFailure": "অন্য একজন ইউজার একই সময়ে এই তথ্যটি পরিবর্তন করেছেন। তাই আপনার পরিবর্তন বাতিল হয়েছে।",
+    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
     "validation": "সার্ভারে ভ্যালিডেশন ত্রুটি।"
   }
 }

@@ -9,6 +9,7 @@
       "500": "サーバ内部エラーです。"
     },
     "concurrencyFailure": "他のユーザがあなたと同時にこのデータを変更しました。あなたの変更は拒否されました。",
+    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
     "validation": "サーバで検証エラーが発生しました。"
   }
 }

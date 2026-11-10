@@ -21,7 +21,15 @@ package <%- packageName %>.web.rest.errors;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
+<%_ if (!databaseTypeNo) { _%>
+import org.springframework.dao.DataIntegrityViolationException;
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
+import io.r2dbc.spi.R2dbcNonTransientResourceException;
+import org.springframework.r2dbc.UncategorizedR2dbcException;
+<%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
+import org.hibernate.TransientObjectException;
 import org.hibernate.query.sqm.UnknownPathException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 <%_ } _%>
@@ -44,7 +52,33 @@ public class ExceptionTranslatorTestController {
     }
 <%_ } _%>
 
+<%_ if (!databaseTypeNo) { _%>
+    @GetMapping("/data-integrity-violation")
+    public void dataIntegrityViolation() {
+        throw new DataIntegrityViolationException("test data integrity violation");
+    }
+
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
+    @GetMapping("/data-exception")
+    public void dataException() {
+        throw new UncategorizedR2dbcException(
+            "test data exception",
+            null,
+            new R2dbcNonTransientResourceException("test value too long", "22001")
+        );
+    }
+
+<%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
+    @GetMapping("/transient-reference")
+    public void transientReference() {
+        throw new InvalidDataAccessApiUsageException(
+            "test transient reference",
+            new IllegalStateException(new TransientObjectException("test transient object"))
+        );
+    }
+
     @GetMapping("/invalid-sort")
     public void invalidSort() {
         throw new InvalidDataAccessApiUsageException("test invalid sort", new UnknownPathException("test unknown path"));

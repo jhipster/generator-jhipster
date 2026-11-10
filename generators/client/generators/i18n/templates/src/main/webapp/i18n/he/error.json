@@ -9,6 +9,7 @@
       "500": "שגיאת שרת פנימית."
     },
     "concurrencyFailure": "משתמש אחר שינה את הנתונים במקביל אליך. השינויים שלך נדחו.",
+    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
     "validation": "שגיאת אימות בצד השרת."
   }
 }
