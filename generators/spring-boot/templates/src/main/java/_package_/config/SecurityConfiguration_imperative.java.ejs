@@ -28,7 +28,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeJwt && generateAuthenticationApi) { _%>
 import org.springframework.http.HttpMethod;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -226,11 +226,13 @@ public class SecurityConfiguration {
   <%_ } _%>
                     .requestMatchers("/swagger-ui/**").permitAll()
 <%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
+<%_ if (generateAuthenticationApi) { _%>
+  <%_ if (authenticationTypeJwt) { _%>
                     .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
-<%_ } else { _%>
+  <%_ } else { _%>
                     .requestMatchers("/api/authenticate").permitAll()
+  <%_ } _%>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
   <%_ if (generateUserRegistration) { _%>
