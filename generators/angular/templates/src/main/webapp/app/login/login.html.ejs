@@ -51,12 +51,14 @@
           />
         </div>
 
-        <div class="form-check"<%- authenticationTypeSession && locals.databaseTypeNo ? ' hidden' : '' %>>
+<%_ if (authenticationUsesRememberMe) { _%>
+        <div class="form-check">
           <label class="form-check-label" for="rememberMe">
             <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
             <span>__jhiTranslateTag__('login.form.rememberme')</span>
           </label>
         </div>
+<%_ } _%>
 
         <button type="submit" class="btn btn-primary" data-cy="submit">__jhiTranslateTag__('login.form.button')</button>
       </form>

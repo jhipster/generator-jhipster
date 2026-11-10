@@ -303,7 +303,7 @@ describe('Authentication reducer tests', () => {
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = vi.fn().mockResolvedValue(loginResponse);
 
-      await store.dispatch(login('test', 'test'));
+      await store.dispatch(login({ username: 'test', password: 'test' }));
       expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBe('TestToken');
       expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
       clearAuthToken();
@@ -314,7 +314,7 @@ describe('Authentication reducer tests', () => {
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = vi.fn().mockResolvedValue(loginResponse);
 
-      await store.dispatch(login('user', 'user', true));
+      await store.dispatch(login({ username: 'user', password: 'user', rememberMe: true }));
       expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
       expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBe('TestToken');
       clearAuthToken();
@@ -329,7 +329,7 @@ describe('Authentication reducer tests', () => {
       });
       axios.post = vi.fn().mockResolvedValue({ headers: {} });
 
-      await store.dispatch(login('test', 'test'));
+      await store.dispatch(login({ username: 'test', password: 'test' }));
       expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
       expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
     });

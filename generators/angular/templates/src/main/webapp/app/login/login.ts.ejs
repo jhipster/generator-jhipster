@@ -52,7 +52,9 @@ export default class Login implements OnInit, AfterViewInit {
   loginForm = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+<%_ if (authenticationUsesRememberMe) { _%>
     rememberMe: new FormControl(false, { nonNullable: true, validators: [Validators.required] }),
+<%_ } _%>
   });
 
   private readonly accountService = inject(AccountService);

@@ -149,7 +149,7 @@ describe('Layout screens', () => {
       const loginService = TestBed.inject(LoginService);
       const authenticated = vi.fn();
 
-      loginService.login({ username: 'user', password: 'user', rememberMe: false }).subscribe(authenticated);
+      loginService.login({ username: 'user', password: 'user'<%- authenticationUsesRememberMe ? ', rememberMe: false' : '' %> }).subscribe(authenticated);
       httpMock.match(() => true).forEach(request => request.flush({ id_token: 'token' }));
       httpMock.match(() => true).forEach(request => request.flush(account));
       loginService.logout();

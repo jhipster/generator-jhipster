@@ -57,7 +57,7 @@ describe('Login', () => {
     fireEvent.change(container.querySelector('[name="password"]')!, { target: { value: 'secret' } });
     fireEvent.click(screen.getByRole('button'));
 
-    await waitFor(() => expect(login).toHaveBeenCalledWith('admin', 'secret', false));
+    await waitFor(() => expect(login).toHaveBeenCalledWith(expect.objectContaining({ username: 'admin', password: 'secret' })));
   });
 
   it('should require the username and the password', async () => {

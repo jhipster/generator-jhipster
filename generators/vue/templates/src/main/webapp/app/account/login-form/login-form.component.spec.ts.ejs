@@ -152,7 +152,9 @@ describe('LoginForm Component', () => {
     // GIVEN
     loginForm.login = 'login';
     loginForm.password = 'pwd';
+  <%_ if (authenticationUsesRememberMe) { _%>
     loginForm.rememberMe = true;
+  <%_ } _%>
     axiosStub.post.mockRejectedValue(new Error());
 
     // WHEN
@@ -160,7 +162,7 @@ describe('LoginForm Component', () => {
     await loginForm.$nextTick();
 
     // THEN
-    expect(axiosStub.post).toHaveBeenCalledWith('api/authentication', 'username=login&password=pwd&remember-me=true&submit=Login', {
+    expect(axiosStub.post).toHaveBeenCalledWith('api/authentication', 'username=login&password=pwd<%- authenticationUsesRememberMe ? '&remember-me=true' : '' %>&submit=Login', {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
     await loginForm.$nextTick();
@@ -171,7 +173,9 @@ describe('LoginForm Component', () => {
     // GIVEN
     loginForm.login = 'login';
     loginForm.password = 'pwd';
+  <%_ if (authenticationUsesRememberMe) { _%>
     loginForm.rememberMe = true;
+  <%_ } _%>
     axiosStub.post.mockResolvedValue({});
 
     // WHEN
@@ -179,7 +183,7 @@ describe('LoginForm Component', () => {
     await loginForm.$nextTick();
 
     // THEN
-    expect(axiosStub.post).toHaveBeenCalledWith('api/authentication', 'username=login&password=pwd&remember-me=true&submit=Login', {
+    expect(axiosStub.post).toHaveBeenCalledWith('api/authentication', 'username=login&password=pwd<%- authenticationUsesRememberMe ? '&remember-me=true' : '' %>&submit=Login', {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
     expect(loginForm.authenticationError).toBeFalsy();
@@ -193,14 +197,18 @@ describe('LoginForm Component', () => {
     // WHEN
     wrapper.findComponent<ComponentPublicInstance>('#username').vm.$emit('update:modelValue', 'login');
     wrapper.findComponent<ComponentPublicInstance>('#password').vm.$emit('update:modelValue', 'pwd');
+<%_ if (authenticationUsesRememberMe) { _%>
     wrapper.findComponent<ComponentPublicInstance>('#rememberMe').vm.$emit('update:modelValue', false);
+<%_ } _%>
     await wrapper.find('form').trigger('submit');
     await flushPromises();
 
     // THEN
     expect(loginForm.login).toBe('login');
     expect(loginForm.password).toBe('pwd');
+<%_ if (authenticationUsesRememberMe) { _%>
     expect(loginForm.rememberMe).toBe(false);
+<%_ } _%>
     expect(axiosStub.post).toHaveBeenCalled();
   });
 
