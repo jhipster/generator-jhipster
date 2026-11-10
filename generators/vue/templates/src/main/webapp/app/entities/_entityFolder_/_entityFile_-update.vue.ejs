@@ -265,18 +265,7 @@ const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
 const previousState = () => router.go(-1);
 
 const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
-  async (id, { signal }) => {
-    const res = await <%- entityInstance %>Service().find(id, { signal });
-<%_ for (field of fields.filter(field => !field.id)) { _%>
-  <%_ const { fieldName, fieldType } = field; _%>
-  <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-    if (res.<%- fieldName %>) {
-      res.<%- fieldName %> = new Date(res.<%- fieldName %>);
-    }
-  <%_ } _%>
-<%_ } _%>
-    return res;
-  },
+  (id, { signal }) => <%- entityInstance %>Service().find(id, { signal }),
   {
     // The router reuses the component when the id of the route changes, and an update without id is a new entity.
     params: () => route.params?.<%- entityInstance %>Id as string | undefined,

@@ -20,9 +20,15 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import axios from 'axios';
-import { <%- entityAngularName %> } from './<%- entityFileName %>.model';
 
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
+
+const sampleWithRequiredData: I<%- entityAngularName %> = <%- vueTsSampleWithRequiredData %>;
+
+const sampleWithPartialData: I<%- entityAngularName %> = <%- vueTsSampleWithPartialData %>;
+
+const sampleWithFullData: I<%- entityAngularName %> = <%- vueTsSampleWithFullData %>;
 
 const error = {
   response: {
@@ -44,50 +50,19 @@ const axiosStub = {
 describe('Service Tests', () => {
   describe('<%- entityAngularName %> Service', () => {
     let service: <%- entityAngularName %>Service;
-    let elemDefault: <%- entityAngularName %>;
-<%_ if (anyFieldIsDateDerived) { _%>
-    let currentDate: Date;
-<%_ } _%>
 
     beforeEach(() => {
       service = new <%- entityAngularName %>Service();
-<%_ if (anyFieldIsDateDerived) { _%>
-      currentDate = new Date();
-<%_ } _%>
-      elemDefault = new <%- entityAngularName %>(
-        <%- primaryKey.tsSampleValues[0] %>,
-<%_ for (const field of fields.filter(field => !field.id)) { _%>
-  <%_ if (field.fieldIsEnum) { _%>
-        '<%- field.enumValues[0].name %>',
-  <%_ } else if (field.fieldTypeBoolean) { _%>
-        false,
-  <%_ } else if (field.fieldTypeDuration) { _%>
-        'PT1S',
-  <%_ } else if (field.fieldTypeNumeric) { _%>
-        0,
-  <%_ } else if (field.fieldTypeCharSequence) { _%>
-        'AAAAAAA',
-  <%_ } else if (field.fieldTypeTemporal) { _%>
-        currentDate,
-  <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        'image/png',
-        'AAAAAAA',
-  <%_ } else { /* (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' */ _%>
-        'AAAAAAA',
-  <%_ } _%>
-<%_ } _%>
-      );
     });
 
     describe('Service methods', () => {
       it('should find an element', async () => {
-        const returnedFromService = { ...elemDefault };
+        const returnedFromService = { ...sampleWithFullData };
         axiosStub.get.mockResolvedValue({ data: returnedFromService });
 
-        return service
-          .find(<%- tsKeyId %>).then((res) => {
-            expect(res).toMatchObject(elemDefault);
-        });
+        const res = await service.find(<%- tsKeyId %>);
+
+        expect(res).toEqual(returnedFromService);
       });
 
       it('should pass the signal of the request', async () => {
@@ -111,13 +86,12 @@ describe('Service Tests', () => {
 
 <%_ if (!readOnly) { _%>
       it('should create a <%- entityAngularName %>', async () => {
-        const returnedFromService = { ...elemDefault };
-        const expected = { ...returnedFromService };
+        const returnedFromService = { ...sampleWithFullData };
+        axiosStub.post.mockResolvedValue({ data: returnedFromService });
 
-          axiosStub.post.mockResolvedValue({ data: returnedFromService });
-          return service.create({}).then((res) => {
-            expect(res).toMatchObject(expected);
-        });
+        const res = await service.create({ ...sampleWithRequiredData });
+
+        expect(res).toEqual(returnedFromService);
       });
 
       it('should not create a <%- entityAngularName %>', async () => {
@@ -127,14 +101,12 @@ describe('Service Tests', () => {
       });
 
       it('should update a <%- entityAngularName %>', async () => {
-        const returnedFromService = { ...elemDefault };
+        const returnedFromService = { ...sampleWithRequiredData };
+        axiosStub.put.mockResolvedValue({ data: returnedFromService });
 
-          const expected = { ...returnedFromService };
-          axiosStub.put.mockResolvedValue({ data: returnedFromService });
+        const res = await service.update({ ...sampleWithRequiredData });
 
-          return service.update(expected).then((res) => {
-            expect(res).toMatchObject(expected);
-        });
+        expect(res).toEqual(returnedFromService);
       });
 
       it('should not update a <%- entityAngularName %>', async () => {
@@ -144,14 +116,13 @@ describe('Service Tests', () => {
       });
 
       it('should partial update a <%- entityAngularName %>', async () => {
-          const patchObject = { ...elemDefault };
-          const returnedFromService = { ...patchObject };
-          const expected = { ...returnedFromService };
-          axiosStub.patch.mockResolvedValue({ data: returnedFromService });
+        const patchObject = { ...sampleWithPartialData };
+        const returnedFromService = { ...sampleWithFullData, ...patchObject };
+        axiosStub.patch.mockResolvedValue({ data: returnedFromService });
 
-          return service.partialUpdate(patchObject).then((res) => {
-            expect(res).toMatchObject(expected);
-          });
+        const res = await service.partialUpdate(patchObject);
+
+        expect(res).toEqual(returnedFromService);
       });
 
       it('should not partial update a <%- entityAngularName %>', async () => {
@@ -162,12 +133,12 @@ describe('Service Tests', () => {
 
 <%_ } _%>
       it('should return a list of <%- entityAngularName %>', async () => {
-        const returnedFromService = { ...elemDefault };
-        const expected = { ...returnedFromService };
-        axiosStub.get.mockResolvedValue([returnedFromService]);
-        return service.retrieve(<%- paginationNo ? '' : '{ sort: {}, page: 0, size: 10 }' %>).then((res) => {
-          expect(res).toContainEqual(expected);
-        });
+        const returnedFromService = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        axiosStub.get.mockResolvedValue({ data: returnedFromService });
+
+        const res = await service.retrieve(<%- paginationNo ? '' : '{ sort: {}, page: 0, size: 10 }' %>);
+
+        expect(res.data).toEqual(returnedFromService);
       });
 
 <%_ if (searchEngineAny) { _%>
@@ -189,10 +160,11 @@ describe('Service Tests', () => {
 
 <%_ if (!readOnly) { _%>
       it('should delete a <%- entityAngularName %>', async () => {
-          axiosStub.delete.mockResolvedValue({ok: true});
-          return service.delete(<%- tsKeyId %>).then((res) => {
-              expect(res).toEqual({ ok: true });
-          });
+        axiosStub.delete.mockResolvedValue({ ok: true });
+
+        const res = await service.delete(<%- tsKeyId %>);
+
+        expect(res).toEqual({ ok: true });
       });
 
       it('should not delete a <%- entityAngularName %>', async () => {

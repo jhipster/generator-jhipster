@@ -249,7 +249,7 @@ describe('Component Tests', () => {
 <%_ const dateTimeField = fields.find(field => !field.id && ['Instant', 'ZonedDateTime'].includes(field.fieldType)); _%>
 <%_ if (dateTimeField) { _%>
 
-      it('Should convert a date time', async () => {
+      it('Should keep the date time of the server', async () => {
         // GIVEN
         <%- entityInstance %>ServiceStub.find.mockResolvedValue({ ...<%- entityInstance %>Sample, <%- dateTimeField.fieldName %>: '2019-10-15T11:42:02Z' });
         <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue([<%- entityInstance %>Sample]);
@@ -265,7 +265,7 @@ describe('Component Tests', () => {
         await comp.$nextTick();
 
         // THEN
-        expect(comp.<%- entityInstance %>.<%- dateTimeField.fieldName %>).toEqual(new Date('2019-10-15T11:42:02Z'));
+        expect(comp.<%- entityInstance %>.<%- dateTimeField.fieldName %>).toBe('2019-10-15T11:42:02Z');
       });
 <%_ } _%>
 
