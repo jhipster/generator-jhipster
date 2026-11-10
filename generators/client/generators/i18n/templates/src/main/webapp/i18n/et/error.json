@@ -9,7 +9,7 @@
       "500": "Serveri sisemine viga."
     },
     "concurrencyFailure": "Teine kasutaja muutis teiega samal ajal andmeid. Teie muutused on tagasi lükatud.",
-    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
+    "dataIntegrityViolation": "Andmed on vastuolus olemasolevate andmetega või ei ole kehtivad. Teie muutused on tagasi lükatud.",
     "validation": "Valideerimisviga serveris."
   }
 }

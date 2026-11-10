@@ -9,7 +9,7 @@
       "500": "ਅੰਦਰੂਨੀ ਸਰਵਰ ਗਲਤੀ।"
     },
     "concurrencyFailure": "ਇਕ ਹੋਰ ਉਪਭੋਗਤਾ ਨੇ ਉਸੇ ਸਮੇਂ ਇਸ ਡੇਟਾ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕੀਤਾ। ਤੁਹਾਡੀਆਂ ਤਬਦੀਲੀਆਂ ਰੱਦ ਕਰ ਦਿੱਤੀਆਂ ਗਈਆਂ।",
-    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
+    "dataIntegrityViolation": "ਇਹ ਡੇਟਾ ਮੌਜੂਦਾ ਡੇਟਾ ਨਾਲ ਟਕਰਾਉਂਦਾ ਹੈ ਜਾਂ ਵੈਧ ਨਹੀਂ ਹੈ। ਤੁਹਾਡੀਆਂ ਤਬਦੀਲੀਆਂ ਰੱਦ ਕਰ ਦਿੱਤੀਆਂ ਗਈਆਂ।",
     "validation": "ਸਰਵਰ ਉੱਤੇ ਪ੍ਰਮਾਣਿਕਤਾ ਗਲਤੀ ।"
   }
 }

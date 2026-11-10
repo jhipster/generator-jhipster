@@ -9,7 +9,7 @@
       "500": "Internal server error."
     },
     "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
-    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
+    "dataIntegrityViolation": "데이터가 기존 데이터와 충돌하거나 유효하지 않습니다. 변경 사항이 거부되었습니다.",
     "validation": "Validation error on the server."
   }
 }

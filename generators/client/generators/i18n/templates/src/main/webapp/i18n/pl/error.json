@@ -9,7 +9,7 @@
       "500": "Wewnętrzny błąd serwera."
     },
     "concurrencyFailure": "Inny użytkownik zmodyfikował te same dane chwilę przed Tobą. Twoje zmiany zostały odrzucone.",
-    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
+    "dataIntegrityViolation": "Dane są w konflikcie z istniejącymi danymi lub są nieprawidłowe. Twoje zmiany zostały odrzucone.",
     "validation": "Błąd walidacji po stronie serwera."
   }
 }

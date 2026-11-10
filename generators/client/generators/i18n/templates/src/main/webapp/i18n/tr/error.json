@@ -9,7 +9,7 @@
       "500": "Dahili sunucu hatası."
     },
     "concurrencyFailure": "Farklı bir kullanıcı bu verileri sizinle aynı anda değiştirdi. Bu yüzden değişiklikleriniz reddedildi.",
-    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
+    "dataIntegrityViolation": "Veriler mevcut verilerle çakışıyor veya geçerli değil. Bu yüzden değişiklikleriniz reddedildi.",
     "validation": "Sunucuda doğrulama hatası oluştu."
   }
 }

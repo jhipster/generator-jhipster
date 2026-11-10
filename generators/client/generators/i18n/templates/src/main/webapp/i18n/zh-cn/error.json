@@ -9,7 +9,7 @@
       "500": "内部服务器错误."
     },
     "concurrencyFailure": "出现并发提交. 您的提交被拒绝.",
-    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
+    "dataIntegrityViolation": "数据与已有数据冲突或无效. 您的提交被拒绝.",
     "validation": "服务器校验失败."
   }
 }

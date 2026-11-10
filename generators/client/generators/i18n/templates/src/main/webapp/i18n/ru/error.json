@@ -9,7 +9,7 @@
       "500": "Внутренняя ошибка сервера."
     },
     "concurrencyFailure": "Другой пользователь изменил эти данные одновременно с вами. Ваши изменения были отклонены.",
-    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
+    "dataIntegrityViolation": "Данные конфликтуют с существующими данными или недопустимы. Ваши изменения были отклонены.",
     "validation": "Ошибка валидации на сервере."
   }
 }

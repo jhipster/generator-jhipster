@@ -9,7 +9,7 @@
       "500": "Interna greška servera."
     },
     "concurrencyFailure": "Drugi korisnik modificirao je podatke u isto vrijeme kao i Vi. Vaše promjene nisu prihvaćene.",
-    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
+    "dataIntegrityViolation": "Podaci su u sukobu s postojećim podacima ili nisu valjani. Vaše promjene nisu prihvaćene.",
     "validation": "Greška kod provjere na serveru."
   }
 }
