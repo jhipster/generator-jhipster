@@ -19,7 +19,6 @@
 <&_ if (fragment.importsSection) { -&>
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-// For a detailed explanation, visit: https://github.com/angular-eslint/angular-eslint/blob/main/docs/CONFIGURING_ESLINT.md
 import angular from 'angular-eslint';
 import vitest from '@vitest/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
@@ -34,6 +33,7 @@ import stylistic from '@stylistic/eslint-plugin';
     },
   },
   {
+    // For a detailed explanation, visit: https://github.com/angular-eslint/angular-eslint/blob/main/docs/CONFIGURING_ESLINT.md
     files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.ts'],
     extends: [...tseslint.configs.strictTypeChecked, ...tseslint.configs.stylistic, ...angular.configs.tsRecommended],
     plugins: {
