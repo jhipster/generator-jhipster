@@ -193,11 +193,12 @@ export default class VueGenerator extends VueApplicationGenerator {
           this.fetchFromInstalledJHipster('vue', 'resources', 'package.json'),
         );
       },
-      applicationDefaults({ applicationDefaults }) {
+      applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
         });
+        application.prettierFolders.push('build-plugins/**/');
       },
       javaNodeBuildPaths({ application }) {
         const { clientBundlerRsbuild, clientBundlerVite, microfrontend, enableTranslation, enableI18nRTL, javaNodeBuildPaths } =

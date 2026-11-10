@@ -139,7 +139,7 @@ export default class ReactGenerator extends ReactApplicationGenerator {
       },
       applicationDefaults({ application, applicationDefaults }) {
         application.prettierExtensions.push('html', 'tsx', 'css', 'scss');
-
+        application.prettierFolders.push('build-plugins/**/');
         applicationDefaults({
           __override__: true,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
