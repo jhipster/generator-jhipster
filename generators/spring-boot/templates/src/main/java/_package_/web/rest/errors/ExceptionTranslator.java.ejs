@@ -55,11 +55,13 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.http.MediaType;
 import tech.jhipster.web.rest.errors.ExceptionTranslation;
+import org.springframework.web.reactive.resource.NoResourceFoundException;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 <%_ } else { _%>
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 <%_ } _%>
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
@@ -208,6 +210,11 @@ _%>
         String problemTitle = problem.getTitle();
         if (problemTitle == null || !problemTitle.equals(title)) {
             problem.setTitle(title);
+        }
+
+        if (err instanceof NoResourceFoundException) {
+            // The message of the exception tells how the request is handled
+            problem.setDetail(HttpStatus.NOT_FOUND.getReasonPhrase());
         }
 
         if (problem.getDetail() == null) {
