@@ -18,6 +18,10 @@
  */
 
 const defaultCommands = {
+  'describe-samples': {
+    desc: 'Describe the CI samples',
+    blueprint: '@jhipster/jhipster-dev',
+  },
   'generate-sample': {
     desc: 'Generate a test sample',
     blueprint: '@jhipster/jhipster-dev',
