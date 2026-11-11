@@ -212,12 +212,10 @@ _%>
             problem.setTitle(title);
         }
 
-        if (err instanceof NoResourceFoundException) {
-            // The message of the exception tells how the request is handled
-            problem.setDetail(HttpStatus.NOT_FOUND.getReasonPhrase());
-        }
-
-        if (problem.getDetail() == null) {
+        String mappedDetail = getMappedDetail(err);
+        if (mappedDetail != null) {
+            problem.setDetail(mappedDetail);
+        } else if (problem.getDetail() == null) {
             // higher precedence to cause
             problem.setDetail(getCustomizedErrorDetails(err));
         }
@@ -339,6 +337,12 @@ _%>
         if (
             err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException
         ) return "Method argument not valid";
+        return null;
+    }
+
+    private String getMappedDetail(Throwable err) {
+        // Where we disagree with Spring defaults
+        if (err instanceof NoResourceFoundException) return HttpStatus.NOT_FOUND.getReasonPhrase();
         return null;
     }
 
