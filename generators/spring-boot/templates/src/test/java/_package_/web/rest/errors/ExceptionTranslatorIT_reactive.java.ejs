@@ -262,6 +262,25 @@ class ExceptionTranslatorIT {
     }
 
     @Test
+    void testNotFound() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/nothing")
+            .exchange()
+            .expectStatus()
+            .isNotFound()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.404")
+            .jsonPath("$.title")
+            .isEqualTo("Not Found")
+            .jsonPath("$.detail")
+            .isEqualTo("Not Found");
+    }
+
+    @Test
     void testExceptionWithResponseStatus() {
         webTestClient
             .get()

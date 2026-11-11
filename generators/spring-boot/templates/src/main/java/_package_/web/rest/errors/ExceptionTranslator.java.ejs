@@ -55,11 +55,13 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.http.MediaType;
 import tech.jhipster.web.rest.errors.ExceptionTranslation;
+import org.springframework.web.reactive.resource.NoResourceFoundException;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 <%_ } else { _%>
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 <%_ } _%>
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
@@ -210,10 +212,7 @@ _%>
             problem.setTitle(title);
         }
 
-        if (problem.getDetail() == null) {
-            // higher precedence to cause
-            problem.setDetail(getCustomizedErrorDetails(err));
-        }
+        problem.setDetail(getCustomizedErrorDetails(err, problem.getDetail()));
 
         Map<String, Object> problemProperties = problem.getProperties();
         if (problemProperties == null || !problemProperties.containsKey(MESSAGE_KEY)) problem.setProperty(
@@ -335,23 +334,34 @@ _%>
         return null;
     }
 
-    private String getCustomizedErrorDetails(Throwable err) {
+    private String getCustomizedErrorDetails(Throwable err, String currentDetail) {
+        // Where we disagree with Spring defaults
+        if (err instanceof NoResourceFoundException) return HttpStatus.NOT_FOUND.getReasonPhrase();
+        if (currentDetail != null) return currentDetail;
+
         // The message of such an exception is its whole body, the message key of the problem tells the error
         if (err instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause) return null;
 
         Collection<String> activeProfiles = List.of(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
-            if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
-<%_ if (!databaseTypeNo) { _%>
-            if (isInvalidSortProperty(err)) return "Invalid sort property";
-            if (isDataIntegrityViolation(err)) return "Data integrity violation";
-            if (err instanceof DataAccessException) return "Failure during data access";
-<%_ } _%>
+            String productionDetail = getProductionErrorDetails(err);
+            if (productionDetail != null) return productionDetail;
         }
+        // higher precedence to cause
         String detail = err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
         return activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION) && containsPackageName(detail)
             ? "Unexpected runtime exception"
             : detail;
+    }
+
+    private String getProductionErrorDetails(Throwable err) {
+        if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
+<%_ if (!databaseTypeNo) { _%>
+        if (isInvalidSortProperty(err)) return "Invalid sort property";
+        if (isDataIntegrityViolation(err)) return "Data integrity violation";
+        if (err instanceof DataAccessException) return "Failure during data access";
+<%_ } _%>
+        return null;
     }
 
     private HttpStatus getMappedStatus(Throwable err) {
