@@ -103,8 +103,14 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.csrf.*;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
+<%_ } _%>
+<%_ if (authenticationTypeJwt || authenticationTypeOauth2) { _%>
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.jwt.JwtValidationException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
+import org.springframework.security.web.AuthenticationEntryPoint;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -348,6 +354,9 @@ public class SecurityConfiguration {
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter())))
             .oauth2Client(withDefaults());
 <%_ } _%>
+<%_ if (authenticationTypeJwt || authenticationTypeOauth2) { _%>
+        http.oauth2ResourceServer(oauth2 -> oauth2.authenticationEntryPoint(bearerTokenAuthenticationEntryPoint()));
+<%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             http
@@ -475,6 +484,24 @@ public class SecurityConfiguration {
              */
             return this.xor.resolveCsrfTokenValue(request, csrfToken);
         }
+    }
+<%_ } _%>
+<%_ if (authenticationTypeJwt || authenticationTypeOauth2) { _%>
+
+    /**
+     * Answers an invalid bearer token with a description that does not depend on the library that decodes the token.
+     */
+    private AuthenticationEntryPoint bearerTokenAuthenticationEntryPoint() {
+        BearerTokenAuthenticationEntryPoint entryPoint = new BearerTokenAuthenticationEntryPoint();
+        return (request, response, exception) -> entryPoint.commence(request, response, describeInvalidBearerToken(exception));
+    }
+
+    private AuthenticationException describeInvalidBearerToken(AuthenticationException exception) {
+        if (!(exception instanceof InvalidBearerTokenException)) return exception;
+        boolean expired =
+            exception.getCause() instanceof JwtValidationException validation &&
+            validation.getErrors().stream().anyMatch(error -> error.getDescription() != null && error.getDescription().startsWith("Jwt expired"));
+        return new InvalidBearerTokenException(expired ? "The access token expired" : "The access token is invalid", exception.getCause());
     }
 <%_ } _%>
 }
