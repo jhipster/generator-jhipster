@@ -372,6 +372,16 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "clientThemeVariantPrimary": false,
   "commandName": "spring-boot",
   "communicationSpringWebsocket": false,
+  "corsAdditionalAllowedOrigins": [],
+  "corsAllowedOriginPatterns": [
+    "https://*.githubpreview.dev",
+  ],
+  "corsAllowedOrigins": [
+    "http://localhost:8100",
+    "https://localhost:8100",
+    "http://localhost:9060",
+    "https://localhost:9060",
+  ],
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": [],
   "cypressAudit": undefined,
@@ -1296,6 +1306,16 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "clientThemeVariantPrimary": false,
   "commandName": "spring-boot",
   "communicationSpringWebsocket": false,
+  "corsAdditionalAllowedOrigins": [],
+  "corsAllowedOriginPatterns": [
+    "https://*.githubpreview.dev",
+  ],
+  "corsAllowedOrigins": [
+    "http://localhost:8100",
+    "https://localhost:8100",
+    "http://localhost:9060",
+    "https://localhost:9060",
+  ],
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": [],
   "cypressAudit": undefined,
