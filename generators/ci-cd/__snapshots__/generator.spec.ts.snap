@@ -453,6 +453,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "serverTestFrameworksAny": false,
   "serverTestFrameworksCucumber": false,
   "serverTestFrameworksGatling": false,
+  "serverUsesCsrf": false,
   "serviceDiscovery": "no",
   "serviceDiscoveryAny": false,
   "serviceDiscoveryConsul": false,

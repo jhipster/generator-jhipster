@@ -243,6 +243,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "serverTestFrameworksAny": false,
   "serverTestFrameworksCucumber": false,
   "serverTestFrameworksGatling": false,
+  "serverUsesCsrf": false,
   "serviceDiscovery": "no",
   "serviceDiscoveryAny": false,
   "serviceDiscoveryConsul": false,

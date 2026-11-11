@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -110,7 +109,6 @@ describe('Account screens', () => {
 <%_ if (enableTranslation) { _%>
         provideTranslateService(),
 <%_ } _%>
-        provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: ActivatedRoute, useValue: { queryParams: of({ key: 'key' }) } },

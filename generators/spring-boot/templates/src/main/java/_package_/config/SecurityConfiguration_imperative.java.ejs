@@ -28,7 +28,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeJwt && generateAuthenticationApi) { _%>
 import org.springframework.http.HttpMethod;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -37,13 +37,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 <%_ } _%>
 import org.springframework.security.web.SecurityFilterChain;
-<%_ if (!skipClient || authenticationUsesCsrf) { _%>
+<%_ if (!skipClient || serverUsesCsrf) { _%>
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 <%_ } _%>
 <%_ if (!skipClient) { _%>
 import <%- packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 <%_ } _%>
@@ -82,7 +82,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
   <%_ } _%>
 import java.util.*;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import java.util.function.Supplier;
 <%_ } _%>
 <%_ if (authenticationTypeSession || (authenticationTypeOauth2 && !applicationTypeMicroservice)) { _%>
@@ -99,7 +99,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
   <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import org.springframework.security.web.csrf.*;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
@@ -114,7 +114,7 @@ import <%- packageName %>.security.oauth2.CustomClaimConverter;
 <%_ if (!skipClient) { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import org.springframework.util.StringUtils;
 <%_ } _%>
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -186,7 +186,7 @@ public class SecurityConfiguration {
             .cors(withDefaults())
 <%_ } _%>
             .csrf(csrf -> csrf
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
 <%_ } else { _%>
@@ -226,11 +226,13 @@ public class SecurityConfiguration {
   <%_ } _%>
                     .requestMatchers("/swagger-ui/**").permitAll()
 <%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
+<%_ if (generateAuthenticationApi) { _%>
+  <%_ if (authenticationTypeJwt) { _%>
                     .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
-<%_ } else { _%>
+  <%_ } else { _%>
                     .requestMatchers("/api/authenticate").permitAll()
+  <%_ } _%>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
   <%_ if (generateUserRegistration) { _%>
@@ -349,7 +351,7 @@ public class SecurityConfiguration {
 <%_ if (devDatabaseTypeH2Any) { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             http
-  <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+  <%_ if (serverUsesCsrf) { _%>
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
   <%_ } _%>
                 .authorizeHttpRequests(authz -> authz.requestMatchers("/h2-console/**").permitAll());
@@ -429,7 +431,7 @@ public class SecurityConfiguration {
         return jwtDecoder;
     }
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
 
     /**
      * Custom CSRF handler to provide BREACH protection for Single-Page Applications (SPA).
