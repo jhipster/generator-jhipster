@@ -230,6 +230,25 @@ class ExceptionTranslatorIT {
     }
 
     @Test
+    void testResponseStatusException() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/response-status-exception")
+            .exchange()
+            .expectStatus()
+            .isNotFound()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.404")
+            .jsonPath("$.title")
+            .isEqualTo("Not Found")
+            .jsonPath("$.detail")
+            .isEqualTo("Not Found");
+    }
+
+    @Test
     void testBindingFailure() {
         webTestClient
             .get()
@@ -258,7 +277,7 @@ class ExceptionTranslatorIT {
             .jsonPath("$.message")
             .isEqualTo("error.http.405")
             .jsonPath("$.detail")
-            .isEqualTo("405 METHOD_NOT_ALLOWED \"Request method 'POST' is not supported.\"");
+            .isEqualTo("Request method 'POST' is not supported.");
     }
 
     @Test
