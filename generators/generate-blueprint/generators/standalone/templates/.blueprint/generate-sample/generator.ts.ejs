@@ -16,11 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { readdir } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
+import { readdir } from 'node:fs/promises';
 import { extname, join } from 'node:path';
-import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
+
 import { getGithubSamplesGroup } from 'generator-jhipster/ci';
+import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
 
 export default class extends BaseCoreGenerator {
   samplesFolder?: string;

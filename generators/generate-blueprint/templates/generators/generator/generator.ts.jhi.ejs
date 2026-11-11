@@ -58,18 +58,16 @@ export default class extends <%- parentGenerator %>Generator {
   <%_ } -%>
     });
   }
-
 <%_ } -%>
 <%_ if (!sbs && !customGenerator) { _%>
+
   async beforeQueue() {
     await super.beforeQueue();
   }
-
 <%_ } _%>
 <% for (const priority of priorities) { %>
 <&- fragments.<%- priority.name %>Section() -&>
 <& if (!fragments.<%- priority.name %>Section()) { -&>
-
   get [<%- parentGenerator %>Generator.<%- priority.constant %>]() {
     return this.<%- priority.asTaskGroup %>({
   <%_ if (!sbs && !customGenerator) { _%>

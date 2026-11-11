@@ -29,7 +29,7 @@ const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
 
 describe('SubGenerator <%- subGenerator %> of <%- application.baseName %> JHipster blueprint', () => {
   describe('run', () => {
-    beforeAll(async function() {
+    beforeAll(async function () {
       await helpers
 <%_ if (subGenerator === 'jdl') { _%>
         .runJDL('application { }')

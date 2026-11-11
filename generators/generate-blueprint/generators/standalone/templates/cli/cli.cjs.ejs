@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-const { dirname, basename, join } = require('node:path');
-const { version, bin } = require('../package.json');
+const { basename, dirname, join } = require('node:path');
+
+const { bin, version } = require('../package.json');
 
 // Get package name to use as namespace.
 // Allows blueprints to be aliased.
