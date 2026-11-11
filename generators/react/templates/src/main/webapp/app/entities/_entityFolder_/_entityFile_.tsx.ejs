@@ -88,9 +88,9 @@ export const <%- entityReactName %> = () => {
   const [search, setSearch] = useState('');
 <%_ } _%>
 <%_ if (paginationNo) { _%>
-  const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(pageLocation, '<%- primaryKey.name %>'), pageLocation.search));
+  const [sortState, setSortState] = useState(() => overrideSortStateWithQueryParams(getSortState(pageLocation, '<%- primaryKey.name %>'), pageLocation.search));
 <%_ } else { _%>
-  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, '<%- primaryKey.name %>'), pageLocation.search));
+  const [paginationState, setPaginationState] = useState(() => overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, '<%- primaryKey.name %>'), pageLocation.search));
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   const [sorting, setSorting] = useState(false);
