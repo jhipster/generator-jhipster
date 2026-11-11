@@ -290,9 +290,9 @@ jhipster:
     allowed-methods: "*"
     allowed-headers: "*"
   <%_ if (authenticationTypeSession) { _%>
-    exposed-headers: "Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
+    exposed-headers: "Link,X-Total-Count,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-alert,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-error,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-params"
   <%_ } else { _%>
-    exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
+    exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-alert,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-error,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-params"
   <%_ } _%>
     allow-credentials: true
     max-age: 1800
