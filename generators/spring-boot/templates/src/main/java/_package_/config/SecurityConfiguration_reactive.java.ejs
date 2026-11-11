@@ -313,8 +313,8 @@ public class SecurityConfiguration {
   <%_ if (generateAuthenticationApi) { _%>
             .oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))
             .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint()))
-  <%_ } _%>
             .oauth2Client(withDefaults())
+  <%_ } _%>
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
 <%_ } else if (authenticationTypeJwt) { _%>
             .httpBasic(basic -> basic.disable())
