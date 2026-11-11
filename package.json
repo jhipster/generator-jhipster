@@ -141,7 +141,7 @@
     "@yeoman/types": "1.13.1",
     "chalk": "6.0.1",
     "chevrotain": "13.2.0",
-    "commander": "15.0.0",
+    "commander": "15.1.0",
     "debug": "4.4.3",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.7.1",
