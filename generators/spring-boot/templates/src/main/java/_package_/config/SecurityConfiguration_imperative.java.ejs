@@ -360,6 +360,14 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authz -> authz.requestMatchers("/h2-console/**").permitAll());
         }
 <%_ } _%>
+<%_ if (authenticationTypeJwt || authenticationTypeOauth2) { _%>
+        // The access tokens are not bound to a client certificate
+        http.oauth2ResourceServer(oauth2 ->
+            oauth2.protectedResourceMetadata(metadata ->
+                metadata.protectedResourceMetadataCustomizer(builder -> builder.tlsClientCertificateBoundAccessTokens(false))
+            )
+        );
+<%_ } _%>
         return http.build();
     }
 
