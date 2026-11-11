@@ -344,18 +344,24 @@ _%>
 
         Collection<String> activeProfiles = List.of(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
-            if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
-<%_ if (!databaseTypeNo) { _%>
-            if (isInvalidSortProperty(err)) return "Invalid sort property";
-            if (isDataIntegrityViolation(err)) return "Data integrity violation";
-            if (err instanceof DataAccessException) return "Failure during data access";
-<%_ } _%>
+            String productionDetail = getProductionErrorDetails(err);
+            if (productionDetail != null) return productionDetail;
         }
         // higher precedence to cause
         String detail = err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
         return activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION) && containsPackageName(detail)
             ? "Unexpected runtime exception"
             : detail;
+    }
+
+    private String getProductionErrorDetails(Throwable err) {
+        if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
+<%_ if (!databaseTypeNo) { _%>
+        if (isInvalidSortProperty(err)) return "Invalid sort property";
+        if (isDataIntegrityViolation(err)) return "Data integrity violation";
+        if (err instanceof DataAccessException) return "Failure during data access";
+<%_ } _%>
+        return null;
     }
 
     private HttpStatus getMappedStatus(Throwable err) {
