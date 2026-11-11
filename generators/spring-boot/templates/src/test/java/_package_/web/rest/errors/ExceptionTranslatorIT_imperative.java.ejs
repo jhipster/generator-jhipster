@@ -166,6 +166,16 @@ class ExceptionTranslatorIT {
     }
 
     @Test
+    void testResponseStatusException() throws Exception {
+        mockMvc.perform(get("/api/exception-translator-test/response-status-exception")<%- serverUsesCsrf ? '.with(csrf())' : '' %>)
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(jsonPath("$.message").value("error.http.404"))
+            .andExpect(jsonPath("$.title").value("Not Found"))
+            .andExpect(jsonPath("$.detail").value("Not Found"));
+    }
+
+    @Test
     void testBindingFailure() throws Exception {
         mockMvc
             .perform(get("/api/exception-translator-test/binding-failure").param("number", "abc"))

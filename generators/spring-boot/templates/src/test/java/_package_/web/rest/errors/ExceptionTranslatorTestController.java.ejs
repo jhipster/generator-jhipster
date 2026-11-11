@@ -38,6 +38,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -119,6 +120,11 @@ public class ExceptionTranslatorTestController {
     @GetMapping("/bad-request-alert")
     public void badRequestAlert() {
         throw new BadRequestAlertException("test bad request", "entity", "testkey");
+    }
+
+    @GetMapping("/response-status-exception")
+    public void responseStatusException() {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/binding-failure")

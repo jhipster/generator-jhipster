@@ -73,6 +73,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.server.ResponseStatusException;
 
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
@@ -338,6 +339,10 @@ _%>
     private String getCustomizedErrorDetails(Throwable err) {
         // The message of such an exception is its whole body, the message key of the problem tells the error
         if (err instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause) return null;
+        // The message of such an exception starts with the code and the name of its status
+        if (err instanceof ResponseStatusException exp) {
+            return exp.getReason() != null ? exp.getReason() : HttpStatus.valueOf(exp.getStatusCode().value()).getReasonPhrase();
+        }
 
         Collection<String> activeProfiles = List.of(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
