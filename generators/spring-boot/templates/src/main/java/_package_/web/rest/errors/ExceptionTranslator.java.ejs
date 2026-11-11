@@ -212,13 +212,7 @@ _%>
             problem.setTitle(title);
         }
 
-        String mappedDetail = getMappedDetail(err);
-        if (mappedDetail != null) {
-            problem.setDetail(mappedDetail);
-        } else if (problem.getDetail() == null) {
-            // higher precedence to cause
-            problem.setDetail(getCustomizedErrorDetails(err));
-        }
+        problem.setDetail(getCustomizedErrorDetails(err, problem.getDetail()));
 
         Map<String, Object> problemProperties = problem.getProperties();
         if (problemProperties == null || !problemProperties.containsKey(MESSAGE_KEY)) problem.setProperty(
@@ -340,13 +334,11 @@ _%>
         return null;
     }
 
-    private String getMappedDetail(Throwable err) {
+    private String getCustomizedErrorDetails(Throwable err, String currentDetail) {
         // Where we disagree with Spring defaults
         if (err instanceof NoResourceFoundException) return HttpStatus.NOT_FOUND.getReasonPhrase();
-        return null;
-    }
+        if (currentDetail != null) return currentDetail;
 
-    private String getCustomizedErrorDetails(Throwable err) {
         // The message of such an exception is its whole body, the message key of the problem tells the error
         if (err instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause) return null;
 
@@ -359,6 +351,7 @@ _%>
             if (err instanceof DataAccessException) return "Failure during data access";
 <%_ } _%>
         }
+        // higher precedence to cause
         String detail = err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
         return activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION) && containsPackageName(detail)
             ? "Unexpected runtime exception"
