@@ -16,9 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { translate } from 'react-jhipster';
 import { Route } from 'react-router';
 
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
+import PageTitle from 'app/shared/layout/page-title';
 
 import <%- entityReactName %> from './<%- entityFileName %>';
 <%_ if (!readOnly) { _%>
@@ -30,19 +32,22 @@ import <%- entityReactName %>Update from './<%- entityFileName %>-update';
 <%_ } _%>
 
 const <%- entityReactName %>Routes = () => (
-  <ErrorBoundaryRoutes>
-    <Route index element={<<%- entityReactName %> />} />
+  <>
+    <PageTitle title={translate('<%- i18nKeyPrefix %>.home.title')} />
+    <ErrorBoundaryRoutes>
+      <Route index element={<<%- entityReactName %> />} />
 <%_ if (!readOnly) { _%>
-    <Route path="new" element={<<%- entityReactName %>Update />} />
+      <Route path="new" element={<<%- entityReactName %>Update />} />
 <%_ } _%>
-    <Route path=":id">
-      <Route index element={<<%- entityReactName %>Detail />} />
+      <Route path=":id">
+        <Route index element={<<%- entityReactName %>Detail />} />
 <%_ if (!readOnly) { _%>
-      <Route path="edit" element={<<%- entityReactName %>Update />} />
-      <Route path="delete" element={<<%- entityReactName %>DeleteDialog />} />
+        <Route path="edit" element={<<%- entityReactName %>Update />} />
+        <Route path="delete" element={<<%- entityReactName %>DeleteDialog />} />
 <%_ } _%>
-    </Route>
-  </ErrorBoundaryRoutes>
+      </Route>
+    </ErrorBoundaryRoutes>
+  </>
 );
 
 export default <%- entityReactName %>Routes;

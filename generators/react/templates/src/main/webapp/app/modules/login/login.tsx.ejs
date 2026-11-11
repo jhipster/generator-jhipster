@@ -23,6 +23,7 @@ import { Link, Navigate, useLocation } from 'react-router';
 import { type FieldError, type FieldValues, useForm } from 'react-hook-form';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import PageTitle from 'app/shared/layout/page-title';
 import { type IAuthParams, login } from 'app/shared/reducers/authentication';
 
 export const Login = () => {
@@ -45,6 +46,7 @@ export const Login = () => {
   }
   return (
     <div className="d-flex justify-content-center" id="login-page">
+      <PageTitle title={translate('login.title')} />
       <div className="col-lg-6 col-md-8 col-sm-10">
         <h1 id="login-title" data-cy="loginTitle">
           <Translate contentKey="login.title">Sign in</Translate>

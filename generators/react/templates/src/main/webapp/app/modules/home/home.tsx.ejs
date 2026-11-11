@@ -22,7 +22,7 @@ import './home.scss';
 import { useEffect } from 'react';
 <%_ } _%>
 import { Alert, Col, Row } from 'react-bootstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 <%_ if (authenticationTypeOauth2) { _%>
 import { useLocation, useNavigate } from 'react-router';
 <%_ } else { _%>
@@ -33,6 +33,7 @@ import { useAppSelector } from 'app/config/store';
 <%_ if (authenticationTypeOauth2) { _%>
 import { REDIRECT_URL, getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
+import PageTitle from 'app/shared/layout/page-title';
 
 export const Home = () => {
   const account = useAppSelector(state => state.authentication.account);
@@ -51,6 +52,7 @@ export const Home = () => {
 
   return (
     <Row>
+      <PageTitle title={translate('home.title')} />
       <Col md="3" className="pad">
         <span className="hipster rounded" />
       </Col>
