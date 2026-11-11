@@ -19,8 +19,6 @@
 
 import { describe, expect, it } from 'expect-node';
 
-import { mutateData } from '../../lib/utils/object.ts';
-
 import * as entityData from './application.ts';
 
 import { mutateMockedCompleteData, mutateMockedData, prepareMutationTest } from '#testing';
@@ -34,16 +32,4 @@ describe('application mutation test', () => {
       expect(Object.keys(mutateMockedCompleteData(...data))).toHaveLength(0);
     });
   }
-
-  it('adds the additional allowed origins after the ones of the development servers', () => {
-    const application: any = { devServerPort: 4200, corsAdditionalAllowedOrigins: ['capacitor://localhost'] };
-    mutateData(application, entityData.mutateApplication as any);
-    expect(application.corsAllowedOrigins).toEqual([
-      'http://localhost:8100',
-      'https://localhost:8100',
-      'http://localhost:4200',
-      'https://localhost:4200',
-      'capacitor://localhost',
-    ]);
-  });
 });

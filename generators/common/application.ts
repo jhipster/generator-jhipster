@@ -36,18 +36,6 @@ export type CommonAddedApplicationProperties = {
 
   devServerPort: number;
   serverPort: number;
-  /**
-   * The origins a backend allows in development: the ones of the development servers, then the additional ones.
-   */
-  corsAllowedOrigins: string[];
-  /**
-   * The origins a blueprint adds to the allowed ones, in its preparing.
-   */
-  corsAdditionalAllowedOrigins: string[];
-  /**
-   * The patterns of the origins a backend allows in development.
-   */
-  corsAllowedOriginPatterns: string[];
   gatewayServerPort: number | undefined;
 
   loginRegex?: string;
@@ -88,26 +76,6 @@ export const mutateApplication = {
   endpointPrefix: ({ applicationType, lowercaseBaseName }) => (applicationType === 'microservice' ? `services/${lowercaseBaseName}` : ''),
 
   devServerPort: finalizeDefault(() => 9060),
-  corsAdditionalAllowedOrigins: () => [],
-  corsAllowedOrigins: finalizeDefault((data: CommonApplication) => {
-    const { devServerPort, devServerPortProxy, microfrontend } = data as CommonApplication & {
-      devServerPortProxy?: number;
-      microfrontend?: boolean;
-    };
-    const ports = [
-      // Ionic for JHipster
-      8100,
-      ...(devServerPortProxy ? [devServerPortProxy] : []),
-      ...(data.skipClient ? [] : [devServerPort]),
-      // The microfrontends in development
-      ...(!data.skipClient && data.applicationTypeGateway && microfrontend ?
-        Array.from({ length: 9 }, (_, index) => devServerPort + index + 1)
-      : []),
-    ];
-    return [...ports.flatMap(port => [`http://localhost:${port}`, `https://localhost:${port}`]), ...data.corsAdditionalAllowedOrigins];
-  }),
-  // GitHub Codespaces
-  corsAllowedOriginPatterns: () => ['https://*.githubpreview.dev'],
   serverPort: ({ applicationTypeMicroservice }) => (applicationTypeMicroservice ? 8081 : 8080),
   gatewayServerPort: (ctx, { undefinedMarker }) => (ctx.microfrontend && ctx.applicationTypeMicroservice ? 8080 : undefinedMarker),
 
