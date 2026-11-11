@@ -46,6 +46,8 @@ export type Application<E extends BaseApplicationEntity = Entity> = ExportApplic
   JavaApplication<E> & {
     oauth2AppSchemes?: string[];
     devDatabaseTypeH2Any?: boolean;
+    /** The server authenticates the requests by a session cookie and protects them with a CSRF token. */
+    serverUsesCsrf: boolean;
   };
 
 export type { JavaSource as Source };
