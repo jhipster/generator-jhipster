@@ -25,6 +25,8 @@ concurrency:
 env:
   NODE_OPTIONS: --dns-result-order=ipv4first
   FORCE_COLOR: 2
+  # Days. A version published minutes ago may depend on a version that is not published yet.
+  NPM_CONFIG_MIN_RELEASE_AGE: 0.05
 on:
   push:
     branches:
