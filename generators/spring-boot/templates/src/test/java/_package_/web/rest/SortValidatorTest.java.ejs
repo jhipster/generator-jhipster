@@ -27,6 +27,7 @@ import <%- packageName %>.web.rest.errors.BadRequestAlertException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Set;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
 <%_ if (databaseTypeMongodb) { _%>
@@ -91,11 +92,33 @@ class SortValidatorTest {
         @DBRef
         Related referenced;
 <%_ } _%>
+
+        UUID reference;
+    }
+
+    static class WithUuidId {
+
+<%_ if (databaseTypeSql && !reactive) { _%>
+        @jakarta.persistence.Id
+<%_ } else if (databaseTypeNeo4j) { _%>
+        @org.springframework.data.neo4j.core.schema.Id
+<%_ } else { _%>
+        @org.springframework.data.annotation.Id
+<%_ } _%>
+        UUID id;
+
+        String name;
     }
 
     @Test
     void acceptsTheColumnsAndTheColumnsOfARelationship() {
         assertThat(SortValidator.isSortable(Sample.class, Sort.by("id", "name", "createdDate", "duration", "related.id", "related.name"))).isTrue();
+    }
+
+    @Test
+    void acceptsAUuidIdOnly() {
+        assertThat(SortValidator.isSortable(WithUuidId.class, Sort.by("id", "name"))).isTrue();
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("reference"))).isFalse();
     }
 
     @Test
