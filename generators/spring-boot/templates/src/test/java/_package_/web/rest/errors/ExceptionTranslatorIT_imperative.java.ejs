@@ -194,7 +194,7 @@ class ExceptionTranslatorIT {
 
     @Test
     void testOpenApiResourceNotFound() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/open-api-resource-not-found")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
+        mockMvc.perform(get("/api/exception-translator-test/open-api-resource-not-found")<%- serverUsesCsrf ? '.with(csrf())' : '' %>)
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.404"))
