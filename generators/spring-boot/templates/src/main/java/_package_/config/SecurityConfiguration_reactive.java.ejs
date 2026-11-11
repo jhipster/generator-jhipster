@@ -273,7 +273,9 @@ public class SecurityConfiguration {
                         "/swagger-ui/**"
                     ).permitAll()
 <%_ } _%>
+<%_ if (generateAuthenticationApi) { _%>
                     .pathMatchers("/api/authenticate").permitAll()
+<%_ } _%>
 <%_ if (generateUserManagement) { _%>
   <%_ if (generateUserRegistration) { _%>
                     .pathMatchers("/api/register").permitAll()
