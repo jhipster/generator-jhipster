@@ -2427,7 +2427,6 @@ export class UserManagementUpdate implements OnInit {
   },
   "src/main/webapp/app/entities/admin/user-management/user-management-screens.spec.ts": {
     "contents": "import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { provideHttpClient } from "@angular/common/http";
 import {
   HttpTestingController,
   provideHttpClientTesting,
@@ -2490,7 +2489,6 @@ describe("UserManagement screens", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([{ path: "**", children: [] }]),
         NgbActiveModal,

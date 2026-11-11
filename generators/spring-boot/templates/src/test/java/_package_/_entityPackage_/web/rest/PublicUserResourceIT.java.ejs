@@ -64,7 +64,7 @@ import java.util.Set;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
-<%_ if (reactive && authenticationUsesCsrf) { _%>
+<%_ if (reactive && serverUsesCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } else if (!reactive) { _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -129,7 +129,7 @@ class PublicUserResourceIT {
 <%_ if (!databaseTypeCassandra) { _%>
         numberOfUsers = userRepository.count()<%- reactorBlock %>;
 <%_ } _%>
-<%_ if (reactive && authenticationUsesCsrf) { _%>
+<%_ if (reactive && serverUsesCsrf) { _%>
         webTestClient = webTestClient.mutateWith(csrf());
 <%_ } _%>
         user = UserResourceIT.initTestUser();

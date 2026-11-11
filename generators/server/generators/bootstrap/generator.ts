@@ -77,6 +77,9 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
       properties({ application }) {
         mutateData(application as unknown as SpringDataRelationalApplication, {
           devDatabaseTypeH2Any: ({ devDatabaseType }) => devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory',
+          // A microservice only validates the token of the request, the session is held by the gateway.
+          serverUsesCsrf: ({ generateAuthenticationApi, authenticationType }) =>
+            generateAuthenticationApi && ['oauth2', 'session'].includes(authenticationType!),
           devJdbcUrl: undefined,
           devDatabaseUsername: undefined,
           devDatabasePassword: undefined,

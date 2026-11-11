@@ -244,6 +244,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "serverTestFrameworksAny": false,
   "serverTestFrameworksCucumber": false,
   "serverTestFrameworksGatling": false,
+  "serverUsesCsrf": false,
   "serviceDiscovery": "no",
   "serviceDiscoveryAny": false,
   "serviceDiscoveryConsul": false,

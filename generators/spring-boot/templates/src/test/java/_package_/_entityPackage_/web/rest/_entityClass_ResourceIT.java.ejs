@@ -251,9 +251,9 @@ import static org.hamcrest.Matchers.hasItem;
 <%_ if (reactive) { _%>
 import static org.hamcrest.Matchers.is;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && reactive) { _%>
+<%_ if (serverUsesCsrf && reactive) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
-<%_ } else if (authenticationUsesCsrf) { _%>
+<%_ } else if (serverUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -617,7 +617,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
 
 <%_ } _%>
-<%_ if (reactive && authenticationUsesCsrf) { _%>
+<%_ if (reactive && serverUsesCsrf) { _%>
     @BeforeEach
     void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
@@ -676,7 +676,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             rest<%- entityClass %>MockMvc
                 .perform(
                   post(ENTITY_API_URL)
-    <%_ if (authenticationUsesCsrf) { _%>
+    <%_ if (serverUsesCsrf) { _%>
                   .with(csrf())
     <%_ } _%>
                   .contentType(MediaType.APPLICATION_JSON)
@@ -751,7 +751,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         rest<%- entityClass %>MockMvc
             .perform(
                 post(ENTITY_API_URL)
-    <%_ if (authenticationUsesCsrf) { _%>
+    <%_ if (serverUsesCsrf) { _%>
                 .with(csrf())
     <%_ } _%>
                 .contentType(MediaType.APPLICATION_JSON)
@@ -845,7 +845,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
       <%_ } _%>
                 .<%- primaryKey.propertySupplierName %>()
         )
-      <%_ if (authenticationUsesCsrf) { _%>
+      <%_ if (serverUsesCsrf) { _%>
             .with(csrf())
       <%_ } _%>
             .contentType(MediaType.APPLICATION_JSON)
@@ -909,7 +909,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
         <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -955,7 +955,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>Patch)))
             .andExpect(status().isBadRequest());
@@ -1629,7 +1629,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isOk();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- dtoMapstruct ? dtoInstance : `updated${persistClass}` %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- dtoMapstruct ? dtoInstance : `updated${persistClass}` %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- dtoMapstruct ? dtoInstance : `updated${persistClass}` %>)))
             .andExpect(status().isOk());
@@ -1688,7 +1688,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1728,7 +1728,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1769,7 +1769,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isEqualTo(405);
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
@@ -1847,7 +1847,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isOk();
     <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(updateJson)))
             .andExpect(status().isOk());
@@ -1866,7 +1866,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isOk();
     <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(patchJson)))
             .andExpect(status().isOk());
@@ -1957,7 +1957,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1996,7 +1996,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -2037,7 +2037,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isEqualTo(405);
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
@@ -2093,7 +2093,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isNoContent();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- (primaryKey.typeUUID && databaseTypeSql) ? '.toString()' : '' %>)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- (primaryKey.typeUUID && databaseTypeSql) ? '.toString()' : '' %>)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
   <%_ } _%>

@@ -24,7 +24,7 @@ import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
-<%_ if (authenticationUsesCsrf) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import org.junit.jupiter.api.BeforeEach;
 
 <%_ } _%>
@@ -32,7 +32,7 @@ import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTest
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-<%_ if (authenticationUsesCsrf) { _%>
+<%_ if (serverUsesCsrf) { _%>
 
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } _%>
@@ -47,7 +47,7 @@ class ExceptionTranslatorIT {
 
     @Autowired
     private WebTestClient webTestClient;
-<%_ if (authenticationUsesCsrf) { _%>
+<%_ if (serverUsesCsrf) { _%>
 
     @BeforeEach
     void setupCsrf() {
