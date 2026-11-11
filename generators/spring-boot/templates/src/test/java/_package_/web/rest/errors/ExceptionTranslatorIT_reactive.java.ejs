@@ -143,7 +143,9 @@ class ExceptionTranslatorIT {
             .jsonPath("$.fieldErrors.[0].field")
             .isEqualTo("test")
             .jsonPath("$.fieldErrors.[0].message")
-            .isEqualTo("must not be null");
+            .isEqualTo("must not be null")
+            .jsonPath("$.fieldErrors.[0].code")
+            .isEqualTo("NotNull");
     }
 
     @Test
@@ -260,6 +262,8 @@ class ExceptionTranslatorIT {
             .jsonPath("$.fieldErrors.[0].field")
             .isEqualTo("number")
             .jsonPath("$.fieldErrors.[0].message")
+            .isEqualTo("typeMismatch")
+            .jsonPath("$.fieldErrors.[0].code")
             .isEqualTo("typeMismatch");
     }
 
