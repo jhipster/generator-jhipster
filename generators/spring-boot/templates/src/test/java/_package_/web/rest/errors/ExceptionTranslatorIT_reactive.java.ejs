@@ -298,6 +298,23 @@ class ExceptionTranslatorIT {
     }
 
     @Test
+    void testOpenApiResourceNotFound() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/open-api-resource-not-found")
+            .exchange()
+            .expectStatus()
+            .isNotFound()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.404")
+            .jsonPath("$.title")
+            .isEqualTo("Not Found");
+    }
+
+    @Test
     void testInternalServerError() {
         webTestClient
             .get()
