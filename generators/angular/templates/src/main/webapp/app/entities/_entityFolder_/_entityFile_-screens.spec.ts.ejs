@@ -95,20 +95,28 @@ dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
 <%_ } _%>
-vi.useFakeTimers();
-
-const clickAll = (fixture: ComponentFixture<unknown>, selector: string): void => {
-  const elements: NodeListOf<HTMLElement> = fixture.nativeElement.querySelectorAll(selector);
-  elements.forEach(element => element.click());
-  fixture.detectChanges();
-};
-
 describe('<%- entityAngularName %> screens', () => {
   let httpMock: HttpTestingController;
 
+  // Answers the pending requests and the ones that their responses start: a loading resource keeps the application unstable.
   const flushAll = (body: unknown): void => {
     const headers = { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"', 'X-Total-Count': '40' };
-    httpMock.match(() => true).forEach(request => request.flush(body as any, { headers }));
+    TestBed.tick();
+    for (let round = 0; round < 10; round++) {
+      const requests = httpMock.match(() => true);
+      if (requests.length === 0) {
+        return;
+      }
+      requests.forEach(request => request.flush(body as any, { headers }));
+      TestBed.tick();
+    }
+  };
+
+  const clickAll = async (fixture: ComponentFixture<unknown>, selector: string): Promise<void> => {
+    const elements: NodeListOf<HTMLElement> = fixture.nativeElement.querySelectorAll(selector);
+    elements.forEach(element => element.click());
+    flushAll([]);
+    await fixture.whenStable();
   };
 
   beforeEach(() => {
@@ -145,11 +153,8 @@ describe('<%- entityAngularName %> screens', () => {
   describe('list', () => {
     const render = async (entities: unknown[]): Promise<ComponentFixture<<%- entityAngularName %>>> => {
       const fixture = TestBed.createComponent(<%- entityAngularName %>);
-      fixture.detectChanges();
-      TestBed.tick();
       flushAll(entities);
-      await vi.runAllTimersAsync();
-      fixture.detectChanges();
+      await fixture.whenStable();
       return fixture;
     };
 
@@ -173,7 +178,7 @@ describe('<%- entityAngularName %> screens', () => {
       const fixture = await render([sample]);
 
       fixture.componentInstance.sortState.set({ predicate: '<%- notSortableField.fieldName %>', order: 'asc' });
-      clickAll(fixture, 'form button');
+      await clickAll(fixture, 'form button');
 
       expect(fixture.nativeElement.querySelector('form')).not.toBeNull();
     });
@@ -186,8 +191,8 @@ describe('<%- entityAngularName %> screens', () => {
 
       input.value = 'other';
       input.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-      clickAll(fixture, 'form button');
+      await fixture.whenStable();
+      await clickAll(fixture, 'form button');
 
       expect(fixture.nativeElement.querySelector('form')).not.toBeNull();
     });
@@ -224,45 +229,45 @@ describe('<%- entityAngularName %> screens', () => {
 <%_ } _%>
       const fixture = await render([sample<%- builtInUserManagement ? ', { ...sample, activated: false }' : '' %>]);
 
-      clickAll(fixture, 'tbody a:not([href]), tbody button, th, h2 button');
+      await clickAll(fixture, 'tbody a:not([href]), tbody button, th, h2 button');
 
       expect(fixture.nativeElement.querySelector('h2')).not.toBeNull();
     });
   });
 
   describe('detail', () => {
-    const render = (entity: unknown): ComponentFixture<<%- entityAngularName %>Detail> => {
+    const render = async (entity: unknown): Promise<ComponentFixture<<%- entityAngularName %>Detail>> => {
       const fixture = TestBed.createComponent(<%- entityAngularName %>Detail);
       fixture.componentRef.setInput('<%- entityInstance %>', entity);
-      fixture.detectChanges();
+      await fixture.whenStable();
       return fixture;
     };
 
-    it('should show the entity', () => {
-      const fixture = render(sample);
+    it('should show the entity', async () => {
+      const fixture = await render(sample);
 
       expect(fixture.nativeElement.querySelector('[data-cy="<%- entityInstance %>DetailsHeading"]')).not.toBeNull();
     });
 
-    it('should show an entity without data', () => {
-      const fixture = render(sampleWithoutData);
+    it('should show an entity without data', async () => {
+      const fixture = await render(sampleWithoutData);
 
       expect(fixture.nativeElement.querySelector('dd')).not.toBeNull();
     });
 
-    it('should show nothing without an entity', () => {
-      const fixture = render(null);
+    it('should show nothing without an entity', async () => {
+      const fixture = await render(null);
 
       expect(fixture.nativeElement.querySelector('dd')).toBeNull();
     });
 
-    it('should accept the actions', () => {
+    it('should accept the actions', async () => {
 <%_ if (builtInUserManagement) { _%>
       TestBed.inject(AccountService).authenticate({ login: 'other' } as Account);
 <%_ } _%>
-      const fixture = render(sample);
+      const fixture = await render(sample);
 
-      clickAll(fixture, 'a:not([href]), button');
+      await clickAll(fixture, 'a:not([href]), button');
 
       expect(fixture.nativeElement.querySelector('dd')).not.toBeNull();
     });
@@ -270,73 +275,75 @@ describe('<%- entityAngularName %> screens', () => {
 <%_ if (!readOnly) { _%>
 
   describe('update', () => {
-    const render = (): ComponentFixture<<%- entityAngularName %>Update> => {
+    const render = async (): Promise<ComponentFixture<<%- entityAngularName %>Update>> => {
       const fixture = TestBed.createComponent(<%- entityAngularName %>Update);
-      fixture.detectChanges();
       flushAll(<%- screenRelationships.length > 0 ? '[related]' : '[]' %>);
-      fixture.detectChanges();
+      await fixture.whenStable();
       return fixture;
     };
 
-    it('should show the form of an entity', () => {
-      const fixture = render();
+    it('should show the form of an entity', async () => {
+      const fixture = await render();
 
       expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
     });
 
-    it('should show the form of an entity without data', () => {
+    it('should show the form of an entity without data', async () => {
       TestBed.inject(ActivatedRoute).data = of({ <%- entityInstance %>: sampleWithoutData });
-      const fixture = render();
+      const fixture = await render();
 
       expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
     });
 
-    it('should accept empty options', () => {
+    it('should accept empty options', async () => {
       const fixture = TestBed.createComponent(<%- entityAngularName %>Update);
-      fixture.detectChanges();
+  <%_ if (builtInUserManagement) { _%>
+      TestBed.tick();
+      httpMock.match(request => request.url.endsWith('api/authorities')).forEach(request => request.flush([]));
+  <%_ } _%>
       flushAll(null);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
     });
 
-    it('should show the form of a new entity', () => {
+    it('should show the form of a new entity', async () => {
       TestBed.inject(ActivatedRoute).data = of({});
-      const fixture = render();
+      const fixture = await render();
 
       expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
     });
 
   <%_ if (fields.some(field => field.fieldValidate && !field.hidden) || relationships.some(relationship => relationship.relationshipValidate && relationship.persistableRelationship)) { _%>
-    it('should show the messages of the validations', () => {
+    it('should show the messages of the validations', async () => {
       TestBed.inject(ActivatedRoute).data = of({});
-      const fixture = render();
+      const fixture = await render();
 
       for (const control of Object.values(fixture.componentInstance.editForm.controls)) {
         control.markAsDirty();
         control.setErrors({ required: true, minlength: {}, maxlength: {}, min: {}, max: {}, pattern: {}, email: true, number: true, datetimelocal: true });
       }
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(fixture.nativeElement.querySelector('small.text-danger')).not.toBeNull();
 
       const controls = Object.values(fixture.componentInstance.editForm.controls);
       controls.forEach(control => control.setErrors({ other: true }));
-      fixture.detectChanges();
+      await fixture.whenStable();
       controls.forEach(control => {
         control.markAsPristine();
         control.markAsTouched();
       });
-      fixture.detectChanges();
+      await fixture.whenStable();
       controls.forEach(control => control.markAsUntouched());
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(fixture.nativeElement.querySelector('small.text-danger')).toBeNull();
     });
 
   <%_ } _%>
-    it('should save the form', () => {
-      const fixture = render();
+    it('should save the form', async () => {
+      const fixture = await render();
       const previousState = vi.spyOn(fixture.componentInstance, 'previousState');
 
       fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
@@ -345,10 +352,10 @@ describe('<%- entityAngularName %> screens', () => {
       expect(previousState).toHaveBeenCalled();
     });
 
-    it('should accept the actions', () => {
-      const fixture = render();
+    it('should accept the actions', async () => {
+      const fixture = await render();
 
-      clickAll(fixture, 'a:not([href]), button[type="button"]');
+      await clickAll(fixture, 'a:not([href]), button[type="button"]');
       fixture.nativeElement.querySelectorAll('input[type="file"]').forEach((input: HTMLElement) => input.dispatchEvent(new Event('change')));
 
       expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
@@ -356,31 +363,31 @@ describe('<%- entityAngularName %> screens', () => {
   });
 
   describe('delete', () => {
-    const render = (entity?: typeof sample): ComponentFixture<<%- entityAngularName %>DeleteDialog> => {
+    const render = async (entity?: typeof sample): Promise<ComponentFixture<<%- entityAngularName %>DeleteDialog>> => {
       const fixture = TestBed.createComponent(<%- entityAngularName %>DeleteDialog);
       fixture.componentInstance.<%- entityInstance %> = entity;
-      fixture.detectChanges();
+      await fixture.whenStable();
       return fixture;
     };
 
-    it('should show nothing without an entity', () => {
-      const fixture = render();
+    it('should show nothing without an entity', async () => {
+      const fixture = await render();
 
       expect(fixture.nativeElement.querySelector('form')).toBeNull();
     });
 
-    it('should dismiss the dialog when cancelled', () => {
+    it('should dismiss the dialog when cancelled', async () => {
       const dismiss = vi.spyOn(TestBed.inject(NgbActiveModal), 'dismiss');
-      const fixture = render(sample);
+      const fixture = await render(sample);
 
-      clickAll(fixture, '.btn-secondary');
+      await clickAll(fixture, '.btn-secondary');
 
       expect(dismiss).toHaveBeenCalled();
     });
 
-    it('should close the dialog when confirmed', () => {
+    it('should close the dialog when confirmed', async () => {
       const close = vi.spyOn(TestBed.inject(NgbActiveModal), 'close');
-      const fixture = render(sample);
+      const fixture = await render(sample);
 
       fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
       flushAll(null);

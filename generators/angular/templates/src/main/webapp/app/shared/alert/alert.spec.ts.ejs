@@ -49,24 +49,24 @@ describe('Alert Component', () => {
     mockAlertService = TestBed.inject(AlertService);
   });
 
-  it('should render alerts added after init', () => {
+  it('should render alerts added after init', async () => {
     // GIVEN
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     // WHEN
     const alerts = mockAlertService.alerts as WritableSignal<AlertModel[]>;
     alerts.set([{ id: 0, type: 'success', message: 'Hello' }]);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     // THEN
     expect(fixture.nativeElement.querySelectorAll('ngb-alert')).toHaveLength(1);
   });
 
-  it('should not render an alert without message', () => {
-    fixture.detectChanges();
+  it('should not render an alert without message', async () => {
+    await fixture.whenStable();
 
     (mockAlertService.alerts as WritableSignal<AlertModel[]>).set([{ id: 0, type: 'success', message: '' }]);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelectorAll('ngb-alert')).toHaveLength(0);
   });

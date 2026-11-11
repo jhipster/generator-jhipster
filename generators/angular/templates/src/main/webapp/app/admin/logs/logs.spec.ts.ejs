@@ -48,7 +48,7 @@ describe('Logs', () => {
   let service: LogsService;
 
   const renderLoggers = async (): Promise<void> => {
-    fixture.detectChanges();
+    await fixture.whenStable();
     const [deferBlock] = await fixture.getDeferBlocks();
     await deferBlock.render(DeferBlockState.Loading);
     await deferBlock.render(DeferBlockState.Complete);
@@ -124,21 +124,21 @@ describe('Logs', () => {
       expect(element.querySelectorAll('.btn-warning')).toHaveLength(1);
     });
 
-    it('should filter and order the loggers', () => {
+    it('should filter and order the loggers', async () => {
       const element = fixture.nativeElement as HTMLElement;
       const input = element.querySelector<HTMLInputElement>('#logs-filter')!;
       input.value = 'ro';
       input.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
+      await fixture.whenStable();
       expect(names()).toEqual(['ROOT']);
 
       comp.filter.set('');
       element.querySelector<HTMLElement>('th')!.click();
-      fixture.detectChanges();
+      await fixture.whenStable();
       expect(names()).toEqual(['ROOT', 'main']);
 
       comp.sortState.set({});
-      fixture.detectChanges();
+      await fixture.whenStable();
       expect(names()).toHaveLength(2);
     });
 

@@ -38,24 +38,24 @@ describe('Filter screens', () => {
     TestBed.inject(FaIconLibrary).addIconPacks(fas);
   });
 
-  const render = (filters: FilterOptions): ComponentFixture<Filter> => {
+  const render = async (filters: FilterOptions): Promise<ComponentFixture<Filter>> => {
     const fixture = TestBed.createComponent(Filter);
     fixture.componentRef.setInput('filters', filters);
-    fixture.detectChanges();
+    await fixture.whenStable();
     return fixture;
   };
 
-  it('should show nothing without a filter', () => {
-    const fixture = render(new FilterOptions());
+  it('should show nothing without a filter', async () => {
+    const fixture = await render(new FilterOptions());
 
     expect(fixture.nativeElement.querySelector('.filter-display')).toBeNull();
   });
 
-  it('should clear a filter and all of them', () => {
+  it('should clear a filter and all of them', async () => {
     const filters = new FilterOptions([new FilterOption('name', ['value', 'other'])]);
     const removeFilter = vi.spyOn(filters, 'removeFilter');
     const clear = vi.spyOn(filters, 'clear');
-    const fixture = render(filters);
+    const fixture = await render(filters);
 
     fixture.nativeElement.querySelector('li button').click();
     fixture.nativeElement.querySelector('.filter-display > button').click();

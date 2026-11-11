@@ -75,9 +75,9 @@ describe('Health', () => {
       { id: 'ping', label: { text: 'Ping' }, status: { text: 'UP' }, healthy: true },
     ];
 
-    beforeEach(() => {
+    beforeEach(async () => {
       vi.spyOn(service, 'checkHealth').mockReturnValue(of(checks));
-      fixture.detectChanges();
+      await fixture.whenStable();
     });
 
     it('should render the checks', () => {
@@ -93,10 +93,10 @@ describe('Health', () => {
       expect(service.checkHealth).toHaveBeenCalledTimes(2);
     });
 
-    it('should render no check before they load', () => {
+    it('should render no check before they load', async () => {
       vi.mocked(service.checkHealth).mockReturnValue(EMPTY);
       comp.checks.set(null);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect((fixture.nativeElement as HTMLElement).querySelector('tbody')).toBeNull();
     });
