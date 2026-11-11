@@ -340,9 +340,7 @@ _%>
         // The message of such an exception is its whole body, the message key of the problem tells the error
         if (err instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause) return null;
         // The message of such an exception starts with the code and the name of its status
-        if (err instanceof ResponseStatusException exp) {
-            return exp.getReason() != null ? exp.getReason() : HttpStatus.valueOf(exp.getStatusCode().value()).getReasonPhrase();
-        }
+        if (err instanceof ResponseStatusException exp) return getReasonOrStatus(exp);
 
         Collection<String> activeProfiles = List.of(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
@@ -372,6 +370,10 @@ _%>
         if (isDataIntegrityViolation(err)) return HttpStatus.BAD_REQUEST;
 <%_ } _%>
         return null;
+    }
+
+    private String getReasonOrStatus(ResponseStatusException err) {
+        return err.getReason() != null ? err.getReason() : HttpStatus.valueOf(err.getStatusCode().value()).getReasonPhrase();
     }
 
     private URI getPathValue(<%- requestClass %> request) {
