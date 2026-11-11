@@ -184,15 +184,6 @@ class ExceptionTranslatorIT {
     }
 
     @Test
-    void testExceptionWithResponseStatus() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/response-status")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.400"))
-            .andExpect(jsonPath("$.title").value("test response status"));
-    }
-
-    @Test
     void testNotFound() throws Exception {
         mockMvc.perform(get("/api/exception-translator-test/nothing")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
             .andExpect(status().isNotFound())
@@ -200,6 +191,15 @@ class ExceptionTranslatorIT {
             .andExpect(jsonPath("$.message").value("error.http.404"))
             .andExpect(jsonPath("$.title").value("Not Found"))
             .andExpect(jsonPath("$.detail").value("Not Found"));
+    }
+
+    @Test
+    void testExceptionWithResponseStatus() throws Exception {
+        mockMvc.perform(get("/api/exception-translator-test/response-status")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(jsonPath("$.message").value("error.http.400"))
+            .andExpect(jsonPath("$.title").value("test response status"));
     }
 
     @Test

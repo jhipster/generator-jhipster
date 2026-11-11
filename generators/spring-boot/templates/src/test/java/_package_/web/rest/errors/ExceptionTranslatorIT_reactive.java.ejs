@@ -262,23 +262,6 @@ class ExceptionTranslatorIT {
     }
 
     @Test
-    void testExceptionWithResponseStatus() {
-        webTestClient
-            .get()
-            .uri("/api/exception-translator-test/response-status")
-            .exchange()
-            .expectStatus()
-            .isBadRequest()
-            .expectHeader()
-            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-            .expectBody()
-            .jsonPath("$.message")
-            .isEqualTo("error.http.400")
-            .jsonPath("$.title")
-            .isEqualTo("test response status");
-    }
-
-    @Test
     void testNotFound() {
         webTestClient
             .get()
@@ -295,6 +278,23 @@ class ExceptionTranslatorIT {
             .isEqualTo("Not Found")
             .jsonPath("$.detail")
             .isEqualTo("Not Found");
+    }
+
+    @Test
+    void testExceptionWithResponseStatus() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/response-status")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.400")
+            .jsonPath("$.title")
+            .isEqualTo("test response status");
     }
 
     @Test
