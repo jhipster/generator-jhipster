@@ -2,7 +2,6 @@
   "dependencies": {
     "ejs-lint": "2.0.1",
     "eslint": "10.14.0",
-    "globals": "17.14.0",
     "typescript-eslint": "8.72.1",
     "vitest": "5.1.0"
   },
