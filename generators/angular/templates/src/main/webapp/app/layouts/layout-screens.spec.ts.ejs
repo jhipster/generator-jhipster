@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { provideHttpClient } from '@angular/common/http';
 import { <%- authenticationTypeOauth2 ? '' : 'HttpTestingController, ' %>provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -66,7 +65,7 @@ const clickAll = (fixture: ComponentFixture<unknown>, selector: string): void =>
 describe('Layout screens', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [<%- enableTranslation ? 'provideTranslateService(), ' : '' %>provideHttpClient(), provideHttpClientTesting(), provideRouter([{ path: '**', children: [] }])],
+      providers: [<%- enableTranslation ? 'provideTranslateService(), ' : '' %>provideHttpClientTesting(), provideRouter([{ path: '**', children: [] }])],
     });
     TestBed.inject(FaIconLibrary).addIconPacks(fas);
   });
