@@ -34,6 +34,7 @@ import org.hibernate.query.sqm.UnknownPathException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.orm.ObjectRetrievalFailureException;
 <%_ } _%>
+import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -129,6 +130,11 @@ public class ExceptionTranslatorTestController {
     @GetMapping("/response-status")
     public void exceptionWithResponseStatus() {
         throw new TestResponseStatusException();
+    }
+
+    @GetMapping("/open-api-resource-not-found")
+    public void openApiResourceNotFound() {
+        throw new OpenApiResourceNotFoundException("test open api resource not found");
     }
 
     @GetMapping("/internal-server-error")

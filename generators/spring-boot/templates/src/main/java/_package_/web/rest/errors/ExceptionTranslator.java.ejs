@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 import org.springframework.dao.ConcurrencyFailureException;
@@ -362,6 +363,7 @@ _%>
 <%_ } _%>
         if (err instanceof AuthenticationException) return HttpStatus.UNAUTHORIZED;
         if (err instanceof ConstraintViolationException) return HttpStatus.BAD_REQUEST;
+        if (err instanceof OpenApiResourceNotFoundException) return HttpStatus.NOT_FOUND;
 <%_ if (!databaseTypeNo) { _%>
         if (isInvalidSortProperty(err)) return HttpStatus.BAD_REQUEST;
         if (isDataIntegrityViolation(err)) return HttpStatus.BAD_REQUEST;
