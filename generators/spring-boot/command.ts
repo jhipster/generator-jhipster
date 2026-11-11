@@ -240,9 +240,17 @@ const command = {
         message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
         choices: answers => {
           const prodDatabaseType = answers.prodDatabaseType ?? config.prodDatabaseType;
-          const currentDatabase = SQL_DB_OPTIONS.find(it => it.value === prodDatabaseType)!;
+          const currentDatabase = SQL_DB_OPTIONS.find(it => it.value === prodDatabaseType);
           return [
-            { ...currentDatabase, name: `${currentDatabase.name} (requires Docker or manually configured database)` },
+            // The relational database of a blueprint is not a core choice: keep it by its own value.
+            ...(prodDatabaseType ?
+              [
+                {
+                  value: prodDatabaseType,
+                  name: `${currentDatabase?.name ?? prodDatabaseType} (requires Docker or manually configured database)`,
+                },
+              ]
+            : []),
             { value: H2_DISK, name: 'H2 with disk-based persistence' },
             { value: H2_MEMORY, name: 'H2 with in-memory persistence' },
           ];
