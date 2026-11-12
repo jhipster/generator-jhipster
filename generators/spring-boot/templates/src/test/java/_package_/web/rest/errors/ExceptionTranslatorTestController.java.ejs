@@ -43,6 +43,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @RestController
 @RequestMapping("/api/exception-translator-test")
@@ -95,6 +96,11 @@ public class ExceptionTranslatorTestController {
 <%_ } _%>
     @PostMapping("/method-argument")
     public void methodArgument(@Valid @RequestBody Test<%- dtoSuffix %> test<%- dtoSuffix %>) {
+        // empty method
+    }
+
+    @PostMapping("/method-validation/{name}")
+    public void methodValidation(@PathVariable("name") @Size(max = 3) String name, @Valid @RequestBody Test<%- dtoSuffix %> test<%- dtoSuffix %>) {
         // empty method
     }
 
