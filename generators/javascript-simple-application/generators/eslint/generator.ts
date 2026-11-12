@@ -38,6 +38,7 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
         if (!this.fromInit) return;
 
         this.loadNodeDependencies(application.nodeDependencies, {
+          globals: application.jhipsterPackageJson.devDependencies.globals,
           jiti: application.jhipsterPackageJson.devDependencies.jiti,
         });
 
