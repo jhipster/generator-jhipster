@@ -254,7 +254,8 @@ _%>
                 new FieldErrorVM(
                     f.getObjectName().replaceFirst("<%- dtoSuffix %>$", ""),
                     f.getField(),
-                    f.isBindingFailure() || StringUtils.isBlank(f.getDefaultMessage()) ? f.getCode() : f.getDefaultMessage()
+                    f.isBindingFailure() || StringUtils.isBlank(f.getDefaultMessage()) ? f.getCode() : f.getDefaultMessage(),
+                    f.getCode()
                 )
             )
             .toList();
@@ -268,7 +269,8 @@ _%>
                 new FieldErrorVM(
                     StringUtils.uncapitalize(violation.getRootBeanClass().getSimpleName()).replaceFirst("<%- dtoSuffix %>$", ""),
                     violation.getPropertyPath().toString(),
-                    violation.getMessage()
+                    violation.getMessage(),
+                    violation.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName()
                 )
             )
             .toList();

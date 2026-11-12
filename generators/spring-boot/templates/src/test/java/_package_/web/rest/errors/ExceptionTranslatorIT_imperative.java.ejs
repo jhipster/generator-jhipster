@@ -117,7 +117,8 @@ class ExceptionTranslatorIT {
              .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
              .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("test"))
              .andExpect(jsonPath("$.fieldErrors.[0].field").value("test"))
-             .andExpect(jsonPath("$.fieldErrors.[0].message").value("must not be null"));
+             .andExpect(jsonPath("$.fieldErrors.[0].message").value("must not be null"))
+             .andExpect(jsonPath("$.fieldErrors.[0].code").value("NotNull"));
     }
 
     @Test
@@ -181,7 +182,8 @@ class ExceptionTranslatorIT {
             .perform(get("/api/exception-translator-test/binding-failure").param("number", "abc"))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.fieldErrors.[0].field").value("number"))
-            .andExpect(jsonPath("$.fieldErrors.[0].message").value("typeMismatch"));
+            .andExpect(jsonPath("$.fieldErrors.[0].message").value("typeMismatch"))
+            .andExpect(jsonPath("$.fieldErrors.[0].code").value("typeMismatch"));
     }
 
     @Test

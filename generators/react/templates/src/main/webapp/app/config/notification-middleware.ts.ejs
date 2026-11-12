@@ -45,14 +45,16 @@ const addErrorAlert = (message: ToastMessage) => {
 
 const getFieldErrorsToasts = (fieldErrors: FieldErrorVM[]): ToastMessage[] =>
   fieldErrors.map(fieldError => {
-    if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
-      fieldError.message = 'Size';
-    }
+<%_ if (enableTranslation) { _%>
+    // The code of the constraint is the key of its translation, older servers send it as the message.
+    const code = fieldError.code ?? fieldError.message;
+    const errorKey = ['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(code) ? 'Size' : code;
+<%_ } _%>
     // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
     const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
 <%_ if (enableTranslation) { _%>
     const fieldName = translate(`<%- frontendAppName %>.${fieldError.objectName}.${convertedField}`);
-    return { message: `Error on field "${fieldName}"`, key: `error.${fieldError.message}`, data: { fieldName } };
+    return { message: `Error on field "${fieldName}"`, key: `error.${errorKey}`, data: { fieldName } };
 <%_ } else { _%>
     const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
     return { message: `Error on field "${fieldName}"` };

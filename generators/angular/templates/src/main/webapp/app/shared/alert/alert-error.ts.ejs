@@ -131,9 +131,11 @@ export class AlertError implements OnDestroy {
   private handleFieldsError(httpErrorResponse: HttpErrorResponse): void {
     const { fieldErrors } = httpErrorResponse.error;
     for (const fieldError of fieldErrors) {
-      if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
-        fieldError.message = 'Size';
-      }
+<%_ if (enableTranslation) { _%>
+      // The code of the constraint is the key of its translation, older servers send it as the message.
+      const code: string = fieldError.code ?? fieldError.message;
+      const errorKey = ['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(code) ? 'Size' : code;
+<%_ } _%>
       // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
       const convertedField: string = fieldError.field.replaceAll(/\[\d*\]/g, '[]');
 <%_ if (enableTranslation) { _%>
@@ -142,7 +144,7 @@ export class AlertError implements OnDestroy {
 <%_ } else { _%>
       const fieldName: string = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
 <%_ } _%>
-      this.addErrorAlert(`Error on field "${fieldName}"`<%- enableTranslation ? ', `error.${fieldError.message as string}`, { fieldName }' : '' %>);
+      this.addErrorAlert(`Error on field "${fieldName}"`<%- enableTranslation ? ', `error.${errorKey}`, { fieldName }' : '' %>);
     }
   }
 }
