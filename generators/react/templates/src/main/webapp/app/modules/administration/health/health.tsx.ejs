@@ -26,6 +26,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { type HealthCheck } from 'app/shared/jhipster/health.model';
 import { type Label } from 'app/shared/jhipster/label';
+import PageTitle from 'app/shared/layout/page-title';
 import { getSystemHealth } from '../administration.reducer';
 
 import HealthModal from './health-modal';
@@ -64,6 +65,7 @@ export const HealthPage = () => {
 
   return (
     <div>
+      <PageTitle title={translate('health.title')} />
       <h2>
         <span id="health-page-heading" data-cy="healthPageHeading">
           <Translate contentKey="health.title">Health Checks</Translate>

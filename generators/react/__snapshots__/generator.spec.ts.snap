@@ -643,6 +643,12 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/layout/page-title.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
@@ -1591,6 +1597,12 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/layout/menus/menu-item.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/layout/page-title.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/layout/password/password-strength-bar.scss": {
@@ -2729,6 +2741,12 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/layout/page-title.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
@@ -3734,6 +3752,12 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
@@ -4838,6 +4862,12 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
@@ -5694,6 +5724,12 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
@@ -6535,6 +6571,12 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {

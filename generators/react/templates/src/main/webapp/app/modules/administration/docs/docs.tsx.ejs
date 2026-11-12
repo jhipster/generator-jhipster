@@ -18,9 +18,13 @@
 -%>
 import './docs.scss';
 
+import { translate } from 'react-jhipster';
+
+import PageTitle from 'app/shared/layout/page-title';
 
 const DocsPage = () => (
   <div>
+    <PageTitle title={translate('global.menu.admin.apidocs')} />
     <iframe
       src="../swagger-ui/index.html"
       width="100%"

@@ -27,6 +27,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { languages, locales } from 'app/config/translation';
 <%_ } _%>
 import { getSession } from 'app/shared/reducers/authentication';
+import PageTitle from 'app/shared/layout/page-title';
 
 import { reset, saveAccountSettings } from './settings.reducer';
 
@@ -63,6 +64,7 @@ export const SettingsPage = () => {
 
   return (
     <div>
+      <PageTitle title={translate('global.menu.account.settings')} />
       <Row className="justify-content-center">
         <Col md="8">
           <h2 id="settings-title">

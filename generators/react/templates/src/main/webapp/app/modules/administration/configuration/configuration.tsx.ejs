@@ -25,6 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { type Label } from 'app/shared/jhipster/label';
+import PageTitle from 'app/shared/layout/page-title';
 import { getConfiguration } from '../administration.reducer';
 
 <%_ if (enableTranslation) { _%>
@@ -55,6 +56,7 @@ export const ConfigurationPage = () => {
 
   return (
     <div>
+      <PageTitle title={translate('configuration.title')} />
       <h2 id="configuration-page-heading" data-cy="configurationPageHeading">
         <Translate contentKey="configuration.title">Configuration</Translate>
       </h2>
