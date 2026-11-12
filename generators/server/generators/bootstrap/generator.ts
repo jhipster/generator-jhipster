@@ -27,6 +27,7 @@ import type { Application as BaseApplicationApplication } from '../../../base-ap
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import javaDomainCommand from '../../../java/generators/domain/command.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
+import { mutateApplication } from '../../application.ts';
 import {
   addEntitiesOtherRelationships,
   getPrimaryKeyValue,
@@ -74,7 +75,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           prepareSqlApplicationProperties({ application: application as any });
         }
       },
-      properties({ application }) {
+      properties({ application, applicationDefaults }) {
+        applicationDefaults(mutateApplication);
         mutateData(application as unknown as SpringDataRelationalApplication, {
           devDatabaseTypeH2Any: ({ devDatabaseType }) => devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory',
           // A microservice only validates the token of the request, the session is held by the gateway.
