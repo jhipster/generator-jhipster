@@ -392,10 +392,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
     },
   ],
   "packageJsonNodeEngine": undefined,
-  "packageJsonScripts": {
-    "pretry-it": "./mvnw clean && npm run java:jar:prod",
-    "try-it": "java -jar target/*.jar --spring.profiles.include=secret-samples",
-  },
+  "packageJsonScripts": {},
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
   "pkType": undefined,

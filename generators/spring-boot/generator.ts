@@ -468,6 +468,23 @@ ${classProperties
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      packageJsonScripts({ application }) {
+        // Tries the application, in a demonstration: builds the jar of the production profile, then runs it with the sample secrets.
+        // Cleans first, so the only jar is the one to run: e2e builds and older versions would match the wildcard too.
+        Object.assign(application.packageJsonScripts, {
+          'pretry-it': `./${application.buildToolGradle ? 'gradlew' : 'mvnw'} clean && npm run java:jar:prod`,
+          'try-it': `java -jar ${application.javaPackagingDestDir}*.jar --spring.profiles.include=secret-samples`,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
+
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity, application }) {
