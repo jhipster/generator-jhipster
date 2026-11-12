@@ -30,7 +30,7 @@ import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
 import { getChangelogDateForBuiltInEntities } from './internal/utils.ts';
-import type { ApplicationObject, ApplicationObjectConfig } from './objects.ts';
+import { type ApplicationObject, type ApplicationObjectConfig, isJdlObjectName } from './objects.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
 import {
   CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
@@ -284,6 +284,10 @@ export default class BaseApplicationGenerator<
 
   /** Declares an object of the application, by its name, in the `objects` of the `.yo-rc.json` file. */
   setObjectConfig(name: string, config: ApplicationObjectConfig): void {
+    // An object already declared keeps its name, the project is warned about it once.
+    if (!isJdlObjectName(name) && this.#objectsStorage.get(name) === undefined) {
+      throw new Error(`The object ${name} cannot be declared: a name of the JDL starts with a letter or an underscore`);
+    }
     this.#objectsStorage.set(name, config);
   }
 
@@ -322,7 +326,16 @@ export default class BaseApplicationGenerator<
   /** The `objects` of the `.yo-rc.json` file, shared by the generators of the application. */
   get #objectsStorage(): Storage {
     return this.getContextData<Storage>(CONTEXT_DATA_APPLICATION_OBJECTS_STORAGE_KEY, {
-      factory: () => this.createStorage('.yo-rc.json', 'objects'),
+      factory: () => {
+        const storage = this.createStorage('.yo-rc.json', 'objects');
+        const names = Object.keys(storage.getAll()).filter(name => !isJdlObjectName(name));
+        if (names.length > 0) {
+          this.log.warn(
+            `The objects ${names.join(', ')} of the .yo-rc.json file cannot be declared in a JDL: a name of the JDL starts with a letter or an underscore`,
+          );
+        }
+        return storage;
+      },
     });
   }
 
