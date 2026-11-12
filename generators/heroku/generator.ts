@@ -260,7 +260,9 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
               },
             ]);
             if (props.herokuForceName === 'Yes') {
-              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!], { reject: true });
+              if (this.herokuDeployType === 'git') {
+                await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!], { reject: true });
+              }
             } else {
               const { stdout } = await this.spawnHeroku(['create', ...regionParams]);
               // Extract from "Created random-app-name-1234... done"
