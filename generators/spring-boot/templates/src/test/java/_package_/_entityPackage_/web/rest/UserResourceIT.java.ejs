@@ -644,14 +644,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ if (reactive) { _%>
         webTestClient
             .put()
-            .uri("/api/admin/users")
+            .uri("/api/admin/users/{login}", updatedUser.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus()
             .isOk();
   <%_ } else { _%>
-        restUserMockMvc.perform(put("/api/admin/users")
+        restUserMockMvc.perform(put("/api/admin/users/{login}", updatedUser.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
@@ -707,14 +707,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ if (reactive) { _%>
         webTestClient
             .put()
-            .uri("/api/admin/users")
+            .uri("/api/admin/users/{login}", updatedUser.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus()
             .isOk();
   <%_ } else { _%>
-        restUserMockMvc.perform(put("/api/admin/users")
+        restUserMockMvc.perform(put("/api/admin/users/{login}", updatedUser.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
@@ -794,14 +794,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ if (reactive) { _%>
         webTestClient
             .put()
-            .uri("/api/admin/users")
+            .uri("/api/admin/users/{login}", updatedUser.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        restUserMockMvc.perform(put("/api/admin/users")
+        restUserMockMvc.perform(put("/api/admin/users/{login}", updatedUser.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
@@ -867,14 +867,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ if (reactive) { _%>
         webTestClient
             .put()
-            .uri("/api/admin/users")
+            .uri("/api/admin/users/{login}", updatedUser.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        restUserMockMvc.perform(put("/api/admin/users")
+        restUserMockMvc.perform(put("/api/admin/users/{login}", updatedUser.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
