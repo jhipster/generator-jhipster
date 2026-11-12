@@ -101,9 +101,9 @@ describe('Configuration', () => {
     const keys = (): (string | null)[] =>
       Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('tbody tr td:first-child')).map(cell => cell.textContent.trim());
 
-    beforeEach(() => {
+    beforeEach(async () => {
       vi.spyOn(service, 'getConfiguration').mockReturnValue(of(sections));
-      fixture.detectChanges();
+      await fixture.whenStable();
     });
 
     it('should render the sections', () => {
@@ -115,29 +115,29 @@ describe('Configuration', () => {
       expect(keys()).toEqual(['alpha', 'beta']);
     });
 
-    it('should reverse the order and filter the rows', () => {
+    it('should reverse the order and filter the rows', async () => {
       (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('th')!.click();
-      fixture.detectChanges();
+      await fixture.whenStable();
       expect(keys()).toEqual(['beta', 'alpha']);
 
       const input = (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>('#configuration-filter')!;
       input.value = 'ALP';
       input.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
+      await fixture.whenStable();
       expect(keys()).toEqual(['alpha']);
     });
 
-    it('should keep the order of the rows without a sort', () => {
+    it('should keep the order of the rows without a sort', async () => {
       comp.sortState.set({});
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(keys()).toEqual(['beta', 'alpha']);
     });
   });
 
-  it('should render nothing before the configuration loads', () => {
+  it('should render nothing before the configuration loads', async () => {
     vi.spyOn(service, 'getConfiguration').mockReturnValue(EMPTY);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(comp.sections()).toEqual([]);
     expect((fixture.nativeElement as HTMLElement).querySelector('h2')).toBeNull();

@@ -44,7 +44,7 @@ describe('HealthModal', () => {
   });
 
   describe('view', () => {
-    it('should show the details and the error of an indicator', () => {
+    it('should show the details and the error of an indicator', async () => {
       // GIVEN
       comp.check = {
         id: 'db.primary',
@@ -57,7 +57,7 @@ describe('HealthModal', () => {
       };
 
       // WHEN
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       // THEN
       expect(fixture.nativeElement.textContent).toContain('H2');
@@ -67,23 +67,23 @@ describe('HealthModal', () => {
   });
 
   describe('view without a check', () => {
-    it('should render a check without sublabel', () => {
+    it('should render a check without sublabel', async () => {
       comp.check = { id: 'ping', label: { text: 'ping' }, status: { text: 'UP' }, healthy: true };
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect((fixture.nativeElement as HTMLElement).querySelector('h4')?.textContent).not.toContain(' - ');
     });
 
-    it('should render no details', () => {
-      fixture.detectChanges();
+    it('should render no details', async () => {
+      await fixture.whenStable();
 
       expect((fixture.nativeElement as HTMLElement).querySelector('table')).toBeNull();
       expect((fixture.nativeElement as HTMLElement).querySelector('pre')).toBeNull();
     });
 
-    it('should dismiss from the buttons', () => {
+    it('should dismiss from the buttons', async () => {
       const spy = vi.spyOn(mockActiveModal, 'dismiss');
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       for (const button of (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('button')) {
         button.click();
