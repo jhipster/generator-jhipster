@@ -228,6 +228,22 @@ describe('<%- entityReactName %> screens', () => {
 
       await waitFor(() => expect(axios.put).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ activated: false })));
     });
+
+    it('should disable the deletion of the current user only', async () => {
+      entities = [
+        { ...sample, login: 'current' },
+        { ...sampleWithoutData, login: 'other' },
+      ];
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+
+      const [currentUser, otherUser] = Array.from(container.querySelectorAll('[data-cy="entityDeleteButton"]'));
+      expect(currentUser.classList).toContain('disabled');
+      expect(currentUser.getAttribute('aria-disabled')).toBe('true');
+      expect(currentUser.getAttribute('tabindex')).toBe('-1');
+      expect(otherUser.classList).not.toContain('disabled');
+      expect(otherUser.hasAttribute('aria-disabled')).toBe(false);
+    });
 <%_ } _%>
 <%_ if (fileFields.length > 0) { _%>
 

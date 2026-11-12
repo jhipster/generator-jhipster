@@ -20,7 +20,7 @@ import { useEffect
 <%_ if (!readOnly) { _%>
 , useState
 <%_ } _%> } from 'react';
-import { <%- builtInUserManagement ? 'Badge, ' : '' %>Button, Col, <%- anyFieldHasDocumentation ? 'OverlayTrigger, ' : '' %>Row<%- anyFieldHasDocumentation ? ', Tooltip' : '' %> } from 'react-bootstrap';
+import { <%- builtInUserManagement ? 'Badge, ' : '' %><%- readOnly ? '' : 'Button, ' %>Col, <%- anyFieldHasDocumentation ? 'OverlayTrigger, ' : '' %>Row<%- anyFieldHasDocumentation ? ', Tooltip' : '' %> } from 'react-bootstrap';
 import {
   Translate,
 <%_ if (anyFieldIsDateDerived) { _%>
@@ -184,12 +184,12 @@ export const <%- entityReactName %>Detail = () => {
   <%_ } _%>
 <%_ } _%>
           </dl>
-        <Button as={Link as any} to="/<%- entityPage %>" replace variant="info" data-cy="entityDetailsBackButton">
+        <Link to="/<%- entityPage %>" replace className="btn btn-info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.back">Back</Translate></span>
-        </Button>&nbsp;
-        <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>Entity.<%- primaryKey.name %>}/edit`} replace variant="primary">
+        </Link>&nbsp;
+        <Link to={`/<%- entityPage %>/${<%- entityInstance %>Entity.<%- primaryKey.name %>}/edit`} replace className="btn btn-primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
-        </Button>
+        </Link>
 <%_ if (!readOnly) { _%>
         <Button onClick={() => setShowDeleteDialog(true)}<% if (builtInUserManagement) { %> disabled={account.login === <%- entityInstance %>Entity.login}<% } %> variant="danger" data-cy="entityDeleteButton">
           <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
