@@ -24,6 +24,9 @@
  */
 export type ApplicationObjectConfigType = string | { $ref: string } | ApplicationObjectConfigType[];
 
+/** Whether a name of an object is a name of the JDL, which starts with a letter or an underscore: any other one cannot be declared in a JDL. */
+export const isJdlObjectName = (name: string): boolean => /^[a-zA-Z_][\w-]*$/.test(name);
+
 /** A field of an object, as the `objects` of the `.yo-rc.json` file declare it. */
 export type ApplicationObjectFieldConfig = {
   type: ApplicationObjectConfigType;
