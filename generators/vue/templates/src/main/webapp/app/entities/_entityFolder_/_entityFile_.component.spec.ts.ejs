@@ -102,15 +102,11 @@ describe('Component Tests', () => {
 <%_ } _%>
           bModal: bModalStub,
           'font-awesome-icon': true,
-          'b-badge': true,
 <%_ if (!paginationNo) { _%>
           'jhi-sort-header': JhiSortHeader,
 <%_ } _%>
           'b-button': bButtonStub,
           'router-link': routerLinkStub,
-        },
-        directives: {
-          'b-modal': {},
         },
 <%_ if (!paginationNo) { _%>
         plugins: [router],
