@@ -76,6 +76,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.context.MessageSourceResolvable;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.method.ParameterErrors;
 import org.springframework.web.server.ResponseStatusException;
 
 <%_ if (reactive) { _%>
@@ -236,6 +240,8 @@ _%>
 
         if (err instanceof<%- reactive ? ' WebExchangeBindException ' : ' MethodArgumentNotValidException ' %>fieldException) {
             problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(fieldException));
+        } else if (err instanceof HandlerMethodValidationException methodValidationException) {
+            problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(methodValidationException));
         } else if (err instanceof ConstraintViolationException constraintViolationException) {
             problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(constraintViolationException));
         }
@@ -250,15 +256,48 @@ _%>
             .getBindingResult()
             .getFieldErrors()
             .stream()
-            .map(f ->
-                new FieldErrorVM(
-                    f.getObjectName().replaceFirst("<%- dtoSuffix %>$", ""),
-                    f.getField(),
-                    f.isBindingFailure() || StringUtils.isBlank(f.getDefaultMessage()) ? f.getCode() : f.getDefaultMessage(),
-                    f.getCode()
-                )
+            .map(this::toFieldError)
+            .toList();
+    }
+
+    /**
+     * The errors of a method validated as a whole, which a constraint on one of its parameters asks for: the ones of
+     * the fields of a validated argument, like the request body, and the ones of the other parameters, by their name.
+     */
+    private List<FieldErrorVM> getFieldErrors(HandlerMethodValidationException ex) {
+        return ex
+            .getParameterValidationResults()
+            .stream()
+            .flatMap(result ->
+                result instanceof ParameterErrors errors
+                    ? errors.getFieldErrors().stream().map(this::toFieldError)
+                    : result
+                        .getResolvableErrors()
+                        .stream()
+                        .map(error ->
+                            new FieldErrorVM(
+                                StringUtils.uncapitalize(result.getMethodParameter().getContainingClass().getSimpleName()),
+                                result.getMethodParameter().getParameterName(),
+                                error.getDefaultMessage(),
+                                getCode(error)
+                            )
+                        )
             )
             .toList();
+    }
+
+    private FieldErrorVM toFieldError(FieldError f) {
+        return new FieldErrorVM(
+            f.getObjectName().replaceFirst("<%- dtoSuffix %>$", ""),
+            f.getField(),
+            f.isBindingFailure() || StringUtils.isBlank(f.getDefaultMessage()) ? f.getCode() : f.getDefaultMessage(),
+            f.getCode()
+        );
+    }
+
+    private String getCode(MessageSourceResolvable error) {
+        String[] codes = error.getCodes();
+        return codes == null || codes.length == 0 ? null : codes[codes.length - 1];
     }
 
     private List<FieldErrorVM> getFieldErrors(ConstraintViolationException ex) {
@@ -306,14 +345,12 @@ _%>
     }
 
     private URI getMappedType(Throwable err) {
-        if (
-            err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException
-        ) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
+        if (isValidationFailure(err)) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
         return ErrorConstants.DEFAULT_TYPE;
     }
 
     private String getMappedMessageKey(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException) {
+        if (isValidationFailure(err)) {
             return ErrorConstants.ERR_VALIDATION;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         } else if (err instanceof ConcurrencyFailureException || err.getCause() instanceof ConcurrencyFailureException) {
@@ -332,10 +369,16 @@ _%>
     }
 
     private String getCustomizedTitle(Throwable err) {
-        if (
-            err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException
-        ) return "Method argument not valid";
+        if (isValidationFailure(err)) return "Method argument not valid";
         return null;
+    }
+
+    private boolean isValidationFailure(Throwable err) {
+        return (
+            err instanceof MethodArgumentNotValidException ||
+            err instanceof HandlerMethodValidationException ||
+            err instanceof ConstraintViolationException
+        );
     }
 
     private String getCustomizedErrorDetails(Throwable err, String currentDetail) {

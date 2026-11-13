@@ -149,6 +149,54 @@ class ExceptionTranslatorIT {
     }
 
     @Test
+    void testMethodValidationOfTheBody() {
+        webTestClient
+            .post()
+            .uri("/api/exception-translator-test/method-validation/abc")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue("{}")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_VALIDATION)
+            .jsonPath("$.fieldErrors.[0].objectName")
+            .isEqualTo("test")
+            .jsonPath("$.fieldErrors.[0].field")
+            .isEqualTo("test")
+            .jsonPath("$.fieldErrors.[0].message")
+            .isEqualTo("must not be null")
+            .jsonPath("$.fieldErrors.[0].code")
+            .isEqualTo("NotNull");
+    }
+
+    @Test
+    void testMethodValidationOfAParameter() {
+        webTestClient
+            .post()
+            .uri("/api/exception-translator-test/method-validation/abcdef")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue("{\"test\": \"test\"}")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_VALIDATION)
+            .jsonPath("$.fieldErrors.[0].objectName")
+            .isEqualTo("exceptionTranslatorTestController")
+            .jsonPath("$.fieldErrors.[0].field")
+            .isEqualTo("name")
+            .jsonPath("$.fieldErrors.[0].code")
+            .isEqualTo("Size");
+    }
+
+    @Test
     void testMissingRequestPart() {
         webTestClient
             .get()

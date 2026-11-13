@@ -792,6 +792,10 @@ ${classProperties
           method: 'validate',
         });
         source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.web.method.annotation.HandlerMethodValidator',
+          method: 'validateArguments',
+        });
+        source.addAllowBlockingCallsInside!({
           classPath: `${application.packageName}.service.MailService`,
           method: 'sendEmailFromTemplate',
         });
