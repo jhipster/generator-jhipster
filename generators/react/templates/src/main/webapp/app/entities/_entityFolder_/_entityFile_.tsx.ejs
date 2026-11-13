@@ -75,6 +75,9 @@ import {
   reset,
 <%_ } _%>
 } from './<%- entityFileName %>.reducer';
+<%_ if (!readOnly) { _%>
+import <%- entityReactName %>DeleteDialog from './<%- entityFileName %>-delete-dialog';
+<%_ } _%>
 
 export const <%- entityReactName %> = () => {
   const dispatch = useAppDispatch();
@@ -86,6 +89,9 @@ export const <%- entityReactName %> = () => {
 
 <%_ if (searchEngineAny) { _%>
   const [search, setSearch] = useState('');
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+  const [deleteId, setDeleteId] = useState<string | number | undefined>();
 <%_ } _%>
 <%_ if (paginationNo) { _%>
   const [sortState, setSortState] = useState(() => overrideSortStateWithQueryParams(getSortState(pageLocation, '<%- primaryKey.name %>'), pageLocation.search));
@@ -516,19 +522,17 @@ export const <%- entityReactName %> = () => {
                           <Link to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} className="btn btn-primary btn-sm" data-cy="entityEditButton">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Link>
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => setDeleteId(<%- entityInstance %>.<%- primaryKey.name %>)}
   <%_ if (builtInUserManagement) { _%>
-                          <Link
-                            to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`}
-                            className={`btn btn-danger btn-sm${account.login === <%- entityInstance %>.login ? ' disabled' : ''}`}
-                            aria-disabled={account.login === <%- entityInstance %>.login || undefined}
-                            tabIndex={account.login === <%- entityInstance %>.login ? -1 : undefined}
+                            disabled={account.login === <%- entityInstance %>.login}
+  <%_ } _%>
                             data-cy="entityDeleteButton"
                           >
-  <%_ } else { _%>
-                          <Link to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} className="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-  <%_ } _%>
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
-                          </Link>
+                          </Button>
 <%_ } _%>
                         </div>
                       </td>
@@ -574,6 +578,20 @@ export const <%- entityReactName %> = () => {
         ''
       )}
   <%_ } _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+      {deleteId === undefined ? null : (
+        <<%- entityReactName %>DeleteDialog
+          id={deleteId}
+          onClose={() => setDeleteId(undefined)}
+          onDeleted={() => {
+            setDeleteId(undefined);
+  <%_ if (!paginationInfiniteScroll) { _%>
+            sortEntities();
+  <%_ } _%>
+          }}
+        />
+      )}
 <%_ } _%>
     </div>
   );
