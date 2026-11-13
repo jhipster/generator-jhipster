@@ -1130,19 +1130,6 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
     "spawn",
     "heroku",
     [
-      "git:remote",
-      "--app",
-      "random-app-name",
-    ],
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawn",
-    "heroku",
-    [
       "addons:create",
       "heroku-postgresql",
       "--as",
@@ -1580,6 +1567,19 @@ exports[`generator - Heroku monolith application with existing app calls should 
     "heroku plugins",
     {
       "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "git:remote",
+      "--app",
+      "jhipster-existing",
+    ],
+    {
+      "reject": true,
       "stdio": "pipe",
     },
   ],

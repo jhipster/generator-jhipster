@@ -227,7 +227,17 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
       },
 
       async herokuCreate() {
-        if (!this.hasHerokuCli || this.herokuAppExists) return;
+        if (!this.hasHerokuCli) return;
+
+        if (this.herokuAppExists) {
+          if (this.herokuDeployType === 'git') {
+            const remotes = await this.createSimpleGit().getRemotes();
+            if (!remotes.some(({ name }) => name === 'heroku')) {
+              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!], { reject: true });
+            }
+          }
+          return;
+        }
 
         const regionParams = this.herokuRegion === 'us' ? [] : ['--region', this.herokuRegion];
 
@@ -260,7 +270,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
               },
             ]);
             if (props.herokuForceName === 'Yes') {
-              if (this.herokuDeployType === 'git') {
+              if (await this.createSimpleGit().checkIsRepo()) {
                 await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!], { reject: true });
               }
             } else {
@@ -268,7 +278,9 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
               // Extract from "Created random-app-name-1234... done"
               this.herokuAppName = stdout.substring(stdout.lastIndexOf('/') + 1, stdout.indexOf('.git'));
               // ensure that the git remote is the same as the appName
-              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
+              if (await this.createSimpleGit().checkIsRepo()) {
+                await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
+              }
               this.jhipsterConfig.herokuAppName = this.herokuAppName;
             }
           } else if (stderr.includes('Invalid credentials')) {
@@ -490,7 +502,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
           );
           try {
             await this.spawnHeroku(['deploy:jar', jarFile, '--app', this.herokuAppName!], { stdio: 'pipe' });
-            await this.spawnHerokuCommand('buildpacks:set heroku/jvm', { stdio: 'pipe' });
+            await this.spawnHeroku(['buildpacks:set', 'heroku/jvm', '--app', this.herokuAppName!], { stdio: 'pipe', reject: true });
             this.log.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
             this.log.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
             this.log.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
