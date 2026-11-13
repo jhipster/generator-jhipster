@@ -97,6 +97,17 @@ describe('language', () => {
     expect(useTranslationStore().currentLanguage).toBe('yy');
   });
 
+  it('should keep the locale when the current language is cleared', async () => {
+    mountLanguage();
+    await flushPromises();
+    translationService.setLocale.mockClear();
+
+    useTranslationStore().$patch({ currentLanguage: undefined });
+    await nextTick();
+
+    expect(translationService.setLocale).not.toHaveBeenCalled();
+  });
+
   it('should take the language of the account when the user chose none', async () => {
     mountLanguage('<%- nativeLanguage %>');
     await flushPromises();

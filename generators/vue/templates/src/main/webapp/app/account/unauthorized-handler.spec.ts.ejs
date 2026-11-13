@@ -85,6 +85,14 @@ describe('unauthorized handler', () => {
   });
 <%_ } _%>
 
+  it('should read the status of the response when the error has none', async () => {
+    const withoutStatus = { response: { status: 401, config: { url: 'api/account' } } } as unknown as AxiosError;
+
+    await expect(handler(withoutStatus)).rejects.toBe(withoutStatus);
+
+    expect(accountService.logout).toHaveBeenCalledOnce();
+  });
+
   it('should keep the session on another error', async () => {
     await expect(handler(error(403))).rejects.toMatchObject({ status: 403 });
 
