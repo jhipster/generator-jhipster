@@ -55,4 +55,36 @@ describe(`generator - ${generator}`, () => {
       });
     });
   }
+
+  describe('skipCommitHook in a project with the commit hook', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withMockedNodeDependencies()
+        .withSharedApplication({ prettierExtensions: ['PRETTIER_EXTENSIONS'], prettierFolders: ['PRETTIER_FOLDERS'] })
+        .withFiles({
+          '.lintstagedrc.cjs': 'module.exports = {};\n',
+          '.husky/pre-commit': 'lint-staged\n',
+          'package.json': {
+            scripts: { prepare: 'husky', test: 'test' },
+            devDependencies: { husky: '1.0.0', 'lint-staged': '1.0.0', other: '1.0.0' },
+          },
+        })
+        .commitFiles()
+        .withJHipsterConfig({ skipCommitHook: true });
+    });
+
+    it('should remove the files of the commit hook', () => {
+      result.assertNoFile(['.lintstagedrc.cjs', '.husky/pre-commit']);
+    });
+
+    it('should remove its script and its dependencies only', () => {
+      result.assertJsonFileContent('package.json', { scripts: { test: 'test' }, devDependencies: { other: '1.0.0' } });
+      result.assertNoJsonFileContent('package.json', { scripts: { prepare: 'husky' } });
+      result.assertNoJsonFileContent('package.json', { devDependencies: { husky: '1.0.0' } });
+      result.assertNoJsonFileContent('package.json', { devDependencies: { 'lint-staged': '1.0.0' } });
+    });
+  });
 });

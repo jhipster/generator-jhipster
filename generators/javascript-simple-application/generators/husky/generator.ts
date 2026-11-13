@@ -34,6 +34,7 @@ export default class HuskyGenerator extends JavascriptSimpleApplicationGenerator
     return this.asConfiguringTaskGroup({
       configureNodeOptions() {
         if (this.jhipsterConfig.skipCommitHook) {
+          this.removeCommitHook();
           this.cancelCancellableTasks();
         }
       },
@@ -77,5 +78,27 @@ export default class HuskyGenerator extends JavascriptSimpleApplicationGenerator
 
   get [JavascriptSimpleApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  /**
+   * Removes what this generator writes from a project that turned the commit hook off: its files, its script and its
+   * dependencies.
+   */
+  private removeCommitHook() {
+    this.removeFile('.lintstagedrc.cjs');
+    this.removeFile('.husky/pre-commit');
+    if (!this.packageJson.existed) return;
+    const { scripts, devDependencies } = this.packageJson.getAll() as {
+      scripts?: Record<string, string>;
+      devDependencies?: Record<string, string>;
+    };
+    if (scripts?.prepare === 'husky') {
+      const { prepare: _prepare, ...otherScripts } = scripts;
+      this.packageJson.set('scripts', otherScripts);
+    }
+    if (devDependencies && ('husky' in devDependencies || 'lint-staged' in devDependencies)) {
+      const { husky: _husky, 'lint-staged': _lintStaged, ...otherDevDependencies } = devDependencies;
+      this.packageJson.set('devDependencies', otherDevDependencies);
+    }
   }
 }
