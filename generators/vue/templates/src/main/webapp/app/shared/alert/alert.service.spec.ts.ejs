@@ -293,12 +293,38 @@ describe('Alert Service test suite', () => {
   });
 <%_ } _%>
 
-  it('should show a validation error when http status = 400 with field errors', () => {
+  it('should show an error for each field error when http status = 400', () => {
+<%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.mockImplementation((key: string) => key);
+
+<%_ } _%>
     // WHEN
-    alertService.showHttpError({ status: 400, headers: {}, data: { fieldErrors: [{ field: 'name' }] } });
+    alertService.showHttpError({
+      status: 400,
+      headers: {},
+      data: {
+        message: 'error.validation',
+        fieldErrors: [
+          { objectName: 'foo', field: 'name', message: 'must not be null', code: 'NotNull' },
+          { objectName: 'foo', field: 'items[2].quantity', message: 'must be greater than or equal to 1', code: 'Min' },
+        ],
+      },
+    });
 
     // THEN
-    expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ body: 'Validation error', variant: 'danger' }));
+<%_ if (enableTranslation) { _%>
+    expect(translationStub).toHaveBeenCalledWith('<%- frontendAppName %>.foo.name');
+    expect(translationStub).toHaveBeenCalledWith('error.NotNull', { fieldName: '<%- frontendAppName %>.foo.name' });
+    expect(translationStub).toHaveBeenCalledWith('error.Size', { fieldName: '<%- frontendAppName %>.foo.items[].quantity' });
+    expect(toastStub).toHaveBeenCalledTimes(2);
+    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'error.NotNull', variant: 'danger' }));
+    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'error.Size', variant: 'danger' }));
+<%_ } else { _%>
+    expect(toastStub).toHaveBeenCalledTimes(2);
+    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'Error on field "Name"', variant: 'danger' }));
+    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'Error on field "Items[].quantity"', variant: 'danger' }));
+<%_ } _%>
   });
 
   it('should need the toasts of BootstrapVue', () => {

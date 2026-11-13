@@ -25,6 +25,9 @@ import { type BToastProps, useToast } from 'bootstrap-vue-next';
 
 import { getMessageFromHeaders } from '@/shared/jhipster/headers';
 
+/** An error of a field of the body, as the server gives it in a problem detail. */
+type FieldError = { objectName?: string; field: string; message?: string; code?: string };
+
 export const useAlertService = () => {
   // Throws without the plugin of BootstrapVue.
   const toast = useToast();
@@ -104,6 +107,12 @@ export default class AlertService {
         break;
 
       case 400: {
+        if (Array.isArray(data?.fieldErrors) && data.fieldErrors.length > 0) {
+          for (const fieldError of data.fieldErrors as FieldError[]) {
+            this.showError(this.getFieldErrorMessage(fieldError));
+          }
+          return;
+        }
         const message = getMessageFromHeaders(headers!);
 <%_ if (enableTranslation) { _%>
         if (message.errorKey && message.param) {
@@ -120,8 +129,6 @@ export default class AlertService {
 <%_ } else { _%>
           errorMessage = data.message;
 <%_ } _%>
-        } else if (data?.fieldErrors) {
-          errorMessage = 'Validation error';
         }
         break;
       }
@@ -138,6 +145,21 @@ export default class AlertService {
 <%_ } _%>
     }
     this.showError(errorMessage!);
+  }
+
+  private getFieldErrorMessage({ <%- enableTranslation ? 'objectName, field, message, code' : 'field' %> }: FieldError): string {
+    // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
+    const convertedField = field.replace(/\[\d*\]/g, '[]');
+<%_ if (enableTranslation) { _%>
+    // The code of the constraint is the key of its translation, older servers send it as the message.
+    const errorCode = code ?? message ?? '';
+    const errorKey = ['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(errorCode) ? 'Size' : errorCode;
+    const fieldName = this.i18n.t(`<%- frontendAppName %>.${objectName}.${convertedField}`).toString();
+    return this.i18n.t(`error.${errorKey}`, { fieldName }).toString();
+<%_ } else { _%>
+    const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
+    return `Error on field "${fieldName}"`;
+<%_ } _%>
   }
 }
 
