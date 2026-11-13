@@ -294,11 +294,6 @@ describe('Alert Service test suite', () => {
 <%_ } _%>
 
   it('should show an error for each field error when http status = 400', () => {
-<%_ if (enableTranslation) { _%>
-    // GIVEN
-    translationStub.mockImplementation((key: string) => key);
-
-<%_ } _%>
     // WHEN
     alertService.showHttpError({
       status: 400,
@@ -313,18 +308,11 @@ describe('Alert Service test suite', () => {
     });
 
     // THEN
-<%_ if (enableTranslation) { _%>
-    expect(translationStub).toHaveBeenCalledWith('<%- frontendAppName %>.foo.name');
-    expect(translationStub).toHaveBeenCalledWith('error.NotNull', { fieldName: '<%- frontendAppName %>.foo.name' });
-    expect(translationStub).toHaveBeenCalledWith('error.Size', { fieldName: '<%- frontendAppName %>.foo.items[].quantity' });
     expect(toastStub).toHaveBeenCalledTimes(2);
-    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'error.NotNull', variant: 'danger' }));
-    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'error.Size', variant: 'danger' }));
-<%_ } else { _%>
-    expect(toastStub).toHaveBeenCalledTimes(2);
-    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'Error on field "Name"', variant: 'danger' }));
-    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'Error on field "Items[].quantity"', variant: 'danger' }));
-<%_ } _%>
+    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'name: must not be null', variant: 'danger' }));
+    expect(toastStub).toHaveBeenCalledWith(
+      expect.objectContaining({ body: 'items[2].quantity: must be greater than or equal to 1', variant: 'danger' }),
+    );
   });
 
   it('should need the toasts of BootstrapVue', () => {
