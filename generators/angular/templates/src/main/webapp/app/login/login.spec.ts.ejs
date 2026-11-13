@@ -156,6 +156,7 @@ describe('Login', () => {
     it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {
       // GIVEN
       vi.spyOn(mockRouter, 'currentNavigation').mockReturnValue({} as Navigation);
+      comp.loginForm.patchValue({ username: 'admin', password: 'admin' });
 
       // WHEN
       comp.login();
@@ -165,9 +166,20 @@ describe('Login', () => {
       expect(mockRouter.navigate).not.toHaveBeenCalled();
     });
 
+    it('should not authenticate without a username or a password', () => {
+      // WHEN
+      comp.login();
+
+      // THEN
+      expect(mockLoginService.login).not.toHaveBeenCalled();
+      expect(comp.loginForm.controls.username.touched).toEqual(true);
+      expect(comp.loginForm.controls.password.touched).toEqual(true);
+    });
+
     it('should stay on login form and show error message on login error', () => {
       // GIVEN
       mockLoginService.login = vi.fn(() => throwError(() => new Error()));
+      comp.loginForm.patchValue({ username: 'admin', password: 'admin' });
 
       // WHEN
       comp.login();

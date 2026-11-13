@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import {
+  classInvalid,
   titleLoginSelector,
   errorLoginSelector,
   usernameLoginSelector,
@@ -60,9 +61,7 @@ describe('login page', () => {
   it('requires username', () => {
     cy.get(passwordLoginSelector).should('be.visible').type('a-password');
     cy.get(submitLoginSelector).click();
-<%_ if (!clientFrameworkReact) { _%>
-    cy.wait('@authenticate').then(({ response }) => expect(response?.statusCode).to.equal(<%- authenticationTypeSession ? '401' : '400' %>));
-<%_ } _%>
+    cy.get(usernameLoginSelector).should('have.class', classInvalid);
     // login page should stay open when login fails
     cy.get(titleLoginSelector).should('be.visible');
   });
@@ -70,13 +69,9 @@ describe('login page', () => {
   it('requires password', () => {
     cy.get(usernameLoginSelector).should('be.visible').type('a-login');
     cy.get(submitLoginSelector).click();
-<%_ if (clientFrameworkReact) { _%>
+    cy.get(passwordLoginSelector).should('have.class', classInvalid);
     // login page should stay open when login fails
     cy.get(titleLoginSelector).should('be.visible');
-<%_ } else { _%>
-    cy.wait('@authenticate').then(({ response }) => expect(response?.statusCode).to.equal(<%- authenticationTypeSession ? '401' : '400' %>));
-    cy.get(errorLoginSelector).should('be.visible');
-<%_ } _%>
   });
 
   it('errors when password is incorrect', () => {

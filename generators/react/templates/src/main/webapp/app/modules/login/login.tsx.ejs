@@ -58,7 +58,7 @@ export const Login = () => {
             </Translate>
           </Alert>
         )}
-        <Form onSubmit={handleSubmit(handleLogin)}>
+        <Form onSubmit={handleSubmit(handleLogin)} noValidate>
           <ValidatedField
             name="username"
             label={translate('global.form.username.label')}
