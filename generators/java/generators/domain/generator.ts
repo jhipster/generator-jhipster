@@ -113,7 +113,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
       },
 
       validators({ entity }) {
-        for (const field of entity.fields.filter(f => f.fieldValidate)) {
+        for (const field of entity.fields.filter(f => f.fieldValidate || f.blobContentTypeImage)) {
           mutateData(field, mutateValidatedField);
         }
       },
