@@ -29,7 +29,8 @@
               id="firstName"
               name="firstName"
               :placeholder="t$('settings.form[\'firstname.placeholder\']')"
-              :class="{ 'is-valid': !v$.settingsAccount.firstName.$invalid, 'is-invalid': v$.settingsAccount.firstName.$invalid }"
+              :class="{ 'is-valid': v$.settingsAccount.firstName.$dirty && !v$.settingsAccount.firstName.$invalid, 'is-invalid': v$.settingsAccount.firstName.$dirty && v$.settingsAccount.firstName.$invalid }"
+              @blur="v$.settingsAccount.firstName.$touch()"
               v-model="v$.settingsAccount.firstName.$model"
               data-cy="firstname"
             />
@@ -53,7 +54,8 @@
               id="lastName"
               name="lastName"
               :placeholder="t$('settings.form[\'lastname.placeholder\']')"
-              :class="{ 'is-valid': !v$.settingsAccount.lastName.$invalid, 'is-invalid': v$.settingsAccount.lastName.$invalid }"
+              :class="{ 'is-valid': v$.settingsAccount.lastName.$dirty && !v$.settingsAccount.lastName.$invalid, 'is-invalid': v$.settingsAccount.lastName.$dirty && v$.settingsAccount.lastName.$invalid }"
+              @blur="v$.settingsAccount.lastName.$touch()"
               v-model="v$.settingsAccount.lastName.$model"
               data-cy="lastname"
             />
@@ -77,7 +79,8 @@
               id="email"
               name="email"
               :placeholder="t$('global.form[\'email.placeholder\']')"
-              :class="{ 'is-valid': !v$.settingsAccount.email.$invalid, 'is-invalid': v$.settingsAccount.email.$invalid }"
+              :class="{ 'is-valid': v$.settingsAccount.email.$dirty && !v$.settingsAccount.email.$invalid, 'is-invalid': v$.settingsAccount.email.$dirty && v$.settingsAccount.email.$invalid }"
+              @blur="v$.settingsAccount.email.$touch()"
               v-model="v$.settingsAccount.email.$model"
               data-cy="email"
             />
