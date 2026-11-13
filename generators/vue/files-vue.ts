@@ -113,6 +113,8 @@ export const vueFiles = asWriteFilesSection({
         'layouts/navbar/navbar.component.spec.ts',
         'layouts/ribbon/ribbon.vue',
         'layouts/ribbon/ribbon.component.spec.ts',
+        'composables/account.ts',
+        'composables/account.spec.ts',
         'composables/date-format.ts',
         'composables/date-format.spec.ts',
         'composables/entity-list.ts',

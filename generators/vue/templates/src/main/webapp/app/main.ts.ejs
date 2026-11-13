@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { computed, createApp, h, provide } from 'vue';
+import { <%- enableTranslation ? '' : 'computed, ' %>createApp, h, provide } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -24,33 +24,28 @@ import { useI18n } from 'vue-i18n';
 <%_ if (microfrontend) { _%>
 import { registerRemotes } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 <%_ } _%>
-import { createPinia, storeToRefs } from 'pinia'
+import { createPinia } from 'pinia'
 
-import AccountService, { accountServiceKey } from '@/account/account.service';
-import { createUnauthorizedHandler } from '@/account/unauthorized-handler';
-<%_ if (authenticationUsesCsrf) { _%>
-import LoginService, { loginServiceKey } from '@/account/login.service';
-<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import TranslationService, { translationServiceKey } from '@/shared/language/translation.service';
 <%_ } _%>
-import { setupAxiosInterceptors } from '@/config/axios-interceptor';
 import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/config/config';
 import { initBootstrapVue } from '@/config/config-bootstrap-vue';
-import { authenticatedKey, <%- enableTranslation ? '' : 'currentLanguageKey, ' %>currentUsernameKey } from '@/config/injection-keys';
+<%_ if (!enableTranslation) { _%>
+import { currentLanguageKey } from '@/config/injection-keys';
+<%_ } _%>
 import JhiItemCount from '@/components/jhi-item-count.vue';
+import { useAccount } from '@/composables/account';
 <%_ if (enableTranslation) { _%>
 import { useLanguage } from '@/composables/language';
 <%_ } _%>
 import JhiSortHeader from '@/components/jhi-sort-header.vue';
-import { useStore } from '@/stores';
 
 <%_ if (communicationSpringWebsocket) { _%>
 import { trackerServiceKey, useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 import App from './app.vue';
 import router from './router';
-import { createAuthorityGuard } from './router/authority-guard';
 
 import '../content/scss/global.scss';
 import '../content/scss/vendor.scss';
@@ -76,31 +71,15 @@ const i18n = initI18N();
 
 const app = createApp({
   setup() {
-<%_ if (authenticationUsesCsrf) { _%>
-    provide(loginServiceKey, new LoginService());
-<%_ } _%>
-    const store = useStore();
-    const accountService = new AccountService(store);
+    const { store<%- communicationSpringWebsocket ? ', authenticated' : '' %> } = useAccount({ router });
 <%_ if (enableTranslation) { _%>
     const composer = useI18n();
     const translationService = new TranslationService(composer);
     useLanguage({ composer, store, translationService });
+    provide(translationServiceKey, translationService);
 <%_ } else { _%>
     provide(currentLanguageKey, computed(() => store.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
 <%_ } _%>
-
-    router.beforeResolve(createAuthorityGuard({ accountService, store }));
-
-    setupAxiosInterceptors(createUnauthorizedHandler({ accountService<%- authenticationTypeOauth2 ? '' : ', router' %> }), error => Promise.reject(error));
-
-    const { authenticated } = storeToRefs(store);
-    provide(authenticatedKey, authenticated);
-    provide(currentUsernameKey, computed(() => store.account?.login));
-
-<%_ if (enableTranslation) { _%>
-    provide(translationServiceKey, translationService);
-<%_ } _%>
-    provide(accountServiceKey, accountService);
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
 <%_ if (communicationSpringWebsocket) { _%>
 
