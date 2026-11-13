@@ -198,6 +198,8 @@ describe('Component Tests', () => {
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%- entityInstance %> = <%- entityInstance %>Sample;
+        // The save is what is tested: the form is taken as valid, whatever the sample.
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
         <%- entityInstance %>ServiceStub.update.mockResolvedValue(<%- entityInstance %>Sample);
 
         // WHEN
@@ -209,6 +211,22 @@ describe('Component Tests', () => {
         expect(comp.isSaving).toEqual(false);
       });
 
+      it('Should mark the fields of an invalid form instead of saving it', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(true);
+        const touch = vi.spyOn(comp.v$, '$touch');
+
+        // WHEN
+        await comp.save();
+
+        // THEN
+        expect(touch).toHaveBeenCalled();
+        expect(<%- entityInstance %>ServiceStub.create).not.toHaveBeenCalled();
+        expect(<%- entityInstance %>ServiceStub.update).not.toHaveBeenCalled();
+      });
+
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
@@ -216,6 +234,8 @@ describe('Component Tests', () => {
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%- entityInstance %> = entity;
+        // The save is what is tested: the form is taken as valid, whatever the sample.
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
 
         // WHEN
         comp.save();
@@ -508,9 +528,12 @@ describe('Component Tests', () => {
 
         // WHEN
         comp.<%- entityInstance %> = <%- entityInstance %>Sample;
+        // The save is what is tested: the form is taken as valid, whatever the sample.
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
         comp.save();
         await flushPromises();
         comp.<%- entityInstance %> = {};
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
         comp.save();
         await flushPromises();
 
