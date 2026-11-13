@@ -294,6 +294,13 @@ describe('Alert Service test suite', () => {
 <%_ } _%>
 
   it('should show an error for each field error when http status = 400', () => {
+<%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.mockImplementation((key: string) => key);
+    const translationExistsStub = vi.fn((key: string) => key === 'error.NotNull');
+    alertService = new AlertService({ toast: { create: toastStub }, i18n: { t: translationStub, te: translationExistsStub } as any });
+
+<%_ } _%>
     // WHEN
     alertService.showHttpError({
       status: 400,
@@ -309,7 +316,13 @@ describe('Alert Service test suite', () => {
 
     // THEN
     expect(toastStub).toHaveBeenCalledTimes(2);
+<%_ if (enableTranslation) { _%>
+    // The code that has a translation is translated, with the field.
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith('error.NotNull', { fieldName: 'name' });
+    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'error.NotNull', variant: 'danger' }));
+<%_ } else { _%>
     expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'name: must not be null', variant: 'danger' }));
+<%_ } _%>
     expect(toastStub).toHaveBeenCalledWith(
       expect.objectContaining({ body: 'items[2].quantity: must be greater than or equal to 1', variant: 'danger' }),
     );

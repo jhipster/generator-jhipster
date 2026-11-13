@@ -26,7 +26,7 @@ import { type BToastProps, useToast } from 'bootstrap-vue-next';
 import { getMessageFromHeaders } from '@/shared/jhipster/headers';
 
 /** An error of a field of the body, as the server gives it in a problem detail. */
-type FieldError = { field: string; message: string };
+type FieldError = { field: string; message: string<%- enableTranslation ? '; code?: string' : '' %> };
 
 export const useAlertService = () => {
   // Throws without the plugin of BootstrapVue.
@@ -45,7 +45,7 @@ export const useAlertService = () => {
 export default class AlertService {
   private readonly toast: Pick<ReturnType<typeof useToast>, 'create'>;
 <%_ if (enableTranslation) { _%>
-  private readonly i18n: Pick<Composer, 't'>;
+  private readonly i18n: Pick<Composer, 't'> & Partial<Pick<Composer, 'te'>>;
 <%_ } _%>
 
   constructor({
@@ -56,7 +56,7 @@ export default class AlertService {
   }: {
     toast: Pick<ReturnType<typeof useToast>, 'create'>;
 <%_ if (enableTranslation) { _%>
-    i18n: Pick<Composer, 't'>,
+    i18n: Pick<Composer, 't'> & Partial<Pick<Composer, 'te'>>,
 <%_ } _%>
   }) {
     this.toast = toast;
@@ -108,9 +108,8 @@ export default class AlertService {
 
       case 400: {
         if (Array.isArray(data?.fieldErrors) && data.fieldErrors.length > 0) {
-          // The server tells the field and what is wrong with it.
-          for (const { field, message } of data.fieldErrors as FieldError[]) {
-            this.showError(`${field}: ${message}`);
+          for (const fieldError of data.fieldErrors as FieldError[]) {
+            this.showError(this.getFieldErrorMessage(fieldError));
           }
           return;
         }
@@ -146,6 +145,20 @@ export default class AlertService {
 <%_ } _%>
     }
     this.showError(errorMessage!);
+  }
+
+  /**
+   * What is wrong with a field<%- enableTranslation ? ': the translation of the code of its constraint when there is one, else' : ':' %> the message of the
+   * server.
+   */
+  private getFieldErrorMessage({ field, message<%- enableTranslation ? ', code' : '' %> }: FieldError): string {
+<%_ if (enableTranslation) { _%>
+    const key = `error.${code}`;
+    if (code && this.i18n.te?.(key)) {
+      return this.i18n.t(key, { fieldName: field }).toString();
+    }
+<%_ } _%>
+    return `${field}: ${message}`;
   }
 }
 
