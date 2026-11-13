@@ -67,33 +67,22 @@ export function addEntitiesRoute<const E extends ClientEntity, const A extends C
 }) {
   const { enableTranslation } = application;
   return joinCallbacks(
-    ...entities.map(entity => {
-      const { i18nKeyPrefix, entityNamePlural, entityFolderName, entityFileName, entityUrl, entityPage } = entity;
+    ...entities
+      // The pages of an entity of the administration are among the administration ones.
+      .filter(entity => !isAdminPageEntity(application, entity))
+      .map(entity => {
+        const { i18nKeyPrefix, entityNamePlural, entityFolderName, entityFileName, entityUrl } = entity;
 
-      if (isAdminPageEntity(application, entity)) {
-        // The pages of the entity are among the administration ones, its former urls redirect to them.
-        const routePath = `path: '${entityUrl}',`;
-        return createNeedleCallback({
+        const title = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityNamePlural;
+        const modulePath = `./${entityFolderName}/${entityFileName}.routes`;
+
+        return addRoute({
           needle: 'jhipster-needle-add-entity-route',
-          contentToAdd: `
-    {
-      ${routePath}
-      children: [{ path: '**', redirectTo: ({ url }) => ['/${entityPage}', ...url.map(segment => segment.path)].join('/') }],
-    },`,
-          contentToCheck: routePath,
+          route: entityUrl,
+          modulePath,
+          title,
         });
-      }
-
-      const title = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityNamePlural;
-      const modulePath = `./${entityFolderName}/${entityFileName}.routes`;
-
-      return addRoute({
-        needle: 'jhipster-needle-add-entity-route',
-        route: entityUrl,
-        modulePath,
-        title,
-      });
-    }),
+      }),
   );
 }
 

@@ -289,21 +289,6 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               }),
             );
 
-            if (adminPage) {
-              // The pages of the entity are among the administration ones, its former urls redirect to them.
-              this.editFile(
-                `${application.clientSrcDir}/app/entities/entities.routes.ts`,
-                createNeedleCallback({
-                  needle: 'jhipster-needle-add-entity-to-router',
-                  contentToAdd: `{
-  path: '${entityFileName}/:pathMatch(.*)*',
-  redirect: (to: { path: string }) => \`/${entityPage}\${to.path.slice('/${entityFileName}'.length)}\`,
-},`,
-                  contentToCheck: `path: '${entityFileName}/:pathMatch(.*)*'`,
-                }),
-              );
-            }
-
             this.editFile(
               `${application.clientSrcDir}/app/entities/entities.vue`,
               createNeedleCallback({

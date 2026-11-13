@@ -62,12 +62,6 @@ export default
         component: <%- entity.entityAngularName %>Details,
         meta: { authorities: [<%- entity.entityVueReadAuthorities %>] },
       },
-  <%_ if (adminPage) { _%>
-      {
-        path: '<%- entity.entityFileName %>/:pathMatch(.*)*',
-        redirect: (to: { path: string }) => `/<%- entity.entityPage %>${to.path.slice('/<%- entity.entityFileName %>'.length)}`,
-      },
-  <%_ } _%>
 <%_ } _%>
       // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
     ],
