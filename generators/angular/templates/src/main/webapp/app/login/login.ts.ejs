@@ -17,16 +17,16 @@
  limitations under the License.
 -%>
 import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormField, FormRoot, form, required } from '@angular/forms/signals';
 import { Router<%- generateUserManagement ? ', RouterLink' : '' %> } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
+import { firstValueFrom } from 'rxjs';
 
 import { AccountService } from 'app/core/auth';
 import { LoginService } from 'app/login/login.service';
-import { ValidationClassesDirective } from 'app/shared/form';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
@@ -38,8 +38,8 @@ import { TranslateDirective } from 'app/shared/language';
     TranslateDirective,
     TranslatePipe,
 <%_ } _%>
-    ReactiveFormsModule,
-    ValidationClassesDirective,
+    FormField,
+    FormRoot,
 <%_ if (generateUserManagement) { _%>
     RouterLink,
 <%_ } _%>
@@ -51,13 +51,17 @@ export default class Login implements OnInit, AfterViewInit {
 
   readonly authenticationError = signal(false);
 
-  loginForm = new FormGroup({
-    username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-<%_ if (authenticationUsesRememberMe) { _%>
-    rememberMe: new FormControl(false, { nonNullable: true, validators: [Validators.required] }),
-<%_ } _%>
-  });
+  readonly loginModel = signal({ username: '', password: '', rememberMe: false });
+
+  readonly loginForm = form(
+    this.loginModel,
+    path => {
+      required(path.username);
+      required(path.password);
+    },
+    // A submit marks the fields as touched and sends nothing while the form is invalid.
+    { submission: { action: async () => this.login() } },
+  );
 
   private readonly accountService = inject(AccountService);
   private readonly loginService = inject(LoginService);
@@ -76,20 +80,17 @@ export default class Login implements OnInit, AfterViewInit {
     this.username().nativeElement.focus();
   }
 
-  login(): void {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
+  async login(): Promise<undefined> {
+    try {
+      await firstValueFrom(this.loginService.login(this.loginModel()));
+      this.authenticationError.set(false);
+      if (!this.router.currentNavigation()) {
+        // There were no routing during login (e.g. from navigationToStoredUrl)
+        void this.router.navigate(['']);
+      }
+    } catch {
+      this.authenticationError.set(true);
     }
-    this.loginService.login(this.loginForm.getRawValue()).subscribe({
-      next: () => {
-        this.authenticationError.set(false);
-        if (!this.router.currentNavigation()) {
-          // There were no routing during login (e.g. from navigationToStoredUrl)
-          void this.router.navigate(['']);
-        }
-      },
-      error: () => this.authenticationError.set(true),
-    });
+    return undefined;
   }
 }

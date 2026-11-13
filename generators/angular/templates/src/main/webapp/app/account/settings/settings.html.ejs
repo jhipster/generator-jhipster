@@ -19,8 +19,8 @@
 <div>
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
-    @if (settingsForm.value.login) {
-      <h2>__jhiTranslateTag__('settings.title', { "username": "settingsForm.value.login" })</h2>
+    @if (login()) {
+      <h2>__jhiTranslateTag__('settings.title', { "username": "login()" })</h2>
     }
 
     @if (success()) {
@@ -29,34 +29,33 @@
 
       <<%- jhiPrefixDashed %>-alert-error />
 
-    @if (settingsForm.value.login) {
-      <form name="form" (ngSubmit)="save()" [formGroup]="settingsForm" novalidate>
+    @if (login()) {
+      <form name="form" [formRoot]="settingsForm" novalidate>
         <div class="mb-3">
           <label class="form-label" for="firstName">__jhiTranslateTag__('settings.form.firstname')</label>
           <input
             type="text"
             class="form-control"
             id="firstName"
-            name="firstName"
             placeholder="__jhiTranslatePipe__('settings.form.firstname.placeholder')"
-            formControlName="firstName"
+            [formField]="settingsForm.firstName"
             data-cy="firstname"
           />
 
-        @let firstNameRef = settingsForm.get('firstName')!;
-        @if (firstNameRef.invalid && (firstNameRef.dirty || firstNameRef.touched)) {
+        @let firstNameRef = settingsForm.firstName();
+        @if (firstNameRef.invalid() && (firstNameRef.dirty() || firstNameRef.touched())) {
           <div>
-          @if (firstNameRef?.errors?.required) {
+          @if (firstNameRef.getError('required')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.firstname.required')</small>
           }
 
-          @if (firstNameRef?.errors?.minlength) {
+          @if (firstNameRef.getError('minLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.firstname.minlength')</small>
           }
 
-          @if (firstNameRef?.errors?.maxlength) {
+          @if (firstNameRef.getError('maxLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.firstname.maxlength')</small>
           }
@@ -70,26 +69,25 @@
             type="text"
             class="form-control"
             id="lastName"
-            name="lastName"
             placeholder="__jhiTranslatePipe__('settings.form.lastname.placeholder')"
-            formControlName="lastName"
+            [formField]="settingsForm.lastName"
             data-cy="lastname"
           />
 
-        @let lastNameRef = settingsForm.get('lastName')!;
-        @if (lastNameRef.invalid && (lastNameRef.dirty || lastNameRef.touched)) {
+        @let lastNameRef = settingsForm.lastName();
+        @if (lastNameRef.invalid() && (lastNameRef.dirty() || lastNameRef.touched())) {
           <div>
-          @if (lastNameRef?.errors?.required) {
+          @if (lastNameRef.getError('required')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.lastname.required')</small>
           }
 
-          @if (lastNameRef?.errors?.minlength) {
+          @if (lastNameRef.getError('minLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.lastname.minlength')</small>
           }
 
-          @if (lastNameRef?.errors?.maxlength) {
+          @if (lastNameRef.getError('maxLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.lastname.maxlength')</small>
           }
@@ -103,31 +101,30 @@
             type="email"
             class="form-control"
             id="email"
-            name="email"
             placeholder="__jhiTranslatePipe__('global.form.email.placeholder')"
-            formControlName="email"
+            [formField]="settingsForm.email"
             data-cy="email"
           />
 
-        @let emailRef = settingsForm.get('email')!;
-        @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
+        @let emailRef = settingsForm.email();
+        @if (emailRef.invalid() && (emailRef.dirty() || emailRef.touched())) {
           <div>
-          @if (emailRef?.errors?.required) {
+          @if (emailRef.getError('required')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.required')</small>
           }
 
-          @if (emailRef?.errors?.email) {
+          @if (emailRef.getError('email')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.invalid')</small>
           }
 
-          @if (emailRef?.errors?.minlength) {
+          @if (emailRef.getError('minLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.minlength')</small>
           }
 
-          @if (emailRef?.errors?.maxlength) {
+          @if (emailRef.getError('maxLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.maxlength')</small>
           }
@@ -139,7 +136,7 @@
       @if (languages.length > 0) {
         <div class="mb-3">
           <label class="form-label" for="langKey">__jhiTranslateTag__('settings.form.language')</label>
-          <select class="form-select" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
+          <select class="form-select" id="langKey" [formField]="settingsForm.langKey" data-cy="langKey">
           @for (language of languages; track language) {
             <option [value]="language">{{ language | findLanguageFromKey }}</option>
           }

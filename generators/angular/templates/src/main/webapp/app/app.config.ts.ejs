@@ -20,6 +20,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, LOCALE_ID, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NavigationError, Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler } from '@angular/router';
+import { provideSignalFormsConfig } from '@angular/forms/signals';
 import { provideServiceWorker } from '@angular/service-worker';
 
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap/datepicker';
@@ -67,6 +68,14 @@ export const appConfig: ApplicationConfig = {
   providers: [
 <%_ if (enableTranslation) { _%>
     provideTranslation(),
+    // The validation classes of Bootstrap, the ones the clients have in common: a field is marked once touched or changed.
+    provideSignalFormsConfig({
+      classes: {
+        'is-invalid': ({ state }) => (state().touched() || state().dirty()) && state().invalid(),
+        'is-valid': ({ state }) => (state().touched() || state().dirty()) && state().valid(),
+        'is-touched': ({ state }) => state().touched(),
+      },
+    }),
   <%_ if (microfrontend) { _%>
     provideMicrofrontendTranslation(),
   <%_ } _%>

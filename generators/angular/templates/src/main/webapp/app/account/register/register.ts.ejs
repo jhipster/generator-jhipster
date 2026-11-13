@@ -18,15 +18,14 @@
 -%>
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, ReactiveFormsModule, type ValidatorFn, Validators } from '@angular/forms';
+import { FormField, FormRoot, email, form, maxLength, minLength, pattern, required, validate } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 <%_ } _%>
+import { firstValueFrom } from 'rxjs';
 
-import { ValidationClassesDirective } from 'app/shared/form';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/jhipster/error.constants';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
@@ -34,10 +33,6 @@ import { TranslateDirective } from 'app/shared/language';
 import PasswordStrengthBar from '../password/password-strength-bar/password-strength-bar';
 
 import { RegisterService } from './register.service';
-
-/** The confirmation is the password: an empty one is left to the required validator. */
-const matchesPassword: ValidatorFn = control =>
-  control.value && control.value !== control.parent?.get('password')?.value ? { dontMatch: true } : null;
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-register',
@@ -47,8 +42,8 @@ const matchesPassword: ValidatorFn = control =>
     TranslatePipe,
 <%_ } _%>
     RouterLink,
-    ReactiveFormsModule,
-    ValidationClassesDirective,
+    FormField,
+    FormRoot,
     PasswordStrengthBar,
   ],
   templateUrl: './register.html',
@@ -61,62 +56,57 @@ export default class Register implements AfterViewInit {
   readonly errorUserExists = signal(false);
   readonly success = signal(false);
 
-  registerForm = new FormGroup({
-    login: new FormControl('', {
-      nonNullable: true,
-      validators: [
-<%_ if (user.fieldsByName.login.fieldValidationRequired) { _%>
-        Validators.required,
-<%_ } _%>
-        Validators.maxLength(<%- user.fieldsByName.login.fieldValidateRulesMaxlength %>),
-        Validators.pattern('<%- user.fieldsByName.login.fieldValidateRulesPatternAngular %>'),
-      ],
-    }),
-    email: new FormControl('', {
-      nonNullable: true,
-      validators: [<%- user.fieldsByName.email.fieldValidationRequired ? 'Validators.required, ' : '' %>Validators.minLength(<%- user.fieldsByName.email.fieldValidateRulesMinlength %>), Validators.maxLength(<%- user.fieldsByName.email.fieldValidateRulesMaxlength %>)<%- user.fieldsByName.email.fieldValidationEmail ? ', Validators.email' : '' %>],
-    }),
-    password: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
-    }),
-    confirmPassword: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50), matchesPassword],
-    }),
-  });
+  readonly registerModel = signal({ login: '', email: '', password: '', confirmPassword: '' });
+
+  readonly registerForm = form(
+    this.registerModel,
+    path => {
+      required(path.login);
+      maxLength(path.login, <%- user.fieldsByName.login.fieldValidateRulesMaxlength %>);
+      pattern(path.login, /^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$/);
+      required(path.email);
+      minLength(path.email, <%- user.fieldsByName.email.fieldValidateRulesMinlength %>);
+      maxLength(path.email, <%- user.fieldsByName.email.fieldValidateRulesMaxlength %>);
+      email(path.email);
+      required(path.password);
+      minLength(path.password, 4);
+      maxLength(path.password, <%- user.fieldsByName.login.fieldValidateRulesMaxlength %>);
+      required(path.confirmPassword);
+      minLength(path.confirmPassword, 4);
+      maxLength(path.confirmPassword, <%- user.fieldsByName.login.fieldValidateRulesMaxlength %>);
+      // The confirmation is the password: an empty one is left to the required validator.
+      validate(path.confirmPassword, ({ value, valueOf }) =>
+        value() && value() !== valueOf(path.password) ? { kind: 'dontMatch' } : undefined,
+      );
+    },
+    // A submit marks the fields as touched and sends nothing while the form is invalid.
+    { submission: { action: async () => this.register() } },
+  );
 
 <%_ if (enableTranslation) { _%>
   private readonly translateService = inject(TranslateService);
 <%_ } _%>
   private readonly registerService = inject(RegisterService);
 
-  constructor() {
-    // The confirmation is checked again when the password changes.
-    this.registerForm.controls.password.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.registerForm.controls.confirmPassword.updateValueAndValidity());
-  }
-
   ngAfterViewInit(): void {
     this.login().nativeElement.focus();
   }
 
-  register(): void {
+  async register(): Promise<undefined> {
     this.error.set(false);
     this.errorEmailExists.set(false);
     this.errorUserExists.set(false);
 
-    if (this.registerForm.invalid) {
-      // The fields are marked and their errors shown, nothing is sent.
-      this.registerForm.markAllAsTouched();
-      return;
+    const { login, email: registerEmail, password } = this.registerModel();
+    try {
+      await firstValueFrom(
+        this.registerService.save({ login, email: registerEmail, password, langKey: <%- enableTranslation ? 'this.translateService.getCurrentLang() ?? ' : '' %>'<%- nativeLanguage %>' }),
+      );
+      this.success.set(true);
+    } catch (response) {
+      this.processError(response as HttpErrorResponse);
     }
-
-    const { login, email, password } = this.registerForm.getRawValue();
-    this.registerService
-      .save({ login, email, password, langKey: <%- enableTranslation ? 'this.translateService.getCurrentLang() ?? ' : '' %>'<%- nativeLanguage %>' })
-      .subscribe({ next: () => (this.success.set(true)), error: response => this.processError(response) });
+    return undefined;
   }
 
   private processError(response: HttpErrorResponse): void {

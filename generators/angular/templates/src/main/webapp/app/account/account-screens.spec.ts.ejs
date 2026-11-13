@@ -18,9 +18,9 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Type } from '@angular/core';
+import { Type, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { FieldTree } from '@angular/forms/signals';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -61,28 +61,19 @@ const account: Account = {
   imageUrl: null,
 };
 
-const validationErrors = { required: true, minlength: {}, maxlength: {}, pattern: {}, email: true };
-
 describe('Account screens', () => {
-  const showValidations = async <T>(fixture: ComponentFixture<T>, form: FormGroup): Promise<void> => {
-    for (const control of Object.values<AbstractControl>(form.controls)) {
-      control.markAsDirty();
-      control.setErrors(validationErrors);
+  /** Every field takes values that its validators refuse, each one showing a message of an error. */
+  const showValidations = async <T>(
+    fixture: ComponentFixture<T>,
+    form: FieldTree<Record<string, string>>,
+    model: WritableSignal<Record<string, string>>,
+  ): Promise<void> => {
+    form().markAsTouched();
+    for (const value of ['', 'a', 'a b', 'x'.repeat(300)]) {
+      model.update(fields => Object.fromEntries(Object.keys(fields).map(field => [field, value])));
+      await fixture.whenStable();
+      expect(fixture.nativeElement.querySelector('small.text-danger')).not.toBeNull();
     }
-    await fixture.whenStable();
-    expect(fixture.nativeElement.querySelector('small.text-danger')).not.toBeNull();
-
-    const controls = Object.values<AbstractControl>(form.controls);
-    controls.forEach(control => control.setErrors({ other: true }));
-    await fixture.whenStable();
-    controls.forEach(control => {
-      control.markAsPristine();
-      control.markAsTouched();
-    });
-    await fixture.whenStable();
-    controls.forEach(control => control.markAsUntouched());
-    await fixture.whenStable();
-    expect(fixture.nativeElement.querySelector('small.text-danger')).toBeNull();
   };
 
   const render = async <T>(component: Type<T>): Promise<ComponentFixture<T>> => {
@@ -125,7 +116,7 @@ describe('Account screens', () => {
     const fixture = await render(Register);
 
     await submit(fixture);
-    await showValidations(fixture, fixture.componentInstance.registerForm);
+    await showValidations(fixture, fixture.componentInstance.registerForm as any, fixture.componentInstance.registerModel as any);
     await showStates(fixture, ['error', 'errorEmailExists', 'errorUserExists']);
     await showStates(fixture, ['success']);
 
@@ -137,7 +128,7 @@ describe('Account screens', () => {
     const fixture = await render(Settings);
 
     await submit(fixture);
-    await showValidations(fixture, fixture.componentInstance.settingsForm);
+    await showValidations(fixture, fixture.componentInstance.settingsForm as any, fixture.componentInstance.settingsModel as any);
     await showStates(fixture, ['success']);
 
     expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
@@ -147,7 +138,7 @@ describe('Account screens', () => {
     const fixture = await render(Password);
 
     await submit(fixture);
-    await showValidations(fixture, fixture.componentInstance.passwordForm);
+    await showValidations(fixture, fixture.componentInstance.passwordForm as any, fixture.componentInstance.passwordModel as any);
     await showStates(fixture, ['error', 'doNotMatch', 'success']);
 
     expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
@@ -157,7 +148,7 @@ describe('Account screens', () => {
     const fixture = await render(PasswordResetFinish);
 
     await submit(fixture);
-    await showValidations(fixture, fixture.componentInstance.passwordForm);
+    await showValidations(fixture, fixture.componentInstance.passwordForm as any, fixture.componentInstance.passwordModel as any);
     await showStates(fixture, ['error', 'doNotMatch', 'success']);
 
     expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();
@@ -174,7 +165,7 @@ describe('Account screens', () => {
     const fixture = await render(PasswordResetInit);
 
     await submit(fixture);
-    await showValidations(fixture, fixture.componentInstance.resetRequestForm);
+    await showValidations(fixture, fixture.componentInstance.resetRequestForm as any, fixture.componentInstance.resetRequestModel as any);
     await showStates(fixture, ['success']);
 
     expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();

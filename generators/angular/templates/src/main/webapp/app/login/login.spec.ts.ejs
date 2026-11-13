@@ -19,6 +19,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { submit } from '@angular/forms/signals';
 import { ActivatedRoute, Navigation, Router } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
@@ -126,7 +127,7 @@ describe('Login', () => {
   });
 
   describe('login', () => {
-    it('should authenticate the user and navigate to home page', () => {
+    it('should authenticate the user and navigate to home page', async () => {
       // GIVEN
       const credentials = {
         username: 'admin',
@@ -136,7 +137,7 @@ describe('Login', () => {
 <%_ } _%>
       };
 
-      comp.loginForm.patchValue({
+      comp.loginModel.set({
         username: 'admin',
         password: 'admin',
 <%_ if (authenticationUsesRememberMe) { _%>
@@ -145,7 +146,7 @@ describe('Login', () => {
       });
 
       // WHEN
-      comp.login();
+      await submit(comp.loginForm);
 
       // THEN
       expect(comp.authenticationError()).toEqual(false);
@@ -153,36 +154,36 @@ describe('Login', () => {
       expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
     });
 
-    it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {
+    it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', async () => {
       // GIVEN
       vi.spyOn(mockRouter, 'currentNavigation').mockReturnValue({} as Navigation);
-      comp.loginForm.patchValue({ username: 'admin', password: 'admin' });
+      comp.loginModel.set({ username: 'admin', password: 'admin', rememberMe: false });
 
       // WHEN
-      comp.login();
+      await submit(comp.loginForm);
 
       // THEN
       expect(comp.authenticationError()).toEqual(false);
       expect(mockRouter.navigate).not.toHaveBeenCalled();
     });
 
-    it('should not authenticate without a username or a password', () => {
+    it('should not authenticate without a username or a password', async () => {
       // WHEN
-      comp.login();
+      await submit(comp.loginForm);
 
       // THEN
       expect(mockLoginService.login).not.toHaveBeenCalled();
-      expect(comp.loginForm.controls.username.touched).toEqual(true);
-      expect(comp.loginForm.controls.password.touched).toEqual(true);
+      expect(comp.loginForm.username().touched()).toEqual(true);
+      expect(comp.loginForm.password().touched()).toEqual(true);
     });
 
-    it('should stay on login form and show error message on login error', () => {
+    it('should stay on login form and show error message on login error', async () => {
       // GIVEN
       mockLoginService.login = vi.fn(() => throwError(() => new Error()));
-      comp.loginForm.patchValue({ username: 'admin', password: 'admin' });
+      comp.loginModel.set({ username: 'admin', password: 'admin', rememberMe: false });
 
       // WHEN
-      comp.login();
+      await submit(comp.loginForm);
 
       // THEN
       expect(comp.authenticationError()).toEqual(true);
