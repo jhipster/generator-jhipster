@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (authenticationTypeJwt || enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 
@@ -25,7 +25,7 @@ import axios, { AxiosResponse } from 'axios';
 
 import { AppThunk } from 'app/config/store';
 <%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
+import { clearAuthenticationToken, storeAuthenticationToken } from 'app/shared/auth/authentication-token';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { setLocale } from 'app/shared/reducers/locale';
@@ -113,11 +113,7 @@ export const login: (credentials: IAuthParams) => AppThunk = credentials => asyn
   const bearerToken = response?.headers?.authorization;
   if (bearerToken?.startsWith('Bearer ')) {
     const jwt = bearerToken.slice(7, bearerToken.length);
-    if (credentials.rememberMe) {
-      localStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
-    } else {
-      sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
-    }
+    storeAuthenticationToken(jwt, credentials.rememberMe);
   }
   dispatch(getSession());
 };
@@ -125,8 +121,7 @@ export const login: (credentials: IAuthParams) => AppThunk = credentials => asyn
 
 <%_ if (authenticationTypeJwt) { _%>
 export const clearAuthToken = () => {
-  localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-  sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+  clearAuthenticationToken();
 };
 
 export const logout: () => AppThunk = () => dispatch => {

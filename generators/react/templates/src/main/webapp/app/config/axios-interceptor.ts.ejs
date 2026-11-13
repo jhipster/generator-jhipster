@@ -19,7 +19,7 @@
 import axios, { type AxiosError } from 'axios';
 
 <%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
+import { getAuthenticationToken } from 'app/shared/auth/authentication-token';
 <%_ } _%>
 
 const TIMEOUT = 1 * 60 * 1000;
@@ -29,7 +29,7 @@ axios.defaults.baseURL = SERVER_API_URL;
 const setupAxiosInterceptors = onUnauthenticated => {
   const onRequestSuccess = config => {
 <%_ if (authenticationTypeJwt) { _%>
-    const token = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) ?? sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY);
+    const token = getAuthenticationToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

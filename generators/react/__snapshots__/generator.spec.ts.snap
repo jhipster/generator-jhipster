@@ -553,6 +553,12 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/auth/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/auth/authentication-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/auth/private-route.spec.tsx": {
     "stateCleared": "modified",
   },
@@ -2648,6 +2654,12 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/auth/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/auth/authentication-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/auth/private-route.spec.tsx": {
     "stateCleared": "modified",
   },
@@ -4725,6 +4737,12 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/DurationFormat.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/authentication-token.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/auth/private-route.spec.tsx": {

@@ -69,6 +69,11 @@ export const files = asWriteFilesSection({
       templates: ['config/websocket-middleware.ts'],
     },
     {
+      condition: generator => generator.authenticationTypeJwt,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['shared/auth/authentication-token.ts', 'shared/auth/authentication-token.spec.ts'],
+    },
+    {
       ...clientApplicationTemplatesBlock(),
       templates: ['app.scss', '_bootstrap-variables.scss'],
     },
