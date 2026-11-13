@@ -345,6 +345,8 @@ describe('<%- entityAngularName %> screens', () => {
     it('should save the form', async () => {
       const fixture = await render();
       const previousState = vi.spyOn(fixture.componentInstance, 'previousState');
+      // The save is what is tested: the form is taken as valid, whatever the sample.
+      vi.spyOn(fixture.componentInstance.editForm, 'invalid', 'get').mockReturnValue(false);
 
       fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
       flushAll(sample);

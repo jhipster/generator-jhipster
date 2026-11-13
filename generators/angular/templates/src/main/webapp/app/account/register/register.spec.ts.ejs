@@ -53,15 +53,29 @@ describe('Register', () => {
     comp = fixture.componentInstance;
   });
 
-  it('should ensure the two passwords entered match', () => {
+  it('should ensure the two passwords entered match', inject([RegisterService], (service: RegisterService) => {
+    vi.spyOn(service, 'save');
     comp.registerForm.patchValue({
+      login: 'user',
+      email: 'user@example.com',
       password: 'password',
       confirmPassword: 'non-matching',
     });
 
     comp.register();
 
-    expect(comp.doNotMatch()).toBe(true);
+    expect(comp.registerForm.controls.confirmPassword.errors).toEqual({ dontMatch: true });
+    expect(comp.registerForm.controls.confirmPassword.touched).toBe(true);
+    expect(service.save).not.toHaveBeenCalled();
+  }));
+
+  it('should check the confirmation again when the password changes', () => {
+    comp.registerForm.patchValue({ password: 'password', confirmPassword: 'other-password' });
+    expect(comp.registerForm.controls.confirmPassword.errors).toEqual({ dontMatch: true });
+
+    comp.registerForm.patchValue({ password: 'other-password' });
+
+    expect(comp.registerForm.controls.confirmPassword.errors).toBeNull();
   });
 
   it('should update success to true after creating an account', inject(
@@ -72,6 +86,8 @@ describe('Register', () => {
       vi.spyOn(mockTranslateService, 'getCurrentLang').mockReturnValue('<%- nativeLanguage %>');
 <%_ } _%>
       comp.registerForm.patchValue({
+        login: 'user',
+        email: 'user@example.com',
         password: 'password',
         confirmPassword: 'password',
       });
@@ -79,9 +95,9 @@ describe('Register', () => {
       comp.register();
 
       expect(service.save).toHaveBeenCalledWith({
-        email: '',
+        email: 'user@example.com',
         password: 'password',
-        login: '',
+        login: 'user',
         langKey: '<%- nativeLanguage %>',
       });
       expect(comp.success()).toBe(true);
@@ -97,6 +113,8 @@ describe('Register', () => {
       const err = { status: 400, error: { type: LOGIN_ALREADY_USED_TYPE } };
       vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
+        login: 'user',
+        email: 'user@example.com',
         password: 'password',
         confirmPassword: 'password',
       });
@@ -115,6 +133,8 @@ describe('Register', () => {
       const err = { status: 400, error: { type: EMAIL_ALREADY_USED_TYPE } };
       vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
+        login: 'user',
+        email: 'user@example.com',
         password: 'password',
         confirmPassword: 'password',
       });
@@ -133,6 +153,8 @@ describe('Register', () => {
       const err = { status: 503 };
       vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
+        login: 'user',
+        email: 'user@example.com',
         password: 'password',
         confirmPassword: 'password',
       });

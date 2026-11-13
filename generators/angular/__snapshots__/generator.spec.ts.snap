@@ -2179,7 +2179,7 @@ export class UserManagementFormService {
           type="submit"
           id="save-entity"
           data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving()"
+          [disabled]="isSaving()"
           class="btn btn-primary"
         >
           <fa-icon icon="save" />&nbsp;<span>Save</span>
@@ -2246,6 +2246,24 @@ describe("UserManagement Management Update Component", () => {
   });
 
   describe("save", () => {
+    beforeEach(() => {
+      // The save is what is tested: the form is taken as valid, whatever the sample.
+      vi.spyOn(comp.editForm, "invalid", "get").mockReturnValue(false);
+    });
+
+    it("should mark the fields of an invalid form instead of saving it", () => {
+      // GIVEN
+      vi.spyOn(comp.editForm, "invalid", "get").mockReturnValue(true);
+      vi.spyOn(comp.editForm, "markAllAsTouched");
+
+      // WHEN
+      comp.save();
+
+      // THEN
+      expect(comp.editForm.markAllAsTouched).toHaveBeenCalled();
+      expect(comp.isSaving()).toEqual(false);
+    });
+
     it("should call update service on save for existing entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
@@ -2382,6 +2400,11 @@ export class UserManagementUpdate implements OnInit {
   }
 
   save(): void {
+    if (this.editForm.invalid) {
+      // The fields are marked and their errors shown, nothing is sent.
+      this.editForm.markAllAsTouched();
+      return;
+    }
     this.isSaving.set(true);
     const userManagement = this.userManagementFormService.getUserManagement(
       this.editForm,
@@ -2742,6 +2765,12 @@ describe("UserManagement screens", () => {
         fixture.componentInstance,
         "previousState",
       );
+      // The save is what is tested: the form is taken as valid, whatever the sample.
+      vi.spyOn(
+        fixture.componentInstance.editForm,
+        "invalid",
+        "get",
+      ).mockReturnValue(false);
 
       fixture.nativeElement
         .querySelector("form")

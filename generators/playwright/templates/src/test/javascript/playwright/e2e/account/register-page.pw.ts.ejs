@@ -102,16 +102,10 @@ test.describe('/account/register', () => {
     await expect(page.locator(firstPasswordRegisterSelector)).toContainClass(classValid);
     await page.locator(secondPasswordRegisterSelector).focus();
     await page.locator(secondPasswordRegisterSelector).blur();
-<%_ if (clientFrameworkAngular) { _%>
-    await expect(page.locator(secondPasswordRegisterSelector)).toContainClass(classInvalid);
-    await page.locator(secondPasswordRegisterSelector).fill('otherPassword');
-    await expect(page.locator(submitRegisterSelector)).toBeDisabled();
-<%_ } else { _%>
     await expect(page.locator(secondPasswordRegisterSelector)).toContainClass(classInvalid);
     await page.locator(secondPasswordRegisterSelector).fill('otherPassword');
     await page.locator(secondPasswordRegisterSelector).blur();
     await expect(page.locator(secondPasswordRegisterSelector)).toContainClass(classInvalid);
-<%_ } _%>
   });
 
   test('register a valid user', async ({ page }) => {

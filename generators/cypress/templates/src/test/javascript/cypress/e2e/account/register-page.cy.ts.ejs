@@ -105,16 +105,10 @@ describe('/account/register', () => {
     cy.get(firstPasswordRegisterSelector).should('have.class', classValid);
     cy.get(secondPasswordRegisterSelector).focus();
     cy.get(secondPasswordRegisterSelector).blur();
-<%_ if (clientFrameworkAngular) { _%>
-    cy.get(secondPasswordRegisterSelector).should('have.class', classInvalid);
-    cy.get(secondPasswordRegisterSelector).type('otherPassword');
-    cy.get(submitRegisterSelector).should('be.disabled');
-<%_ } else { _%>
     cy.get(secondPasswordRegisterSelector).should('have.class', classInvalid);
     cy.get(secondPasswordRegisterSelector).type('otherPassword');
     cy.get(secondPasswordRegisterSelector).blur();
     cy.get(secondPasswordRegisterSelector).should('have.class', classInvalid);
-<%_ } _%>
   });
 
   it('register a valid user', () => {

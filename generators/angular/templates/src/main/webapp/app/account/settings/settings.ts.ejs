@@ -87,6 +87,11 @@ export default class Settings implements OnInit {
   }
 
   save(): void {
+    if (this.settingsForm.invalid) {
+      // The fields are marked and their errors shown, nothing is sent.
+      this.settingsForm.markAllAsTouched();
+      return;
+    }
     this.success.set(false);
 
     const account = this.settingsForm.getRawValue();

@@ -37,9 +37,6 @@
         <div class="alert alert-danger">__jhiTranslateTag__('register.messages.error.emailexists')</div>
       }
 
-      @if (doNotMatch()) {
-        <div class="alert alert-danger">__jhiTranslateTag__('global.messages.error.dontmatch')</div>
-      }
     </div>
   </div>
 
@@ -190,13 +187,17 @@
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.confirmpassword.maxlength')</small>
           }
+
+          @if (confirmPasswordRef?.errors?.dontMatch) {
+            <small class="form-text text-danger"
+            >__jhiTranslateTag__('global.messages.error.dontmatch')</small>
+          }
           </div>
         }
         </div>
 
         <button
           type="submit"
-          [disabled]="registerForm.invalid"
           class="btn btn-primary"
           data-cy="submit"
         >__jhiTranslateTag__('register.form.button')</button>
