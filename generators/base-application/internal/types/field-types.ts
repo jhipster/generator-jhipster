@@ -27,6 +27,8 @@ export const isBlobType = (fieldType: string): fieldType is FieldBlobType =>
 
 export const getBlobContentType = (fieldType: FieldBlobType) => {
   switch (fieldType) {
+    // The Blob of a JDL holds any content.
+    case 'Blob':
     case 'AnyBlob': {
       return 'any';
     }
