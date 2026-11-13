@@ -99,7 +99,7 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
 <%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+import { storeAuthenticationToken } from '../authentication-token';
 <%_ } _%>
 import { accountServiceKey } from '../account.service';
 
@@ -137,14 +137,7 @@ const doLogin = async () => {
     const result = await axios.post('api/authenticate', data);
     const bearerToken = result.headers.authorization;
     if (bearerToken?.startsWith('Bearer ')) {
-      const jwt = bearerToken.slice(7, bearerToken.length);
-      if (rememberMe.value) {
-        localStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
-        sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-      } else {
-        sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
-        localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-      }
+      storeAuthenticationToken(bearerToken.slice(7, bearerToken.length), rememberMe.value);
     }
 <%_ } else { _%>
   const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}<%- authenticationUsesRememberMe ? '&remember-me=${rememberMe.value}' : '' %>&submit=Login`;

@@ -358,6 +358,12 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/account/account.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/account/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/account/authentication-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/account/login-form/login-form.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -2222,6 +2228,12 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/account/account.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/account/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/account/authentication-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/account/login-form/login-form.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4060,6 +4072,12 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/authentication-token.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/change-password/change-password.component.spec.ts": {

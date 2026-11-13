@@ -42,7 +42,7 @@ import { initBootstrapVue } from '@/config/config-bootstrap-vue';
 import { authenticatedKey<%- enableTranslation ? ', changeLanguageKey' : '' %>, currentLanguageKey, currentUsernameKey } from '@/config/injection-keys';
 import JhiItemCount from '@/components/jhi-item-count.vue';
 <%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+import { clearAuthenticationToken } from '@/account/authentication-token';
 <%_ } _%>
 import JhiSortHeader from '@/components/jhi-sort-header.vue';
 import { useStore<%- enableTranslation ? ', useTranslationStore' : '' %> } from '@/stores';
@@ -172,8 +172,7 @@ const app = createApp({
         if (status === 401) {
           // Store logged out state.
 <%_ if (authenticationTypeJwt) { _%>
-          sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-          localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+          clearAuthenticationToken();
 <%_ } _%>
           store.logout();
           if (!url?.endsWith('api/account') && !url?.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {

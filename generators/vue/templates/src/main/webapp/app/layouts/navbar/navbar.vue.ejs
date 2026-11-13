@@ -203,7 +203,7 @@ import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
 import getLanguages from '@/config/languages';
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+import { clearAuthenticationToken } from '@/account/authentication-token';
 <%_ } _%>
 import { useStore } from '@/stores';
 
@@ -271,8 +271,7 @@ const hasAnyAuthority = (authorities: string): boolean => {
 
 const logout = async () => {
 <%_ if (authenticationTypeJwt) { _%>
-  localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-  sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+  clearAuthenticationToken();
   store.logout();
 <%_ } else { _%>
   <%- authenticationTypeOauth2 ? 'const response = ' : '' %>await loginService.logout();
