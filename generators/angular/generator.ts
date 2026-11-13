@@ -257,11 +257,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ application, entity }) {
-        if (isAdminPageEntity(application, entity)) {
-          // The pages of an entity of the administration are among the administration ones.
-          entity.entityPage = `admin/${entity.entityFileName}`;
-        }
+      prepareEntity({ entity }) {
         const asAuthorities = (authorities: string[]): string | undefined =>
           authorities.length > 0 ? authorities.map(auth => `'${auth}'`).join(', ') : undefined;
         mutateData(entity, {

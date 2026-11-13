@@ -243,10 +243,6 @@ export function createUserManagementEntity(
     entityTranslationKey: 'userManagement',
   };
 
-  mutateData(userManagement, {
-    entityPage: () => (application.clientFrameworkAngular || application.clientFrameworkVue ? undefined : 'admin/user-management'),
-  });
-
   mutateFields(userManagement.fields!, [
     { fieldName: 'login', id: true },
     {
