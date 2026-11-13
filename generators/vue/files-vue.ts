@@ -157,6 +157,11 @@ export const vueFiles = asWriteFilesSection({
       ],
     },
     {
+      condition: generator => generator.authenticationTypeJwt,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['account/authentication-token.ts', 'account/authentication-token.spec.ts'],
+    },
+    {
       condition: generator => !generator.authenticationTypeOauth2,
       ...clientApplicationTemplatesBlock(),
       templates: ['account/login-form/login-form.vue', 'account/login-form/login-form.component.spec.ts', 'router/account.ts'],
