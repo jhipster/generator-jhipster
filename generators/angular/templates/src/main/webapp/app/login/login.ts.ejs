@@ -75,6 +75,10 @@ export default class Login implements OnInit, AfterViewInit {
   }
 
   login(): void {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
     this.loginService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
         this.authenticationError.set(false);

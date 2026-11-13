@@ -36,6 +36,9 @@
             formControlName="username"
             data-cy="username"
           />
+          @if (loginForm.controls.username.touched && loginForm.controls.username.errors?.required) {
+            <small class="form-text text-danger">__jhiTranslateTag__('entity.validation.required')</small>
+          }
         </div>
 
         <div class="mb-3">
@@ -49,6 +52,9 @@
             formControlName="password"
             data-cy="password"
           />
+          @if (loginForm.controls.password.touched && loginForm.controls.password.errors?.required) {
+            <small class="form-text text-danger">__jhiTranslateTag__('entity.validation.required')</small>
+          }
         </div>
 
 <%_ if (authenticationUsesRememberMe) { _%>

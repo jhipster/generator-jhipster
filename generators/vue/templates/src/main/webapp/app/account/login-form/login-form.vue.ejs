@@ -37,10 +37,12 @@
               name="username"
               :placeholder="t$('global.form[\'username.placeholder\']')"
               v-model="login"
+              :class="{ 'is-valid': submitted && !!login, 'is-invalid': submitted && !login }"
               data-cy="username"
               autofocus
             >
             </b-form-input>
+            <small class="form-text text-danger" v-if="submitted && !login">{{ t$('entity.validation.required') }}</small>
           </b-form-group>
           <b-form-group :label="t$('login.form.password')" label-for="password">
             <b-form-input
@@ -49,9 +51,11 @@
               name="password"
               :placeholder="t$('login.form[\'password.placeholder\']')"
               v-model="password"
+              :class="{ 'is-valid': submitted && !!password, 'is-invalid': submitted && !password }"
               data-cy="password"
             >
             </b-form-input>
+            <small class="form-text text-danger" v-if="submitted && !password">{{ t$('entity.validation.required') }}</small>
           </b-form-group>
 <%_ if (authenticationUsesRememberMe) { _%>
           <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked>
@@ -104,6 +108,7 @@ const { t: t$ } = useI18n();
 <%_ } _%>
 
 const authenticationError = ref(false);
+const submitted = ref(false);
 const login = ref<string | null>(null);
 const password = ref<string | null>(null);
 <%_ if (authenticationUsesRememberMe) { _%>
@@ -122,6 +127,10 @@ const redirectPath = (): string => {
 const accountService = inject(accountServiceKey)!;
 
 const doLogin = async () => {
+  submitted.value = true;
+  if (!login.value || !password.value) {
+    return;
+  }
 <%_ if (authenticationTypeJwt) { _%>
   const data = { username: login.value, password: password.value, rememberMe: rememberMe.value };
   try {
@@ -157,6 +166,7 @@ const doLogin = async () => {
 
 defineExpose({
   authenticationError,
+  submitted,
   login,
   password,
   rememberMe,

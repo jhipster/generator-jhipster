@@ -58,7 +58,7 @@ export const Login = () => {
             </Translate>
           </Alert>
         )}
-        <Form onSubmit={handleSubmit(handleLogin)}>
+        <Form onSubmit={handleSubmit(handleLogin)} noValidate>
           <ValidatedField
             name="username"
             label={translate('global.form.username.label')}
@@ -66,7 +66,7 @@ export const Login = () => {
             required
             autoFocus
             data-cy="username"
-            validate={{ required: 'Username cannot be empty!' }}
+            validate={{ required: { value: true, message: translate('entity.validation.required') } }}
             register={register}
             error={errors.username as FieldError}
             isTouched={touchedFields.username}
@@ -78,7 +78,7 @@ export const Login = () => {
             placeholder={translate('login.form.password.placeholder')}
             required
             data-cy="password"
-            validate={{ required: 'Password cannot be empty!' }}
+            validate={{ required: { value: true, message: translate('entity.validation.required') } }}
             register={register}
             error={errors.password as FieldError}
             isTouched={touchedFields.password}
