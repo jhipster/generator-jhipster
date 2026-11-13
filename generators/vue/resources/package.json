@@ -52,7 +52,7 @@
     "rimraf": "6.1.4",
     "sass": "1.70.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.72.1",
+    "typescript-eslint": "8.72.2",
     "vite": "8.3.7",
     "vite-plugin-static-copy": "4.1.1",
     "vitest": "5.1.0",
