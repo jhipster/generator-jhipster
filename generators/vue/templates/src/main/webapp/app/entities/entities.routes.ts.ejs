@@ -34,32 +34,40 @@ export default
     component: Entities,
     children: [
 <%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
+  <%_ const adminPage = entity.adminEntity && !applicationTypeMicroservice; _%>
+  <%_ const entityPath = adminPage ? entity.entityPage : entity.entityFileName; _%>
       {
-        path: '<%- entity.entityFileName %>',
+        path: '<%- entityPath %>',
         name: '<%- entity.entityAngularName %>',
         component: <%- entity.entityAngularName %>,
         meta: { authorities: [<%- entity.entityVueReadAuthorities %>] },
       },
   <%_ if (!entity.readOnly) { _%>
       {
-        path: '<%- entity.entityFileName %>/new',
+        path: '<%- entityPath %>/new',
         name: '<%- entity.entityAngularName %>Create',
         component: <%- entity.entityAngularName %>Update,
         meta: { authorities: [<%- entity.entityVueAuthorities %>] },
       },
       {
-        path: '<%- entity.entityFileName %>/:<%- entity.entityInstance %>Id/edit',
+        path: '<%- entityPath %>/:<%- entity.entityInstance %>Id/edit',
         name: '<%- entity.entityAngularName %>Edit',
         component: <%- entity.entityAngularName %>Update,
         meta: { authorities: [<%- entity.entityVueAuthorities %>] },
       },
   <%_ } _%>
       {
-        path: '<%- entity.entityFileName %>/:<%- entity.entityInstance %>Id/view',
+        path: '<%- entityPath %>/:<%- entity.entityInstance %>Id/view',
         name: '<%- entity.entityAngularName %>View',
         component: <%- entity.entityAngularName %>Details,
         meta: { authorities: [<%- entity.entityVueReadAuthorities %>] },
       },
+  <%_ if (adminPage) { _%>
+      {
+        path: '<%- entity.entityFileName %>/:pathMatch(.*)*',
+        redirect: (to: { path: string }) => `/<%- entity.entityPage %>${to.path.slice('/<%- entity.entityFileName %>'.length)}`,
+      },
+  <%_ } _%>
 <%_ } _%>
       // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
     ],

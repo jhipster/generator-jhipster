@@ -235,6 +235,8 @@ export default class VueGenerator extends VueApplicationGenerator {
               entityAngularName,
               readOnly,
             } = entity;
+            // The pages of an entity of the administration are among the administration ones.
+            const adminPage = Boolean(entity.adminEntity && !application.applicationTypeMicroservice);
 
             this.editFile(
               `${application.clientSrcDir}/app/entities/entities.routes.ts`,
@@ -283,9 +285,24 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 },`
                   )
                 }`,
-                contentToCheck: `path: '${entityFileName}'`,
+                contentToCheck: `path: '${adminPage ? entityPage : entityFileName}'`,
               }),
             );
+
+            if (adminPage) {
+              // The pages of the entity are among the administration ones, its former urls redirect to them.
+              this.editFile(
+                `${application.clientSrcDir}/app/entities/entities.routes.ts`,
+                createNeedleCallback({
+                  needle: 'jhipster-needle-add-entity-to-router',
+                  contentToAdd: `{
+  path: '${entityFileName}/:pathMatch(.*)*',
+  redirect: (to: { path: string }) => \`/${entityPage}\${to.path.slice('/${entityFileName}'.length)}\`,
+},`,
+                  contentToCheck: `path: '${entityFileName}/:pathMatch(.*)*'`,
+                }),
+              );
+            }
 
             this.editFile(
               `${application.clientSrcDir}/app/entities/entities.vue`,

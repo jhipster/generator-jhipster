@@ -54,6 +54,10 @@ export function addRoute({
   });
 }
 
+/** An entity of the administration has its pages among the administration ones, except in a microservice, which has none. */
+export const isAdminPageEntity = (application: { applicationTypeMicroservice?: boolean }, entity: { adminEntity?: boolean }): boolean =>
+  Boolean(entity.adminEntity && !application.applicationTypeMicroservice);
+
 export function addEntitiesRoute<const E extends ClientEntity, const A extends ClientApplication<E>>({
   application,
   entities,
@@ -64,7 +68,21 @@ export function addEntitiesRoute<const E extends ClientEntity, const A extends C
   const { enableTranslation } = application;
   return joinCallbacks(
     ...entities.map(entity => {
-      const { i18nKeyPrefix, entityNamePlural, entityFolderName, entityFileName, entityUrl } = entity;
+      const { i18nKeyPrefix, entityNamePlural, entityFolderName, entityFileName, entityUrl, entityPage } = entity;
+
+      if (isAdminPageEntity(application, entity)) {
+        // The pages of the entity are among the administration ones, its former urls redirect to them.
+        const routePath = `path: '${entityUrl}',`;
+        return createNeedleCallback({
+          needle: 'jhipster-needle-add-entity-route',
+          contentToAdd: `
+    {
+      ${routePath}
+      children: [{ path: '**', redirectTo: ({ url }) => ['/${entityPage}', ...url.map(segment => segment.path)].join('/') }],
+    },`,
+          contentToCheck: routePath,
+        });
+      }
 
       const title = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityNamePlural;
       const modulePath = `./${entityFolderName}/${entityFileName}.routes`;
@@ -76,6 +94,30 @@ export function addEntitiesRoute<const E extends ClientEntity, const A extends C
         title,
       });
     }),
+  );
+}
+
+/** The routes of the entities of the administration, among the administration ones. */
+export function addAdminEntitiesRoute<const E extends ClientEntity, const A extends ClientApplication<E>>({
+  application,
+  entities,
+}: {
+  application: A;
+  entities: E[];
+}) {
+  const { enableTranslation } = application;
+  return joinCallbacks(
+    ...entities
+      .filter(entity => isAdminPageEntity(application, entity))
+      .map(entity => {
+        const { i18nKeyPrefix, entityNamePlural, entityFolderName, entityFileName, entityUrl } = entity;
+        return addRoute({
+          needle: 'add-admin-route',
+          route: entityUrl,
+          modulePath: `../entities/${entityFolderName}/${entityFileName}.routes`,
+          title: enableTranslation ? `${i18nKeyPrefix}.home.title` : entityNamePlural,
+        });
+      }),
   );
 }
 
