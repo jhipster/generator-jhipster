@@ -34,30 +34,28 @@ export default
     component: Entities,
     children: [
 <%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
-  <%_ const adminPage = entity.adminEntity && !applicationTypeMicroservice; _%>
-  <%_ const entityPath = adminPage ? entity.entityPage : entity.entityFileName; _%>
       {
-        path: '<%- entityPath %>',
+        path: '<%- entity.entityFileName %>',
         name: '<%- entity.entityAngularName %>',
         component: <%- entity.entityAngularName %>,
         meta: { authorities: [<%- entity.entityVueReadAuthorities %>] },
       },
   <%_ if (!entity.readOnly) { _%>
       {
-        path: '<%- entityPath %>/new',
+        path: '<%- entity.entityFileName %>/new',
         name: '<%- entity.entityAngularName %>Create',
         component: <%- entity.entityAngularName %>Update,
         meta: { authorities: [<%- entity.entityVueAuthorities %>] },
       },
       {
-        path: '<%- entityPath %>/:<%- entity.entityInstance %>Id/edit',
+        path: '<%- entity.entityFileName %>/:<%- entity.entityInstance %>Id/edit',
         name: '<%- entity.entityAngularName %>Edit',
         component: <%- entity.entityAngularName %>Update,
         meta: { authorities: [<%- entity.entityVueAuthorities %>] },
       },
   <%_ } _%>
       {
-        path: '<%- entityPath %>/:<%- entity.entityInstance %>Id/view',
+        path: '<%- entity.entityFileName %>/:<%- entity.entityInstance %>Id/view',
         name: '<%- entity.entityAngularName %>View',
         component: <%- entity.entityAngularName %>Details,
         meta: { authorities: [<%- entity.entityVueReadAuthorities %>] },

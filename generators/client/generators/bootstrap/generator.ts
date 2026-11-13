@@ -91,15 +91,10 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
     return this.asPreparingEachEntityTaskGroup({
       preparing({ application, entityDefaults }) {
         entityDefaults(mutateEntity, {
-          entityPage: ({ microserviceName, entityFileName, adminEntity }) => {
-            if (adminEntity && !application.applicationTypeMicroservice) {
-              // The pages of an entity of the administration are among the administration ones.
-              return `admin/${entityFileName}`;
-            }
-            return microserviceName && application.microfrontend && application.applicationTypeMicroservice ?
-                `${microserviceName.toLowerCase()}/${entityFileName}`
-              : entityFileName;
-          },
+          entityPage: ({ microserviceName, entityFileName }) =>
+            microserviceName && application.microfrontend && application.applicationTypeMicroservice ?
+              `${microserviceName.toLowerCase()}/${entityFileName}`
+            : entityFileName,
           enumTypeFields: ({ fields }) => {
             const enumFields = fields.filter(field => fieldIsEnum(field.fieldType) && !field.clientConstantsAsValues);
             return enumFields.filter((field, index) => enumFields.findIndex(({ fieldType }) => fieldType === field.fieldType) === index);
