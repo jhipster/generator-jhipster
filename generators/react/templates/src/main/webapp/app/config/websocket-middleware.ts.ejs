@@ -16,17 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (!authenticationTypeSession) { _%>
-import { Storage } from 'react-jhipster';
-<%_ } _%>
-
 import { Observable } from 'rxjs';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 
 import { websocketActivityMessage } from 'app/modules/administration/administration.reducer';
-<%_ if (authenticationTypeJwt || authenticationUsesCsrf) { _%>
-import { <%- [authenticationTypeJwt ? 'AUTHENTICATION_TOKEN_KEY' : undefined, authenticationUsesCsrf ? 'CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN_HEADER_NAME' : undefined].filter(Boolean).join(', ') %> } from 'app/shared/jhipster/constants';
+<%_ if (authenticationTypeJwt) { _%>
+import { getAuthenticationToken } from 'app/shared/auth/authentication-token';
+<%_ } _%>
+<%_ if (authenticationUsesCsrf) { _%>
+import { CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN_HEADER_NAME } from 'app/shared/jhipster/constants';
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import { encodeCsrfToken } from 'app/shared/jhipster/encode-csrf-token';
@@ -88,7 +87,7 @@ const connect = () => {
   headers[CSRF_TOKEN_HEADER_NAME] = encodeCsrfToken(cookie.read(CSRF_TOKEN_COOKIE_NAME));
 <%_ } else { _%>
   let url = `//${loc.host}${baseHref}/websocket/tracker`;
-  const authToken = Storage.local.get(AUTHENTICATION_TOKEN_KEY) || Storage.session.get(AUTHENTICATION_TOKEN_KEY);
+  const authToken = getAuthenticationToken();
   if (authToken) {
     url += `?access_token=${authToken}`;
   }
