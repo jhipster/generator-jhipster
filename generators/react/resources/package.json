@@ -46,7 +46,7 @@
     "sass": "1.77.6",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.2",
-    "vite": "8.3.6",
+    "vite": "8.3.7",
     "vite-plugin-static-copy": "4.1.1",
     "vitest": "5.1.0",
     "vitest-sonar-reporter": "3.0.0"
