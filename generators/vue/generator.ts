@@ -235,6 +235,8 @@ export default class VueGenerator extends VueApplicationGenerator {
               entityAngularName,
               readOnly,
             } = entity;
+            // The pages of an entity of the administration are among the administration ones.
+            const adminPage = Boolean(entity.adminEntity && !application.applicationTypeMicroservice);
 
             this.editFile(
               `${application.clientSrcDir}/app/entities/entities.routes.ts`,
@@ -283,7 +285,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 },`
                   )
                 }`,
-                contentToCheck: `path: '${entityFileName}'`,
+                contentToCheck: `path: '${adminPage ? entityPage : entityFileName}'`,
               }),
             );
 
@@ -341,6 +343,21 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      adminPage({ application, entity }) {
+        if (entity.adminEntity && !application.applicationTypeMicroservice) {
+          // The pages of an entity of the administration are among the administration ones.
+          entity.entityPage = `admin/${entity.entityFileName}`;
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get preparingEachEntityField() {
