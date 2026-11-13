@@ -34,12 +34,14 @@ import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
 import { writeFiles } from './files-angular.ts';
 import {
+  addAdminEntitiesRoute,
   addEntitiesRoute,
   addIconImport,
   addItemToAdminMenu,
   type addItemToMenu,
   addRoute,
   addToEntitiesMenu,
+  isAdminPageEntity,
   isTranslatedAngularFile,
   translateAngularFilesTransform,
 } from './support/index.ts';
@@ -159,6 +161,14 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           const ignoreNonExistingRoute = chalk.yellow(`Route(s) not added to ${routeTemplatePath}.`);
           const addRouteCallback = addEntitiesRoute(param);
           this.editFile(routeTemplatePath, { ignoreNonExisting: ignoreNonExistingRoute }, addRouteCallback);
+          if (param.entities.some(entity => isAdminPageEntity(application, entity))) {
+            const adminRoutesPath = `${param.application.clientSrcDir}app/admin/admin.routes.ts`;
+            this.editFile(
+              adminRoutesPath,
+              { ignoreNonExisting: chalk.yellow(`Route(s) not added to ${adminRoutesPath}.`) },
+              addAdminEntitiesRoute(param),
+            );
+          }
 
           if (application.exposeMicrofrontend) {
             const adminEntities = application.applicationTypeMicroservice ? [] : param.entities.filter(entity => entity.adminEntity);

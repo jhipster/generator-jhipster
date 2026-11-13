@@ -210,7 +210,7 @@ export class UserManagementDeleteDialog {
 
       <button
         type="button"
-        [routerLink]="['/user-management', userManagementRef.login, 'edit']"
+        [routerLink]="['/admin/user-management', userManagementRef.login, 'edit']"
         class="btn btn-primary"
       >
         <fa-icon icon="pencil-alt" />&nbsp;<span>Edit</span>
@@ -332,7 +332,7 @@ describe("UserManagement Management Detail Component", () => {
         size: "lg",
         backdrop: "static",
       });
-      expect(navigateSpy).toHaveBeenCalledWith(["/user-management"]);
+      expect(navigateSpy).toHaveBeenCalledWith(["/admin/user-management"]);
     });
   });
 });
@@ -388,7 +388,7 @@ export class UserManagementDetail {
     modalRef.closed
       .pipe(
         filter((reason) => reason === ITEM_DELETED_EVENT),
-        tap(() => void this.router.navigate(["/user-management"])),
+        tap(() => void this.router.navigate(["/admin/user-management"])),
       )
       .subscribe();
   }
@@ -415,7 +415,7 @@ export class UserManagementDetail {
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary"
-        [routerLink]="['/user-management/new']"
+        [routerLink]="['/admin/user-management/new']"
       >
         <fa-icon icon="plus" />
         <span>Create a new user</span>
@@ -484,7 +484,8 @@ export class UserManagementDetail {
         trackLogin(userManagement)) {
         <tr data-cy="entityTable">
           <td>
-            <a [routerLink]="['/user-management', userManagement.login, 'view']"
+            <a
+              [routerLink]="['/admin/user-management', userManagement.login, 'view']"
               >{{ userManagement.login }}</a
             >
           </td>
@@ -516,7 +517,7 @@ export class UserManagementDetail {
             <span>
               <a
                 class="badge bg-info"
-                [routerLink]="['/authority', authority, 'view']"
+                [routerLink]="['/admin/authority', authority, 'view']"
                 >{{ authority }}</a
               >{{ last ? '' : ', ' }}
             </span>
@@ -525,7 +526,7 @@ export class UserManagementDetail {
           <td class="text-end">
             <div class="btn-group">
               <a
-                [routerLink]="['/user-management', userManagement.login, 'view']"
+                [routerLink]="['/admin/user-management', userManagement.login, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -534,7 +535,7 @@ export class UserManagementDetail {
               </a>
 
               <a
-                [routerLink]="['/user-management', userManagement.login, 'edit']"
+                [routerLink]="['/admin/user-management', userManagement.login, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
