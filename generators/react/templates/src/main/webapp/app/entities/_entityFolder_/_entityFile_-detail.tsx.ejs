@@ -27,7 +27,7 @@ import {
   TextFormat
 <%_ } _%>
 } from 'react-jhipster';
-import { Link, useParams } from 'react-router';
+import { Link, <%- readOnly ? '' : 'useNavigate, ' %>useParams } from 'react-router';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -57,6 +57,7 @@ export const <%- entityReactName %>Detail = () => {
   }, []);
 
 <%_ if (!readOnly) { _%>
+  const navigate = useNavigate();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
 <%_ } _%>
@@ -194,7 +195,13 @@ export const <%- entityReactName %>Detail = () => {
         <Button onClick={() => setShowDeleteDialog(true)}<% if (builtInUserManagement) { %> disabled={account.login === <%- entityInstance %>Entity.login}<% } %> variant="danger" data-cy="entityDeleteButton">
           <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
         </Button>
-        {showDeleteDialog ? <<%- entityReactName %>DeleteDialog onClose={() => setShowDeleteDialog(false)} /> : null}
+        {showDeleteDialog ? (
+          <<%- entityReactName %>DeleteDialog
+            id={<%- entityInstance %>Entity.<%- primaryKey.name %>}
+            onClose={() => setShowDeleteDialog(false)}
+            onDeleted={() => navigate('/<%- entityPage %>')}
+          />
+        ) : null}
 <%_ } _%>
       </Col>
     </Row>

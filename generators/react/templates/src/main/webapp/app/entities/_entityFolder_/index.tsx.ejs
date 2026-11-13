@@ -24,7 +24,6 @@ import PageTitle from 'app/shared/layout/page-title';
 
 import <%- entityReactName %> from './<%- entityFileName %>';
 <%_ if (!readOnly) { _%>
-import <%- entityReactName %>DeleteDialog from './<%- entityFileName %>-delete-dialog';
 <%_ } _%>
 import <%- entityReactName %>Detail from './<%- entityFileName %>-detail';
 <%_ if (!readOnly) { _%>
@@ -43,7 +42,6 @@ const <%- entityReactName %>Routes = () => (
         <Route index element={<<%- entityReactName %>Detail />} />
 <%_ if (!readOnly) { _%>
         <Route path="edit" element={<<%- entityReactName %>Update />} />
-        <Route path="delete" element={<<%- entityReactName %>DeleteDialog />} />
 <%_ } _%>
       </Route>
     </ErrorBoundaryRoutes>
