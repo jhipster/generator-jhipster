@@ -18,6 +18,7 @@
 -%>
 import {
   classInvalid,
+  classValid,
   titleLoginSelector,
   errorLoginSelector,
   usernameLoginSelector,
@@ -62,6 +63,7 @@ describe('login page', () => {
     cy.get(passwordLoginSelector).should('be.visible').type('a-password');
     cy.get(submitLoginSelector).click();
     cy.get(usernameLoginSelector).should('have.class', classInvalid);
+    cy.get(passwordLoginSelector).should('have.class', classValid);
     // login page should stay open when login fails
     cy.get(titleLoginSelector).should('be.visible');
   });
@@ -70,6 +72,7 @@ describe('login page', () => {
     cy.get(usernameLoginSelector).should('be.visible').type('a-login');
     cy.get(submitLoginSelector).click();
     cy.get(passwordLoginSelector).should('have.class', classInvalid);
+    cy.get(usernameLoginSelector).should('have.class', classValid);
     // login page should stay open when login fails
     cy.get(titleLoginSelector).should('be.visible');
   });

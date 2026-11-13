@@ -18,6 +18,7 @@
 -%>
 import {
   classInvalid,
+  classValid,
   titleLoginSelector,
   errorLoginSelector,
   usernameLoginSelector,
@@ -51,6 +52,7 @@ test.describe('login page', () => {
     await page.locator(passwordLoginSelector).fill('a-password');
     await page.locator(submitLoginSelector).click();
     await expect(page.locator(usernameLoginSelector)).toContainClass(classInvalid);
+    await expect(page.locator(passwordLoginSelector)).toContainClass(classValid);
     // login page should stay open when login fails
     await expect(page.locator(titleLoginSelector)).toBeVisible();
   });
@@ -60,6 +62,7 @@ test.describe('login page', () => {
     await page.locator(usernameLoginSelector).fill('a-login');
     await page.locator(submitLoginSelector).click();
     await expect(page.locator(passwordLoginSelector)).toContainClass(classInvalid);
+    await expect(page.locator(usernameLoginSelector)).toContainClass(classValid);
     // login page should stay open when login fails
     await expect(page.locator(titleLoginSelector)).toBeVisible();
   });
