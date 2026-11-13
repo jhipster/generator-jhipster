@@ -721,9 +721,62 @@ describe('cli', () => {
         it('should print usage', () => {
           expect(stdout).toMatch('Usage: jhipster run jhipster:app [options]');
         });
-        // TODO handle command imports in run command.
-        it.skip('should print options', () => {
+        it('should print options from imported generators', () => {
           expect(stdout).toMatch('--defaults');
+          expect(stdout).toMatch('--client-framework');
+        });
+        it('should exit with code 0', () => {
+          expect(exitCode).toBe(0);
+        });
+      });
+      describe('with option from a blueprint', () => {
+        let stdout: string;
+        let exitCode: number | null;
+        beforeEach(async () => {
+          await helpers
+            .prepareTemporaryDir()
+            .withFiles(
+              createBlueprintFiles('generator-jhipster-bar', {
+                generator: ['app'],
+                generatorContent: `export const createGenerator = async env => {
+    const BaseGenerator = await env.requireGenerator('jhipster:base');
+    return class extends BaseGenerator {
+      get [BaseGenerator.INITIALIZING]() {
+        return {};
+      }
+    };
+  };
+  `,
+                files: {
+                  'generators/app/command.js': `export default {
+  configs: {
+    fooBar: {
+      cli: {
+        description: 'Sample option',
+        type: Boolean,
+      },
+      scope: 'none',
+    },
+  },
+};
+`,
+                },
+              }),
+            )
+            .commitFiles();
+        });
+        beforeEach(done => {
+          const forked = fork(jhipsterCli, ['run', 'jhipster:app', '--blueprints', 'bar', '--help'], { stdio: 'pipe' });
+          forked.on('exit', code => {
+            exitCode = code;
+            stdout = forked.stdout?.read().toString();
+            done();
+          });
+        });
+
+        it('should print the blueprint option', () => {
+          expect(stdout).toMatch('--foo-bar');
+          expect(stdout).toMatch('Sample option (blueprint option: bar)');
         });
         it('should exit with code 0', () => {
           expect(exitCode).toBe(0);
