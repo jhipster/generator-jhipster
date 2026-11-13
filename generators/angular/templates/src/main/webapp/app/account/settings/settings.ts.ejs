@@ -28,6 +28,7 @@ import { LANGUAGES } from 'app/config';
 <%_ } _%>
 import { Account, AccountService } from 'app/core/auth';
 import { AlertError } from 'app/shared/alert';
+import { ValidationClassesDirective } from 'app/shared/form';
 <%_ if (enableTranslation) { _%>
 import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
 <%_ } _%>
@@ -44,6 +45,7 @@ const initialAccount: Account = {} as Account;
 <%_ } _%>
     AlertError,
     ReactiveFormsModule,
+    ValidationClassesDirective,
   ],
   templateUrl: './settings.html',
 })

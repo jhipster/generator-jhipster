@@ -1,0 +1,74 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it } from 'vitest';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { ValidationClassesDirective } from './validation-classes.directive';
+
+@Component({
+  imports: [ReactiveFormsModule, ValidationClassesDirective],
+  template: '<form [formGroup]="form"><input formControlName="name" /></form>',
+})
+class Host {
+  readonly form = new FormGroup({ name: new FormControl('', { nonNullable: true, validators: [Validators.required] }) });
+}
+
+describe('ValidationClassesDirective', () => {
+  const render = async (): Promise<{ fixture: ComponentFixture<Host>; input: HTMLInputElement }> => {
+    const fixture = TestBed.createComponent(Host);
+    await fixture.whenStable();
+    return { fixture, input: fixture.nativeElement.querySelector('input') as HTMLInputElement };
+  };
+
+  it('should not mark an untouched field', async () => {
+    const { input } = await render();
+
+    expect(input.classList).not.toContain('is-invalid');
+    expect(input.classList).not.toContain('is-valid');
+    expect(input.classList).not.toContain('is-touched');
+  });
+
+  it('should mark a touched field as invalid, then as valid once filled', async () => {
+    const { fixture, input } = await render();
+
+    input.dispatchEvent(new Event('blur'));
+    fixture.detectChanges();
+    expect(input.classList).toContain('is-invalid');
+    expect(input.classList).toContain('is-touched');
+
+    input.value = 'name';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(input.classList).toContain('is-valid');
+    expect(input.classList).not.toContain('is-invalid');
+  });
+
+  it('should mark a changed field before it is touched', async () => {
+    const { fixture, input } = await render();
+
+    input.value = 'name';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(input.classList).toContain('is-valid');
+    expect(input.classList).not.toContain('is-touched');
+  });
+});

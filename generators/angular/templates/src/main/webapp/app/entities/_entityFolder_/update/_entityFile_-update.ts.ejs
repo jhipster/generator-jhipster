@@ -67,6 +67,7 @@ import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entit
 import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- otherEntity.entityFolderName %>/service/<%- otherEntity.entityFileName %>.service';
 <%_ } _%>
 import { AlertError<%- anyFieldIsBlobDerived ? ', AlertErrorModel' : '' %> } from 'app/shared/alert';
+import { ValidationClassesDirective } from 'app/shared/form';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { type BlobType } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
@@ -94,6 +95,7 @@ import { <%- entityAngularName %>FormGroup, <%- entityAngularName %>FormService 
       FontAwesomeModule,
       AlertError,
       ReactiveFormsModule,
+    ValidationClassesDirective,
 <%_ if (anyFieldHasTypeLocalDate) { _%>
       NgbInputDatepicker,
 <%_ } _%>

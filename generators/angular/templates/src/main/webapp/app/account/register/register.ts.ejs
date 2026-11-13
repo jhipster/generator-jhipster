@@ -26,6 +26,7 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
+import { ValidationClassesDirective } from 'app/shared/form';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/jhipster/error.constants';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
@@ -47,6 +48,7 @@ const matchesPassword: ValidatorFn = control =>
 <%_ } _%>
     RouterLink,
     ReactiveFormsModule,
+    ValidationClassesDirective,
     PasswordStrengthBar,
   ],
   templateUrl: './register.html',

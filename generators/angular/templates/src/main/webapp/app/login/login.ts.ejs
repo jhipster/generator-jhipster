@@ -26,6 +26,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { AccountService } from 'app/core/auth';
 import { LoginService } from 'app/login/login.service';
+import { ValidationClassesDirective } from 'app/shared/form';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
@@ -38,6 +39,7 @@ import { TranslateDirective } from 'app/shared/language';
     TranslatePipe,
 <%_ } _%>
     ReactiveFormsModule,
+    ValidationClassesDirective,
 <%_ if (generateUserManagement) { _%>
     RouterLink,
 <%_ } _%>

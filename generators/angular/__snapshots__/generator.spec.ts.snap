@@ -2352,6 +2352,7 @@ import { Observable, finalize, map } from "rxjs";
 
 import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
 import { AlertError } from "app/shared/alert";
+import { ValidationClassesDirective } from "app/shared/form";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
 
@@ -2363,7 +2364,12 @@ import {
 @Component({
   selector: "jhi-user-management-update",
   templateUrl: "./user-management-update.html",
-  imports: [FontAwesomeModule, AlertError, ReactiveFormsModule],
+  imports: [
+    FontAwesomeModule,
+    AlertError,
+    ReactiveFormsModule,
+    ValidationClassesDirective,
+  ],
 })
 export class UserManagementUpdate implements OnInit {
   readonly isSaving = signal(false);
@@ -3852,6 +3858,15 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/validation-classes.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/validation-classes.directive.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
@@ -5132,6 +5147,15 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/validation-classes.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/validation-classes.directive.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
@@ -6327,6 +6351,15 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/validation-classes.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/validation-classes.directive.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
@@ -7532,6 +7565,15 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/validation-classes.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/validation-classes.directive.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
@@ -9074,6 +9116,15 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/validation-classes.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/validation-classes.directive.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
@@ -10248,6 +10299,15 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/validation-classes.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/validation-classes.directive.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
@@ -11356,6 +11416,15 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/validation-classes.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/validation-classes.directive.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
