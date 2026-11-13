@@ -42,6 +42,7 @@
               autofocus
             >
             </b-form-input>
+            <small class="form-text text-danger" v-if="submitted && !login">{{ t$('entity.validation.required') }}</small>
           </b-form-group>
           <b-form-group :label="t$('login.form.password')" label-for="password">
             <b-form-input
@@ -54,6 +55,7 @@
               data-cy="password"
             >
             </b-form-input>
+            <small class="form-text text-danger" v-if="submitted && !password">{{ t$('entity.validation.required') }}</small>
           </b-form-group>
 <%_ if (authenticationUsesRememberMe) { _%>
           <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked>
