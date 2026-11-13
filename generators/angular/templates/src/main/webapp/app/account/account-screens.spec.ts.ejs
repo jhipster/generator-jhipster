@@ -126,7 +126,7 @@ describe('Account screens', () => {
 
     await submit(fixture);
     await showValidations(fixture, fixture.componentInstance.registerForm);
-    await showStates(fixture, ['error', 'errorEmailExists', 'errorUserExists', 'doNotMatch']);
+    await showStates(fixture, ['error', 'errorEmailExists', 'errorUserExists']);
     await showStates(fixture, ['success']);
 
     expect(fixture.nativeElement.querySelector('.alert')).not.toBeNull();

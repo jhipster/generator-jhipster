@@ -18,7 +18,8 @@
 -%>
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, ReactiveFormsModule, type ValidatorFn, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
@@ -32,6 +33,10 @@ import { TranslateDirective } from 'app/shared/language';
 import PasswordStrengthBar from '../password/password-strength-bar/password-strength-bar';
 
 import { RegisterService } from './register.service';
+
+/** The confirmation is the password: an empty one is left to the required validator. */
+const matchesPassword: ValidatorFn = control =>
+  control.value && control.value !== control.parent?.get('password')?.value ? { dontMatch: true } : null;
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-register',
@@ -49,7 +54,6 @@ import { RegisterService } from './register.service';
 export default class Register implements AfterViewInit {
   readonly login = viewChild.required<ElementRef>('login');
 
-  readonly doNotMatch = signal(false);
   readonly error = signal(false);
   readonly errorEmailExists = signal(false);
   readonly errorUserExists = signal(false);
@@ -76,7 +80,7 @@ export default class Register implements AfterViewInit {
     }),
     confirmPassword: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
+      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50), matchesPassword],
     }),
   });
 
@@ -85,25 +89,32 @@ export default class Register implements AfterViewInit {
 <%_ } _%>
   private readonly registerService = inject(RegisterService);
 
+  constructor() {
+    // The confirmation is checked again when the password changes.
+    this.registerForm.controls.password.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.registerForm.controls.confirmPassword.updateValueAndValidity());
+  }
+
   ngAfterViewInit(): void {
     this.login().nativeElement.focus();
   }
 
   register(): void {
-    this.doNotMatch.set(false);
     this.error.set(false);
     this.errorEmailExists.set(false);
     this.errorUserExists.set(false);
 
-    const { password, confirmPassword } = this.registerForm.getRawValue();
-    if (password === confirmPassword) {
-      const { login, email } = this.registerForm.getRawValue();
-      this.registerService
-        .save({ login, email, password, langKey: <%- enableTranslation ? 'this.translateService.getCurrentLang() ?? ' : '' %>'<%- nativeLanguage %>' })
-        .subscribe({ next: () => (this.success.set(true)), error: response => this.processError(response) });
-    } else {
-      this.doNotMatch.set(true);
+    if (this.registerForm.invalid) {
+      // The fields are marked and their errors shown, nothing is sent.
+      this.registerForm.markAllAsTouched();
+      return;
     }
+
+    const { login, email, password } = this.registerForm.getRawValue();
+    this.registerService
+      .save({ login, email, password, langKey: <%- enableTranslation ? 'this.translateService.getCurrentLang() ?? ' : '' %>'<%- nativeLanguage %>' })
+      .subscribe({ next: () => (this.success.set(true)), error: response => this.processError(response) });
   }
 
   private processError(response: HttpErrorResponse): void {
