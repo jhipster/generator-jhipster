@@ -34,9 +34,8 @@ const NoErrorComp = (): JSX.Element => {
 
 describe('error-boundary-routes component', () => {
   beforeEach(() => {
-    // ignore console and jsdom errors
-    vi.spyOn((globalThis as any)._virtualConsole, 'emit').mockImplementation(() => false);
-    vi.spyOn((globalThis as any).console, 'error').mockImplementation(() => false);
+    // React logs the errors that the error boundaries catch
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
   });
 
   it('should render fallback component when an uncaught error is thrown in route', () => {
