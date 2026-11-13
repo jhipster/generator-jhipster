@@ -19,13 +19,13 @@
 import axios, { type AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from 'axios';
 
 <%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+import { getAuthenticationToken } from '@/account/authentication-token';
 <%_ } _%>
 
 const TIMEOUT = 1 * 60 * 1000;
 const onRequestSuccess = (config: AxiosRequestConfig): AxiosRequestConfig => {
 <%_ if (authenticationTypeJwt) { _%>
-  const token = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) ?? sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY);
+  const token = getAuthenticationToken();
   if (token) {
     if (!config.headers) {
       config.headers = {};

@@ -60,7 +60,10 @@ describe('JhiNavbar', () => {
 <%_ if (authenticationUsesCsrf) { _%>
   let loginService: LoginService;
 <%_ } _%>
-  const accountService = { hasAnyAuthorityAndCheckAuth: vi.fn().mockImplementation(() => Promise.resolve(true)) };
+  const accountService = {
+    hasAnyAuthorityAndCheckAuth: vi.fn().mockImplementation(() => Promise.resolve(true)),
+    logout: vi.fn(() => store.logout()),
+  };
 <%_ if (enableTranslation) { _%>
   const changeLanguage = vi.fn();
 <%_ } _%>

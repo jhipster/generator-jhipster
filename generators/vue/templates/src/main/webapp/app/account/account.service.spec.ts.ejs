@@ -57,6 +57,18 @@ describe('Account Service test suite', () => {
     resetStore(store);
   });
 
+  it('should sign the user out', () => {
+    accountService = new AccountService(store);
+    store.setAuthentication({ login: 'user' } as any);
+
+    accountService.logout();
+
+    expect(store.authenticated).toBe(false);
+<%_ if (authenticationTypeJwt) { _%>
+    expect(localStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBeNull();
+<%_ } _%>
+  });
+
   it('should init service and do not retrieve account', async () => {
     axiosStub.get.mockImplementation((...args: unknown[]) => {
       if (args[0] === 'management/info') {

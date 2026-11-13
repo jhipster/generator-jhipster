@@ -358,10 +358,22 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/account/account.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/account/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/account/authentication-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/account/login-form/login-form.component.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/account/login-form/login-form.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/account/unauthorized-handler.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/account/unauthorized-handler.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/docs/docs.component.spec.ts": {
@@ -389,6 +401,12 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "clientRoot/src/app/components/jhi-sort-header.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/account.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/account.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/composables/controlled-request.spec.ts": {
@@ -605,6 +623,12 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "clientRoot/src/app/router/admin.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/router/authority-guard.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/router/authority-guard.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/router/index.spec.ts": {
@@ -1216,6 +1240,12 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/account/login.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/account/unauthorized-handler.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/account/unauthorized-handler.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/admin/configuration/configuration.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -1294,6 +1324,12 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/components/jhi-sort-header.vue": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/composables/account.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/account.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/composables/controlled-request.spec.ts": {
     "stateCleared": "modified",
   },
@@ -1343,6 +1379,12 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/composables/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/language.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/language.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/composables/validation.spec.ts": {
@@ -1541,6 +1583,12 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/router/admin.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/router/authority-guard.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/router/authority-guard.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/router/index.spec.ts": {
@@ -2222,10 +2270,22 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/account/account.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/account/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/account/authentication-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/account/login-form/login-form.component.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/account/login-form/login-form.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/account/unauthorized-handler.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/account/unauthorized-handler.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/docs/docs.component.spec.ts": {
@@ -2244,6 +2304,12 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/app/components/jhi-sort-header.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/account.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/account.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/composables/controlled-request.spec.ts": {
@@ -2469,6 +2535,12 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/app/router/admin.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/router/authority-guard.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/router/authority-guard.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/router/index.spec.ts": {
@@ -3099,6 +3171,12 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/account/login.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/unauthorized-handler.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/unauthorized-handler.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/configuration/configuration.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -3168,6 +3246,12 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/components/jhi-sort-header.vue": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/composables/account.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/account.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/composables/controlled-request.spec.ts": {
     "stateCleared": "modified",
   },
@@ -3217,6 +3301,12 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/language.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/language.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/validation.spec.ts": {
@@ -3391,6 +3481,12 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/router/admin.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/authority-guard.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/authority-guard.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/router/index.spec.ts": {
@@ -4062,6 +4158,12 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/account/activate/activate.vue": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/authentication-token.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/change-password/change-password.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4099,6 +4201,12 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/settings/settings.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/unauthorized-handler.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/unauthorized-handler.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/configuration/configuration.component.spec.ts": {
@@ -4170,6 +4278,12 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/components/jhi-sort-header.vue": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/composables/account.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/account.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/composables/controlled-request.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4219,6 +4333,12 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/language.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/language.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/validation.spec.ts": {
@@ -4447,6 +4567,12 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/router/admin.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/authority-guard.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/authority-guard.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/router/index.spec.ts": {
@@ -5117,6 +5243,12 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/app/account/login.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/unauthorized-handler.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/unauthorized-handler.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -5133,6 +5265,12 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/components/jhi-sort-header.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/account.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/account.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/controlled-request.spec.ts": {
@@ -5346,6 +5484,12 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/router/admin.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/authority-guard.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/authority-guard.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/router/index.spec.ts": {
@@ -5970,6 +6114,12 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/app/account/login.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/unauthorized-handler.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/unauthorized-handler.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -5986,6 +6136,12 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/components/jhi-sort-header.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/account.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/account.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/controlled-request.spec.ts": {
@@ -6202,6 +6358,12 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/router/admin.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/authority-guard.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/router/authority-guard.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/router/index.spec.ts": {
