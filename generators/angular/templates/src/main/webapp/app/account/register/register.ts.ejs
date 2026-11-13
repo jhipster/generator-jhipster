@@ -92,7 +92,7 @@ export default class Register implements AfterViewInit {
     this.login().nativeElement.focus();
   }
 
-  async register(): Promise<undefined> {
+  async register(): Promise<void> {
     this.error.set(false);
     this.errorEmailExists.set(false);
     this.errorUserExists.set(false);
@@ -106,7 +106,6 @@ export default class Register implements AfterViewInit {
     } catch (response) {
       this.processError(response as HttpErrorResponse);
     }
-    return undefined;
   }
 
   private processError(response: HttpErrorResponse): void {

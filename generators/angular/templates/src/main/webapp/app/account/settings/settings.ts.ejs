@@ -88,7 +88,7 @@ export default class Settings implements OnInit {
     });
   }
 
-  async save(): Promise<undefined> {
+  async save(): Promise<void> {
     this.success.set(false);
 
     const { firstName, lastName, ...settings } = this.settingsModel();
@@ -112,6 +112,5 @@ export default class Settings implements OnInit {
     } catch {
       // Handled by interceptor.
     }
-    return undefined;
   }
 }

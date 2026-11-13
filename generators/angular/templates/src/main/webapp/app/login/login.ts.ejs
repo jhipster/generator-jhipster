@@ -80,7 +80,7 @@ export default class Login implements OnInit, AfterViewInit {
     this.username().nativeElement.focus();
   }
 
-  async login(): Promise<undefined> {
+  async login(): Promise<void> {
     try {
       await firstValueFrom(this.loginService.login(this.loginModel()));
       this.authenticationError.set(false);
@@ -91,6 +91,5 @@ export default class Login implements OnInit, AfterViewInit {
     } catch {
       this.authenticationError.set(true);
     }
-    return undefined;
   }
 }
