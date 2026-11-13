@@ -16,10 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (!authenticationTypeSession) { _%>
-import { Storage } from 'react-jhipster';
-<%_ } _%>
-
 import { Observable } from 'rxjs';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
@@ -88,7 +84,7 @@ const connect = () => {
   headers[CSRF_TOKEN_HEADER_NAME] = encodeCsrfToken(cookie.read(CSRF_TOKEN_COOKIE_NAME));
 <%_ } else { _%>
   let url = `//${loc.host}${baseHref}/websocket/tracker`;
-  const authToken = Storage.local.get(AUTHENTICATION_TOKEN_KEY) || Storage.session.get(AUTHENTICATION_TOKEN_KEY);
+  const authToken = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) ?? sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY);
   if (authToken) {
     url += `?access_token=${authToken}`;
   }

@@ -114,9 +114,9 @@ export const login: (credentials: IAuthParams) => AppThunk = credentials => asyn
   if (bearerToken?.startsWith('Bearer ')) {
     const jwt = bearerToken.slice(7, bearerToken.length);
     if (credentials.rememberMe) {
-      Storage.local.set(AUTHENTICATION_TOKEN_KEY, jwt);
+      localStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
     } else {
-      Storage.session.set(AUTHENTICATION_TOKEN_KEY, jwt);
+      sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
     }
   }
   dispatch(getSession());
@@ -125,12 +125,8 @@ export const login: (credentials: IAuthParams) => AppThunk = credentials => asyn
 
 <%_ if (authenticationTypeJwt) { _%>
 export const clearAuthToken = () => {
-  if (Storage.local.get(AUTHENTICATION_TOKEN_KEY)) {
-    Storage.local.remove(AUTHENTICATION_TOKEN_KEY);
-  }
-  if (Storage.session.get(AUTHENTICATION_TOKEN_KEY)) {
-    Storage.session.remove(AUTHENTICATION_TOKEN_KEY);
-  }
+  localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+  sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
 };
 
 export const logout: () => AppThunk = () => dispatch => {

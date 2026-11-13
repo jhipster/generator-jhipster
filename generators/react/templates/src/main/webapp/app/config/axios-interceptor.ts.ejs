@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Storage } from 'react-jhipster';
-
 import axios, { type AxiosError } from 'axios';
 
 <%_ if (authenticationTypeJwt) { _%>
@@ -31,7 +29,7 @@ axios.defaults.baseURL = SERVER_API_URL;
 const setupAxiosInterceptors = onUnauthenticated => {
   const onRequestSuccess = config => {
 <%_ if (authenticationTypeJwt) { _%>
-    const token = Storage.local.get(AUTHENTICATION_TOKEN_KEY) || Storage.session.get(AUTHENTICATION_TOKEN_KEY);
+    const token = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) ?? sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
