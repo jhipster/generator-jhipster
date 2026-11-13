@@ -69,6 +69,7 @@ script:
 <%_ } _%>
   - <%- nodePackageManager %> run ci:backend:test
 <%_ if (!skipClient) { _%>
+  - <%- nodePackageManager %> run lint
   - <%- nodePackageManager %> run ci:frontend:test
 <%_ } _%>
   - <%- nodePackageManager %> run java:jar:prod

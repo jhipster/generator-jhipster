@@ -66,6 +66,13 @@ dependency-scanning:
         - ./snyk monitor --all-projects
     allow_failure: true
   <%_ } _%>
+  <%_ if (!skipClient) { _%>
+
+frontend-lint:
+    stage: check
+    script:
+        - ./gradlew <%- nodePackageManager %>_run_lint -PnodeInstall --no-daemon
+  <%_ } _%>
 
 gradle-compile:
     stage: build
@@ -203,6 +210,13 @@ dependency-scanning:
         - ./snyk monitor --all-projects
     allow_failure: true
   <%_ } _%>
+  <%_ if (!skipClient) { _%>
+
+frontend-lint:
+    stage: check
+    script:
+        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%- nodePackageManager %> -Dfrontend.<%- nodePackageManager %>.arguments='run lint' -Dmaven.repo.local=$MAVEN_USER_HOME
+  <%_ } _%>
 
 maven-compile:
     stage: build
@@ -308,12 +322,18 @@ cache:
     paths:
         - node_modules/
 stages:
+    - check
     - build
     - test
   <%_ if (ciCdIntegrationsSonar) { _%>
     - analyze
   <%_ } _%>
     - packaging
+webapp-lint:
+    stage: check
+    script:
+        - <%- nodePackageManager %> install
+        - <%- nodePackageManager %> run lint
 webapp-build:
     stage: build
     script:
