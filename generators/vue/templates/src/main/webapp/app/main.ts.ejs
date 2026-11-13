@@ -16,11 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { computed, createApp, h<%- enableTranslation ? ', onMounted' : '' %>, provide, watch } from 'vue';
+import { computed, createApp, h, provide } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
-import { START_LOCATION } from 'vue-router';
 
 <%_ if (microfrontend) { _%>
 import { registerRemotes } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
@@ -28,30 +27,28 @@ import { registerRemotes } from '@module-federation/<%- clientBundlerVite ? '' :
 import { createPinia, storeToRefs } from 'pinia'
 
 import AccountService, { accountServiceKey } from '@/account/account.service';
-<%_ if (!authenticationTypeOauth2) { _%>
-<%_ } _%>
+import { createUnauthorizedHandler } from '@/account/unauthorized-handler';
 <%_ if (authenticationUsesCsrf) { _%>
 import LoginService, { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
+import { useLanguage } from '@/shared/language/language';
 import TranslationService, { translationServiceKey } from '@/shared/language/translation.service';
 <%_ } _%>
 import { setupAxiosInterceptors } from '@/config/axios-interceptor';
 import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/config/config';
 import { initBootstrapVue } from '@/config/config-bootstrap-vue';
-import { authenticatedKey<%- enableTranslation ? ', changeLanguageKey' : '' %>, currentLanguageKey, currentUsernameKey } from '@/config/injection-keys';
+import { authenticatedKey, <%- enableTranslation ? '' : 'currentLanguageKey, ' %>currentUsernameKey } from '@/config/injection-keys';
 import JhiItemCount from '@/components/jhi-item-count.vue';
-<%_ if (authenticationTypeJwt) { _%>
-import { clearAuthenticationToken } from '@/account/authentication-token';
-<%_ } _%>
 import JhiSortHeader from '@/components/jhi-sort-header.vue';
-import { useStore<%- enableTranslation ? ', useTranslationStore' : '' %> } from '@/stores';
+import { useStore } from '@/stores';
 
 <%_ if (communicationSpringWebsocket) { _%>
 import { trackerServiceKey, useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 import App from './app.vue';
 import router from './router';
+import { createAuthorityGuard } from './router/authority-guard';
 
 import '../content/scss/global.scss';
 import '../content/scss/vendor.scss';
@@ -80,118 +77,19 @@ const app = createApp({
 <%_ if (authenticationUsesCsrf) { _%>
     provide(loginServiceKey, new LoginService());
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2) { _%>
-<%_ } _%>
     const store = useStore();
     const accountService = new AccountService(store);
 <%_ if (enableTranslation) { _%>
     const composer = useI18n();
-    const translationStore = useTranslationStore();
     const translationService = new TranslationService(composer);
-
-    const changeLanguage = async (newLanguage?: string | null) => {
-      if (newLanguage && composer.locale.value !== newLanguage) {
-        await translationService.refreshTranslation(newLanguage);
-  <%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
-        if (store.authenticated) {
-          await translationService.refreshMicrofrontendTranslations(newLanguage);
-        }
-  <%_ } _%>
-        translationStore.setCurrentLanguage(newLanguage);
-      }
-    };
-
-    provide(currentLanguageKey, composer.locale);
-    provide(changeLanguageKey, changeLanguage);
-
-    watch(
-      () => store.account,
-      async value => {
-        if (!translationService.getLocalStoreLanguage()) {
-          await changeLanguage(value?.langKey);
-        }
-      },
-    );
-
-  <%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
-    watch(
-      () => store.authenticated,
-      async authenticated => {
-        if (authenticated && translationStore.currentLanguage) {
-          await translationService.refreshMicrofrontendTranslations(translationStore.currentLanguage);
-        }
-      },
-    );
-
-  <%_ } _%>
-    watch(
-      () => translationStore.currentLanguage,
-      value => {
-        if (value) {
-          translationService.setLocale(value);
-        }
-      },
-    );
-
-    onMounted(async () => {
-      const lang = [
-      translationService.getLocalStoreLanguage(),
-        store.account?.langKey,
-        navigator.language,
-        '<%- nativeLanguage %>'
-      ].find(language => language && translationService.isLanguageSupported(language));
-      await changeLanguage(lang);
-    });
+    useLanguage({ composer, store, translationService });
 <%_ } else { _%>
     provide(currentLanguageKey, computed(() => store.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
 <%_ } _%>
 
-    router.beforeResolve(async (to, from) => {
-      // The account is loaded on the first navigation only: a login loads it again, a 401 logs out.
-      if (from === START_LOCATION && !store.authenticated) {
-        await accountService.update();
-      }
-      if (to.meta?.authorities && to.meta.authorities.length > 0) {
-        const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
-        if (!value && from.path !== '/forbidden') {
-<%_ if (!authenticationTypeOauth2) { _%>
-          if (!store.authenticated) {
-            return { path: '/login', query: { redirect: to.fullPath } };
-          }
-<%_ } _%>
-          return { path: '/forbidden' };
-        }
-      }
-      return true;
-    });
+    router.beforeResolve(createAuthorityGuard({ accountService, store }));
 
-    setupAxiosInterceptors(
-      error => {
-        const url = error.response?.config?.url;
-        const status = error.status || error.response?.status;
-        if (status === 401) {
-          // Store logged out state.
-<%_ if (authenticationTypeJwt) { _%>
-          clearAuthenticationToken();
-<%_ } _%>
-          store.logout();
-          if (!url?.endsWith('api/account') && !url?.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {
-            // Ask for a new authentication
-<%_ if (authenticationTypeOauth2) { _%>
-            window.location.reload();
-<%_ } else { _%>
-            const { fullPath, path } = router.currentRoute.value;
-            if (path !== '/login') {
-              router.push({ path: '/login', query: { redirect: fullPath } });
-            }
-<%_ } _%>
-          }
-        }
-        // The caller fails, a 401 left out of its alerts.
-        return Promise.reject(error);
-      },
-      error => Promise.reject(error),
-    );
+    setupAxiosInterceptors(createUnauthorizedHandler({ accountService<%- authenticationTypeOauth2 ? '' : ', router' %> }), error => Promise.reject(error));
 
     const { authenticated } = storeToRefs(store);
     provide(authenticatedKey, authenticated);

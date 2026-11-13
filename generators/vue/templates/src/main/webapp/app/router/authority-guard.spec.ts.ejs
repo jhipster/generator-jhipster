@@ -1,0 +1,85 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { type RouteLocationNormalized, START_LOCATION } from 'vue-router';
+
+import type AccountService from '@/account/account.service';
+import { type AccountStore } from '@/stores';
+
+import { createAuthorityGuard } from './authority-guard';
+
+const route = (path: string, authorities?: string[]) => ({ path, fullPath: path, meta: { authorities } }) as unknown as RouteLocationNormalized;
+
+describe('authority guard', () => {
+  let accountService: { update: ReturnType<typeof vi.fn>; hasAnyAuthorityAndCheckAuth: ReturnType<typeof vi.fn> };
+  let store: { authenticated: boolean };
+  const guard = (to: RouteLocationNormalized, from: RouteLocationNormalized) =>
+    (createAuthorityGuard({ accountService: accountService as unknown as AccountService, store: store as AccountStore }) as any)(to, from);
+
+  beforeEach(() => {
+    accountService = { update: vi.fn().mockResolvedValue(undefined), hasAnyAuthorityAndCheckAuth: vi.fn().mockResolvedValue(true) };
+    store = { authenticated: false };
+  });
+
+  it('should load the account on the first navigation', async () => {
+    expect(await guard(route('/'), START_LOCATION)).toBe(true);
+
+    expect(accountService.update).toHaveBeenCalledOnce();
+  });
+
+  it('should not load the account again', async () => {
+    expect(await guard(route('/'), route('/other'))).toBe(true);
+
+    expect(accountService.update).not.toHaveBeenCalled();
+    expect(accountService.hasAnyAuthorityAndCheckAuth).not.toHaveBeenCalled();
+  });
+
+  it('should let the user in a route of an authority the user has', async () => {
+    store.authenticated = true;
+
+    expect(await guard(route('/admin/health', ['ROLE_ADMIN']), route('/'))).toBe(true);
+
+    expect(accountService.hasAnyAuthorityAndCheckAuth).toHaveBeenCalledWith(['ROLE_ADMIN']);
+  });
+
+  it('should forbid a route of an authority the user does not have', async () => {
+    store.authenticated = true;
+    accountService.hasAnyAuthorityAndCheckAuth.mockResolvedValue(false);
+
+    expect(await guard(route('/admin/health', ['ROLE_ADMIN']), route('/'))).toEqual({ path: '/forbidden' });
+  });
+
+  it('should stay when coming from the forbidden page', async () => {
+    store.authenticated = true;
+    accountService.hasAnyAuthorityAndCheckAuth.mockResolvedValue(false);
+
+    expect(await guard(route('/admin/health', ['ROLE_ADMIN']), route('/forbidden'))).toBe(true);
+  });
+<%_ if (!authenticationTypeOauth2) { _%>
+
+  it('should ask an anonymous user to sign in, to come back to the route', async () => {
+    accountService.hasAnyAuthorityAndCheckAuth.mockResolvedValue(false);
+
+    expect(await guard(route('/admin/health', ['ROLE_ADMIN']), route('/'))).toEqual({
+      path: '/login',
+      query: { redirect: '/admin/health' },
+    });
+  });
+<%_ } _%>
+});

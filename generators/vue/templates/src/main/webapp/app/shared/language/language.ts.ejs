@@ -1,0 +1,94 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { onMounted, provide, watch } from 'vue';
+import { type Composer } from 'vue-i18n';
+
+import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
+import { type AccountStore, useTranslationStore } from '@/stores';
+
+import type TranslationService from './translation.service';
+
+/**
+ * Keeps the language of the application: the one the user chose, else the one of the account, the one of the browser or
+ * the native one. Provides the current language and the function that changes it.
+ */
+export const useLanguage = ({
+  composer,
+  store,
+  translationService,
+}: {
+  composer: Pick<Composer, 'locale'>;
+  store: AccountStore;
+  translationService: TranslationService;
+}) => {
+  const translationStore = useTranslationStore();
+
+  const changeLanguage = async (newLanguage?: string | null) => {
+    if (newLanguage && composer.locale.value !== newLanguage) {
+      await translationService.refreshTranslation(newLanguage);
+<%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
+      if (store.authenticated) {
+        await translationService.refreshMicrofrontendTranslations(newLanguage);
+      }
+<%_ } _%>
+      translationStore.setCurrentLanguage(newLanguage);
+    }
+  };
+
+  provide(currentLanguageKey, composer.locale);
+  provide(changeLanguageKey, changeLanguage);
+
+  watch(
+    () => store.account,
+    async value => {
+      if (!translationService.getLocalStoreLanguage()) {
+        await changeLanguage(value?.langKey);
+      }
+    },
+  );
+
+<%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
+  watch(
+    () => store.authenticated,
+    async authenticated => {
+      if (authenticated && translationStore.currentLanguage) {
+        await translationService.refreshMicrofrontendTranslations(translationStore.currentLanguage);
+      }
+    },
+  );
+
+<%_ } _%>
+  watch(
+    () => translationStore.currentLanguage,
+    value => {
+      if (value) {
+        translationService.setLocale(value);
+      }
+    },
+  );
+
+  onMounted(async () => {
+    const lang = [translationService.getLocalStoreLanguage(), store.account?.langKey, navigator.language, '<%- nativeLanguage %>'].find(
+      language => language && translationService.isLanguageSupported(language),
+    );
+    await changeLanguage(lang);
+  });
+
+  return { changeLanguage };
+};

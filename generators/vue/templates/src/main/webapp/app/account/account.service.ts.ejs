@@ -22,7 +22,7 @@ import axios from 'axios';
 
 import { type IUser } from '@/entities/user/user.model';
 <%_ if (authenticationTypeJwt) { _%>
-import { getAuthenticationToken } from '@/account/authentication-token';
+import { clearAuthenticationToken, getAuthenticationToken } from '@/account/authentication-token';
 <%_ } _%>
 import { type AccountStore } from '@/stores';
 
@@ -64,6 +64,16 @@ export default class AccountService {
 
     this.store.logout();
     return false;
+  }
+
+  /**
+   * Signs the user out of the application: the account<%- authenticationTypeJwt ? ' and the authentication token are' : ' is' %> forgotten.
+   */
+  logout(): void {
+<%_ if (authenticationTypeJwt) { _%>
+    clearAuthenticationToken();
+<%_ } _%>
+    this.store.logout();
   }
 
   async loadAccount() {

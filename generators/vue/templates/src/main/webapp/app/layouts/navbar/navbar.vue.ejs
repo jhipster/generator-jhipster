@@ -202,9 +202,6 @@ import { loginServiceKey } from '@/account/login.service';
 import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
 import getLanguages from '@/config/languages';
 <%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
-import { clearAuthenticationToken } from '@/account/authentication-token';
-<%_ } _%>
 import { useStore } from '@/stores';
 
 defineOptions({
@@ -271,11 +268,10 @@ const hasAnyAuthority = (authorities: string): boolean => {
 
 const logout = async () => {
 <%_ if (authenticationTypeJwt) { _%>
-  clearAuthenticationToken();
-  store.logout();
+  accountService.logout();
 <%_ } else { _%>
   <%- authenticationTypeOauth2 ? 'const response = ' : '' %>await loginService.logout();
-  store.logout();
+  accountService.logout();
 
   <%_ if (authenticationTypeOauth2) { _%>
   const next = response.data?.logoutUrl;

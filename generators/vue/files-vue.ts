@@ -74,6 +74,8 @@ export const vueFiles = asWriteFilesSection({
         'stores/index.ts',
         'router/index.ts',
         'router/index.spec.ts',
+        'router/authority-guard.ts',
+        'router/authority-guard.spec.ts',
         'router/admin.ts',
         'router/pages.ts',
         'test-setup.ts',
@@ -85,6 +87,8 @@ export const vueFiles = asWriteFilesSection({
       condition: generator => generator.enableTranslation,
       ...clientApplicationTemplatesBlock(),
       templates: [
+        'shared/language/language.ts',
+        'shared/language/language.spec.ts',
         'shared/language/translation.service.ts',
         'stores/translation-store.ts',
         'stores/translation-store.spec.ts',
@@ -145,7 +149,12 @@ export const vueFiles = asWriteFilesSection({
   accountModule: [
     {
       ...clientApplicationTemplatesBlock(),
-      templates: ['account/account.service.ts', 'account/account.service.spec.ts'],
+      templates: [
+        'account/account.service.ts',
+        'account/account.service.spec.ts',
+        'account/unauthorized-handler.ts',
+        'account/unauthorized-handler.spec.ts',
+      ],
     },
     {
       condition: generator => generator.authenticationTypeJwt,
