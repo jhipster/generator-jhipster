@@ -47,9 +47,8 @@ describe('<%- registerPage %>', () => {
   });
 
   it('requires username', () => {
-<%_ if (clientFrameworkReact) { _%>
-    cy.get(submitRegisterSelector).click();
-<%_ } _%>
+    cy.get(usernameRegisterSelector).focus();
+    cy.get(usernameRegisterSelector).blur();
     cy.get(usernameRegisterSelector).should('have.class', classInvalid);
     cy.get(usernameRegisterSelector).type('test');
     cy.get(usernameRegisterSelector).blur();
@@ -57,9 +56,8 @@ describe('<%- registerPage %>', () => {
   });
 
   it('should not accept invalid email', () => {
-<%_ if (clientFrameworkReact) { _%>
-    cy.get(submitRegisterSelector).click();
-<%_ } _%>
+    cy.get(emailRegisterSelector).focus();
+    cy.get(emailRegisterSelector).blur();
     cy.get(emailRegisterSelector).should('have.class', classInvalid);
     cy.get(emailRegisterSelector).type('testtest.fr');
     cy.get(emailRegisterSelector).blur();
@@ -67,9 +65,8 @@ describe('<%- registerPage %>', () => {
   });
 
   it('requires email in correct format', () => {
-<%_ if (clientFrameworkReact) { _%>
-    cy.get(submitRegisterSelector).click();
-<%_ } _%>
+    cy.get(emailRegisterSelector).focus();
+    cy.get(emailRegisterSelector).blur();
     cy.get(emailRegisterSelector).should('have.class', classInvalid);
     cy.get(emailRegisterSelector).type('test@test.fr');
     cy.get(emailRegisterSelector).blur();
@@ -77,9 +74,8 @@ describe('<%- registerPage %>', () => {
   });
 
   it('requires first password', () => {
-<%_ if (clientFrameworkReact) { _%>
-    cy.get(submitRegisterSelector).click();
-<%_ } _%>
+    cy.get(firstPasswordRegisterSelector).focus();
+    cy.get(firstPasswordRegisterSelector).blur();
     cy.get(firstPasswordRegisterSelector).should('have.class', classInvalid);
     cy.get(firstPasswordRegisterSelector).type('test@test.fr');
     cy.get(firstPasswordRegisterSelector).blur();
@@ -87,13 +83,14 @@ describe('<%- registerPage %>', () => {
   });
 
   it('requires password and confirm password to be same', () => {
-<%_ if (clientFrameworkReact) { _%>
-    cy.get(submitRegisterSelector).click();
-<%_ } _%>
+    cy.get(firstPasswordRegisterSelector).focus();
+    cy.get(firstPasswordRegisterSelector).blur();
     cy.get(firstPasswordRegisterSelector).should('have.class', classInvalid);
     cy.get(firstPasswordRegisterSelector).type('test');
     cy.get(firstPasswordRegisterSelector).blur();
     cy.get(firstPasswordRegisterSelector).should('have.class', classValid);
+    cy.get(secondPasswordRegisterSelector).focus();
+    cy.get(secondPasswordRegisterSelector).blur();
     cy.get(secondPasswordRegisterSelector).should('have.class', classInvalid);
     cy.get(secondPasswordRegisterSelector).type('test');
     cy.get(secondPasswordRegisterSelector).blur();
@@ -101,13 +98,14 @@ describe('<%- registerPage %>', () => {
   });
 
   it('requires password and confirm password have not the same value', () => {
-<%_ if (clientFrameworkReact) { _%>
-    cy.get(submitRegisterSelector).click();
-<%_ } _%>
+    cy.get(firstPasswordRegisterSelector).focus();
+    cy.get(firstPasswordRegisterSelector).blur();
     cy.get(firstPasswordRegisterSelector).should('have.class', classInvalid);
     cy.get(firstPasswordRegisterSelector).type('test');
     cy.get(firstPasswordRegisterSelector).blur();
     cy.get(firstPasswordRegisterSelector).should('have.class', classValid);
+    cy.get(secondPasswordRegisterSelector).focus();
+    cy.get(secondPasswordRegisterSelector).blur();
 <%_ if (clientFrameworkAngular) { _%>
     cy.get(secondPasswordRegisterSelector).should('have.class', classInvalid);
     cy.get(secondPasswordRegisterSelector).type('otherPassword');
