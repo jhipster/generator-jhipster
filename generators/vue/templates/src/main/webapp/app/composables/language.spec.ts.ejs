@@ -23,10 +23,10 @@ import { createTestingPinia } from '@pinia/testing';
 import { flushPromises, mount } from '@vue/test-utils';
 
 import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
+import type TranslationService from '@/shared/language/translation.service';
 import { type AccountStore, useStore, useTranslationStore } from '@/stores';
 
 import { useLanguage } from './language';
-import type TranslationService from './translation.service';
 
 describe('language', () => {
   let translationService: Record<

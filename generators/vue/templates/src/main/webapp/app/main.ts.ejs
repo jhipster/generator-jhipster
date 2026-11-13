@@ -32,7 +32,6 @@ import { createUnauthorizedHandler } from '@/account/unauthorized-handler';
 import LoginService, { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-import { useLanguage } from '@/shared/language/language';
 import TranslationService, { translationServiceKey } from '@/shared/language/translation.service';
 <%_ } _%>
 import { setupAxiosInterceptors } from '@/config/axios-interceptor';
@@ -40,6 +39,9 @@ import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/c
 import { initBootstrapVue } from '@/config/config-bootstrap-vue';
 import { authenticatedKey, <%- enableTranslation ? '' : 'currentLanguageKey, ' %>currentUsernameKey } from '@/config/injection-keys';
 import JhiItemCount from '@/components/jhi-item-count.vue';
+<%_ if (enableTranslation) { _%>
+import { useLanguage } from '@/composables/language';
+<%_ } _%>
 import JhiSortHeader from '@/components/jhi-sort-header.vue';
 import { useStore } from '@/stores';
 

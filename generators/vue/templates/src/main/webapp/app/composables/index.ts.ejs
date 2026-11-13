@@ -23,4 +23,7 @@ export { useEntityOptions } from './entity-options';
 export { useEntitySave } from './entity-save';
 export { type PropertyRules, useEntityValidation } from './entity-validation';
 export { type RequestOptions, useControlledRequest } from './controlled-request';
+<%_ if (enableTranslation) { _%>
+export { useLanguage } from './language';
+<%_ } _%>
 export { useValidation } from './validation';

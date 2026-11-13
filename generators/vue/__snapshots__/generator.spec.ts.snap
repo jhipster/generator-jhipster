@@ -1363,6 +1363,12 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/composables/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/composables/language.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/language.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/composables/validation.spec.ts": {
     "stateCleared": "modified",
   },
@@ -1655,12 +1661,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/shared/language/language.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/shared/language/language.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/language/translation.service.ts": {
@@ -3267,6 +3267,12 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/composables/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/composables/language.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/language.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/composables/validation.spec.ts": {
     "stateCleared": "modified",
   },
@@ -3535,12 +3541,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/language/language.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/language/language.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translation.service.ts": {
@@ -4287,6 +4287,12 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/composables/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/composables/language.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/language.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/composables/validation.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4609,12 +4615,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/language/language.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/language/language.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translation.service.ts": {

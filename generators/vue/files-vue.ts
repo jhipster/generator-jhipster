@@ -87,8 +87,8 @@ export const vueFiles = asWriteFilesSection({
       condition: generator => generator.enableTranslation,
       ...clientApplicationTemplatesBlock(),
       templates: [
-        'shared/language/language.ts',
-        'shared/language/language.spec.ts',
+        'composables/language.ts',
+        'composables/language.spec.ts',
         'shared/language/translation.service.ts',
         'stores/translation-store.ts',
         'stores/translation-store.spec.ts',

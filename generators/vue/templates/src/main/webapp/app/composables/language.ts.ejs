@@ -20,9 +20,8 @@ import { onMounted, provide, watch } from 'vue';
 import { type Composer } from 'vue-i18n';
 
 import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
+import type TranslationService from '@/shared/language/translation.service';
 import { type AccountStore, useTranslationStore } from '@/stores';
-
-import type TranslationService from './translation.service';
 
 /**
  * Keeps the language of the application: the one the user chose, else the one of the account, the one of the browser or
