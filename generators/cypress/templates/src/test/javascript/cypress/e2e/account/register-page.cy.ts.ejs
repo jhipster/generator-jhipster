@@ -26,10 +26,9 @@ import {
   classValid,
 } from '../../support/commands';
 
-<%_ const registerPage = clientFrameworkVue ? '/register' : '/account/register'; _%>
-describe('<%- registerPage %>', () => {
+describe('/account/register', () => {
   beforeEach(() => {
-    cy.visit('<%- registerPage %>');
+    cy.visit('/account/register');
   });
 
   beforeEach(() => {
@@ -39,7 +38,7 @@ describe('<%- registerPage %>', () => {
   it('should be accessible through menu', () => {
     cy.visit('');
     cy.clickOnRegisterItem();
-    cy.location('pathname').should('eq', '<%- registerPage %>');
+    cy.location('pathname').should('eq', '/account/register');
   });
 
   it('should load the register page', () => {

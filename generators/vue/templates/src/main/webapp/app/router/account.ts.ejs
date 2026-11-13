@@ -36,9 +36,13 @@ export default [
 <%_ if (generateUserManagement) { _%>
   <%_ if (generateUserRegistration) { _%>
   {
-    path: '/register',
+    path: '/account/register',
     name: 'Register',
     component: Register,
+  },
+  {
+    path: '/register',
+    redirect: '/account/register',
   },
   {
     path: '/account/activate',
