@@ -425,6 +425,7 @@ describe('<%- entityReactName %> screens', () => {
 
   describe('delete', () => {
     it('should delete the entity from the list', async () => {
+      entities = [sample];
       renderPage();
       await waitFor(() => expect(document.querySelector('[data-cy="entityDeleteButton"]')).not.toBeNull());
 
@@ -438,6 +439,7 @@ describe('<%- entityReactName %> screens', () => {
     });
 
     it('should stay in the list when cancelled there', async () => {
+      entities = [sample];
       renderPage();
       await waitFor(() => expect(document.querySelector('[data-cy="entityDeleteButton"]')).not.toBeNull());
 
