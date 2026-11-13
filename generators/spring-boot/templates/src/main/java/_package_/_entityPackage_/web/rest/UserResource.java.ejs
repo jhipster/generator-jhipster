@@ -188,18 +188,23 @@ public class UserResource {
     }
 
     /**
-     * {@code PUT /admin/users} : Updates an existing User.
+     * {@code PUT /admin/users/:login} : Updates an existing User.
      *
+     * @param login the login of the user to update.
      * @param userDTO the user to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user.
+     * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login of the url is not the one of the user.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
      */
-    @PutMapping({ "/users", "/users/{login}" })
+    @PutMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 <%_ if (reactive) { _%>
-    public Mono<ResponseEntity<<%- user.adminUserDto %>>> updateUser(@PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login, @Valid @RequestBody <%- user.adminUserDto %> userDTO) {
+    public Mono<ResponseEntity<<%- user.adminUserDto %>>> updateUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login, @Valid @RequestBody <%- user.adminUserDto %> userDTO) {
         LOG.debug("REST request to update User : {}", userDTO);
+        if (!login.equalsIgnoreCase(userDTO.getLogin())) {
+            throw BadRequestAlertException.idinvalid("userManagement");
+        }
         return userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
             .filter(user -> !user.getId().equals(userDTO.getId()))
             .hasElement()
@@ -223,8 +228,11 @@ public class UserResource {
                 .body(user)
             );
 <%_ } else { _%>
-    public ResponseEntity<<%- user.adminUserDto %>> updateUser(@PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login, @Valid @RequestBody <%- user.adminUserDto %> userDTO) {
+    public ResponseEntity<<%- user.adminUserDto %>> updateUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login, @Valid @RequestBody <%- user.adminUserDto %> userDTO) {
         LOG.debug("REST request to update User : {}", userDTO);
+        if (!login.equalsIgnoreCase(userDTO.getLogin())) {
+            throw BadRequestAlertException.idinvalid("userManagement");
+        }
         Optional<<%- user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
