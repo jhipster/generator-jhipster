@@ -30,35 +30,6 @@ exports[`generator - Heroku microservice application with JAR deployment should 
     <profiles>
         <profile>
             <id>heroku</id>
-            <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->
-            <!-- https://github.com/jhipster/generator-jhipster/issues/18650 -->
-            <properties>
-                <bonsai.elasticsearch.version>7.10.2</bonsai.elasticsearch.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch</groupId>
-                        <artifactId>elasticsearch</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.plugin</groupId>
-                        <artifactId>transport-netty4-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <build>
                 <plugins>
                     <plugin>
@@ -246,35 +217,6 @@ exports[`generator - Heroku monolith application in the EU should match files sn
     <profiles>
         <profile>
             <id>heroku</id>
-            <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->
-            <!-- https://github.com/jhipster/generator-jhipster/issues/18650 -->
-            <properties>
-                <bonsai.elasticsearch.version>7.10.2</bonsai.elasticsearch.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch</groupId>
-                        <artifactId>elasticsearch</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.plugin</groupId>
-                        <artifactId>transport-netty4-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <build>
                 <plugins>
                     <plugin>
@@ -460,35 +402,6 @@ exports[`generator - Heroku monolith application in the US should match files sn
     <profiles>
         <profile>
             <id>heroku</id>
-            <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->
-            <!-- https://github.com/jhipster/generator-jhipster/issues/18650 -->
-            <properties>
-                <bonsai.elasticsearch.version>7.10.2</bonsai.elasticsearch.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch</groupId>
-                        <artifactId>elasticsearch</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.plugin</groupId>
-                        <artifactId>transport-netty4-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <build>
                 <plugins>
                     <plugin>
@@ -729,35 +642,6 @@ exports[`generator - Heroku monolith application with Git deployment should matc
     <profiles>
         <profile>
             <id>heroku</id>
-            <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->
-            <!-- https://github.com/jhipster/generator-jhipster/issues/18650 -->
-            <properties>
-                <bonsai.elasticsearch.version>7.10.2</bonsai.elasticsearch.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch</groupId>
-                        <artifactId>elasticsearch</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.plugin</groupId>
-                        <artifactId>transport-netty4-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <build>
                 <plugins>
                     <plugin>
@@ -945,35 +829,6 @@ exports[`generator - Heroku monolith application with PostgreSQL should match fi
     <profiles>
         <profile>
             <id>heroku</id>
-            <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->
-            <!-- https://github.com/jhipster/generator-jhipster/issues/18650 -->
-            <properties>
-                <bonsai.elasticsearch.version>7.10.2</bonsai.elasticsearch.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch</groupId>
-                        <artifactId>elasticsearch</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.plugin</groupId>
-                        <artifactId>transport-netty4-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <build>
                 <plugins>
                     <plugin>
@@ -1183,35 +1038,6 @@ exports[`generator - Heroku monolith application with an unavailable app name sh
     <profiles>
         <profile>
             <id>heroku</id>
-            <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->
-            <!-- https://github.com/jhipster/generator-jhipster/issues/18650 -->
-            <properties>
-                <bonsai.elasticsearch.version>7.10.2</bonsai.elasticsearch.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch</groupId>
-                        <artifactId>elasticsearch</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.plugin</groupId>
-                        <artifactId>transport-netty4-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <build>
                 <plugins>
                     <plugin>
@@ -1315,7 +1141,7 @@ server:
 }
 `;
 
-exports[`generator - Heroku monolith application with elasticsearch calls should match snapshot 1`] = `
+exports[`generator - Heroku monolith application with elasticsearch and an app that already has the foundelasticsearch add-on calls should match snapshot 1`] = `
 [
   [
     "spawnCommand",
@@ -1328,6 +1154,19 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
   [
     "spawnCommand",
     "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:plans",
+      "foundelasticsearch",
+      "--json",
+    ],
     {
       "reject": false,
       "stdio": "pipe",
@@ -1358,12 +1197,455 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
     "heroku",
     [
       "addons:create",
-      "bonsai:sandbox-6",
+      "foundelasticsearch",
       "--as",
-      "BONSAI",
+      "FOUNDELASTICSEARCH",
+      "--wait",
       "--app",
       "jhipster-test",
     ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "SPRING_ELASTICSEARCH_URIS",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "heroku-postgresql",
+      "--as",
+      "DATABASE",
+      "--app",
+      "jhipster-test",
+    ],
+  ],
+]
+`;
+
+exports[`generator - Heroku monolith application with elasticsearch and an app that already has the foundelasticsearch add-on should match files state snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "Procfile": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": {
+    "stateCleared": "modified",
+  },
+  "system.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - Heroku monolith application with elasticsearch and an existing app with the bonsai add-on calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "apps:info",
+      "--json",
+      "jhipster-existing",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "BONSAI_URL",
+      "--app",
+      "jhipster-existing",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+]
+`;
+
+exports[`generator - Heroku monolith application with elasticsearch and an existing app with the bonsai add-on should match files state snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "Procfile": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": {
+    "stateCleared": "modified",
+  },
+  "system.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - Heroku monolith application with elasticsearch and the default answers calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:plans",
+      "foundelasticsearch",
+      "--json",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "heroku-postgresql",
+      "--as",
+      "DATABASE",
+      "--app",
+      "jhipster-test",
+    ],
+  ],
+]
+`;
+
+exports[`generator - Heroku monolith application with elasticsearch and the default answers should match files state snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "Procfile": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": {
+    "stateCleared": "modified",
+  },
+  "system.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - Heroku monolith application with elasticsearch and unreadable foundelasticsearch settings calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:plans",
+      "foundelasticsearch",
+      "--json",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "foundelasticsearch",
+      "--as",
+      "FOUNDELASTICSEARCH",
+      "--wait",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config",
+      "--json",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "heroku-postgresql",
+      "--as",
+      "DATABASE",
+      "--app",
+      "jhipster-test",
+    ],
+  ],
+]
+`;
+
+exports[`generator - Heroku monolith application with elasticsearch and unreadable foundelasticsearch settings should match files state snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "Procfile": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": {
+    "stateCleared": "modified",
+  },
+  "system.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - Heroku monolith application with elasticsearch calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:plans",
+      "foundelasticsearch",
+      "--json",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "foundelasticsearch",
+      "--as",
+      "FOUNDELASTICSEARCH",
+      "--wait",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config",
+      "--json",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "SPRING_ELASTICSEARCH_URIS=https://jhipster-test.es.us-east-1.aws.found.io",
+      "SPRING_ELASTICSEARCH_USERNAME=elastic",
+      "SPRING_ELASTICSEARCH_PASSWORD=test-password",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
   ],
   [
     "spawn",
@@ -1410,35 +1692,6 @@ exports[`generator - Heroku monolith application with elasticsearch should match
     <profiles>
         <profile>
             <id>heroku</id>
-            <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->
-            <!-- https://github.com/jhipster/generator-jhipster/issues/18650 -->
-            <properties>
-                <bonsai.elasticsearch.version>7.10.2</bonsai.elasticsearch.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch</groupId>
-                        <artifactId>elasticsearch</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.plugin</groupId>
-                        <artifactId>transport-netty4-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <build>
                 <plugins>
                     <plugin>
@@ -1521,8 +1774,6 @@ spring:
     password: \${JDBC_DATABASE_PASSWORD}
     hikari:
       maximumPoolSize: 8
-  elasticsearch:
-    uris: \${BONSAI_URL}
 server:
   port: \${PORT:8080}
 ",
@@ -1615,35 +1866,6 @@ exports[`generator - Heroku monolith application with existing app should match 
     <profiles>
         <profile>
             <id>heroku</id>
-            <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->
-            <!-- https://github.com/jhipster/generator-jhipster/issues/18650 -->
-            <properties>
-                <bonsai.elasticsearch.version>7.10.2</bonsai.elasticsearch.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch</groupId>
-                        <artifactId>elasticsearch</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.plugin</groupId>
-                        <artifactId>transport-netty4-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <build>
                 <plugins>
                     <plugin>
