@@ -29,7 +29,7 @@ _%>
               <option v-for="value of <%- fieldName %>Values" :key="value" :value="value">{{ value }}</option>
             </select>
   <%_ } else if (field.fieldIsEnum) { _%>
-            <select class="form-select" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" <%- field.fieldValidate === true && field.fieldValidateRules.includes('required') ? ' required' : '' %>>
+            <select class="form-select" name="<%- fieldName %>" :class="{ 'is-valid': v$.<%- fieldName %>.$dirty && !v$.<%- fieldName %>.$invalid, 'is-invalid': v$.<%- fieldName %>.$dirty && v$.<%- fieldName %>.$invalid, 'is-touched': v$.<%- fieldName %>.$dirty }" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" <%- field.fieldValidate === true && field.fieldValidateRules.includes('required') ? ' required' : '' %>>
     <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
               <option v-for="<%- field.enumInstance %> in <%- field.enumInstance %>Values" :key="<%- field.enumInstance %>" :value="<%- field.enumInstance %>" :label="t$('<%- enumPrefix %>.'+<%- field.enumInstance %>)">{{ <%- field.enumInstance %> }}</option>
 
@@ -76,29 +76,29 @@ _%>
                 >
                 </b-form-datepicker>
               </b-input-group-prepend>
-              <b-form-input id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" type="text" class="<%- fieldInputClass %>" name="<%- fieldName %>"  :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }"
+              <b-form-input id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" type="text" class="<%- fieldInputClass %>" name="<%- fieldName %>"  :class="{ 'is-valid': v$.<%- fieldName %>.$dirty && !v$.<%- fieldName %>.$invalid, 'is-invalid': v$.<%- fieldName %>.$dirty && v$.<%- fieldName %>.$invalid, 'is-touched': v$.<%- fieldName %>.$dirty }"
               v-model="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidationRequired ? ' required' : '' %> />
             </b-input-group>
     <%_ } else if (field.fieldTypeInstant) { _%>
             <div class="d-flex">
-              <input id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" type="datetime-local" class="<%- fieldInputClass %>" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }"
+              <input id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" type="datetime-local" class="<%- fieldInputClass %>" name="<%- fieldName %>" :class="{ 'is-valid': v$.<%- fieldName %>.$dirty && !v$.<%- fieldName %>.$invalid, 'is-invalid': v$.<%- fieldName %>.$dirty && v$.<%- fieldName %>.$invalid, 'is-touched': v$.<%- fieldName %>.$dirty }"
               <%- field.fieldValidate && field.fieldValidationRequired ? ' required' : '' %>
               :value="dateFormat.convertDateTimeFromServer(v$.<%- fieldName %>.$model)"
               @change="dateFormat.updateInstantField('<%- fieldName %>', $event)"/>
             </div>
     <%_ } else if (field.fieldTypeZonedDateTime) { _%>
             <div class="d-flex">
-              <input id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" type="datetime-local" class="<%- fieldInputClass %>" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }"
+              <input id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" type="datetime-local" class="<%- fieldInputClass %>" name="<%- fieldName %>" :class="{ 'is-valid': v$.<%- fieldName %>.$dirty && !v$.<%- fieldName %>.$invalid, 'is-invalid': v$.<%- fieldName %>.$dirty && v$.<%- fieldName %>.$invalid, 'is-touched': v$.<%- fieldName %>.$dirty }"
               <%- field.fieldValidate && field.fieldValidationRequired ? ' required' : '' %>
               :value="dateFormat.convertDateTimeFromServer(v$.<%- fieldName %>.$model)"
               @change="dateFormat.updateZonedDateTimeField('<%- fieldName %>', $event)"/>
             </div>
     <%_ } else if (field.blobContentTypeText) { _%>
             <textarea class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
-              :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %>></textarea>
+              :class="{ 'is-valid': v$.<%- fieldName %>.$dirty && !v$.<%- fieldName %>.$invalid, 'is-invalid': v$.<%- fieldName %>.$dirty && v$.<%- fieldName %>.$invalid, 'is-touched': v$.<%- fieldName %>.$dirty }" v-model="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %>></textarea>
     <%_ } else { _%>
             <input type="<%- field.htmlInputType %>" class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
-              :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<%- field.htmlInputType === 'number' ? '.number' : '' %>="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %><%- (field.id && userProvidedPrimaryKey) ? ' :readonly="isUpdate"' : '' %>/>
+              :class="{ 'is-valid': v$.<%- fieldName %>.$dirty && !v$.<%- fieldName %>.$invalid, 'is-invalid': v$.<%- fieldName %>.$dirty && v$.<%- fieldName %>.$invalid, 'is-touched': v$.<%- fieldName %>.$dirty }" v-model<%- field.htmlInputType === 'number' ? '.number' : '' %>="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %><%- (field.id && userProvidedPrimaryKey) ? ' :readonly="isUpdate"' : '' %>/>
       <%_ if (field.fieldTypeBinary) { _%>
             <input type="hidden" class="<%- fieldInputClass %>" name="<%- fieldName %>ContentType" id="<%- entityFileName %>-<%- fieldName %>ContentType"
               v-model="<%- entityInstance %>.<%- fieldName %>ContentType" />
