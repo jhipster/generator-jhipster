@@ -69,6 +69,20 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     expect(samples([field], 20).map(sample => sample.name)).toEqual(values);
   });
 
+  it('should not repeat a value of a distinct batch', () => {
+    const field = prepareField({
+      fieldName: 'code',
+      fieldType: 'String',
+      fieldValidateRules: ['pattern'],
+      fieldValidateRulesPattern: '^[0-9]$',
+    });
+    const [values] = generateEntitySamples(entity, {
+      seed: 'seed',
+      batches: [{ fields: [field], format: 'json-serializable', count: 10, distinct: true }],
+    });
+    expect(values.map(sample => sample.code).sort()).toEqual(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+  });
+
   it('should go through a unique enum', () => {
     const values = samples([enumField(['unique'])], 3).map(sample => sample.color);
     expect([...values].sort()).toEqual(['BLUE', 'GREEN', 'RED']);
