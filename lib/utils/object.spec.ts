@@ -120,6 +120,21 @@ _shouldAcceptNumberProperties.nr satisfies
   'try-it': () => 1,
 }) satisfies MutateDataParam<Record<string, string>>;
 
+// A record of literal keys accepts its keys
+({
+  foo: ctx => `${ctx.foo} --build`,
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+({
+  // @ts-expect-error a record of literal keys should not accept other keys
+  bar: 'baz',
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+({
+  // @ts-expect-error a record of literal keys should not accept values of another type
+  foo: 1,
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
 // mutateData accepts the keys of a record
 const _scripts: Record<string, string> = {};
 mutateData(_scripts, { __override__: false, 'try-it': 'java -jar app.jar' });
