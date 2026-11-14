@@ -20,9 +20,9 @@
 package <%- entityAbsolutePackage %>.web.rest;
 
 import static <%- entityAbsolutePackage %>.domain.<%- persistClass %>Asserts.*;
-import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
+import static <%- packageName %>.test.util.TestUtil.createUpdateProxyForBean;
 <%_ if (!readOnly && updatableEntity) { _%>
-import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateBody;
+import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdateBody;
 <%_ } _%>
 <%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
@@ -71,9 +71,7 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
     }
     const transactionalAnnotation = databaseTypeSql && !reactive ? '\n    @Transactional' : '';
 _%>
-<%_ if (entityAbsolutePackage !== packageName) { _%>
-import <%- packageName %>.web.rest.TestUtil;
-<% } %>
+import <%- packageName %>.test.util.TestUtil;
 import <%- packageName %>.IntegrationTest;
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ const imported = [entityNameCapitalized]; _%>
@@ -241,10 +239,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 <%_ } _%>
 
 <%_ if (anyFieldIsBigDecimal) { _%>
-import static <%- packageName %>.web.rest.TestUtil.sameNumber;
+import static <%- packageName %>.test.util.TestUtil.sameNumber;
 <%_ } _%>
 <%_ if (anyFieldIsZonedDateTime) { _%>
-import static <%- packageName %>.web.rest.TestUtil.sameInstant;
+import static <%- packageName %>.test.util.TestUtil.sameInstant;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
