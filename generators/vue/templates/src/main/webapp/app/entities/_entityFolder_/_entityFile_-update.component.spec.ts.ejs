@@ -372,6 +372,24 @@ describe('Component Tests', () => {
       });
 
 <%_ } _%>
+<%_ const blurredField = fields.find(field => !field.hidden && !field.id && !field.readonly && !field.fieldTypeLocalDate && !field.fieldTypeBinary); _%>
+<%_ if (blurredField) { _%>
+      it('Should mark a field once it is left', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        const field = wrapper.find('[data-cy="<%- blurredField.fieldName %>"]');
+        expect(field.classes()).not.toContain('is-touched');
+
+        // WHEN
+        await field.trigger('blur');
+
+        // THEN
+        expect(field.classes()).toContain('is-touched');
+      });
+
+<%_ } _%>
 <%_ if (fields.some(field => !field.id && field.fieldValidationRequired) || allRelationshipsThatNeedSelectOptions.flat().some(relationship => relationship.relationshipValidate && relationship.relationshipRequired)) { _%>
       it('Should show the validation errors', async () => {
         // GIVEN
