@@ -19,6 +19,9 @@
 package <%- packageName %>.web.rest;
 
 import static <%- packageName %>.security.SecurityUtils.AUTHORITIES_CLAIM;
+<%_ if (generateUserManagement) { _%>
+import static <%- packageName %>.security.SecurityUtils.CREDENTIALS_CLAIM;
+<%_ } _%>
 import static <%- packageName %>.security.SecurityUtils.JWT_ALGORITHM;
 import static <%- packageName %>.security.SecurityUtils.USER_ID_CLAIM;
 
@@ -146,6 +149,9 @@ public class AuthenticateController {
 <%_ if (user) { _%>
         if (authentication.getPrincipal() instanceof UserWithId user) {
             builder.claim(USER_ID_CLAIM, user.getId());
+  <%_ if (generateUserManagement) { _%>
+            builder.claim(CREDENTIALS_CLAIM, user.getCredentialsStamp());
+  <%_ } _%>
         }
 <%_ } _%>
 

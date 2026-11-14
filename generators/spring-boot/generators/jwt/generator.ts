@@ -60,6 +60,18 @@ export default class JwtGenerator extends SpringBootApplicationGenerator {
                 renameTo: moveToJavaPackageSrcDir,
                 templates: ['config/SecurityInMemoryConfiguration.java'],
               },
+              {
+                condition: data => data.generateUserManagement,
+                path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageSrcDir,
+                templates: ['security/JwtCredentialsValidator.java'],
+              },
+              {
+                condition: data => data.generateUserManagement,
+                path: `${SERVER_TEST_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageTestDir,
+                templates: ['security/JwtCredentialsValidatorTest.java'],
+              },
             ],
             entrypointFiles: [
               {
