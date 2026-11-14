@@ -46,7 +46,7 @@
     if (fields.some(field => field.fieldValidationMin)) signalFormsImports.push('min');
     if (fields.some(field => field.fieldValidationMinLength)) signalFormsImports.push('minLength');
     if (fields.some(field => field.fieldValidationPattern)) signalFormsImports.push('pattern');
-    if (fields.some(field => field.fieldValidationRequired || (field.id && !field.autoGenerate)) || formRelationships.some(relationship => !relationship.collection && relationship.relationshipRequired)) signalFormsImports.push('required');
+    if (fields.some(field => (field.fieldValidationRequired && !field.fieldTypeBoolean) || (field.id && !field.autoGenerate)) || formRelationships.some(relationship => !relationship.collection && relationship.relationshipRequired)) signalFormsImports.push('required');
     const anchoredPattern = pattern => `${pattern.startsWith('^') ? '' : '^'}${pattern}${pattern.endsWith('$') ? '' : '$'}`;
 _%>
 import { Service, <%- editableId ? 'Signal, ' : '' %>WritableSignal } from '@angular/core';
@@ -145,7 +145,7 @@ export class <%- entityAngularName %>FormService {
   <%_ } else if (field.readonly) { _%>
         readonly(path.<%- fieldName %>);
   <%_ } _%>
-  <%_ if (field.fieldValidationRequired || (field.id && !field.autoGenerate)) { _%>
+  <%_ if ((field.fieldValidationRequired && !field.fieldTypeBoolean) || (field.id && !field.autoGenerate)) { _%>
         required(path.<%- fieldName %>);
   <%_ } _%>
   <%_ if (field.fieldValidationEmail) { _%>

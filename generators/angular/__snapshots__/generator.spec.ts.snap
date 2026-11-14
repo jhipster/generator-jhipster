@@ -1786,6 +1786,25 @@ describe("UserManagement Form Service", () => {
 
         expect(form().value()).toEqual(model());
       });
+
+      it("should accept the values of an entity with its required data, false booleans included", () => {
+        const entity = {
+          ...sampleWithRequiredData,
+          activated: false,
+        };
+        const form = TestBed.runInInjectionContext(() =>
+          service.createUserManagementForm(
+            signal(service.createUserManagementFormModel(entity)),
+          ),
+        );
+
+        expect(
+          form()
+            .errorSummary()
+            .map((error) => error.kind),
+        ).toEqual([]);
+        expect(form().valid()).toBe(true);
+      });
     });
 
     describe("getUserManagement", () => {

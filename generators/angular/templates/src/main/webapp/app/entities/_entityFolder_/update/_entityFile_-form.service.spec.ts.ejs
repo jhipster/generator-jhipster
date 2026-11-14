@@ -18,6 +18,7 @@
 -%>
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
 <%_ const timedFields = fields.filter(field => field.fieldTypeTimed); _%>
+<%_ const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient); _%>
 <%_ const collectionRelationships = relationships.filter(relationship => relationship.persistableRelationship && relationship.collection); _%>
 import { beforeEach, describe, expect, it } from 'vitest';
 import { signal } from '@angular/core';
@@ -81,6 +82,27 @@ describe('<%- entityAngularName %> Form Service', () => {
 
         expect(form().value()).toEqual(model());
       });
+<%_ if (!relationships.some(relationship => relationship.persistableRelationship && !relationship.collection && relationship.relationshipRequired)) { _%>
+
+      it('should accept the values of an entity with its required data<%- booleanFields.length > 0 ? ', false booleans included' : '' %>', () => {
+  <%_ if (booleanFields.length > 0) { _%>
+        const entity = {
+          ...sampleWithRequiredData,
+    <%_ for (const field of booleanFields) { _%>
+          <%- field.fieldName %>: false,
+    <%_ } _%>
+        };
+  <%_ } else { _%>
+        const entity = sampleWithRequiredData;
+  <%_ } _%>
+        const form = TestBed.runInInjectionContext(() =>
+          service.create<%- entityAngularName %>Form(signal(service.create<%- entityAngularName %>FormModel(entity))<%- editableId ? ', signal(true)' : '' %>),
+        );
+
+        expect(form().errorSummary().map(error => error.kind)).toEqual([]);
+        expect(form().valid()).toBe(true);
+      });
+<%_ } _%>
 <%_ if (primaryKey.autoGenerate && !builtInUserManagement) { _%>
 
       it('should keep the <%- primaryKey.name %> readonly', () => {
