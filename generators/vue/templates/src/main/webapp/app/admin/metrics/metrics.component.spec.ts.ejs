@@ -75,7 +75,7 @@ describe('Metrics Component', () => {
   const mountMetrics = () =>
     shallowMount(Metrics, {
       global: {
-        stubs: { bModal: contentStub, bProgress: contentStub, 'font-awesome-icon': true, MetricsModal: true },
+        stubs: { bModal: contentStub, bProgress: contentStub, bProgressBar: true, 'font-awesome-icon': true, MetricsModal: true },
         provide: { [metricsServiceKey as symbol]: new MetricsService() },
       },
     });
@@ -127,7 +127,7 @@ describe('Metrics Component', () => {
 
   it('should use the default service', async () => {
     // WHEN
-    shallowMount(Metrics, { global: { stubs: { bModal: true, bProgress: true, 'font-awesome-icon': true, MetricsModal: true } } });
+    shallowMount(Metrics, { global: { stubs: { bModal: true, bProgress: true, bProgressBar: true, 'font-awesome-icon': true, MetricsModal: true } } });
     await flushPromises();
 
     // THEN
