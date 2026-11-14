@@ -2427,6 +2427,7 @@ import {
   provideHttpClientTesting,
 } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { submit } from "@angular/forms/signals";
 import {
   ActivatedRoute,
   convertToParamMap,
@@ -2694,29 +2695,45 @@ describe("UserManagement screens", () => {
         fixture.nativeElement.querySelector("small.text-danger"),
       ).toBeNull();
 
-      const { editForm, userManagementModel } = fixture.componentInstance;
-      editForm().markAsTouched();
-      let shown = false;
-      // Every field takes values that its validators refuse, each one showing a message of an error.
-      for (const [text] of [
-        ["", null],
-        ["a", Number.MIN_SAFE_INTEGER],
-        ["!", null],
-        ["x".repeat(300), Number.MAX_SAFE_INTEGER],
-      ] as const) {
-        userManagementModel.update((model) => ({
-          ...model,
-          login: text,
-          firstName: text,
-          lastName: text,
-          email: text,
-        }));
+      // The fields get every error their messages read, then one none of them reads, once changed and once touched.
+      const { editForm } = fixture.componentInstance;
+      const fields = [
+        editForm.login,
+        editForm.firstName,
+        editForm.lastName,
+        editForm.email,
+      ];
+      const showErrors = async (kinds: string[]): Promise<void> => {
+        await submit(editForm, {
+          action: () =>
+            Promise.resolve(
+              fields.flatMap((fieldTree) =>
+                kinds.map((kind) => ({ kind, fieldTree })),
+              ),
+            ),
+          ignoreValidators: "all",
+        });
         await fixture.whenStable();
-        shown ||=
-          fixture.nativeElement.querySelector("small.text-danger") !== null;
-      }
+      };
+      fields.forEach((field) => field().markAsDirty());
+      await showErrors([
+        "required",
+        "minLength",
+        "maxLength",
+        "min",
+        "max",
+        "pattern",
+        "email",
+        "parse",
+      ]);
 
-      expect(shown).toBe(true);
+      expect(
+        fixture.nativeElement.querySelector("small.text-danger"),
+      ).not.toBeNull();
+
+      // Touched, not changed, with an error no message reads: the messages of the validators of the fields only.
+      editForm().reset();
+      await showErrors(["other"]);
     });
 
     it("should save the form", async () => {
