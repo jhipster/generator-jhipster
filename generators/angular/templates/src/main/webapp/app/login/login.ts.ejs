@@ -51,7 +51,7 @@ export default class Login implements OnInit, AfterViewInit {
 
   readonly authenticationError = signal(false);
 
-  readonly loginModel = signal({ username: '', password: '', rememberMe: false });
+  readonly loginModel = signal({ username: '', password: ''<%- authenticationUsesRememberMe ? ', rememberMe: false' : '' %> });
 
   readonly loginForm = form(
     this.loginModel,

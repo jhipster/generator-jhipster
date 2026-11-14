@@ -103,8 +103,8 @@ export default class Register implements AfterViewInit {
         this.registerService.save({ login, email: registerEmail, password, langKey: <%- enableTranslation ? 'this.translateService.getCurrentLang() ?? ' : '' %>'<%- nativeLanguage %>' }),
       );
       this.success.set(true);
-    } catch (response) {
-      this.processError(response as HttpErrorResponse);
+    } catch (error_) {
+      this.processError(error_ as HttpErrorResponse);
     }
   }
 

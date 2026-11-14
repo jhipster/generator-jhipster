@@ -157,7 +157,7 @@ describe('Login', () => {
     it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', async () => {
       // GIVEN
       vi.spyOn(mockRouter, 'currentNavigation').mockReturnValue({} as Navigation);
-      comp.loginModel.set({ username: 'admin', password: 'admin', rememberMe: false });
+      comp.loginModel.set({ username: 'admin', password: 'admin'<%- authenticationUsesRememberMe ? ', rememberMe: false' : '' %> });
 
       // WHEN
       await submit(comp.loginForm);
@@ -180,7 +180,7 @@ describe('Login', () => {
     it('should stay on login form and show error message on login error', async () => {
       // GIVEN
       mockLoginService.login = vi.fn(() => throwError(() => new Error()));
-      comp.loginModel.set({ username: 'admin', password: 'admin', rememberMe: false });
+      comp.loginModel.set({ username: 'admin', password: 'admin'<%- authenticationUsesRememberMe ? ', rememberMe: false' : '' %> });
 
       // WHEN
       await submit(comp.loginForm);

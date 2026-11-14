@@ -68,6 +68,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
 <%_ if (enableTranslation) { _%>
     provideTranslation(),
+  <%_ if (microfrontend) { _%>
+    provideMicrofrontendTranslation(),
+  <%_ } _%>
+<%_ } _%>
     // The validation classes of Bootstrap, the ones the clients have in common: a field is marked once touched or changed.
     provideSignalFormsConfig({
       classes: {
@@ -76,10 +80,6 @@ export const appConfig: ApplicationConfig = {
         'is-touched': ({ state }) => state().touched(),
       },
     }),
-  <%_ if (microfrontend) { _%>
-    provideMicrofrontendTranslation(),
-  <%_ } _%>
-<%_ } _%>
     provideRouter(routes, ...routerFeatures),
     // Set this to true to enable service worker (PWA)
     provideServiceWorker('ngsw-worker.js', { enabled: false }),
