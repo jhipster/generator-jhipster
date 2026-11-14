@@ -1681,9 +1681,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/shared/language/translation.service.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/shims-vue.d.ts": {
     "stateCleared": "modified",
   },
@@ -1691,12 +1688,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/stores/index.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/stores/translation-store.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/stores/translation-store.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/test-setup.ts": {
@@ -3579,9 +3570,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/language/translation.service.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/shims-vue.d.ts": {
     "stateCleared": "modified",
   },
@@ -3589,12 +3577,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/stores/index.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/stores/translation-store.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/stores/translation-store.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/test-setup.ts": {
@@ -4665,9 +4647,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/language/translation.service.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/shims-vue.d.ts": {
     "stateCleared": "modified",
   },
@@ -4675,12 +4654,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/stores/index.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/stores/translation-store.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/stores/translation-store.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/test-setup.ts": {

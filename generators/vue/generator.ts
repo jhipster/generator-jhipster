@@ -501,6 +501,10 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             `${application.clientSrcDir}app/shared/sort/sorts.spec.ts`,
             `${application.clientSrcDir}app/shared/sort/sorts.ts`,
             `${application.clientSrcDir}app/store.ts`,
+            // The language is kept by useLanguage
+            `${application.clientSrcDir}app/shared/language/translation.service.ts`,
+            `${application.clientSrcDir}app/stores/translation-store.ts`,
+            `${application.clientSrcDir}app/stores/translation-store.spec.ts`,
           ],
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
           '8.7.4': [
