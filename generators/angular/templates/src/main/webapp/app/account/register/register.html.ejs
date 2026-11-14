@@ -43,7 +43,7 @@
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
     @if (!success()) {
-      <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
+      <form name="form" [formRoot]="registerForm">
         <div class="mb-3">
           <label class="form-label" for="login">__jhiTranslateTag__('global.form.username.label')</label>
           <input
@@ -51,31 +51,30 @@
             #login
             class="form-control"
             id="login"
-            name="login"
             placeholder="__jhiTranslatePipe__('global.form.username.placeholder')"
-            formControlName="login"
+            [formField]="registerForm.login"
             data-cy="username"
           />
 
-        @let loginRef = registerForm.get('login')!;
-        @if (loginRef.invalid && (loginRef.dirty || loginRef.touched)) {
+        @let loginRef = registerForm.login();
+        @if (loginRef.invalid() && (loginRef.dirty() || loginRef.touched())) {
           <div>
-          @if (loginRef?.errors?.required) {
+          @if (loginRef.getError('required')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('register.messages.validate.login.required')</small>
           }
 
-          @if (loginRef?.errors?.minlength) {
+          @if (loginRef.getError('minLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('register.messages.validate.login.minlength')</small>
           }
 
-          @if (loginRef?.errors?.maxlength) {
+          @if (loginRef.getError('maxLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('register.messages.validate.login.maxlength')</small>
           }
 
-          @if (loginRef?.errors?.pattern) {
+          @if (loginRef.getError('pattern')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('register.messages.validate.login.pattern')</small>
           }
@@ -89,31 +88,30 @@
             type="email"
             class="form-control"
             id="email"
-            name="email"
             placeholder="__jhiTranslatePipe__('global.form.email.placeholder')"
-            formControlName="email"
+            [formField]="registerForm.email"
             data-cy="email"
           />
 
-        @let emailRef = registerForm.get('email')!;
-        @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
+        @let emailRef = registerForm.email();
+        @if (emailRef.invalid() && (emailRef.dirty() || emailRef.touched())) {
           <div>
-          @if (emailRef?.errors?.required) {
+          @if (emailRef.getError('required')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.required')</small>
           }
 
-          @if (emailRef?.errors?.email) {
+          @if (emailRef.getError('email')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.invalid')</small>
           }
 
-          @if (emailRef?.errors?.minlength) {
+          @if (emailRef.getError('minLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.minlength')</small>
           }
 
-          @if (emailRef?.errors?.maxlength) {
+          @if (emailRef.getError('maxLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.maxlength')</small>
           }
@@ -127,34 +125,33 @@
             type="password"
             class="form-control"
             id="password"
-            name="password"
             placeholder="__jhiTranslatePipe__('global.form.newpassword.placeholder')"
-            formControlName="password"
+            [formField]="registerForm.password"
             data-cy="firstPassword"
           />
 
-        @let passwordRef = registerForm.get('password')!;
-        @if (passwordRef.invalid &&
-          (passwordRef.dirty || passwordRef.touched)) {
+        @let passwordRef = registerForm.password();
+        @if (passwordRef.invalid() &&
+          (passwordRef.dirty() || passwordRef.touched())) {
           <div>
-          @if (passwordRef?.errors?.required) {
+          @if (passwordRef.getError('required')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.newpassword.required')</small>
           }
 
-          @if (passwordRef?.errors?.minlength) {
+          @if (passwordRef.getError('minLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.newpassword.minlength')</small>
           }
 
-          @if (passwordRef?.errors?.maxlength) {
+          @if (passwordRef.getError('maxLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.newpassword.maxlength')</small>
           }
           </div>
         }
 
-          <<%- jhiPrefixDashed %>-password-strength-bar [passwordToCheck]="passwordRef.value" />
+          <<%- jhiPrefixDashed %>-password-strength-bar [passwordToCheck]="passwordRef.value()" />
         </div>
 
         <div class="mb-3">
@@ -163,32 +160,31 @@
             type="password"
             class="form-control"
             id="confirmPassword"
-            name="confirmPassword"
             placeholder="__jhiTranslatePipe__('global.form.confirmpassword.placeholder')"
-            formControlName="confirmPassword"
+            [formField]="registerForm.confirmPassword"
             data-cy="secondPassword"
           />
 
-        @let confirmPasswordRef = registerForm.get('confirmPassword')!;
-        @if (confirmPasswordRef.invalid &&
-          (confirmPasswordRef.dirty || confirmPasswordRef.touched)) {
+        @let confirmPasswordRef = registerForm.confirmPassword();
+        @if (confirmPasswordRef.invalid() &&
+          (confirmPasswordRef.dirty() || confirmPasswordRef.touched())) {
           <div>
-          @if (confirmPasswordRef?.errors?.required) {
+          @if (confirmPasswordRef.getError('required')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.confirmpassword.required')</small>
           }
 
-          @if (confirmPasswordRef?.errors?.minlength) {
+          @if (confirmPasswordRef.getError('minLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.confirmpassword.minlength')</small>
           }
 
-          @if (confirmPasswordRef?.errors?.maxlength) {
+          @if (confirmPasswordRef.getError('maxLength')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.confirmpassword.maxlength')</small>
           }
 
-          @if (confirmPasswordRef?.errors?.dontMatch) {
+          @if (confirmPasswordRef.getError('dontMatch')) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.error.dontmatch')</small>
           }

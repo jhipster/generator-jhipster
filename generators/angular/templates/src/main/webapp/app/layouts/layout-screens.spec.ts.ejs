@@ -164,7 +164,7 @@ describe('Layout screens', () => {
       const fixture = TestBed.createComponent(Login);
       await fixture.whenStable();
 
-      fixture.componentInstance.loginForm.patchValue({ username: 'admin', password: 'admin' });
+      fixture.componentInstance.loginModel.set({ username: 'admin', password: 'admin'<%- authenticationUsesRememberMe ? ', rememberMe: false' : '' %> });
       fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
       await fixture.whenStable();
 
