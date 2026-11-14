@@ -22,9 +22,11 @@ import { shallowMount } from '@vue/test-utils';
 
 import JhiSortHeader from './jhi-sort-header.vue';
 
+const global = { stubs: { 'font-awesome-icon': true } };
+
 describe('JhiSortHeader', () => {
   it('should sort by its field with a button', async () => {
-    const wrapper = shallowMount(JhiSortHeader, { props: { fieldName: 'name' }, slots: { default: 'Name' } });
+    const wrapper = shallowMount(JhiSortHeader, { global, props: { fieldName: 'name' }, slots: { default: 'Name' } });
 
     await wrapper.find('button').trigger('click');
 
@@ -34,7 +36,7 @@ describe('JhiSortHeader', () => {
   });
 
   it('should tell the order of the sorted column', () => {
-    const ariaSort = (props: Record<string, unknown>) => shallowMount(JhiSortHeader, { props: { fieldName: 'name', ...props } }).attributes('aria-sort');
+    const ariaSort = (props: Record<string, unknown>) => shallowMount(JhiSortHeader, { global, props: { fieldName: 'name', ...props } }).attributes('aria-sort');
 
     expect([
       ariaSort({ currentOrder: 'name' }),

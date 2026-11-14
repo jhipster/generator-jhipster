@@ -53,6 +53,7 @@ describe('Register Component', () => {
         provide: {
           [currentLanguageKey as symbol]: computed(() => '<%- nativeLanguage %>'),
         },
+        stubs: { 'router-link': RouterLinkStub },
       },
     });
     register = wrapper.vm;
@@ -164,7 +165,7 @@ describe('Register Component', () => {
     // GIVEN
     axiosStub.post.mockResolvedValue(undefined);
     const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
-    const wrapper = shallowMount(Register);
+    const wrapper = shallowMount(Register, { global: { stubs: { 'router-link': RouterLinkStub } } });
 
     // WHEN
     await setAllValues(wrapper, 'input', formValues);
