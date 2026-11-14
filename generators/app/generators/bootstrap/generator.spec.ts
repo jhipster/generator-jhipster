@@ -79,6 +79,16 @@ describe(`generator - ${generator}`, () => {
     expect(runResult.getComposedGenerators()).toContain('jhipster:app:bootstrap');
   });
 
+  describe('with skipServer', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withMockedGenerators(['jhipster:server:bootstrap']).withJHipsterConfig({ skipServer: true });
+    });
+
+    it('should not compose the server bootstrap', () => {
+      runResult.assertGeneratorNotComposed('jhipster:server:bootstrap');
+    });
+  });
+
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
