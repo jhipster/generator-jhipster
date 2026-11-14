@@ -29,7 +29,10 @@
               id="firstName"
               name="firstName"
               :placeholder="t$('settings.form[\'firstname.placeholder\']')"
-              :class="{ 'is-valid': v$.settingsAccount.firstName.$dirty && !v$.settingsAccount.firstName.$invalid, 'is-invalid': v$.settingsAccount.firstName.$dirty && v$.settingsAccount.firstName.$invalid }"
+              :class="{
+                'is-valid': v$.settingsAccount.firstName.$dirty && !v$.settingsAccount.firstName.$invalid,
+                'is-invalid': v$.settingsAccount.firstName.$dirty && v$.settingsAccount.firstName.$invalid,
+              }"
               @blur="v$.settingsAccount.firstName.$touch()"
               v-model="v$.settingsAccount.firstName.$model"
               data-cy="firstname"
@@ -54,7 +57,10 @@
               id="lastName"
               name="lastName"
               :placeholder="t$('settings.form[\'lastname.placeholder\']')"
-              :class="{ 'is-valid': v$.settingsAccount.lastName.$dirty && !v$.settingsAccount.lastName.$invalid, 'is-invalid': v$.settingsAccount.lastName.$dirty && v$.settingsAccount.lastName.$invalid }"
+              :class="{
+                'is-valid': v$.settingsAccount.lastName.$dirty && !v$.settingsAccount.lastName.$invalid,
+                'is-invalid': v$.settingsAccount.lastName.$dirty && v$.settingsAccount.lastName.$invalid,
+              }"
               @blur="v$.settingsAccount.lastName.$touch()"
               v-model="v$.settingsAccount.lastName.$model"
               data-cy="lastname"
@@ -79,7 +85,10 @@
               id="email"
               name="email"
               :placeholder="t$('global.form[\'email.placeholder\']')"
-              :class="{ 'is-valid': v$.settingsAccount.email.$dirty && !v$.settingsAccount.email.$invalid, 'is-invalid': v$.settingsAccount.email.$dirty && v$.settingsAccount.email.$invalid }"
+              :class="{
+                'is-valid': v$.settingsAccount.email.$dirty && !v$.settingsAccount.email.$invalid,
+                'is-invalid': v$.settingsAccount.email.$dirty && v$.settingsAccount.email.$invalid,
+              }"
               @blur="v$.settingsAccount.email.$touch()"
               v-model="v$.settingsAccount.email.$model"
               data-cy="email"
@@ -103,12 +112,11 @@
           <div class="mb-3" v-if="languages && Object.keys(languages).length > 1">
             <label class="form-label" for="langKey">{{ t$('settings.form.language') }}</label>
             <select class="form-select" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langKey">
-              <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{ language.name }}
-              </option>
+              <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{ language.name }}</option>
             </select>
           </div>
 <%_ } _%>
-          <button type="submit" :disabled="v$.settingsAccount.$invalid" class="btn btn-primary" data-cy="submit">{{ t$('settings.form.button') }}</button>
+          <button type="submit" class="btn btn-primary" data-cy="submit">{{ t$('settings.form.button') }}</button>
         </form>
       </div>
     </div>
@@ -157,6 +165,11 @@ const rules = {
 const v$ = useVuelidate(rules, { settingsAccount });
 
 const save = () => {
+  if (v$.value.$invalid) {
+    // The fields are marked and their errors shown, nothing is sent.
+    v$.value.$touch();
+    return;
+  }
   error.value = null;
   errorEmailExists.value = null;
   return axios

@@ -93,6 +93,7 @@ describe('Register Component', () => {
     axiosStub.post.mockResolvedValue(undefined);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
+    await register.$nextTick();
     register.register();
     await register.$nextTick();
 
@@ -113,6 +114,7 @@ describe('Register Component', () => {
     axiosStub.post.mockRejectedValue(error);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
+    await register.$nextTick();
     register.register();
     await register.$nextTick();
 
@@ -129,6 +131,7 @@ describe('Register Component', () => {
     axiosStub.post.mockRejectedValue(error);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
+    await register.$nextTick();
     register.register();
     await register.$nextTick();
 
@@ -145,6 +148,7 @@ describe('Register Component', () => {
     axiosStub.post.mockRejectedValue(error);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
+    await register.$nextTick();
     register.register();
     await register.$nextTick();
 
