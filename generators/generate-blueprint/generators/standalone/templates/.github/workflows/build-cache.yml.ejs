@@ -23,9 +23,10 @@ jobs:
         with:
           generator-path: generator-jhipster-<%- baseName %>
         if: always()
-      - run: <%- blueprintCliName %> generate-sample --all
+      # Every sample, each one in a folder of its name, then the dependencies of each one in the cache.
+      - run: <%- blueprintCliName %> generate-sample --all --skip-install
         continue-on-error: true
-      - run: npm run backend:build-cache --workspaces --if-present
+      - run: for sample in */; do (cd "$sample" && npm install && npm run backend:build-cache --if-present) || true; done
         continue-on-error: true
       - uses: <%- githubActions['jhipster/actions/save-cache'] %>
         if: always()
