@@ -85,7 +85,18 @@ export type MutateDataParam<T extends object> = Simplify<
         (ctx: T, opts: MutateDataCallbackOptions<T>) => T[Key] | typeof DelayedMutation | typeof UndefinedMutation
       : T[Key] | ((ctx: T, opts: MutateDataCallbackOptions<T>) => T[Key] | typeof DelayedMutation | typeof UndefinedMutation)
     : never;
-  }>
+  }> &
+    // A record, like the scripts of package.json, takes any key of its values.
+    (string extends keyof T ?
+      [keyof OmitIndexSignature<T>] extends [never] ?
+        Record<
+          string,
+          | boolean
+          | T[string]
+          | ((ctx: T, opts: MutateDataCallbackOptions<T>) => T[string] | typeof DelayedMutation | typeof UndefinedMutation)
+        >
+      : unknown
+    : unknown)
 >;
 
 /**
