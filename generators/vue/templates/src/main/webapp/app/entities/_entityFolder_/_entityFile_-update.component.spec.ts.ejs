@@ -449,6 +449,7 @@ describe('Component Tests', () => {
         // WHEN
         await triggerAll(wrapper, 'input:not([type="file"]), textarea', 'input');
         await triggerAll(wrapper, 'input, select', 'change');
+        await triggerAll(wrapper, 'input, select, textarea', 'blur');
 <%_ if (fields.some(field => field.blobContentTypeAny)) { _%>
         await triggerAll(wrapper, 'a', 'click');
 <%_ } _%>
