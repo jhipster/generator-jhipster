@@ -32,6 +32,7 @@
               :class="{
                 'is-valid': v$.settingsAccount.firstName.$dirty && !v$.settingsAccount.firstName.$invalid,
                 'is-invalid': v$.settingsAccount.firstName.$dirty && v$.settingsAccount.firstName.$invalid,
+                'is-touched': v$.settingsAccount.firstName.$dirty,
               }"
               @blur="v$.settingsAccount.firstName.$touch()"
               v-model="v$.settingsAccount.firstName.$model"
@@ -60,6 +61,7 @@
               :class="{
                 'is-valid': v$.settingsAccount.lastName.$dirty && !v$.settingsAccount.lastName.$invalid,
                 'is-invalid': v$.settingsAccount.lastName.$dirty && v$.settingsAccount.lastName.$invalid,
+                'is-touched': v$.settingsAccount.lastName.$dirty,
               }"
               @blur="v$.settingsAccount.lastName.$touch()"
               v-model="v$.settingsAccount.lastName.$model"
@@ -88,6 +90,7 @@
               :class="{
                 'is-valid': v$.settingsAccount.email.$dirty && !v$.settingsAccount.email.$invalid,
                 'is-invalid': v$.settingsAccount.email.$dirty && v$.settingsAccount.email.$invalid,
+                'is-touched': v$.settingsAccount.email.$dirty,
               }"
               @blur="v$.settingsAccount.email.$touch()"
               v-model="v$.settingsAccount.email.$model"
