@@ -2184,6 +2184,7 @@ import { Subject, from, of } from "rxjs";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
+import { sampleWithRequiredData } from "../user-management.test-samples";
 
 import { UserManagementFormService } from "./user-management-form.service";
 import { UserManagementUpdate } from "./user-management-update";
@@ -2240,6 +2241,19 @@ describe("UserManagement Management Update Component", () => {
       // THEN
       expect(comp.editForm().touched()).toBe(true);
       expect(comp.save).not.toHaveBeenCalled();
+    });
+
+    it("should save a valid submitted form", async () => {
+      // GIVEN
+      vi.spyOn(comp, "save").mockImplementation(() => undefined);
+      activatedRoute.data = of({ userManagement: sampleWithRequiredData });
+      comp.ngOnInit();
+
+      // WHEN
+      await submit(comp.editForm);
+
+      // THEN
+      expect(comp.save).toHaveBeenCalled();
     });
 
     it("should call update service on save for existing entity", () => {
