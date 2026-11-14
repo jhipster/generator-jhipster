@@ -1172,6 +1172,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/test/java/com/mycompany/myapp/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/test/util/TestUtil.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
@@ -1188,9 +1191,6 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/SortValidatorTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/UserResourceIT.java": {
@@ -2003,6 +2003,9 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/test/util/TestUtil.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
@@ -2010,9 +2013,6 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/SortValidatorTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/WithUnauthenticatedMockUser.java": {
