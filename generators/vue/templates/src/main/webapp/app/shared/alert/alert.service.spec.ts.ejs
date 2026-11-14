@@ -334,8 +334,8 @@ describe('Alert Service test suite', () => {
         defineComponent({
           setup() {
             useAlertService();
-            return () => null;
           },
+          render: () => null,
         }),
       ),
     ).toThrow();
