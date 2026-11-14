@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { OmitIndexSignature, ReadonlyKeysOf, RequiredKeysOf, SetRequired, Simplify } from 'type-fest';
+import type { IsEqual, OmitIndexSignature, ReadonlyKeysOf, RequiredKeysOf, SetRequired, Simplify } from 'type-fest';
 
 const filterNullishValues = (value: unknown): boolean => value != null;
 
@@ -86,15 +86,19 @@ export type MutateDataParam<T extends object> = Simplify<
       : T[Key] | ((ctx: T, opts: MutateDataCallbackOptions<T>) => T[Key] | typeof DelayedMutation | typeof UndefinedMutation)
     : never;
   }> &
-    // A record, like the scripts of package.json, takes any key of its values.
+    // A record, like the scripts of package.json, takes any key of its values, a function value through a callback only.
+    // An index signature cannot leave `__override__` out, so a boolean is accepted for every key.
+    // A readonly record takes no key, and a record of `any` values checks none.
     (string extends keyof T ?
       [keyof OmitIndexSignature<T>] extends [never] ?
-        Record<
-          string,
-          | boolean
-          | T[string]
-          | ((ctx: T, opts: MutateDataCallbackOptions<T>) => T[string] | typeof DelayedMutation | typeof UndefinedMutation)
-        >
+        IsEqual<T, Readonly<T>> extends true ?
+          unknown
+        : Record<
+            string,
+            | boolean
+            | (T[string] extends (...args: any[]) => any ? never : T[string])
+            | ((ctx: T, opts: MutateDataCallbackOptions<T>) => T[string] | typeof DelayedMutation | typeof UndefinedMutation)
+          >
       : unknown
     : unknown)
 >;
