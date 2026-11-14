@@ -16,7 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
+<%_ const timedFields = fields.filter(field => field.fieldTypeTimed); _%>
+<%_ const collectionRelationships = relationships.filter(relationship => relationship.persistableRelationship && relationship.collection); _%>
 import { beforeEach, describe, expect, it } from 'vitest';
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { sampleWithNewData, sampleWithRequiredData } from '../<%- entityFileName %>.test-samples';
@@ -31,40 +35,25 @@ describe('<%- entityAngularName %> Form Service', () => {
   });
 
   describe('Service methods', () => {
-    describe('create<%- entityAngularName %>FormGroup', () => {
-      it('should create a new form with FormControl', () => {
-        const formGroup = service.create<%- entityAngularName %>FormGroup();
+    describe('create<%- entityAngularName %>FormModel', () => {
+      it('should create the model of a new entity', () => {
+        const model = service.create<%- entityAngularName %>FormModel();
 
-        expect(formGroup.controls).toEqual(
-          expect.objectContaining({
+        expect(Object.keys(model)).toEqual(
+          expect.arrayContaining([
 <%_ for (const field of fields) { _%>
-            <%- field.fieldName %>: expect.any(Object),
+            '<%- field.fieldName %>',
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) { _%>
-            <%- relationship.propertyName %>: expect.any(Object),
+            '<%- relationship.propertyName %>',
 <%_ } _%>
-          }),
+          ]),
         );
       });
-
-      it('passing I<%- entityAngularName %> should create a new form with FormGroup', () => {
-        const formGroup = service.create<%- entityAngularName %>FormGroup(sampleWithRequiredData);
-
-        expect(formGroup.controls).toEqual(expect.objectContaining({
-<%_ for (const field of fields) { _%>
-          <%- field.fieldName %>: expect.any(Object),
-<%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) { _%>
-          <%- relationship.propertyName %>: expect.any(Object),
-<%_ } _%>
-        }));
-      });
-<%_ const timedFields = fields.filter(field => field.fieldTypeTimed); _%>
-<%_ const collectionRelationships = relationships.filter(relationship => relationship.persistableRelationship && relationship.collection); _%>
 <%_ if (timedFields.length > 0 || collectionRelationships.length > 0) { _%>
 
-      it('passing I<%- entityAngularName %> without <%- [timedFields.length > 0 ? 'dates' : '', collectionRelationships.length > 0 ? 'relationships' : ''].filter(Boolean).join(' nor ') %> should create a new form with empty values', () => {
-        const formGroup = service.create<%- entityAngularName %>FormGroup({
+      it('passing I<%- entityAngularName %> without <%- [timedFields.length > 0 ? 'dates' : '', collectionRelationships.length > 0 ? 'relationships' : ''].filter(Boolean).join(' nor ') %> should create a model with empty values', () => {
+        const model = service.create<%- entityAngularName %>FormModel({
           ...sampleWithRequiredData,
   <%_ for (const field of timedFields) { _%>
           <%- field.fieldName %>: null,
@@ -75,61 +64,63 @@ describe('<%- entityAngularName %> Form Service', () => {
         });
 
   <%_ for (const field of timedFields) { _%>
-        expect(formGroup.controls.<%- field.fieldName %>.value).toBeNull();
+        expect(model.<%- field.fieldName %>).toBe('');
   <%_ } _%>
   <%_ for (const relationship of collectionRelationships) { _%>
-        expect(formGroup.controls.<%- relationship.propertyName %>.value).toEqual([]);
+        expect(model.<%- relationship.propertyName %>).toEqual([]);
   <%_ } _%>
+      });
+<%_ } _%>
+    });
+
+    describe('create<%- entityAngularName %>Form', () => {
+      it('should create the form of the model', () => {
+        const model = signal(service.create<%- entityAngularName %>FormModel(sampleWithRequiredData));
+
+        const form = TestBed.runInInjectionContext(() => service.create<%- entityAngularName %>Form(model<%- editableId ? ', signal(false)' : '' %>));
+
+        expect(form().value()).toEqual(model());
+      });
+<%_ if (primaryKey.autoGenerate && !builtInUserManagement) { _%>
+
+      it('should keep the <%- primaryKey.name %> readonly', () => {
+        const form = TestBed.runInInjectionContext(() => service.create<%- entityAngularName %>Form(signal(service.create<%- entityAngularName %>FormModel())));
+
+        expect(form.<%- primaryKey.name %>().readonly()).toBe(true);
+      });
+<%_ } else if (editableId) { _%>
+
+      it('should make the <%- primaryKey.name %> readonly once an entity is edited', () => {
+        const editing = signal(false);
+        const form = TestBed.runInInjectionContext(() => service.create<%- entityAngularName %>Form(signal(service.create<%- entityAngularName %>FormModel()), editing));
+
+        expect(form.<%- primaryKey.name %>().readonly()).toBe(false);
+
+        editing.set(true);
+
+        expect(form.<%- primaryKey.name %>().readonly()).toBe(true);
       });
 <%_ } _%>
     });
 
     describe('get<%- entityAngularName %>', () => {
       it('should return New<%- entityAngularName %> for default <%- entityAngularName %> initial value', () => {
-        const formGroup = service.create<%- entityAngularName %>FormGroup(sampleWithNewData);
-
-        const <%- entityInstance %> = service.get<%- entityAngularName %>(formGroup);
+        const <%- entityInstance %> = service.get<%- entityAngularName %>(service.create<%- entityAngularName %>FormModel(sampleWithNewData));
 
         expect(<%- entityInstance %>).toMatchObject(sampleWithNewData);
       });
 
       it('should return New<%- entityAngularName %> for empty <%- entityAngularName %> initial value', () => {
-        const formGroup = service.create<%- entityAngularName %>FormGroup();
-
-        const <%- entityInstance %> = service.get<%- entityAngularName %>(formGroup);
+        const <%- entityInstance %> = service.get<%- entityAngularName %>(service.create<%- entityAngularName %>FormModel());
 
         expect(<%- entityInstance %>).toMatchObject({});
       });
 
       it('should return I<%- entityAngularName %>', () => {
-        const formGroup = service.create<%- entityAngularName %>FormGroup(sampleWithRequiredData);
-
-        const <%- entityInstance %> = service.get<%- entityAngularName %>(formGroup);
+        const <%- entityInstance %> = service.get<%- entityAngularName %>(service.create<%- entityAngularName %>FormModel(sampleWithRequiredData));
 
         expect(<%- entityInstance %>).toMatchObject(sampleWithRequiredData);
       });
     });
-<%_ if (primaryKey.autoGenerate) { _%>
-
-    describe('resetForm', () => {
-      it('passing I<%- entityAngularName %> should not enable <%- primaryKey.name %> FormControl', () => {
-        const formGroup = service.create<%- entityAngularName %>FormGroup();
-        expect(formGroup.controls.<%- primaryKey.name %>.disabled).toBe(true);
-
-        service.resetForm(formGroup, sampleWithRequiredData);
-
-        expect(formGroup.controls.<%- primaryKey.name %>.disabled).toBe(true);
-      });
-
-      it('passing New<%- entityAngularName %> should disable <%- primaryKey.name %> FormControl', () => {
-        const formGroup = service.create<%- entityAngularName %>FormGroup(sampleWithRequiredData);
-        expect(formGroup.controls.<%- primaryKey.name %>.disabled).toBe(true);
-
-        service.resetForm(formGroup, { <%- primaryKey.name %>: null });
-
-        expect(formGroup.controls.<%- primaryKey.name %>.disabled).toBe(true);
-      });
-    });
-<%_ } _%>
   });
 });
