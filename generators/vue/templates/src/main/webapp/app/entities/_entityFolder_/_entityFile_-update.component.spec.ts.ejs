@@ -418,6 +418,8 @@ describe('Component Tests', () => {
         await triggerAll(wrapper, 'a', 'click');
 <%_ } _%>
         await triggerAll(wrapper, 'button[type="button"]', 'click');
+        // The save is what is tested: the form is taken as valid, whatever the values the inputs took.
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
         await wrapper.find('form').trigger('submit');
         await flushPromises();
 
