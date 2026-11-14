@@ -97,6 +97,16 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('user email validation', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true });
+    });
+
+    it('should require the email in the admin user DTO', () => {
+      runResult.assertFileContent('src/main/java/com/mycompany/myapp/service/dto/AdminUserDTO.java', /@NotNull\r?\n\s+@Email/);
+    });
+  });
+
   describe('addTestSpringFactory', () => {
     before(async () => {
       await helpers

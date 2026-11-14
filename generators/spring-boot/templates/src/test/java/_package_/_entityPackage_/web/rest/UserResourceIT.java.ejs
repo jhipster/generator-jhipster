@@ -338,6 +338,48 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
+    void createUserWithoutEmail() throws Exception {
+        int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
+            .collectList().block()<% } %>.size();
+
+        // Create the User without an email
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
+        userDTO.setLogin(DEFAULT_LOGIN);
+        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        userDTO.setLastName(DEFAULT_LASTNAME);
+        userDTO.setActivated(true);
+  <%_ if (!databaseTypeCassandra) { _%>
+        userDTO.setImageUrl(DEFAULT_IMAGEURL);
+  <%_ } _%>
+        userDTO.setLangKey(DEFAULT_LANGKEY);
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
+
+        // An email is required, so this API call must fail
+  <%_ if (reactive) { _%>
+        webTestClient
+            .post()
+            .uri("/api/admin/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(userDTO))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+  <%_ } else { _%>
+        restUserMockMvc.perform(post("/api/admin/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
+            .with(csrf())<% } %>)
+            .andExpect(status().isBadRequest());
+  <%_ } _%>
+
+        // Validate the User is not created
+        assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
+    }
+
+    @Test
+  <%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+  <%_ } _%>
     void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -669,6 +711,54 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
   <%_ } _%>
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
+        });
+    }
+
+    @Test
+  <%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+  <%_ } _%>
+    void updateUserWithoutEmail() throws Exception {
+        // Initialize the database
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
+
+        // Update the user without an email
+        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<%- reactive ? 'block' : 'orElseThrow' %>();
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
+        userDTO.setId(updatedUser.getId());
+        userDTO.setLogin(updatedUser.getLogin());
+        userDTO.setFirstName(UPDATED_FIRSTNAME);
+        userDTO.setLastName(UPDATED_LASTNAME);
+        userDTO.setActivated(updatedUser.isActivated());
+  <%_ if (!databaseTypeCassandra) { _%>
+        userDTO.setImageUrl(UPDATED_IMAGEURL);
+  <%_ } _%>
+        userDTO.setLangKey(UPDATED_LANGKEY);
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
+
+        // An email is required, so this API call must fail
+  <%_ if (reactive) { _%>
+        webTestClient
+            .put()
+            .uri("/api/admin/users/{login}", userDTO.getLogin())
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(userDTO))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+  <%_ } else { _%>
+        restUserMockMvc.perform(put("/api/admin/users/{login}", userDTO.getLogin())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
+            .with(csrf())<% } %>)
+            .andExpect(status().isBadRequest());
+  <%_ } _%>
+
+        // Validate the User was not updated
+        assertPersistedUsers(users -> {
+            <%- user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
+            assertThat(testUser.getFirstName()).isEqualTo(updatedUser.getFirstName());
+            assertThat(testUser.getEmail()).isEqualTo(updatedUser.getEmail());
         });
     }
 

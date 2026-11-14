@@ -217,7 +217,8 @@ class RegistrationResourceIT {
         return Stream.of(
             createInvalidUser("bob", "password", "Bob", "Green", "invalid", true), // <-- invalid
             createInvalidUser("bob", "123", "Bob", "Green", "bob@example.com", true), // password with only 3 digits
-            createInvalidUser("bob", null, "Bob", "Green", "bob@example.com", true) // invalid null password
+            createInvalidUser("bob", null, "Bob", "Green", "bob@example.com", true), // invalid null password
+            createInvalidUser("bob", "password", "Bob", "Green", null, true) // null email
         );
     }
 
