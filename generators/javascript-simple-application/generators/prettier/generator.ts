@@ -30,7 +30,8 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
     }
 
     await this.dependsOnBootstrap('javascript-simple-application');
-    if (!this.delegateToBlueprint && !this.options.fromInit) {
+    // Without the client, the generators of the client are not composed.
+    if (!this.delegateToBlueprint && !this.options.fromInit && !(this.jhipsterConfigWithDefaults as { skipClient?: boolean }).skipClient) {
       await this.dependsOnBootstrap('client');
     }
   }
@@ -77,7 +78,7 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPrettierDependencies({ application }) {
-        const { clientFrameworkBuiltIn, clientFrameworkNo, monorepository, nodeDependencies, prettierExtensions } = application;
+        const { monorepository, nodeDependencies, prettierExtensions } = application;
         this.packageJson.merge({
           devDependencies: {
             prettier: nodeDependencies.prettier,
@@ -92,7 +93,7 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
               'prettier-format': 'prettier --write "{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}"',
             },
           });
-        } else if (clientFrameworkBuiltIn || clientFrameworkNo) {
+        } else {
           const prettierFolders = [...new Set(application.prettierFolders)];
           this.packageJson.merge({
             scripts: {
