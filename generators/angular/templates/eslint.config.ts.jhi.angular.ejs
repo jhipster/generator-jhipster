@@ -19,7 +19,6 @@
 <&_ if (fragment.importsSection) { -&>
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-// For a detailed explanation, visit: https://github.com/angular-eslint/angular-eslint/blob/main/docs/CONFIGURING_ESLINT.md
 import angular from 'angular-eslint';
 import vitest from '@vitest/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
@@ -106,8 +105,6 @@ import stylistic from '@stylistic/eslint-plugin';
       '@typescript-eslint/prefer-optional-chain': 'error',
       '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
       '@typescript-eslint/unbound-method': 'off',
-      'arrow-body-style': 'error',
-      curly: 'error',
       eqeqeq: ['error', 'always', { null: 'ignore' }],
       'guard-for-in': 'error',
       'no-bitwise': 'error',

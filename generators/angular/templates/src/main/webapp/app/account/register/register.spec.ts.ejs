@@ -18,6 +18,7 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { submit } from '@angular/forms/signals';
 import { ActivatedRoute } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
@@ -53,35 +54,57 @@ describe('Register', () => {
     comp = fixture.componentInstance;
   });
 
-  it('should ensure the two passwords entered match', () => {
-    comp.registerForm.patchValue({
-      password: 'password',
-      confirmPassword: 'non-matching',
-    });
+  it('should ensure the two passwords entered match', inject([RegisterService], async (service: RegisterService) => {
+    vi.spyOn(service, 'save');
+    comp.registerModel.update(model => ({
+      ...model,
+      ...{
+        login: 'user',
+        email: 'user@example.com',
+        password: 'password',
+        confirmPassword: 'non-matching',
+      },
+    }));
 
-    comp.register();
+    await submit(comp.registerForm);
 
-    expect(comp.doNotMatch()).toBe(true);
+    expect(comp.registerForm.confirmPassword().getError('dontMatch')).toBeDefined();
+    expect(comp.registerForm.confirmPassword().touched()).toBe(true);
+    expect(service.save).not.toHaveBeenCalled();
+  }));
+
+  it('should check the confirmation again when the password changes', () => {
+    comp.registerModel.update(model => ({ ...model, ...{ password: 'password', confirmPassword: 'other-password' } }));
+    expect(comp.registerForm.confirmPassword().getError('dontMatch')).toBeDefined();
+
+    comp.registerModel.update(model => ({ ...model, ...{ password: 'other-password' } }));
+
+    expect(comp.registerForm.confirmPassword().getError('dontMatch')).toBeUndefined();
   });
 
   it('should update success to true after creating an account', inject(
     [RegisterService<%- enableTranslation ? ', TranslateService' : '' %>],
-    (service: RegisterService<%- enableTranslation ? ', mockTranslateService: TranslateService' : '' %>) => {
+    async (service: RegisterService<%- enableTranslation ? ', mockTranslateService: TranslateService' : '' %>) => {
       vi.spyOn(service, 'save').mockReturnValue(of({}));
 <%_ if (enableTranslation) { _%>
       vi.spyOn(mockTranslateService, 'getCurrentLang').mockReturnValue('<%- nativeLanguage %>');
 <%_ } _%>
-      comp.registerForm.patchValue({
-        password: 'password',
-        confirmPassword: 'password',
-      });
+      comp.registerModel.update(model => ({
+        ...model,
+        ...{
+          login: 'user',
+          email: 'user@example.com',
+          password: 'password',
+          confirmPassword: 'password',
+        },
+      }));
 
-      comp.register();
+      await submit(comp.registerForm);
 
       expect(service.save).toHaveBeenCalledWith({
-        email: '',
+        email: 'user@example.com',
         password: 'password',
-        login: '',
+        login: 'user',
         langKey: '<%- nativeLanguage %>',
       });
       expect(comp.success()).toBe(true);
@@ -91,35 +114,42 @@ describe('Register', () => {
     },
   ));
 
-  it('should notify of user existence upon 400/login already in use', inject(
-    [RegisterService],
-    (service: RegisterService) => {
-      const err = { status: 400, error: { type: LOGIN_ALREADY_USED_TYPE } };
-      vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
-      comp.registerForm.patchValue({
+  it('should notify of user existence upon 400/login already in use', inject([RegisterService], async (service: RegisterService) => {
+    const err = { status: 400, error: { type: LOGIN_ALREADY_USED_TYPE } };
+    vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+    comp.registerModel.update(model => ({
+      ...model,
+      ...{
+        login: 'user',
+        email: 'user@example.com',
         password: 'password',
         confirmPassword: 'password',
-      });
+      },
+    }));
 
-      comp.register();
+    await submit(comp.registerForm);
 
-      expect(comp.errorUserExists()).toBe(true);
-      expect(comp.errorEmailExists()).toBe(false);
-      expect(comp.error()).toBe(false);
-    },
-  ));
+    expect(comp.errorUserExists()).toBe(true);
+    expect(comp.errorEmailExists()).toBe(false);
+    expect(comp.error()).toBe(false);
+  }));
 
   it('should notify of email existence upon 400/email address already in use', inject(
     [RegisterService],
-    (service: RegisterService) => {
+    async (service: RegisterService) => {
       const err = { status: 400, error: { type: EMAIL_ALREADY_USED_TYPE } };
       vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
-      comp.registerForm.patchValue({
-        password: 'password',
-        confirmPassword: 'password',
-      });
+      comp.registerModel.update(model => ({
+        ...model,
+        ...{
+          login: 'user',
+          email: 'user@example.com',
+          password: 'password',
+          confirmPassword: 'password',
+        },
+      }));
 
-      comp.register();
+      await submit(comp.registerForm);
 
       expect(comp.errorEmailExists()).toBe(true);
       expect(comp.errorUserExists()).toBe(false);
@@ -127,21 +157,23 @@ describe('Register', () => {
     },
   ));
 
-  it('should notify of generic error', inject(
-    [RegisterService],
-    (service: RegisterService) => {
-      const err = { status: 503 };
-      vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
-      comp.registerForm.patchValue({
+  it('should notify of generic error', inject([RegisterService], async (service: RegisterService) => {
+    const err = { status: 503 };
+    vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+    comp.registerModel.update(model => ({
+      ...model,
+      ...{
+        login: 'user',
+        email: 'user@example.com',
         password: 'password',
         confirmPassword: 'password',
-      });
+      },
+    }));
 
-      comp.register();
+    await submit(comp.registerForm);
 
-      expect(comp.errorUserExists()).toBe(false);
-      expect(comp.errorEmailExists()).toBe(false);
-      expect(comp.error()).toBe(true);
-    },
-  ));
+    expect(comp.errorUserExists()).toBe(false);
+    expect(comp.errorEmailExists()).toBe(false);
+    expect(comp.error()).toBe(true);
+  }));
 });

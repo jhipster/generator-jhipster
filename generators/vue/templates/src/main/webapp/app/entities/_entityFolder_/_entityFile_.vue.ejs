@@ -299,4 +299,24 @@ const setActive = async (<%- entityInstance %>: I<%- entityAngularName %>, activ
   }
 };
 <%_ } _%>
+
+defineExpose({
+  <%- entityInstancePlural %>,
+<%_ if (searchEngineAny) { _%>
+  currentSearch,
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+  propOrder,
+<%_ } _%>
+<%_ if (paginationPagination && !databaseTypeCassandra) { _%>
+  page,
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+  prepareRemove,
+  remove<%- entityAngularName %>,
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+  setActive,
+<%_ } _%>
+});
 </script>

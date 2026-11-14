@@ -21,17 +21,29 @@ package <%- packageName %>.web.rest.errors;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
+<%_ if (!databaseTypeNo) { _%>
+import org.springframework.dao.DataIntegrityViolationException;
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
+import io.r2dbc.spi.R2dbcNonTransientResourceException;
+import org.springframework.r2dbc.UncategorizedR2dbcException;
+<%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
+import org.hibernate.TransientObjectException;
 import org.hibernate.query.sqm.UnknownPathException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.orm.ObjectRetrievalFailureException;
 <%_ } _%>
+import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @RestController
 @RequestMapping("/api/exception-translator-test")
@@ -44,7 +56,38 @@ public class ExceptionTranslatorTestController {
     }
 <%_ } _%>
 
+<%_ if (!databaseTypeNo) { _%>
+    @GetMapping("/data-integrity-violation")
+    public void dataIntegrityViolation() {
+        throw new DataIntegrityViolationException("test data integrity violation");
+    }
+
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
+    @GetMapping("/data-exception")
+    public void dataException() {
+        throw new UncategorizedR2dbcException(
+            "test data exception",
+            null,
+            new R2dbcNonTransientResourceException("test value too long", "22001")
+        );
+    }
+
+<%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
+    @GetMapping("/transient-reference")
+    public void transientReference() {
+        throw new InvalidDataAccessApiUsageException(
+            "test transient reference",
+            new IllegalStateException(new TransientObjectException("test transient object"))
+        );
+    }
+
+    @GetMapping("/unknown-reference")
+    public void unknownReference() {
+        throw new ObjectRetrievalFailureException(Object.class, 1L);
+    }
+
     @GetMapping("/invalid-sort")
     public void invalidSort() {
         throw new InvalidDataAccessApiUsageException("test invalid sort", new UnknownPathException("test unknown path"));
@@ -53,6 +96,11 @@ public class ExceptionTranslatorTestController {
 <%_ } _%>
     @PostMapping("/method-argument")
     public void methodArgument(@Valid @RequestBody Test<%- dtoSuffix %> test<%- dtoSuffix %>) {
+        // empty method
+    }
+
+    @PostMapping("/method-validation/{name}")
+    public void methodValidation(@PathVariable("name") @Size(max = 3) String name, @Valid @RequestBody Test<%- dtoSuffix %> test<%- dtoSuffix %>) {
         // empty method
     }
 
@@ -81,6 +129,11 @@ public class ExceptionTranslatorTestController {
         throw new BadRequestAlertException("test bad request", "entity", "testkey");
     }
 
+    @GetMapping("/response-status-exception")
+    public void responseStatusException() {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping("/binding-failure")
     public void bindingFailure(@Valid @ModelAttribute TestBinding binding) {
         // The binding fails before the method is called.
@@ -89,6 +142,11 @@ public class ExceptionTranslatorTestController {
     @GetMapping("/response-status")
     public void exceptionWithResponseStatus() {
         throw new TestResponseStatusException();
+    }
+
+    @GetMapping("/open-api-resource-not-found")
+    public void openApiResourceNotFound() {
+        throw new OpenApiResourceNotFoundException("test open api resource not found");
     }
 
     @GetMapping("/internal-server-error")

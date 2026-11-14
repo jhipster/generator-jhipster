@@ -284,15 +284,15 @@ jhipster:
   <%_ if (applicationTypeGateway && microfrontend) { _%>
     # Ports <%- devServerPort + 1 %>-<%- devServerPort + 9 %> are allowed for microfrontend development
   <%_ } _%>
-    allowed-origins: "http://localhost:8100,https://localhost:8100<% if (devServerPortProxy) { %>,http://localhost:<%- devServerPortProxy %>,https://localhost:<%- devServerPortProxy %><% } %><% if (!skipClient) { %>,http://localhost:<%- devServerPort %>,https://localhost:<%- devServerPort %><% for (let port = 1; applicationTypeGateway && microfrontend && port < 10; port++) { %>,http://localhost:<%- devServerPort + port %>,https://localhost:<%- devServerPort + port %><% } %><% } %>"
+    allowed-origins: "<%- corsAllowedOrigins.join(',') %>"
     # Enable CORS when running in GitHub Codespaces
-    allowed-origin-patterns: 'https://*.githubpreview.dev'
+    allowed-origin-patterns: '<%- corsAllowedOriginPatterns.join(',') %>'
     allowed-methods: "*"
     allowed-headers: "*"
   <%_ if (authenticationTypeSession) { _%>
-    exposed-headers: "Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
+    exposed-headers: "Link,X-Total-Count,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-alert,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-error,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-params"
   <%_ } else { _%>
-    exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
+    exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-alert,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-error,X-${jhipster.clientApp.name:<%- camelizedBaseName %>}-params"
   <%_ } _%>
     allow-credentials: true
     max-age: 1800

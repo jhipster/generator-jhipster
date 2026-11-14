@@ -46,18 +46,18 @@ describe('TranslateDirective Tests', () => {
     fixture = TestBed.createComponent(TestTranslateDirective);
   });
 
-  it('should change HTML', () => {
+  it('should change HTML', async () => {
     const spy = vi.spyOn(translateService, 'get');
 
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should keep the HTML when the translation fails', () => {
+  it('should keep the HTML when the translation fails', async () => {
     vi.spyOn(translateService, 'get').mockReturnValue(throwError(() => new Error('failed')));
 
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelector('div').innerHTML).toBe('');
   });

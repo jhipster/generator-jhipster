@@ -74,8 +74,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
-            'backend:build-cache':
-              'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package -- -x webapp -x webapp_test',
+            'backend:build-cache': `npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package${excludeWebapp ? ` -- ${excludeWebapp}` : ''}`,
           });
         }
 

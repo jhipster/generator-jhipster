@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ref } from 'vue';
+import { type Ref, ref } from 'vue';
 
 import { RouterLinkStub, type VueWrapper, shallowMount } from '@vue/test-utils';
 
@@ -33,8 +33,8 @@ type HomeComponentType = InstanceType<typeof Home>;
 describe('Home', () => {
   let home: HomeComponentType;
   let wrapper: VueWrapper<HomeComponentType>;
-  let authenticated;
-  let currentUsername;
+  let authenticated: Ref<boolean>;
+  let currentUsername: Ref<string>;
 
 <%_ if (authenticationTypeOauth2) { _%>
   const loginService = { login: vi.fn(), logout: vi.fn() };

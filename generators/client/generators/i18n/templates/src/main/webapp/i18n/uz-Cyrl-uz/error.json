@@ -9,6 +9,7 @@
       "500": "Ички хатолик юз берди."
     },
     "concurrencyFailure": "Бошқа фойдаланувчи шу маълумотни сиз билан бир вақтда ўзгартирди. Сизнинг ўзгаришлариз бекор қилинди.",
+    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
     "validation": "Сервер тарафда валидация хатолиги юз берди."
   }
 }

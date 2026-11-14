@@ -37,10 +37,12 @@
               name="username"
               :placeholder="t$('global.form[\'username.placeholder\']')"
               v-model="login"
+              :class="{ 'is-valid': submitted && !!login, 'is-invalid': submitted && !login }"
               data-cy="username"
               autofocus
             >
             </b-form-input>
+            <small class="form-text text-danger" v-if="submitted && !login">{{ t$('entity.validation.required') }}</small>
           </b-form-group>
           <b-form-group :label="t$('login.form.password')" label-for="password">
             <b-form-input
@@ -49,13 +51,17 @@
               name="password"
               :placeholder="t$('login.form[\'password.placeholder\']')"
               v-model="password"
+              :class="{ 'is-valid': submitted && !!password, 'is-invalid': submitted && !password }"
               data-cy="password"
             >
             </b-form-input>
+            <small class="form-text text-danger" v-if="submitted && !password">{{ t$('entity.validation.required') }}</small>
           </b-form-group>
-          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked <%- authenticationTypeSession && databaseTypeNo ? ' hidden' : '' %>>
+<%_ if (authenticationUsesRememberMe) { _%>
+          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked>
             <span>{{ t$('login.form.rememberme') }}</span>
           </b-form-checkbox>
+<%_ } _%>
           <div>
             <b-button data-cy="submit" type="submit" variant="primary">{{ t$('login.form.button') }}</b-button>
           </div>
@@ -73,7 +79,7 @@
         <div>
           <b-alert :model-value="true" variant="warning">
             <span>{{ t$('global.messages.info.register.noaccount') }}</span>
-            <b-link to="/register" class="alert-link ms-1">{{ t$('global.messages.info.register.link') }}</b-link>
+            <b-link to="/account/register" class="alert-link ms-1">{{ t$('global.messages.info.register.link') }}</b-link>
           </b-alert>
         </div>
   <%_ } _%>
@@ -93,7 +99,7 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
 <%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+import { storeAuthenticationToken } from '../authentication-token';
 <%_ } _%>
 import { accountServiceKey } from '../account.service';
 
@@ -102,9 +108,12 @@ const { t: t$ } = useI18n();
 <%_ } _%>
 
 const authenticationError = ref(false);
+const submitted = ref(false);
 const login = ref<string | null>(null);
 const password = ref<string | null>(null);
+<%_ if (authenticationUsesRememberMe) { _%>
 const rememberMe = ref(false);
+<%_ } _%>
 
 const route = useRoute();
 const router = useRouter();
@@ -118,23 +127,20 @@ const redirectPath = (): string => {
 const accountService = inject(accountServiceKey)!;
 
 const doLogin = async () => {
+  submitted.value = true;
+  if (!login.value || !password.value) {
+    return;
+  }
 <%_ if (authenticationTypeJwt) { _%>
   const data = { username: login.value, password: password.value, rememberMe: rememberMe.value };
   try {
     const result = await axios.post('api/authenticate', data);
     const bearerToken = result.headers.authorization;
     if (bearerToken?.startsWith('Bearer ')) {
-      const jwt = bearerToken.slice(7, bearerToken.length);
-      if (rememberMe.value) {
-        localStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
-        sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-      } else {
-        sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
-        localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-      }
+      storeAuthenticationToken(bearerToken.slice(7, bearerToken.length), rememberMe.value);
     }
 <%_ } else { _%>
-  const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}&remember-me=${rememberMe.value}&submit=Login`;
+  const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}<%- authenticationUsesRememberMe ? '&remember-me=${rememberMe.value}' : '' %>&submit=Login`;
   try {
     await axios.post('api/authentication', data, {
       headers: {
@@ -150,4 +156,13 @@ const doLogin = async () => {
     authenticationError.value = true;
   }
 };
+
+defineExpose({
+  authenticationError,
+  submitted,
+  login,
+  password,
+  rememberMe,
+  doLogin,
+});
 </script>

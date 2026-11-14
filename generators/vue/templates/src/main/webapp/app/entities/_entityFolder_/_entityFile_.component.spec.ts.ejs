@@ -28,9 +28,6 @@ import { type Router, createMemoryHistory, createRouter } from 'vue-router';
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import { createBootstrap } from 'bootstrap-vue-next';
-<%_ if (anyFieldIsDateDerived) { _%>
-import dayjs from 'dayjs';
-<%_ } _%>
 
 import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
 <%_ if (builtInUserManagement) { _%>
@@ -42,9 +39,10 @@ import JhiSortHeader from '@/components/jhi-sort-header.vue';
 import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/testing/stubs';
 
 import { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 import <%- entityAngularName %> from './<%- entityFileName %>.vue';
 
-const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
+const <%- entityInstance %>Sample: I<%- entityAngularName %> = { ...<%- vueTsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
 <%_ const relationshipsWithValues = relationships.filter(relationship => !relationship.otherEntity.embedded); _%>
 <%_ for (const otherEntity of new Set(relationshipsWithValues.map(relationship => relationship.otherEntity))) { _%>
 const <%- otherEntity.entityInstance %>Option = { <%- otherEntity.primaryKey.name %>: <%- otherEntity.primaryKey.tsSampleValues[0] %> };
@@ -67,7 +65,7 @@ describe('Component Tests', () => {
 
   describe('<%- entityAngularName %> Management Component', () => {
     let <%- entityInstance %>ServiceStub: Record<string, Mock>;
-    let mountOptions: MountingOptions<<%- entityAngularName %>ComponentType>['global'];
+    let mountOptions: NonNullable<MountingOptions<<%- entityAngularName %>ComponentType>['global']>;
 <%_ if (!paginationNo) { _%>
     let router: Router;
 <%_ } _%>
@@ -104,15 +102,11 @@ describe('Component Tests', () => {
 <%_ } _%>
           bModal: bModalStub,
           'font-awesome-icon': true,
-          'b-badge': true,
 <%_ if (!paginationNo) { _%>
           'jhi-sort-header': JhiSortHeader,
 <%_ } _%>
           'b-button': bButtonStub,
           'router-link': routerLinkStub,
-        },
-        directives: {
-          'b-modal': {},
         },
 <%_ if (!paginationNo) { _%>
         plugins: [router],

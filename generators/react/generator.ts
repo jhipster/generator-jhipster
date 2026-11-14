@@ -28,7 +28,6 @@ import {
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
-import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
@@ -140,11 +139,7 @@ export default class ReactGenerator extends ReactApplicationGenerator {
       },
       applicationDefaults({ application, applicationDefaults }) {
         application.prettierExtensions.push('html', 'tsx', 'css', 'scss');
-        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
-          // When we have a java backend, 'src/**' is already added by java:bootstrap
-          application.prettierFolders.push(`${application.clientSrcDir}**/`);
-        }
-
+        application.prettierFolders.push('build-plugins/**/');
         applicationDefaults({
           __override__: true,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
@@ -256,9 +251,6 @@ ${comment}
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       react({ application, entity }) {
-        if (isAdminEntity(application, entity)) {
-          entity.entityPage = `admin/${entity.entityFileName}`;
-        }
         entity.entityReactState =
           application.applicationTypeMonolith || isAdminEntity(application, entity) ?
             entity.entityInstance

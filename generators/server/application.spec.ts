@@ -1,0 +1,49 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { describe, expect, it } from 'expect-node';
+
+import { mutateData } from '../../lib/utils/object.ts';
+
+import * as entityData from './application.ts';
+
+import { mutateMockedCompleteData, mutateMockedData, prepareMutationTest } from '#testing';
+
+describe('application mutation test', () => {
+  for (const [name, data] of Object.entries(prepareMutationTest(entityData))) {
+    it(`expects ${name} to match snapshot`, () => {
+      expect(mutateMockedData(...data)).toMatchSnapshot();
+    });
+    it(`expects ${name} not to override existing properties`, () => {
+      expect(Object.keys(mutateMockedCompleteData(...data))).toHaveLength(0);
+    });
+  }
+
+  it('adds the additional allowed origins after the ones of the development servers', () => {
+    const application: any = { devServerPort: 4200, corsAdditionalAllowedOrigins: ['capacitor://localhost'] };
+    mutateData(application, entityData.mutateApplication as any);
+    expect(application.corsAllowedOrigins).toEqual([
+      'http://localhost:8100',
+      'https://localhost:8100',
+      'http://localhost:4200',
+      'https://localhost:4200',
+      'capacitor://localhost',
+    ]);
+  });
+});

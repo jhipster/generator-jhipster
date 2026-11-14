@@ -170,7 +170,7 @@
             <span>{{ t$('global.menu.account.login') }}</span>
           </b-dropdown-item>
 <%_ if (generateUserRegistration) { _%>
-          <b-dropdown-item data-cy="register" to="/register" id="register" v-if="!authenticated" active-class="active">
+          <b-dropdown-item data-cy="register" to="/account/register" id="register" v-if="!authenticated" active-class="active">
             <font-awesome-icon icon="user-plus" />
             <span>{{ t$('global.menu.account.register') }}</span>
           </b-dropdown-item>
@@ -201,9 +201,6 @@ import { loginServiceKey } from '@/account/login.service';
 <%_ if (enableTranslation) { _%>
 import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
 import getLanguages from '@/config/languages';
-<%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
 import { useStore } from '@/stores';
 
@@ -271,12 +268,10 @@ const hasAnyAuthority = (authorities: string): boolean => {
 
 const logout = async () => {
 <%_ if (authenticationTypeJwt) { _%>
-  localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-  sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-  store.logout();
+  accountService.logout();
 <%_ } else { _%>
   <%- authenticationTypeOauth2 ? 'const response = ' : '' %>await loginService.logout();
-  store.logout();
+  accountService.logout();
 
   <%_ if (authenticationTypeOauth2) { _%>
   const next = response.data?.logoutUrl;
@@ -296,6 +291,25 @@ const logout = async () => {
     await router.push('/');
   }
 };
+
+defineExpose({
+  authenticated,
+  hasAnyAuthority,
+  openAPIEnabled,
+  subIsActive,
+  logout,
+<%_ if (authenticationUsesCsrf && authenticationTypeOauth2) { _%>
+  login,
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+  currentLanguage,
+  changeLanguage,
+  isActiveLanguage,
+<%_ } _%>
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
+  inProduction,
+<%_ } _%>
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

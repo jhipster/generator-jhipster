@@ -24,7 +24,7 @@ import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
-<%_ if (authenticationUsesCsrf) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import org.junit.jupiter.api.BeforeEach;
 
 <%_ } _%>
@@ -32,7 +32,7 @@ import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTest
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-<%_ if (authenticationUsesCsrf) { _%>
+<%_ if (serverUsesCsrf) { _%>
 
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } _%>
@@ -47,7 +47,7 @@ class ExceptionTranslatorIT {
 
     @Autowired
     private WebTestClient webTestClient;
-<%_ if (authenticationUsesCsrf) { _%>
+<%_ if (serverUsesCsrf) { _%>
 
     @BeforeEach
     void setupCsrf() {
@@ -69,6 +69,40 @@ class ExceptionTranslatorIT {
             .expectBody()
             .jsonPath("$.message")
             .isEqualTo(ErrorConstants.ERR_CONCURRENCY_FAILURE);
+    }
+<%_ } _%>
+<%_ if (!databaseTypeNo) { _%>
+
+    @Test
+    void testDataIntegrityViolation() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/data-integrity-violation")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_DATA_INTEGRITY_VIOLATION);
+    }
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+
+    @Test
+    void testDataException() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/data-exception")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_DATA_INTEGRITY_VIOLATION);
     }
 <%_ } _%>
 
@@ -109,7 +143,57 @@ class ExceptionTranslatorIT {
             .jsonPath("$.fieldErrors.[0].field")
             .isEqualTo("test")
             .jsonPath("$.fieldErrors.[0].message")
-            .isEqualTo("must not be null");
+            .isEqualTo("must not be null")
+            .jsonPath("$.fieldErrors.[0].code")
+            .isEqualTo("NotNull");
+    }
+
+    @Test
+    void testMethodValidationOfTheBody() {
+        webTestClient
+            .post()
+            .uri("/api/exception-translator-test/method-validation/abc")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue("{}")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_VALIDATION)
+            .jsonPath("$.fieldErrors.[0].objectName")
+            .isEqualTo("test")
+            .jsonPath("$.fieldErrors.[0].field")
+            .isEqualTo("test")
+            .jsonPath("$.fieldErrors.[0].message")
+            .isEqualTo("must not be null")
+            .jsonPath("$.fieldErrors.[0].code")
+            .isEqualTo("NotNull");
+    }
+
+    @Test
+    void testMethodValidationOfAParameter() {
+        webTestClient
+            .post()
+            .uri("/api/exception-translator-test/method-validation/abcdef")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue("{\"test\": \"test\"}")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_VALIDATION)
+            .jsonPath("$.fieldErrors.[0].objectName")
+            .isEqualTo("exceptionTranslatorTestController")
+            .jsonPath("$.fieldErrors.[0].field")
+            .isEqualTo("name")
+            .jsonPath("$.fieldErrors.[0].code")
+            .isEqualTo("Size");
     }
 
     @Test
@@ -196,6 +280,25 @@ class ExceptionTranslatorIT {
     }
 
     @Test
+    void testResponseStatusException() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/response-status-exception")
+            .exchange()
+            .expectStatus()
+            .isNotFound()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.404")
+            .jsonPath("$.title")
+            .isEqualTo("Not Found")
+            .jsonPath("$.detail")
+            .isEqualTo("Not Found");
+    }
+
+    @Test
     void testBindingFailure() {
         webTestClient
             .get()
@@ -207,6 +310,8 @@ class ExceptionTranslatorIT {
             .jsonPath("$.fieldErrors.[0].field")
             .isEqualTo("number")
             .jsonPath("$.fieldErrors.[0].message")
+            .isEqualTo("typeMismatch")
+            .jsonPath("$.fieldErrors.[0].code")
             .isEqualTo("typeMismatch");
     }
 
@@ -224,7 +329,26 @@ class ExceptionTranslatorIT {
             .jsonPath("$.message")
             .isEqualTo("error.http.405")
             .jsonPath("$.detail")
-            .isEqualTo("405 METHOD_NOT_ALLOWED \"Request method 'POST' is not supported.\"");
+            .isEqualTo("Request method 'POST' is not supported.");
+    }
+
+    @Test
+    void testNotFound() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/nothing")
+            .exchange()
+            .expectStatus()
+            .isNotFound()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.404")
+            .jsonPath("$.title")
+            .isEqualTo("Not Found")
+            .jsonPath("$.detail")
+            .isEqualTo("Not Found");
     }
 
     @Test
@@ -242,6 +366,23 @@ class ExceptionTranslatorIT {
             .isEqualTo("error.http.400")
             .jsonPath("$.title")
             .isEqualTo("test response status");
+    }
+
+    @Test
+    void testOpenApiResourceNotFound() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/open-api-resource-not-found")
+            .exchange()
+            .expectStatus()
+            .isNotFound()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.404")
+            .jsonPath("$.title")
+            .isEqualTo("Not Found");
     }
 
     @Test

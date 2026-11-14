@@ -38,7 +38,8 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
  * Checks the properties of a sort against the fields of an entity.
  * <p>
  * An entity can be sorted by its columns, and by the columns of an entity it relates to (one level, like
- * {@code relationship.name}), but not by a field marked {@link NotSortable}, nor by a transient or a static field.
+ * {@code relationship.name}), but not by a field marked {@link NotSortable}, nor by a transient or a static field, nor by a
+ * {@link UUID} but the id, whose order only keeps the pages of a list stable.
 <%_ if (databaseTypeMongodb) { _%>
  * A referenced document ({@link DBRef}) can only be sorted by its id.
 <%_ } _%>
@@ -106,12 +107,6 @@ public final class SortValidator {
             .filter(SortValidator::isColumn)
             .isPresent();
     }
-<%_ if (databaseTypeMongodb) { _%>
-
-    private static boolean isId(Field field) {
-        return field.isAnnotationPresent(org.springframework.data.annotation.Id.class) || "id".equals(field.getName());
-    }
-<%_ } _%>
 
     private static Optional<Field> sortableField(Class<?> type, String name) {
         for (Class<?> current = type; current != null && current != Object.class; current = current.getSuperclass()) {
@@ -128,7 +123,28 @@ public final class SortValidator {
     }
 
     private static boolean isColumn(Field field) {
-        return isSimpleType(field.getType()) && !Modifier.isTransient(field.getModifiers()) && !hasTransientAnnotation(field);
+        return (
+            isSimpleType(field.getType()) &&
+            (UUID.class != field.getType() || isId(field)) &&
+            !Modifier.isTransient(field.getModifiers()) &&
+            !hasTransientAnnotation(field)
+        );
+    }
+
+    private static boolean isId(Field field) {
+        return (
+<%_ if (databaseTypeSql && !reactive) { _%>
+            field.isAnnotationPresent(jakarta.persistence.Id.class) ||
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+            field.isAnnotationPresent(org.springframework.data.neo4j.core.schema.Id.class) ||
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
+            // A field named id is the id of a document without annotation.
+            "id".equals(field.getName()) ||
+<%_ } _%>
+            field.isAnnotationPresent(org.springframework.data.annotation.Id.class)
+        );
     }
 
     private static boolean hasTransientAnnotation(Field field) {

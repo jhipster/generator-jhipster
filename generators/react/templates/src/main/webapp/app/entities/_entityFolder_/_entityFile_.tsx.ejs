@@ -75,6 +75,9 @@ import {
   reset,
 <%_ } _%>
 } from './<%- entityFileName %>.reducer';
+<%_ if (!readOnly) { _%>
+import <%- entityReactName %>DeleteDialog from './<%- entityFileName %>-delete-dialog';
+<%_ } _%>
 
 export const <%- entityReactName %> = () => {
   const dispatch = useAppDispatch();
@@ -87,10 +90,13 @@ export const <%- entityReactName %> = () => {
 <%_ if (searchEngineAny) { _%>
   const [search, setSearch] = useState('');
 <%_ } _%>
+<%_ if (!readOnly) { _%>
+  const [deleteId, setDeleteId] = useState<string | number | undefined>();
+<%_ } _%>
 <%_ if (paginationNo) { _%>
-  const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(pageLocation, '<%- primaryKey.name %>'), pageLocation.search));
+  const [sortState, setSortState] = useState(() => overrideSortStateWithQueryParams(getSortState(pageLocation, '<%- primaryKey.name %>'), pageLocation.search));
 <%_ } else { _%>
-  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, '<%- primaryKey.name %>'), pageLocation.search));
+  const [paginationState, setPaginationState] = useState(() => overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, '<%- primaryKey.name %>'), pageLocation.search));
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   const [sorting, setSorting] = useState(false);
@@ -509,14 +515,22 @@ export const <%- entityReactName %> = () => {
 <%_ } _%>
                       <td className="text-end">
                         <div className="btn-group flex-btn-group-container">
-                          <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}`} variant="info" size="sm" data-cy="entityDetailsButton">
+                          <Link to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}`} className="btn btn-info btn-sm" data-cy="entityDetailsButton">
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.view">View</Translate></span>
-                          </Button>
+                          </Link>
 <%_ if (!readOnly) { _%>
-                          <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} variant="primary" size="sm" data-cy="entityEditButton">
+                          <Link to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} className="btn btn-primary btn-sm" data-cy="entityEditButton">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
-                          </Button>
-                          <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} <% if (builtInUserManagement) { %>disabled={account.login === <%- entityInstance %>.login} <% } %>variant="danger" size="sm" data-cy="entityDeleteButton">
+                          </Link>
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => setDeleteId(<%- entityInstance %>.<%- primaryKey.name %>)}
+  <%_ if (builtInUserManagement) { _%>
+                            disabled={account.login === <%- entityInstance %>.login}
+  <%_ } _%>
+                            data-cy="entityDeleteButton"
+                          >
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
 <%_ } _%>
@@ -564,6 +578,20 @@ export const <%- entityReactName %> = () => {
         ''
       )}
   <%_ } _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+      {deleteId === undefined ? null : (
+        <<%- entityReactName %>DeleteDialog
+          id={deleteId}
+          onClose={() => setDeleteId(undefined)}
+          onDeleted={() => {
+            setDeleteId(undefined);
+  <%_ if (!paginationInfiniteScroll) { _%>
+            sortEntities();
+  <%_ } _%>
+          }}
+        />
+      )}
 <%_ } _%>
     </div>
   );

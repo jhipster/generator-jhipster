@@ -21,7 +21,6 @@ import { registerRemotes } from '@module-federation/runtime';
 <%_ } _%>
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { bindActionCreators } from 'redux';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 
 registerRemotes([
@@ -50,8 +49,7 @@ const store = getStore();
 await registerLocale(store);
 <%_ } _%>
 
-const actions = bindActionCreators({ clearAuthentication }, store.dispatch);
-setupAxiosInterceptors(() => actions.clearAuthentication('login.error.unauthorized'));
+setupAxiosInterceptors(() => store.dispatch(clearAuthentication('login.error.unauthorized')));
 
 loadIcons();
 

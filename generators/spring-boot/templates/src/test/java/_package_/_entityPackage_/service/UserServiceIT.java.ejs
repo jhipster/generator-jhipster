@@ -20,13 +20,13 @@ package <%- packageName %>.service;
 
 import <%- packageName %>.IntegrationTest;
 import <%- packageName %>.config.Constants;
-<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 import <%- packageName %>.domain.PersistentToken;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
 import <%- user.entityAbsoluteClass %>;
 <%_ } _%>
-<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 import <%- packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -35,11 +35,11 @@ import <%- packageName %>.repository.search.UserSearchRepository;
 <%_ if (!databaseTypeNo) { _%>
 import <%- packageName %>.repository.UserRepository;
 <%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeSession && generateUserManagement && !reactive) { _%>
 import <%- packageName %>.security.AuthoritiesConstants;
 <%_ } _%>
 import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
-<%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
+<%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) || (authenticationTypeSession && authenticationUsesRememberMe)) { _%>
 
 import tech.jhipster.security.RandomUtil;
 <%_ } _%>
@@ -70,8 +70,12 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 <%_ if (databaseTypeSql && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
+<%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+<%_ } _%>
 
-<%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
+<%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) || (authenticationTypeSession && authenticationUsesRememberMe)) { _%>
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
@@ -91,6 +95,9 @@ import java.util.Map;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
 import java.util.Optional;
+<%_ } _%>
+<%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+import java.util.Set;
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 import java.util.UUID;
@@ -144,9 +151,14 @@ class UserServiceIT {
 <%_ } _%>
     private static final String DEFAULT_LANGKEY = "dummy";
 
-<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
+
+<%_ } _%>
+<%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
@@ -281,6 +293,137 @@ class UserServiceIT {
         assertThat(persistentTokenRepository.findByUser(user)).hasSize(existingCount + 1);
     }
 <%_ } _%>
+<%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    void assertThatResetPasswordRemovesThePersistentTokens() {
+        user.setActivated(true);
+        user.setResetDate(Instant.now().minus(2, ChronoUnit.HOURS));
+        user.setResetKey(RandomUtil.generateResetKey());
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+        generateUserToken(user, "1111-1111", <%- databaseTypeCassandra ? 'Instant.now()' : 'LocalDate.now()' %>);
+
+        assertThat(userService.completePasswordReset("johndoe2", user.getResetKey())).isPresent();
+
+        assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
+    }
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    void assertThatDeactivatingAUserRemovesThePersistentTokens() {
+        user.setActivated(true);
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+        generateUserToken(user, "1111-1111", <%- databaseTypeCassandra ? 'Instant.now()' : 'LocalDate.now()' %>);
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>(user);
+
+        userDTO.setActivated(true);
+        assertThat(userService.updateUser(userDTO)).isPresent();
+        assertThat(persistentTokenRepository.findByUser(user)).hasSize(1);
+
+        userDTO.setActivated(false);
+        assertThat(userService.updateUser(userDTO)).isPresent();
+        assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
+    }
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    void assertThatDeletingAUserRemovesThePersistentTokens() {
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+        generateUserToken(user, "1111-1111", <%- databaseTypeCassandra ? 'Instant.now()' : 'LocalDate.now()' %>);
+
+        userService.deleteUser(user.getLogin());
+
+        assertThat(persistentTokenRepository.findById("1111-1111")).isEmpty();
+    }
+<%_ } _%>
+<%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    void assertThatResetPasswordExpiresTheSessions() {
+        user.setActivated(true);
+        user.setResetDate(Instant.now().minus(2, ChronoUnit.HOURS));
+        user.setResetKey(RandomUtil.generateResetKey());
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+        SessionInformation session = registerSession(user.getLogin(), "reset-password-session");
+
+        assertThat(userService.completePasswordReset("johndoe2", user.getResetKey())).isPresent();
+
+        assertThat(session.isExpired()).isTrue();
+        sessionRegistry.removeSessionInformation(session.getSessionId());
+    }
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    void assertThatDeactivatingAUserExpiresTheSessions() {
+        user.setActivated(true);
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+        SessionInformation session = registerSession(user.getLogin(), "deactivate-session");
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>(user);
+
+        userDTO.setFirstName("changed");
+        assertThat(userService.updateUser(userDTO)).isPresent();
+        assertThat(session.isExpired()).isFalse();
+
+        userDTO.setActivated(false);
+        assertThat(userService.updateUser(userDTO)).isPresent();
+        assertThat(session.isExpired()).isTrue();
+        sessionRegistry.removeSessionInformation(session.getSessionId());
+    }
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    void assertThatChangingTheAuthoritiesOfAUserExpiresTheSessions() {
+        user.setActivated(true);
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+        SessionInformation session = registerSession(user.getLogin(), "authorities-session");
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>(user);
+
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
+        assertThat(userService.updateUser(userDTO)).isPresent();
+
+        assertThat(session.isExpired()).isTrue();
+        sessionRegistry.removeSessionInformation(session.getSessionId());
+    }
+
+    @Test
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional
+  <%_ } _%>
+    void assertThatDeletingAUserExpiresTheSessions() {
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
+        SessionInformation session = registerSession(user.getLogin(), "delete-session");
+        SessionInformation otherUserSession = registerSession("other-user", "other-user-session");
+
+        userService.deleteUser(user.getLogin());
+
+        assertThat(session.isExpired()).isTrue();
+        assertThat(otherUserSession.isExpired()).isFalse();
+        sessionRegistry.removeSessionInformation(session.getSessionId());
+        sessionRegistry.removeSessionInformation(otherUserSession.getSessionId());
+    }
+
+    private SessionInformation registerSession(String login, String sessionId) {
+        sessionRegistry.registerNewSession(
+            sessionId,
+            org.springframework.security.core.userdetails.User.withUsername(login).password("password").build()
+        );
+        return sessionRegistry.getSessionInformation(sessionId);
+    }
+<%_ } _%>
 <%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
 
     @Test
@@ -368,15 +511,21 @@ class UserServiceIT {
     }
 
 <%_ } _%>
-<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && authenticationUsesRememberMe) { _%>
 
-    private void generateUserToken(<%- user.persistClass %> user, String tokenSeries, LocalDate localDate) {
+    private void generateUserToken(<%- user.persistClass %> user, String tokenSeries, <%- databaseTypeCassandra ? 'Instant' : 'LocalDate' %> tokenDate) {
         PersistentToken token = new PersistentToken();
-        token.setSeries(tokenSeries);<% if (databaseTypeCouchbase) { %>
-        token.setLogin(user.getLogin());<% } else { %>
-        token.setUser(user);<% } %>
+        token.setSeries(tokenSeries);
+  <%_ if (databaseTypeCouchbase) { _%>
+        token.setLogin(user.getLogin());
+  <%_ } else if (databaseTypeCassandra) { _%>
+        token.setUserId(user.getId());
+        token.setLogin(user.getLogin());
+  <%_ } else { _%>
+        token.setUser(user);
+  <%_ } _%>
         token.setTokenValue(tokenSeries + "-data");
-        token.setTokenDate(localDate);
+        token.setTokenDate(tokenDate);
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
         persistentTokenRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(token);

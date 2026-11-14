@@ -42,7 +42,7 @@ describe('Ribbon', () => {
     ribbon = wrapper.vm;
     await ribbon.$nextTick();
     store = useStore();
-    store.setRibbonOnProfiles(null);
+    store.setRibbonOnProfiles('');
   });
 
   it('should not have ribbonEnabled when no data', () => {

@@ -49,7 +49,11 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
       this.log.debug(`${applicationType} is not an official application type, its blueprint bootstraps the application.`);
       this.cancelCancellableTasks();
     } else {
-      await this.dependsOnBootstrap('client');
+      await this.dependsOnBootstrap('javascript-simple-application');
+      // Without the client, the generators of the client are not composed.
+      if (!this.jhipsterConfigWithDefaults.skipClient) {
+        await this.dependsOnBootstrap('client');
+      }
       await this.dependsOnBootstrap('server');
     }
   }

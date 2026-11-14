@@ -23,7 +23,8 @@ import { Link, Navigate, useLocation } from 'react-router';
 import { type FieldError, type FieldValues, useForm } from 'react-hook-form';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { login } from 'app/shared/reducers/authentication';
+import PageTitle from 'app/shared/layout/page-title';
+import { type IAuthParams, login } from 'app/shared/reducers/authentication';
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -37,7 +38,7 @@ export const Login = () => {
     formState: { errors, touchedFields },
   } = useForm({ mode: 'onTouched' });
 
-  const handleLogin = ({ username, password, rememberMe }: FieldValues) => dispatch(login(username, password, rememberMe));
+  const handleLogin = (credentials: FieldValues) => dispatch(login(credentials as IAuthParams));
 
   const { from } = pageLocation.state || { from: { pathname: '/', search: pageLocation.search } };
   if (isAuthenticated) {
@@ -45,6 +46,7 @@ export const Login = () => {
   }
   return (
     <div className="d-flex justify-content-center" id="login-page">
+      <PageTitle title={translate('login.title')} />
       <div className="col-lg-6 col-md-8 col-sm-10">
         <h1 id="login-title" data-cy="loginTitle">
           <Translate contentKey="login.title">Sign in</Translate>
@@ -56,7 +58,7 @@ export const Login = () => {
             </Translate>
           </Alert>
         )}
-        <Form onSubmit={handleSubmit(handleLogin)}>
+        <Form onSubmit={handleSubmit(handleLogin)} noValidate>
           <ValidatedField
             name="username"
             label={translate('global.form.username.label')}
@@ -64,7 +66,7 @@ export const Login = () => {
             required
             autoFocus
             data-cy="username"
-            validate={{ required: 'Username cannot be empty!' }}
+            validate={{ required: { value: true, message: translate('entity.validation.required') } }}
             register={register}
             error={errors.username as FieldError}
             isTouched={touchedFields.username}
@@ -76,13 +78,13 @@ export const Login = () => {
             placeholder={translate('login.form.password.placeholder')}
             required
             data-cy="password"
-            validate={{ required: 'Password cannot be empty!' }}
+            validate={{ required: { value: true, message: translate('entity.validation.required') } }}
             register={register}
             error={errors.password as FieldError}
             isTouched={touchedFields.password}
           />
+<%_ if (authenticationUsesRememberMe) { _%>
           <ValidatedField
-            <%- authenticationTypeSession && databaseTypeNo ? ' hidden' : '' %>
             name="rememberMe"
             type="checkbox"
             check
@@ -90,6 +92,7 @@ export const Login = () => {
             value={true}
             register={register}
           />
+<%_ } _%>
           <Button variant="primary" type="submit" data-cy="submit">
             <Translate contentKey="login.form.button">Sign in</Translate>
           </Button>

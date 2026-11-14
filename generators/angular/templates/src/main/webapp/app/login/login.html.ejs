@@ -23,19 +23,21 @@
       @if (authenticationError()) {
         <div class="alert alert-danger" data-cy="loginError">__jhiTranslateTag__('login.messages.error.authentication')</div>
       }
-      <form class="form" (ngSubmit)="login()" [formGroup]="loginForm">
+      <form class="form" [formRoot]="loginForm">
         <div class="mb-3">
           <label class="form-label" for="username">__jhiTranslateTag__('global.form.username.label')</label>
           <input
             type="text"
             #username
             class="form-control"
-            name="username"
             id="username"
             placeholder="__jhiTranslatePipe__('global.form.username.placeholder')"
-            formControlName="username"
+            [formField]="loginForm.username"
             data-cy="username"
           />
+          @if (loginForm.username().touched() && loginForm.username().invalid()) {
+            <small class="form-text text-danger">__jhiTranslateTag__('entity.validation.required')</small>
+          }
         </div>
 
         <div class="mb-3">
@@ -43,20 +45,24 @@
           <input
             type="password"
             class="form-control"
-            name="password"
             id="password"
             placeholder="__jhiTranslatePipe__('login.form.password.placeholder')"
-            formControlName="password"
+            [formField]="loginForm.password"
             data-cy="password"
           />
+          @if (loginForm.password().touched() && loginForm.password().invalid()) {
+            <small class="form-text text-danger">__jhiTranslateTag__('entity.validation.required')</small>
+          }
         </div>
 
-        <div class="form-check"<%- authenticationTypeSession && locals.databaseTypeNo ? ' hidden' : '' %>>
+<%_ if (authenticationUsesRememberMe) { _%>
+        <div class="form-check">
           <label class="form-check-label" for="rememberMe">
-            <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
+            <input class="form-check-input" type="checkbox" id="rememberMe" [formField]="loginForm.rememberMe" />
             <span>__jhiTranslateTag__('login.form.rememberme')</span>
           </label>
         </div>
+<%_ } _%>
 
         <button type="submit" class="btn btn-primary" data-cy="submit">__jhiTranslateTag__('login.form.button')</button>
       </form>

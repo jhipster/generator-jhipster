@@ -9,6 +9,7 @@
       "500": "Internal server error."
     },
     "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+    "dataIntegrityViolation": "Az adatok ütköznek a meglévő adatokkal, vagy nem érvényesek. A módosításait elutasítottuk.",
     "validation": "Validation error on the server."
   }
 }

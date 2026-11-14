@@ -28,7 +28,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeJwt && generateAuthenticationApi) { _%>
 import org.springframework.http.HttpMethod;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -37,13 +37,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 <%_ } _%>
 import org.springframework.security.web.SecurityFilterChain;
-<%_ if (!skipClient || authenticationUsesCsrf) { _%>
+<%_ if (!skipClient || serverUsesCsrf) { _%>
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 <%_ } _%>
 <%_ if (!skipClient) { _%>
 import <%- packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 <%_ } _%>
@@ -82,7 +82,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
   <%_ } _%>
 import java.util.*;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import java.util.function.Supplier;
 <%_ } _%>
 <%_ if (authenticationTypeSession || (authenticationTypeOauth2 && !applicationTypeMicroservice)) { _%>
@@ -93,15 +93,24 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 <%_ if (authenticationTypeSession) { _%>
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
   <%_ if (generateUserManagement) { _%>
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
   <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import org.springframework.security.web.csrf.*;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
+<%_ } _%>
+<%_ if (authenticationTypeJwt || authenticationTypeOauth2) { _%>
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.jwt.JwtValidationException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
+import org.springframework.security.web.AuthenticationEntryPoint;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -111,7 +120,7 @@ import <%- packageName %>.security.oauth2.CustomClaimConverter;
 <%_ if (!skipClient) { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import org.springframework.util.StringUtils;
 <%_ } _%>
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -156,6 +165,25 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 <%_ } _%>
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
+
+    /**
+     * The sessions of each user, to end them when the user can no longer log in with them.
+     * It is kept in memory: with several instances, the sessions are to be shared, with Spring Session for instance.
+     */
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    /**
+     * Removes the sessions that end from the {@link SessionRegistry}.
+     */
+    @Bean
+    public static HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
+<%_ } _%>
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
@@ -164,7 +192,7 @@ public class SecurityConfiguration {
             .cors(withDefaults())
 <%_ } _%>
             .csrf(csrf -> csrf
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
 <%_ } else { _%>
@@ -204,11 +232,13 @@ public class SecurityConfiguration {
   <%_ } _%>
                     .requestMatchers("/swagger-ui/**").permitAll()
 <%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
+<%_ if (generateAuthenticationApi) { _%>
+  <%_ if (authenticationTypeJwt) { _%>
                     .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
-<%_ } else { _%>
+  <%_ } else { _%>
                     .requestMatchers("/api/authenticate").permitAll()
+  <%_ } _%>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
   <%_ if (generateUserRegistration) { _%>
@@ -252,6 +282,20 @@ public class SecurityConfiguration {
                     .rememberMeServices(rememberMeServices)
                     .rememberMeParameter("remember-me")
                     .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
+            )
+            .sessionManagement(session ->
+                session
+                    .maximumSessions(-1)
+                    .sessionRegistry(sessionRegistry())
+                    .expiredSessionStrategy(event -> {
+                        String path = event.getRequest().getRequestURI().substring(event.getRequest().getContextPath().length());
+                        if (new AntPathMatcher().match("/api/**", path)) {
+                            event.getResponse().setStatus(HttpStatus.UNAUTHORIZED.value());
+                        } else {
+                            // The session ended, the page is requested again without it.
+                            event.getResponse().sendRedirect(event.getRequest().getRequestURI());
+                        }
+                    })
             )
 <%_ } _%>
 <%_ if (authenticationTypeSession || (authenticationTypeOauth2 && !applicationTypeMicroservice)) { _%>
@@ -308,16 +352,30 @@ public class SecurityConfiguration {
     <%_ } _%>
   <%_ } _%>
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter())))
-            .oauth2Client(withDefaults());
+  <%_ if (generateAuthenticationApi) { _%>
+            .oauth2Client(withDefaults())
+  <%_ } _%>
+            ;
+<%_ } _%>
+<%_ if (authenticationTypeJwt || authenticationTypeOauth2) { _%>
+        http.oauth2ResourceServer(oauth2 -> oauth2.authenticationEntryPoint(bearerTokenAuthenticationEntryPoint()));
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             http
-  <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+  <%_ if (serverUsesCsrf) { _%>
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
   <%_ } _%>
                 .authorizeHttpRequests(authz -> authz.requestMatchers("/h2-console/**").permitAll());
         }
+<%_ } _%>
+<%_ if (authenticationTypeJwt || authenticationTypeOauth2) { _%>
+        // The access tokens are not bound to a client certificate
+        http.oauth2ResourceServer(oauth2 ->
+            oauth2.protectedResourceMetadata(metadata ->
+                metadata.protectedResourceMetadataCustomizer(builder -> builder.tlsClientCertificateBoundAccessTokens(false))
+            )
+        );
 <%_ } _%>
         return http.build();
     }
@@ -393,7 +451,7 @@ public class SecurityConfiguration {
         return jwtDecoder;
     }
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (serverUsesCsrf) { _%>
 
     /**
      * Custom CSRF handler to provide BREACH protection for Single-Page Applications (SPA).
@@ -437,6 +495,24 @@ public class SecurityConfiguration {
              */
             return this.xor.resolveCsrfTokenValue(request, csrfToken);
         }
+    }
+<%_ } _%>
+<%_ if (authenticationTypeJwt || authenticationTypeOauth2) { _%>
+
+    /**
+     * Answers an invalid bearer token with a description that does not depend on the library that decodes the token.
+     */
+    private AuthenticationEntryPoint bearerTokenAuthenticationEntryPoint() {
+        BearerTokenAuthenticationEntryPoint entryPoint = new BearerTokenAuthenticationEntryPoint();
+        return (request, response, exception) -> entryPoint.commence(request, response, describeInvalidBearerToken(exception));
+    }
+
+    private AuthenticationException describeInvalidBearerToken(AuthenticationException exception) {
+        if (!(exception instanceof InvalidBearerTokenException)) return exception;
+        boolean expired =
+            exception.getCause() instanceof JwtValidationException validation &&
+            validation.getErrors().stream().anyMatch(error -> error.getDescription() != null && error.getDescription().startsWith("Jwt expired"));
+        return new InvalidBearerTokenException(expired ? "The access token expired" : "The access token is invalid", exception.getCause());
     }
 <%_ } _%>
 }

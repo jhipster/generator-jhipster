@@ -228,6 +228,19 @@ describe('<%- entityReactName %> screens', () => {
 
       await waitFor(() => expect(axios.put).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ activated: false })));
     });
+
+    it('should disable the deletion of the current user only', async () => {
+      entities = [
+        { ...sample, login: 'current' },
+        { ...sampleWithoutData, login: 'other' },
+      ];
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+
+      const [currentUser, otherUser] = Array.from(container.querySelectorAll('[data-cy="entityDeleteButton"]'));
+      expect(currentUser.hasAttribute('disabled')).toBe(true);
+      expect(otherUser.hasAttribute('disabled')).toBe(false);
+    });
 <%_ } _%>
 <%_ if (fileFields.length > 0) { _%>
 
@@ -411,24 +424,44 @@ describe('<%- entityReactName %> screens', () => {
   });
 
   describe('delete', () => {
-    it('should delete the entity', async () => {
-      renderPage(`/${sample.<%- primaryKeyName %>}/delete`);
-      await waitFor(() => expect(document.querySelector('[data-cy="entityConfirmDeleteButton"]')).not.toBeNull());
+    it('should delete the entity from the list', async () => {
+      entities = [sample];
+      renderPage();
+      await waitFor(() => expect(document.querySelector('[data-cy="entityDeleteButton"]')).not.toBeNull());
 
+      fireEvent.click(document.querySelector('[data-cy="entityDeleteButton"]')!);
+      await waitFor(() => expect(document.querySelector('[data-cy="entityConfirmDeleteButton"]')).not.toBeNull());
+      fireEvent.click(document.querySelector('[data-cy="entityConfirmDeleteButton"]')!);
+
+      await waitFor(() => expect(axios.delete).toHaveBeenCalledWith(`${apiUrl}/${sample.<%- primaryKeyName %>}`));
+      await waitFor(() => expect(document.querySelector('.modal-footer')).toBeNull());
+      expect(heading()).not.toBeNull();
+    });
+
+    it('should stay in the list when cancelled there', async () => {
+      entities = [sample];
+      renderPage();
+      await waitFor(() => expect(document.querySelector('[data-cy="entityDeleteButton"]')).not.toBeNull());
+
+      fireEvent.click(document.querySelector('[data-cy="entityDeleteButton"]')!);
+      await waitFor(() => expect(document.querySelector('.modal-footer .btn-secondary')).not.toBeNull());
+      fireEvent.click(document.querySelector('.modal-footer .btn-secondary')!);
+
+      await waitFor(() => expect(document.querySelector('.modal-footer')).toBeNull());
+      expect(heading()).not.toBeNull();
+      expect(axios.delete).not.toHaveBeenCalled();
+    });
+
+    it('should delete the entity from the detail and go back to the list', async () => {
+      renderPage(`/${sample.<%- primaryKeyName %>}`);
+      await waitFor(() => expect(document.querySelector('[data-cy="entityDeleteButton"]')).not.toBeNull());
+
+      fireEvent.click(document.querySelector('[data-cy="entityDeleteButton"]')!);
+      await waitFor(() => expect(document.querySelector('[data-cy="entityConfirmDeleteButton"]')).not.toBeNull());
       fireEvent.click(document.querySelector('[data-cy="entityConfirmDeleteButton"]')!);
 
       await waitFor(() => expect(axios.delete).toHaveBeenCalledWith(`${apiUrl}/${sample.<%- primaryKeyName %>}`));
       await waitFor(() => expect(heading()).not.toBeNull());
-    });
-
-    it('should go back to the list when cancelled', async () => {
-      renderPage(`/${sample.<%- primaryKeyName %>}/delete`);
-      await waitFor(() => expect(document.querySelector('.modal-footer .btn-secondary')).not.toBeNull());
-
-      fireEvent.click(document.querySelector('.modal-footer .btn-secondary')!);
-
-      await waitFor(() => expect(heading()).not.toBeNull());
-      expect(axios.delete).not.toHaveBeenCalled();
     });
 
     it('should stay in the detail when cancelled there', async () => {

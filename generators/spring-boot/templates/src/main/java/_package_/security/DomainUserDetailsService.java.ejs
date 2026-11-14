@@ -37,6 +37,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 <%_ } _%>
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+<%_ if (authenticationTypeJwt && generateUserManagement) { _%>
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
@@ -112,15 +117,48 @@ public class DomainUserDetailsService implements <%- reactivePrefix %>UserDetail
     public static class UserWithId extends org.springframework.security.core.userdetails.User {
 
         private final <%- user.primaryKey.type %> id;
+  <%_ if (authenticationTypeJwt && generateUserManagement) { _%>
+
+        private final String credentialsStamp;
+  <%_ } _%>
 
         public UserWithId(String login, String password, Collection<? extends GrantedAuthority> authorities, <%- user.primaryKey.type %> id) {
             super(login, password, authorities);
             this.id = id;
+  <%_ if (authenticationTypeJwt && generateUserManagement) { _%>
+            this.credentialsStamp = credentialsStamp(password, authorities);
+  <%_ } _%>
         }
 
         public <%- user.primaryKey.type %> getId() {
             return id;
         }
+  <%_ if (authenticationTypeJwt && generateUserManagement) { _%>
+
+        /**
+         * The stamp of the credentials, kept once the password is erased: it changes with the password and the authorities.
+         *
+         * @return the stamp of the credentials.
+         */
+        public String getCredentialsStamp() {
+            return credentialsStamp;
+        }
+
+        private static String credentialsStamp(String password, Collection<? extends GrantedAuthority> authorities) {
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                digest.update(String.valueOf(password).getBytes(StandardCharsets.UTF_8));
+                authorities
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .sorted()
+                    .forEach(authority -> digest.update(("\n" + authority).getBytes(StandardCharsets.UTF_8)));
+                return Base64.getUrlEncoder().withoutPadding().encodeToString(Arrays.copyOf(digest.digest(), 16));
+            } catch (NoSuchAlgorithmException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+  <%_ } _%>
 
         @Override
         public boolean equals(Object obj) {

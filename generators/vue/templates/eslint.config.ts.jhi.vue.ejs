@@ -60,13 +60,12 @@ import vitest from '@vitest/eslint-plugin';
       'vue/multi-word-component-names': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-require-imports': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
       'vue/no-v-text-v-html-on-component': [
         'error',
-        { 'allow': ['router-link', 'b-alert', 'b-badge', 'b-button', 'b-link'] },
+        { 'allow': ['router-link', 'b-alert', 'b-button', 'b-link'] },
       ],
       'vue/no-reserved-component-names': 'off',
       'vue/attributes-order': 'off',
@@ -94,8 +93,5 @@ import vitest from '@vitest/eslint-plugin';
   {
     files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.ts'],
     extends: [vitest.configs.recommended],
-    rules: {
-      '@typescript-eslint/no-empty-function': 'off',
-    },
   },
 <&_ } -&>

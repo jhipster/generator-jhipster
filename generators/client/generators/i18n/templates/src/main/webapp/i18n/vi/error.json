@@ -9,6 +9,7 @@
       "500": "Internal server error."
     },
     "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+    "dataIntegrityViolation": "Dữ liệu xung đột với dữ liệu hiện có hoặc không hợp lệ. Các thay đổi của bạn đã bị từ chối.",
     "validation": "Validation error on the server."
   }
 }

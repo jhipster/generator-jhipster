@@ -59,11 +59,11 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (reactive) { _%>
-  <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (serverUsesCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
   <%_ } _%>
 <%_ } else { _%>
-  <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (serverUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
   <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -114,7 +114,7 @@ class RegistrationResourceIT {
     }
 
 <%_ } _%>
-<%_ if (reactive && authenticationUsesCsrf) { _%>
+<%_ if (reactive && serverUsesCsrf) { _%>
     @BeforeEach
     void setupCsrf() {
         accountWebTestClient = accountWebTestClient.mutateWith(csrf());
@@ -160,7 +160,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(validUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(validUser))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -201,7 +201,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(invalidUser))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
   <%_ if (databaseTypeCouchbase) { _%>
             .andDo(exportTestSecurityContext())
@@ -240,7 +240,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(invalidUser))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
 <%_ } _%>
@@ -323,7 +323,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(firstUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(firstUser))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -342,7 +342,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(secondUser))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
   <%_ if (databaseTypeCouchbase) { _%>
             .andDo(exportTestSecurityContext())
@@ -369,7 +369,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(secondUser))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().is4xxClientError());
 <%_ } _%>
@@ -409,7 +409,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(firstUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(firstUser))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -444,7 +444,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(secondUser))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -483,7 +483,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(userWithUpperCaseEmail))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(userWithUpperCaseEmail))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -509,7 +509,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(secondUser))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().is4xxClientError());
 <%_ } _%>
@@ -548,7 +548,7 @@ class RegistrationResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(validUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(validUser))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>

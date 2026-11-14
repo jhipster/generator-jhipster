@@ -16,6 +16,7 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -552,6 +553,12 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/auth/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/auth/authentication-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/auth/private-route.spec.tsx": {
     "stateCleared": "modified",
   },
@@ -640,6 +647,12 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/layout/menus/menu-item.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/layout/page-title.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/layout/password/password-strength-bar.scss": {
@@ -870,6 +883,7 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
+  "authenticationUsesRememberMe": false,
   "authority": Any<Object>,
   "backendType": "Java",
   "backendTypeJavaAny": true,
@@ -1591,6 +1605,12 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/layout/page-title.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
@@ -2098,6 +2118,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -2633,6 +2654,12 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/auth/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/auth/authentication-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/auth/private-route.spec.tsx": {
     "stateCleared": "modified",
   },
@@ -2724,6 +2751,12 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/layout/menus/menu-item.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/layout/page-title.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/layout/password/password-strength-bar.scss": {
@@ -3033,6 +3066,7 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
+  "authenticationUsesRememberMe": false,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -3732,6 +3766,12 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
@@ -4045,6 +4085,7 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": true,
   "authority": Any<Object>,
   "backendType": "Java",
   "backendTypeJavaAny": true,
@@ -4698,6 +4739,12 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/auth/authentication-token.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/authentication-token.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/auth/private-route.spec.tsx": {
     "stateCleared": "modified",
   },
@@ -4831,6 +4878,12 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
@@ -5078,6 +5131,7 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
+  "authenticationUsesRememberMe": false,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -5688,6 +5742,12 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
@@ -5916,6 +5976,7 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "authenticationTypeSession": true,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": true,
+  "authenticationUsesRememberMe": false,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -6528,6 +6589,12 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/layout/page-title.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {

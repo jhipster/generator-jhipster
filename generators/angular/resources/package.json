@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "22.2.4",
+    "@angular/common": "22.2.5",
     "@fortawesome/angular-fontawesome": "5.1.0",
     "@fortawesome/free-solid-svg-icons": "7.3.1",
     "@ng-bootstrap/ng-bootstrap": "21.0.0",
@@ -40,7 +40,7 @@
     "sonar-scanner": "3.1.0",
     "tinyglobby": "0.2.17",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.72.1",
+    "typescript-eslint": "8.72.2",
     "vitest": "5.1.0",
     "vitest-sonar-reporter": "3.0.0"
   },

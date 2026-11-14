@@ -32,7 +32,6 @@ import {
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
 import type { Field as ClientField } from '../client/types.ts';
-import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
@@ -199,11 +198,7 @@ export default class VueGenerator extends VueApplicationGenerator {
           __override__: true,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
         });
-
-        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
-          // When we have a java backend, 'src/**' is already added by java:bootstrap
-          application.prettierFolders.push(`${application.clientSrcDir}**/`);
-        }
+        application.prettierFolders.push('build-plugins/**/');
       },
       javaNodeBuildPaths({ application }) {
         const { clientBundlerRsbuild, clientBundlerVite, microfrontend, enableTranslation, enableI18nRTL, javaNodeBuildPaths } =
@@ -240,6 +235,8 @@ export default class VueGenerator extends VueApplicationGenerator {
               entityAngularName,
               readOnly,
             } = entity;
+            // The pages of an entity of the administration are among the administration ones.
+            const adminPage = Boolean(entity.adminEntity && !application.applicationTypeMicroservice);
 
             this.editFile(
               `${application.clientSrcDir}/app/entities/entities.routes.ts`,
@@ -288,12 +285,17 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 },`
                   )
                 }`,
-                contentToCheck: `path: '${entityFileName}'`,
+                contentToCheck: `path: '${adminPage ? entityPage : entityFileName}'`,
               }),
             );
 
             this.editFile(
               `${application.clientSrcDir}/app/entities/entities.vue`,
+              createNeedleCallback({
+                needle: 'jhipster-needle-add-entity-service-to-entities-component-import',
+                contentToAdd: "import { provide } from 'vue';",
+                contentToCheck: /import \{[^}]*\bprovide\b[^}]*\} from 'vue'/,
+              }),
               createNeedleCallback({
                 needle: 'jhipster-needle-add-entity-service-to-entities-component-import',
                 contentToAdd: `import ${entityAngularName}Service, { ${entityInstance}ServiceKey } from './${entityFolderName}/${entityFileName}.service';`,
@@ -389,7 +391,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           entityVueReadAuthorities: () =>
             asAuthorities([...(entity.entityAuthority?.split(',') ?? []), ...(entity.entityReadAuthority?.split(',') ?? [])]),
           entityClientFields: () =>
-            this.generateEntityClientFields(entity.primaryKey, fieldsWithoutId, entity.relationships, entity.dto, 'Date', entity.embedded),
+            this.generateEntityClientFields(
+              entity.primaryKey,
+              fieldsWithoutId,
+              entity.relationships,
+              entity.dto,
+              'string',
+              entity.embedded,
+            ),
           entityClientImports: () => this.generateEntityClientImports(entity.relationships, entity.dto),
           entityClientFieldDefaultValues: () => this.generateEntityClientFieldDefaultValues(fieldsWithoutId),
           entityModelEnumImports: () => this.generateEntityClientEnumImports(fieldsWithoutId),
@@ -413,6 +422,15 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 
   get default() {
     return this.asDefaultTaskGroup({
+      prepareEntitySamples({ entities }) {
+        for (const entity of entities) {
+          // The model types the dates as the strings of the server, the samples of the client (written at default) as dayjs.
+          const toVueSample = (sample?: string) => sample?.replaceAll(/dayjs\(('[^']*')\)/g, '$1');
+          entity.vueTsSampleWithFullData = toVueSample(entity.tsSampleWithFullData);
+          entity.vueTsSampleWithRequiredData = toVueSample(entity.tsSampleWithRequiredData);
+          entity.vueTsSampleWithPartialData = toVueSample(entity.tsSampleWithPartialData);
+        }
+      },
       queueTranslateTransform({ application }) {
         const { clientI18nDir, enableTranslation, getWebappTranslation } = application;
 

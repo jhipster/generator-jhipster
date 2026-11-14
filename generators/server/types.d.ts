@@ -22,6 +22,7 @@ import type {
 import type { Relationship as LanguagesRelationship } from '../languages/types.d.ts';
 import type { DatabaseEntity } from '../liquibase/types.ts';
 
+import type { ServerAddedApplicationProperties } from './application.ts';
 import type Command from './command.ts';
 
 export { BaseApplicationFeatures as Features };
@@ -46,6 +47,8 @@ export type Application<E extends BaseApplicationEntity = Entity> = ExportApplic
   JavaApplication<E> & {
     oauth2AppSchemes?: string[];
     devDatabaseTypeH2Any?: boolean;
-  };
+    /** The server authenticates the requests by a session cookie and protects them with a CSRF token. */
+    serverUsesCsrf: boolean;
+  } & ServerAddedApplicationProperties;
 
 export type { JavaSource as Source };

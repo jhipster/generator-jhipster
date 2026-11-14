@@ -210,7 +210,7 @@ export class UserManagementDeleteDialog {
 
       <button
         type="button"
-        [routerLink]="['/user-management', userManagementRef.login, 'edit']"
+        [routerLink]="['/admin/user-management', userManagementRef.login, 'edit']"
         class="btn btn-primary"
       >
         <fa-icon icon="pencil-alt" />&nbsp;<span>Edit</span>
@@ -332,7 +332,7 @@ describe("UserManagement Management Detail Component", () => {
         size: "lg",
         backdrop: "static",
       });
-      expect(navigateSpy).toHaveBeenCalledWith(["/user-management"]);
+      expect(navigateSpy).toHaveBeenCalledWith(["/admin/user-management"]);
     });
   });
 });
@@ -388,7 +388,7 @@ export class UserManagementDetail {
     modalRef.closed
       .pipe(
         filter((reason) => reason === ITEM_DELETED_EVENT),
-        tap(() => void this.router.navigate(["/user-management"])),
+        tap(() => void this.router.navigate(["/admin/user-management"])),
       )
       .subscribe();
   }
@@ -415,7 +415,7 @@ export class UserManagementDetail {
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary"
-        [routerLink]="['/user-management/new']"
+        [routerLink]="['/admin/user-management/new']"
       >
         <fa-icon icon="plus" />
         <span>Create a new user</span>
@@ -484,7 +484,8 @@ export class UserManagementDetail {
         trackLogin(userManagement)) {
         <tr data-cy="entityTable">
           <td>
-            <a [routerLink]="['/user-management', userManagement.login, 'view']"
+            <a
+              [routerLink]="['/admin/user-management', userManagement.login, 'view']"
               >{{ userManagement.login }}</a
             >
           </td>
@@ -516,7 +517,7 @@ export class UserManagementDetail {
             <span>
               <a
                 class="badge bg-info"
-                [routerLink]="['/authority', authority, 'view']"
+                [routerLink]="['/admin/authority', authority, 'view']"
                 >{{ authority }}</a
               >{{ last ? '' : ', ' }}
             </span>
@@ -525,7 +526,7 @@ export class UserManagementDetail {
           <td class="text-end">
             <div class="btn-group">
               <a
-                [routerLink]="['/user-management', userManagement.login, 'view']"
+                [routerLink]="['/admin/user-management', userManagement.login, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -534,7 +535,7 @@ export class UserManagementDetail {
               </a>
 
               <a
-                [routerLink]="['/user-management', userManagement.login, 'edit']"
+                [routerLink]="['/admin/user-management', userManagement.login, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
@@ -620,8 +621,6 @@ import { UserManagementService } from "../service/user-management.service";
 
 import { UserManagement } from "./user-management";
 
-vi.useFakeTimers();
-
 describe("UserManagement Management Component", () => {
   let httpMock: HttpTestingController;
   let comp: UserManagement;
@@ -630,6 +629,7 @@ describe("UserManagement Management Component", () => {
   let routerNavigateSpy: MockInstance;
 
   beforeEach(() => {
+    vi.useFakeTimers();
     TestBed.configureTestingModule({
       providers: [
         provideHttpClientTesting(),
@@ -681,6 +681,7 @@ describe("UserManagement Management Component", () => {
   afterEach(() => {
     TestBed.resetTestingModule();
     httpMock.verify();
+    vi.useRealTimers();
   });
 
   it("should call load all on init", async () => {
@@ -2178,7 +2179,7 @@ export class UserManagementFormService {
           type="submit"
           id="save-entity"
           data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving()"
+          [disabled]="isSaving()"
           class="btn btn-primary"
         >
           <fa-icon icon="save" />&nbsp;<span>Save</span>
@@ -2245,6 +2246,24 @@ describe("UserManagement Management Update Component", () => {
   });
 
   describe("save", () => {
+    beforeEach(() => {
+      // The save is what is tested: the form is taken as valid, whatever the sample.
+      vi.spyOn(comp.editForm, "invalid", "get").mockReturnValue(false);
+    });
+
+    it("should mark the fields of an invalid form instead of saving it", () => {
+      // GIVEN
+      vi.spyOn(comp.editForm, "invalid", "get").mockReturnValue(true);
+      vi.spyOn(comp.editForm, "markAllAsTouched");
+
+      // WHEN
+      comp.save();
+
+      // THEN
+      expect(comp.editForm.markAllAsTouched).toHaveBeenCalled();
+      expect(comp.isSaving()).toEqual(false);
+    });
+
     it("should call update service on save for existing entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
@@ -2381,6 +2400,11 @@ export class UserManagementUpdate implements OnInit {
   }
 
   save(): void {
+    if (this.editForm.invalid) {
+      // The fields are marked and their errors shown, nothing is sent.
+      this.editForm.markAllAsTouched();
+      return;
+    }
     this.isSaving.set(true);
     const userManagement = this.userManagementFormService.getUserManagement(
       this.editForm,
@@ -2427,7 +2451,6 @@ export class UserManagementUpdate implements OnInit {
   },
   "src/main/webapp/app/entities/admin/user-management/user-management-screens.spec.ts": {
     "contents": "import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { provideHttpClient } from "@angular/common/http";
 import {
   HttpTestingController,
   provideHttpClientTesting,
@@ -2462,35 +2485,40 @@ const sample: any = {
 };
 const sampleWithoutData = { login: "CBA" };
 
-vi.useFakeTimers();
-
-const clickAll = (
-  fixture: ComponentFixture<unknown>,
-  selector: string,
-): void => {
-  const elements: NodeListOf<HTMLElement> =
-    fixture.nativeElement.querySelectorAll(selector);
-  elements.forEach((element) => element.click());
-  fixture.detectChanges();
-};
-
 describe("UserManagement screens", () => {
   let httpMock: HttpTestingController;
 
+  // Answers the pending requests and the ones that their responses start: a loading resource keeps the application unstable.
   const flushAll = (body: unknown): void => {
     const headers = {
       link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       "X-Total-Count": "40",
     };
-    httpMock
-      .match(() => true)
-      .forEach((request) => request.flush(body as any, { headers }));
+    TestBed.tick();
+    for (let round = 0; round < 10; round++) {
+      const requests = httpMock.match(() => true);
+      if (requests.length === 0) {
+        return;
+      }
+      requests.forEach((request) => request.flush(body as any, { headers }));
+      TestBed.tick();
+    }
+  };
+
+  const clickAll = async (
+    fixture: ComponentFixture<unknown>,
+    selector: string,
+  ): Promise<void> => {
+    const elements: NodeListOf<HTMLElement> =
+      fixture.nativeElement.querySelectorAll(selector);
+    elements.forEach((element) => element.click());
+    flushAll([]);
+    await fixture.whenStable();
   };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([{ path: "**", children: [] }]),
         NgbActiveModal,
@@ -2534,11 +2562,8 @@ describe("UserManagement screens", () => {
       entities: unknown[],
     ): Promise<ComponentFixture<UserManagement>> => {
       const fixture = TestBed.createComponent(UserManagement);
-      fixture.detectChanges();
-      TestBed.tick();
       flushAll(entities);
-      await vi.runAllTimersAsync();
-      fixture.detectChanges();
+      await fixture.whenStable();
       return fixture;
     };
 
@@ -2585,24 +2610,27 @@ describe("UserManagement screens", () => {
       } as Account);
       const fixture = await render([sample, { ...sample, activated: false }]);
 
-      clickAll(fixture, "tbody a:not([href]), tbody button, th, h2 button");
+      await clickAll(
+        fixture,
+        "tbody a:not([href]), tbody button, th, h2 button",
+      );
 
       expect(fixture.nativeElement.querySelector("h2")).not.toBeNull();
     });
   });
 
   describe("detail", () => {
-    const render = (
+    const render = async (
       entity: unknown,
-    ): ComponentFixture<UserManagementDetail> => {
+    ): Promise<ComponentFixture<UserManagementDetail>> => {
       const fixture = TestBed.createComponent(UserManagementDetail);
       fixture.componentRef.setInput("userManagement", entity);
-      fixture.detectChanges();
+      await fixture.whenStable();
       return fixture;
     };
 
-    it("should show the entity", () => {
-      const fixture = render(sample);
+    it("should show the entity", async () => {
+      const fixture = await render(sample);
 
       expect(
         fixture.nativeElement.querySelector(
@@ -2611,81 +2639,85 @@ describe("UserManagement screens", () => {
       ).not.toBeNull();
     });
 
-    it("should show an entity without data", () => {
-      const fixture = render(sampleWithoutData);
+    it("should show an entity without data", async () => {
+      const fixture = await render(sampleWithoutData);
 
       expect(fixture.nativeElement.querySelector("dd")).not.toBeNull();
     });
 
-    it("should show nothing without an entity", () => {
-      const fixture = render(null);
+    it("should show nothing without an entity", async () => {
+      const fixture = await render(null);
 
       expect(fixture.nativeElement.querySelector("dd")).toBeNull();
     });
 
-    it("should accept the actions", () => {
+    it("should accept the actions", async () => {
       TestBed.inject(AccountService).authenticate({
         login: "other",
       } as Account);
-      const fixture = render(sample);
+      const fixture = await render(sample);
 
-      clickAll(fixture, "a:not([href]), button");
+      await clickAll(fixture, "a:not([href]), button");
 
       expect(fixture.nativeElement.querySelector("dd")).not.toBeNull();
     });
   });
 
   describe("update", () => {
-    const render = (): ComponentFixture<UserManagementUpdate> => {
+    const render = async (): Promise<
+      ComponentFixture<UserManagementUpdate>
+    > => {
       const fixture = TestBed.createComponent(UserManagementUpdate);
-      fixture.detectChanges();
       flushAll([related]);
-      fixture.detectChanges();
+      await fixture.whenStable();
       return fixture;
     };
 
-    it("should show the form of an entity", () => {
-      const fixture = render();
+    it("should show the form of an entity", async () => {
+      const fixture = await render();
 
       expect(
         fixture.nativeElement.querySelector("#save-entity"),
       ).not.toBeNull();
     });
 
-    it("should show the form of an entity without data", () => {
+    it("should show the form of an entity without data", async () => {
       TestBed.inject(ActivatedRoute).data = of({
         userManagement: sampleWithoutData,
       });
-      const fixture = render();
+      const fixture = await render();
 
       expect(
         fixture.nativeElement.querySelector("#save-entity"),
       ).not.toBeNull();
     });
 
-    it("should accept empty options", () => {
+    it("should accept empty options", async () => {
       const fixture = TestBed.createComponent(UserManagementUpdate);
-      fixture.detectChanges();
+      TestBed.tick();
+      httpMock
+        .match((request) => request.url.endsWith("api/authorities"))
+        .forEach((request) => request.flush([]));
       flushAll(null);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(
         fixture.nativeElement.querySelector("#save-entity"),
       ).not.toBeNull();
     });
 
-    it("should show the form of a new entity", () => {
+    it("should show the form of a new entity", async () => {
       TestBed.inject(ActivatedRoute).data = of({});
-      const fixture = render();
+      const fixture = await render();
 
       expect(
         fixture.nativeElement.querySelector("#save-entity"),
       ).not.toBeNull();
     });
 
-    it("should show the messages of the validations", () => {
+    it("should show the messages of the validations", async () => {
       TestBed.inject(ActivatedRoute).data = of({});
-      const fixture = render();
+      const fixture = await render();
 
       for (const control of Object.values(
         fixture.componentInstance.editForm.controls,
@@ -2703,7 +2735,7 @@ describe("UserManagement screens", () => {
           datetimelocal: true,
         });
       }
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(
         fixture.nativeElement.querySelector("small.text-danger"),
@@ -2713,26 +2745,32 @@ describe("UserManagement screens", () => {
         fixture.componentInstance.editForm.controls,
       );
       controls.forEach((control) => control.setErrors({ other: true }));
-      fixture.detectChanges();
+      await fixture.whenStable();
       controls.forEach((control) => {
         control.markAsPristine();
         control.markAsTouched();
       });
-      fixture.detectChanges();
+      await fixture.whenStable();
       controls.forEach((control) => control.markAsUntouched());
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(
         fixture.nativeElement.querySelector("small.text-danger"),
       ).toBeNull();
     });
 
-    it("should save the form", () => {
-      const fixture = render();
+    it("should save the form", async () => {
+      const fixture = await render();
       const previousState = vi.spyOn(
         fixture.componentInstance,
         "previousState",
       );
+      // The save is what is tested: the form is taken as valid, whatever the sample.
+      vi.spyOn(
+        fixture.componentInstance.editForm,
+        "invalid",
+        "get",
+      ).mockReturnValue(false);
 
       fixture.nativeElement
         .querySelector("form")
@@ -2742,10 +2780,10 @@ describe("UserManagement screens", () => {
       expect(previousState).toHaveBeenCalled();
     });
 
-    it("should accept the actions", () => {
-      const fixture = render();
+    it("should accept the actions", async () => {
+      const fixture = await render();
 
-      clickAll(fixture, 'a:not([href]), button[type="button"]');
+      await clickAll(fixture, 'a:not([href]), button[type="button"]');
       fixture.nativeElement
         .querySelectorAll('input[type="file"]')
         .forEach((input: HTMLElement) =>
@@ -2759,33 +2797,33 @@ describe("UserManagement screens", () => {
   });
 
   describe("delete", () => {
-    const render = (
+    const render = async (
       entity?: typeof sample,
-    ): ComponentFixture<UserManagementDeleteDialog> => {
+    ): Promise<ComponentFixture<UserManagementDeleteDialog>> => {
       const fixture = TestBed.createComponent(UserManagementDeleteDialog);
       fixture.componentInstance.userManagement = entity;
-      fixture.detectChanges();
+      await fixture.whenStable();
       return fixture;
     };
 
-    it("should show nothing without an entity", () => {
-      const fixture = render();
+    it("should show nothing without an entity", async () => {
+      const fixture = await render();
 
       expect(fixture.nativeElement.querySelector("form")).toBeNull();
     });
 
-    it("should dismiss the dialog when cancelled", () => {
+    it("should dismiss the dialog when cancelled", async () => {
       const dismiss = vi.spyOn(TestBed.inject(NgbActiveModal), "dismiss");
-      const fixture = render(sample);
+      const fixture = await render(sample);
 
-      clickAll(fixture, ".btn-secondary");
+      await clickAll(fixture, ".btn-secondary");
 
       expect(dismiss).toHaveBeenCalled();
     });
 
-    it("should close the dialog when confirmed", () => {
+    it("should close the dialog when confirmed", async () => {
       const close = vi.spyOn(TestBed.inject(NgbActiveModal), "close");
-      const fixture = render(sample);
+      const fixture = await render(sample);
 
       fixture.nativeElement
         .querySelector("form")
@@ -2958,6 +2996,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -4091,6 +4130,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
+  "authenticationUsesRememberMe": false,
   "authority": Any<Object>,
   "backendType": "Java",
   "backendTypeJavaAny": true,
@@ -5440,6 +5480,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -6573,6 +6614,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
+  "authenticationUsesRememberMe": false,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -7843,6 +7885,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": true,
   "authority": Any<Object>,
   "backendType": "Java",
   "backendTypeJavaAny": true,
@@ -9377,6 +9420,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
+  "authenticationUsesRememberMe": false,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -10479,6 +10523,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "authenticationTypeSession": true,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": true,
+  "authenticationUsesRememberMe": false,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,

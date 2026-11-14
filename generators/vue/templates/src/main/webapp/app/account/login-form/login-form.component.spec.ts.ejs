@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { type ComponentPublicInstance } from 'vue';
 import { type RouteLocation } from 'vue-router';
 
 import { createTestingPinia } from '@pinia/testing';
@@ -77,6 +78,16 @@ describe('LoginForm Component', () => {
     wrapper = shallowMount(LoginForm, { global: globalOptions });
 
     loginForm = wrapper.vm;
+  });
+
+  it('should not authenticate without a login or a password', async () => {
+    // WHEN
+    await loginForm.doLogin();
+
+    // THEN
+    expect(axiosStub.post).not.toHaveBeenCalled();
+    expect(loginForm.submitted).toBe(true);
+    expect(loginForm.authenticationError).toBe(false);
   });
 
 <%_ if (authenticationTypeJwt) { _%>
@@ -151,7 +162,9 @@ describe('LoginForm Component', () => {
     // GIVEN
     loginForm.login = 'login';
     loginForm.password = 'pwd';
+  <%_ if (authenticationUsesRememberMe) { _%>
     loginForm.rememberMe = true;
+  <%_ } _%>
     axiosStub.post.mockRejectedValue(new Error());
 
     // WHEN
@@ -159,7 +172,7 @@ describe('LoginForm Component', () => {
     await loginForm.$nextTick();
 
     // THEN
-    expect(axiosStub.post).toHaveBeenCalledWith('api/authentication', 'username=login&password=pwd&remember-me=true&submit=Login', {
+    expect(axiosStub.post).toHaveBeenCalledWith('api/authentication', 'username=login&password=pwd<%- authenticationUsesRememberMe ? '&remember-me=true' : '' %>&submit=Login', {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
     await loginForm.$nextTick();
@@ -170,7 +183,9 @@ describe('LoginForm Component', () => {
     // GIVEN
     loginForm.login = 'login';
     loginForm.password = 'pwd';
+  <%_ if (authenticationUsesRememberMe) { _%>
     loginForm.rememberMe = true;
+  <%_ } _%>
     axiosStub.post.mockResolvedValue({});
 
     // WHEN
@@ -178,7 +193,7 @@ describe('LoginForm Component', () => {
     await loginForm.$nextTick();
 
     // THEN
-    expect(axiosStub.post).toHaveBeenCalledWith('api/authentication', 'username=login&password=pwd&remember-me=true&submit=Login', {
+    expect(axiosStub.post).toHaveBeenCalledWith('api/authentication', 'username=login&password=pwd<%- authenticationUsesRememberMe ? '&remember-me=true' : '' %>&submit=Login', {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
     expect(loginForm.authenticationError).toBeFalsy();
@@ -190,22 +205,28 @@ describe('LoginForm Component', () => {
     axiosStub.post.mockRejectedValue(new Error());
 
     // WHEN
-    wrapper.findComponent('#username').vm.$emit('update:modelValue', 'login');
-    wrapper.findComponent('#password').vm.$emit('update:modelValue', 'pwd');
-    wrapper.findComponent('#rememberMe').vm.$emit('update:modelValue', false);
+    wrapper.findComponent<ComponentPublicInstance>('#username').vm.$emit('update:modelValue', 'login');
+    wrapper.findComponent<ComponentPublicInstance>('#password').vm.$emit('update:modelValue', 'pwd');
+<%_ if (authenticationUsesRememberMe) { _%>
+    wrapper.findComponent<ComponentPublicInstance>('#rememberMe').vm.$emit('update:modelValue', false);
+<%_ } _%>
     await wrapper.find('form').trigger('submit');
     await flushPromises();
 
     // THEN
     expect(loginForm.login).toBe('login');
     expect(loginForm.password).toBe('pwd');
+<%_ if (authenticationUsesRememberMe) { _%>
     expect(loginForm.rememberMe).toBe(false);
+<%_ } _%>
     expect(axiosStub.post).toHaveBeenCalled();
   });
 
   describe('once signed in', () => {
     beforeEach(() => {
       axiosStub.post.mockResolvedValue({ headers: {} });
+      loginForm.login = 'login';
+      loginForm.password = 'pwd';
     });
 
     it('should go back to the page it came from', async () => {

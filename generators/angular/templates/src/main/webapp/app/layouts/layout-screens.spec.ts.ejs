@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { provideHttpClient } from '@angular/common/http';
 import { <%- authenticationTypeOauth2 ? '' : 'HttpTestingController, ' %>provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -56,87 +55,88 @@ const account: Account = {
   imageUrl: null,
 };
 
-const clickAll = (fixture: ComponentFixture<unknown>, selector: string): void => {
-  fixture.nativeElement.querySelectorAll(selector).forEach((element: HTMLElement) => {
+const clickAll = async (fixture: ComponentFixture<unknown>, selector: string): Promise<void> => {
+  const elements: NodeListOf<HTMLElement> = fixture.nativeElement.querySelectorAll(selector);
+  for (const element of elements) {
     element.click();
-    fixture.detectChanges();
-  });
+    await fixture.whenStable();
+  }
 };
 
 describe('Layout screens', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [<%- enableTranslation ? 'provideTranslateService(), ' : '' %>provideHttpClient(), provideHttpClientTesting(), provideRouter([{ path: '**', children: [] }])],
+      providers: [<%- enableTranslation ? 'provideTranslateService(), ' : '' %>provideHttpClientTesting(), provideRouter([{ path: '**', children: [] }])],
     });
     TestBed.inject(FaIconLibrary).addIconPacks(fas);
   });
 
   describe('navbar', () => {
-    const render = (identity: Account | null): ComponentFixture<Navbar> => {
+    const render = async (identity: Account | null): Promise<ComponentFixture<Navbar>> => {
       TestBed.inject(AccountService).authenticate(identity);
       vi.spyOn(TestBed.inject(ProfileService), 'getProfileInfo').mockReturnValue(of({ inProduction: false, openAPIEnabled: true }));
       vi.spyOn(TestBed.inject(LoginService), 'logout').mockImplementation(() => undefined);
       const fixture = TestBed.createComponent(Navbar);
-      fixture.detectChanges();
+      await fixture.whenStable();
       return fixture;
     };
 
-    it('should show the menus of an administrator and accept their links', () => {
-      const fixture = render(account);
+    it('should show the menus of an administrator and accept their links', async () => {
+      const fixture = await render(account);
 
-      clickAll(fixture, 'a, button');
+      await clickAll(fixture, 'a, button');
 
       expect(TestBed.inject(LoginService).logout).toHaveBeenCalled();
     });
 
 <%_ if (enableTranslation) { _%>
-    it('should change the language', () => {
+    it('should change the language', async () => {
       TestBed.inject(AccountService).authenticate(null);
       vi.spyOn(TestBed.inject(ProfileService), 'getProfileInfo').mockReturnValue(of({}));
       const translateService = TestBed.inject(TranslateService);
       const use = vi.spyOn(translateService, 'use');
       const fixture = TestBed.createComponent(Navbar);
       Object.assign(fixture.componentInstance, { languages: ['en', 'en'] });
-      fixture.detectChanges();
+      await fixture.whenStable();
 
-      clickAll(fixture, '[data-cy="navbar"] a, a.dropdown-item');
+      await clickAll(fixture, '[data-cy="navbar"] a, a.dropdown-item');
       translateService.use('en');
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(use).toHaveBeenCalledWith('en');
     });
 
 <%_ } _%>
-    it('should show the picture of the account', () => {
-      const fixture = render({ ...account, imageUrl: 'http://localhost/image.png' });
+    it('should show the picture of the account', async () => {
+      const fixture = await render({ ...account, imageUrl: 'http://localhost/image.png' });
 
       expect(fixture.nativeElement.querySelector('img')).not.toBeNull();
     });
 
-    it('should show the login to an anonymous user', () => {
-      const fixture = render(null);
+    it('should show the login to an anonymous user', async () => {
+      const fixture = await render(null);
 
-      clickAll(fixture, '#login');
+      await clickAll(fixture, '#login');
 
       expect(fixture.nativeElement.querySelector('#login')).not.toBeNull();
     });
   });
 
   describe('home', () => {
-    it('should show the account', () => {
+    it('should show the account', async () => {
       TestBed.inject(AccountService).authenticate(account);
       const fixture = TestBed.createComponent(Home);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(fixture.nativeElement.querySelector('.alert-success')).not.toBeNull();
     });
 
-    it('should invite to log in', () => {
+    it('should invite to log in', async () => {
       TestBed.inject(AccountService).authenticate(null);
       const fixture = TestBed.createComponent(Home);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
-      clickAll(fixture, 'a.alert-link');
+      await clickAll(fixture, 'a.alert-link');
 
       expect(fixture.nativeElement.querySelector('.alert-success')).toBeNull();
     });
@@ -149,7 +149,7 @@ describe('Layout screens', () => {
       const loginService = TestBed.inject(LoginService);
       const authenticated = vi.fn();
 
-      loginService.login({ username: 'user', password: 'user', rememberMe: false }).subscribe(authenticated);
+      loginService.login({ username: 'user', password: 'user'<%- authenticationUsesRememberMe ? ', rememberMe: false' : '' %> }).subscribe(authenticated);
       httpMock.match(() => true).forEach(request => request.flush({ id_token: 'token' }));
       httpMock.match(() => true).forEach(request => request.flush(account));
       loginService.logout();
@@ -158,14 +158,15 @@ describe('Layout screens', () => {
       expect(authenticated).toHaveBeenCalled();
     });
 
-    it('should show the form and the failure', () => {
+    it('should show the form and the failure', async () => {
       vi.spyOn(TestBed.inject(AccountService), 'identity').mockReturnValue(of(null));
       vi.spyOn(TestBed.inject(LoginService), 'login').mockReturnValue(throwError(() => new Error('failed')));
       const fixture = TestBed.createComponent(Login);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
+      fixture.componentInstance.loginModel.set({ username: 'admin', password: 'admin'<%- authenticationUsesRememberMe ? ', rememberMe: false' : '' %> });
       fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(fixture.nativeElement.querySelector('.alert-danger')).not.toBeNull();
     });
@@ -175,20 +176,20 @@ describe('Layout screens', () => {
   describe('alerts', () => {
     const alert: AlertModel = { id: 0, type: 'danger', message: 'failed', position: 'top right', toast: true, close: vi.fn() };
 
-    it('should show and close the alerts', () => {
+    it('should show and close the alerts', async () => {
       const fixture = TestBed.createComponent(AlertError);
       fixture.componentInstance.alerts.set([alert, { ...alert, message: undefined, position: undefined }]);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       fixture.debugElement.query(By.css('ngb-alert')).triggerEventHandler('closed');
 
       expect(alert.close).toHaveBeenCalled();
     });
 
-    it('should show and close the alerts of the service', () => {
+    it('should show and close the alerts of the service', async () => {
       TestBed.inject(AlertService).addAlert({ ...alert, timeout: 0 });
       const fixture = TestBed.createComponent(Alert);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       fixture.debugElement.query(By.css('ngb-alert')).triggerEventHandler('closed');
 
@@ -197,18 +198,18 @@ describe('Layout screens', () => {
   });
 
   describe('ribbon', () => {
-    it('should show the environment', () => {
+    it('should show the environment', async () => {
       vi.spyOn(TestBed.inject(ProfileService), 'getProfileInfo').mockReturnValue(of({ ribbonEnv: 'dev' }));
       const fixture = TestBed.createComponent(PageRibbon);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(fixture.nativeElement.querySelector('.ribbon')).not.toBeNull();
     });
 
-    it('should show nothing when the profile is unknown', () => {
+    it('should show nothing when the profile is unknown', async () => {
       vi.spyOn(TestBed.inject(ProfileService), 'getProfileInfo').mockReturnValue(throwError(() => new Error('failed')));
       const fixture = TestBed.createComponent(PageRibbon);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(fixture.nativeElement.querySelector('.ribbon')).toBeNull();
     });

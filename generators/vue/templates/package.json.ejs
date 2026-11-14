@@ -110,7 +110,7 @@
     "pretest": "<%- nodePackageManager %> run lint && <%- nodePackageManager %> run type-check",
     "test": "<%- nodePackageManager %> run vitest-run --",
     "test:watch": "<%- nodePackageManager %> run vitest",
-    "type-check": "vue-tsc --noEmit -p tsconfig.app.json",
+    "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json",
     "vitest-run": "vitest --run --coverage",
     "vitest": "vitest",
     "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev --",

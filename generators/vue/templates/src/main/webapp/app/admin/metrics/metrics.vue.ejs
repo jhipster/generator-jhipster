@@ -117,4 +117,9 @@ const openModal = (blockDetails: MetricDetails): void => {
 onMounted(() => {
   refresh();
 });
+
+defineExpose({
+  sections,
+  updatingMetrics,
+});
 </script>

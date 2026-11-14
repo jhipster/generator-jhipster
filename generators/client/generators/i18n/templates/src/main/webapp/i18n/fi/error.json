@@ -9,6 +9,7 @@
       "500": "Palvelimella tapahtui virhe."
     },
     "concurrencyFailure": "Toinen käyttäjä muokkasi samaa sivua samaan aikaan. Tekemäsi muutokset hylättiin.",
+    "dataIntegrityViolation": "Tiedot ovat ristiriidassa olemassa olevien tietojen kanssa tai ne eivät kelpaa. Tekemäsi muutokset hylättiin.",
     "validation": "Palvelimella tapahtui tarkistusvirhe."
   }
 }

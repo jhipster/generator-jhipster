@@ -84,11 +84,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
-<%_ if (reactive && authenticationUsesCsrf) { _%>
+<%_ if (reactive && serverUsesCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } else if (!reactive) { _%>
 import static org.hamcrest.Matchers.hasItem;
-  <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (serverUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
   <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -245,7 +245,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ if (!databaseTypeCassandra) { _%>
         numberOfUsers = userRepository.count()<%- reactorBlock %>;
 <%_ } _%>
-<%_ if (reactive && authenticationUsesCsrf) { _%>
+<%_ if (reactive && serverUsesCsrf) { _%>
         webTestClient = webTestClient.mutateWith(csrf());
 <%_ } _%>
         user = initTestUser();
@@ -312,7 +312,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         var returned<%- restClass %> = om.readValue(
             restUserMockMvc.perform(post("/api/admin/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
                 .with(csrf())<% } %>)
                 .andExpect(status().isCreated())
                 .andReturn()
@@ -374,7 +374,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -421,7 +421,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -468,7 +468,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -644,16 +644,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ if (reactive) { _%>
         webTestClient
             .put()
-            .uri("/api/admin/users")
+            .uri("/api/admin/users/{login}", userDTO.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus()
             .isOk();
   <%_ } else { _%>
-        restUserMockMvc.perform(put("/api/admin/users")
+        restUserMockMvc.perform(put("/api/admin/users/{login}", userDTO.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
   <%_ } _%>
@@ -707,16 +707,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ if (reactive) { _%>
         webTestClient
             .put()
-            .uri("/api/admin/users")
+            .uri("/api/admin/users/{login}", userDTO.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus()
             .isOk();
   <%_ } else { _%>
-        restUserMockMvc.perform(put("/api/admin/users")
+        restUserMockMvc.perform(put("/api/admin/users/{login}", userDTO.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
   <%_ } _%>
@@ -734,6 +734,48 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ } _%>
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
+    }
+
+    @Test
+  <%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+  <%_ } _%>
+    void updateUserWithAnotherLoginInTheUrl() throws Exception {
+        // Initialize the database
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
+
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
+        userDTO.setId(user.getId());
+        userDTO.setLogin(user.getLogin());
+        userDTO.setFirstName(UPDATED_FIRSTNAME);
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setActivated(user.isActivated());
+        userDTO.setLangKey(user.getLangKey());
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
+
+  <%_ if (reactive) { _%>
+        webTestClient
+            .put()
+            .uri("/api/admin/users/{login}", UPDATED_LOGIN)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(userDTO))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+  <%_ } else { _%>
+        restUserMockMvc.perform(put("/api/admin/users/{login}", UPDATED_LOGIN)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
+            .with(csrf())<% } %>)
+            .andExpect(status().isBadRequest());
+  <%_ } _%>
+
+        // Validate the User in the database
+        assertPersistedUsers(users ->
+            assertThat(users.stream().filter(usr -> usr.getId().equals(user.getId())).findFirst().orElseThrow().getFirstName())
+                .isEqualTo(DEFAULT_FIRSTNAME)
+        );
     }
 
     @Test
@@ -794,16 +836,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ if (reactive) { _%>
         webTestClient
             .put()
-            .uri("/api/admin/users")
+            .uri("/api/admin/users/{login}", userDTO.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        restUserMockMvc.perform(put("/api/admin/users")
+        restUserMockMvc.perform(put("/api/admin/users/{login}", userDTO.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -867,16 +909,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ if (reactive) { _%>
         webTestClient
             .put()
-            .uri("/api/admin/users")
+            .uri("/api/admin/users/{login}", userDTO.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        restUserMockMvc.perform(put("/api/admin/users")
+        restUserMockMvc.perform(put("/api/admin/users/{login}", userDTO.getLogin())
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -901,7 +943,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .isNoContent();
   <%_ } else { _%>
         restUserMockMvc.perform(delete("/api/admin/users/{login}", user.getLogin())
-            .accept(MediaType.APPLICATION_JSON)<% if (authenticationUsesCsrf) { %>
+            .accept(MediaType.APPLICATION_JSON)<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isNoContent());
   <%_ } _%>

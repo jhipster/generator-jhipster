@@ -20,6 +20,10 @@ const { t: t$ } = useI18n();
 const store = useStore();
 const ribbonEnv = computed(() => store.ribbonOnProfiles);
 const ribbonEnabled = computed(() => store.ribbonOnProfiles && store.activeProfiles.indexOf(store.ribbonOnProfiles) > -1);
+
+defineExpose({
+  ribbonEnabled,
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

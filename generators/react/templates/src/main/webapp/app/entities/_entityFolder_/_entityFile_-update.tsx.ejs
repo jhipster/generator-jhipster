@@ -391,10 +391,10 @@ export const <%- entityReactName %>Update = () => {
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
-          <Button as={Link as any} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%- entityPage %>" replace variant="secondary">
+          <Link id="cancel-save" data-cy="entityCreateCancelButton" to="/<%- entityPage %>" replace className="btn btn-secondary">
             <FontAwesomeIcon icon="ban" />&nbsp;
             <Translate contentKey="entity.action.cancel">Cancel</Translate>
-          </Button>
+          </Link>
           &nbsp;
           <Button variant="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
             <FontAwesomeIcon icon="save" />&nbsp;

@@ -108,4 +108,14 @@ const changeOrder = (prop: string): void => {
 onMounted(() => {
   init();
 });
+
+defineExpose({
+  allSections,
+  sections,
+  filtered,
+  orderProp,
+  reverse,
+  changeOrder,
+  init,
+});
 </script>

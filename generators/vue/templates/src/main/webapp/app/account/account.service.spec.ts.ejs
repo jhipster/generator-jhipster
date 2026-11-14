@@ -32,7 +32,7 @@ const resetStore = (store: AccountStore) => {
   store.logout();
   store.authenticate(null);
   store.profilesLoaded = false;
-  store.activeProfiles = '';
+  store.activeProfiles = [];
   store.ribbonOnProfiles = '';
 };
 
@@ -55,6 +55,18 @@ describe('Account Service test suite', () => {
 
     axiosStub.get.mockReset();
     resetStore(store);
+  });
+
+  it('should sign the user out', () => {
+    accountService = new AccountService(store);
+    store.setAuthentication({ login: 'user' } as any);
+
+    accountService.logout();
+
+    expect(store.authenticated).toBe(false);
+<%_ if (authenticationTypeJwt) { _%>
+    expect(localStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBeNull();
+<%_ } _%>
   });
 
   it('should init service and do not retrieve account', async () => {

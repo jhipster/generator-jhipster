@@ -9,6 +9,7 @@
       "500": "Interner Serverfehler."
     },
     "concurrencyFailure": "Ein anderer Benutzer hat diese Daten zeitgleich mit Ihnen geändert. Ihre Änderungen wurden abgelehnt.",
+    "dataIntegrityViolation": "Die Daten stehen im Konflikt mit vorhandenen Daten oder sind ungültig. Ihre Änderungen wurden abgelehnt.",
     "validation": "Validierungsfehler auf dem Server."
   }
 }

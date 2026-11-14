@@ -18,13 +18,14 @@
 -%>
 import { useEffect, useState } from 'react';
 import { Button, Col, ProgressBar, Row, Table } from 'react-bootstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 
 import { faSync } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { type MetricDetails, type MetricGauge } from 'app/shared/jhipster/metrics.model';
+import PageTitle from 'app/shared/layout/page-title';
 import { getSystemMetrics } from '../administration.reducer';
 import MetricsDetailsModal, { labelText } from './metrics-details-modal';
 
@@ -46,6 +47,7 @@ export const MetricsPage = () => {
 
   return (
     <div>
+      <PageTitle title={translate('metrics.title')} />
       <h2>
         <span id="metrics-page-heading" data-cy="metricsPageHeading">
           <Translate contentKey="metrics.title">Application Metrics</Translate>

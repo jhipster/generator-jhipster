@@ -25,6 +25,7 @@ import <%- packageName %>.config.Constants;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.FactorGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 <%_ if (reactive) { _%>
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -46,9 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
-<%_ } else { _%>
-import java.util.stream.Stream;
 <%_ } _%>
+import java.util.stream.Stream;
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt || !reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
@@ -77,9 +77,29 @@ public final class SecurityUtils {
 
     public static final String USER_ID_CLAIM = "userId";
   <%_ } _%>
+  <%_ if (generateUserManagement) { _%>
+
+    /** The stamp of the credentials of the user at the login, see {@code JwtCredentialsValidator}. */
+    public static final String CREDENTIALS_CLAIM = "credentials";
+  <%_ } _%>
 <%_ } _%>
 
     private SecurityUtils() {}
+
+    /**
+     * Get the authorities of an authentication, without the factors Spring Security adds for the way the user authenticated
+     * ({@link FactorGrantedAuthority}), which are not authorities of the user.
+     *
+     * @param authentication the authentication.
+     * @return the names of the authorities of the user.
+     */
+    public static Stream<String> getUserAuthorities(Authentication authentication) {
+        return authentication
+            .getAuthorities()
+            .stream()
+            .filter(authority -> !(authority instanceof FactorGrantedAuthority))
+            .map(GrantedAuthority::getAuthority);
+    }
 
     /**
      * Get the login of the current user.

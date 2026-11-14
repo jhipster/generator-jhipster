@@ -27,7 +27,7 @@
 <%_ if (generateUserRegistration) { _%>
         <div class="alert alert-warning" v-if="!authenticated">
           <span>{{ t$('global.messages.info.register.noaccount') }}</span>
-          <router-link class="alert-link ms-1" to="/register">{{ t$('global.messages.info.register.link') }}</router-link>
+          <router-link class="alert-link ms-1" to="/account/register">{{ t$('global.messages.info.register.link') }}</router-link>
         </div>
 <%_ } _%>
       </div>
@@ -82,4 +82,12 @@ const { login } = inject(loginServiceKey)!;
 <%_ } _%>
 const authenticated = inject(authenticatedKey);
 const username = inject(currentUsernameKey);
+
+defineExpose({
+  authenticated,
+  username,
+<%_ if (authenticationTypeOauth2) { _%>
+  login,
+<%_ } _%>
+});
 </script>

@@ -30,7 +30,7 @@ import { type RouteLocation } from 'vue-router';
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
 import axios, { CanceledError } from 'axios';
 import { createBootstrap } from 'bootstrap-vue-next';
-<%_ if (anyFieldIsDateDerived) { _%>
+<%_ if (vueFormTimeFields) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
 
@@ -48,6 +48,7 @@ import { DATE_TIME_LONG_FORMAT } from '@/composables/date-format';
 <%_ } _%>
 
 import <%- entityAngularName %>Update from './<%- entityFileName %>-update.vue';
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 
 
@@ -61,7 +62,7 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ go: routerGoMock }),
 }));
 
-const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
+const <%- entityInstance %>Sample: I<%- entityAngularName %> = { ...<%- vueTsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
 <%_ for (const [{ otherEntity }] of allRelationshipsThatNeedSelectOptions) { _%>
 const <%- otherEntity.entityInstance %>Option = { <%- otherEntity.primaryKey.name %>: <%- otherEntity.primaryKey.tsSampleValues[0] %> };
 <%_ } _%>
@@ -79,7 +80,7 @@ const <%- entityInstance %>SampleWithRelationships = {
 <%_ } _%>
 
 describe('Component Tests', () => {
-  let mountOptions: MountingOptions<<%- entityAngularName %>UpdateComponentType>['global'];
+  let mountOptions: NonNullable<MountingOptions<<%- entityAngularName %>UpdateComponentType>['global']>;
   let alertService: AlertService;
 
   describe('<%- entityAngularName %> Management Update Component', () => {
@@ -197,6 +198,8 @@ describe('Component Tests', () => {
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%- entityInstance %> = <%- entityInstance %>Sample;
+        // The save is what is tested: the form is taken as valid, whatever the sample.
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
         <%- entityInstance %>ServiceStub.update.mockResolvedValue(<%- entityInstance %>Sample);
 
         // WHEN
@@ -208,6 +211,22 @@ describe('Component Tests', () => {
         expect(comp.isSaving).toEqual(false);
       });
 
+      it('Should mark the fields of an invalid form instead of saving it', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(true);
+        const touch = vi.spyOn(comp.v$, '$touch');
+
+        // WHEN
+        await comp.save();
+
+        // THEN
+        expect(touch).toHaveBeenCalled();
+        expect(<%- entityInstance %>ServiceStub.create).not.toHaveBeenCalled();
+        expect(<%- entityInstance %>ServiceStub.update).not.toHaveBeenCalled();
+      });
+
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
@@ -215,6 +234,8 @@ describe('Component Tests', () => {
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%- entityInstance %> = entity;
+        // The save is what is tested: the form is taken as valid, whatever the sample.
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
 
         // WHEN
         comp.save();
@@ -248,7 +269,7 @@ describe('Component Tests', () => {
 <%_ const dateTimeField = fields.find(field => !field.id && ['Instant', 'ZonedDateTime'].includes(field.fieldType)); _%>
 <%_ if (dateTimeField) { _%>
 
-      it('Should convert a date time', async () => {
+      it('Should keep the date time of the server', async () => {
         // GIVEN
         <%- entityInstance %>ServiceStub.find.mockResolvedValue({ ...<%- entityInstance %>Sample, <%- dateTimeField.fieldName %>: '2019-10-15T11:42:02Z' });
         <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue([<%- entityInstance %>Sample]);
@@ -264,7 +285,7 @@ describe('Component Tests', () => {
         await comp.$nextTick();
 
         // THEN
-        expect(comp.<%- entityInstance %>.<%- dateTimeField.fieldName %>).toEqual(new Date('2019-10-15T11:42:02Z'));
+        expect(comp.<%- entityInstance %>.<%- dateTimeField.fieldName %>).toBe('2019-10-15T11:42:02Z');
       });
 <%_ } _%>
 
@@ -397,6 +418,8 @@ describe('Component Tests', () => {
         await triggerAll(wrapper, 'a', 'click');
 <%_ } _%>
         await triggerAll(wrapper, 'button[type="button"]', 'click');
+        // The save is what is tested: the form is taken as valid, whatever the values the inputs took.
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
         await wrapper.find('form').trigger('submit');
         await flushPromises();
 
@@ -507,9 +530,12 @@ describe('Component Tests', () => {
 
         // WHEN
         comp.<%- entityInstance %> = <%- entityInstance %>Sample;
+        // The save is what is tested: the form is taken as valid, whatever the sample.
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
         comp.save();
         await flushPromises();
         comp.<%- entityInstance %> = {};
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
         comp.save();
         await flushPromises();
 

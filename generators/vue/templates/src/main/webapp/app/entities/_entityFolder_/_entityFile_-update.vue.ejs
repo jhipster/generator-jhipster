@@ -158,13 +158,7 @@ _%>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-info" @click="previousState()">
             <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.back') }}</span>
           </button>
-          <button
-            type="submit"
-            id="save-entity"
-            data-cy="entityCreateSaveButton"
-            :disabled="v$.$invalid || isSaving || isLoading"
-            class="btn btn-primary"
-          >
+          <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" :disabled="isSaving || isLoading" class="btn btn-primary">
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.save') }}</span>
           </button>
         </div>
@@ -265,18 +259,7 @@ const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
 const previousState = () => router.go(-1);
 
 const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
-  async (id, { signal }) => {
-    const res = await <%- entityInstance %>Service().find(id, { signal });
-<%_ for (field of fields.filter(field => !field.id)) { _%>
-  <%_ const { fieldName, fieldType } = field; _%>
-  <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-    if (res.<%- fieldName %>) {
-      res.<%- fieldName %> = new Date(res.<%- fieldName %>);
-    }
-  <%_ } _%>
-<%_ } _%>
-    return res;
-  },
+  (id, { signal }) => <%- entityInstance %>Service().find(id, { signal }),
   {
     // The router reuses the component when the id of the route changes, and an update without id is a new entity.
     params: () => route.params?.<%- entityInstance %>Id as string | undefined,
@@ -303,7 +286,7 @@ const v$ = useEntityValidation(<%- entityInstance %>, {
 <%_ } _%>
 });
 
-const { isSaving, save } = useEntitySave({
+const { isSaving, save: saveEntity } = useEntitySave({
   alertService,
   isUpdate: () => <% if (userProvidedPrimaryKey) { %>isUpdate.value<% } else { %>Boolean(<%- entityInstance %>.value.<%- builtInUserManagement ? 'id' : primaryKey.name %>)<% } %>,
   create: () => <%- entityInstance %>Service().create(<%- entityInstance %>.value),
@@ -318,6 +301,15 @@ const { isSaving, save } = useEntitySave({
 <%_ } _%>
   onSaved: () => previousState(),
 });
+
+const save = async () => {
+  if (v$.value.$invalid) {
+    // The fields are marked and their errors shown, nothing is sent.
+    v$.value.$touch();
+    return;
+  }
+  await saveEntity();
+};
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
 
 const clearInputImage = (field: string, fieldContentType: string, idInput: string) => {
@@ -335,4 +327,24 @@ const clearInputImage = (field: string, fieldContentType: string, idInput: strin
 const getSelected = <T extends object>(selectedVals: T[] | null | undefined, option: T, pkField = 'id'): T =>
   selectedVals?.find(value => (option as Record<string, unknown>)[pkField] === (value as Record<string, unknown>)[pkField]) ?? option;
 <%_ } _%>
+
+defineExpose({
+  <%- entityInstance %>Service,
+  alertService,
+  <%- entityInstance %>,
+  isLoading,
+  isSaving,
+  save,
+  previousState,
+  v$,
+<%_ if (anyFieldIsLocalDate) { _%>
+  currentLanguage,
+<%_ } _%>
+<%_ if (vueFormTimeFields) { _%>
+  dateFormat,
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
+  clearInputImage,
+<%_ } _%>
+});
 </script>

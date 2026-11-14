@@ -13,7 +13,9 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 <%_ } else { _%>
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.WWW_AUTHENTICATE;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -42,17 +44,17 @@ class TokenAuthenticationIT {
 
     @Test
     void testReturnFalseWhenJWThasInvalidSignature() throws Exception {
-        expectUnauthorized(createTokenWithDifferentSignature());
+        expectUnauthorized(createTokenWithDifferentSignature(), "The access token is invalid");
     }
 
     @Test
     void testReturnFalseWhenJWTisMalformed() throws Exception {
-        expectUnauthorized(createSignedInvalidJwt(jwtKey));
+        expectUnauthorized(createSignedInvalidJwt(jwtKey), "The access token is invalid");
     }
 
     @Test
     void testReturnFalseWhenJWTisExpired() throws Exception {
-        expectUnauthorized(createExpiredToken(jwtKey));
+        expectUnauthorized(createExpiredToken(jwtKey), "The access token expired");
     }
 <%_ if (reactive) { _%>
 
@@ -66,14 +68,16 @@ class TokenAuthenticationIT {
             .isNoContent();
     }
 
-    private void expectUnauthorized(String token) {
+    private void expectUnauthorized(String token, String errorDescription) {
         webTestClient
             .get()
             .uri("/api/authenticate")
             .headers(headers -> headers.setBearerAuth(token))
             .exchange()
             .expectStatus()
-            .isUnauthorized();
+            .isUnauthorized()
+            .expectHeader()
+            .valueMatches("WWW-Authenticate", ".*error_description=\"" + errorDescription + "\".*");
     }
 <%_ } else { _%>
 
@@ -83,10 +87,11 @@ class TokenAuthenticationIT {
         );
     }
 
-    private void expectUnauthorized(String token) throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/authenticate").header(AUTHORIZATION, BEARER + token)).andExpect(
-            status().isUnauthorized()
-        );
+    private void expectUnauthorized(String token, String errorDescription) throws Exception {
+        mvc
+            .perform(MockMvcRequestBuilders.get("/api/authenticate").header(AUTHORIZATION, BEARER + token))
+            .andExpect(status().isUnauthorized())
+            .andExpect(header().string(WWW_AUTHENTICATE, containsString("error_description=\"" + errorDescription + "\"")));
     }
 <%_ } _%>
 }

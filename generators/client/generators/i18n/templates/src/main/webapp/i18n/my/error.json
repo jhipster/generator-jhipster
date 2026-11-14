@@ -9,6 +9,7 @@
       "500": "ဆာဗာ error တက်နေပါသည်။"
     },
     "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
     "validation": "ဆာဗာတွင် validation error တက်နေပါသည်။"
   }
 }

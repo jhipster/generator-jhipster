@@ -59,7 +59,7 @@ describe('Tracker Service', () => {
       render: () => null,
       setup() {
         trackerService = useTrackerService({ stomp: mockStomp as unknown as RxStomp });
-        trackerService['buildUrl'] = () => '';
+        (trackerService as unknown as { buildUrl: () => string }).buildUrl = () => '';
       },
     };
   });

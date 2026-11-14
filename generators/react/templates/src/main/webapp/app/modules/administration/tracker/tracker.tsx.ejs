@@ -16,15 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Translate } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 
 import { useAppSelector } from 'app/config/store';
+import PageTitle from 'app/shared/layout/page-title';
 
 export const TrackerPage = () => {
   const activities = useAppSelector(state => state.administration.tracker.activities);
 
   return (
       <div>
+        <PageTitle title={translate('tracker.title')} />
         <h2 data-cy="trackerPageHeading">
           <Translate contentKey="tracker.title">Real-time user activities</Translate>
         </h2>
