@@ -26,6 +26,7 @@ import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFramework
 import { mutateData } from '../../lib/utils/index.ts';
 import { lowerFirst } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
+import { generateEntitySamples } from '../base-application/support/index.ts';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
 import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
@@ -591,9 +592,15 @@ ${classProperties
       },
       prepareTestTextValues({ entity }) {
         // The text values of the resource integration test: the minimum and maximum lengths respected, matching the pattern.
-        entity.resetFakerSeed?.('resource-it');
-        for (const field of entity.fields) {
-          if (!field.fieldTypeString && !field.blobContentTypeText) continue;
+        const textFields = entity.fields.filter(field => field.fieldTypeString || field.blobContentTypeText);
+        // Two different values of each pattern, the default and the updated one.
+        const patternFields = textFields.filter(field => field.fieldValidateRulesPattern !== undefined);
+        const patternSamples = generateEntitySamples(entity, {
+          seed: 'resource-it',
+          batches: patternFields.map(field => ({ fields: [field], format: 'json-serializable', count: 2, distinct: true })),
+        });
+        const toJavaString = (value: string) => value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        for (const field of textFields) {
           let sampleTextLength = 10;
           if (field.fieldValidateRulesMinlength! > sampleTextLength) {
             sampleTextLength = field.fieldValidateRulesMinlength!;
@@ -604,24 +611,16 @@ ${classProperties
           let sampleTextString = 'A'.repeat(sampleTextLength);
           let updatedTextString = 'B'.repeat(sampleTextLength);
           if (field.fieldValidateRulesPattern !== undefined) {
-            try {
-              const patternRegExp = new RegExp(field.fieldValidateRulesPattern);
-              if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-                sampleTextString = field.generateFakeDataFromPattern!()!.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-              }
-              if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-                updatedTextString = field.generateFakeDataFromPattern!()!.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-              }
-            } catch (error) {
+            const [sample, updated] = patternSamples[patternFields.indexOf(field)].map(
+              patternSample => patternSample[field.fieldName] as string | undefined,
+            );
+            if (sample === undefined || updated === undefined) {
               this.log.warn(
-                `Error generating test value for entity "${entity.entityClass}" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern}", generating default values for this field. Detailed error message: "${(error as Error).message}".`,
+                `The pattern "${field.fieldValidateRulesPattern}" of entity "${entity.entityClass}" field "${field.fieldName}" gives no two different test values, generating default values for this field.`,
               );
-            }
-            if (sampleTextString === updatedTextString) {
-              updatedTextString = `${updatedTextString}B`;
-              this.log.warn(
-                `Randomly generated first and second test values for entity "${entity.entityClass}" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern}" in file "${entity.entityClass}ResourceIT" where equal, added symbol "B" to second value.`,
-              );
+            } else {
+              sampleTextString = toJavaString(sample);
+              updatedTextString = toJavaString(updated);
             }
           }
           mutateData(field, { __override__: false, sbTestSampleText: sampleTextString, sbTestUpdatedText: updatedTextString });
