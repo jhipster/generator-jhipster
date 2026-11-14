@@ -474,7 +474,9 @@ ${classProperties
       packageJsonScripts({ application }) {
         // Tries the application, in a demonstration: builds the jar of the production profile, then runs it with the sample secrets.
         // Cleans first, so the only jar is the one to run: e2e builds and older versions would match the wildcard too.
-        Object.assign(application.packageJsonScripts, {
+        // A script already set, by a blueprint or the user, is kept.
+        mutateData(application.packageJsonScripts, {
+          __override__: false,
           'pretry-it': `./${application.buildToolGradle ? 'gradlew' : 'mvnw'} clean && npm run java:jar:prod`,
           'try-it': `java -jar ${application.javaPackagingDestDir}*.jar --spring.profiles.include=secret-samples`,
         });
