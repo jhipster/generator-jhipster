@@ -23,11 +23,20 @@
       .filter(relationships => relationships.length > 0);
     const testEntityPrimaryKey0 = tsPrimaryKeySamples[0];
     const testEntityPrimaryKey1 = tsPrimaryKeySamples[1];
+    // A new entity leaves empty a field the form requires.
+    const newEntityFormInvalid = !primaryKey.autoGenerate
+      || fields.some(field => field.fieldValidationRequired && !field.id && !field.fieldTypeBoolean && !field.fieldTypeTimed && field.fieldTsDefaultValue === undefined)
+      || relationships.some(relationship => relationship.persistableRelationship && !relationship.collection && relationship.relationshipRequired);
+    // The sample of the required data of the entity fills a valid form, but for a required relationship.
+    const requiredDataFormValid = !relationships.some(relationship => relationship.persistableRelationship && !relationship.collection && relationship.relationshipRequired);
 _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+<%_ if (newEntityFormInvalid || requiredDataFormValid) { _%>
+import { submit } from '@angular/forms/signals';
+<%_ } _%>
 import { ActivatedRoute } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
@@ -42,6 +51,9 @@ import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- ot
 <%_ } _%>
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
+<%_ if (requiredDataFormValid) { _%>
+import { sampleWithRequiredData } from '../<%- entityFileName %>.test-samples';
+<%_ } _%>
 
 import { <%- entityAngularName %>FormService } from './<%- entityFileName %>-form.service';
 import { <%- entityAngularName %>Update } from './<%- entityFileName %>-update';
@@ -171,24 +183,37 @@ describe('<%- entityAngularName %> Management Update Component', () => {
     });
 
     describe('save', () => {
-        beforeEach(() => {
-            // The save is what is tested: the form is taken as valid, whatever the sample.
-            vi.spyOn(comp.editForm, 'invalid', 'get').mockReturnValue(false);
-        });
-
-        it('should mark the fields of an invalid form instead of saving it', () => {
+<%_ if (newEntityFormInvalid) { _%>
+        it('should mark the fields of an invalid form instead of saving it', async () => {
             // GIVEN
-            vi.spyOn(comp.editForm, 'invalid', 'get').mockReturnValue(true);
-            vi.spyOn(comp.editForm, 'markAllAsTouched');
+            vi.spyOn(comp, 'save');
+            activatedRoute.data = of({ <%- entityInstance %>: null });
+            comp.ngOnInit();
 
             // WHEN
-            comp.save();
+            await submit(comp.editForm);
 
             // THEN
-            expect(comp.editForm.markAllAsTouched).toHaveBeenCalled();
-            expect(comp.isSaving()).toEqual(false);
+            expect(comp.editForm().touched()).toBe(true);
+            expect(comp.save).not.toHaveBeenCalled();
         });
 
+<%_ } _%>
+<%_ if (requiredDataFormValid) { _%>
+        it('should save a valid submitted form', async () => {
+            // GIVEN
+            vi.spyOn(comp, 'save').mockImplementation(() => undefined);
+            activatedRoute.data = of({ <%- entityInstance %>: sampleWithRequiredData });
+            comp.ngOnInit();
+
+            // WHEN
+            await submit(comp.editForm);
+
+            // THEN
+            expect(comp.save).toHaveBeenCalled();
+        });
+
+<%_ } _%>
 <%_ if (updatableEntity) { _%>
         it('should call update service on save for existing entity', () => {
             // GIVEN

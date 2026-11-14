@@ -18,7 +18,6 @@
 -%>
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup } from '@angular/forms';
 
 import dayjs from 'dayjs/esm';
 import duration from 'dayjs/esm/plugin/duration';
@@ -74,8 +73,7 @@ describe('Shared utilities', () => {
       expect(revokeObjectURL).toHaveBeenCalled();
     });
 
-    describe('loadFileToForm', () => {
-      const form = new FormGroup({ file: new FormControl(''), fileContentType: new FormControl('') });
+    describe('loadFile', () => {
       const eventOf = (files?: File[]): Event => ({ target: { files } }) as unknown as Event;
       let dataUtils: DataUtils;
 
@@ -86,7 +84,7 @@ describe('Shared utilities', () => {
       it('should refuse an event without a file', () => {
         const error = vi.fn();
 
-        dataUtils.loadFileToForm(eventOf(), form, 'file', false).subscribe({ error });
+        dataUtils.loadFile(eventOf(), false).subscribe({ error });
 
         expect(error).toHaveBeenCalledWith(expect.objectContaining({ key: 'could.not.extract' }));
       });
@@ -94,18 +92,19 @@ describe('Shared utilities', () => {
       it('should refuse a file that is not an image', () => {
         const error = vi.fn();
 
-        dataUtils.loadFileToForm(eventOf([new File(['a'], 'a.txt', { type: 'text/plain' })]), form, 'file', true).subscribe({ error });
+        dataUtils.loadFile(eventOf([new File(['a'], 'a.txt', { type: 'text/plain' })]), true).subscribe({ error });
 
         expect(error).toHaveBeenCalledWith(expect.objectContaining({ key: 'not.image' }));
       });
 
-      it('should load the file into the form', async () => {
+      it('should load the file', async () => {
         vi.useFakeTimers();
-        dataUtils.loadFileToForm(eventOf([new File(['a'], 'a.txt', { type: 'text/plain' })]), form, 'file', false).subscribe();
+        const next = vi.fn();
+        dataUtils.loadFile(eventOf([new File(['a'], 'a.txt', { type: 'text/plain' })]), false).subscribe({ next });
 
         await vi.runAllTimersAsync();
 
-        expect(form.getRawValue()).toEqual({ file: 'YQ==', fileContentType: 'text/plain' });
+        expect(next).toHaveBeenCalledWith({ data: 'YQ==', contentType: 'text/plain' });
       });
     });
   });
