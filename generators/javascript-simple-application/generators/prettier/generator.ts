@@ -30,10 +30,6 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
     }
 
     await this.dependsOnBootstrap('javascript-simple-application');
-    // Without the client, the generators of the client are not composed.
-    if (!this.delegateToBlueprint && !this.options.fromInit && !(this.jhipsterConfigWithDefaults as { skipClient?: boolean }).skipClient) {
-      await this.dependsOnBootstrap('client');
-    }
   }
 
   get preparing() {
