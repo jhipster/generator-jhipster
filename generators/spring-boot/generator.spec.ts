@@ -311,4 +311,21 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+
+  for (const [buildTool, command] of [
+    ['maven', './mvnw -Pprod clean verify sonar:sonar'],
+    ['gradle', './gradlew -Pprod clean check jacocoTestReport sonar'],
+  ] as const) {
+    describe(`README with ${buildTool}`, () => {
+      before(async () => {
+        await helpers.runJHipster('server').withJHipsterConfig({ buildTool, skipClient: true });
+      });
+
+      it('should run the Sonar analysis with a token', () => {
+        runResult.assertFileContent('README.md', 'export SONAR_TOKEN=<your-token>');
+        runResult.assertFileContent('README.md', `${command}\n`);
+        runResult.assertNoFileContent('README.md', 'sonar.password');
+      });
+    });
+  }
 });
