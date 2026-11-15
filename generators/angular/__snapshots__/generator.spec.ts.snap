@@ -29,7 +29,7 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
       type="submit"
       class="btn btn-danger"
     >
-      <fa-icon icon="times" />&nbsp;<span>Delete</span>
+      <fa-icon icon="trash" />&nbsp;<span>Delete</span>
     </button>
   </div>
 </form>
@@ -476,7 +476,7 @@ export class UserManagementDetail {
                 [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
                 data-cy="entityDeleteButton"
               >
-                <fa-icon icon="times" />
+                <fa-icon icon="trash" />
                 <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
@@ -537,7 +537,7 @@ import {
   faSortDown,
   faSortUp,
   faSync,
-  faTimes,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { of, Subject } from "rxjs";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
@@ -600,7 +600,7 @@ describe("UserManagement Management Component", () => {
       faSortDown,
       faSortUp,
       faSync,
-      faTimes,
+      faTrash,
     );
     httpMock = TestBed.inject(HttpTestingController);
   });
