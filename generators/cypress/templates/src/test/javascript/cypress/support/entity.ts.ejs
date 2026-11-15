@@ -63,22 +63,6 @@ Cypress.Commands.add('setFieldImageAsBytesOfEntity', (fieldName: string, fileNam
     });
 });
 
-Cypress.Commands.add('setFieldSelectToLastOfEntity', (fieldName: string) => {
-  return cy.get(`[data-cy="${fieldName}"]`).then(select => {
-    const selectSize = (select[0] as HTMLSelectElement)?.options?.length || Number(select.attr('size')) || 0;
-    if (selectSize > 0) {
-      return cy.get(`[data-cy="${fieldName}"] option`).then((options: JQuery) => {
-        const elements = [...options].map((o: HTMLElement) => (o as HTMLOptionElement).label);
-        const lastElement = elements.length - 1;
-        cy.get(`[data-cy="${fieldName}"]`).select(lastElement);
-        cy.get(`[data-cy="${fieldName}"]`).type('{downarrow}');
-      });
-    } else {
-      return cy.get(`[data-cy="${fieldName}"]`).type('{downarrow}');
-    }
-  });
-});
-
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -87,7 +71,6 @@ declare global {
       getEntityDetailsHeading(entityInstanceName: string): Cypress.Chainable;
       getEntityDeleteDialogHeading(entityInstanceName: string): Cypress.Chainable;
       setFieldImageAsBytesOfEntity(fieldName: string, fileName: string, mimeType: string): Cypress.Chainable;
-      setFieldSelectToLastOfEntity(fieldName: string): Cypress.Chainable;
     }
   }
 }
