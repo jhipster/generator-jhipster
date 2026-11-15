@@ -196,6 +196,47 @@ describe('generator - Kubernetes', () => {
     });
   });
 
+  describe('a reactive postgresql microservice', () => {
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces()
+        .withWorkspaceApplicationAtFolder('reactive-psql', {
+          applicationType: 'microservice',
+          baseName: 'reactivepsql',
+          prodDatabaseType: 'postgresql',
+          reactive: true,
+          serverPort: 8081,
+        })
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({ askAnswered: true })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps: ['reactive-psql'],
+          adminPassword: 'meetup',
+          dockerRepositoryName: 'jhipsterrepository',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'jhipsternamespace',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+
+    it('should set the R2DBC username', () => {
+      runResult.assertFileContent(
+        './kubernetes/reactivepsql-k8s/reactivepsql-deployment.yml',
+        /- name: SPRING_R2DBC_USERNAME\n\s+value: reactivepsql\n/,
+      );
+    });
+  });
+
   describe('gateway and mysql microservice', () => {
     before(async () => {
       const chosenApps = ['01-gateway', '02-mysql'];
