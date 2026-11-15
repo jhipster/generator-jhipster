@@ -21,9 +21,9 @@ import { basename } from 'node:path';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 
-import { defaultHelpers as helpers, runResult } from '#testing';
-
 import Generator from './generator.ts';
+
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
