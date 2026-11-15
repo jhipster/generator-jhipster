@@ -185,7 +185,7 @@ public class UserService {
                 userRepository.save(user);
       <%_ } _%>
       <%_ if (searchEngineElasticsearch) { _%>
-                userSearchRepository.save(user);
+                userSearchRepository.index(user);
       <%_ } _%>
       <%_ if (cacheProviderAny) { _%>
                 this.clearUserCaches(user);
@@ -377,7 +377,7 @@ public class UserService {
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
       <%_ if (searchEngineElasticsearch) { _%>
-        userSearchRepository.save(newUser);
+        userSearchRepository.index(newUser);
       <%_ } _%>
       <%_ if (cacheProviderAny) { _%>
         this.clearUserCaches(newUser);

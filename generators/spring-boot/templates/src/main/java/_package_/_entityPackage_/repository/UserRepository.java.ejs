@@ -83,6 +83,11 @@ public interface UserRepository extends <%- springBootBaseRepositoryClass %><<%-
 <%_ } _%>
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByLogin(String login);
 
+<%_ if (databaseTypeSql && !reactive && searchEngineElasticsearch) { _%>
+    @EntityGraph(attributePaths = "authorities")
+    Optional<<%- user.persistClass %>> findOneWithAuthoritiesById(<%- user.primaryKey.type %> id);
+
+<%_ } _%>
 <%_ if (reactive) { _%>
     Flux<<%- user.persistClass %>> findAllByIdNotNull(Pageable pageable);
 
