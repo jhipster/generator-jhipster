@@ -1277,7 +1277,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         );
     }
     <%_ } _%>
-    <%_ if (searchBy.fieldTypeString) { _%>
+    <%_ if (searchBy.filterableField && searchBy.fieldTypeString) { _%>
     @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>ContainsSomething() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
@@ -1304,7 +1304,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
     <%_ } _%>
     <%_ // the range criteria _%>
-    <%_ if (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) { _%>
+    <%_ if (searchBy.filterableField && (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime)) { _%>
       <%_ const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           let biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
