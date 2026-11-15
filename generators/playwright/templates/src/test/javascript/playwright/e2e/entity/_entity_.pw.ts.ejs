@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import type { Page } from '@playwright/test';
+
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -65,7 +67,7 @@ const <%- entityInstance %>PageUrl = '/<%- entityPage %>';
 
 const <%- entityInstance %>ApiUrl = '/<%- baseApi + entityApiUrl %>';
 
-const entitiesRequest = (page: import('@playwright/test').Page) =>
+const entitiesRequest = (page: Page) =>
   page.waitForResponse(
     response => new URL(response.url()).pathname === <%- entityInstance %>ApiUrl && response.request().method() === 'GET',
   );

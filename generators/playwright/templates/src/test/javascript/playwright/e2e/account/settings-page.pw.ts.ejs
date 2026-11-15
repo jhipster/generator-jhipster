@@ -16,12 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import type { Page } from '@playwright/test';
+
 import { firstNameSettingsSelector, lastNameSettingsSelector, submitSettingsSelector, emailSettingsSelector } from '../../support/commands';
 import { getAccount, saveAccount } from '../../support/account';
 import type { Account } from '../../support/account';
 import { test, expect } from '../../support/fixtures';
 
-const settingsSave = (page: import('@playwright/test').Page) =>
+const settingsSave = (page: Page) =>
   page.waitForResponse(response => response.url().includes('/api/account') && response.request().method() === 'POST');
 
 const testUserEmail = 'user@localhost.fr';
