@@ -99,6 +99,18 @@ export const mavenProfileContent = (data: any) => {
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <!-- Upload only the jar, not the rest of target, which holds the Node.js used for the client build -->
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.7</version>
+                        <configuration>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>target/\${project.build.finalName}.jar</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
 `;
