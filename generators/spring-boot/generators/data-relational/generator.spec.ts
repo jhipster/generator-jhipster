@@ -111,4 +111,26 @@ describe(`generator - ${databaseType}`, () => {
       });
     });
   });
+
+  for (const prodDatabaseType of [POSTGRESQL, MYSQL]) {
+    describe(`entity with a text blob field on ${prodDatabaseType}`, () => {
+      before(async () => {
+        await helpers
+          .runJHipster('jhipster:spring-boot:data-relational')
+          .withJHipsterConfig({ ...commonConfig, prodDatabaseType }, [
+            {
+              name: 'Note',
+              changelogDate: '20220129000100',
+              fields: [{ fieldName: 'text', fieldType: 'byte[]', fieldTypeBlobContent: 'text' }],
+            },
+          ])
+          .withMockedSource()
+          .withMockedJHipsterGenerators({ except: ['jhipster:java:domain'] });
+      });
+
+      it('should match the entity snapshot', () => {
+        expect(runResult.getSnapshot('**/domain/Note.java')).toMatchSnapshot();
+      });
+    });
+  }
 });
