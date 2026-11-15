@@ -50,12 +50,32 @@ describe(`generator - ${generator}`, () => {
     it('should match the gradle liquibase file snapshot', () => {
       expect(runResult.getSnapshot('**/gradle/liquibase.gradle')).toMatchSnapshot();
     });
+    it('should find the changelogs and the entities for the gradle tasks', () => {
+      runResult.assertFileContent('gradle/liquibase.gradle', 'searchPath ".,src/main/resources/"');
+      runResult.assertFileContent('gradle/liquibase.gradle', 'liquibaseRuntime sourceSets.main.output');
+      runResult.assertFileContent('gradle/liquibase.gradle', 'liquibaseRuntime "org.liquibase.ext:liquibase-hibernate7:');
+    });
     it('should not set contexts in the main activity, since generate-changelog writes them to the changesets', () => {
       const gradle = runResult.fs.read(`${runResult.cwd}/gradle/liquibase.gradle`);
       expect(/^ {4}main \{[\s\S]*?^ {4}\}/m.exec(gradle)?.[0]).not.toContain('contexts');
     });
     it('should exclude the test-only table from the diff', () => {
       runResult.assertFileContent('gradle/liquibase.gradle', 'excludeObjects "(?i)jhi_date_time_wrapper"');
+    });
+  });
+
+  describe('with gradle and a reactive application', () => {
+    before(async () => {
+      await helpers.runJHipster('server').withJHipsterConfig({ buildTool: 'gradle', skipClient: true, reactive: true });
+    });
+
+    it('should match the gradle liquibase file snapshot', () => {
+      expect(runResult.getSnapshot('**/gradle/liquibase.gradle')).toMatchSnapshot();
+    });
+    it('should not add the hibernate reference, which needs JPA entities', () => {
+      runResult.assertFileContent('gradle/liquibase.gradle', 'searchPath ".,src/main/resources/"');
+      runResult.assertNoFileContent('gradle/liquibase.gradle', 'sourceSets.main.output');
+      runResult.assertNoFileContent('gradle/liquibase.gradle', 'liquibase-hibernate');
     });
   });
 });
