@@ -79,7 +79,7 @@ describe('login page', () => {
     cy.get(usernameLoginSelector).should('be.visible').type(username);
     cy.get(passwordLoginSelector).should('be.visible').type('bad-password');
     cy.get(submitLoginSelector).click();
-    cy.wait('@authenticate').then(({ response }) => expect(response?.statusCode).to.equal(401));
+    cy.wait('@authenticate').its('response.statusCode').should('eq', 401);
     cy.get(errorLoginSelector).should('be.visible');
   });
 
@@ -87,7 +87,7 @@ describe('login page', () => {
     cy.get(usernameLoginSelector).should('be.visible').type(username);
     cy.get(passwordLoginSelector).should('be.visible').type(password);
     cy.get(submitLoginSelector).click();
-    cy.wait('@authenticate').then(({ response }) => expect(response?.statusCode).to.equal(200));
+    cy.wait('@authenticate').its('response.statusCode').should('eq', 200);
     cy.hash().should('eq', '');
   });
 });
