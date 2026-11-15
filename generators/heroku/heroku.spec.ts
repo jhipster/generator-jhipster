@@ -32,6 +32,11 @@ const getRunResultCalls = () => {
   return runResult.spawnStub!.mock.calls.map((call: any) => call.arguments ?? call);
 };
 
+const elasticsearchWarnings = (): string[] =>
+  (runResult.env.adapter.log as any).warn.mock.calls
+    .map(({ arguments: [message] }: { arguments: [string] }) => message)
+    .filter((message: string) => message.includes('SPRING_ELASTICSEARCH_URIS'));
+
 const getConfigSetNames = () =>
   getRunResultCalls()
     .filter(([method, command, args]: any) => method === 'spawn' && command === 'heroku' && args[0] === 'config:set')
@@ -62,6 +67,11 @@ describe('generator - Heroku', () => {
   let createWithNameResult: any;
   let createWithoutNameResult: any;
   let appInfoResult: { appName: string; result: any } | undefined;
+  let configResult: any;
+  let bonsaiUrl: string | undefined;
+  let existingElasticsearch: boolean;
+  let elasticsearchAddOnError: string | undefined;
+  let herokuCliMissing: boolean;
   let configGetResults: Record<string, any>;
 
   beforeEach(() => {
@@ -69,11 +79,20 @@ describe('generator - Heroku', () => {
     createWithNameResult = undefined;
     createWithoutNameResult = undefined;
     appInfoResult = undefined;
+    configResult = undefined;
+    bonsaiUrl = undefined;
+    existingElasticsearch = false;
+    elasticsearchAddOnError = undefined;
+    herokuCliMissing = false;
     configGetResults = {};
 
     stub = exnode.fn((method: string, command: string, args: string[]) => {
       if (method === 'spawnCommand' && command === deployCommandResult?.command) {
         return deployCommandResult.result;
+      }
+
+      if (method === 'spawnCommand' && command === 'heroku --version' && herokuCliMissing) {
+        return createSpawnCommandReturn({ exitCode: 1 });
       }
 
       if (method === 'spawn' && command === 'heroku' && Array.isArray(args)) {
@@ -85,6 +104,32 @@ describe('generator - Heroku', () => {
         }
         if (args[0] === 'apps:info' && args[1] === '--json' && args[2] === appInfoResult?.appName) {
           return appInfoResult.result;
+        }
+        if (args[0] === 'config' && args[1] === '--json') {
+          return (
+            configResult ??
+            createSpawnCommandReturn({
+              stdout: JSON.stringify({
+                FOUNDELASTICSEARCH_URL: 'https://jhipster-test.es.us-east-1.aws.found.io',
+                FOUNDELASTICSEARCH_INITIAL_CREDENTIALS: 'elastic:test-password',
+              }),
+            })
+          );
+        }
+        if (args[0] === 'addons:create' && args[1] === 'foundelasticsearch' && elasticsearchAddOnError) {
+          return createSpawnCommandReturn({ exitCode: 1, stderr: elasticsearchAddOnError });
+        }
+        if (args[0] === 'addons:create' && args[1] === 'foundelasticsearch' && existingElasticsearch) {
+          return createSpawnCommandReturn({ exitCode: 1, stderr: 'FOUNDELASTICSEARCH is already in use' });
+        }
+        if (args[0] === 'config:get' && args[1] === 'FOUNDELASTICSEARCH_URL' && existingElasticsearch) {
+          return createSpawnCommandReturn({ stdout: 'https://jhipster-test.es.us-east-1.aws.found.io' });
+        }
+        if (args[0] === 'config:get' && args[1] === 'SPRING_ELASTICSEARCH_URIS' && existingElasticsearch) {
+          return createSpawnCommandReturn({ stdout: 'https://jhipster-test.es.us-east-1.aws.found.io' });
+        }
+        if (args[0] === 'config:get' && args[1] === 'BONSAI_URL' && bonsaiUrl) {
+          return createSpawnCommandReturn({ stdout: bonsaiUrl });
         }
         if (args[0] === 'config:get' && configGetResults[args[1]]) {
           return configGetResults[args[1]];
@@ -445,6 +490,7 @@ describe('generator - Heroku', () => {
             herokuRegion: 'us',
             herokuDeployType: 'jar',
             herokuJavaVersion: '11',
+            herokuElasticsearch: 'foundelasticsearch',
           })
           .withSpawnMock(stub);
       });
@@ -459,6 +505,190 @@ describe('generator - Heroku', () => {
       });
       it('calls should match snapshot', () => {
         expect(getRunResultCalls()).toMatchSnapshot();
+      });
+      it('does not warn about the Elasticsearch settings', () => {
+        expect(elasticsearchWarnings()).toEqual([]);
+      });
+    });
+
+    describe('with elasticsearch and unreadable foundelasticsearch settings', () => {
+      beforeEach(async () => {
+        configResult = createSpawnCommandReturn({ stdout: 'not json' });
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+            herokuElasticsearch: 'foundelasticsearch',
+          })
+          .withSpawnMock(stub);
+      });
+      it('should match files state snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+      it('calls should match snapshot', () => {
+        expect(getRunResultCalls()).toMatchSnapshot();
+      });
+      it('warns to set the Elasticsearch settings', () => {
+        expect(elasticsearchWarnings()).toEqual([
+          expect.stringContaining('Could not set the Elasticsearch settings from the foundelasticsearch add-on.'),
+        ]);
+      });
+    });
+
+    describe('with elasticsearch and an app that already has the foundelasticsearch add-on', () => {
+      beforeEach(async () => {
+        existingElasticsearch = true;
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+            herokuElasticsearch: 'foundelasticsearch',
+          })
+          .withSpawnMock(stub);
+      });
+      it('should match files state snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+      it('calls should match snapshot', () => {
+        expect(getRunResultCalls()).toMatchSnapshot();
+      });
+      it('keeps the Elasticsearch settings without a warning', () => {
+        expect(elasticsearchWarnings()).toEqual([]);
+      });
+    });
+
+    describe('with elasticsearch and the default answers', () => {
+      beforeEach(async () => {
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+          })
+          .withSpawnMock(stub);
+      });
+      it('should match files state snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+      it('calls should match snapshot', () => {
+        expect(getRunResultCalls()).toMatchSnapshot();
+      });
+      it('warns to point the app to an Elasticsearch of your own', () => {
+        expect(elasticsearchWarnings()).toEqual([expect.stringContaining('Point the app to your Elasticsearch 9 cluster')]);
+      });
+    });
+
+    describe('with elasticsearch and the add-on set by an option, without the prompts of the command', () => {
+      beforeEach(async () => {
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true, defaults: true, herokuElasticsearch: 'foundelasticsearch' })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+          })
+          .withSpawnMock(stub);
+      });
+      it('creates the foundelasticsearch add-on', () => {
+        expect(getRunResultCalls()).toContainEqual([
+          'spawn',
+          'heroku',
+          ['addons:create', 'foundelasticsearch', '--as', 'FOUNDELASTICSEARCH', '--wait', '--app', herokuAppName],
+          expect.anything(),
+        ]);
+      });
+      it('does not warn about the Elasticsearch settings', () => {
+        expect(elasticsearchWarnings()).toEqual([]);
+      });
+    });
+
+    describe('with elasticsearch and a foundelasticsearch add-on that cannot be created', () => {
+      beforeEach(async () => {
+        elasticsearchAddOnError = 'Your account has reached its add-on limit';
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+            herokuElasticsearch: 'foundelasticsearch',
+          })
+          .withSpawnMock(stub);
+      });
+      it('warns with the error of the Heroku CLI and the settings to set', () => {
+        expect(elasticsearchWarnings()).toEqual([
+          expect.stringMatching(
+            /Could not create the foundelasticsearch add-on:\nYour account has reached its add-on limit\n[^]*heroku config:set SPRING_ELASTICSEARCH_URIS/,
+          ),
+        ]);
+      });
+    });
+
+    describe('with elasticsearch and without the Heroku CLI', () => {
+      beforeEach(async () => {
+        herokuCliMissing = true;
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true, skipChecks: true })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+          })
+          .withSpawnMock(stub);
+      });
+      it('warns to point the app to an Elasticsearch of your own', () => {
+        expect(elasticsearchWarnings()).toEqual([expect.stringContaining('Point the app to your Elasticsearch 9 cluster')]);
+      });
+      it('does not create add-ons', () => {
+        expect(getRunResultCalls().some(([, command, args]: any[]) => command === 'heroku' && args?.[0] === 'addons:create')).toBe(false);
+      });
+    });
+
+    describe('with elasticsearch and an existing app with the bonsai add-on', () => {
+      const existingHerokuAppName = 'jhipster-existing';
+      beforeEach(async () => {
+        appInfoResult = {
+          appName: existingHerokuAppName,
+          result: createSpawnCommandReturn({ stdout: `{"app":{"name":"${existingHerokuAppName}"}, "dynos":[]}` }),
+        };
+        bonsaiUrl = 'https://user:password@jhipster-existing.bonsaisearch.net';
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig<any>({ herokuAppName: existingHerokuAppName, herokuDeployType: 'git', searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true })
+          .withSpawnMock(stub);
+      });
+      it('should match files state snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+      it('calls should match snapshot', () => {
+        expect(getRunResultCalls()).toMatchSnapshot();
+      });
+      it('warns that the app no longer reads BONSAI_URL', () => {
+        expect(elasticsearchWarnings()).toEqual([expect.stringContaining("The app doesn't read BONSAI_URL anymore")]);
       });
     });
   });
