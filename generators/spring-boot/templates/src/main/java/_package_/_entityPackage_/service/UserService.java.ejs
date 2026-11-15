@@ -343,7 +343,7 @@ public class UserService {
     public <%- reactive ? 'Mono' : 'Optional' %><<%- user.adminUserDto %>> updateUser(<%- user.adminUserDto %> userDTO) {
     <%_ if (reactive) { _%>
         return userRepository.findById(userDTO.getId())
-      <%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
+      <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
             .flatMap
       <%_ } else { _%>
             .map
@@ -387,7 +387,7 @@ public class UserService {
                 user.setAuthorities(userDTO.getAuthorities());
     <%_ } _%>
     <%_ if (reactive) { _%>
-      <%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
+      <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
         <%_ if (databaseTypeSql) { _%>
                 return userRepository
                     .deleteUserAuthorities(user.getId())
