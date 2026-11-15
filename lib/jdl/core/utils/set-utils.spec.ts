@@ -38,7 +38,7 @@ describe('jdl - SetUtils', () => {
         addAll(set);
       });
 
-      it('should return the set unchanged', () => {
+      it('should return the set unchanged - snapshot', () => {
         expect(set).toMatchInlineSnapshot(`
 Set {
   1,
@@ -56,7 +56,7 @@ Set {
         addAll(set, []);
       });
 
-      it('should return the set unchanged', () => {
+      it('should return the set unchanged - snapshot', () => {
         expect(set).toMatchInlineSnapshot(`
 Set {
   1,
@@ -74,7 +74,7 @@ Set {
         addAll(set, [3, 42]);
       });
 
-      it('should add them to the set', () => {
+      it('should add them to the set - snapshot', () => {
         expect(set).toMatchInlineSnapshot(`
 Set {
   1,

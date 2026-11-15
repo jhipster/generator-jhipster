@@ -17,11 +17,14 @@
  limitations under the License.
 -%>
 import { Alert, Col, Row } from 'react-bootstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
+
+import PageTitle from 'app/shared/layout/page-title';
 
 const PageNotFound = () => {
   return (
     <div>
+      <PageTitle title={translate('error.title')} />
       <Row>
         <Col md="4">
           <span className="hipster img-fluid rounded" />

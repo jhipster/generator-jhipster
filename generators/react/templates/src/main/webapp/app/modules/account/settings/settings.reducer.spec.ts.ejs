@@ -18,13 +18,13 @@
 -%>
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 <%_ if (enableTranslation) { _%>
-import { TranslatorContext } from 'react-jhipster';
+import { Storage, TranslatorContext } from 'react-jhipster';
 <%_ } _%>
 
 import { configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import account, { reset, updateAccount } from './settings.reducer';
+import account, { reset, <%- enableTranslation ? 'saveAccountSettings, ' : '' %>updateAccount } from './settings.reducer';
 
 describe('Settings reducer tests', () => {
 <%_ if (enableTranslation) { _%>
@@ -118,5 +118,15 @@ describe('Settings reducer tests', () => {
       await store.dispatch(reset());
       expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(reset())]);
     });
+<%_ if (enableTranslation) { _%>
+    it('forgets the locale of the session on saveAccountSettings', async () => {
+      Storage.session.set('locale', '<%- nativeLanguage %>');
+      saveAccountSettings({ langKey: '<%- nativeLanguage %>' })(dispatch, getState, extra);
+      await vi.waitFor(() => expect(Storage.session.get('locale')).toBeUndefined());
+
+      saveAccountSettings({ langKey: '<%- nativeLanguage %>' })(dispatch, getState, extra);
+      await vi.waitFor(() => expect(Storage.session.get('locale')).toBeUndefined());
+    });
+<%_ } _%>
   });
 });

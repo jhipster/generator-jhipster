@@ -19,6 +19,9 @@ exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(false) s
   "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/security/JwtCredentialsValidator.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
@@ -26,6 +29,9 @@ exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(false) s
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/JwtCredentialsValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/security/jwt/AuthenticationIntegrationTest.java": {
@@ -114,6 +120,9 @@ exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(false) sh
   "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/security/JwtCredentialsValidator.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
@@ -121,6 +130,9 @@ exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(false) sh
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/JwtCredentialsValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/security/jwt/AuthenticationIntegrationTest.java": {

@@ -24,52 +24,63 @@ import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.web.util.HeaderUtil;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.core.PropertyReferenceException;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 <%_ if (reactive && databaseTypeSql) { _%>
+import io.r2dbc.spi.R2dbcException;
 import org.springframework.stereotype.Component;
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+import org.hibernate.TransientObjectException;
+import org.hibernate.query.sqm.UnknownPathException;
+import org.springframework.orm.ObjectRetrievalFailureException;
 <%_ } _%>
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 <%_ if (reactive) { _%>
-  <%_ if (!skipUserManagement) { _%>
-import org.springframework.security.core.AuthenticationException;
-  <%_ } _%>
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.http.MediaType;
 import tech.jhipster.web.rest.errors.ExceptionTranslation;
+import org.springframework.web.reactive.resource.NoResourceFoundException;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 <%_ } else { _%>
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 <%_ } _%>
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import tech.jhipster.web.rest.errors.ProblemDetailWithCause;
 import tech.jhipster.web.rest.errors.ProblemDetailWithCause.ProblemDetailWithCauseBuilder;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.context.MessageSourceResolvable;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.method.ParameterErrors;
+import org.springframework.web.server.ResponseStatusException;
 
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
@@ -84,6 +95,7 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly JSON structures.
@@ -114,6 +126,7 @@ _%>
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
     private static final boolean CAUSAL_CHAIN_ENABLED = false;
+    private static final Pattern QUALIFIED_CLASS_NAME = Pattern.compile("\\b[a-z_][a-z0-9_]*+(?:\\.[a-z_][a-z0-9_]*+)*+\\.[A-Z]");
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionTranslator.class);
 
@@ -142,7 +155,17 @@ _%>
     @Override
     protected <%- returnType %> handleExceptionInternal(
             Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, <%- requestEntityRequestClass %> request) {
-        body = body == null ? wrapAndCustomizeProblem(ex, (<%- requestClass %>) request) : body;
+        if (!(body instanceof ProblemDetailWithCause)) {
+            ProblemDetailWithCause problem = getProblemDetailWithCause(ex);
+            problem.setStatus(statusCode.value());
+            if (body instanceof ProblemDetail problemDetail) problem.setDetail(problemDetail.getDetail());
+            body = customizeProblem(problem, ex, (<%- requestClass %>) request);
+        }
+        HttpHeaders alertHeaders = buildHeaders(ex);
+        if (alertHeaders != null) {
+            alertHeaders.putAll(headers);
+            headers = alertHeaders;
+        }
 <%_ if (reactive) { _%>
         if (request.getResponse().isCommitted()) {
             return Mono.error(ex);
@@ -168,7 +191,6 @@ _%>
         if (ex instanceof <%- packageName %>.service.InvalidPasswordException)
             return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
 
-  <%_ if (reactive) { _%>
         if (ex instanceof AuthenticationException) {
             // Ensure no information about existing users is revealed via failed authentication attempts
             return ProblemDetailWithCauseBuilder.instance()
@@ -177,7 +199,6 @@ _%>
                 .withDetail("Invalid credentials")
                 .build();
         }
-  <%_ } _%>
 <%_ } _%>
         if (
             ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause
@@ -197,10 +218,7 @@ _%>
             problem.setTitle(title);
         }
 
-        if (problem.getDetail() == null) {
-            // higher precedence to cause
-            problem.setDetail(getCustomizedErrorDetails(err));
-        }
+        problem.setDetail(getCustomizedErrorDetails(err, problem.getDetail()));
 
         Map<String, Object> problemProperties = problem.getProperties();
         if (problemProperties == null || !problemProperties.containsKey(MESSAGE_KEY)) problem.setProperty(
@@ -222,6 +240,8 @@ _%>
 
         if (err instanceof<%- reactive ? ' WebExchangeBindException ' : ' MethodArgumentNotValidException ' %>fieldException) {
             problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(fieldException));
+        } else if (err instanceof HandlerMethodValidationException methodValidationException) {
+            problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(methodValidationException));
         } else if (err instanceof ConstraintViolationException constraintViolationException) {
             problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(constraintViolationException));
         }
@@ -236,14 +256,48 @@ _%>
             .getBindingResult()
             .getFieldErrors()
             .stream()
-            .map(f ->
-                new FieldErrorVM(
-                    f.getObjectName().replaceFirst("<%- dtoSuffix %>$", ""),
-                    f.getField(),
-                    StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()
-                )
+            .map(this::toFieldError)
+            .toList();
+    }
+
+    /**
+     * The errors of a method validated as a whole, which a constraint on one of its parameters asks for: the ones of
+     * the fields of a validated argument, like the request body, and the ones of the other parameters, by their name.
+     */
+    private List<FieldErrorVM> getFieldErrors(HandlerMethodValidationException ex) {
+        return ex
+            .getParameterValidationResults()
+            .stream()
+            .flatMap(result ->
+                result instanceof ParameterErrors errors
+                    ? errors.getFieldErrors().stream().map(this::toFieldError)
+                    : result
+                        .getResolvableErrors()
+                        .stream()
+                        .map(error ->
+                            new FieldErrorVM(
+                                StringUtils.uncapitalize(result.getMethodParameter().getContainingClass().getSimpleName()),
+                                result.getMethodParameter().getParameterName(),
+                                error.getDefaultMessage(),
+                                getCode(error)
+                            )
+                        )
             )
             .toList();
+    }
+
+    private FieldErrorVM toFieldError(FieldError f) {
+        return new FieldErrorVM(
+            f.getObjectName().replaceFirst("<%- dtoSuffix %>$", ""),
+            f.getField(),
+            f.isBindingFailure() || StringUtils.isBlank(f.getDefaultMessage()) ? f.getCode() : f.getDefaultMessage(),
+            f.getCode()
+        );
+    }
+
+    private String getCode(MessageSourceResolvable error) {
+        String[] codes = error.getCodes();
+        return codes == null || codes.length == 0 ? null : codes[codes.length - 1];
     }
 
     private List<FieldErrorVM> getFieldErrors(ConstraintViolationException ex) {
@@ -254,7 +308,8 @@ _%>
                 new FieldErrorVM(
                     StringUtils.uncapitalize(violation.getRootBeanClass().getSimpleName()).replaceFirst("<%- dtoSuffix %>$", ""),
                     violation.getPropertyPath().toString(),
-                    violation.getMessage()
+                    violation.getMessage(),
+                    violation.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName()
                 )
             )
             .toList();
@@ -290,18 +345,20 @@ _%>
     }
 
     private URI getMappedType(Throwable err) {
-        if (
-            err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException
-        ) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
+        if (isValidationFailure(err)) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
         return ErrorConstants.DEFAULT_TYPE;
     }
 
     private String getMappedMessageKey(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException) {
+        if (isValidationFailure(err)) {
             return ErrorConstants.ERR_VALIDATION;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         } else if (err instanceof ConcurrencyFailureException || err.getCause() instanceof ConcurrencyFailureException) {
             return ErrorConstants.ERR_CONCURRENCY_FAILURE;
+<%_ } _%>
+<%_ if (!databaseTypeNo) { _%>
+        } else if (isDataIntegrityViolation(err)) {
+            return ErrorConstants.ERR_DATA_INTEGRITY_VIOLATION;
 <%_ } _%>
 <%_ if (reactive) { _%>
         } else if (err instanceof WebExchangeBindException) {
@@ -312,22 +369,48 @@ _%>
     }
 
     private String getCustomizedTitle(Throwable err) {
-        if (
-            err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException
-        ) return "Method argument not valid";
+        if (isValidationFailure(err)) return "Method argument not valid";
         return null;
     }
 
-    private String getCustomizedErrorDetails(Throwable err) {
+    private boolean isValidationFailure(Throwable err) {
+        return (
+            err instanceof MethodArgumentNotValidException ||
+            err instanceof HandlerMethodValidationException ||
+            err instanceof ConstraintViolationException
+        );
+    }
+
+    private String getCustomizedErrorDetails(Throwable err, String currentDetail) {
+        // Where we disagree with Spring defaults
+        if (err instanceof NoResourceFoundException) return HttpStatus.NOT_FOUND.getReasonPhrase();
+        if (currentDetail != null) return currentDetail;
+
+        // The message of such an exception is its whole body, the message key of the problem tells the error
+        if (err instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause) return null;
+        // The message of such an exception starts with the code and the name of its status
+        if (err instanceof ResponseStatusException exp) return getReasonOrStatus(exp);
+
         Collection<String> activeProfiles = List.of(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
-            if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
-<%_ if (!databaseTypeNo) { _%>
-            if (err instanceof DataAccessException) return "Failure during data access";
-<%_ } _%>
-            if (containsPackageName(err.getMessage())) return "Unexpected runtime exception";
+            String productionDetail = getProductionErrorDetails(err);
+            if (productionDetail != null) return productionDetail;
         }
-        return err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
+        // higher precedence to cause
+        String detail = err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
+        return activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION) && containsPackageName(detail)
+            ? "Unexpected runtime exception"
+            : detail;
+    }
+
+    private String getProductionErrorDetails(Throwable err) {
+        if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
+<%_ if (!databaseTypeNo) { _%>
+        if (isInvalidSortProperty(err)) return "Invalid sort property";
+        if (isDataIntegrityViolation(err)) return "Data integrity violation";
+        if (err instanceof DataAccessException) return "Failure during data access";
+<%_ } _%>
+        return null;
     }
 
     private HttpStatus getMappedStatus(Throwable err) {
@@ -336,15 +419,18 @@ _%>
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         if (err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
 <%_ } _%>
-        if (err instanceof BadCredentialsException) return HttpStatus.UNAUTHORIZED;
-<%_ if (reactive) { _%>
-        if (err instanceof UsernameNotFoundException) return HttpStatus.UNAUTHORIZED;
-<%_ } _%>
+        if (err instanceof AuthenticationException) return HttpStatus.UNAUTHORIZED;
         if (err instanceof ConstraintViolationException) return HttpStatus.BAD_REQUEST;
+        if (err instanceof OpenApiResourceNotFoundException) return HttpStatus.NOT_FOUND;
 <%_ if (!databaseTypeNo) { _%>
-        if (err instanceof PropertyReferenceException) return HttpStatus.BAD_REQUEST;
+        if (isInvalidSortProperty(err)) return HttpStatus.BAD_REQUEST;
+        if (isDataIntegrityViolation(err)) return HttpStatus.BAD_REQUEST;
 <%_ } _%>
         return null;
+    }
+
+    private String getReasonOrStatus(ResponseStatusException err) {
+        return err.getReason() != null ? err.getReason() : HttpStatus.valueOf(err.getStatusCode().value()).getReasonPhrase();
     }
 
     private URI getPathValue(<%- requestClass %> request) {
@@ -385,10 +471,41 @@ _%>
         return CAUSAL_CHAIN_ENABLED;
     }
 
-    private boolean containsPackageName(String message) {
+<%_ if (!databaseTypeNo) { _%>
+    private boolean isInvalidSortProperty(Throwable err) {
+  <%_ if (databaseTypeSql && !reactive) { _%>
+        // A query with its own select fails when it runs instead of when the sort is read.
+        for (Throwable cause = err; cause != null; cause = cause.getCause()) {
+            if (cause instanceof UnknownPathException) return true;
+        }
+  <%_ } _%>
+        return err instanceof PropertyReferenceException;
+    }
 
-        // This list is for sure not complete
-        return Strings.CS.containsAny(message, "org.", "java.", "net.", "jakarta.", "javax.", "com.", "io.", "de.", "<%- packageName %>");
+    private boolean isDataIntegrityViolation(Throwable err) {
+  <%_ if (databaseTypeSql && !reactive) { _%>
+        // A reference to an entity without id fails before a statement is sent to the database.
+        for (Throwable cause = err; cause != null; cause = cause.getCause()) {
+            if (cause instanceof TransientObjectException) return true;
+        }
+        // A reference to an unknown entity may fail when the referenced entity is loaded.
+        if (err instanceof ObjectRetrievalFailureException) return true;
+  <%_ } _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
+        // A data exception (class 22 of the SQL states), like a value too long, has no exception of its own.
+        for (Throwable cause = err; cause != null; cause = cause.getCause()) {
+            if (cause instanceof R2dbcException r2dbcException) {
+                String sqlState = r2dbcException.getSqlState();
+                if (sqlState != null && sqlState.startsWith("22")) return true;
+            }
+        }
+  <%_ } _%>
+        return err instanceof DataIntegrityViolationException;
+    }
+
+<%_ } _%>
+    private boolean containsPackageName(String message) {
+        return message != null && QUALIFIED_CLASS_NAME.matcher(message).find();
     }
 
 }

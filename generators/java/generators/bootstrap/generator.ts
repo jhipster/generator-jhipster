@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 
-import { mutateData } from '../../../../lib/utils/index.ts';
+import { mutateData, overrideMutateDataProperty } from '../../../../lib/utils/index.ts';
 import { pluralize, upperFirst } from '../../../../lib/utils/string-utils.ts';
 import { mutateApplicationPreparing, mutateField, mutateRelationship } from '../../application.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import { prepareEntity } from '../../support/index.ts';
+import type { Application as JavaApplication } from '../../types.d.ts';
 
 export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
@@ -36,23 +37,39 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
     }
   }
 
+  get loading() {
+    return this.asLoadingTaskGroup({
+      prettierFolders({ applicationDefaults }) {
+        // At loading, not at preparing: client:bootstrap adds the sources of the client once clientSrcDir is resolved,
+        // at preparing with a Java backend, unless a folder already formats them, like this one.
+        applicationDefaults({
+          prettierFolders: overrideMutateDataProperty(({ prettierFolders }: JavaApplication) =>
+            prettierFolders.includes('src/**/') ? prettierFolders : [...prettierFolders, 'src/**/'],
+          ),
+        });
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
-      preparing({ application, applicationDefaults }) {
+      preparing({ applicationDefaults }) {
         applicationDefaults(
           {
             __override__: false,
+            // The wrapper runs the npm or pnpm the build tool installs.
             useNpmWrapper: ({ clientFramework }) => (clientFramework ?? 'no') !== 'no',
           },
           {
             __override__: true,
-            nodePackageManagerCommand: data => (data.useNpmWrapper ? './npmw' : data.nodePackageManagerCommand),
+            nodePackageManagerCommand: data => (data.useNpmWrapper ? `./${data.nodePackageManager}w` : data.nodePackageManagerCommand),
           },
           mutateApplicationPreparing,
         );
-        if (application.prettierFolders && !application.prettierFolders.includes('src/**/')) {
-          application.prettierFolders.push('src/**/');
-        }
       },
     });
   }

@@ -3,8 +3,11 @@
     "title": "Sozlamalar",
     "filter": "Filtr (prefiks buyicha)",
     "table": {
+      "title": "Sozlama xossalari",
       "prefix": "Prefiks",
-      "properties": "Xossalar"
+      "properties": "Xossalar",
+      "property": "Xossa",
+      "value": "Qiymat"
     }
   }
 }

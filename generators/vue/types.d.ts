@@ -43,6 +43,8 @@ export type Field = ClientField & {
   vueClientValidation?: boolean;
   /** A TypeScript expression of a value failing a validation of the field other than required. */
   vueInvalidValue?: string;
+  /** The rules of the field for useEntityValidation, as a TypeScript object literal. */
+  vueValidationRules?: string;
 };
 
 export interface Entity<F extends ClientField = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
@@ -50,6 +52,14 @@ export interface Entity<F extends ClientField = Field, R extends ClientRelations
   entityVueAuthorities?: string;
   /** The authorities of the routes that read the entity, as a list of string literals. */
   entityVueReadAuthorities?: string;
+  /** Whether a field of the update form is an Instant or a ZonedDateTime. */
+  vueFormTimeFields?: boolean;
+  /** The sample with the data of every field, its dates written as the strings of the server like the model types them. */
+  vueTsSampleWithFullData?: string;
+  /** The sample with the data of the required fields, its dates written as the strings of the server. */
+  vueTsSampleWithRequiredData?: string;
+  /** The sample with the data of some fields, its dates written as the strings of the server. */
+  vueTsSampleWithPartialData?: string;
 }
 
 export type Application = ClientApplication & VueAddedApplicationProperties;

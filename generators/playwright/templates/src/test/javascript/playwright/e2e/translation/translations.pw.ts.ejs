@@ -1,0 +1,91 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ const remotes = microfrontend ? microfrontends.filter(remote => !remote.self) : [];
+    const otherLanguage = languages.find(language => language !== nativeLanguage);
+_%>
+<%_ if (otherLanguage) { _%>
+import { readFile } from 'node:fs/promises';
+
+<%_ } _%>
+import { <%- remotes.length > 0 ? 'entityItemSelector, ' : '' %><%- otherLanguage ? 'languageMenuSelector, ' : '' %>navbarSelector } from '../../support/commands';
+import { test, expect } from '../../support/fixtures';
+
+test.describe('translations', () => {
+<%_ if (otherLanguage) { _%>
+  test('should translate the welcome of the home page', async ({ page }) => {
+    const { home } = JSON.parse(await readFile('<%- relativeDir(clientRootDir, clientI18nDir) %><%- otherLanguage %>/home.json', 'utf8'));
+    await page.goto('');
+    await page.locator(navbarSelector).locator(languageMenuSelector).click();
+    await page.locator('[data-cy="language-<%- otherLanguage %>"]').click();
+    await expect(page.locator('h1.display-4')).toContainText(home.title);
+  });
+<%_ } _%>
+<%_ if (remotes.length > 0) { _%>
+  <%_ if (otherLanguage) { _%>
+
+  <%_ } _%>
+  test.describe('microfrontends', () => {
+    // A retry would hide a title replaced after the check.
+    test.describe.configure({ retries: 0 });
+
+    test.beforeEach(async ({ page, jhi }) => {
+      const { username, password } = jhi.credentials();
+      await jhi.login(username, password);
+      // The translations of the microfrontends arrive after the ones of the application.
+      await page.route('**/services/**', async route => {
+        if (route.request().method() !== 'GET') {
+          await route.continue();
+          return;
+        }
+        const response = await route.fetch();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        await route.fulfill({ response });
+      });
+    });
+
+  <%_ for (const remote of remotes) { _%>
+    test('should keep the application title once the <%- remote.baseName %> translations are loaded', async ({ page }) => {
+      await page.goto('');
+      await page.locator(navbarSelector).locator(entityItemSelector).click();
+      // A translated menu item of the microfrontend tells that its translations are loaded.
+      const menuItem = page.locator(`${navbarSelector} ${entityItemSelector} .dropdown-item[href^="/<%- remote.baseName.toLowerCase() %>/"]`).first();
+      await expect(menuItem).toBeVisible({ timeout: 20000 });
+      await expect(menuItem).not.toContainText('global.menu.entities', { timeout: 20000 });
+      await expect(menuItem).not.toContainText('translation-not-found', { timeout: 20000 });
+      await expect(page.locator(navbarSelector).locator('.navbar-title')).toHaveText('<%- capitalizedBaseName %>');
+    });
+
+    <%_ if (otherLanguage) { _%>
+    test('should load the <%- remote.baseName %> translations of another language', async ({ page }) => {
+      await page.goto('');
+      await page.locator(navbarSelector).locator(languageMenuSelector).click();
+      await page.locator('[data-cy="language-<%- otherLanguage %>"]').click();
+      await page.locator(navbarSelector).locator(entityItemSelector).click();
+      const menuItem = page.locator(`${navbarSelector} ${entityItemSelector} .dropdown-item[href^="/<%- remote.baseName.toLowerCase() %>/"]`).first();
+      await expect(menuItem).toBeVisible({ timeout: 20000 });
+      await expect(menuItem).not.toContainText('global.menu.entities', { timeout: 20000 });
+      await expect(menuItem).not.toContainText('translation-not-found', { timeout: 20000 });
+      await expect(page.locator(navbarSelector).locator('.navbar-title')).toHaveText('<%- capitalizedBaseName %>');
+    });
+
+    <%_ } _%>
+  <%_ } _%>
+  });
+<%_ } _%>
+});

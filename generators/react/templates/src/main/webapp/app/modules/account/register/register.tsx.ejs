@@ -24,6 +24,7 @@ import { Link } from 'react-router';
 import { toast } from 'react-toastify';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import PageTitle from 'app/shared/layout/page-title';
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
 <%_ if (authenticationTypeOauth2) { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';
@@ -70,6 +71,7 @@ export const RegisterPage = () => {
 
   return (
     <div>
+      <PageTitle title={translate('register.title')} />
       <Row className="justify-content-center">
         <Col md="8">
           <h1 id="register-title" data-cy="registerTitle">

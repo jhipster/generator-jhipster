@@ -18,7 +18,7 @@
  */
 import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import { generateTestEntity } from '../../../client/support/index.ts';
+import { generateEntitySamples } from '../../../base-application/support/index.ts';
 import { mutateApplication } from '../../application.ts';
 import type { Application as E2eApplication, Entity as E2eEntity } from '../../types.ts';
 
@@ -49,18 +49,22 @@ export default class E2eBootstrapGenerator extends BaseApplicationGenerator<E2eE
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       prepareTestEntities({ entity }) {
-        entity.resetFakerSeed?.('e2e');
+        const { fields } = entity;
+        const entityFields = fields.filter(field => !field.autoGenerate);
+        const [[e2eTestEntitySample], [e2eTestEntity], [e2eFakeData]] = generateEntitySamples(entity, {
+          seed: 'e2e',
+          batches: [
+            { fields: entityFields.filter(field => !(field as { nullable?: boolean }).nullable), format: 'json-serializable' },
+            { fields: entityFields, format: 'json-serializable' },
+            { fields: fields.filter(field => !field.id || !field.autoGenerate), format: 'cypress' },
+          ],
+        });
         mutateData(entity, {
           __override__: false,
-          e2eTestEntitySample: ({ fields }) =>
-            generateTestEntity(fields.filter(field => !field.autoGenerate && !(field as { nullable?: boolean }).nullable)),
-          e2eTestEntity: ({ fields }) => generateTestEntity(fields.filter(field => !field.autoGenerate)),
-          e2eFakeData: () => entity.generateFakeData?.('cypress'),
-          e2eFieldsFakeData: ({ e2eFakeData, fields }) =>
-            e2eFakeData ??
-            Object.fromEntries(
-              fields.filter(field => !field.id || !field.autoGenerate).map(field => [field.fieldName, field.generateFakeData?.('cypress')]),
-            ),
+          e2eTestEntitySample,
+          e2eTestEntity,
+          e2eFakeData,
+          e2eFieldsFakeData: e2eFakeData,
         });
       },
     });

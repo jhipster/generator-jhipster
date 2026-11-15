@@ -25,6 +25,9 @@ import <%- packageName %>.config.Constants;
   <%_ } _%>
 import <%- user.entityAbsoluteClass %>;
 import <%- packageName %>.repository.UserRepository;
+import <%- packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.service.UserService;
+import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
 <%_ } _%>
 import <%- packageName %>.web.rest.vm.LoginVM;
 
@@ -48,12 +51,25 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
   <%_ } _%>
 <%_ } _%>
+<%_ if (generateUserManagement) { _%>
+
+import java.time.Instant;
+import java.util.Map;
+import java.util.Set;
+<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 
 import java.util.UUID;
 <%_ } _%>
+<%_ if (generateUserManagement) { _%>
+
+import static org.assertj.core.api.Assertions.assertThat;
+<%_ } _%>
 <%_ if (!reactive) { _%>
 
+  <%_ if (generateUserManagement) { _%>
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+  <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,6 +90,12 @@ import static org.hamcrest.Matchers.not;
 <%_ } _%>
 @IntegrationTest
 class AuthenticateControllerIT {
+<%_ if (generateUserManagement) { _%>
+
+    private static final int NO_CONTENT = 204;
+
+    private static final int UNAUTHORIZED = 401;
+<%_ } _%>
 
     @Autowired
     private ObjectMapper om;
@@ -84,6 +106,9 @@ class AuthenticateControllerIT {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userService;
 
 <%_ } _%>
     @Autowired
@@ -227,4 +252,131 @@ class AuthenticateControllerIT {
             .andExpect(header().doesNotExist("Authorization"));
 <%_ } _%>
     }
+<%_ if (generateUserManagement) { _%>
+
+    @Test
+  <%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+  <%_ } _%>
+    void testTokenEndsWithAPasswordReset() throws Exception {
+        <%- user.persistClass %> user = createUser("token-password-reset");
+        String token = authenticate("token-password-reset");
+        assertThat(authenticationStatus(token)).isEqualTo(NO_CONTENT);
+
+        user.setResetKey("token-reset-key");
+        user.setResetDate(Instant.now());
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
+        assertThat(userService.completePasswordReset("new password", "token-reset-key")<%- reactive ? '.block()' : '' %>).isNotNull();
+
+        assertThat(authenticationStatus(token)).isEqualTo(UNAUTHORIZED);
+    }
+
+    @Test
+  <%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+  <%_ } _%>
+    void testTokenEndsWithADeactivation() throws Exception {
+        <%- user.persistClass %> user = createUser("token-deactivation");
+        String token = authenticate("token-deactivation");
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>(user);
+
+        userDTO.setFirstName("changed");
+        userService.updateUser(userDTO)<%- reactive ? '.block()' : '' %>;
+        assertThat(authenticationStatus(token)).isEqualTo(NO_CONTENT);
+
+        userDTO.setActivated(false);
+        userService.updateUser(userDTO)<%- reactive ? '.block()' : '' %>;
+        assertThat(authenticationStatus(token)).isEqualTo(UNAUTHORIZED);
+    }
+
+    @Test
+  <%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+  <%_ } _%>
+    void testTokenEndsWithAChangeOfTheAuthorities() throws Exception {
+        <%- user.persistClass %> user = createUser("token-authorities");
+        String token = authenticate("token-authorities");
+        assertThat(authenticationStatus(token)).isEqualTo(NO_CONTENT);
+
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>(user);
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
+        userService.updateUser(userDTO)<%- reactive ? '.block()' : '' %>;
+
+        assertThat(authenticationStatus(token)).isEqualTo(UNAUTHORIZED);
+    }
+
+    @Test
+  <%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+  <%_ } _%>
+    void testTokenEndsWithADeletion() throws Exception {
+        createUser("token-deletion");
+        String token = authenticate("token-deletion");
+        assertThat(authenticationStatus(token)).isEqualTo(NO_CONTENT);
+
+        userService.deleteUser("token-deletion")<%- reactive ? '.block()' : '' %>;
+
+        assertThat(authenticationStatus(token)).isEqualTo(UNAUTHORIZED);
+    }
+
+    private <%- user.persistClass %> createUser(String login) {
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
+  <%_ if (databaseTypeCassandra) { _%>
+        user.setId(UUID.randomUUID().toString());
+  <%_ } _%>
+        user.setLogin(login);
+        user.setEmail(login + "@example.com");
+        user.setActivated(true);
+        user.setPassword(passwordEncoder.encode("test"));
+  <%_ if (databaseTypeSql && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM);
+  <%_ } _%>
+        return userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
+    }
+
+    private String authenticate(String login) throws Exception {
+        LoginVM loginVM = new LoginVM();
+        loginVM.setUsername(login);
+        loginVM.setPassword("test");
+  <%_ if (reactive) { _%>
+        Map<?, ?> body = webTestClient
+            .post()
+            .uri("/api/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(loginVM))
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBody(Map.class)
+            .returnResult()
+            .getResponseBody();
+  <%_ } else { _%>
+        Map<?, ?> body = om.readValue(
+            mockMvc
+                .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(loginVM)))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsByteArray(),
+            Map.class
+        );
+  <%_ } _%>
+        return (String) body.get("id_token");
+    }
+
+    private int authenticationStatus(String token) throws Exception {
+  <%_ if (reactive) { _%>
+        return webTestClient
+            .get()
+            .uri("/api/authenticate")
+            .headers(headers -> headers.setBearerAuth(token))
+            .exchange()
+            .returnResult(Void.class)
+            .getStatus()
+            .value();
+  <%_ } else { _%>
+        return mockMvc.perform(get("/api/authenticate").header("Authorization", "Bearer " + token)).andReturn().getResponse().getStatus();
+  <%_ } _%>
+    }
+<%_ } _%>
 }

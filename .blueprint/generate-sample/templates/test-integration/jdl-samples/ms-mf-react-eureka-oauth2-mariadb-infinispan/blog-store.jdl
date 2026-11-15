@@ -24,6 +24,7 @@ application {
     baseName gateway
     buildTool maven
     clientFramework react
+    languages [en, pt-br]
     creationTimestamp 1617901618886
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.gateway
@@ -44,6 +45,7 @@ application {
     buildTool maven
     cacheProvider infinispan
     clientFramework react
+    languages [en, pt-br]
     creationTimestamp 1617901618887
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.blog
@@ -84,6 +86,7 @@ application {
     baseName notification,
     buildTool gradle
     clientFramework react
+    languages [en, pt-br]
     creationTimestamp 1617901618889
     dtoSuffix Rest
     entitySuffix Entity

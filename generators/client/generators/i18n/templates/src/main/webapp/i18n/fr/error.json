@@ -9,6 +9,7 @@
       "500": "Erreur interne du serveur."
     },
     "concurrencyFailure": "Un autre utilisateur a modifié ces données en même temps que vous. Vos changements n'ont pas été sauvegardés.",
+    "dataIntegrityViolation": "Les données sont en conflit avec des données existantes ou ne sont pas valides. Vos changements n'ont pas été sauvegardés.",
     "validation": "Erreur de validation côté serveur."
   }
 }

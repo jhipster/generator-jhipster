@@ -3,8 +3,11 @@
     "title": "Configurazione",
     "filter": "Filtro (per prefisso)",
     "table": {
+      "title": "Proprietà di configurazione",
       "prefix": "Prefisso",
-      "properties": "Proprietà"
+      "properties": "Proprietà",
+      "property": "Proprietà",
+      "value": "Valore"
     }
   }
 }

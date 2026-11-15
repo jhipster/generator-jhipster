@@ -39,7 +39,7 @@ describe('jdl - ValidationConverter', () => {
           convertedJDLValidations = convertValidations([{ key: 'min', value: 0 }], name => name);
         });
 
-        it('should convert it', () => {
+        it('should convert it - snapshot', () => {
           expect(convertedJDLValidations).toMatchInlineSnapshot(`
 [
   JDLValidation {
@@ -122,7 +122,7 @@ describe('jdl - ValidationConverter', () => {
           convertedJDLValidations = convertValidations([null, { key: 'min', value: 0 }, undefined], name => name);
         });
 
-        it('should ignore it', () => {
+        it('should ignore it - snapshot', () => {
           expect(convertedJDLValidations).toMatchInlineSnapshot(`
 [
   JDLValidation {

@@ -27,7 +27,6 @@ import { mutateData } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
-import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import { defaultLanguage } from '../languages/support/index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
@@ -35,12 +34,14 @@ import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
 import { writeFiles } from './files-angular.ts';
 import {
+  addAdminEntitiesRoute,
   addEntitiesRoute,
   addIconImport,
   addItemToAdminMenu,
   type addItemToMenu,
   addRoute,
   addToEntitiesMenu,
+  isAdminPageEntity,
   isTranslatedAngularFile,
   translateAngularFilesTransform,
 } from './support/index.ts';
@@ -144,10 +145,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         });
         application.prettierExtensions.push('html', 'css', 'scss');
         application.prettierFolders.push('build-plugins/**/');
-        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
-          // When we have a java backend, 'src/**' is already added by java:bootstrap
-          application.prettierFolders.push(`${application.clientSrcDir}**/`);
-        }
       },
       javaNodeBuildPaths({ application }) {
         application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json', 'build-plugins/');
@@ -164,6 +161,14 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           const ignoreNonExistingRoute = chalk.yellow(`Route(s) not added to ${routeTemplatePath}.`);
           const addRouteCallback = addEntitiesRoute(param);
           this.editFile(routeTemplatePath, { ignoreNonExisting: ignoreNonExistingRoute }, addRouteCallback);
+          if (param.entities.some(entity => isAdminPageEntity(application, entity))) {
+            const adminRoutesPath = `${param.application.clientSrcDir}app/admin/admin.routes.ts`;
+            this.editFile(
+              adminRoutesPath,
+              { ignoreNonExisting: chalk.yellow(`Route(s) not added to ${adminRoutesPath}.`) },
+              addAdminEntitiesRoute(param),
+            );
+          }
 
           if (application.exposeMicrofrontend) {
             const adminEntities = application.applicationTypeMicroservice ? [] : param.entities.filter(entity => entity.adminEntity);
@@ -234,6 +239,20 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      async composeSpringBoot({ application }) {
+        if (application.backendTypeSpringBoot) {
+          await this.composeWithJHipster('jhipster:client:spring-boot');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get preparingEachEntity() {
@@ -450,6 +469,31 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientRootDir}webpack/webpack.custom.js`,
             `${application.clientRootDir}webpack/logo-jhipster.png`,
             [application.microfrontend, `${application.clientRootDir}webpack/webpack.microfrontend.js`],
+          ],
+          '9.5.0': [
+            `${application.clientSrcDir}app/admin/configuration/configuration.model.ts`,
+            `${application.clientSrcDir}app/admin/health/health.model.ts`,
+            `${application.clientSrcDir}app/admin/logs/log.model.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.ts`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.html`,
+            `${application.clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.ts`,
+            `${application.clientSrcDir}app/admin/metrics/metrics.model.ts`,
           ],
         });
       },

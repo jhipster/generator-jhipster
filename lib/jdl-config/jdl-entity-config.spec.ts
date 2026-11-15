@@ -48,7 +48,7 @@ describe('jdl entity definitions', () => {
     });
   });
 
-  it('should give the entity options of the generators app reaches', () => {
+  it('should give the entity options of the generators app reaches - snapshot', () => {
     expect(getDefaultJDLEntityConfig()).toMatchSnapshot();
   });
 });

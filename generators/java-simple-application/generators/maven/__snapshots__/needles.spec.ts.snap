@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - maven - needles prod profile should match generated pom 1`] = `
+exports[`generator - maven - needles prod profile should match generated pom snapshot 1`] = `
 {
   "pom.xml": {
     "contents": "<?xml version="1.0" encoding="UTF-8"?>

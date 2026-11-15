@@ -56,4 +56,25 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+  for (const clientFramework of ['angular', 'react', 'vue'] as const) {
+    describe(`with skipClient and ${clientFramework}`, () => {
+      describe('composing', () => {
+        before(() =>
+          helpers
+            .runJHipster('app')
+            .withMockedGenerators(['jhipster:client:bootstrap', `jhipster:${clientFramework}:bootstrap`])
+            .withJHipsterConfig({ skipClient: true, clientFramework, enableTranslation: true }),
+        );
+        it('should not compose the generators of the client', () => {
+          runResult.assertGeneratorNotComposed('jhipster:client:bootstrap');
+          runResult.assertGeneratorNotComposed(`jhipster:${clientFramework}:bootstrap`);
+        });
+      });
+      before(() => helpers.runJHipster('app').withJHipsterConfig({ skipClient: true, clientFramework, enableTranslation: true }));
+      it('should not update the languages of the client', () => {
+        runResult.assertNoFile('src/main/webapp/i18n/en/global.json');
+        runResult.assertNoFile('src/main/webapp/app/shared/language/find-language-from-key.pipe.ts');
+      });
+    });
+  }
 });

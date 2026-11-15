@@ -9,6 +9,7 @@
       "500": "Daxili server xətası."
     },
     "concurrencyFailure": "Fərqli bir istifadəçi bu məlumatları sizinlə eyni vaxtda dəyişdirdi. Bu səbəbdən dəyişiklikləriniz qeyd alınmadı.",
+    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
     "validation": "Serverdə validasiya xətası baş verdi."
   }
 }

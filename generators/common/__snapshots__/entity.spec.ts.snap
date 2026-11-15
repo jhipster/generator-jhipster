@@ -13,6 +13,7 @@ exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
 
 exports[`mutation object test expects mutateField to match snapshot 1`] = `
 {
+  "fieldSupportsSortBy": false,
   "fieldTypeBinary": false,
   "fieldTypeCharSequence": false,
   "fieldTypeNumeric": false,

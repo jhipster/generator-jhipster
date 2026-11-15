@@ -48,7 +48,7 @@ describe('jdl - AbstractJDLOption', () => {
         result = option.resolveEntityNames(['A', 'B', 'C']);
       });
 
-      it("should resolve the option's entity names", () => {
+      it("should resolve the option's entity names - snapshot", () => {
         expect(result).toMatchInlineSnapshot(`
 Set {
   "A",

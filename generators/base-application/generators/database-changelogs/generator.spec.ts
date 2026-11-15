@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'expect-node';
+import { before, describe, exnode, expect, it } from 'expect-node';
 import { basename, join, resolve } from 'node:path';
 
 import Generator from './generator.ts';
@@ -61,8 +61,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('records the changelog creating it, at its changelog date', () => {
-      expect(Object.keys(changelogObjects())).toEqual(['20200101000100_Order']);
-      expect(changelogObjects()['20200101000100_Order']).toMatchObject({
+      expect(Object.keys(changelogObjects())).toEqual(['_20200101000100_Order']);
+      expect(changelogObjects()._20200101000100_Order).toMatchObject({
         type: 'changelog',
         operation: 'create',
         entityName: 'Order',
@@ -89,7 +89,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('records the changelog creating it at its incremental changelog date', () => {
-      expect(Object.keys(changelogObjects())).toEqual(['20200101000200_Order']);
+      expect(Object.keys(changelogObjects())).toEqual(['_20200101000200_Order']);
     });
   });
 
@@ -107,7 +107,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('records the changelogs creating them, from the disk', () => {
-      expect(changelogObjects()['20200101000100_Order']).toMatchObject({ operation: 'create', entityName: 'Order' });
+      expect(changelogObjects()._20200101000100_Order).toMatchObject({ operation: 'create', entityName: 'Order' });
       expect(Object.keys(changelogObjects())).toHaveLength(1);
     });
   });
@@ -153,7 +153,7 @@ describe(`generator - ${generator}`, () => {
 
     it('keeps the entity in the last changelog only, at its final properties', () => {
       const objects = changelogObjects();
-      expect(objects['20200101000100_Order']).not.toHaveProperty('entity');
+      expect(objects._20200101000100_Order).not.toHaveProperty('entity');
       const update = Object.values(objects).find(object => object.operation === 'update');
       expect(update.entity.fields.map((field: Record<string, any>) => field.fieldName)).toEqual(['id', 'code', 'total']);
       expect(update.entity.fields[0]).toMatchObject({ fieldName: 'id', id: true });
@@ -238,7 +238,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('records no changelog', () => {
-      expect(Object.keys(changelogObjects())).toEqual(['20200101000000_Customer', '20200101000100_Order']);
+      expect(Object.keys(changelogObjects())).toEqual(['_20200101000000_Customer', '_20200101000100_Order']);
     });
   });
 
@@ -271,7 +271,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('records the entity at the final properties of its database', () => {
-      const { entity } = changelogObjects()['20200101000100_Order'];
+      const { entity } = changelogObjects()._20200101000100_Order;
       expect(entity.entityTableName).toBe('order');
       expect(entity.fields[1]).toMatchObject({
         fieldName: 'code',
@@ -289,7 +289,9 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with an entity removed after its changelog', () => {
+  describe('with an entity removed after a changelog recorded without the underscore', () => {
+    let warn: ReturnType<typeof exnode.spyOn>;
+
     before(async () => {
       await helpers
         .runJHipster(generator)
@@ -302,13 +304,28 @@ describe(`generator - ${generator}`, () => {
             changelogDate: '20200101000100',
             entity: order,
           },
+        })
+        .onGenerator(generator => {
+          warn = exnode.spyOn(generator.log, 'warn');
         });
+    });
+
+    it('warns its name is not a name of the JDL', () => {
+      expect(warn).toHaveBeenCalledWith(
+        'The objects 20200101000100_Order of the .yo-rc.json file cannot be declared in a JDL: a name of the JDL starts with a letter or an underscore',
+      );
     });
 
     it('records the changelog removing it', () => {
       const removal = Object.values(changelogObjects()).find(object => object.operation === 'remove');
       expect(removal).toMatchObject({ type: 'changelog', entityName: 'Order' });
       expect(removal).not.toHaveProperty('entity');
+    });
+
+    it('keeps the name of a changelog recorded without the underscore', () => {
+      const objects = changelogObjects();
+      expect(objects['20200101000100_Order']).not.toHaveProperty('entity');
+      expect(objects).not.toHaveProperty('_20200101000100_Order');
     });
   });
 
@@ -319,7 +336,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('records no other changelog', () => {
-      expect(Object.keys(changelogObjects())).toEqual(['20200101000100_Order']);
+      expect(Object.keys(changelogObjects())).toEqual(['_20200101000100_Order']);
     });
   });
 });

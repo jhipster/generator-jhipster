@@ -47,7 +47,7 @@ import { useI18n } from 'vue-i18n';
 
 import axios from 'axios';
 
-import { useStore } from '@/store';
+import { useStore } from '@/stores';
 
 defineOptions({ name: 'Sessions' });
 
@@ -55,7 +55,7 @@ interface Session {
   series: string;
   tokenDate: string;
   ipAddress: string;
-  userAgent: string;
+  userAgent: string | null;
 }
 
 const store = useStore();
@@ -90,4 +90,11 @@ const invalidate = (session: string) =>
     });
 
 retrieveSessions();
+
+defineExpose({
+  username,
+  success,
+  error,
+  invalidate,
+});
 </script>

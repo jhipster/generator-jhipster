@@ -45,7 +45,7 @@ describe('helpers', () => {
     before(async () => {
       await helpers.runJHipster('dummy').withGenerators([[helpers.createDummyGenerator(), { namespace: DUMMY_NAMESPACE }]]);
     });
-    it('should register jhipster generators namespaces', () => {
+    it('should register jhipster generators namespaces - snapshot', () => {
       expect(
         Object.keys(runResult.env.getGeneratorsMeta())
           .filter(ns => ns !== DUMMY_NAMESPACE)
@@ -57,7 +57,7 @@ describe('helpers', () => {
     before(async () => {
       await helpers.run(helpers.createDummyGenerator<typeof CoreGenerator>(), { namespace: DUMMY_NAMESPACE }).withJHipsterGenerators();
     });
-    it('should register jhipster generators namespaces', () => {
+    it('should register jhipster generators namespaces - snapshot', () => {
       expect(
         Object.keys(runResult.env.getGeneratorsMeta())
           .filter(ns => ns !== DUMMY_NAMESPACE)
@@ -71,7 +71,7 @@ describe('helpers', () => {
         .runJHipster('dummy', { useDefaultMocks: true })
         .withGenerators([[helpers.createDummyGenerator(), { namespace: DUMMY_NAMESPACE }]]);
     });
-    it('should register jhipster generators namespaces', () => {
+    it('should register jhipster generators namespaces - snapshot', () => {
       expect(
         Object.keys(runResult.env.getGeneratorsMeta())
           .filter(ns => ns !== DUMMY_NAMESPACE)

@@ -3,8 +3,11 @@
     "title": "Konfigurimi",
     "filter": "Filtro (me prefiks)",
     "table": {
+      "title": "Tiparet e konfigurimit",
       "prefix": "Prefiksi",
-      "properties": "Tipare"
+      "properties": "Tipare",
+      "property": "Tipar",
+      "value": "Vlera"
     }
   }
 }

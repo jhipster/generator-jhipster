@@ -114,6 +114,12 @@ export function replaceVueTranslations(
   if (enableTranslation) {
     return body;
   }
+  // The script of a component written with script setup is translated like a .ts file.
+  body = body.replaceAll(/(?<open><script\b[^>]*>)(?<script>[\s\S]*?)(?<close><\/script>)/g, (_complete, ...args) => {
+    const groups: Record<string, string> = args.pop();
+    const script = removeDeclarations({ content: replaceTranslations({ type: 'ts', content: groups.script, getWebappTranslation }) });
+    return `${groups.open}${script}${groups.close}`;
+  });
   return replaceTranslationAttributes({ content: body, getWebappTranslation });
 }
 

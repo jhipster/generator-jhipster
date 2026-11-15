@@ -3,8 +3,11 @@
     "title": "Konfiguracija",
     "filter": "Filter (po prefiksu)",
     "table": {
+      "title": "Osobine konfiguracije",
       "prefix": "Prefiks",
-      "properties": "Osobine"
+      "properties": "Osobine",
+      "property": "Osobina",
+      "value": "Vrednost"
     }
   }
 }

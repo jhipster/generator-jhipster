@@ -48,7 +48,7 @@ describe('jdl - OptionConverter', () => {
             );
           });
 
-          it('should convert it', () => {
+          it('should convert it - snapshot', () => {
             expect(convertedOptions).toMatchSnapshot();
           });
         });
@@ -77,7 +77,7 @@ describe('jdl - OptionConverter', () => {
             );
           });
 
-          it('should convert it', () => {
+          it('should convert it - snapshot', () => {
             expect(convertedOptions).toMatchSnapshot();
           });
         });
@@ -101,7 +101,7 @@ describe('jdl - OptionConverter', () => {
             },
           ]);
         });
-        it('should convert them', () => {
+        it('should convert them - snapshot', () => {
           expect(convertedOptions).toMatchInlineSnapshot(`
 [
   JDLBinaryOption {
@@ -154,7 +154,7 @@ describe('jdl - OptionConverter', () => {
             },
           ]);
         });
-        it('should not convert them', () => {
+        it('should not convert them - snapshot', () => {
           expect(convertedOptions).toMatchInlineSnapshot(`
 [
   JDLBinaryOption {

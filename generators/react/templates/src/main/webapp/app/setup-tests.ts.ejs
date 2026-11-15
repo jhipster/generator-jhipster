@@ -26,7 +26,3 @@ Object.assign(globalThis as any, {
   VERSION: '0.0.1-test',
   DEVELOPMENT: false,
 });
-
-if (!(globalThis as any)._virtualConsole) {
-  (globalThis as any)._virtualConsole = { emit: () => false };
-}

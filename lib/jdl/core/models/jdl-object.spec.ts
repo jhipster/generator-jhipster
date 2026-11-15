@@ -225,7 +225,7 @@ describe('jdl - JDLObject', () => {
         });
       });
 
-      it('should use each entity name', () => {
+      it('should use each entity name - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   "A",
@@ -340,7 +340,7 @@ describe('jdl - JDLObject', () => {
         returnedEntities = object.getEntities();
       });
 
-      it('should return them in an array', () => {
+      it('should return them in an array - snapshot', () => {
         expect(returnedEntities).toMatchInlineSnapshot(`
 [
   JDLEntity {
@@ -434,7 +434,7 @@ describe('jdl - JDLObject', () => {
         });
       });
 
-      it('should use each entity name', () => {
+      it('should use each entity name - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   "A",
@@ -590,7 +590,7 @@ describe('jdl - JDLObject', () => {
         });
       });
 
-      it('should use each enum name', () => {
+      it('should use each enum name - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   "A",
@@ -736,7 +736,7 @@ describe('jdl - JDLObject', () => {
         });
       });
 
-      it('should use each relationship', () => {
+      it('should use each relationship - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   "OneToOne",
@@ -883,7 +883,7 @@ describe('jdl - JDLObject', () => {
         });
       });
 
-      it('should use each option', () => {
+      it('should use each option - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   "skipClient",

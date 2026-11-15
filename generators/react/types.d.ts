@@ -16,10 +16,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Application as ClientApplication } from '../client/types.d.ts';
+import type {
+  Application as ClientApplication,
+  Entity as ClientEntity,
+  Field as ClientField,
+  Relationship as ClientRelationship,
+} from '../client/types.d.ts';
 
 import type { ReactAddedApplicationProperties } from './application.ts';
 
-export type { Config, Entity, Features, Field, Options, Relationship, Source } from '../client/types.d.ts';
+export type { Config, Features, Options, Relationship, Source } from '../client/types.d.ts';
 
-export type Application = ClientApplication & ReactAddedApplicationProperties;
+/** A client constant backing the values of a `clientConstantsAsValues` field. */
+export type ReactFieldClientConstant = {
+  /** Import statement of the constant. */
+  reactConstantImport: string;
+  /** Expression that evaluates to the list of values. */
+  reactConstantValues: string;
+};
+
+export type Field = ClientField & {
+  reactFieldClientConstant?: ReactFieldClientConstant;
+  /** The validation pattern of the field, as the content of a regular expression literal. */
+  fieldValidateRulesPatternReact?: string;
+  /** The validation pattern of the field, as the content of a single-quoted string. */
+  fieldValidateRulesPatternReactString?: string;
+};
+
+export interface Entity<F extends ClientField = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
+  /** The path of the entity in the state of the store. */
+  entityReactState?: string;
+}
+
+export type Application<E extends ClientEntity = Entity> = ClientApplication<E> & ReactAddedApplicationProperties;

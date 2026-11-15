@@ -1,0 +1,55 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { computed, provide } from 'vue';
+import { type Router } from 'vue-router';
+
+import { storeToRefs } from 'pinia';
+
+import AccountService, { accountServiceKey } from '@/account/account.service';
+<%_ if (authenticationUsesCsrf) { _%>
+import LoginService, { loginServiceKey } from '@/account/login.service';
+<%_ } _%>
+import { createUnauthorizedHandler } from '@/account/unauthorized-handler';
+import { setupAxiosInterceptors } from '@/config/axios-interceptor';
+import { authenticatedKey, currentUsernameKey } from '@/config/injection-keys';
+import { createAuthorityGuard } from '@/router/authority-guard';
+import { useStore } from '@/stores';
+
+/**
+ * Sets the account of the application up, once, in the setup of its root: the guard of the routes, what a 401 does to
+ * the session, and what the components inject (the account service, whether the user is authenticated and its name).
+ */
+export const useAccount = ({ router }: { router: Router }) => {
+<%_ if (authenticationUsesCsrf) { _%>
+  provide(loginServiceKey, new LoginService());
+<%_ } _%>
+  const store = useStore();
+  const accountService = new AccountService(store);
+
+  router.beforeResolve(createAuthorityGuard({ accountService, store }));
+
+  setupAxiosInterceptors(createUnauthorizedHandler({ accountService<%- authenticationTypeOauth2 ? '' : ', router' %> }), error => Promise.reject(error));
+
+  const { authenticated } = storeToRefs(store);
+  provide(authenticatedKey, authenticated);
+  provide(currentUsernameKey, computed(() => store.account?.login));
+  provide(accountServiceKey, accountService);
+
+  return { store, accountService, authenticated };
+};

@@ -43,13 +43,13 @@ describe('describe-samples - support', () => {
     });
 
     // A change of the samples groups, or of their samples, shows here.
-    it('should match the samples groups and their samples', () => {
+    it('should match the samples groups and their samples snapshot', () => {
       expect(groups).toMatchSnapshot();
     });
   });
 
   describe('describeSampleGroup', () => {
-    it('should match the samples of a group', () => {
+    it('should match the samples of a group snapshot', () => {
       const group = describeSampleGroup('angular');
       expect(group).toMatchSnapshot({
         samples: Object.fromEntries(Object.entries(group.samples).map(([name, sample]) => [name, shapeOf(sample)])),
@@ -62,7 +62,7 @@ describe('describe-samples - support', () => {
   });
 
   describe('describeSample', () => {
-    it('should match a sample', () => {
+    it('should match a sample snapshot', () => {
       // The files copied to the project shown in full.
       expect(describeSample('ng-default')).toMatchSnapshot();
     });

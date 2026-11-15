@@ -445,7 +445,7 @@ describe('jdl - JDLRelationships', () => {
         });
       });
 
-      it('should use each relationship', () => {
+      it('should use each relationship - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   {

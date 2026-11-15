@@ -68,6 +68,26 @@ const clientAdminFiles = (clientSrcDir: string) => [
 describe(`generator - ${clientFramework}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('backend type', () => {
+    const run = (config: Record<string, unknown>) =>
+      helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withJHipsterConfig({ clientFramework, ...config });
+
+    it('should compose with client:spring-boot for Spring Boot', async () => {
+      await run({});
+      expect(runResult.getComposedGenerators()).toContain('jhipster:client:spring-boot');
+    });
+
+    it('should not compose with client:spring-boot for another backend', async () => {
+      await run({ backendType: 'Other' });
+      expect(runResult.getComposedGenerators()).not.toContain('jhipster:client:spring-boot');
+    });
+  });
   checkEnforcements({ client: true }, generator);
 
   describe('migration', () => {
@@ -239,7 +259,7 @@ describe(`generator - ${clientFramework}`, () => {
             );
             if (enableTranslation) {
               assertion(
-                `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
+                `${clientSrcDir}app/layouts/navbar/navbar.vue`,
                 '<b-dropdown-item to="/admin/metrics" active-class="active">\n' +
                   '            <font-awesome-icon icon="tachometer-alt" />\n' +
                   "            <span>{{ t$('global.menu.admin.metrics') }}</span>\n" +
@@ -303,7 +323,7 @@ describe(`generator - ${clientFramework}`, () => {
 
     it('should not use the embedded entity service at the update component', () => {
       runResult.assertNoFileContent(
-        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.vue`,
         'embedded-entity.service',
       );
       runResult.assertNoFileContent(

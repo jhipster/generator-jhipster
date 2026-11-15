@@ -43,7 +43,7 @@ describe(`generator - ${generator}`, () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
 
-    it('should compose with generators', () => {
+    it('should compose with generators - snapshot', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:java-simple-application:build-tool",
@@ -65,12 +65,27 @@ describe(`generator - ${generator}`, () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
 
-    it('should compose with generators', () => {
+    it('should compose with generators - snapshot', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:java-simple-application:build-tool",
 ]
 `);
+    });
+  });
+
+  describe('with pnpm', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ nodePackageManager: 'pnpm' })
+        .withMockedJHipsterGenerators()
+        .withMockedSource();
+    });
+
+    it('should write the pnpm wrapper', () => {
+      result.assertFile(['pnpmw', 'pnpmw.cmd']);
+      result.assertNoFile(['npmw', 'npmw.cmd']);
     });
   });
 

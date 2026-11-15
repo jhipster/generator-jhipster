@@ -36,7 +36,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runCli('ci-cd').withJHipsterConfig().withSkipWritingPriorities();
       });
 
-      it('should match prompts order', () => {
+      it('should match prompts order snapshot', () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "ciCd",
@@ -83,7 +83,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runCli('ci-cd github').withJHipsterConfig().withSkipWritingPriorities();
       });
 
-      it('should not ask ciCd question', () => {
+      it('should not ask ciCd question - snapshot', () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "ciCdIntegrations",
@@ -101,7 +101,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.application!.ciCd).toEqual(['github']);
       });
 
-      it('should ask provider prompts', () => {
+      it('should ask provider prompts - snapshot', () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "ciCdIntegrations",
@@ -115,7 +115,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runCli('ci-cd jenkins').withJHipsterConfig().withSkipWritingPriorities();
       });
 
-      it('should not ask ciCd question', () => {
+      it('should not ask ciCd question - snapshot', () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "ciCdIntegrations",
@@ -135,7 +135,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.application!.ciCd).toEqual(['jenkins']);
       });
 
-      it('should ask provider prompts', () => {
+      it('should ask provider prompts - snapshot', () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "ciCdIntegrations",

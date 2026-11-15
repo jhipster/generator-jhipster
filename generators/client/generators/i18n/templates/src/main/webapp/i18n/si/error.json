@@ -9,6 +9,7 @@
       "500": "අභ්යන්තර සේවාදායක දෝෂය."
     },
     "concurrencyFailure": "තවත් පරිශීලකයෙක් මෙම දත්ත ඔබ විසින්ම වෙනස් කරන ලදි. ඔබගේ වෙනස්කම් ප්\u200Dරතික්ෂේප විය.",
+    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
     "validation": "සේවාදායකයේ වලංගු කිරීමේ දෝෂයකි."
   }
 }

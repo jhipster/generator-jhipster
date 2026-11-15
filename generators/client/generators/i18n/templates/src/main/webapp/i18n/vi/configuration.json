@@ -3,8 +3,11 @@
     "title": "Cấu hình",
     "filter": "Lọc (bắt đầu với)",
     "table": {
+      "title": "Các thuộc tính cấu hình",
       "prefix": "Bắt đầu với",
-      "properties": "Các thuộc tính"
+      "properties": "Các thuộc tính",
+      "property": "Thuộc tính",
+      "value": "Giá trị"
     }
   }
 }

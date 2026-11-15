@@ -43,7 +43,7 @@ const mockedGenerators = [MOCKED_APP, MOCKED_ENTITIES, MOCKED_DOCKER_COMPOSE, MO
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('help', () => {
-    it('should print expected information', async () => {
+    it('should print expected information - snapshot', async () => {
       expect(await getCommandHelpOutput(generator)).toMatchSnapshot();
     });
   });
@@ -174,7 +174,7 @@ describe(`generator - ${generator}`, () => {
           expect.not.objectContaining({ applicationWithEntities: expect.any(Object) }),
         ]);
       });
-      it('should write expected files', () => {
+      it('should write expected files - snapshot', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
     });
@@ -285,7 +285,7 @@ describe(`generator - ${generator}`, () => {
         });
       });
 
-      it('should write expected files', () => {
+      it('should write expected files - snapshot', () => {
         expect(runResult.getSnapshot()).toMatchInlineSnapshot(`
 {
   ".yo-rc.json": {
@@ -397,7 +397,7 @@ describe(`generator - ${generator}`, () => {
         const { calls } = runResult.getGeneratorMock(MOCKED_APP);
         expect(calls.at(-1)?.arguments).toStrictEqual([[], expect.not.objectContaining({ applicationWithEntities: expect.any(Object) })]);
       });
-      it('should write expected files', () => {
+      it('should write expected files - snapshot', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
     });
@@ -410,7 +410,7 @@ describe(`generator - ${generator}`, () => {
         });
       });
 
-      it('should write entity files', () => {
+      it('should write entity files - snapshot', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
     });
@@ -565,7 +565,7 @@ describe(`generator - ${generator}`, () => {
       it('should not compose with workspaces', () => {
         runResult.assertGeneratorNotComposed(MOCKED_WORKSPACES);
       });
-      it('should write expected files', () => {
+      it('should write expected files - snapshot', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
     });
@@ -714,7 +714,7 @@ describe(`generator - ${generator}`, () => {
           });
         });
 
-        it('should write expected files', () => {
+        it('should write expected files - snapshot', () => {
           expect(runResult.getSnapshot()).toMatchSnapshot();
         });
       });
@@ -768,7 +768,7 @@ entity Bar
         await helpers.runJHipster(generator).withMockedGenerators(mockedGenerators).withOptions({ inline: jdl, jsonOnly: true });
       });
 
-      it('should generate expected config', () => {
+      it('should generate expected config - snapshot', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
     });
@@ -784,7 +784,7 @@ entity Bar
         await helpers.runJHipster(generator).withMockedGenerators(mockedGenerators).withOptions({ inline: jdl, jsonOnly: true });
       });
 
-      it('should generate expected config', () => {
+      it('should generate expected config - snapshot', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
     });
@@ -844,7 +844,7 @@ relationship ManyToOne {
           });
       });
 
-      it('should generate expected Entity config', () => {
+      it('should generate expected Entity config - snapshot', () => {
         expect(runResult.getSnapshot('**/.jhipster/**')).toMatchInlineSnapshot(`
 {
   ".jhipster/AnnotatedEntity.json": {

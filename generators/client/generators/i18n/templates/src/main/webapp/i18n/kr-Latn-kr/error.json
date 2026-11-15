@@ -9,6 +9,7 @@
       "500": "Ishki qátelik júz berdi."
     },
     "concurrencyFailure": "Basqa paydalanıwshı sol maǵlıwmattı siz menen bir waqıtta ózgertirdi. Sizdiń ózgerislerińiz biykar etildi.",
+    "dataIntegrityViolation": "The data conflicts with existing data or is not valid. Your changes were rejected.",
     "validation": "Server tárepte validatsiya qateligi júz berdi."
   }
 }

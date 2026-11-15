@@ -41,7 +41,7 @@ describe(`generator - ${generator}`, () => {
       it('should set workflow value', () => {
         expect(runResult.generator.workflow).toBe(workflow);
       });
-      it('should match matrix value', () => {
+      it('should match matrix value snapshot', () => {
         expect(runResult.generator.matrix).toMatchSnapshot();
       });
     });
