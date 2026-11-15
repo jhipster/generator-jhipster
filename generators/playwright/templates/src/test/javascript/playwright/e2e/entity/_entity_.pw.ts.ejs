@@ -270,7 +270,7 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
         await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
       });
 
-      <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship missbehavior' : '' %>
+      <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship misbehavior' : '' %>
       test<%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '.skip' : '' %>('edit button click should load edit <%- entityNameCapitalized %> page and save', async ({ page, jhi }) => {
         await page.locator(entityEditButtonSelector).first().click();
         await expect(jhi.entity.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>')).toBeVisible();
