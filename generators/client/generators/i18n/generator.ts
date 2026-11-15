@@ -245,7 +245,10 @@ export default class I18NGenerator extends ClientApplicationGenerator {
         );
       },
       async writeEntityFiles({ application, entities }) {
-        const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
+        // The fields the clients skip have no translation.
+        const entitiesToWriteTranslationFor = (application.filterEntitiesAndPropertiesForClient?.(entities) ?? entities).filter(
+          entity => !entity.skipClient && !entity.builtInUser,
+        );
         if (application.userManagement?.skipClient) {
           entitiesToWriteTranslationFor.push(application.userManagement);
         }

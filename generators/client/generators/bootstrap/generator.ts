@@ -22,6 +22,7 @@ import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
 import { mutateEntity, mutateField } from '../../entity.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
+import { isClientField } from '../../support/filter-entities.ts';
 import { filterEntitiesForClient, filterEntityPropertiesForClient, preparePostEntityClientDerivedProperties } from '../../support/index.ts';
 import type { Application as ClientApplication, Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
 
@@ -130,11 +131,9 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
       addFallback({ application }) {
         application.filterEntitiesForClient ??= filterEntitiesForClient;
         application.filterEntityPropertiesForClient ??= filterEntityPropertiesForClient;
-        application.filterEntitiesAndPropertiesForClient ??= entities => {
-          entities = application.filterEntitiesForClient!(entities);
-          entities.forEach(application.filterEntityPropertiesForClient!);
-          return entities;
-        };
+        application.filterEntitiesAndPropertiesForClient ??= entities =>
+          // The fields the clients skip are left out; the relationships are kept as they are.
+          application.filterEntitiesForClient!(entities).map(entity => ({ ...entity, fields: entity.fields.filter(isClientField) }));
       },
       postPreparingEntity({ entities }) {
         for (const entity of entities) {
