@@ -76,12 +76,17 @@ def webapp_test = tasks.register('webapp_test', NpmTask) {
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ } _%>
 
-    outputs.dir("build/test-results/jest/")
-        .withPropertyName("jest-result-dir")
-    outputs.file("build/test-results/TESTS-results-jest.xml")
-        .withPropertyName("jest-result")
-        outputs.file("build/test-results/clover.xml")
-        .withPropertyName("clover-result")
+  <%_ if (clientFramework === 'angular') { _%>
+    outputs.file("build/test-results/TESTS-results-sonar-vitest.xml")
+        .withPropertyName("vitest-result")
+    outputs.file("build/test-results/lcov.info")
+        .withPropertyName("coverage-result")
+  <%_ } else { _%>
+    outputs.file("build/test-results/TESTS-results-vitest.xml")
+        .withPropertyName("vitest-result")
+    outputs.dir("<%- clientFramework === 'vue' ? 'build/vite-coverage/' : 'build/test-results/lcov-report/' %>")
+        .withPropertyName("coverage-result")
+  <%_ } _%>
 
     dependsOn(npmInstall, compileTestJava)
     args = ["run", "webapp:test"]
