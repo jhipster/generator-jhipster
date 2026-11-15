@@ -61,7 +61,18 @@ export const withContentTypeFields = <F extends Field>(fields: F[]): (F | Conten
         skipClient: true,
         // The content type of the image the fake data has.
         fakerTemplate: 'image/png',
-        ...(field.fieldValidateRules?.includes('required') ? { fieldValidateRules: ['required'] } : {}),
       };
       return [field, contentTypeField];
     });
+
+/**
+ * The content type field is required when its blob is, as the blob is once prepared: the required validation of a blob
+ * is dropped where its type has no validation, like the ByteBuffer of Cassandra.
+ */
+export const requireContentTypeFieldWithBlob = (field: Field, fields: Field[]): void => {
+  if (!isContentTypeField(field)) return;
+  const blob = fields.find(other => other.fieldName === field.contentTypeOf);
+  if (blob?.fieldValidationRequired) {
+    field.fieldValidateRules = ['required'];
+  }
+};
