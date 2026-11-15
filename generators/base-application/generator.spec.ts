@@ -436,6 +436,60 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('content type fields of the blobs', () => {
+    const written: Record<string, string[]> = {};
+    const fieldNames = (entities: any[]) => entities.find(entity => entity.name === 'Foo').fields.map((field: any) => field.fieldName);
+
+    const createGenerator = (name: string, features: Record<string, boolean> = {}) =>
+      class extends Generator {
+        constructor(args: any, options: any, generatorFeatures: any) {
+          super(args, options, { ...generatorFeatures, ...features });
+        }
+
+        async beforeQueue() {
+          await this.dependsOnBootstrap('app');
+        }
+
+        get [Generator.PREPARING_EACH_ENTITY]() {
+          return this.asPreparingEachEntityTaskGroup({
+            collect({ entity }) {
+              written[`${name}-preparing`] = entity.fields.map(field => field.fieldName);
+            },
+          });
+        }
+
+        get [Generator.WRITING_ENTITIES]() {
+          return this.asWritingEntitiesTaskGroup({
+            collect({ entities }) {
+              written[name] = fieldNames(entities);
+            },
+          });
+        }
+      };
+
+    before(async () => {
+      for (const [name, features] of [
+        ['without-feature', {}],
+        ['with-feature', { contentTypeFields: true }],
+      ] as const) {
+        await helpers
+          .run(createGenerator(name, features))
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withJHipsterConfig({}, [{ name: 'Foo', fields: [{ fieldName: 'pic', fieldType: 'ImageBlob' }] }]);
+      }
+    });
+
+    it('prepares the content type field next to the blob for every generator', () => {
+      expect(written['without-feature-preparing']).toEqual(['id', 'pic', 'picContentType']);
+    });
+    it('leaves the content type field out of the entities a generator writes without the contentTypeFields feature', () => {
+      expect(written['without-feature']).toEqual(['id', 'pic']);
+    });
+    it('gives the content type field to a generator with the contentTypeFields feature', () => {
+      expect(written['with-feature']).toEqual(['id', 'pic', 'picContentType']);
+    });
+  });
+
   describe('built-in entities added at the loadingEntities priority', () => {
     const loaded: Record<string, any> = {};
 

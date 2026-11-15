@@ -103,9 +103,6 @@ public class <%- persistClass %>Asserts {
             .satisfies(a -> assertThat(a.<%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").usingComparator(bigDecimalCompareTo).isEqualTo(expected.<%- field.propertySupplierName %>()))
     <%_ } else { _%>
             .satisfies(a -> assertThat(a.<%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").isEqualTo(expected.<%- field.propertySupplierName %>()))
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .satisfies(a -> assertThat(a.<%- field.propertySupplierName %>ContentType()).as("check <%- field.propertyName %> content type").isEqualTo(expected.<%- field.propertySupplierName %>ContentType()))
-      <%_ } -%>
     <%_ } -%>
   <%_ } -%>
         ;

@@ -422,8 +422,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     private static final byte[] <%- defaultValueName %> = TestUtil.createByteArray(1, "0");
     private static final byte[] <%- updatedValueName %> = TestUtil.createByteArray(1, "1");
     <%_ } _%>
-    private static final String <%- defaultValueName %>_CONTENT_TYPE = "image/jpg";
-    private static final String <%- updatedValueName %>_CONTENT_TYPE = "image/png";
   <%_ } else if (isEnum) { _%>
 
     private static final <%- fieldType %> <%- defaultValueName %> = <%- fieldType %>.<%- enumValue1.name %>;
@@ -521,9 +519,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
             .<%- field.fieldName %>(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .<%- field.fieldName %>ContentType(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)
-      <%_ } _%>
     <%_ } _%>;
     <%_ if (!anyRelationshipIsRequired) { _%>
     }
@@ -539,9 +534,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
         <%- createInstance %>.<%- field.propertyConsumerName %>(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        <%- createInstance %>.<%- field.propertyConsumerName %>ContentType(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_ const alreadyGeneratedEntities = []; _%>
@@ -1029,9 +1021,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- reactive ? '' : ')' %>
 <%_ } _%>
 <%_ for (field of fieldsToTest) { _%>
-  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))<%- reactive ? '' : ')' %>
-  <%_ } _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
@@ -1214,9 +1203,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- primaryKey.name %>").value(<%- reactive ? 'is(' : '' %><%- idValue %>))
 <%_ } _%>
 <%_ for (field of fieldsToTest) { _%>
-  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- field.fieldName %>ContentType").value(<%- reactive ? 'is(' : '' %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))
-  <%_ } _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- field.fieldName %>").value(<%- reactive ? 'is(' : '' %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
@@ -1457,9 +1443,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<% for (field of fieldsToTest) { %>
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))
-      <%_ } _%>
             .jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if
       (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
@@ -1499,9 +1482,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         }[primaryKey.type] || '';
     _%>
             .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% for (const field of fieldsToTest) { %>
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .andExpect(jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE)))
-      <%_ } _%>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
     if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
@@ -1607,14 +1587,10 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
   <%_ if (fluentMethods && fieldsToTest.length > 0) { _%>
         updated<%- persistClass %><% for (field of fieldsToTest) { %>
-            .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>
-            .<%- field.fieldName %>ContentType(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE)<% } %><% } %>;
+            .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% } %>;
   <%_ } else { _%>
     <%_ for (field of fieldsToTest) { _%>
         updated<%- persistClass %>.<%- field.propertyConsumerName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>);
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        updated<%- persistClass %>.<%- field.propertyConsumerName %>ContentType(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE);
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_ if (dtoMapstruct) { _%>
@@ -2162,9 +2138,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- reactive ? '' : ')' %>
   <%_ } _%>
   <%_ for (field of fieldsToTest) { _%>
-    <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))<%- reactive ? '' : ')' %>
-    <%_ } _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else

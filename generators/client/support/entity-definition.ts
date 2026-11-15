@@ -18,6 +18,7 @@
  */
 
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
+import { isContentTypeField } from '../../base-application/internal/content-type-fields.ts';
 import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.d.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.d.ts';
@@ -75,35 +76,38 @@ const generateEntityClientFields = (
       variablesWithTypes.push(`${primaryKey.name}?: ${tsKeyType}`);
     }
   }
-  fields.forEach(field => {
-    const { fieldType, fieldName } = field;
-    const nullable = !field.id && (field as DatabaseProperty).nullable;
-    let tsType = 'any';
-    if (field.fieldIsEnum && field.clientConstantsAsValues && (clientFramework === VUE || clientFramework === REACT)) {
-      // The values of the field are client constants, no enum is generated.
-      tsType = 'string';
-    } else if (field.fieldIsEnum) {
-      tsType = `keyof typeof ${fieldType}`;
-    } else if (fieldType === TYPE_BOOLEAN) {
-      tsType = 'boolean';
-    } else if (([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL] as string[]).includes(fieldType)) {
-      tsType = 'number';
-    } else if (([TYPE_STRING, TYPE_UUID, TYPE_DURATION, TYPE_BYTES, TYPE_BYTE_BUFFER, TYPE_TIME] as string[]).includes(fieldType)) {
-      tsType = 'string';
-      if (([TYPE_BYTES, TYPE_BYTE_BUFFER] as string[]).includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
-        variablesWithTypes.push(`${fieldName}ContentType?: ${nullable ? 'string | null' : 'string'}`);
+  // The blob gives the variable of its content type, its content type field is left out.
+  fields
+    .filter(field => !isContentTypeField(field))
+    .forEach(field => {
+      const { fieldType, fieldName } = field;
+      const nullable = !field.id && (field as DatabaseProperty).nullable;
+      let tsType = 'any';
+      if (field.fieldIsEnum && field.clientConstantsAsValues && (clientFramework === VUE || clientFramework === REACT)) {
+        // The values of the field are client constants, no enum is generated.
+        tsType = 'string';
+      } else if (field.fieldIsEnum) {
+        tsType = `keyof typeof ${fieldType}`;
+      } else if (fieldType === TYPE_BOOLEAN) {
+        tsType = 'boolean';
+      } else if (([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL] as string[]).includes(fieldType)) {
+        tsType = 'number';
+      } else if (([TYPE_STRING, TYPE_UUID, TYPE_DURATION, TYPE_BYTES, TYPE_BYTE_BUFFER, TYPE_TIME] as string[]).includes(fieldType)) {
+        tsType = 'string';
+        if (([TYPE_BYTES, TYPE_BYTE_BUFFER] as string[]).includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
+          variablesWithTypes.push(`${fieldName}ContentType?: ${nullable ? 'string | null' : 'string'}`);
+        }
+      } else if (([TYPE_LOCAL_DATE, TYPE_INSTANT, TYPE_ZONED_DATE_TIME] as string[]).includes(fieldType)) {
+        tsType = customDateType;
       }
-    } else if (([TYPE_LOCAL_DATE, TYPE_INSTANT, TYPE_ZONED_DATE_TIME] as string[]).includes(fieldType)) {
-      tsType = customDateType;
-    }
-    if (field.collection && (clientFramework === VUE || clientFramework === REACT)) {
-      tsType = tsType.includes(' ') ? `(${tsType})[]` : `${tsType}[]`;
-    }
-    if (nullable) {
-      tsType += ' | null';
-    }
-    variablesWithTypes.push(`${fieldName}?: ${tsType}`);
-  });
+      if (field.collection && (clientFramework === VUE || clientFramework === REACT)) {
+        tsType = tsType.includes(' ') ? `(${tsType})[]` : `${tsType}[]`;
+      }
+      if (nullable) {
+        tsType += ' | null';
+      }
+      variablesWithTypes.push(`${fieldName}?: ${tsType}`);
+    });
 
   const relevantRelationships = filterRelevantRelationships(relationships);
 

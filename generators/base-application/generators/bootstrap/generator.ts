@@ -31,6 +31,7 @@ import type { Application as SpringBootApplication } from '../../../spring-boot/
 import { mutateApplication } from '../../application.ts';
 import { mutateRelationship, mutateRelationshipWithEntity } from '../../entity.ts';
 import BaseApplicationGenerator from '../../index.ts';
+import { withContentTypeFields } from '../../internal/content-type-fields.ts';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../internal/types/field-types.ts';
 import {
   createAuthorityEntity,
@@ -318,6 +319,8 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
               }
             }
           }
+          // A new array: the fields of the entity file are left as they are.
+          entity.fields = withContentTypeFields(entity.fields) as typeof entity.fields;
           for (const relationship of entity.relationships) {
             // ownerSide backward compatibility
             relationship.ownerSide ??=

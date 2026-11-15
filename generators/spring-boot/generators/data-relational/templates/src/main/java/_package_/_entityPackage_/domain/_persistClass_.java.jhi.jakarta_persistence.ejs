@@ -77,17 +77,6 @@ import org.hibernate.type.SqlTypes;
 <&_ } -&>
 <%_ } -%>
 
-<%_ for (const field of fields.filter(field => field.fieldWithContentType)) { -%>
-<&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
-    @Column(
-        name = "<%- field.fieldNameAsDatabaseColumn %>_content_type"
-  <%_ if (field.fieldValidationRequired) { _%>
-        , nullable = false
-  <%_ } _%>
-    )
-<&_ } -&>
-<%_ } -%>
-
 <%_ for (const relationship of relationships) { -%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipOneToMany) { -%>

@@ -19,6 +19,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 
 import BaseApplicationGenerator from '../base-application/index.ts';
+import { withContentTypeFields } from '../base-application/internal/content-type-fields.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.ts';
 import type { TaskTypes as ApplicationTaskTypes } from '../base-application/tasks.ts';
@@ -125,6 +126,10 @@ export default abstract class BaseEntityChangesGenerator<
           { name: entityName, ...JSON.parse(readFileSync(entityConfigPath).toString()) } as Entity,
         ]),
     );
+    for (const entity of Object.values(previousEntitiesByName)) {
+      // The content type fields of the blobs, which the entity files never have, like the current entities.
+      entity.fields = withContentTypeFields(entity.fields ?? []) as Entity['fields'];
+    }
     // The primary keys as the entity files declare them, before the entities are prepared.
     const previousIdSignatures = Object.fromEntries(
       Object.entries(previousEntitiesByName).map(([entityName, entity]) => [entityName, this.#idSignature(entity)]),

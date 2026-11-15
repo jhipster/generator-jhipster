@@ -23,9 +23,6 @@
     const fieldsToGenerate = [...allFields.filter(f => f.id), ...fields.filter(f => !f.id)].filter(field => field.liquibaseGenerateFakeData);
     for (field of fieldsToGenerate) {
       header.push(field.columnName);
-      if (field.shouldCreateContentType) {
-        header.push(`${field.columnName}_content_type`);
-      }
     }
     for (relationship of relationships.filter(relationship => relationship.liquibaseGenerateFakeData)) {
       const { joinColumnNames } = relationship;
@@ -51,9 +48,6 @@
         }
 
         line.push(data);
-        if (field.shouldCreateContentType) {
-          line.push('image/png');
-        }
       }
 
       for (relationship of relationships.filter(relationship => relationship.liquibaseGenerateFakeData)) {
