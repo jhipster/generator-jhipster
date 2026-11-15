@@ -638,6 +638,7 @@ jhipster:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - cluster.routing.allocation.disk.threshold_enabled=false
     healthcheck:
       test:
         - CMD
@@ -1023,6 +1024,7 @@ jhipster:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - cluster.routing.allocation.disk.threshold_enabled=false
     healthcheck:
       test:
         - CMD
@@ -1432,6 +1434,7 @@ jhipster:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - cluster.routing.allocation.disk.threshold_enabled=false
     healthcheck:
       test:
         - CMD
@@ -1758,6 +1761,7 @@ jhipster:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - cluster.routing.allocation.disk.threshold_enabled=false
     healthcheck:
       test:
         - CMD
@@ -2827,6 +2831,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - cluster.routing.allocation.disk.threshold_enabled=false
     healthcheck:
       test:
         - CMD
