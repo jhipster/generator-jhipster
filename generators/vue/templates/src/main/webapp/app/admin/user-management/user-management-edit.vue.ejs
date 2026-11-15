@@ -130,8 +130,8 @@
           </div>
         </div>
         <div>
-          <button type="button" class="btn btn-secondary" @click="previousState()" data-cy="entityCreateCancelButton">
-            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.cancel') }}</span>
+          <button type="button" class="btn btn-info" @click="previousState()" data-cy="entityCreateCancelButton">
+            <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.back') }}</span>
           </button>
           <button type="submit" :disabled="v$.userAccount.$invalid || isSaving" class="btn btn-primary" data-cy="entityCreateSaveButton">
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.save') }}</span>
