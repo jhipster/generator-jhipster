@@ -188,6 +188,12 @@ export const writeDeploymentFiles = (suffix = '') =>
           { sourceFile: 'registry/application-configmap.yml.ejs', destinationFile: `registry-${suffix}/application-configmap.yml` },
         ],
       },
+      {
+        condition: data => data.serviceDiscoveryTypeConsul && data.istio,
+        templates: [
+          { sourceFile: 'istio/consul-destination-rule.yml.ejs', destinationFile: `registry-${suffix}/consul-destination-rule.yml` },
+        ],
+      },
     ],
     serviceMesh: [
       {

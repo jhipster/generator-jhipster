@@ -68,6 +68,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -78,7 +81,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500

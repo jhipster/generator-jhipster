@@ -189,6 +189,12 @@ export const deploymentKubernetesFiles = (suffix = '') =>
           `${data.generatorTypeK8s ? 'registry' : 'csvc'}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}application-configmap.yml`,
         templates: ['registry/application-configmap.yml'],
       },
+      {
+        condition: generator => generator.serviceDiscoveryTypeConsul && generator.istio,
+        renameTo: data =>
+          `${data.generatorTypeK8s ? 'registry' : 'csvc'}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}consul-destination-rule.yml`,
+        templates: ['istio/consul-destination-rule.yml'],
+      },
     ],
     istio: [
       {
