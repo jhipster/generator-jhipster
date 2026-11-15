@@ -19,9 +19,9 @@
 import BaseApplicationGenerator from '../base-simple-application/index.ts';
 
 import { ciCdGeneratorNamespace } from './support/providers.ts';
-import type { Application as CiCdApplication } from './types.ts';
+import type { Application as CiCdApplication, Config as CiCdConfig, Options as CiCdOptions } from './types.ts';
 
-export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication> {
+export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication, CiCdConfig, CiCdOptions> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

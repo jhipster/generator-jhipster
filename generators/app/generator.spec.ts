@@ -78,6 +78,7 @@ describe(`generator - ${helpers.commandName}`, () => {
         result.assertGeneratorNotComposed('jhipster:common');
         result.assertGeneratorNotComposed('jhipster:server');
         result.assertGeneratorNotComposed('jhipster:client');
+        result.assertGeneratorNotComposed('jhipster:ci-cd');
       });
     });
 
@@ -129,12 +130,27 @@ describe(`generator - ${helpers.commandName}`, () => {
 
   describe('with an official application type', () => {
     before(async () => {
-      await helpers.runJHipster().withJHipsterConfig({ applicationType: 'monolith' }).withSkipWritingPriorities();
+      await helpers.runJHipster().withJHipsterConfig({ applicationType: 'monolith' });
     });
 
     it('should bootstrap the server and the client', () => {
       expect(getSource()?.editJavaFile).toBeDefined();
       expect(result.application?.frontendAppName).toBeDefined();
+    });
+    it('should not generate ci-cd files by default', () => {
+      result.assertNoFile('.github/workflows/main.yml');
+    });
+  });
+
+  describe('with ciCd', () => {
+    before(async () => {
+      await helpers.runJHipster().withJHipsterConfig({ ciCd: ['github'] });
+    });
+
+    it('should generate ci-cd files without asking ci-cd questions', () => {
+      expect(result.askedQuestions.map(({ name }) => name)).not.toContain('ciCd');
+      expect(result.askedQuestions.map(({ name }) => name)).not.toContain('ciCdIntegrations');
+      result.assertFile('.github/workflows/main.yml');
     });
   });
 

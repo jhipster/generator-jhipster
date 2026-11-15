@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 import buildToolCommand from '../java-simple-application/generators/build-tool/command.ts';
 
 import { ciCdChoices } from './support/providers.ts';
@@ -26,12 +27,18 @@ const { buildTool } = buildToolCommand.configs;
 const command = {
   configs: {
     ciCd: {
+      description: 'CI/CD pipelines to generate',
       argument: {
         type: Array,
       },
       prompt: {
         type: 'checkbox',
         message: 'What CI/CD pipeline do you want to generate?',
+      },
+      jdl: {
+        type: 'list',
+        tokenType: 'list',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       choices: ciCdChoices,
       internal: {

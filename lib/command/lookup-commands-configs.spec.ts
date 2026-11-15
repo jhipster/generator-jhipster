@@ -42,6 +42,7 @@ describe('jdl options', () => {
   "entitySuffix",
   "dtoSuffix",
   "testFrameworks",
+  "ciCd",
   "serviceDiscoveryType",
   "blueprints",
   "nodePackageManager",
@@ -148,16 +149,14 @@ describe('jdl options', () => {
   for (const [optionName, config] of jdlConfigs) {
     const choices = getChoices(config);
     const isBoolean = config.cli?.type === Boolean;
-    const isArray = config.cli?.type === Array;
+    const isArray = config.cli?.type === Array || config.jdl?.type === 'list';
     if (!choices) {
       continue;
     }
 
     describe(`jdl - ${optionName}`, function () {
-      choices.forEach(optionValue => {
-        if (isArray) {
-          optionValue = `[${optionValue}]`;
-        }
+      choices.forEach(choiceValue => {
+        const optionValue = isArray ? `[${choiceValue}]` : choiceValue;
         describe(`with ${optionValue} value`, () => {
           let state: ImportState;
 
@@ -169,7 +168,7 @@ describe('jdl options', () => {
           });
 
           it('should set expected value', () => {
-            expect(state.exportedApplicationsWithEntities.jhipster.config[optionName]).toBe(optionValue);
+            expect(state.exportedApplicationsWithEntities.jhipster.config[optionName]).toEqual(isArray ? [choiceValue] : choiceValue);
           });
         });
       });

@@ -17,15 +17,18 @@
  * limitations under the License.
  */
 import type { CommandTypeMap } from '../../lib/command/types.ts';
+import type { Options as SimpleApplicationOptions } from '../base-simple-application/types.d.ts';
 import type { Application as DockerApplication } from '../docker/types.d.ts';
 
 import type command from './command.ts';
 import type commonCommand from './generators/common/command.ts';
 
-export type { Config, Features, Options, Source } from '../base-simple-application/types.d.ts';
+export type { Config, Features, Source } from '../base-simple-application/types.d.ts';
 
 type Command = CommandTypeMap<typeof command>;
 type CommonCommand = CommandTypeMap<typeof commonCommand>;
+
+export type Options = SimpleApplicationOptions & Command['Options'] & CommonCommand['Options'];
 
 type CICDApplicationProperties = Command['Application'] &
   CommonCommand['Application'] & {

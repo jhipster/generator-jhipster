@@ -18,6 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { ALPHANUMERIC_PATTERN, JHI_PREFIX_NAME_PATTERN } from '../../lib/constants/jdl.ts';
+import ciCdCommand from '../ci-cd/command.ts';
 
 const command = {
   configs: {
@@ -91,6 +92,12 @@ const command = {
         }
       },
       scope: 'none',
+    },
+    ciCd: {
+      ...ciCdCommand.configs.ciCd,
+      argument: undefined,
+      prompt: undefined,
+      scope: 'storage',
     },
   },
   import: [

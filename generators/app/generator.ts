@@ -127,6 +127,17 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
           await this.composeWithJHipster('client');
         }
       },
+      async composeCiCd() {
+        const { ciCd } = this.jhipsterConfigWithDefaults;
+        if (ciCd?.length) {
+          await this.composeWithJHipster('ci-cd', {
+            generatorOptions: {
+              ciCd,
+              defaults: true,
+            },
+          });
+        }
+      },
     });
   }
 

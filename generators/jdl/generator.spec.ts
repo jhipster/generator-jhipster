@@ -912,5 +912,22 @@ relationship ManyToOne {
 `);
       });
     });
+
+    describe('with ciCd', () => {
+      before(async () => {
+        await helpers.runJDL('application { config { baseName jhipster ciCd [github, jenkins] } }');
+      });
+
+      it('should save ciCd config and generate ci-cd files', () => {
+        expect(runResult.askedQuestions).toEqual([]);
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': {
+            baseName: 'jhipster',
+            ciCd: ['github', 'jenkins'],
+          },
+        });
+        runResult.assertFile(['.github/workflows/main.yml', 'Jenkinsfile']);
+      });
+    });
   });
 });
