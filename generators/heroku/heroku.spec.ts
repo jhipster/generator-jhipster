@@ -37,6 +37,14 @@ const elasticsearchWarnings = (): string[] =>
     .map(({ arguments: [message] }: { arguments: [string] }) => message)
     .filter((message: string) => message.includes('SPRING_ELASTICSEARCH_URIS'));
 
+const getConfigSetNames = () =>
+  getRunResultCalls()
+    .filter(([method, command, args]: any) => method === 'spawn' && command === 'heroku' && args[0] === 'config:set')
+    .map(([, , args]: any) => args[1].split('=')[0]);
+
+const JWT_SECRET = 'JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET';
+const REMEMBER_ME_KEY = 'JHIPSTER_SECURITY_REMEMBER_ME_KEY';
+
 const createSpawnCommandReturn = (resolvedValue?: any, data?: any) =>
   Object.assign(
     Promise.resolve({
@@ -64,6 +72,7 @@ describe('generator - Heroku', () => {
   let existingElasticsearch: boolean;
   let elasticsearchAddOnError: string | undefined;
   let herokuCliMissing: boolean;
+  let configGetResults: Record<string, any>;
 
   beforeEach(() => {
     deployCommandResult = undefined;
@@ -75,6 +84,7 @@ describe('generator - Heroku', () => {
     existingElasticsearch = false;
     elasticsearchAddOnError = undefined;
     herokuCliMissing = false;
+    configGetResults = {};
 
     stub = exnode.fn((method: string, command: string, args: string[]) => {
       if (method === 'spawnCommand' && command === deployCommandResult?.command) {
@@ -120,6 +130,9 @@ describe('generator - Heroku', () => {
         }
         if (args[0] === 'config:get' && args[1] === 'BONSAI_URL' && bonsaiUrl) {
           return createSpawnCommandReturn({ stdout: bonsaiUrl });
+        }
+        if (args[0] === 'config:get' && configGetResults[args[1]]) {
+          return configGetResults[args[1]];
         }
       }
 
@@ -219,6 +232,28 @@ describe('generator - Heroku', () => {
       it('creates expected files', () => {
         runResult.assertFileContent('.yo-rc.json', '"herokuDeployType": "jar"');
       });
+      it('does not set a JWT secret', () => {
+        expect(getConfigSetNames()).not.toContain(JWT_SECRET);
+      });
+    });
+  });
+
+  describe('gateway application', () => {
+    beforeEach(async () => {
+      await helpers
+        .runJHipster(GENERATOR_HEROKU)
+        .withJHipsterConfig({ applicationType: 'gateway', serviceDiscoveryType: 'consul' })
+        .withOptions({ skipBuild: true })
+        .withAnswers({
+          herokuAppName,
+          herokuRegion: 'us',
+          herokuDeployType: 'jar',
+          herokuJavaVersion: '17',
+        })
+        .withSpawnMock(stub);
+    });
+    it('does not set a JWT secret', () => {
+      expect(getConfigSetNames()).not.toContain(JWT_SECRET);
     });
   });
 
@@ -381,6 +416,66 @@ describe('generator - Heroku', () => {
       });
       it('calls should match snapshot', () => {
         expect(getRunResultCalls()).toMatchSnapshot();
+      });
+    });
+
+    describe('with an existing JWT secret', () => {
+      beforeEach(async () => {
+        configGetResults[JWT_SECRET] = createSpawnCommandReturn({ stdout: 'existing-secret\n' });
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig()
+          .withOptions({ skipBuild: true })
+          .withAnswers({ herokuAppName, herokuRegion: 'us', herokuDeployType: 'jar', herokuJavaVersion: '17' })
+          .withSpawnMock(stub);
+      });
+      it('keeps the existing secret', () => {
+        expect(getConfigSetNames()).not.toContain(JWT_SECRET);
+      });
+    });
+
+    describe('when the JWT secret cannot be read', () => {
+      beforeEach(async () => {
+        configGetResults[JWT_SECRET] = createSpawnCommandReturn({ exitCode: 1, stderr: 'error' });
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig()
+          .withOptions({ skipBuild: true })
+          .withAnswers({ herokuAppName, herokuRegion: 'us', herokuDeployType: 'jar', herokuJavaVersion: '17' })
+          .withSpawnMock(stub);
+      });
+      it('does not set a JWT secret', () => {
+        expect(getConfigSetNames()).not.toContain(JWT_SECRET);
+      });
+    });
+
+    describe('with session authentication', () => {
+      beforeEach(async () => {
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ authenticationType: 'session' })
+          .withOptions({ skipBuild: true })
+          .withAnswers({ herokuAppName, herokuRegion: 'us', herokuDeployType: 'jar', herokuJavaVersion: '17' })
+          .withSpawnMock(stub);
+      });
+      it('sets a remember-me key and no JWT secret', () => {
+        expect(getConfigSetNames()).toContain(REMEMBER_ME_KEY);
+        expect(getConfigSetNames()).not.toContain(JWT_SECRET);
+      });
+    });
+
+    describe('with OAuth2 authentication', () => {
+      beforeEach(async () => {
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ authenticationType: 'oauth2' })
+          .withOptions({ skipBuild: true })
+          .withAnswers({ herokuAppName, herokuRegion: 'us', herokuDeployType: 'jar', herokuJavaVersion: '17' })
+          .withSpawnMock(stub);
+      });
+      it('sets no secret', () => {
+        expect(getConfigSetNames()).not.toContain(JWT_SECRET);
+        expect(getConfigSetNames()).not.toContain(REMEMBER_ME_KEY);
       });
     });
 

@@ -189,6 +189,34 @@ exports[`generator - Heroku monolith application in the EU calls should match sn
       "jhipster-test",
     ],
   ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
 ]
 `;
 
@@ -378,6 +406,34 @@ exports[`generator - Heroku monolith application in the US calls should match sn
       "jhipster-test",
     ],
   ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
 ]
 `;
 
@@ -566,6 +622,34 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
       "--app",
       "jhipster-test",
     ],
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
   ],
   [
     "spawn",
@@ -813,6 +897,34 @@ exports[`generator - Heroku monolith application with PostgreSQL calls should ma
       "jhipster-test",
     ],
   ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
 ]
 `;
 
@@ -1025,6 +1137,34 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
       "--app",
       "random-app-name",
     ],
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "random-app-name",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
+      "--app",
+      "random-app-name",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
   ],
 ]
 `;
@@ -1273,6 +1413,34 @@ exports[`generator - Heroku monolith application with elasticsearch and an app t
       "jhipster-test",
     ],
   ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
 ]
 `;
 
@@ -1336,6 +1504,34 @@ exports[`generator - Heroku monolith application with elasticsearch and an exist
     [
       "config:get",
       "BONSAI_URL",
+      "--app",
+      "jhipster-existing",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "jhipster-existing",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
       "--app",
       "jhipster-existing",
     ],
@@ -1424,6 +1620,34 @@ exports[`generator - Heroku monolith application with elasticsearch and the defa
       "--app",
       "jhipster-test",
     ],
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
   ],
 ]
 `;
@@ -1536,6 +1760,34 @@ exports[`generator - Heroku monolith application with elasticsearch and unreadab
       "--app",
       "jhipster-test",
     ],
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
   ],
 ]
 `;
@@ -1664,6 +1916,34 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
       "--app",
       "jhipster-test",
     ],
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
   ],
 ]
 `;
@@ -1838,6 +2118,34 @@ exports[`generator - Heroku monolith application with existing app calls should 
     [
       "apps:info",
       "--json",
+      "jhipster-existing",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET",
+      "--app",
+      "jhipster-existing",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=SECRET--64",
+      "--app",
       "jhipster-existing",
     ],
     {
