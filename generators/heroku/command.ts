@@ -18,6 +18,14 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
+/** What the Elasticsearch prompt reads from the heroku generator, set at its initializing priority. */
+type HerokuPromptContext = {
+  hasHerokuCli: boolean;
+  herokuAppExists: boolean;
+  herokuElasticsearchPrice: string;
+  jhipsterConfigWithDefaults: { searchEngine?: string };
+};
+
 const command = {
   configs: {
     skipBuild: {
@@ -33,6 +41,29 @@ const command = {
         type: Boolean,
       },
       scope: 'none',
+    },
+    herokuElasticsearch: {
+      description: "Elasticsearch of an app that uses it: your own cluster (external) or Elastic's paid Heroku add-on (foundelasticsearch)",
+      cli: {
+        type: String,
+      },
+      prompt: gen => {
+        const { hasHerokuCli, herokuAppExists, herokuElasticsearchPrice, jhipsterConfigWithDefaults } =
+          gen as unknown as HerokuPromptContext;
+        return {
+          when: () => hasHerokuCli && !herokuAppExists && jhipsterConfigWithDefaults.searchEngine === 'elasticsearch',
+          type: 'select',
+          message: 'Which Elasticsearch should the app use?',
+          choices: [
+            { value: 'external', name: 'My own Elasticsearch, configured after the deployment' },
+            // Elastic's add-on is the only Heroku add-on that runs Elasticsearch 9, and it has no free plan
+            { value: 'foundelasticsearch', name: `Elastic's Heroku add-on (foundelasticsearch, paid${herokuElasticsearchPrice})` },
+          ],
+          default: 'external',
+        };
+      },
+      choices: ['external', 'foundelasticsearch'],
+      scope: 'storage',
     },
   },
 } as const satisfies JHipsterCommandDefinition;

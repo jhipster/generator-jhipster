@@ -62,6 +62,8 @@ describe('generator - Heroku', () => {
   let configResult: any;
   let bonsaiUrl: string | undefined;
   let existingElasticsearch: boolean;
+  let elasticsearchAddOnError: string | undefined;
+  let herokuCliMissing: boolean;
 
   beforeEach(() => {
     deployCommandResult = undefined;
@@ -71,10 +73,16 @@ describe('generator - Heroku', () => {
     configResult = undefined;
     bonsaiUrl = undefined;
     existingElasticsearch = false;
+    elasticsearchAddOnError = undefined;
+    herokuCliMissing = false;
 
     stub = exnode.fn((method: string, command: string, args: string[]) => {
       if (method === 'spawnCommand' && command === deployCommandResult?.command) {
         return deployCommandResult.result;
+      }
+
+      if (method === 'spawnCommand' && command === 'heroku --version' && herokuCliMissing) {
+        return createSpawnCommandReturn({ exitCode: 1 });
       }
 
       if (method === 'spawn' && command === 'heroku' && Array.isArray(args)) {
@@ -98,8 +106,14 @@ describe('generator - Heroku', () => {
             })
           );
         }
+        if (args[0] === 'addons:create' && args[1] === 'foundelasticsearch' && elasticsearchAddOnError) {
+          return createSpawnCommandReturn({ exitCode: 1, stderr: elasticsearchAddOnError });
+        }
         if (args[0] === 'addons:create' && args[1] === 'foundelasticsearch' && existingElasticsearch) {
           return createSpawnCommandReturn({ exitCode: 1, stderr: 'FOUNDELASTICSEARCH is already in use' });
+        }
+        if (args[0] === 'config:get' && args[1] === 'FOUNDELASTICSEARCH_URL' && existingElasticsearch) {
+          return createSpawnCommandReturn({ stdout: 'https://jhipster-test.es.us-east-1.aws.found.io' });
         }
         if (args[0] === 'config:get' && args[1] === 'SPRING_ELASTICSEARCH_URIS' && existingElasticsearch) {
           return createSpawnCommandReturn({ stdout: 'https://jhipster-test.es.us-east-1.aws.found.io' });
@@ -480,6 +494,81 @@ describe('generator - Heroku', () => {
       });
       it('warns to point the app to an Elasticsearch of your own', () => {
         expect(elasticsearchWarnings()).toEqual([expect.stringContaining('Point the app to your Elasticsearch 9 cluster')]);
+      });
+    });
+
+    describe('with elasticsearch and the add-on set by an option, without the prompts of the command', () => {
+      beforeEach(async () => {
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true, defaults: true, herokuElasticsearch: 'foundelasticsearch' })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+          })
+          .withSpawnMock(stub);
+      });
+      it('creates the foundelasticsearch add-on', () => {
+        expect(getRunResultCalls()).toContainEqual([
+          'spawn',
+          'heroku',
+          ['addons:create', 'foundelasticsearch', '--as', 'FOUNDELASTICSEARCH', '--wait', '--app', herokuAppName],
+          expect.anything(),
+        ]);
+      });
+      it('does not warn about the Elasticsearch settings', () => {
+        expect(elasticsearchWarnings()).toEqual([]);
+      });
+    });
+
+    describe('with elasticsearch and a foundelasticsearch add-on that cannot be created', () => {
+      beforeEach(async () => {
+        elasticsearchAddOnError = 'Your account has reached its add-on limit';
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+            herokuElasticsearch: 'foundelasticsearch',
+          })
+          .withSpawnMock(stub);
+      });
+      it('warns with the error of the Heroku CLI and the settings to set', () => {
+        expect(elasticsearchWarnings()).toEqual([
+          expect.stringMatching(
+            /Could not create the foundelasticsearch add-on:\nYour account has reached its add-on limit\n[^]*heroku config:set SPRING_ELASTICSEARCH_URIS/,
+          ),
+        ]);
+      });
+    });
+
+    describe('with elasticsearch and without the Heroku CLI', () => {
+      beforeEach(async () => {
+        herokuCliMissing = true;
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true, skipChecks: true })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+          })
+          .withSpawnMock(stub);
+      });
+      it('warns to point the app to an Elasticsearch of your own', () => {
+        expect(elasticsearchWarnings()).toEqual([expect.stringContaining('Point the app to your Elasticsearch 9 cluster')]);
+      });
+      it('does not create add-ons', () => {
+        expect(getRunResultCalls().some(([, command, args]: any[]) => command === 'heroku' && args?.[0] === 'addons:create')).toBe(false);
       });
     });
 

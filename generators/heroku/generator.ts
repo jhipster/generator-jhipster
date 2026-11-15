@@ -47,6 +47,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
   herokuSkipBuild!: boolean;
   dynoSize!: string;
   herokuElasticsearch?: 'foundelasticsearch' | 'external';
+  herokuElasticsearchPrice = '';
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -89,6 +90,19 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
         this.herokuAppExists = Boolean(this.jhipsterConfig.herokuAppName);
         this.herokuSkipBuild = this.options.skipBuild;
         this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
+      },
+      async elasticsearchAddOnPrice() {
+        const { searchEngine } = this.jhipsterConfigWithDefaults as SpringBootConfig;
+        if (!this.hasHerokuCli || this.herokuAppExists || searchEngine !== 'elasticsearch') return;
+
+        // Shown in the Elasticsearch prompt of the command
+        const { stdout } = await this.spawnHeroku(['addons:plans', 'foundelasticsearch', '--json'], { verboseInfo: false });
+        try {
+          const plan = JSON.parse(stdout).find((plan: { default: boolean }) => plan.default);
+          this.herokuElasticsearchPrice = `, $${plan.price.cents / 100}/${plan.price.unit}`;
+        } catch {
+          // Leave the price out
+        }
       },
     });
   }
@@ -173,34 +187,6 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
           this.config,
         );
       },
-
-      async askForElasticsearch() {
-        const { searchEngine } = this.jhipsterConfigWithDefaults as SpringBootConfig;
-        if (!this.hasHerokuCli || this.herokuAppExists || searchEngine !== 'elasticsearch') return;
-
-        // Elastic's add-on is the only Heroku add-on that runs Elasticsearch 9, and it has no free plan
-        const { stdout } = await this.spawnHeroku(['addons:plans', 'foundelasticsearch', '--json'], { verboseInfo: false });
-        let price = '';
-        try {
-          const plan = JSON.parse(stdout).find((plan: { default: boolean }) => plan.default);
-          price = `, $${plan.price.cents / 100}/${plan.price.unit}`;
-        } catch {
-          // Leave the price out
-        }
-        const answers = await this.prompt([
-          {
-            type: 'select',
-            name: 'herokuElasticsearch',
-            message: 'Which Elasticsearch should the app use?',
-            choices: [
-              { value: 'external', name: 'My own Elasticsearch, configured after the deployment' },
-              { value: 'foundelasticsearch', name: `Elastic's Heroku add-on (foundelasticsearch, paid${price})` },
-            ],
-            default: 'external',
-          },
-        ]);
-        this.herokuElasticsearch = answers.herokuElasticsearch;
-      },
     });
   }
 
@@ -214,6 +200,11 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
         this.herokuAppName = kebabCase(this.jhipsterConfig.herokuAppName);
         this.herokuJavaVersion = this.jhipsterConfig.herokuJavaVersion!;
         this.herokuDeployType = this.jhipsterConfig.herokuDeployType!;
+        if (this.jhipsterConfig.herokuElasticsearch === null) {
+          // A prompt that isn't asked is stored as null, don't keep it in .yo-rc.json
+          this.config.delete('herokuElasticsearch');
+        }
+        this.herokuElasticsearch = this.jhipsterConfig.herokuElasticsearch ?? 'external';
       },
     });
   }
@@ -298,10 +289,17 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
       },
 
       async herokuAddonsCreate({ application }) {
-        if (!this.hasHerokuCli || this.herokuAppExists) return;
+        if (!this.hasHerokuCli) {
+          // Nothing is provisioned without the Heroku CLI
+          if (!this.herokuAppExists && application.searchEngineElasticsearch) {
+            this.log.warn(this.elasticsearchConfigHint());
+          }
+          return;
+        }
+        if (this.herokuAppExists) return;
 
         this.log.log(chalk.bold('\nProvisioning addons'));
-        if (this.herokuElasticsearch === 'foundelasticsearch') {
+        if (application.searchEngineElasticsearch && this.herokuElasticsearch === 'foundelasticsearch') {
           this.log.log(chalk.bold('\nProvisioning Elasticsearch addon foundelasticsearch, this can take a few minutes'));
           // The alias stops a second add-on from being created when the app already has one
           const { stdout, stderr, exitCode } = await this.spawnHeroku([
@@ -316,17 +314,29 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
           this.checkAddOnReturn({ addOn: 'Elasticsearch', stdout: exitCode === 0 ? stdout : '', stderr });
 
           let configured = false;
+          let failure = 'Could not set the Elasticsearch settings from the foundelasticsearch add-on. ';
           if (exitCode !== 0) {
-            // The alias already exists when the app has the add-on, so keep the settings a previous run set
-            const { stdout: uris, exitCode: getExitCode } = await this.spawnHeroku([
+            // The alias already exists when the app has the add-on, which sets FOUNDELASTICSEARCH_URL
+            const { stdout: addOnUrl, exitCode: addOnExitCode } = await this.spawnHeroku([
               'config:get',
-              'SPRING_ELASTICSEARCH_URIS',
+              'FOUNDELASTICSEARCH_URL',
               '--app',
               this.herokuAppName!,
             ]);
-            configured = getExitCode === 0 && uris.trim() !== '';
-            if (configured) {
-              this.log.info('Keeping the Elasticsearch settings the app already has');
+            if (addOnExitCode === 0 && addOnUrl.trim() !== '') {
+              // Keep the settings a previous run set
+              const { stdout: uris, exitCode: getExitCode } = await this.spawnHeroku([
+                'config:get',
+                'SPRING_ELASTICSEARCH_URIS',
+                '--app',
+                this.herokuAppName!,
+              ]);
+              configured = getExitCode === 0 && uris.trim() !== '';
+              if (configured) {
+                this.log.info('Keeping the Elasticsearch settings the app already has');
+              }
+            } else {
+              failure = `Could not create the foundelasticsearch add-on:\n${stderr.trim()}\n`;
             }
           } else {
             // The add-on's URL has no credentials, they're in FOUNDELASTICSEARCH_INITIAL_CREDENTIALS as user:password.
@@ -354,7 +364,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
             }
           }
           if (!configured) {
-            this.log.warn(`Could not set the Elasticsearch settings from the foundelasticsearch add-on. ${this.elasticsearchConfigHint()}`);
+            this.log.warn(`${failure}${this.elasticsearchConfigHint()}`);
           }
         } else if (application.searchEngineElasticsearch) {
           this.log.warn(this.elasticsearchConfigHint());
@@ -628,6 +638,13 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
       data.toString().split(/\r?\n/).filter(Boolean).forEach(log);
     });
     return child;
+  }
+
+  /**
+   * The configs of the command are asked for an existing project too, which `jhipster heroku` always runs in.
+   */
+  shouldAskForPrompts() {
+    return this.options.defaults !== true;
   }
 
   elasticsearchConfigHint() {

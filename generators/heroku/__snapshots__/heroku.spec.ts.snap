@@ -1238,6 +1238,20 @@ exports[`generator - Heroku monolith application with elasticsearch and an app t
     "heroku",
     [
       "config:get",
+      "FOUNDELASTICSEARCH_URL",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
       "SPRING_ELASTICSEARCH_URIS",
       "--app",
       "jhipster-test",
@@ -1664,6 +1678,7 @@ exports[`generator - Heroku monolith application with elasticsearch should match
     "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
+    "herokuElasticsearch": "foundelasticsearch",
     "herokuJavaVersion": "11",
     "searchEngine": "elasticsearch"
   }
