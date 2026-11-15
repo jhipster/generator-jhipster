@@ -185,6 +185,13 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
         if (!application.reactive) return;
 
         source.addAllowBlockingCallsInside!({ classPath: 'io.netty.util.NetUtil', method: '<clinit>' });
+        // The driver shuts its executors down from Netty's global executor when a session closes. Waking an executor up
+        // takes the lock of its task queue, which blocks when the lock is contended: the error then keeps the session from
+        // closing, and the tests hang.
+        source.addAllowBlockingCallsInside!({
+          classPath: 'io.netty.util.concurrent.SingleThreadEventExecutor',
+          method: 'shutdownGracefully',
+        });
       },
       integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
