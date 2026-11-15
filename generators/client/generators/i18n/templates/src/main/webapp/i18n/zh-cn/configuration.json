@@ -3,8 +3,11 @@
     "title": "配置",
     "filter": "过滤 (按前缀)",
     "table": {
+      "title": "配置属性",
       "prefix": "前缀",
-      "properties": "属性"
+      "properties": "属性",
+      "property": "属性",
+      "value": "值"
     }
   }
 }

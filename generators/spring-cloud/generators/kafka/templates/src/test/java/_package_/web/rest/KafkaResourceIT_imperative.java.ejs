@@ -22,7 +22,7 @@ import <%- packageName %>.IntegrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-<%_ if (authenticationUsesCsrf) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -67,7 +67,7 @@ class <%- upperFirstCamelCaseBaseName %>KafkaResourceIT {
 
     @Test
     void producesMessages() throws Exception {
-        restMockMvc.perform(post("/api/<%- dasherizedBaseName %>-kafka/publish?message=value-produce")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>).andExpect(status().isOk());
+        restMockMvc.perform(post("/api/<%- dasherizedBaseName %>-kafka/publish?message=value-produce")<%- serverUsesCsrf ? '.with(csrf())' : '' %>).andExpect(status().isOk());
         assertThat(output.receive(1000, "binding-out-0").getPayload()).isEqualTo("value-produce".getBytes());
     }
 

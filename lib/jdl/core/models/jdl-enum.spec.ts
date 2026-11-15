@@ -70,7 +70,7 @@ describe('jdl - JDLEnum', () => {
       result = jdlEnum.getValueJavadocs();
     });
 
-    it('returns the comments by enum value', () => {
+    it('returns the comments by enum value - snapshot', () => {
       expect(result).toMatchInlineSnapshot(`
 {
   "A": "first comment",

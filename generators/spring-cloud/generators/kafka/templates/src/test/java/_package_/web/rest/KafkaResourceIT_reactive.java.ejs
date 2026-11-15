@@ -21,7 +21,7 @@ package <%- packageName %>.web.rest;
 import <%- packageName %>.IntegrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-<%_ if (authenticationUsesCsrf) { _%>
+<%_ if (serverUsesCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +63,7 @@ class <%- upperFirstCamelCaseBaseName %>KafkaResourceIT {
 
     @Autowired
     private OutputDestination output;
-<%_ if (authenticationUsesCsrf) { _%>
+<%_ if (serverUsesCsrf) { _%>
 
     @BeforeEach
     void setupCsrf() {

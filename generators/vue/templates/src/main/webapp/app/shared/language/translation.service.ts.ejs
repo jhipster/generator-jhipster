@@ -1,0 +1,136 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { type InjectionKey } from 'vue';
+import { type Composer } from 'vue-i18n';
+
+<%_ if (microfrontend) { _%>
+import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
+<%_ } _%>
+import axios from 'axios';
+import dayjs from 'dayjs';
+
+import languages from '@/config/languages';
+
+<%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
+/**
+ * The translations of a microfrontend without the keys the application defines: it adds its own keys, the ones of the application,
+ * like its title, are kept whichever is loaded first.
+ */
+const withoutDefinedKeys = (translations: Record<string, any>, defined: Record<string, any>): Record<string, any> => {
+  const isObject = (value: unknown): boolean => typeof value === 'object' && value !== null && !Array.isArray(value);
+  const result: Record<string, any> = {};
+  for (const [key, value] of Object.entries(translations)) {
+    if (defined[key] === undefined) {
+      result[key] = value;
+    } else if (isObject(value) && isObject(defined[key])) {
+      result[key] = withoutDefinedKeys(value, defined[key]);
+    }
+  }
+  return result;
+};
+
+<%_ } _%>
+export default class TranslationService {
+  private readonly i18n: Composer;
+  private readonly languages = languages();
+  private readonly loadedLanguages: Set<string> = new Set();
+
+  constructor(i18n: Composer) {
+    this.i18n = i18n;
+  }
+
+  async refreshTranslation(newLanguage: string) {
+    if (this.i18n && !this.loadedLanguages.has(newLanguage)) {
+<%_ if (exposeMicrofrontend) { _%>
+      this.i18n.setLocaleMessage(newLanguage, {});
+      // Load translations exposed by microfrontend
+<%_ } _%>
+      <%- exposeMicrofrontend ? '// ' : '' %>const translations = await import(`../../../i18n/${newLanguage}/${newLanguage}.js`);
+      <%- exposeMicrofrontend ? '// ' : '' %>this.i18n.setLocaleMessage(newLanguage, translations.default);
+<%_ if (exposeMicrofrontend) { _%>
+
+      const applicationTranslations = await this.loadApplicationTranslations(newLanguage);
+      this.i18n.mergeLocaleMessage(newLanguage, applicationTranslations!.default);
+<%_ } _%>
+
+      this.loadedLanguages.add(newLanguage);
+    }
+  }
+<%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
+
+  /**
+   * Microfrontends are only used by authenticated users, their translations are loaded once the user logs in.
+   */
+  async refreshMicrofrontendTranslations(language: string) {
+    const applicationTranslations = await this.loadApplicationTranslations(language);
+    await Promise.all([
+  <%_ for (const remote of microfrontends.filter(remote => !remote.self)) { _%>
+      loadRemote<{ default: Record<string, any> }>(`<%- remote.moduleFederationName %>/i18n-${language}`)
+        .then(<%- remote.moduleFederationName %>Translations =>
+          this.i18n.mergeLocaleMessage(language, withoutDefinedKeys(<%- remote.moduleFederationName %>Translations!.default, applicationTranslations!.default)),
+        )
+        .catch(error => {
+          // eslint-disable-next-line no-console
+          console.log(`Error loading <%- remote.moduleFederationName %> translations. Make sure it's up. ${error}`);
+        }),
+  <%_ } _%>
+    ]);
+  }
+<%_ } _%>
+<%_ if (microfrontend) { _%>
+
+  private loadApplicationTranslations(language: string) {
+  <%_ if (exposeMicrofrontend) { _%>
+    return loadRemote<{ default: Record<string, any> }>(`<%- microfrontends.find(remote => remote.self).moduleFederationName %>/i18n-${language}`);
+  <%_ } else { _%>
+    return import(`../../../i18n/${language}/${language}.js`);
+  <%_ } _%>
+  }
+<%_ } _%>
+
+  setLocale(lang: string) {
+    dayjs.locale(lang);
+    this.i18n.locale.value = lang;
+    axios.defaults.headers.common['Accept-Language'] = lang;
+    document.querySelector('html')?.setAttribute('lang', lang);
+<%_ if (enableI18nRTL) { _%>
+    this.updatePageDirection(lang);
+<%_ } _%>
+  }
+<%_ if (enableI18nRTL) { _%>
+
+  private isRTL(lang: string): boolean {
+    return Boolean((this.languages as Record<string, { rtl?: boolean }>)[lang]?.rtl);
+  }
+
+  private updatePageDirection(currentLanguage: string): void {
+    document.querySelector('html')?.setAttribute('dir', this.isRTL(currentLanguage) ? 'rtl' : 'ltr');
+  }
+<%_ } _%>
+
+  isLanguageSupported(lang: string) {
+    return Boolean((this.languages as Record<string, unknown>)[lang]);
+  }
+
+  getLocalStoreLanguage(): string | null {
+    return localStorage.getItem('currentLanguage');
+  }
+}
+
+export const translationServiceKey: InjectionKey<TranslationService> = Symbol.for('jhipster:translationService');

@@ -44,7 +44,7 @@ describe('generator - languages - translate', () => {
       jhiTransformTranslate = createJhiTransformTranslateReplacer(getWebappTranslation);
     });
 
-    it('should replace __jhiTransformTranslate__ function', () => {
+    it('should replace __jhiTransformTranslate__ function - snapshot', () => {
       const body = `
 __jhiTransformTranslate__('global')
 `;
@@ -55,7 +55,7 @@ global-translated-"-'-value-0
 `);
     });
 
-    it('should replace __jhiTransformTranslate__ function with interpolation', () => {
+    it('should replace __jhiTransformTranslate__ function with interpolation - snapshot', () => {
       const body = `
 __jhiTransformTranslate__('global', { "min":20, "max": 50, "pattern": "^[a-zA-Z0-9]*$",
 "anotherPattern": "^[a-zA-Z0-9]*$",
@@ -79,7 +79,7 @@ global-{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*$","anotherPattern":"^[a-zA-Z0
 
     describe('with translation disabled', () => {
       describe('.tsx files', () => {
-        it('should replace __jhiTransformTranslate__ function', () => {
+        it('should replace __jhiTransformTranslate__ function - snapshot', () => {
           const body = `
 __jhiTransformTranslate__('global')
 `;
@@ -90,7 +90,7 @@ global-translated-&quot;-&apos;-value-0
 `);
         });
 
-        it('should replace __jhiTransformTranslate__ function with interpolation', () => {
+        it('should replace __jhiTransformTranslate__ function with interpolation - snapshot', () => {
           const body = `
 __jhiTransformTranslate__('global', { "min": 20, "max": 50, "pattern": "^[a-zA-Z0-9]*$",
   "anotherPattern": "^[a-zA-Z0-9]*$",
@@ -116,7 +116,7 @@ global-{&quot;min&quot;:20,&quot;max&quot;:50,&quot;pattern&quot;:&quot;^[a-zA-Z
 
     describe('with translation disabled', () => {
       describe('.tsx files', () => {
-        it('should replace __jhiTransformTranslate__ function', () => {
+        it('should replace __jhiTransformTranslate__ function - snapshot', () => {
           const body = `
 __jhiTransformTranslate__('global')
 `;
@@ -127,7 +127,7 @@ __jhiTransformTranslate__('global')
 `);
         });
 
-        it('should replace __jhiTransformTranslate__ function with interpolation', () => {
+        it('should replace __jhiTransformTranslate__ function with interpolation - snapshot', () => {
           const body = `
 __jhiTransformTranslate__('global', { "min":20, "max": 50, "pattern": "^[a-zA-Z0-9]*$",
   "anotherPattern": "^[a-zA-Z0-9]*$",
@@ -155,7 +155,7 @@ __jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers.length }}" })
       jhiTransformTranslateStringify = createJhiTransformTranslateStringifyReplacer(getWebappTranslation);
     });
 
-    it('should replace __jhiTransformTranslateStringify__ function', () => {
+    it('should replace __jhiTransformTranslateStringify__ function - snapshot', () => {
       const body = `
 __jhiTransformTranslateStringify__('global')
 `;
@@ -177,7 +177,7 @@ __jhiTransformTranslateStringify__('global')
       });
     });
 
-    it('should replace __jhiTranslateFoo__ function', () => {
+    it('should replace __jhiTranslateFoo__ function - snapshot', () => {
       const body = `
 __jhiTranslateFoo__('global')
 >__jhiTranslateFoo__('global')<

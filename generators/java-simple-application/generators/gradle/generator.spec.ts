@@ -34,7 +34,7 @@ describe(`generator - ${generator}`, () => {
         packageName: 'tech.jhipster',
       });
     });
-    it('should generate only gradle files', () => {
+    it('should generate only gradle files - snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
     it('should set buildTool config', () => {
@@ -45,7 +45,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig();
     });
-    it('should generate only gradle files', () => {
+    it('should generate only gradle files - snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
     it('should set buildTool config', () => {

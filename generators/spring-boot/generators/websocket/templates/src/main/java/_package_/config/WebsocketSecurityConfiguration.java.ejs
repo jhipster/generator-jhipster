@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.SimpMessageType;
-<%_ if (!authenticationUsesCsrf) { _%>
+<%_ if (!serverUsesCsrf) { _%>
 import org.springframework.messaging.support.ChannelInterceptor;
 <%_ } _%>
 import org.springframework.security.authorization.AuthorizationManager;
@@ -55,7 +55,7 @@ public class WebsocketSecurityConfiguration {
             .denyAll()
             .build();
     }
-<%_ if (!authenticationUsesCsrf) { _%>
+<%_ if (!serverUsesCsrf) { _%>
 
     /**
      * Disables CSRF

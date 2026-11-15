@@ -25,7 +25,7 @@ import { createSecureContext } from 'node:tls';
 import { createReproducibleBase64Secret, createReproducibleSecret } from '../../lib/utils/secret.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.ts';
 import { createKeyStore } from '../java/support/key-store-node-crypto.ts';
 import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
@@ -47,6 +47,76 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({}, generator);
 
+  describe('with a field and a relationship annotated @NotSortable', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        { name: 'Author', changelogDate: '20220129025419', fields: [{ fieldName: 'name', fieldType: 'String' }] },
+        {
+          name: 'Book',
+          changelogDate: '20220129025420',
+          fields: [
+            { fieldName: 'title', fieldType: 'String' },
+            { fieldName: 'secret', fieldType: 'String', options: { notSortable: true } },
+          ],
+          relationships: [
+            {
+              relationshipName: 'author',
+              otherEntityName: 'author',
+              relationshipType: 'many-to-one',
+              relationshipSide: 'left',
+              options: { notSortable: true },
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should mark them @NotSortable in the entity', () => {
+      const book = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Book.java`;
+      runResult.assertFileContent(book, /@NotSortable\s+(?:@[\w.]+(?:\([^)]*\))?\s+)*private String secret;/);
+      runResult.assertFileContent(book, /@NotSortable\s+(?:@[\w.]+(?:\([^)]*\))?\s+)*private Author author;/);
+      runResult.assertNoFileContent(book, /@NotSortable\s+(?:@[\w.]+(?:\([^)]*\))?\s+)*private String title;/);
+    });
+
+    it('should leave an entity without them unchanged', () => {
+      runResult.assertNoFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Author.java`, 'NotSortable');
+    });
+  });
+
+  describe('with a field of a pattern of two values', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'Flag',
+          changelogDate: '20220129025419',
+          fields: [{ fieldName: 'code', fieldType: 'String', fieldValidateRules: ['pattern'], fieldValidateRulesPattern: '^[01]$' }],
+        },
+      ]);
+    });
+
+    it('should test the resource with the two values of the pattern', () => {
+      const resourceIT = `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FlagResourceIT.java`;
+      runResult.assertFileContent(resourceIT, /DEFAULT_CODE = "[01]";/);
+      runResult.assertFileContent(resourceIT, /UPDATED_CODE = "[01]";/);
+      const content = runResult.getSnapshot()[resourceIT].contents as string;
+      expect(content.match(/DEFAULT_CODE = "(\d)"/)![1]).not.toBe(content.match(/UPDATED_CODE = "(\d)"/)![1]);
+    });
+  });
+
+  describe('with graalvm support and an existing cache provider', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ graalvmSupport: true, cacheProvider: 'ehcache' })
+        .withMockedJHipsterGenerators()
+        .withSkipWritingPriorities();
+    });
+
+    it('should compose with the cache generator', () => {
+      expect(runResult.composedMockedGenerators).toContain('jhipster:spring-boot:cache');
+    });
+  });
+
   describe('addTestSpringFactory', () => {
     before(async () => {
       await helpers
@@ -65,7 +135,7 @@ describe(`generator - ${generator}`, () => {
         );
     });
 
-    it('should add a test spring factory', () => {
+    it('should add a test spring factory - snapshot', () => {
       expect(runResult.getSnapshot('**/spring.factories')).toMatchSnapshot();
     });
   });
@@ -588,7 +658,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runJHipster(generator).withJHipsterConfig({ buildTool: 'gradle', serviceDiscoveryType, skipClient: true });
       });
 
-      it('should replace the placeholders in every configuration file', () => {
+      it('should replace the placeholders in every configuration file - snapshot', () => {
         expect(runResult.getSnapshot('**/gradle/profile_*.gradle')).toMatchSnapshot();
       });
     });

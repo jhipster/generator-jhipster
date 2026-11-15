@@ -43,11 +43,11 @@ node {
 
   <%_ if (!skipClient) { _%>
 <%- indent %>    stage('install tools') {
-<%- indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm"
+<%- indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-<%- nodePackageManager %>@install-node-and-<%- nodePackageManager %>"
 <%- indent %>    }
 
-<%- indent %>    stage('npm install') {
-<%- indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
+<%- indent %>    stage('<%- nodePackageManager %> install') {
+<%- indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%- nodePackageManager %>"
 <%- indent %>    }
   <%_ } _%>
   <%_ if (ciCdIntegrationsSnyk) { _%>
@@ -109,7 +109,7 @@ node {
 <%- indent %>    }
 
   <%_ if (!skipClient) { _%>
-<%- indent %>    stage('npm install') {
+<%- indent %>    stage('<%- nodePackageManager %> install') {
 <%- indent %>        sh "./gradlew <%- nodePackageManager %>_install -PnodeInstall --no-daemon"
 <%- indent %>    }
   <%_ } _%>

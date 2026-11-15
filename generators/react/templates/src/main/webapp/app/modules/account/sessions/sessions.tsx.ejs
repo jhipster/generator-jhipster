@@ -18,9 +18,10 @@
 -%>
 import { useEffect } from 'react';
 import { Alert, Button, Table } from 'react-bootstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import PageTitle from 'app/shared/layout/page-title';
 import { getSession } from 'app/shared/reducers/authentication';
 
 import { findAll, invalidateSession } from './sessions.reducer';
@@ -49,6 +50,7 @@ export const SessionsPage = () => {
 
   return (
     <div>
+      <PageTitle title={translate('global.menu.account.sessions')} />
       <h2>
         <Translate contentKey="sessions.title" interpolate={{ username: account.login }}>
           Active sessions for [<strong>{account.login}</strong>]

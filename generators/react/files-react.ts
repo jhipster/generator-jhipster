@@ -69,6 +69,11 @@ export const files = asWriteFilesSection({
       templates: ['config/websocket-middleware.ts'],
     },
     {
+      condition: generator => generator.authenticationTypeJwt,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['shared/auth/authentication-token.ts', 'shared/auth/authentication-token.spec.ts'],
+    },
+    {
       ...clientApplicationTemplatesBlock(),
       templates: ['app.scss', '_bootstrap-variables.scss'],
     },
@@ -87,7 +92,7 @@ export const files = asWriteFilesSection({
     {
       condition: generator => !generator.authenticationTypeOauth2,
       ...clientApplicationTemplatesBlock(),
-      templates: ['modules/login/login.tsx', 'modules/login/login-modal.tsx'],
+      templates: ['modules/login/login.tsx'],
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
@@ -116,7 +121,7 @@ export const files = asWriteFilesSection({
       templates: ['shared/reducers/locale.ts'],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2,
+      condition: generator => generator.generateBuiltInUserEntity,
       ...clientApplicationTemplatesBlock(),
       templates: ['shared/reducers/user-management.ts'],
     },
@@ -127,17 +132,23 @@ export const files = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       templates: [
         'modules/account/index.tsx',
-        'modules/account/activate/activate.tsx',
         'modules/account/password/password.tsx',
-        'modules/account/register/register.tsx',
         'modules/account/password-reset/init/password-reset-init.tsx',
         'modules/account/password-reset/finish/password-reset-finish.tsx',
         'modules/account/settings/settings.tsx',
-        'modules/account/register/register.reducer.ts',
-        'modules/account/activate/activate.reducer.ts',
         'modules/account/password-reset/password-reset.reducer.ts',
         'modules/account/password/password.reducer.ts',
         'modules/account/settings/settings.reducer.ts',
+      ],
+    },
+    {
+      condition: generator => generator.generateUserRegistration,
+      ...clientApplicationTemplatesBlock(),
+      templates: [
+        'modules/account/activate/activate.tsx',
+        'modules/account/activate/activate.reducer.ts',
+        'modules/account/register/register.tsx',
+        'modules/account/register/register.reducer.ts',
       ],
     },
     {
@@ -164,6 +175,7 @@ export const files = asWriteFilesSection({
         'modules/administration/health/health.tsx',
         'modules/administration/health/health-modal.tsx',
         'modules/administration/logs/logs.tsx',
+        'modules/administration/metrics/metrics-details-modal.tsx',
         'modules/administration/metrics/metrics.tsx',
       ],
     },
@@ -171,18 +183,6 @@ export const files = asWriteFilesSection({
       condition: generator => generator.communicationSpringWebsocket,
       ...clientApplicationTemplatesBlock(),
       templates: ['modules/administration/tracker/tracker.tsx'],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      ...clientApplicationTemplatesBlock(),
-      templates: [
-        'modules/administration/user-management/index.tsx',
-        'modules/administration/user-management/user-management.tsx',
-        'modules/administration/user-management/user-management-update.tsx',
-        'modules/administration/user-management/user-management-detail.tsx',
-        'modules/administration/user-management/user-management-delete-dialog.tsx',
-        'modules/administration/user-management/user-management.reducer.ts',
-      ],
     },
     {
       condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
@@ -204,6 +204,7 @@ export const files = asWriteFilesSection({
         'shared/layout/menus/entities.tsx',
         'shared/layout/menus/menu-components.tsx',
         'shared/layout/menus/menu-item.tsx',
+        'shared/layout/page-title.tsx',
         'shared/layout/password/password-strength-bar.tsx',
         // util
         'shared/util/date-utils.ts',
@@ -253,9 +254,33 @@ export const files = asWriteFilesSection({
   clientTestFw: [
     {
       ...clientApplicationTemplatesBlock(),
+      templates: ['entities/routes.spec.tsx'],
+    },
+    {
+      condition: generator => !generator.applicationTypeMonolith,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['entities/menu.spec.tsx'],
+    },
+    {
+      condition: generator => !generator.authenticationTypeOauth2,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['modules/login/login.spec.tsx'],
+    },
+    {
+      condition: generator => generator.microfrontend || generator.applicationTypeGateway,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['config/store.spec.ts'],
+    },
+    {
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'config/axios-interceptor.spec.ts',
+        'config/error-middleware.spec.ts',
+        'config/loading-bar-middleware.spec.ts',
+        'shared/util/test-utils.tsx',
         'config/notification-middleware.spec.ts',
+        'shared/reducers/reducer.utils.spec.ts',
+        'shared/DurationFormat.spec.tsx',
         'shared/reducers/application-profile.spec.ts',
         'shared/reducers/authentication.spec.ts',
         'shared/util/entity-utils.spec.ts',
@@ -264,26 +289,46 @@ export const files = asWriteFilesSection({
         'shared/error/error-boundary-routes.spec.tsx',
         'shared/layout/header/header.spec.tsx',
         'shared/layout/menus/account.spec.tsx',
+        'shared/layout/page-title.spec.tsx',
         'modules/administration/administration.reducer.spec.ts',
+        'modules/administration/admin-test-utils.ts',
+        'modules/administration/docs/docs.spec.tsx',
+        'modules/administration/index.spec.tsx',
       ],
     },
     {
+      condition: generator => generator.withAdminUi,
+      ...clientApplicationTemplatesBlock(),
+      templates: [
+        'modules/administration/configuration/configuration.spec.tsx',
+        'modules/administration/health/health.spec.tsx',
+        'modules/administration/health/health-modal.spec.tsx',
+        'modules/administration/logs/logs.spec.tsx',
+        'modules/administration/metrics/metrics-details-modal.spec.tsx',
+        'modules/administration/metrics/metrics.spec.tsx',
+      ],
+    },
+    {
+      condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['modules/administration/gateway/gateway.spec.tsx'],
+    },
+    {
       condition: generator => generator.generateUserManagement,
+      ...clientApplicationTemplatesBlock(),
+      templates: [
+        'modules/account/password/password.reducer.spec.ts',
+        'modules/account/password-reset/password-reset.reducer.spec.ts',
+        'modules/account/settings/settings.reducer.spec.ts',
+      ],
+    },
+    {
+      condition: generator => generator.generateUserRegistration,
       ...clientApplicationTemplatesBlock(),
       templates: [
         // 'spec/app/modules/account/register/register.spec.tsx',
         'modules/account/register/register.reducer.spec.ts',
         'modules/account/activate/activate.reducer.spec.ts',
-        'modules/account/password/password.reducer.spec.ts',
-        'modules/account/settings/settings.reducer.spec.ts',
-      ],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      ...clientApplicationTemplatesBlock(),
-      templates: [
-        'modules/administration/user-management/user-management.reducer.spec.ts',
-        'modules/administration/user-management/user-management-delete-dialog.spec.tsx',
       ],
     },
     {
@@ -292,7 +337,7 @@ export const files = asWriteFilesSection({
       templates: ['shared/reducers/locale.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2,
+      condition: generator => generator.generateBuiltInUserEntity,
       ...clientApplicationTemplatesBlock(),
       templates: ['shared/reducers/user-management.spec.ts'],
     },

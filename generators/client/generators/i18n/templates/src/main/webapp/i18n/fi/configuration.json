@@ -3,8 +3,11 @@
     "title": "Asetukset",
     "filter": "Suodatus (by prefix)",
     "table": {
+      "title": "Konfiguraation asetukset",
       "prefix": "Prefix",
-      "properties": "Asetukset"
+      "properties": "Asetukset",
+      "property": "Asetus",
+      "value": "Arvo"
     }
   }
 }

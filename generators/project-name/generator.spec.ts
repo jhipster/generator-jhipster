@@ -30,7 +30,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers.runJHipster(generator);
     });
-    it('should apply default baseName', () => {
+    it('should apply default baseName - snapshot', () => {
       expect(runResult.askedQuestions).toMatchInlineSnapshot(`
 [
   {

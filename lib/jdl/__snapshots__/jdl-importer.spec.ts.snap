@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`jdl - JDLImporter import when importing a JDL application with blueprints should return the blueprints attributes in the application 1`] = `
+exports[`jdl - JDLImporter import when importing a JDL application with blueprints should return the blueprints attributes in the application - snapshot 1`] = `
 [
   {
     "generator-jhipster": {
@@ -20,7 +20,7 @@ exports[`jdl - JDLImporter import when importing a JDL application with blueprin
 ]
 `;
 
-exports[`jdl - JDLImporter import when not parsing applications should return the final state 1`] = `
+exports[`jdl - JDLImporter import when not parsing applications should return the final state - snapshot 1`] = `
 {
   "exportedApplications": [],
   "exportedApplicationsWithEntities": {},
@@ -399,7 +399,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
 }
 `;
 
-exports[`jdl - JDLImporter import when parsing JDL applications and deployment config should export the application & deployment contents 1`] = `
+exports[`jdl - JDLImporter import when parsing JDL applications and deployment config should export the application & deployment contents - snapshot 1`] = `
 {
   "exportedApplications": [
     {
@@ -518,7 +518,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
 }
 `;
 
-exports[`jdl - JDLImporter import when parsing JDL applications and exporting them should export the application contents 1`] = `
+exports[`jdl - JDLImporter import when parsing JDL applications and exporting them should export the application contents - snapshot 1`] = `
 {
   "exportedApplications": [
     {
@@ -621,7 +621,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
 }
 `;
 
-exports[`jdl - JDLImporter import when parsing deployment config should export the deployment contents 1`] = `
+exports[`jdl - JDLImporter import when parsing deployment config should export the deployment contents - snapshot 1`] = `
 [
   {
     "generator-jhipster": {
@@ -663,7 +663,7 @@ exports[`jdl - JDLImporter import when parsing deployment config should export t
 ]
 `;
 
-exports[`jdl - JDLImporter import when passing the unidirectionalRelationships option when parsing one JDL application and entities should return the corresponding exportedApplicationsWithEntities 1`] = `
+exports[`jdl - JDLImporter import when passing the unidirectionalRelationships option when parsing one JDL application and entities should return the corresponding exportedApplicationsWithEntities - snapshot 1`] = `
 [
   {
     "annotations": {},

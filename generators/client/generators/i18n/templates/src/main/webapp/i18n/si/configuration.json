@@ -3,8 +3,11 @@
     "title": "වින්\u200Dයාසය",
     "filter": "පෙරණය (උපසර්ගය අනුව)",
     "table": {
+      "title": "වින්‍යාස දේපළ",
       "prefix": "උපසර්ගය",
-      "properties": "දේපළ"
+      "properties": "දේපළ",
+      "property": "දේපළ",
+      "value": "අගය"
     }
   }
 }

@@ -3,8 +3,11 @@
     "title": "Sazlamalar",
     "filter": "Filter (prefiks boyinsha)",
     "table": {
+      "title": "Sazlama xarakteristikaları",
       "prefix": "Prefiks",
-      "properties": "Xarakteristikalar"
+      "properties": "Xarakteristikalar",
+      "property": "Xarakteristika",
+      "value": "Qıymet"
     }
   }
 }

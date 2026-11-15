@@ -35,16 +35,12 @@ import Metrics from './metrics/metrics';
 <%_ if (communicationSpringWebsocket) { _%>
 import Tracker from './tracker/tracker';
 <%_ } _%>
-<%_ if (generateUserManagement) { _%>
-import UserManagement from './user-management';
-<%_ } _%>
+/* jhipster-needle-add-route-import - JHipster will add admin routes here */
 
 const AdministrationRoutes = () => (
   <div>
     <ErrorBoundaryRoutes>
-<%_ if (generateUserManagement) { _%>
-      <Route path="user-management/*" element={<UserManagement />} />
-<%_ } _%>
+      {/* jhipster-needle-add-route-path - JHipster will add admin routes here */}
 <%_ if (communicationSpringWebsocket) { _%>
       <Route path="tracker" element={<Tracker />} />
 <%_ } _%>

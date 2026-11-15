@@ -28,9 +28,8 @@ const ErrorComp = () => {
 
 describe('error component', () => {
   beforeEach(() => {
-    // ignore console and jsdom errors
-    vi.spyOn((globalThis as any)._virtualConsole, 'emit').mockImplementation(() => false);
-    vi.spyOn((globalThis as any).console, 'error').mockImplementation(() => false);
+    // React logs the errors that the error boundaries catch
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
   });
 
   it('should throw an error when component is not enclosed in Error Boundary', () => {

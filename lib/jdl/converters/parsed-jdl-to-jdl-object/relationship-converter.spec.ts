@@ -69,7 +69,7 @@ describe('jdl - RelationshipConverter', () => {
           );
         });
 
-        it('should convert them', () => {
+        it('should convert them - snapshot', () => {
           expect(convertedRelationships).toMatchInlineSnapshot(String.raw`
             [
               JDLRelationship {
@@ -130,7 +130,7 @@ describe('jdl - RelationshipConverter', () => {
           );
         });
 
-        it('should generate them', () => {
+        it('should generate them - snapshot', () => {
           expect(convertedRelationships).toMatchInlineSnapshot(String.raw`
             [
               JDLRelationship {

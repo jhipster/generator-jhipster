@@ -39,6 +39,8 @@
   <%_ } _%>
   <%_ if (field.fieldTypeNumeric) { _%>
           validate: v => isNumber(v) || translate('entity.validation.number'),
+  <%_ } else if (builtInUserManagement && field.fieldName === 'email') { _%>
+          validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
   <%_ } _%>
         }}
 <%_ } _%>

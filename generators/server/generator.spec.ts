@@ -46,7 +46,7 @@ describe(`generator - ${generator}`, () => {
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
-        it('should match generated files', () => {
+        it('should match generated files snapshot', () => {
           expect(runResult.getStateSnapshot()).toMatchSnapshot();
         });
 
@@ -64,7 +64,7 @@ describe(`generator - ${generator}`, () => {
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
-        it('should match generated files', () => {
+        it('should match generated files snapshot', () => {
           expect(runResult.getStateSnapshot()).toMatchSnapshot();
         });
 
@@ -82,7 +82,7 @@ describe(`generator - ${generator}`, () => {
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
-        it('should match generated files', () => {
+        it('should match generated files snapshot', () => {
           expect(runResult.getStateSnapshot()).toMatchSnapshot();
         });
 

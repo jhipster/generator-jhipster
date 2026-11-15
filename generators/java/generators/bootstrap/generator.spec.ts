@@ -47,7 +47,7 @@ describe(`generator - ${generator}`, () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
 
-    it('should compose with generators', () => {
+    it('should compose with generators - snapshot', () => {
       expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
     });
   });
@@ -59,6 +59,20 @@ describe(`generator - ${generator}`, () => {
 
     it('should not use the npm wrapper', () => {
       expect(result.application).toMatchObject({ useNpmWrapper: false, nodePackageManagerCommand: 'npm' });
+    });
+  });
+
+  describe('with pnpm', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withJHipsterConfig({ clientFramework: 'angular', nodePackageManager: 'pnpm' });
+    });
+
+    it('should use the pnpm wrapper', () => {
+      expect(result.application).toMatchObject({ useNpmWrapper: true, nodePackageManagerCommand: './pnpmw' });
     });
   });
 

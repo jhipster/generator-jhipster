@@ -42,7 +42,7 @@ describe('jdl - ExportUtils', () => {
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });
 
-      it('should export the config', () => {
+      it('should export the config - snapshot', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
 {
   "generator-jhipster": {
@@ -77,7 +77,7 @@ describe('jdl - ExportUtils', () => {
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });
 
-      it('should export the config', () => {
+      it('should export the config - snapshot', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
 {
   "generator-jhipster": {
@@ -121,7 +121,7 @@ describe('jdl - ExportUtils', () => {
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });
 
-      it('should export the config', () => {
+      it('should export the config - snapshot', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
 {
   "generator-jhipster": {
@@ -165,7 +165,7 @@ describe('jdl - ExportUtils', () => {
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });
 
-      it('should export the config with new creationTimestamp', () => {
+      it('should export the config with new creationTimestamp - snapshot', () => {
         expect(exportedConfig).toMatchInlineSnapshot(`
 {
   "generator-jhipster": {

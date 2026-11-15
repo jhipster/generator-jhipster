@@ -46,7 +46,7 @@ describe('generator - angular - transform', () => {
       describe('.html files', () => {
         const extension = '.html';
 
-        it('should translate __jhiTransformTranslate__ function', () => {
+        it('should translate __jhiTransformTranslate__ function - snapshot', () => {
           const body = `
 <h1>__jhiTransformTranslate__('activate.title1')</h1>
 <h1>__jhiTransformTranslate__('activate.title2')</h1>
@@ -59,7 +59,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should remove jhiTranslate attribute', () => {
+        it('should remove jhiTranslate attribute - snapshot', () => {
           const body = `
 <h1 jhiTranslate="activate.title1">activate.title1</h1>
 <h1 jhiTranslate="activate.title2">activate.title2</h1>
@@ -72,7 +72,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should remove [translateValues] attribute', () => {
+        it('should remove [translateValues] attribute - snapshot', () => {
           const body = `
 <h1 [translateValues]="{ max: 50 }">translate-values1</h1>
 <h1 [translateValues]="{ max: 50 }">translate-values2</h1>
@@ -85,7 +85,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should remove nested [translateValues] attribute', () => {
+        it('should remove nested [translateValues] attribute - snapshot', () => {
           const body = `
 <h1 [translateValues]="{ max: 50 }"><span [translateValues]="{ max: 50 }">translate-values1</span></h1>
 <h1 [translateValues]="{ max: 50 }"><span [translateValues]="{ max: 50 }">translate-values2</span></h1>
@@ -98,7 +98,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should remove [translateValues] attribute with any character', () => {
+        it('should remove [translateValues] attribute with any character - snapshot', () => {
           const body = `
 <h1 [translateValues]="{  %79kma#@ }">translate-values1</h1>
 <h1 [translateValues]="{  %79kma#@ }">translate-values2</h1>
@@ -111,7 +111,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should remove nested [translateValues] attributes', () => {
+        it('should remove nested [translateValues] attributes - snapshot', () => {
           const body = `
 <h1 [translateValues]="{ max: 50 }"><span [translateValues]="{ max: 50 }">translate-values1</span></h1>
 <h1 [translateValues]="{ max: 20 }"><span [translateValues]="{ max: 20 }">translate-values2</span></h1>
@@ -124,7 +124,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should replace placeholder attribute value with translated value', () => {
+        it('should replace placeholder attribute value with translated value - snapshot', () => {
           const body = `
 <input placeholder="{{ 'global.form.currentpassword.placeholder1' | translate }}"/>
 <input placeholder="{{ 'global.form.currentpassword.placeholder2' | translate }}"/>
@@ -137,7 +137,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should replace title attribute value with translated value', () => {
+        it('should replace title attribute value with translated value - snapshot', () => {
           const body = `
 <input title="{{ 'global.form.currentpassword.title1' | translate }}"/>
 <input title="{{ 'global.form.currentpassword.title2' | translate }}"/>
@@ -150,7 +150,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should replace __jhiTranslatePipe__ with translated value', () => {
+        it('should replace __jhiTranslatePipe__ with translated value - snapshot', () => {
           const body = `
 <input title="__jhiTranslatePipe__('global.form.currentpassword.title1')"/>
 <input title="__jhiTranslatePipe__('global.form.currentpassword.title2')"/>
@@ -163,7 +163,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should replace __jhiTranslatePipe__ with translation pipe', () => {
+        it('should replace __jhiTranslatePipe__ with translation pipe - snapshot', () => {
           const body = `
 <input title="__jhiTranslatePipe__('global.form.currentpassword.title1')"/>
 <input title="__jhiTranslatePipe__('global.form.currentpassword.title2')"/>
@@ -176,7 +176,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should replace __jhiTranslateTag__ with translated value', () => {
+        it('should replace __jhiTranslateTag__ with translated value - snapshot', () => {
           const body = `
 <tag>__jhiTranslateTag__('global.form.currentpassword.title1', { "username": "account()!.login" })</tag>
 <tag>
@@ -193,12 +193,12 @@ translated-value-global.form.currentpassword.title2-0
 `);
         });
 
-        it('should replace __jhiTranslateTag__ with empty translated value', () => {
+        it('should replace __jhiTranslateTag__ with empty translated value - snapshot', () => {
           const body = `<tag>__jhiTranslateTag__('blank', { "username": "account()!.login" })</tag>`;
           expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`"<tag></tag>"`);
         });
 
-        it('should replace __jhiTranslateTag__ with translation attribute and value', () => {
+        it('should replace __jhiTranslateTag__ with translation attribute and value - snapshot', () => {
           const body = `
 <tag>__jhiTranslateTag__('global.form.currentpassword.title1', { "username": "account()!.login" })</tag>
 <tag>
@@ -215,7 +215,7 @@ translated-value-global.form.currentpassword.title2-0
 `);
         });
 
-        it('should replace __jhiTranslateTagPipe__ with translated value', () => {
+        it('should replace __jhiTranslateTagPipe__ with translated value - snapshot', () => {
           const body = `
 <tag>__jhiTranslateTagPipe__('global.form.currentpassword.title1', { "username": "translation.key" })</tag>
 `;
@@ -226,7 +226,7 @@ translated-value-global.form.currentpassword.title2-0
 `);
         });
 
-        it('should replace __jhiTranslateTagPipe__ with translation attribute and value', () => {
+        it('should replace __jhiTranslateTagPipe__ with translation attribute and value - snapshot', () => {
           const body = `
 <tag>__jhiTranslateTagPipe__('global.form.currentpassword.title1', { "username": "translation.key" })</tag>
 `;
@@ -241,7 +241,7 @@ translated-value-global.form.currentpassword.title2-0
       describe('.route.ts files', () => {
         const extension = '.route.ts';
 
-        it('should translate title fields with translation values', () => {
+        it('should translate title fields with translation values - snapshot', () => {
           const body = `
 title: 'activate.title1',
 title: 'activate.title2',
@@ -258,7 +258,7 @@ title: 'translated-value-activate.title2-1',
       describe('.routes.ts files', () => {
         const extension = '.routes.ts';
 
-        it('should translate title fields with translation values', () => {
+        it('should translate title fields with translation values - snapshot', () => {
           const body = `
 title: 'activate.title1',
 title: 'activate.title2',
@@ -275,7 +275,7 @@ title: 'translated-value-activate.title2-1',
       describe('.module.ts files', () => {
         const extension = '.module.ts';
 
-        it('should translate title fields with translation values', () => {
+        it('should translate title fields with translation values - snapshot', () => {
           const body = `
 title: 'activate.title1',
 title: 'activate.title2',
@@ -292,7 +292,7 @@ title: 'translated-value-activate.title2-1',
       describe('.error.route.ts files', () => {
         const extension = '.error.route.ts';
 
-        it('should translate errorMessage fields with translation values', () => {
+        it('should translate errorMessage fields with translation values - snapshot', () => {
           const body = `
 errorMessage: 'activate.title1',
 errorMessage: 'activate.title2',

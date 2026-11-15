@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it } from 'vitest';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter<%- authenticationTypeOauth2 ? ', Route, Routes' : '' %> } from 'react-router';
 
-import { render, waitFor } from '@testing-library/react';
+import { <%- authenticationTypeOauth2 ? 'fireEvent, ' : '' %>render, <%- authenticationTypeOauth2 ? 'screen, ' : '' %>waitFor } from '@testing-library/react';
 
 import { AccountMenu } from './account';
 
@@ -70,5 +70,22 @@ describe('AccountMenu', () => {
 <%_ } _%>
     expect(html).not.toContain('/logout');
   });
+<%_ if (authenticationTypeOauth2) { _%>
 
+  it('should go to the login page from the guest AccountMenu component', async () => {
+    const { container } = render(
+      <MemoryRouter>
+        <Routes>
+          <Route path="/" element={<AccountMenu />} />
+          <Route path="/sign-in" element={<div>Login page</div>} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    await waitFor(() => expect(container.querySelector('#login-item')).not.toBeNull());
+
+    fireEvent.click(container.querySelector('#login-item')!);
+
+    expect(await screen.findByText('Login page')).not.toBeNull();
+  });
+<%_ } _%>
 });

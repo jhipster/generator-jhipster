@@ -16,11 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { EnvironmentProviders, Provider, Service, effect, inject, provideAppInitializer, signal, untracked } from '@angular/core';
+import { EnvironmentProviders, Provider, effect, inject, provideAppInitializer } from '@angular/core';
 
-import { TranslateLoader, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { loadLocale } from 'i18n';
-import { Observable, from } from 'rxjs';
 
 import { AccountService } from 'app/core/auth';
 
@@ -28,60 +27,60 @@ import { loadTranslation } from './index';
 
 const microfrontends: string[] = [<%- microfrontends.filter(remote => !remote.self).map(remote => `'${remote.moduleFederationName}'`).join(', ') %>];
 
-const mergeTranslations = (target: Record<string, any>, source: Record<string, any>): Record<string, any> => {
-  for (const [key, value] of Object.entries(source)) {
-    target[key] = value && typeof value === 'object' && typeof target[key] === 'object' ? mergeTranslations({ ...target[key] }, value) : value;
-  }
-  return target;
-};
-
 const logTranslationError = (microfrontend: string) => (error: unknown): undefined => {
   console.error(`Error loading ${microfrontend} translations`, error);
   return undefined;
 };
 
 /**
- * Loads the application translations, merged with the microfrontends translations when enabled.
+ * The translations of a microfrontend without the keys the application defines: it adds its own keys, the ones of the application,
+ * like its title, are kept whichever is loaded first.
  */
-@Service()
-export class MicrofrontendTranslationLoader implements TranslateLoader {
-  /** Microfrontends are only used by authenticated users, their translations are loaded once enabled. */
-  readonly loadMicrofrontends = signal(false);
-
-  getTranslation(lang: string): Observable<any> {
-    return from(this.loadTranslations(lang));
+const withoutDefinedKeys = (translations: Record<string, any>, defined: Record<string, any>): Record<string, any> => {
+  const isObject = (value: unknown): boolean => typeof value === 'object' && value !== null && !Array.isArray(value);
+  const result: Record<string, any> = {};
+  for (const [key, value] of Object.entries(translations)) {
+    if (defined[key] === undefined) {
+      result[key] = value;
+    } else if (isObject(value) && isObject(defined[key])) {
+      result[key] = withoutDefinedKeys(value, defined[key]);
+    }
   }
-
-  private async loadTranslations(lang: string): Promise<Record<string, any>> {
-    const translations = await Promise.all([
-      loadLocale(lang as any),
-      ...(this.loadMicrofrontends()
-        ? microfrontends.map(microfrontend => loadTranslation(microfrontend, lang).catch(logTranslationError(microfrontend)))
-        : []),
-    ]);
-    return translations.reduce<Record<string, any>>((merged, translation) => mergeTranslations(merged, translation ?? {}), {});
-  }
-}
+  return result;
+};
 
 /**
- * Replaces the translation loader with the microfrontends aware one and reloads the translations once the user logs in.
- * Must be provided by the application config: the loader relies on the federation runtime initialized by the application.
+ * Microfrontends are only used by authenticated users: their translations are merged into the ones of the language once the user
+ * logs in, after the language is loaded, since its loader replaces them. Reloading the language removes them at logout.
+ * Must be provided by the application config: it relies on the federation runtime initialized by the application.
  */
 export function provideMicrofrontendTranslation(): (Provider | EnvironmentProviders)[] {
   return [
-    { provide: TranslateLoader, useClass: MicrofrontendTranslationLoader },
     provideAppInitializer(() => {
       const translateService = inject(TranslateService);
-      const translateLoader = inject(TranslateLoader) as MicrofrontendTranslationLoader;
       const accountService = inject(AccountService);
+      const mergedLanguages = new Set<string>();
+      const mergeTranslations = async (lang: string): Promise<void> => {
+        const applicationTranslations = await loadLocale(lang as any);
+        await Promise.all(
+          microfrontends.map(microfrontend =>
+            loadTranslation(microfrontend, lang)
+              .then(translations => translateService.setTranslation(lang, withoutDefinedKeys(translations, applicationTranslations), true))
+              .catch(logTranslationError(microfrontend)),
+          ),
+        );
+      };
       effect(() => {
-        const loadMicrofrontends = accountService.account() !== null;
-        if (untracked(translateLoader.loadMicrofrontends) !== loadMicrofrontends) {
-          translateLoader.loadMicrofrontends.set(loadMicrofrontends);
-          const lang = translateService.getCurrentLang();
-          if (lang) {
-            translateService.reloadLang(lang).subscribe();
-          }
+        const lang = translateService.getCurrentLang();
+        const authenticated = accountService.account() !== null;
+        if (!lang || translateService.isLoading()) {
+          return;
+        }
+        if (authenticated && !mergedLanguages.has(lang)) {
+          mergedLanguages.add(lang);
+          void mergeTranslations(lang);
+        } else if (!authenticated && mergedLanguages.delete(lang)) {
+          translateService.reloadLang(lang).subscribe();
         }
       });
     }),

@@ -3,8 +3,11 @@
     "title": "Konfiguration",
     "filter": "Filtrer (efter præfiks)",
     "table": {
+      "title": "Konfigurationsegenskaber",
       "prefix": "Præfiks",
-      "properties": "Egenskaber"
+      "properties": "Egenskaber",
+      "property": "Egenskab",
+      "value": "Værdi"
     }
   }
 }

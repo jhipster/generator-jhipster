@@ -1,0 +1,64 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { readFile, readdir } from 'node:fs/promises';
+import path from 'node:path';
+
+<%_ if (clientBundlerRsbuild) { _%>
+import type { RsbuildPlugin } from '@rsbuild/core';
+<%_ } _%>
+import deepmerge from 'deepmerge';
+import type { Plugin } from 'vite';
+
+// The file of a language, like i18n/en/en.js.
+const languageFile = /[\\/]i18n[\\/]([^\\/]+)[\\/]\1\.js$/;
+
+/**
+ * The module of a language, with its translations merged at build time: it imports nothing, so it does not depend on a shared module.
+ */
+const mergeTranslations = async (languageDir: string, addDependency: (file: string) => void): Promise<string> => {
+  const files = (await readdir(languageDir)).filter(file => file.endsWith('.json')).sort();
+  const translations = await Promise.all(
+    files.map(async file => {
+      const translationFile = path.join(languageDir, file);
+      addDependency(translationFile);
+      return JSON.parse(await readFile(translationFile, 'utf-8'));
+    }),
+  );
+  return `export default ${JSON.stringify(deepmerge.all(translations))};`;
+};
+
+export const i18nVitePlugin = (): Plugin => ({
+  name: 'jhipster:i18n',
+  enforce: 'pre',
+  load(id) {
+    const [file] = id.split('?');
+    return languageFile.test(file) ? mergeTranslations(path.dirname(file), dependency => this.addWatchFile(dependency)) : undefined;
+  },
+});
+<%_ if (clientBundlerRsbuild) { _%>
+
+export const i18nRsbuildPlugin = (): RsbuildPlugin => ({
+  name: 'jhipster:i18n',
+  setup(api) {
+    api.transform({ test: languageFile }, ({ resourcePath, addDependency }) =>
+      mergeTranslations(path.dirname(resourcePath), addDependency),
+    );
+  },
+});
+<%_ } _%>

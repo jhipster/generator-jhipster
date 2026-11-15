@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (authenticationTypeJwt || enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 
@@ -25,7 +25,7 @@ import axios, { AxiosResponse } from 'axios';
 
 import { AppThunk } from 'app/config/store';
 <%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
+import { clearAuthenticationToken, storeAuthenticationToken } from 'app/shared/auth/authentication-token';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { setLocale } from 'app/shared/reducers/locale';
@@ -74,6 +74,16 @@ export const getAccount = createAsyncThunk('authentication/get_account', async (
   serializeError: serializeAxiosError,
 });
 
+<%_ if (authenticationTypeSession || authenticationTypeJwt) { _%>
+export interface IAuthParams {
+  username: string;
+  password: string;
+  <%_ if (authenticationUsesRememberMe) { _%>
+  rememberMe?: boolean;
+  <%_ } _%>
+}
+
+<%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
 export const authenticate = createAsyncThunk(
   'authentication/login',
@@ -83,20 +93,12 @@ export const authenticate = createAsyncThunk(
   },
 );
 
-export const login: (username: string, password: string, rememberMe?: boolean) => AppThunk =
-  (username, password, rememberMe = false) =>
-  async dispatch => {
-    const data = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&remember-me=${rememberMe}&submit=Login`;
-    await dispatch(authenticate(data));
-    dispatch(getSession());
-  };
+export const login: (credentials: IAuthParams) => AppThunk = credentials => async dispatch => {
+  const data = `username=${encodeURIComponent(credentials.username)}&password=${encodeURIComponent(credentials.password)}<%- authenticationUsesRememberMe ? '&remember-me=${Boolean(credentials.rememberMe)}' : '' %>&submit=Login`;
+  await dispatch(authenticate(data));
+  dispatch(getSession());
+};
 <%_ } else if (authenticationTypeJwt) { _%>
-interface IAuthParams {
-  username: string;
-  password: string;
-  rememberMe?: boolean;
-}
-
 export const authenticate = createAsyncThunk(
   'authentication/login',
   async (auth: IAuthParams) => axios.post<any>('api/authenticate', auth),
@@ -105,32 +107,21 @@ export const authenticate = createAsyncThunk(
   },
 );
 
-export const login: (username: string, password: string, rememberMe?: boolean) => AppThunk =
-  (username, password, rememberMe = false) =>
-  async dispatch => {
-    const result = await dispatch(authenticate({ username, password, rememberMe }));
-    const response = result.payload as AxiosResponse;
-    const bearerToken = response?.headers?.authorization;
-    if (bearerToken?.startsWith('Bearer ')) {
-      const jwt = bearerToken.slice(7, bearerToken.length);
-      if (rememberMe) {
-        Storage.local.set(AUTHENTICATION_TOKEN_KEY, jwt);
-      } else {
-        Storage.session.set(AUTHENTICATION_TOKEN_KEY, jwt);
-      }
-    }
-    dispatch(getSession());
-  };
+export const login: (credentials: IAuthParams) => AppThunk = credentials => async dispatch => {
+  const result = await dispatch(authenticate(credentials));
+  const response = result.payload as AxiosResponse;
+  const bearerToken = response?.headers?.authorization;
+  if (bearerToken?.startsWith('Bearer ')) {
+    const jwt = bearerToken.slice(7, bearerToken.length);
+    storeAuthenticationToken(jwt, credentials.rememberMe);
+  }
+  dispatch(getSession());
+};
 <%_ } _%>
 
 <%_ if (authenticationTypeJwt) { _%>
 export const clearAuthToken = () => {
-  if (Storage.local.get(AUTHENTICATION_TOKEN_KEY)) {
-    Storage.local.remove(AUTHENTICATION_TOKEN_KEY);
-  }
-  if (Storage.session.get(AUTHENTICATION_TOKEN_KEY)) {
-    Storage.session.remove(AUTHENTICATION_TOKEN_KEY);
-  }
+  clearAuthenticationToken();
 };
 
 export const logout: () => AppThunk = () => dispatch => {

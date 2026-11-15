@@ -17,9 +17,10 @@
  limitations under the License.
 -%>
 <template>
-  <div class="d-flex justify-content-center">
-    <div class="row-md">
-      <div class="col-md-12">
+  <div class="d-flex justify-content-center" id="login-page">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <h1 id="login-title" data-cy="loginTitle">{{ t$('login.title') }}</h1>
+      <div>
         <b-alert
           data-cy="loginError"
           variant="danger"
@@ -27,7 +28,7 @@
           v-html="t$('login.messages.error.authentication')"
         ></b-alert>
       </div>
-      <div class="col-md-12">
+      <div>
         <b-form @submit.prevent="doLogin()">
           <b-form-group :label="t$('global.form[\'username.label\']')" label-for="username">
             <b-form-input
@@ -36,9 +37,12 @@
               name="username"
               :placeholder="t$('global.form[\'username.placeholder\']')"
               v-model="login"
+              :class="{ 'is-valid': submitted && !!login, 'is-invalid': submitted && !login }"
               data-cy="username"
+              autofocus
             >
             </b-form-input>
+            <small class="form-text text-danger" v-if="submitted && !login">{{ t$('entity.validation.required') }}</small>
           </b-form-group>
           <b-form-group :label="t$('login.form.password')" label-for="password">
             <b-form-input
@@ -47,13 +51,17 @@
               name="password"
               :placeholder="t$('login.form[\'password.placeholder\']')"
               v-model="password"
+              :class="{ 'is-valid': submitted && !!password, 'is-invalid': submitted && !password }"
               data-cy="password"
             >
             </b-form-input>
+            <small class="form-text text-danger" v-if="submitted && !password">{{ t$('entity.validation.required') }}</small>
           </b-form-group>
-          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked <%- authenticationTypeSession && databaseTypeNo ? ' hidden' : '' %>>
+<%_ if (authenticationUsesRememberMe) { _%>
+          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked>
             <span>{{ t$('login.form.rememberme') }}</span>
           </b-form-checkbox>
+<%_ } _%>
           <div>
             <b-button data-cy="submit" type="submit" variant="primary">{{ t$('login.form.button') }}</b-button>
           </div>
@@ -67,12 +75,14 @@
             }}</b-link>
           </b-alert>
         </div>
+  <%_ if (generateUserRegistration) { _%>
         <div>
           <b-alert :model-value="true" variant="warning">
             <span>{{ t$('global.messages.info.register.noaccount') }}</span>
-            <b-link to="/register" class="alert-link ms-1">{{ t$('global.messages.info.register.link') }}</b-link>
+            <b-link to="/account/register" class="alert-link ms-1">{{ t$('global.messages.info.register.link') }}</b-link>
           </b-alert>
         </div>
+  <%_ } _%>
 <%_ } _%>
       </div>
     </div>
@@ -88,9 +98,8 @@ import { useRoute, useRouter } from 'vue-router';
 
 import axios from 'axios';
 
-import { useLoginModal } from '@/account/login-modal';
 <%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+import { storeAuthenticationToken } from '../authentication-token';
 <%_ } _%>
 import { accountServiceKey } from '../account.service';
 
@@ -99,36 +108,39 @@ const { t: t$ } = useI18n();
 <%_ } _%>
 
 const authenticationError = ref(false);
+const submitted = ref(false);
 const login = ref<string | null>(null);
 const password = ref<string | null>(null);
+<%_ if (authenticationUsesRememberMe) { _%>
 const rememberMe = ref(false);
+<%_ } _%>
 
-const { hideLogin } = useLoginModal();
 const route = useRoute();
 const router = useRouter();
 
-const previousState = () => router.go(-1);
+/** The page to go back to: a path of the application, else home. */
+const redirectPath = (): string => {
+  const { redirect } = route.query;
+  return typeof redirect === 'string' && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/';
+};
 
 const accountService = inject(accountServiceKey)!;
 
 const doLogin = async () => {
+  submitted.value = true;
+  if (!login.value || !password.value) {
+    return;
+  }
 <%_ if (authenticationTypeJwt) { _%>
   const data = { username: login.value, password: password.value, rememberMe: rememberMe.value };
   try {
     const result = await axios.post('api/authenticate', data);
     const bearerToken = result.headers.authorization;
     if (bearerToken?.startsWith('Bearer ')) {
-      const jwt = bearerToken.slice(7, bearerToken.length);
-      if (rememberMe.value) {
-        localStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
-        sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-      } else {
-        sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
-        localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
-      }
+      storeAuthenticationToken(bearerToken.slice(7, bearerToken.length), rememberMe.value);
     }
 <%_ } else { _%>
-  const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}&remember-me=${rememberMe.value}&submit=Login`;
+  const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}<%- authenticationUsesRememberMe ? '&remember-me=${rememberMe.value}' : '' %>&submit=Login`;
   try {
     await axios.post('api/authentication', data, {
       headers: {
@@ -138,13 +150,19 @@ const doLogin = async () => {
 <%_ } _%>
 
     authenticationError.value = false;
-    hideLogin();
     await accountService.retrieveAccount();
-    if (route.path === '/forbidden') {
-      previousState();
-    }
+    await router.replace(redirectPath());
   } catch {
     authenticationError.value = true;
   }
 };
+
+defineExpose({
+  authenticationError,
+  submitted,
+  login,
+  password,
+  rememberMe,
+  doLogin,
+});
 </script>

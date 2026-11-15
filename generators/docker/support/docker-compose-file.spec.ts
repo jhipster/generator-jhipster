@@ -23,7 +23,7 @@ import { createDockerComposeFile, flowHealthcheckCommands, mergeDockerComposeFil
 
 describe('generator - docker - docker-compose-file', () => {
   describe('createDockerComposeFile', () => {
-    it('should return a docker compose file header with default name', () => {
+    it('should return a docker compose file header with default name - snapshot', () => {
       expect(createDockerComposeFile()).toMatchInlineSnapshot(`
 "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: jhipster
@@ -31,7 +31,7 @@ name: jhipster
 `);
     });
 
-    it('should return a docker compose file header with custom name', () => {
+    it('should return a docker compose file header with custom name - snapshot', () => {
       expect(createDockerComposeFile('customService')).toMatchInlineSnapshot(`
 "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: customService

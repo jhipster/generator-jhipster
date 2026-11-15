@@ -3,8 +3,11 @@
     "title": "Beállítások",
     "filter": "Szűrés (prefix alapján)",
     "table": {
+      "title": "Konfigurációs beállítások",
       "prefix": "Prefix",
-      "properties": "Beállítások"
+      "properties": "Beállítások",
+      "property": "Beállítás",
+      "value": "Érték"
     }
   }
 }

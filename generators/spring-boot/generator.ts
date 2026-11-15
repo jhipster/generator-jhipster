@@ -26,6 +26,7 @@ import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFramework
 import { mutateData } from '../../lib/utils/index.ts';
 import { lowerFirst } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
+import { generateEntitySamples } from '../base-application/support/index.ts';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
 import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
@@ -44,7 +45,7 @@ import cleanupTask from './cleanup.ts';
 import command from './command.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
-import springBootDependencies from './resources/spring-boot-dependencies-4.ts';
+import springBootDependencies, { springBootDependenciesOverrides } from './resources/spring-boot-dependencies-4.ts';
 import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
@@ -286,9 +287,13 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
             'spring-boot-dependencies': "'SPRING-BOOT-VERSION'",
           };
         } else {
-          application.springBootDependencies = this.prepareDependencies(springBootDependencies.versions, 'java');
+          application.springBootDependencies = this.prepareDependencies(
+            { ...springBootDependencies.versions, ...springBootDependenciesOverrides.versions },
+            'java',
+          );
           application.javaDependencies['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
-          Object.assign(application.javaManagedProperties, springBootDependencies.properties);
+          Object.assign(application.javaManagedProperties, springBootDependencies.properties, springBootDependenciesOverrides.properties);
+          Object.assign(application.javaDependencies, springBootDependenciesOverrides.dependencies);
           application.javaDependencies.liquibase = application.javaManagedProperties['liquibase.version']!;
         }
       },
@@ -464,6 +469,25 @@ ${classProperties
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      packageJsonScripts({ application }) {
+        // Tries the application, in a demonstration: builds the jar of the production profile, then runs it with the sample secrets.
+        // Cleans first, so the only jar is the one to run: e2e builds and older versions would match the wildcard too.
+        // A script already set, by a blueprint or the user, is kept.
+        mutateData(application.packageJsonScripts, {
+          __override__: false,
+          'pretry-it': `./${application.buildToolGradle ? 'gradlew' : 'mvnw'} clean && npm run java:jar:prod`,
+          'try-it': `java -jar ${application.javaPackagingDestDir}*.jar --spring.profiles.include=secret-samples`,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
+
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity, application }) {
@@ -587,9 +611,15 @@ ${classProperties
       },
       prepareTestTextValues({ entity }) {
         // The text values of the resource integration test: the minimum and maximum lengths respected, matching the pattern.
-        entity.resetFakerSeed?.('resource-it');
-        for (const field of entity.fields) {
-          if (!field.fieldTypeString && !field.blobContentTypeText) continue;
+        const textFields = entity.fields.filter(field => field.fieldTypeString || field.blobContentTypeText);
+        // Two different values of each pattern, the default and the updated one.
+        const patternFields = textFields.filter(field => field.fieldValidateRulesPattern !== undefined);
+        const patternSamples = generateEntitySamples(entity, {
+          seed: 'resource-it',
+          batches: patternFields.map(field => ({ fields: [field], format: 'json-serializable', count: 2, distinct: true })),
+        });
+        const toJavaString = (value: string) => value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        for (const field of textFields) {
           let sampleTextLength = 10;
           if (field.fieldValidateRulesMinlength! > sampleTextLength) {
             sampleTextLength = field.fieldValidateRulesMinlength!;
@@ -600,24 +630,16 @@ ${classProperties
           let sampleTextString = 'A'.repeat(sampleTextLength);
           let updatedTextString = 'B'.repeat(sampleTextLength);
           if (field.fieldValidateRulesPattern !== undefined) {
-            try {
-              const patternRegExp = new RegExp(field.fieldValidateRulesPattern);
-              if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-                sampleTextString = field.generateFakeDataFromPattern!()!.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-              }
-              if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-                updatedTextString = field.generateFakeDataFromPattern!()!.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-              }
-            } catch (error) {
+            const [sample, updated] = patternSamples[patternFields.indexOf(field)].map(
+              patternSample => patternSample[field.fieldName] as string | undefined,
+            );
+            if (sample === undefined || updated === undefined) {
               this.log.warn(
-                `Error generating test value for entity "${entity.entityClass}" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern}", generating default values for this field. Detailed error message: "${(error as Error).message}".`,
+                `The pattern "${field.fieldValidateRulesPattern}" of entity "${entity.entityClass}" field "${field.fieldName}" gives no two different test values, generating default values for this field.`,
               );
-            }
-            if (sampleTextString === updatedTextString) {
-              updatedTextString = `${updatedTextString}B`;
-              this.log.warn(
-                `Randomly generated first and second test values for entity "${entity.entityClass}" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern}" in file "${entity.entityClass}ResourceIT" where equal, added symbol "B" to second value.`,
-              );
+            } else {
+              sampleTextString = toJavaString(sample);
+              updatedTextString = toJavaString(updated);
             }
           }
           mutateData(field, { __override__: false, sbTestSampleText: sampleTextString, sbTestUpdatedText: updatedTextString });
@@ -728,6 +750,12 @@ ${classProperties
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      overrideManagedVersions({ source }) {
+        if (this.useVersionPlaceholders) return;
+        for (const [property, value] of Object.entries(springBootDependenciesOverrides.properties)) {
+          source.addJavaProperty!({ property, value });
+        }
+      },
       baseDependencies({ application, source }) {
         source.addSpringBootModule!(
           'spring-boot-configuration-processor',
@@ -780,6 +808,10 @@ ${classProperties
         source.addAllowBlockingCallsInside!({
           classPath: 'org.springframework.validation.beanvalidation.SpringValidatorAdapter',
           method: 'validate',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.web.method.annotation.HandlerMethodValidator',
+          method: 'validateArguments',
         });
         source.addAllowBlockingCallsInside!({
           classPath: `${application.packageName}.service.MailService`,

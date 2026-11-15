@@ -3,8 +3,11 @@
     "title": "תצורה",
     "filter": "סינון (לפי קידומת)",
     "table": {
+      "title": "מאפייני תצורה",
       "prefix": "קידומת",
-      "properties": "מאפיינים"
+      "properties": "מאפיינים",
+      "property": "מאפיין",
+      "value": "ערך"
     }
   }
 }

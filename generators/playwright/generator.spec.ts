@@ -63,6 +63,75 @@ describe(`generator - ${generator}`, () => {
     expect(e2eSamples).toMatchSnapshot();
   });
 
+  describe('translations', () => {
+    const translationsSpec = 'src/test/javascript/playwright/e2e/translation/translations.pw.ts';
+    const config = { clientFramework: VUE, testFrameworks: [PLAYWRIGHT] };
+    const gatewayConfig = {
+      ...config,
+      applicationType: 'gateway' as const,
+      baseName: 'gateway',
+      microfrontends: [{ baseName: 'blog' }],
+    };
+
+    describe('with more than one language', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ ...config, languages: ['en', 'pt-br'] });
+      });
+
+      it('should check the welcome of the other language', () => {
+        runResult.assertFileContent(translationsSpec, 'i18n/pt-br/home.json');
+        runResult.assertFileContent(translationsSpec, '[data-cy="language-pt-br"]');
+      });
+    });
+
+    describe('with one language', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ ...config, languages: ['en'] });
+      });
+
+      it('should not write the spec', () => {
+        runResult.assertNoFile(translationsSpec);
+      });
+    });
+
+    describe('with a microfrontend', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig(gatewayConfig);
+      });
+
+      it('should not check another language', () => {
+        runResult.assertNoFileContent(translationsSpec, 'languageMenuSelector');
+      });
+
+      it('should check the application title once the microfrontend is loaded', () => {
+        runResult.assertFileContent(translationsSpec, '.dropdown-item[href^="/blog/"]');
+        runResult.assertFileContent(translationsSpec, ".toHaveText('Gateway')");
+        runResult.assertFileContent(translationsSpec, 'test.describe.configure({ retries: 0 })');
+      });
+    });
+
+    describe('with a microfrontend and another language', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ ...gatewayConfig, languages: ['en', 'pt-br'] });
+      });
+
+      it('should check the translations of the microfrontend in that language', () => {
+        runResult.assertFileContent(translationsSpec, 'should load the blog translations of another language');
+        runResult.assertFileContent(translationsSpec, '[data-cy="language-pt-br"]');
+      });
+    });
+
+    describe('without translations', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ ...gatewayConfig, enableTranslation: false, languages: ['en', 'pt-br'] });
+      });
+
+      it('should not write the spec', () => {
+        runResult.assertNoFile(translationsSpec);
+      });
+    });
+  });
+
   Object.entries(e2eSamples).forEach(([name, sampleConfig]) => {
     describe(name, () => {
       before(async () => {

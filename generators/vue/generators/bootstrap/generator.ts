@@ -45,10 +45,10 @@ export default class VueBootstrapGenerator extends VueApplicationGenerator {
           const { enableTranslation, clientSrcDir, clientRootDir } = application;
           if (!enableTranslation) return;
 
-          this.editFile(`${clientSrcDir}app/shared/config/dayjs.ts`, createDayjsUpdateLanguagesEditFileCallback(allLanguages, true));
+          this.editFile(`${clientSrcDir}app/config/dayjs.ts`, createDayjsUpdateLanguagesEditFileCallback(allLanguages, true));
 
           this.editFile(
-            `${clientSrcDir}app/shared/config/languages.ts`,
+            `${clientSrcDir}app/config/languages.ts`,
             createNeedleCallback({
               contentToAdd: generateLanguagesWebappOptions(allLanguages),
               needle: 'jhipster-needle-i18n-language-key-pipe',
@@ -74,7 +74,7 @@ export default class VueBootstrapGenerator extends VueApplicationGenerator {
 },`;
 
           this.editFile(
-            `${clientSrcDir}app/shared/config/config.ts`,
+            `${clientSrcDir}app/config/config.ts`,
             createNeedleCallback({
               contentToAdd: allLanguages.map(lang => generateDateTimeFormat(lang.languageTag)),
               needle: 'jhipster-needle-i18n-language-date-time-format',

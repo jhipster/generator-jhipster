@@ -16,59 +16,87 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const labelText = label => enableTranslation ? `${label} | label` : `${label}.text`; _%>
 <div>
   <h2>
     <span id="metrics-page-heading" data-cy="metricsPageHeading">__jhiTranslateTag__('metrics.title')</span>
 
-    <button class="btn btn-primary float-end" (click)="refresh()">
+    <button class="btn btn-primary float-end" (click)="refresh()" [disabled]="updatingMetrics()">
       <fa-icon icon="sync" /> <span>__jhiTranslateTag__('metrics.refresh.button')</span>
     </button>
   </h2>
 
-  <h3>__jhiTranslateTag__('metrics.jvm.title')</h3>
+  @if (updatingMetrics()) {
+    <div class="alert alert-info">__jhiTranslateTag__('metrics.updating')</div>
+  }
 
-@let metricsRef = metrics();
-@if (metricsRef && !updatingMetrics()) {
-  <div class="row">
-    <<%- jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics()" [jvmMemoryMetrics]="metricsRef.jvm" />
+  @for (section of sections(); track section.id) {
+    <h3 [id]="section.id">{{ <%- labelText('section.label') %> }}</h3>
 
-    <<%- jhiPrefixDashed %>-jvm-threads class="col-md-4" [threads]="threads()" />
+    @if (section.blocks.length > 0) {
+      <div class="row">
+        @for (block of section.blocks; track $index) {
+          <div class="col-md-4">
+            @if (block.label; as blockLabel) {
+              <h4>{{ <%- labelText('blockLabel') %> }}</h4>
+            }
 
-    <<%- jhiPrefixDashed %>-metrics-system class="col-md-4" [updating]="updatingMetrics()" [systemMetrics]="metricsRef.processMetrics" />
-  </div>
-}
+            @for (item of block.items; track $index) {
+              <div class="d-flex flex-wrap justify-content-between column-gap-2">
+                <span>{{ <%- labelText('item.label') %> }}</span>
+                <span>{{ item.value }}</span>
+              </div>
 
-@if (metricsRef?.garbageCollector; as metricsRefGarbageCollector) {
-  <<%- jhiPrefixDashed %>-metrics-garbagecollector
-    [updating]="updatingMetrics()"
-    [garbageCollectorMetrics]="metricsRefGarbageCollector" />
-}
+              @if (item.note) {
+                <div>{{ item.note }}</div>
+              }
 
-@if (updatingMetrics()) {
-  <div class="alert alert-info">__jhiTranslateTag__('metrics.updating')</div>
-}
+              @if (item.gauge; as gauge) {
+                <ngb-progressbar [value]="gauge.percent" [striped]="true" [animated]="false" [type]="gauge.status">
+                  <span>{{ gauge.text }}</span>
+                </ngb-progressbar>
+              }
+            }
 
-@if (metricsRef?.['http.server.requests']; as metricsRefHttpServerRequests) {
-  <<%- jhiPrefixDashed %>-metrics-request
-    [updating]="updatingMetrics()"
-    [requestMetrics]="metricsRefHttpServerRequests" />
-}
+            @if (block.details; as details) {
+              <button class="hand btn btn-primary btn-sm mt-2" (click)="openDetails(details)">
+                <span>Expand</span>
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
 
-@if (metricsRef?.services; as metricsRefServices) {
-  <<%- jhiPrefixDashed %>-metrics-endpoints-requests
-    [updating]="updatingMetrics()"
-    [endpointsRequestsMetrics]="metricsRefServices" />
-}
-
-@if (metricsRef?.cache; as metricsRefCache) {
-  <<%- jhiPrefixDashed %>-metrics-cache
-    [updating]="updatingMetrics()"
-    [cacheMetrics]="metricsRefCache" />
-}
-
-@if (metricsRef && metricsKeyExistsAndObjectNotEmpty('databases')) {
-  <<%- jhiPrefixDashed %>-metrics-datasource
-    [updating]="updatingMetrics()"
-    [datasourceMetrics]="metricsRef.databases" />
-}
+    @for (table of section.tables; track $index) {
+      <div class="table-responsive">
+        <table class="table table-striped" [attr.aria-describedby]="section.id">
+          <thead>
+            <tr>
+              @for (column of table.columns; track $index) {
+                <th scope="col" [class.text-end]="column.numeric">{{ <%- labelText('column.label') %> }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of table.rows; track $index) {
+              <tr>
+                @for (cell of row; track $index; let columnIndex = $index) {
+                  <td [class.text-end]="table.columns[columnIndex].numeric">
+                    @if (cell.gauge; as gauge) {
+                      <ngb-progressbar [value]="gauge.percent" [striped]="true" [animated]="false" [type]="gauge.status">
+                        <span>{{ gauge.text }}</span>
+                      </ngb-progressbar>
+                    } @else {
+                      {{ cell.text }}
+                    }
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
 </div>

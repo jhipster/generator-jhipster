@@ -8,4 +8,7 @@ export default defineConfig({
   workers: true,
   // The longest test files first, by the durations of .expect-node.durations.json (npm run update-durations).
   durations: true,
+  // The snapshots keep the format of Jest: their names and the header of their files.
+  snapshotNames: 'jest',
+  snapshotMigration: 'keep',
 });

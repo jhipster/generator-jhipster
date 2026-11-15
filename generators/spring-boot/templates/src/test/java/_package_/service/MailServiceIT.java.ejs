@@ -161,6 +161,7 @@ class MailServiceIT {
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
 <%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (generateUserRegistration) { _%>
 
     @Test
     void testSendActivationEmail() throws Exception {
@@ -176,6 +177,7 @@ class MailServiceIT {
         assertThat(message.getContent().toString()).isNotEmpty();
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
+  <%_ } _%>
 
     @Test
     void testCreationEmail() throws Exception {

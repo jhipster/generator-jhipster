@@ -326,7 +326,7 @@ describe('jdl - JDLApplication', () => {
         });
       });
 
-      it('uses each entity name', () => {
+      it('uses each entity name - snapshot', () => {
         expect(result).toMatchInlineSnapshot(`
 [
   "A",

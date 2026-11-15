@@ -48,7 +48,7 @@ describe('jdl - JSONEntity', () => {
         });
       });
 
-      it('should set default values', () => {
+      it('should set default values - snapshot', () => {
         expect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
@@ -101,7 +101,7 @@ JSONEntity {
         });
       });
 
-      it('should use them', () => {
+      it('should use them - snapshot', () => {
         expect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "yes",
@@ -286,7 +286,7 @@ JSONEntity {
         });
       });
 
-      it('should set them', () => {
+      it('should set them - snapshot', () => {
         expect(jsonEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,

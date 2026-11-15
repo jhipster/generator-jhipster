@@ -21,7 +21,7 @@ import { describe, expect, it } from 'expect-node';
 import { parseMavenPom } from './dependabot-maven.ts';
 
 describe('parseMavenPom', () => {
-  it('should parse a pom file', () => {
+  it('should parse a pom file - snapshot', () => {
     const pomContent = `<?xml version="1.0" encoding="UTF-8"?>
 <project>
     <artifactId>test</artifactId>

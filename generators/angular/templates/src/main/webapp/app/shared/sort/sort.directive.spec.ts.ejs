@@ -52,12 +52,12 @@ describe('Directive: SortDirective', () => {
     tableRow = fixture.debugElement.query(By.directive(SortDirective));
   });
 
-  it('should emit sortStateChange', () => {
+  it('should emit sortStateChange', async () => {
     // GIVEN
     const sortDirective = tableRow.injector.get(SortDirective as Type<SortDirective>);
 
     // WHEN
-    fixture.detectChanges();
+    await fixture.whenStable();
     sortDirective.sort('ID');
 
     // THEN
@@ -65,12 +65,12 @@ describe('Directive: SortDirective', () => {
     expect(component.transition).toHaveBeenCalledWith({ predicate: 'ID', order: 'asc' });
   });
 
-  it('should change sort order to descending, neutral when same field is sorted again', () => {
+  it('should change sort order to descending, neutral when same field is sorted again', async () => {
     // GIVEN
     const sortDirective = tableRow.injector.get(SortDirective as Type<SortDirective>);
 
     // WHEN
-    fixture.detectChanges();
+    await fixture.whenStable();
     sortDirective.sort('ID');
     // sort again
     sortDirective.sort('ID');
@@ -84,12 +84,12 @@ describe('Directive: SortDirective', () => {
     expect(component.transition).toHaveBeenNthCalledWith(3, { predicate: 'ID', order: 'asc' });
   });
 
-  it('should change sort order to ascending when different field is sorted', () => {
+  it('should change sort order to ascending when different field is sorted', async () => {
     // GIVEN
     const sortDirective = tableRow.injector.get(SortDirective as Type<SortDirective>);
 
     // WHEN
-    fixture.detectChanges();
+    await fixture.whenStable();
     sortDirective.sort('ID');
     // sort again
     sortDirective.sort('NAME');

@@ -241,6 +241,15 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           });
         }
       },
+      nativeHints({ application, source }) {
+        if (!application.graalvmSupport || !application.cacheProviderEhcache) return;
+        // GraalVM's reachability metadata doesn't cover the Ehcache and hibernate-jcache versions Spring Boot manages
+        source.addNativeHint!({
+          publicConstructors: application.enableHibernateCache ? ['org.hibernate.cache.jcache.internal.JCacheRegionFactory.class'] : [],
+          // Micrometer's cache metrics call the JCache MXBeans
+          publicMethods: ['javax.cache.management.CacheStatisticsMXBean.class', 'javax.cache.management.CacheMXBean.class'],
+        });
+      },
       sonar({ application, source }) {
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S1192',

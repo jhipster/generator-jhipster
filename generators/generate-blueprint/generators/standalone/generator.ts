@@ -180,7 +180,6 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
             'ejs-lint': mainDependencies['ejs-lint'],
             eslint: mainDependencies.eslint,
             jiti: mainDependencies.jiti,
-            globals: mainDependencies.globals,
             vitest: mainDependencies.vitest,
             prettier: mainDependencies.prettier,
             ...(application.typescriptEslint ? { 'typescript-eslint': mainDependencies['typescript-eslint'] } : {}),

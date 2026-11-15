@@ -48,7 +48,7 @@ describe(`generator - ${generator}`, () => {
         expect(result.getSnapshot()).toMatchSnapshot({ '.yo-rc.json': expect.objectContaining({ contents: expect.any(String) }) });
       });
 
-      it('should compose with generators', () => {
+      it('should compose with generators - snapshot', () => {
         expect(result.getComposedGenerators()).toMatchSnapshot();
       });
     });
