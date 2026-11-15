@@ -11115,7 +11115,7 @@ spec:
         - containerPort: 5432
         volumeMounts:
         - name: data
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql
           subPath: postgres
         resources:
           requests:
@@ -15862,7 +15862,7 @@ spec:
         - containerPort: 5432
         volumeMounts:
         - name: data
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql
           subPath: postgres
         resources:
           requests:

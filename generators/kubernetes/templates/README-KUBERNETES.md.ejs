@@ -32,6 +32,40 @@ If you want to deploy using skaffold binary, then run
 ```
 skaffold run [or] skaffold deploy
 ```
+<%_ const postgresqlDatabases = kubernetesUseDynamicStorage ? [
+      ...appConfigs
+        .filter(app => app.prodDatabaseTypePostgresql)
+        .map(app => ({ name: `${app.baseName.toLowerCase()}-postgresql`, file: `${app.baseName.toLowerCase()}-k8s/${app.baseName.toLowerCase()}-postgresql.yml` })),
+      ...useKeycloak ? [{ name: 'keycloak-postgresql', file: 'keycloak-k8s/keycloak-postgresql.yml' }] : [],
+    ] : [];
+    const namespaceOption = kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}`;
+_%>
+<%_ if (postgresqlDatabases.length > 0) { _%>
+
+### Upgrading PostgreSQL databases deployed by an older JHipster version
+
+PostgreSQL 18 keeps its data in `/var/lib/postgresql/18/docker`, so the PostgreSQL volumes are mounted at `/var/lib/postgresql` instead of `/var/lib/postgresql/data`. If you deployed these databases with an older JHipster version, their volume holds the data of an older PostgreSQL version, and PostgreSQL 18 refuses to start with it until it's upgraded.
+
+Before applying the new manifests, dump each database from its current deployment:
+
+```
+  <%_ for (const database of postgresqlDatabases) { _%>
+kubectl exec deploy/<%- database.name %><%- namespaceOption %> -- sh -c 'pg_dumpall --no-role-passwords -U "$POSTGRES_USER"' > <%- database.name %>.sql
+  <%_ } _%>
+```
+
+Then apply only the new database manifests, wait for the databases to be ready, and restore the dumps before deploying the applications (errors about roles or databases that already exist can be ignored):
+
+```
+  <%_ for (const database of postgresqlDatabases) { _%>
+kubectl apply -f <%- database.file %>
+kubectl rollout status deploy/<%- database.name %><%- namespaceOption %>
+kubectl exec -i deploy/<%- database.name %><%- namespaceOption %> -- sh -c 'psql -U "$POSTGRES_USER" -d postgres' < <%- database.name %>.sql
+  <%_ } _%>
+```
+
+If you prefer to upgrade the data files in place, run [pg_upgrade](https://www.postgresql.org/docs/current/pgupgrade.html) on the old data, which stays at the root of the `postgres` directory of the volume. Once the data is migrated, you can delete the old files from the volume.
+<%_ } _%>
 
 ## Exploring your services
 
