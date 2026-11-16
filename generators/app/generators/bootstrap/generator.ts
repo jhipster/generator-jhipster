@@ -53,11 +53,15 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
       await this.dependsOnBootstrap('common');
       // The database the entities are stored in, with or without the server: the other side of their relationships.
       await this.dependsOnJHipster('jhipster:base-application:database-bootstrap');
-      // Without the client or the server, their generators are not composed.
-      if (!this.jhipsterConfigWithDefaults.skipClient) {
+      // Without the client or the server, their generators are not composed. An option of the first run is not stored
+      // in the configuration yet.
+      const options = this.options as { skipClient?: boolean; skipServer?: boolean };
+      const skipClient = options.skipClient ?? this.jhipsterConfigWithDefaults.skipClient;
+      const skipServer = options.skipServer ?? this.jhipsterConfigWithDefaults.skipServer;
+      if (!skipClient) {
         await this.dependsOnBootstrap('client');
       }
-      if (!this.jhipsterConfigWithDefaults.skipServer) {
+      if (!skipServer) {
         await this.dependsOnBootstrap('server');
       }
     }

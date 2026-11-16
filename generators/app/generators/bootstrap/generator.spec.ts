@@ -89,6 +89,46 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with the skipServer option of a first run', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withMockedGenerators(['jhipster:server:bootstrap']).withOptions({ skipServer: true });
+    });
+
+    it('should not compose the server bootstrap', () => {
+      runResult.assertGeneratorNotComposed('jhipster:server:bootstrap');
+    });
+  });
+
+  describe('with skipServer and entities', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedGenerators(['jhipster:server:bootstrap'])
+        .withJHipsterConfig({ skipServer: true, databaseType: 'mongodb', searchEngine: 'elasticsearch' }, [
+          {
+            name: 'Author',
+            changelogDate: '20200101000000',
+            searchEngine: 'elasticsearch',
+            fields: [{ fieldName: 'name', fieldType: 'String' }],
+            relationships: [{ relationshipName: 'book', otherEntityName: 'book', relationshipType: 'one-to-many' }],
+          },
+          { name: 'Book', changelogDate: '20200101000100', fields: [{ fieldName: 'title', fieldType: 'String' }] },
+        ] as any);
+    });
+
+    it('should add the other side of the relationships', () => {
+      expect(runResult.entities!.Book.relationships!.map(({ relationshipName }) => relationshipName)).toEqual(['author']);
+    });
+
+    it('should prepare the search of the entities', () => {
+      expect(runResult.entities!.Author).toMatchObject({ searchEngineAny: true, searchEngineElasticsearch: true });
+    });
+
+    it('should give the entities the id of the database', () => {
+      expect((runResult.entities!.Author as any).primaryKey.type).toBe('String');
+    });
+  });
+
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
