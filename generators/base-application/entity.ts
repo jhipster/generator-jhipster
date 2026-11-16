@@ -48,10 +48,10 @@ const mutateProperty = {
 } as const satisfies MutateDataParam<Property>;
 
 /**
- * How the REST API holds a field: `stored` (read and written, sortable), `computed` (computed by the backend, read only) or
- * `transient` (accepted, never stored).
+ * What a client can do with a field through the REST API, as the `readOnly` and `writeOnly` of OpenAPI: `readWrite` (read,
+ * written and sortable), `readOnly` (given by the backend, which computes it) or `writeOnly` (accepted, never given back).
  */
-export type FieldRestType = 'stored' | 'computed' | 'transient';
+export type FieldRestAccess = 'readWrite' | 'readOnly' | 'writeOnly';
 
 type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType', FieldType> &
   DerivedBooleanPropertiesOf<'fieldValidation', ValidationType> & {
@@ -90,11 +90,11 @@ type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType
     /** Stored in no column: an option of the entity file, or set by the backend. */
     transient?: boolean;
     /**
-     * How the REST API holds the field, which the clients read rather than how the backend stores it. Once the entity is
-     * prepared it is `transient` for a transient field, the one of its blob for a content type field, else `stored`: a
-     * backend sets it first for a field it computes.
+     * What a client can do with the field through the REST API, which the clients read rather than how the backend stores
+     * it. Once the entity is prepared it is `writeOnly` for a transient field, the one of its blob for a content type field,
+     * else `readWrite`: a backend sets it first for a field it computes.
      */
-    restType?: FieldRestType;
+    restAccess?: FieldRestAccess;
     id?: boolean;
     autoGenerate?: boolean;
     readonly?: boolean;

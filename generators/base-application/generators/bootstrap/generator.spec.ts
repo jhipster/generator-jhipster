@@ -125,7 +125,7 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with the fields the REST API holds', () => {
+  describe('with the access of its fields through the REST API', () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
@@ -144,21 +144,22 @@ describe(`generator - ${generator}`, () => {
         .withSkipWritingPriorities();
     });
 
-    const restTypes = () => Object.fromEntries((result.entities!.Foo as any).fields.map((field: any) => [field.fieldName, field.restType]));
+    const restAccesses = () =>
+      Object.fromEntries((result.entities!.Foo as any).fields.map((field: any) => [field.fieldName, field.restAccess]));
 
-    it('should hold a transient field as transient, the content type of a blob as its blob, and the others as stored', () => {
-      expect(restTypes()).toMatchObject({
-        name: 'stored',
-        note: 'transient',
-        photo: 'stored',
-        photoContentType: 'stored',
-        temp: 'transient',
-        tempContentType: 'transient',
+    it('should give a transient field write only, a content type field the access of its blob, the others read and write', () => {
+      expect(restAccesses()).toMatchObject({
+        name: 'readWrite',
+        note: 'writeOnly',
+        photo: 'readWrite',
+        photoContentType: 'readWrite',
+        temp: 'writeOnly',
+        tempContentType: 'writeOnly',
       });
     });
 
-    it('should hold a field as stored when no backend computes it', () => {
-      expect(restTypes()).toMatchObject({ preview: 'stored', previewContentType: 'stored' });
+    it('should give a field read and write when no backend computes it', () => {
+      expect(restAccesses()).toMatchObject({ preview: 'readWrite', previewContentType: 'readWrite' });
     });
   });
 

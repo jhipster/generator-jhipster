@@ -74,16 +74,16 @@ describe(`generator - ${generator}`, () => {
     const field = (fieldName: string): Record<string, any> =>
       (result.entities!.Foo as any).fields.find((field: any) => field.fieldName === fieldName);
 
-    it('should hold the field as computed by the backend, read only and stored in no column', () => {
-      expect(field('preview')).toMatchObject({ restType: 'computed', readonly: true, transient: true });
+    it('should give the field read only, computed by the backend and stored in no column', () => {
+      expect(field('preview')).toMatchObject({ restAccess: 'readOnly', readonly: true, transient: true });
     });
 
-    it('should hold the content type of a computed blob as its blob', () => {
-      expect(field('previewContentType')).toMatchObject({ restType: 'computed', readonly: true });
+    it('should give the content type of a computed blob the access of its blob', () => {
+      expect(field('previewContentType')).toMatchObject({ restAccess: 'readOnly', readonly: true });
     });
 
-    it('should hold the other fields as stored', () => {
-      expect(field('name')).toMatchObject({ restType: 'stored' });
+    it('should give the other fields read and write', () => {
+      expect(field('name')).toMatchObject({ restAccess: 'readWrite' });
       expect(field('name').readonly).toBeUndefined();
     });
   });
