@@ -16,37 +16,120 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { onMounted, provide, watch } from 'vue';
+<%_ const remoteMicrofrontends = microfrontend ? microfrontends.filter(remote => !remote.self) : []; _%>
+import { onMounted, provide, ref, watch } from 'vue';
 import { type Composer } from 'vue-i18n';
 
+<%_ if (microfrontend) { _%>
+import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
+<%_ } _%>
+import axios from 'axios';
+import dayjs from 'dayjs';
+
 import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
-import type TranslationService from '@/shared/language/translation.service';
-import { type AccountStore, useTranslationStore } from '@/stores';
+import languages from '@/config/languages';
+import { type AccountStore } from '@/stores';
+
+const LANGUAGE_STORAGE_KEY = 'currentLanguage';
+
+type Translations = Record<string, any>;
+
+/** The translations of the application in a language. */
+const loadApplicationTranslations = async (language: string): Promise<Translations> =>
+<%_ if (exposeMicrofrontend) { _%>
+  (await loadRemote<{ default: Translations }>(`<%- microfrontends.find(remote => remote.self).moduleFederationName %>/i18n-${language}`))!.default;
+<%_ } else { _%>
+  (await import(`../../i18n/${language}/${language}.js`)).default;
+<%_ } _%>
+<%_ if (remoteMicrofrontends.length > 0) { _%>
+
+/**
+ * The translations of a microfrontend without the keys the application defines: it adds its own keys, the ones of the application,
+ * like its title, are kept whichever is loaded first.
+ */
+const withoutDefinedKeys = (translations: Translations, defined: Translations): Translations => {
+  const isObject = (value: unknown): boolean => typeof value === 'object' && value !== null && !Array.isArray(value);
+  const result: Translations = {};
+  for (const [key, value] of Object.entries(translations)) {
+    if (defined[key] === undefined) {
+      result[key] = value;
+    } else if (isObject(value) && isObject(defined[key])) {
+      result[key] = withoutDefinedKeys(value, defined[key]);
+    }
+  }
+  return result;
+};
+<%_ } _%>
 
 /**
  * Keeps the language of the application: the one the user chose, else the one of the account, the one of the browser or
- * the native one. Provides the current language and the function that changes it.
+ * the native one. Loads its translations, sets the locale of the page and provides the current language and the function
+ * that changes it. The translations are loaded by loadTranslations, the files of the application by default.
  */
 export const useLanguage = ({
   composer,
   store,
-  translationService,
+  loadTranslations = loadApplicationTranslations,
 }: {
-  composer: Pick<Composer, 'locale'>;
+  composer: Pick<Composer, 'locale' | 'setLocaleMessage'<%- remoteMicrofrontends.length > 0 ? " | 'mergeLocaleMessage'" : '' %>>;
   store: AccountStore;
-  translationService: TranslationService;
+  loadTranslations?: (language: string) => Promise<Translations>;
 }) => {
-  const translationStore = useTranslationStore();
+  const supportedLanguages: Record<string, { name: string; rtl?: boolean }> = languages();
+  const loadedLanguages = new Set<string>();
+  const storedLanguage = () => localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  const currentLanguage = ref<string | undefined>();
+
+  const isLanguageSupported = (language?: string | null): language is string => Boolean(language && supportedLanguages[language]);
+
+  const refreshTranslation = async (language: string) => {
+    if (!loadedLanguages.has(language)) {
+      composer.setLocaleMessage(language, await loadTranslations(language));
+      loadedLanguages.add(language);
+    }
+  };
+<%_ if (remoteMicrofrontends.length > 0) { _%>
+
+  /**
+   * Microfrontends are only used by authenticated users, their translations are loaded once the user logs in.
+   */
+  const refreshMicrofrontendTranslations = async (language: string) => {
+    const applicationTranslations = await loadTranslations(language);
+    await Promise.all([
+  <%_ for (const remote of remoteMicrofrontends) { _%>
+      loadRemote<{ default: Translations }>(`<%- remote.moduleFederationName %>/i18n-${language}`)
+        .then(<%- remote.moduleFederationName %>Translations =>
+          composer.mergeLocaleMessage(language, withoutDefinedKeys(<%- remote.moduleFederationName %>Translations!.default, applicationTranslations)),
+        )
+        .catch(error => {
+          // eslint-disable-next-line no-console
+          console.log(`Error loading <%- remote.moduleFederationName %> translations. Make sure it's up. ${error}`);
+        }),
+  <%_ } _%>
+    ]);
+  };
+<%_ } _%>
+
+  const setLocale = (language: string) => {
+    dayjs.locale(language);
+    composer.locale.value = language;
+    axios.defaults.headers.common['Accept-Language'] = language;
+    document.querySelector('html')?.setAttribute('lang', language);
+<%_ if (enableI18nRTL) { _%>
+    document.querySelector('html')?.setAttribute('dir', supportedLanguages[language]?.rtl ? 'rtl' : 'ltr');
+<%_ } _%>
+  };
 
   const changeLanguage = async (newLanguage?: string | null) => {
     if (newLanguage && composer.locale.value !== newLanguage) {
-      await translationService.refreshTranslation(newLanguage);
-<%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
+      await refreshTranslation(newLanguage);
+<%_ if (remoteMicrofrontends.length > 0) { _%>
       if (store.authenticated) {
-        await translationService.refreshMicrofrontendTranslations(newLanguage);
+        await refreshMicrofrontendTranslations(newLanguage);
       }
 <%_ } _%>
-      translationStore.setCurrentLanguage(newLanguage);
+      currentLanguage.value = newLanguage;
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, newLanguage);
     }
   };
 
@@ -56,37 +139,31 @@ export const useLanguage = ({
   watch(
     () => store.account,
     async value => {
-      if (!translationService.getLocalStoreLanguage()) {
+      if (!storedLanguage()) {
         await changeLanguage(value?.langKey);
       }
     },
   );
 
-<%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
+<%_ if (remoteMicrofrontends.length > 0) { _%>
   watch(
     () => store.authenticated,
     async authenticated => {
-      if (authenticated && translationStore.currentLanguage) {
-        await translationService.refreshMicrofrontendTranslations(translationStore.currentLanguage);
+      if (authenticated && currentLanguage.value) {
+        await refreshMicrofrontendTranslations(currentLanguage.value);
       }
     },
   );
 
 <%_ } _%>
-  watch(
-    () => translationStore.currentLanguage,
-    value => {
-      if (value) {
-        translationService.setLocale(value);
-      }
-    },
-  );
+  watch(currentLanguage, value => {
+    if (value) {
+      setLocale(value);
+    }
+  });
 
   onMounted(async () => {
-    const lang = [translationService.getLocalStoreLanguage(), store.account?.langKey, navigator.language, '<%- nativeLanguage %>'].find(
-      language => language && translationService.isLanguageSupported(language),
-    );
-    await changeLanguage(lang);
+    await changeLanguage([storedLanguage(), store.account?.langKey, navigator.language, '<%- nativeLanguage %>'].find(isLanguageSupported));
   });
 
   return { changeLanguage };
