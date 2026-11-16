@@ -30,10 +30,13 @@ import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
 <%_ if (enableTranslation) { _%>
-import { LANGUAGES } from 'app/config/language.constants';
+import { LANGUAGES } from 'app/config';
 <%_ } _%>
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
+<%_ if (enableTranslation) { _%>
+import { StateStorageService } from 'app/core/auth/state-storage.service';
+<%_ } _%>
 import { AlertModel, AlertService } from 'app/core/util/alert.service';
 import Home from 'app/home/home';
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -107,6 +110,7 @@ describe('Layout screens', () => {
         expect(use).toHaveBeenCalledWith(language);
       }
       translateService.use('<%- nativeLanguage %>');
+      TestBed.inject(StateStorageService).clearLocale();
       await fixture.whenStable();
     });
 
@@ -116,6 +120,7 @@ describe('Layout screens', () => {
       const fixture = TestBed.createComponent(Navbar);
       await fixture.whenStable();
 
+      expect(fixture.nativeElement.querySelector('[data-cy="navbar"]')).not.toBeNull();
       expect(fixture.nativeElement.querySelector('[data-cy="languageMenu"]')).toBeNull();
     });
 
