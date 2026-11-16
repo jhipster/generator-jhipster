@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const clearsUserCaches = cacheProviderAny || (authenticationTypeJwt && generateUserManagement); _%>
 package <%- packageName %>.service;
 
 import <%- packageName %>.config.Constants;
@@ -33,6 +34,9 @@ import <%- packageName %>.repository.PersistentTokenRepository;
 import <%- packageName %>.repository.UserRepository;
   <%_ if (searchEngineElasticsearch) { _%>
 import <%- packageName %>.repository.search.UserSearchRepository;
+  <%_ } _%>
+  <%_ if (authenticationTypeJwt && generateUserManagement) { _%>
+import <%- packageName %>.security.JwtCredentialsValidator;
   <%_ } _%>
 import <%- packageName %>.security.SecurityUtils;
 <%_ } _%>
@@ -144,8 +148,12 @@ public class UserService {
 
     protected final OpenSessions openSessions;
   <%_ } _%>
+  <%_ if (authenticationTypeJwt && generateUserManagement) { _%>
 
-    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><%- authenticationTypeSession && authenticationUsesRememberMe ? ', PersistentTokenRepository persistentTokenRepository' : '' %><%- databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase ? ', AuthorityRepository authorityRepository' : '' %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %><%- authenticationTypeSession && generateUserManagement && !reactive ? ', SessionRegistry sessionRegistry, OpenSessions openSessions' : '' %>) {
+    protected final JwtCredentialsValidator credentialsValidator;
+  <%_ } _%>
+
+    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><%- authenticationTypeSession && authenticationUsesRememberMe ? ', PersistentTokenRepository persistentTokenRepository' : '' %><%- databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase ? ', AuthorityRepository authorityRepository' : '' %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %><%- authenticationTypeSession && generateUserManagement && !reactive ? ', SessionRegistry sessionRegistry, OpenSessions openSessions' : '' %><%- authenticationTypeJwt && generateUserManagement ? ', JwtCredentialsValidator credentialsValidator' : '' %>) {
         this.userRepository = userRepository;
   <%_ if (!authenticationTypeOauth2) { _%>
         this.passwordEncoder = passwordEncoder;
@@ -166,6 +174,9 @@ public class UserService {
         this.sessionRegistry = sessionRegistry;
         this.openSessions = openSessions;
   <%_ } _%>
+  <%_ if (authenticationTypeJwt && generateUserManagement) { _%>
+        this.credentialsValidator = credentialsValidator;
+  <%_ } _%>
     }
   <%_ if (!authenticationTypeOauth2) { _%>
 
@@ -185,7 +196,7 @@ public class UserService {
                 user.setResetDate(null);
                 return user;
             })
-            .flatMap(this::saveUser)<% if (cacheProviderAny) { %>
+            .flatMap(this::saveUser)<% if (clearsUserCaches) { %>
             .doOnNext(this::clearUserCaches)<% } %>;
     <%_ } else { _%>
             .map(user -> {
@@ -201,7 +212,7 @@ public class UserService {
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
       <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
                 this.clearUserCaches(user);
       <%_ } _%>
                 return user;
@@ -222,7 +233,7 @@ public class UserService {
                 user.setResetDate(Instant.now());
                 return user;
             })
-            .flatMap(this::saveUser)<% if (cacheProviderAny) { %>
+            .flatMap(this::saveUser)<% if (clearsUserCaches) { %>
             .doOnNext(this::clearUserCaches)<% } %>;
     <%_ } else { _%>
             .map(user -> {
@@ -231,7 +242,7 @@ public class UserService {
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
       <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
                 this.clearUserCaches(user);
       <%_ } _%>
                 return user;
@@ -284,7 +295,7 @@ public class UserService {
       <%_ if (searchEngineElasticsearch) { _%>
             .flatMap(user1 -> userSearchRepository.save(user1).thenReturn(user1))
       <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
             .doOnNext(user1 -> LOG.debug("Created Information for User: {}", user1));
@@ -312,7 +323,7 @@ public class UserService {
       <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.index(user);
       <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
         this.clearUserCaches(user);
       <%_ } _%>
         LOG.debug("Created Information for User: {}", user);
@@ -347,7 +358,7 @@ public class UserService {
                     userRepository.deleteById(userDTO.getId());
                 }
     <%_ } _%>
-    <%_ if (cacheProviderAny) { _%>
+    <%_ if (clearsUserCaches) { _%>
                 this.clearUserCaches(user);
     <%_ } _%>
     <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
@@ -395,7 +406,7 @@ public class UserService {
       <%_ if (searchEngineElasticsearch) { _%>
             .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
       <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
             .doOnNext(user -> LOG.debug("Changed Information for User: {}", user))
@@ -423,7 +434,7 @@ public class UserService {
       <%_ if (searchEngineElasticsearch) { _%>
                 userSearchRepository.index(user);
       <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
                 this.clearUserCaches(user);
       <%_ } _%>
                 LOG.debug("Changed Information for User: {}", user);
@@ -447,7 +458,7 @@ public class UserService {
       <%_ if (searchEngineElasticsearch) { _%>
             .flatMap(user -> userSearchRepository.delete(user).thenReturn(user))
       <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
             .doOnNext(user -> LOG.debug("Deleted User: {}", user))
@@ -466,7 +477,7 @@ public class UserService {
       <%_ if (searchEngineElasticsearch) { _%>
             userSearchRepository.deleteFromIndex(user);
       <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
             this.clearUserCaches(user);
       <%_ } _%>
             LOG.debug("Deleted User: {}", user);
@@ -511,7 +522,7 @@ public class UserService {
     <%_ if (searchEngineElasticsearch) { _%>
             .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
     <%_ } _%>
-    <%_ if (cacheProviderAny) { _%>
+    <%_ if (clearsUserCaches) { _%>
             .doOnNext(this::clearUserCaches)
     <%_ } _%>
             .doOnNext(user -> LOG.debug("Changed Information for User: {}", user))
@@ -521,7 +532,7 @@ public class UserService {
     <%_ if (searchEngineElasticsearch) { _%>
                 userSearchRepository.index(user);
     <%_ } _%>
-    <%_ if (cacheProviderAny) { _%>
+    <%_ if (clearsUserCaches) { _%>
                 this.clearUserCaches(user);
     <%_ } _%>
                 LOG.debug("Changed Information for User: {}", user);
@@ -601,7 +612,7 @@ public class UserService {
                 return user;
             })
             .flatMap(this::saveUser)
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
             .doOnNext(user -> LOG.debug("Changed password for User: {}", user))
@@ -616,7 +627,7 @@ public class UserService {
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
       <%_ } _%>
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
                 this.clearUserCaches(user);
       <%_ } _%>
                 LOG.debug("Changed password for User: {}", user);
@@ -838,7 +849,7 @@ public class UserService {
         } else {
             LOG.debug("Saving user '{}' in local database", user.getLogin());
             userRepository.save(user);
-      <%_ if (cacheProviderAny) { _%>
+      <%_ if (clearsUserCaches) { _%>
             this.clearUserCaches(user);
       <%_ } _%>
         }
@@ -953,13 +964,18 @@ public class UserService {
         return user;
     }
 <%_ } _%>
-<%_ if (cacheProviderAny && !databaseTypeNo) { _%>
+<%_ if (clearsUserCaches && !databaseTypeNo) { _%>
 
     protected void clearUserCaches(<%- user.persistClass %> user) {
+  <%_ if (cacheProviderAny) { _%>
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evictIfPresent(user.getLogin());
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evictIfPresent(user.getEmail());
         }
+  <%_ } _%>
+  <%_ if (authenticationTypeJwt && generateUserManagement) { _%>
+        credentialsValidator.evict(user.getLogin());
+  <%_ } _%>
     }
 <%_ } _%>
 }

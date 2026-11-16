@@ -486,7 +486,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
                 hibernateNamingImplicitStrategy: application.hibernateNamingImplicitStrategy,
                 packageName: application.packageName!,
                 srcMainResources: application.srcMainResources,
-                authenticationTypeOauth2: application.authenticationTypeOauth2,
                 devDatabaseTypeH2Any: relationalApplication.devDatabaseTypeH2Any!,
                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 driver: liquibasePluginJdbcDriver!,

@@ -208,6 +208,11 @@ export class <%- entityAngularName %>Update implements OnInit {
     }
 
     save(): void {
+        if (this.editForm.invalid) {
+            // The fields are marked and their errors shown, nothing is sent.
+            this.editForm.markAllAsTouched();
+            return;
+        }
         this.isSaving.set(true);
         const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.editForm);
 <%_ if (primaryKey.autoGenerate || builtInUserManagement) { _%>

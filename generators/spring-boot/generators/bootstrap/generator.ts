@@ -84,7 +84,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
       dockerEnvironment({ application }) {
         const { baseName, dockerApplicationEnvironment } = application;
 
-        mutateData(dockerApplicationEnvironment as any, {
+        mutateData(dockerApplicationEnvironment, {
           _JAVA_OPTIONS: '-Xmx512m -Xms256m',
           SPRING_PROFILES_ACTIVE: 'prod,api-docs,secret-samples',
           MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED: 'true',
@@ -92,7 +92,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
         // TODO move to spring-cloud:bootstrap generator
         if (application.serviceDiscoveryConsul) {
-          mutateData(dockerApplicationEnvironment as any, {
+          mutateData(dockerApplicationEnvironment, {
             SPRING_CLOUD_CONSUL_HOST: 'consul',
             SPRING_CLOUD_CONSUL_PORT: '8500',
           });
@@ -100,19 +100,19 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
         if (application.serviceDiscoveryEureka) {
           // eslint-disable-next-line no-template-curly-in-string
           const jhipsterRegistryUrl = 'http://admin:$${jhipster.registry.password}@jhipster-registry:8761/';
-          mutateData(dockerApplicationEnvironment as any, {
+          mutateData(dockerApplicationEnvironment, {
             EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: `${jhipsterRegistryUrl}eureka`,
             SPRING_CLOUD_CONFIG_URI: `${jhipsterRegistryUrl}config`,
           });
         }
 
         if (application.authenticationTypeSession) {
-          mutateData(dockerApplicationEnvironment as any, {
+          mutateData(dockerApplicationEnvironment, {
             SPRING_SECURITY_REMEMBER_ME_KEY: application.rememberMeKey,
           });
         } else if (application.authenticationTypeOauth2) {
           const clientId = application.applicationTypeMicroservice ? 'internal' : 'web_app';
-          mutateData(dockerApplicationEnvironment as any, {
+          mutateData(dockerApplicationEnvironment, {
             SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI: 'http://keycloak:9080/realms/jhipster',
             SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID: clientId,
             SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET: clientId,
@@ -120,7 +120,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
         }
 
         if (application.generateInMemoryUserCredentials) {
-          mutateData(dockerApplicationEnvironment as any, {
+          mutateData(dockerApplicationEnvironment, {
             SPRING_SECURITY_USER_NAME: application.defaultAdminUsername,
             SPRING_SECURITY_USER_PASSWORD: application.defaultAdminPassword,
             SPRING_SECURITY_USER_ROLES: application.defaultAdminRoles.join(','),
@@ -139,7 +139,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
               databaseName,
             });
             if (application.reactive) {
-              mutateData(environment as any, {
+              mutateData(environment, {
                 SPRING_R2DBC_URL: getR2dbcUrl(application.prodDatabaseType!, {
                   hostname,
                   databaseName,
@@ -148,22 +148,22 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
                 SPRING_R2DBC_PASSWORD: application.prodDatabasePassword,
               });
             } else {
-              mutateData(environment as any, {
+              mutateData(environment, {
                 SPRING_DATASOURCE_URL: jdbcUrl,
                 SPRING_DATASOURCE_USERNAME: application.prodDatabaseUsername,
                 SPRING_DATASOURCE_PASSWORD: application.prodDatabasePassword,
               });
             }
-            mutateData(environment as any, {
+            mutateData(environment, {
               SPRING_LIQUIBASE_URL: jdbcUrl,
             });
           } else if (application.databaseTypeMongodb) {
             const mongodbUri = `mongodb://${hostPrefix}mongodb:27017/${application.baseName}`;
-            mutateData(environment as any, {
+            mutateData(environment, {
               SPRING_MONGODB_URI: mongodbUri,
             });
           } else if (application.databaseTypeCouchbase) {
-            mutateData(environment as any, {
+            mutateData(environment, {
               SPRING_COUCHBASE_USERNAME: 'Administrator',
               SPRING_COUCHBASE_PASSWORD: 'password',
               SPRING_COUCHBASE_CONNECTION_STRING: `${hostPrefix}couchbase`,
@@ -171,16 +171,16 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
               JHIPSTER_SLEEP: '20', // Let database to start
             });
           } else if (application.databaseTypeNeo4j) {
-            mutateData(environment as any, {
+            mutateData(environment, {
               SPRING_NEO4J_URI: `bolt://${hostPrefix}neo4j:7687`,
             });
             if (application.databaseMigrationLiquibase) {
-              mutateData(environment as any, {
+              mutateData(environment, {
                 SPRING_LIQUIBASE_URL: `jdbc:neo4j:bolt://${hostPrefix}neo4j:7687`,
               });
             }
           } else if (application.databaseTypeCassandra) {
-            mutateData(environment as any, {
+            mutateData(environment, {
               SPRING_CASSANDRA_CONTACTPOINTS: `${hostPrefix}cassandra`,
               JHIPSTER_SLEEP: '10', // Let migration complete
             });

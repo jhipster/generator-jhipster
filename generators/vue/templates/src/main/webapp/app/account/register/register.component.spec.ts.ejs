@@ -53,6 +53,7 @@ describe('Register Component', () => {
         provide: {
           [currentLanguageKey as symbol]: computed(() => '<%- nativeLanguage %>'),
         },
+        stubs: { 'router-link': RouterLinkStub },
       },
     });
     register = wrapper.vm;
@@ -93,6 +94,7 @@ describe('Register Component', () => {
     axiosStub.post.mockResolvedValue(undefined);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
+    await register.$nextTick();
     register.register();
     await register.$nextTick();
 
@@ -113,6 +115,7 @@ describe('Register Component', () => {
     axiosStub.post.mockRejectedValue(error);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
+    await register.$nextTick();
     register.register();
     await register.$nextTick();
 
@@ -129,6 +132,7 @@ describe('Register Component', () => {
     axiosStub.post.mockRejectedValue(error);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
+    await register.$nextTick();
     register.register();
     await register.$nextTick();
 
@@ -145,6 +149,7 @@ describe('Register Component', () => {
     axiosStub.post.mockRejectedValue(error);
     register.registerAccount = filledRegisterAccount;
     register.confirmPassword = filledRegisterAccount.password;
+    await register.$nextTick();
     register.register();
     await register.$nextTick();
 
@@ -160,7 +165,7 @@ describe('Register Component', () => {
     // GIVEN
     axiosStub.post.mockResolvedValue(undefined);
     const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
-    const wrapper = shallowMount(Register);
+    const wrapper = shallowMount(Register, { global: { stubs: { 'router-link': RouterLinkStub } } });
 
     // WHEN
     await setAllValues(wrapper, 'input', formValues);

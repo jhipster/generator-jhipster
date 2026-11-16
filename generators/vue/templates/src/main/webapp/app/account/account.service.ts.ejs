@@ -22,7 +22,7 @@ import axios from 'axios';
 
 import { type IUser } from '@/entities/user/user.model';
 <%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+import { clearAuthenticationToken, getAuthenticationToken } from '@/account/authentication-token';
 <%_ } _%>
 import { type AccountStore } from '@/stores';
 
@@ -66,12 +66,22 @@ export default class AccountService {
     return false;
   }
 
+  /**
+   * Signs the user out of the application: the account<%- authenticationTypeJwt ? ' and the authentication token are' : ' is' %> forgotten.
+   */
+  logout(): void {
+<%_ if (authenticationTypeJwt) { _%>
+    clearAuthenticationToken();
+<%_ } _%>
+    this.store.logout();
+  }
+
   async loadAccount() {
     if (this.store.logon) {
       return this.store.logon;
     }
 <%_ if (authenticationTypeJwt) { _%>
-    const token = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) ?? sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY);
+    const token = getAuthenticationToken();
     if (this.authenticated && this.userAuthorities && token) {
 <%_ } else { _%>
     if (this.authenticated && this.userAuthorities) {

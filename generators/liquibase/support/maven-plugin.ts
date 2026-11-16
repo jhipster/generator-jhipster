@@ -23,7 +23,6 @@ export default function mavenPluginContent({
   hibernateNamingImplicitStrategy,
   packageName,
   srcMainResources,
-  authenticationTypeOauth2,
   devDatabaseTypeH2Any,
   driver,
   url,
@@ -38,7 +37,6 @@ export default function mavenPluginContent({
   hibernateNamingImplicitStrategy?: string;
   packageName: string;
   srcMainResources: string;
-  authenticationTypeOauth2: boolean;
   devDatabaseTypeH2Any: boolean;
   driver: string;
   url: string;
@@ -61,8 +59,7 @@ export default function mavenPluginContent({
       <password>${password}</password>${!hibernateNamingPhysicalStrategy || !hibernateNamingImplicitStrategy ? '' : `
       <referenceUrl>hibernate:spring:${packageName}.domain?dialect=${hibernateDialect}&amp;hibernate.physical_naming_strategy=${hibernateNamingPhysicalStrategy}&amp;hibernate.implicit_naming_strategy=${hibernateNamingImplicitStrategy}</referenceUrl>`}
       <verbose>true</verbose>
-      <contexts>!test</contexts>${authenticationTypeOauth2 ? `
-      <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects>`: ''}
+      <contexts>!test</contexts>
     </configuration>
     <dependencies>
       <dependency>

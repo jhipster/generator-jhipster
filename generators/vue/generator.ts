@@ -235,6 +235,8 @@ export default class VueGenerator extends VueApplicationGenerator {
               entityAngularName,
               readOnly,
             } = entity;
+            // The pages of an entity of the administration are among the administration ones.
+            const adminPage = Boolean(entity.adminEntity && !application.applicationTypeMicroservice);
 
             this.editFile(
               `${application.clientSrcDir}/app/entities/entities.routes.ts`,
@@ -283,7 +285,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 },`
                   )
                 }`,
-                contentToCheck: `path: '${entityFileName}'`,
+                contentToCheck: `path: '${adminPage ? entityPage : entityFileName}'`,
               }),
             );
 

@@ -1,0 +1,51 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ if (!authenticationTypeOauth2) { _%>
+import { type Router } from 'vue-router';
+
+<%_ } _%>
+import { type AxiosError } from 'axios';
+
+import type AccountService from './account.service';
+
+/**
+ * What an error of the server does to the session: a 401 signs the user out and asks for a new authentication.
+ */
+export const createUnauthorizedHandler =
+  ({ accountService<%- authenticationTypeOauth2 ? '' : ', router' %> }: { accountService: AccountService<%- authenticationTypeOauth2 ? '' : '; router: Router' %> }) =>
+  (error: AxiosError) => {
+    const url = error.response?.config?.url;
+    const status = error.status || error.response?.status;
+    if (status === 401) {
+      accountService.logout();
+      if (!url?.endsWith('api/account') && !url?.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {
+        // Ask for a new authentication
+<%_ if (authenticationTypeOauth2) { _%>
+        window.location.reload();
+<%_ } else { _%>
+        const { fullPath, path } = router.currentRoute.value;
+        if (path !== '/login') {
+          router.push({ path: '/login', query: { redirect: fullPath } });
+        }
+<%_ } _%>
+      }
+    }
+    // The caller fails, a 401 left out of its alerts.
+    return Promise.reject(error);
+  };

@@ -188,7 +188,7 @@ describe('Alert Error Component', () => {
           status: 400,
           path: '/api/foos',
           message: 'error.validation',
-          fieldErrors: [{ objectName: 'foo', field: 'minField', message: 'Min' }],
+          fieldErrors: [{ objectName: 'foo', field: 'minField', message: 'must be greater than or equal to 1', code: 'Min' }],
         },
       });
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });

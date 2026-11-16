@@ -58,13 +58,8 @@ export class JHipster {
 
 <%_ if (authenticationTypeJwt) { _%>
   private async bearerToken(): Promise<string | undefined> {
-    const raw = await this.page.evaluate(name => window.sessionStorage.getItem(name), '<%- jhiPrefixDashed %>-authenticationToken');
-    if (!raw) return undefined;
-  <%_ if (clientFrameworkVue) { _%>
-    return raw;
-  <%_ } else { _%>
-    return JSON.parse(raw) as string;
-  <%_ } _%>
+    const token = await this.page.evaluate(name => window.sessionStorage.getItem(name), '<%- jhiPrefixDashed %>-authenticationToken');
+    return token ?? undefined;
   }
 <%_ } _%>
 
@@ -114,11 +109,7 @@ export class JHipster {
     const { id_token: idToken } = (await response.json()) as { id_token: string };
     await this.page.evaluate(
       ([name, token]) => window.sessionStorage.setItem(name, token),
-    <%_ if (clientFrameworkVue) { _%>
       ['<%- jhiPrefixDashed %>-authenticationToken', idToken],
-    <%_ } else { _%>
-      ['<%- jhiPrefixDashed %>-authenticationToken', JSON.stringify(idToken)],
-    <%_ } _%>
     );
   <%_ } _%>
 <%_ } _%>

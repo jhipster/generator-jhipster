@@ -171,6 +171,24 @@ describe('<%- entityAngularName %> Management Update Component', () => {
     });
 
     describe('save', () => {
+        beforeEach(() => {
+            // The save is what is tested: the form is taken as valid, whatever the sample.
+            vi.spyOn(comp.editForm, 'invalid', 'get').mockReturnValue(false);
+        });
+
+        it('should mark the fields of an invalid form instead of saving it', () => {
+            // GIVEN
+            vi.spyOn(comp.editForm, 'invalid', 'get').mockReturnValue(true);
+            vi.spyOn(comp.editForm, 'markAllAsTouched');
+
+            // WHEN
+            comp.save();
+
+            // THEN
+            expect(comp.editForm.markAllAsTouched).toHaveBeenCalled();
+            expect(comp.isSaving()).toEqual(false);
+        });
+
 <%_ if (updatableEntity) { _%>
         it('should call update service on save for existing entity', () => {
             // GIVEN

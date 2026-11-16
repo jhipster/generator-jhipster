@@ -91,18 +91,13 @@ export const configurationPageHeadingSelector = '[data-cy="configurationPageHead
 // End Specific Selector Attributes for Cypress
 // ***********************************************
 
-export const classInvalid = <%- clientFrameworkAngular ? '\'ng-invalid\';' : '\'is-invalid\'' %>;
+export const classInvalid = 'is-invalid';
 
-export const classValid = <%- clientFrameworkAngular ? '\'ng-valid\'' : '\'is-valid\'' %>;
+export const classValid = 'is-valid';
 
 Cypress.Commands.add('authenticatedRequest', (data) => {
 <%_ if (authenticationTypeJwt) { _%>
-  <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
-  const jwtToken = sessionStorage.getItem(Cypress.expose('jwtStorageName'));
-  const bearerToken = jwtToken && JSON.parse(jwtToken);
-  <%_ } else { _%>
   const bearerToken = sessionStorage.getItem(Cypress.expose('jwtStorageName'));
-  <%_ } _%>
   if (bearerToken) {
     return cy.request({
       ...data,
@@ -148,11 +143,7 @@ Cypress.Commands.add('login', (username: string, password: string) => {
         form: true,
   <%_ } else { _%>
       }).then(({ body: { id_token } }) => {
-    <%_ if (clientFrameworkVue) { _%>
         sessionStorage.setItem(Cypress.expose('jwtStorageName'), id_token);
-    <%_ } else { _%>
-        sessionStorage.setItem(Cypress.expose('jwtStorageName'), JSON.stringify(id_token));
-    <%_ } _%>
   <%_ } _%>
       });
 <%_ } _%>

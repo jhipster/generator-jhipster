@@ -52,4 +52,21 @@ describe(`generator - ${generator}`, () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`[]`);
     });
   });
+
+  describe('with fromInit option', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withOptions({ fromInit: true }).withJHipsterConfig();
+    });
+
+    it('should add the dependencies imported by the eslint config', () => {
+      expect(JSON.parse(result.getSnapshot('**/package.json')['package.json'].contents!)).toMatchObject({
+        devDependencies: {
+          'eslint-config-prettier': expect.any(String),
+          'eslint-plugin-prettier': expect.any(String),
+          globals: expect.any(String),
+          jiti: expect.any(String),
+        },
+      });
+    });
+  });
 });

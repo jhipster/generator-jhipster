@@ -276,7 +276,7 @@ describe('Component Tests', () => {
         };
 
         // WHEN
-        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: {}, plugins: [createBootstrap()] } });
+        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: {<%- builtInUserManagement ? " [currentUsernameKey as symbol]: ref('admin') " : '' %>}, plugins: [createBootstrap()] } });
         await flushPromises();
 
         // THEN

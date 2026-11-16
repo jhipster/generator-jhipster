@@ -77,6 +77,11 @@ public final class SecurityUtils {
 
     public static final String USER_ID_CLAIM = "userId";
   <%_ } _%>
+  <%_ if (generateUserManagement) { _%>
+
+    /** The stamp of the credentials of the user at the login, see {@code JwtCredentialsValidator}. */
+    public static final String CREDENTIALS_CLAIM = "credentials";
+  <%_ } _%>
 <%_ } _%>
 
     private SecurityUtils() {}

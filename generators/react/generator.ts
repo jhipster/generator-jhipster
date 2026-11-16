@@ -251,9 +251,6 @@ ${comment}
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       react({ application, entity }) {
-        if (isAdminEntity(application, entity)) {
-          entity.entityPage = `admin/${entity.entityFileName}`;
-        }
         entity.entityReactState =
           application.applicationTypeMonolith || isAdminEntity(application, entity) ?
             entity.entityInstance

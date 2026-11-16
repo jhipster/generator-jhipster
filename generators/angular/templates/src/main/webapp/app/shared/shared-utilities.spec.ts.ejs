@@ -44,6 +44,7 @@ dayjs.extend(relativeTime);
 
 describe('Shared utilities', () => {
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 

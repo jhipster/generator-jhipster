@@ -73,7 +73,7 @@ describe('Notification Middleware', () => {
           status: 400,
           path: '/api/foos',
           message: 'error.validation',
-          fieldErrors: [{ objectName: 'foos', field: 'minField', message: 'Min' }],
+          fieldErrors: [{ objectName: 'foos', field: 'minField', message: 'must be greater than or equal to 1', code: 'Min' }],
         },
         status: 400,
         statusText: 'Bad Request',

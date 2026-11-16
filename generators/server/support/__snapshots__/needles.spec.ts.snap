@@ -179,6 +179,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/java/com/mycompany/myapp/security/DomainUserDetailsService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/security/JwtCredentialsValidator.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
@@ -398,6 +401,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/security/DomainUserDetailsServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/security/JwtCredentialsValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
@@ -425,6 +431,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/test/util/TestUtil.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
@@ -444,9 +453,6 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/SortValidatorTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/UserResourceIT.java": {

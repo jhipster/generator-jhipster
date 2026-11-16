@@ -35,7 +35,8 @@ export type ProblemDetails = {
 
 export const ProblemWithMessageType = 'https://www.jhipster.tech/problem/problem-with-message';
 
-export type FieldErrorVM = { message: string; objectName: string; field: string };
+/** A field error: `code` is the constraint, the key of its translation, and `message` its text. */
+export type FieldErrorVM = { message: string; code?: string; objectName: string; field: string };
 
 export type ProblemWithMessage = ProblemDetails & {
   type: typeof ProblemWithMessageType;

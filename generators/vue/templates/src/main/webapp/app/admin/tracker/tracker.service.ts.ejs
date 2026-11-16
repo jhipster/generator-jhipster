@@ -24,11 +24,11 @@ import Cookies from 'js-cookie';
 import { map } from 'rxjs';
 import SockJS from 'sockjs-client';
 
+<%_ if (authenticationTypeJwt) { _%>
+import { getAuthenticationToken } from '@/account/authentication-token';
+<%_ } _%>
 import { authenticatedKey } from '@/config/injection-keys';
 import {
-<%_ if (authenticationTypeJwt) { _%>
-  AUTHENTICATION_TOKEN_KEY,
-<%_ } _%>
   CSRF_TOKEN_COOKIE_NAME,
   CSRF_TOKEN_HEADER_NAME,
 } from '@/shared/jhipster/constants';
@@ -122,8 +122,7 @@ export default class TrackerService {
 <%_ if (authenticationTypeJwt) { _%>
 
   private getAuthToken() {
-    const authToken = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) || sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY);
-    return authToken;
+    return getAuthenticationToken();
   }
 <%_ } _%>
 

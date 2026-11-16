@@ -95,9 +95,62 @@ _shouldAcceptNumberProperties.nr satisfies
 }) satisfies MutateDataParam<{ readonly readonly: string; str: string }>;
 
 ({
-  // @ts-expect-error fails to build because index signatures should be removed
-  str: ctx => ctx.readonly,
-}) satisfies MutateDataParam<Record<string, any>>;
+  // @ts-expect-error index signatures of a type with named properties should be removed
+  other: 'baz',
+}) satisfies MutateDataParam<{ str: string; [key: string]: string }>;
+
+// A record accepts any key with the type of its values
+({
+  __override__: false,
+  'try-it': 'java -jar app.jar',
+}) satisfies MutateDataParam<Record<string, string>>;
+
+// A record accepts callbacks, with the record as context
+({
+  'pretry-it': ctx => `${ctx['try-it']} --build`,
+}) satisfies MutateDataParam<Record<string, string>>;
+
+({
+  // @ts-expect-error a record should not accept values of another type
+  'try-it': 1,
+}) satisfies MutateDataParam<Record<string, string>>;
+
+({
+  // @ts-expect-error callbacks of a record should return the type of its values
+  'try-it': () => 1,
+}) satisfies MutateDataParam<Record<string, string>>;
+
+// A record of literal keys accepts its keys
+({
+  foo: ctx => `${ctx.foo} --build`,
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+({
+  // @ts-expect-error a record of literal keys should not accept other keys
+  bar: 'baz',
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+({
+  // @ts-expect-error a record of literal keys should not accept values of another type
+  foo: 1,
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+// mutateData accepts the keys of a record
+const _scripts: Record<string, string> = {};
+mutateData(_scripts, { __override__: false, 'try-it': 'java -jar app.jar' });
+// @ts-expect-error mutateData should not accept values of another type for a record
+mutateData(_scripts, { 'try-it': 1 });
+
+// A record of functions takes a callback that returns the function, like a named property
+const _fns: Record<string, () => string> = {};
+mutateData(_fns, { a: () => () => 'x' });
+// @ts-expect-error mutateData should not accept a bare function for a record of functions
+mutateData(_fns, { a: () => 'x' });
+
+// A readonly record is not mutated
+const _readonlyScripts: Readonly<Record<string, string>> = {};
+// @ts-expect-error mutateData should not accept the keys of a readonly record
+mutateData(_readonlyScripts, { 'try-it': 'java -jar app.jar' });
 
 describe('utils - object', () => {
   describe('deepCleanup', () => {

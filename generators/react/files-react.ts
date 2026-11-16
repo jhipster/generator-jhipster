@@ -69,6 +69,11 @@ export const files = asWriteFilesSection({
       templates: ['config/websocket-middleware.ts'],
     },
     {
+      condition: generator => generator.authenticationTypeJwt,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['shared/auth/authentication-token.ts', 'shared/auth/authentication-token.spec.ts'],
+    },
+    {
       ...clientApplicationTemplatesBlock(),
       templates: ['app.scss', '_bootstrap-variables.scss'],
     },
@@ -199,6 +204,7 @@ export const files = asWriteFilesSection({
         'shared/layout/menus/entities.tsx',
         'shared/layout/menus/menu-components.tsx',
         'shared/layout/menus/menu-item.tsx',
+        'shared/layout/page-title.tsx',
         'shared/layout/password/password-strength-bar.tsx',
         // util
         'shared/util/date-utils.ts',
@@ -283,6 +289,7 @@ export const files = asWriteFilesSection({
         'shared/error/error-boundary-routes.spec.tsx',
         'shared/layout/header/header.spec.tsx',
         'shared/layout/menus/account.spec.tsx',
+        'shared/layout/page-title.spec.tsx',
         'modules/administration/administration.reducer.spec.ts',
         'modules/administration/admin-test-utils.ts',
         'modules/administration/docs/docs.spec.tsx',

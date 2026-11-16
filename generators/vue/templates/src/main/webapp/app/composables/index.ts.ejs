@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+export { useAccount } from './account';
 export { useDateFormat } from './date-format';
 export { type ListQuery, useEntityList } from './entity-list';
 export { useEntityRemove } from './entity-remove';
@@ -23,4 +24,7 @@ export { useEntityOptions } from './entity-options';
 export { useEntitySave } from './entity-save';
 export { type PropertyRules, useEntityValidation } from './entity-validation';
 export { type RequestOptions, useControlledRequest } from './controlled-request';
+<%_ if (enableTranslation) { _%>
+export { useLanguage } from './language';
+<%_ } _%>
 export { useValidation } from './validation';

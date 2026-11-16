@@ -101,6 +101,16 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "clientThemeVariantPrimary": false,
   "commandName": "ci-cd",
   "communicationSpringWebsocket": undefined,
+  "corsAdditionalAllowedOrigins": [],
+  "corsAllowedOriginPatterns": [
+    "https://*.githubpreview.dev",
+  ],
+  "corsAllowedOrigins": [
+    "http://localhost:8100",
+    "https://localhost:8100",
+    "http://localhost:4200",
+    "https://localhost:4200",
+  ],
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": [],
   "cypressAudit": undefined,

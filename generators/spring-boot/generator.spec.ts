@@ -25,7 +25,7 @@ import { createSecureContext } from 'node:tls';
 import { createReproducibleBase64Secret, createReproducibleSecret } from '../../lib/utils/secret.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.ts';
 import { createKeyStore } from '../java/support/key-store-node-crypto.ts';
 import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
@@ -80,6 +80,26 @@ describe(`generator - ${generator}`, () => {
 
     it('should leave an entity without them unchanged', () => {
       runResult.assertNoFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Author.java`, 'NotSortable');
+    });
+  });
+
+  describe('with a field of a pattern of two values', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'Flag',
+          changelogDate: '20220129025419',
+          fields: [{ fieldName: 'code', fieldType: 'String', fieldValidateRules: ['pattern'], fieldValidateRulesPattern: '^[01]$' }],
+        },
+      ]);
+    });
+
+    it('should test the resource with the two values of the pattern', () => {
+      const resourceIT = `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FlagResourceIT.java`;
+      runResult.assertFileContent(resourceIT, /DEFAULT_CODE = "[01]";/);
+      runResult.assertFileContent(resourceIT, /UPDATED_CODE = "[01]";/);
+      const content = runResult.getSnapshot()[resourceIT].contents as string;
+      expect(content.match(/DEFAULT_CODE = "(\d)"/)![1]).not.toBe(content.match(/UPDATED_CODE = "(\d)"/)![1]);
     });
   });
 

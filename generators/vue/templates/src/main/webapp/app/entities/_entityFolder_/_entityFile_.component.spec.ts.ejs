@@ -102,15 +102,11 @@ describe('Component Tests', () => {
 <%_ } _%>
           bModal: bModalStub,
           'font-awesome-icon': true,
-          'b-badge': true,
 <%_ if (!paginationNo) { _%>
           'jhi-sort-header': JhiSortHeader,
 <%_ } _%>
           'b-button': bButtonStub,
           'router-link': routerLinkStub,
-        },
-        directives: {
-          'b-modal': {},
         },
 <%_ if (!paginationNo) { _%>
         plugins: [router],
@@ -345,7 +341,7 @@ describe('Component Tests', () => {
         const get = vi.spyOn(axios, 'get').mockResolvedValue({ headers: {}, data: [] });
 
         // WHEN
-        const wrapper = shallowMount(<%- entityAngularName %>, { global: { ...mountOptions, provide: {}, plugins: [...(mountOptions?.plugins ?? []), createBootstrap()] } });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: { ...mountOptions, provide: {<%- builtInUserManagement ? " [currentUsernameKey as symbol]: ref('admin') " : '' %>}, plugins: [...(mountOptions?.plugins ?? []), createBootstrap()] } });
         await flushPromises();
 
         // THEN

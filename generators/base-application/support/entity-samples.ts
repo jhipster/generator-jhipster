@@ -29,6 +29,8 @@ export type EntitySamplesBatch<F extends BaseApplicationField = BaseApplicationF
   format: EntitySampleFormat;
   /** The samples to generate, fewer are returned when a required unique field has no value left. */
   count?: number;
+  /** The values of each field do not repeat among the samples, as the ones of a unique field. */
+  distinct?: boolean;
 };
 
 /**
@@ -53,13 +55,13 @@ export function generateEntitySamples<F extends BaseApplicationField>(
     return usedValues.get(field)!;
   };
 
-  return batches.map(({ fields: batchFields, format, count = 1 }) => {
+  return batches.map(({ fields: batchFields, format, count = 1, distinct = false }) => {
     const fields = typeof batchFields === 'function' ? batchFields(entity.faker!) : batchFields;
     const samples: Record<string, any>[] = [];
     for (let index = 0; index < count; index++) {
       let exhausted = false;
       const generateValue = (field: F) => {
-        const uniqueField = Boolean(field.unique || field.id);
+        const uniqueField = distinct || Boolean(field.unique || field.id);
         const domain = count > 1 && !uniqueField ? getFieldFakeDataDomain(field) : undefined;
         const uniqueValues = getUsedValues(field);
         if (domain && uniqueValues.length >= domain.length) {

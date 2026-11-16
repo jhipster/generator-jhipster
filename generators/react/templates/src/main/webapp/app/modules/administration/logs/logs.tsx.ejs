@@ -17,9 +17,10 @@
  limitations under the License.
 -%>
 import { useEffect, useState } from 'react';
-import { Translate } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import PageTitle from 'app/shared/layout/page-title';
 import { changeLogLevel, getLoggers } from '../administration.reducer';
 
 export const LogsPage = () => {
@@ -44,6 +45,7 @@ export const LogsPage = () => {
 
   return (
     <div>
+      <PageTitle title={translate('logs.title')} />
       <h2 id="logs-page-heading" data-cy="logsPageHeading">
         <Translate contentKey="logs.title">Logs</Translate>
       </h2>

@@ -16,7 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { titleLoginSelector, errorLoginSelector, usernameLoginSelector, passwordLoginSelector, submitLoginSelector } from '../../support/commands';
+import {
+  classInvalid,
+  classValid,
+  titleLoginSelector,
+  errorLoginSelector,
+  usernameLoginSelector,
+  passwordLoginSelector,
+  submitLoginSelector,
+} from '../../support/commands';
 import { test, expect } from '../../support/fixtures';
 
 <%_ const authUrl = `/api/${authenticationTypeSession ? 'authentication' : 'authenticate'}`; _%>
@@ -40,33 +48,23 @@ test.describe('login page', () => {
   });
 
   test('requires username', async ({ page }) => {
-<%_ if (!clientFrameworkReact) { _%>
-    const response = authenticate(page);
-<%_ } _%>
     await expect(page.locator(passwordLoginSelector)).toBeVisible();
     await page.locator(passwordLoginSelector).fill('a-password');
     await page.locator(submitLoginSelector).click();
-<%_ if (!clientFrameworkReact) { _%>
-    expect((await response).status()).toBe(<%- authenticationTypeSession ? '401' : '400' %>);
-<%_ } _%>
+    await expect(page.locator(usernameLoginSelector)).toContainClass(classInvalid);
+    await expect(page.locator(passwordLoginSelector)).toContainClass(classValid);
     // login page should stay open when login fails
     await expect(page.locator(titleLoginSelector)).toBeVisible();
   });
 
   test('requires password', async ({ page }) => {
-<%_ if (!clientFrameworkReact) { _%>
-    const response = authenticate(page);
-<%_ } _%>
     await expect(page.locator(usernameLoginSelector)).toBeVisible();
     await page.locator(usernameLoginSelector).fill('a-login');
     await page.locator(submitLoginSelector).click();
-<%_ if (clientFrameworkReact) { _%>
+    await expect(page.locator(passwordLoginSelector)).toContainClass(classInvalid);
+    await expect(page.locator(usernameLoginSelector)).toContainClass(classValid);
     // login page should stay open when login fails
     await expect(page.locator(titleLoginSelector)).toBeVisible();
-<%_ } else { _%>
-    expect((await response).status()).toBe(<%- authenticationTypeSession ? '401' : '400' %>);
-    await expect(page.locator(errorLoginSelector)).toBeVisible();
-<%_ } _%>
   });
 
   test('errors when password is incorrect', async ({ page, jhi }) => {

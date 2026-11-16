@@ -22,7 +22,7 @@ import type { ApplicationObjectConfig } from '../../objects.ts';
 export type ChangelogOperation = 'create' | 'update' | 'remove';
 
 /**
- * A changelog of an entity, an object of the application of type `changelog` named `<changelogDate>_<entityName>`: what a
+ * A changelog of an entity, an object of the application of type `changelog` named `_<changelogDate>_<entityName>`: what a
  * changelog of the entity is written from, the former state of the entity the entity of the changelog before it.
  */
 export type EntityChangelogObject = ApplicationObjectConfig & {

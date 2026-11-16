@@ -118,9 +118,9 @@ describe('Metrics', () => {
       { id: 'cache', label: { text: 'Cache' }, blocks: [], tables: [] },
     ];
 
-    beforeEach(() => {
+    beforeEach(async () => {
       vi.mocked(service.getMetrics).mockReturnValue(of(fullSections));
-      fixture.detectChanges();
+      await fixture.whenStable();
     });
 
     it('should render the sections', () => {
@@ -143,9 +143,9 @@ describe('Metrics', () => {
       expect(open).toHaveBeenCalled();
     });
 
-    it('should tell that the metrics are updating', () => {
+    it('should tell that the metrics are updating', async () => {
       comp.updatingMetrics.set(true);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect((fixture.nativeElement as HTMLElement).querySelector('.alert-info')).not.toBeNull();
     });

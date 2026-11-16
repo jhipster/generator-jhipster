@@ -69,12 +69,12 @@ describe('Gateway', () => {
     httpMock.verify();
   });
 
-  it('should show the routes and the status of their servers', () => {
-    fixture.detectChanges();
+  it('should show the routes and the status of their servers', async () => {
+    await fixture.whenStable();
     expect(comp.updatingRoutes()).toBe(true);
 
     httpMock.expectOne({ method: 'GET' }).flush(routes);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(comp.updatingRoutes()).toBe(false);
     expect(count('tbody a')).toBe(3);
@@ -84,14 +84,14 @@ describe('Gateway', () => {
     expect(count('.badge.bg-info')).toBe(1);
   });
 
-  it('should load the routes again on refresh', () => {
-    fixture.detectChanges();
+  it('should load the routes again on refresh', async () => {
+    await fixture.whenStable();
     httpMock.expectOne({ method: 'GET' }).flush(routes);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     fixture.nativeElement.querySelector('button').click();
     httpMock.expectOne({ method: 'GET' }).flush([]);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(comp.gatewayRoutes()).toEqual([]);
     expect(count('tbody a')).toBe(0);

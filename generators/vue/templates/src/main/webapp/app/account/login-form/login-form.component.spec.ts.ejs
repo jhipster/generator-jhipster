@@ -80,6 +80,16 @@ describe('LoginForm Component', () => {
     loginForm = wrapper.vm;
   });
 
+  it('should not authenticate without a login or a password', async () => {
+    // WHEN
+    await loginForm.doLogin();
+
+    // THEN
+    expect(axiosStub.post).not.toHaveBeenCalled();
+    expect(loginForm.submitted).toBe(true);
+    expect(loginForm.authenticationError).toBe(false);
+  });
+
 <%_ if (authenticationTypeJwt) { _%>
   it('should not store token if authentication is KO', async () => {
     // GIVEN
@@ -215,6 +225,8 @@ describe('LoginForm Component', () => {
   describe('once signed in', () => {
     beforeEach(() => {
       axiosStub.post.mockResolvedValue({ headers: {} });
+      loginForm.login = 'login';
+      loginForm.password = 'pwd';
     });
 
     it('should go back to the page it came from', async () => {

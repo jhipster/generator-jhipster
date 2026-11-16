@@ -60,11 +60,25 @@ describe('JhiNavbar', () => {
 <%_ if (authenticationUsesCsrf) { _%>
   let loginService: LoginService;
 <%_ } _%>
-  const accountService = { hasAnyAuthorityAndCheckAuth: vi.fn().mockImplementation(() => Promise.resolve(true)) };
+  const accountService = {
+    hasAnyAuthorityAndCheckAuth: vi.fn().mockImplementation(() => Promise.resolve(true)),
+    logout: vi.fn(() => store.logout()),
+  };
 <%_ if (enableTranslation) { _%>
   const changeLanguage = vi.fn();
 <%_ } _%>
   let router: Router;
+  const stubs = {
+    'font-awesome-icon': true,
+    'b-navbar': slotsStub,
+    'b-navbar-nav': slotsStub,
+    'b-dropdown-item': slotsStub,
+    'b-collapse': slotsStub,
+    'b-nav-item': slotsStub,
+    'b-nav-item-dropdown': slotsStub,
+    'b-navbar-toggle': slotsStub,
+    'b-navbar-brand': slotsStub,
+  };
 
   beforeEach(() => {
     router = createRouter();
@@ -74,17 +88,7 @@ describe('JhiNavbar', () => {
     wrapper = shallowMount(JhiNavbar, {
       global: {
         plugins: [pinia, router],
-        stubs: {
-          'font-awesome-icon': true,
-          'b-navbar': slotsStub,
-          'b-navbar-nav': slotsStub,
-          'b-dropdown-item': slotsStub,
-          'b-collapse': slotsStub,
-          'b-nav-item': slotsStub,
-          'b-nav-item-dropdown': slotsStub,
-          'b-navbar-toggle': slotsStub,
-          'b-navbar-brand': slotsStub,
-        },
+        stubs,
         provide: {
 <%_ if (authenticationUsesCsrf) { _%>
           [loginServiceKey as symbol]: loginService,
@@ -233,7 +237,7 @@ describe('JhiNavbar', () => {
 <%_ if (enableTranslation) { _%>
   it('should default to the native language', () => {
     const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
-    const navbar = shallowMount(JhiNavbar, { global: { plugins: [pinia, router], provide: { [accountServiceKey as symbol]: accountService<%- authenticationUsesCsrf ? ', [loginServiceKey as symbol]: loginService' : '' %> } } });
+    const navbar = shallowMount(JhiNavbar, { global: { plugins: [pinia, router], stubs, provide: { [accountServiceKey as symbol]: accountService, [changeLanguageKey as symbol]: changeLanguage<%- authenticationUsesCsrf ? ', [loginServiceKey as symbol]: loginService' : '' %> } } });
 
     expect(navbar.vm.currentLanguage).toBe('<%- nativeLanguage %>');
     language.mockRestore();

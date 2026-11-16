@@ -20,7 +20,6 @@ import type { App } from 'vue';
 
 import {
   BAlert,
-  BBadge,
   BButton,
   BCollapse,
   BDropdownItem,
@@ -40,13 +39,11 @@ import {
   BProgress,
   BProgressBar,
   createBootstrap,
-  vBModal,
 } from 'bootstrap-vue-next';
 
 export function initBootstrapVue(vue: App) {
   vue.use(createBootstrap());
 
-  vue.component('BBadge', BBadge);
   vue.component('BDropdownItem', BDropdownItem);
   vue.component('BLink', BLink);
   vue.component('BAlert', BAlert);
@@ -66,5 +63,4 @@ export function initBootstrapVue(vue: App) {
   vue.component('BNavItem', BNavItem);
   vue.component('BNavItemDropdown', BNavItemDropdown);
   vue.component('BModal', BModal);
-  vue.directive('b-modal', vBModal);
 }

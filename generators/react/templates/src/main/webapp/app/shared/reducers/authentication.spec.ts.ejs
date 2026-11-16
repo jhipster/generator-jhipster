@@ -17,9 +17,6 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-<%_ if (authenticationTypeJwt) { _%>
-import { Storage } from 'react-jhipster';
-<%_ } _%>
 
 import { configureStore, createReducer } from '@reduxjs/toolkit';
 import axios from 'axios';
@@ -304,22 +301,22 @@ describe('Authentication reducer tests', () => {
       axios.post = vi.fn().mockResolvedValue(loginResponse);
 
       await store.dispatch(login({ username: 'test', password: 'test' }));
-      expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBe('TestToken');
-      expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
+      expect(sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBe('TestToken');
+      expect(localStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBeNull();
       clearAuthToken();
-      expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
-      expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
+      expect(sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBeNull();
+      expect(localStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBeNull();
     });
     it('clears the local storage token on clearAuthToken', async () => {
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = vi.fn().mockResolvedValue(loginResponse);
 
       await store.dispatch(login({ username: 'user', password: 'user', rememberMe: true }));
-      expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
-      expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBe('TestToken');
+      expect(sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBeNull();
+      expect(localStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBe('TestToken');
       clearAuthToken();
-      expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
-      expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
+      expect(sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBeNull();
+      expect(localStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBeNull();
     });
     it('keeps no token when the login does not give one', async () => {
       store = configureStore({
@@ -330,8 +327,8 @@ describe('Authentication reducer tests', () => {
       axios.post = vi.fn().mockResolvedValue({ headers: {} });
 
       await store.dispatch(login({ username: 'test', password: 'test' }));
-      expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
-      expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
+      expect(sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBeNull();
+      expect(localStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toBeNull();
     });
   });
 <%_ } _%>

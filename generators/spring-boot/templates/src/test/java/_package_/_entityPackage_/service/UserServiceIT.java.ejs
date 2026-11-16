@@ -104,7 +104,7 @@ import java.util.UUID;
 <%_ } _%>
 
 <%_ if (databaseTypeCouchbase) { _%>
-import static <%- packageName %>.web.rest.TestUtil.mockAuthentication;
+import static <%- packageName %>.test.util.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (reactive && searchEngineElasticsearch) { _%>

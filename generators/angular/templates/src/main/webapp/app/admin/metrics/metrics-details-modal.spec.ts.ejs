@@ -85,19 +85,19 @@ describe('MetricsDetailsModal', () => {
     expect(comp.shownItems().has('first')).toBe(false);
   });
 
-  it('should render the items', () => {
-    fixture.detectChanges();
+  it('should render the items', async () => {
+    await fixture.whenStable();
     (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>('h6 a')!.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     const text = (fixture.nativeElement as HTMLElement).textContent;
     expect(text).toContain('a line');
     expect(text).toContain('a cell');
   });
 
-  it('should filter and dismiss from the view', () => {
+  it('should filter and dismiss from the view', async () => {
     const dismiss = vi.spyOn(TestBed.inject(NgbActiveModal), 'dismiss');
-    fixture.detectChanges();
+    await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
 
     Array.from(element.querySelectorAll<HTMLButtonElement>('button.badge'))
@@ -114,9 +114,9 @@ describe('MetricsDetailsModal', () => {
     expect(dismiss).toHaveBeenCalledTimes(2);
   });
 
-  it('should render nothing without details', () => {
+  it('should render nothing without details', async () => {
     comp.details = undefined;
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(comp.items()).toEqual([]);
     expect((fixture.nativeElement as HTMLElement).querySelector('h6')).toBeNull();

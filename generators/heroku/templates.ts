@@ -19,35 +19,6 @@
 
 export const mavenProfileContent = (data: any) => {
   return `
-            <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->
-            <!-- https://github.com/jhipster/generator-jhipster/issues/18650 -->
-            <properties>
-                <bonsai.elasticsearch.version>7.10.2</bonsai.elasticsearch.version>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.client</groupId>
-                        <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch</groupId>
-                        <artifactId>elasticsearch</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.elasticsearch.plugin</groupId>
-                        <artifactId>transport-netty4-client</artifactId>
-                        <version>\${bonsai.elasticsearch.version}</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <build>
                 <plugins>
                     <plugin>
@@ -98,6 +69,18 @@ export const mavenProfileContent = (data: any) => {
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <!-- Upload only the jar, not the rest of target, which holds the Node.js used for the client build -->
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.7</version>
+                        <configuration>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>target/\${project.build.finalName}.jar</include>
+                            </includes>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
