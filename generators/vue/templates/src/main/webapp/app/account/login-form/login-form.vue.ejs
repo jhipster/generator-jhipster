@@ -37,7 +37,7 @@
               name="username"
               :placeholder="t$('global.form[\'username.placeholder\']')"
               v-model="login"
-              :class="{ 'is-valid': submitted && !!login, 'is-invalid': submitted && !login }"
+              :class="{ 'is-valid': submitted && !!login, 'is-invalid': submitted && !login, 'is-touched': submitted }"
               data-cy="username"
               autofocus
             >
@@ -51,7 +51,7 @@
               name="password"
               :placeholder="t$('login.form[\'password.placeholder\']')"
               v-model="password"
-              :class="{ 'is-valid': submitted && !!password, 'is-invalid': submitted && !password }"
+              :class="{ 'is-valid': submitted && !!password, 'is-invalid': submitted && !password, 'is-touched': submitted }"
               data-cy="password"
             >
             </b-form-input>

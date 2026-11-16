@@ -57,7 +57,7 @@ describe('useEntityValidation', () => {
     );
     await flushPromises();
 
-    expect(v$.value.$errors.map(({ $property, $validator }) => [$property, $validator])).toEqual([
+    expect(v$.value.$silentErrors.map(({ $property, $validator }) => [$property, $validator])).toEqual([
       ['name', 'required'],
       ['email', 'email'],
       ['short', 'minLength'],
@@ -68,7 +68,21 @@ describe('useEntityValidation', () => {
       ['code', 'pattern'],
       ['login', 'pattern'],
     ]);
-    expect(v$.value.$errors.every(({ $message }) => typeof $message === 'string' && $message.length > 0)).toBe(true);
+    expect(v$.value.$silentErrors.every(({ $message }) => typeof $message === 'string' && $message.length > 0)).toBe(true);
+  });
+
+  it('should leave the fields untouched until they are touched', async () => {
+    const { v$ } = mountValidation({ name: '' }, { name: { required: true } });
+    await flushPromises();
+
+    expect(v$.value.name.$invalid).toBe(true);
+    expect(v$.value.name.$dirty).toBe(false);
+    expect(v$.value.$errors).toEqual([]);
+
+    v$.value.$touch();
+
+    expect(v$.value.name.$dirty).toBe(true);
+    expect(v$.value.$errors.map(({ $property }) => $property)).toEqual(['name']);
   });
 
   it('should accept the valid values', async () => {
