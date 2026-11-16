@@ -27,6 +27,7 @@ import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
+  isClientField,
 } from '../client/support/index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
@@ -294,7 +295,8 @@ ${comment}
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       prepareEntityModel({ entity }) {
-        const fieldsWithoutId = entity.fields.filter(field => !field.id);
+        // The fields the clients skip are left out of the model.
+        const fieldsWithoutId = entity.fields.filter(field => !field.id && isClientField(field));
         mutateData(entity, {
           __override__: false,
           entityClientFields: () =>

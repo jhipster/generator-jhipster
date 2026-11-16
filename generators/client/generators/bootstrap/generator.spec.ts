@@ -58,6 +58,74 @@ describe(`generator - ${generator}`, () => {
     it('should keep the fields of the entity', () => {
       expect(runResult.entities!.Foo.fields!.map(field => field.fieldName)).toEqual(['id', 'shown', 'hidden']);
     });
+
+    describe('with an enum field the clients skip', () => {
+      const secretField = { fieldName: 'secret', fieldType: 'Hidden', fieldValues: 'ALPHA,BETA', skipClient: true };
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({}, [
+            { name: 'Foo', fields: [{ fieldName: 'color', fieldType: 'Color', fieldValues: 'RED,GREEN' }, secretField] },
+          ]);
+      });
+
+      it('should list the values of the enums of the other fields only', () => {
+        expect((runResult.entities!.Foo as ClientEntity).enumTypeFields!.map(field => field.fieldName)).toEqual(['color']);
+      });
+    });
+
+    describe('with fields the clients skip that are the only ones of their type', () => {
+      const anyFieldProperties = (entity: ClientEntity) =>
+        Object.fromEntries(Object.entries(entity).filter(([key, value]) => key.startsWith('anyField') && value));
+
+      const skippedFields = [
+        { fieldName: 'moment', fieldType: 'Instant', skipClient: true },
+        { fieldName: 'day', fieldType: 'LocalDate', skipClient: true },
+        { fieldName: 'span', fieldType: 'Duration', skipClient: true },
+        { fieldName: 'picture', fieldType: 'ImageBlob', skipClient: true },
+        { fieldName: 'noted', fieldType: 'String', documentation: 'A note', skipClient: true },
+      ];
+
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({}, [
+          { name: 'Foo', fields: [{ fieldName: 'shown', fieldType: 'String' }, ...skippedFields] },
+          {
+            name: 'Bar',
+            fields: [
+              { fieldName: 'picture', fieldType: 'ImageBlob' },
+              { fieldName: 'day', fieldType: 'LocalDate' },
+            ],
+          },
+        ]);
+      });
+
+      it('should derive the anyField properties from the fields that are left', () => {
+        const { application, entities } = runResult;
+        const [foo] = application!.filterEntitiesAndPropertiesForClient!([entities!.Foo as ClientEntity]);
+        expect(anyFieldProperties(foo)).toEqual({});
+      });
+      it('should keep the anyField properties of the entity', () => {
+        expect(anyFieldProperties(runResult.entities!.Foo as ClientEntity)).toEqual({
+          anyFieldHasDocumentation: true,
+          anyFieldHasFileBasedContentType: true,
+          anyFieldHasImageContentType: true,
+          anyFieldIsBlobDerived: true,
+          anyFieldIsDateDerived: true,
+          anyFieldIsDuration: true,
+          anyFieldIsInstant: true,
+          anyFieldIsLocalDate: true,
+          anyFieldIsTimeDerived: true,
+        });
+      });
+      it('should keep the anyField properties of a blob that only its content type field is skipped', () => {
+        const { application, entities } = runResult;
+        const [bar] = application!.filterEntitiesAndPropertiesForClient!([entities!.Bar as ClientEntity]);
+        expect(bar.fields.map(field => field.fieldName)).toEqual(['id', 'picture', 'day']);
+        expect(anyFieldProperties(bar)).toEqual(anyFieldProperties(entities!.Bar as ClientEntity));
+        expect(bar.anyFieldHasImageContentType).toBe(true);
+      });
+    });
   });
 
   describe('withAdminUi', () => {
