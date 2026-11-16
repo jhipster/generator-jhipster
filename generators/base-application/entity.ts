@@ -51,10 +51,14 @@ const mutateProperty = {
  * What a client can do with a field through the REST API, as the `readOnly` and `writeOnly` of OpenAPI: `readWrite` (read,
  * written and sortable), `readOnly` (given by the backend, which computes it) or `writeOnly` (accepted, never given back).
  */
-export type FieldRestAccess = 'readWrite' | 'readOnly' | 'writeOnly';
+export const fieldRestAccesses = ['readWrite', 'readOnly', 'writeOnly'] as const;
+
+export type FieldRestAccess = (typeof fieldRestAccesses)[number];
 
 type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType', FieldType> &
-  DerivedBooleanPropertiesOf<'fieldValidation', ValidationType> & {
+  DerivedBooleanPropertiesOf<'fieldValidation', ValidationType> &
+  /** Derived from `restAccess`, once the entity is prepared. */
+  Partial<DerivedBooleanPropertiesOf<'restAccess', FieldRestAccess>> & {
     path?: string[];
 
     fieldNameCapitalized: string;

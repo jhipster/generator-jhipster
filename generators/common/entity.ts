@@ -58,7 +58,7 @@ export const mutateField = {
   // Computed once the entity is prepared, with the restAccess a backend sets for a field it computes.
   fieldSupportsSortBy: finalizeDefault(
     (data: Field) =>
-      data.restAccess === 'readWrite' &&
+      data.restAccessReadWrite &&
       !data.collection &&
       !(data.fieldTypeBinary && data.fieldTypeBlobContent !== 'text') &&
       !(data as { notSortable?: boolean }).notSortable &&

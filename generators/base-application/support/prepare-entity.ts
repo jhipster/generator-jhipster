@@ -242,6 +242,9 @@ export function prepareEntityPrimaryKeyForTemplates(
             readonly: true,
             // A primary key is read and written, the copy is made once the fields are prepared.
             restAccess: 'readWrite' as const,
+            restAccessReadWrite: true,
+            restAccessReadOnly: false,
+            restAccessWriteOnly: false,
             get derivedPath() {
               if (field.derivedPath) {
                 if (relationship.otherEntity.primaryKey!.derived) {

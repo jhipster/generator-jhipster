@@ -75,7 +75,13 @@ describe(`generator - ${generator}`, () => {
       (result.entities!.Foo as any).fields.find((field: any) => field.fieldName === fieldName);
 
     it('should give the field read only, computed by the backend and stored in no column', () => {
-      expect(field('preview')).toMatchObject({ restAccess: 'readOnly', readonly: true, transient: true });
+      expect(field('preview')).toMatchObject({
+        restAccess: 'readOnly',
+        restAccessReadOnly: true,
+        restAccessReadWrite: false,
+        readonly: true,
+        transient: true,
+      });
     });
 
     it('should give the content type of a computed blob the access of its blob', () => {
