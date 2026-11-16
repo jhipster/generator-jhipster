@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { format } from 'node:util';
-import { beforeAll, beforeEach, vi } from 'vitest'
+import { afterEach, beforeAll, beforeEach, vi } from 'vitest'
 <%_ if (enableTranslation) { _%>
 import { createI18n } from 'vue-i18n';
 <%_ } _%>
@@ -47,10 +47,20 @@ beforeAll(() => {
 });
 
 // A warning or an error printed, of Vue or of the application, fails the test that prints it: a test that expects one mocks the console.
+// The test fails once it ends: an error thrown by the console would stop Vue in the middle of its warning, which would hide its next ones.
+let printed: Error[] = [];
+
 beforeEach(() => {
+  printed = [];
   for (const method of ['warn', 'error'] as const) {
     vi.spyOn(console, method).mockImplementation((...args: unknown[]) => {
-      throw new Error(format(...args));
+      printed.push(new Error(format(...args)));
     });
+  }
+});
+
+afterEach(() => {
+  if (printed.length > 0) {
+    throw printed[0];
   }
 });
