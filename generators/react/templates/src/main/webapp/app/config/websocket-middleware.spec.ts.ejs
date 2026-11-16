@@ -1,0 +1,154 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import SockJS from 'sockjs-client';
+
+<%_ if (authenticationUsesCsrf) { _%>
+import { CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN_HEADER_NAME } from 'app/shared/jhipster/constants';
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+import { clearAuthenticationToken, storeAuthenticationToken } from 'app/shared/auth/authentication-token';
+<%_ } _%>
+
+const stompClient = vi.hoisted(() => ({
+  connected: true,
+  connect: vi.fn(),
+  disconnect: vi.fn(),
+  send: vi.fn(),
+  subscribe: vi.fn(),
+}));
+
+vi.mock('sockjs-client', () => ({ default: vi.fn() }));
+vi.mock('webstomp-client', () => ({ default: { over: vi.fn(() => stompClient) } }));
+
+describe('Websocket Middleware', () => {
+  let middleware: typeof import('./websocket-middleware');
+  let authentication: typeof import('app/shared/reducers/authentication');
+  let administration: typeof import('app/modules/administration/administration.reducer');
+  let store: { dispatch: ReturnType<typeof vi.fn> };
+  let next: ReturnType<typeof vi.fn>;
+  let subscription: { unsubscribe: ReturnType<typeof vi.fn> };
+
+  const activity = { sessionId: '1', userLogin: 'admin', ipAddress: '127.0.0.1', page: 'home', time: '2026-01-02T03:04:05Z' };
+
+  const dispatch = (action: { type: string; payload?: unknown }) => middleware.default(store)(next)(action);
+  const accountOf = (...authorities: string[]) => ({ type: authentication.getAccount.fulfilled.type, payload: { data: { authorities } } });
+  const connected = () => stompClient.connect.mock.calls[0][1]();
+
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    stompClient.connected = true;
+    vi.resetModules();
+    document.head.innerHTML = '<base href="/" />';
+<%_ if (authenticationUsesCsrf) { _%>
+    document.cookie = `${CSRF_TOKEN_COOKIE_NAME}=token`;
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+    clearAuthenticationToken();
+<%_ } _%>
+    subscription = { unsubscribe: vi.fn() };
+    stompClient.subscribe.mockReturnValue(subscription);
+    store = { dispatch: vi.fn() };
+    next = vi.fn(() => 'next');
+    middleware = await import('./websocket-middleware');
+    authentication = await import('app/shared/reducers/authentication');
+    administration = await import('app/modules/administration/administration.reducer');
+  });
+
+  it('should pass every action to the next middleware', () => {
+    expect(dispatch({ type: 'other' })).toBe('next');
+    expect(next).toHaveBeenCalledWith({ type: 'other' });
+    expect(SockJS).not.toHaveBeenCalled();
+  });
+
+  it('should not send an activity before connecting', () => {
+    middleware.sendActivity('home');
+
+    expect(stompClient.send).not.toHaveBeenCalled();
+  });
+
+  it('should connect once the account is loaded', async () => {
+    dispatch(accountOf('ROLE_USER'));
+    dispatch(accountOf('ROLE_USER'));
+
+    expect(SockJS).toHaveBeenCalledTimes(1);
+    expect(SockJS).toHaveBeenCalledWith(expect.stringMatching(/\/websocket\/tracker$/));
+    expect(stompClient.connect).toHaveBeenCalledWith(<%- authenticationUsesCsrf ? '{ [CSRF_TOKEN_HEADER_NAME]: expect.any(String) }' : '{}' %>, expect.any(Function));
+
+    connected();
+
+    await vi.waitFor(() => expect(stompClient.send).toHaveBeenCalledWith('/topic/activity', JSON.stringify({ page: '/' }), {}));
+    expect(stompClient.subscribe).not.toHaveBeenCalled();
+  });
+<%_ if (authenticationTypeJwt) { _%>
+
+  it('should connect with the authentication token', () => {
+    storeAuthenticationToken('token');
+
+    dispatch(accountOf('ROLE_USER'));
+
+    expect(SockJS).toHaveBeenCalledWith(expect.stringMatching(/\/websocket\/tracker\?access_token=token$/));
+  });
+<%_ } _%>
+
+  it('should give the activities to an admin', async () => {
+    dispatch(accountOf('ROLE_USER', 'ROLE_ADMIN'));
+    connected();
+
+    await vi.waitFor(() => expect(stompClient.subscribe).toHaveBeenCalledWith('/topic/tracker', expect.any(Function)));
+    stompClient.subscribe.mock.calls[0][1]({ body: JSON.stringify(activity) });
+
+    expect(store.dispatch).toHaveBeenCalledWith(administration.websocketActivityMessage(activity));
+  });
+
+  it('should disconnect when the account fails to load', async () => {
+    dispatch(accountOf('ROLE_ADMIN'));
+    connected();
+    await vi.waitFor(() => expect(stompClient.subscribe).toHaveBeenCalled());
+
+    dispatch({ type: authentication.getAccount.rejected.type });
+
+    expect(subscription.unsubscribe).toHaveBeenCalled();
+    expect(stompClient.disconnect).toHaveBeenCalled();
+  });
+
+  it('should not disconnect without a connection', () => {
+    dispatch({ type: authentication.getAccount.rejected.type });
+
+    expect(stompClient.disconnect).not.toHaveBeenCalled();
+  });
+
+  it('should not close a connection that is not open', () => {
+    stompClient.connected = false;
+    dispatch(accountOf('ROLE_USER'));
+
+    dispatch({ type: authentication.getAccount.rejected.type });
+
+    expect(stompClient.disconnect).not.toHaveBeenCalled();
+  });
+
+  it('should disconnect at logout', () => {
+    dispatch(accountOf('ROLE_USER'));
+
+    dispatch({ type: <%- authenticationTypeJwt ? 'authentication.logoutSession().type' : 'authentication.logoutServer.pending.type' %> });
+
+    expect(stompClient.disconnect).toHaveBeenCalled();
+  });
+});

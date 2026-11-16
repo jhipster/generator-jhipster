@@ -66,7 +66,7 @@ export const files = asWriteFilesSection({
     {
       condition: generator => generator.communicationSpringWebsocket,
       ...clientApplicationTemplatesBlock(),
-      templates: ['config/websocket-middleware.ts'],
+      templates: ['config/websocket-middleware.ts', 'config/websocket-middleware.spec.ts'],
     },
     {
       condition: generator => generator.authenticationTypeJwt,
@@ -182,7 +182,7 @@ export const files = asWriteFilesSection({
     {
       condition: generator => generator.communicationSpringWebsocket,
       ...clientApplicationTemplatesBlock(),
-      templates: ['modules/administration/tracker/tracker.tsx'],
+      templates: ['modules/administration/tracker/tracker.tsx', 'modules/administration/tracker/tracker.spec.tsx'],
     },
     {
       condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
