@@ -63,7 +63,7 @@ describe('<%- jhiPrefixCapitalized %>Tracker', () => {
       sendActivity: vi.fn(),
     };
 
-    router = createRouter({ history: createMemoryHistory(), routes: [] });
+    router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/:path(.*)*', component: { render: () => null } }] });
 
     wrapper = shallowMount(<%- jhiPrefixCapitalized %>Tracker, {
       global: {

@@ -16,7 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeAll } from 'vitest'
+import { format } from 'node:util';
+import { beforeAll, beforeEach, vi } from 'vitest'
 <%_ if (enableTranslation) { _%>
 import { createI18n } from 'vue-i18n';
 <%_ } _%>
@@ -43,4 +44,13 @@ beforeAll(() => {
     }),
   );
 <%_ } _%>
+});
+
+// A warning or an error printed, of Vue or of the application, fails the test that prints it: a test that expects one mocks the console.
+beforeEach(() => {
+  for (const method of ['warn', 'error'] as const) {
+    vi.spyOn(console, method).mockImplementation((...args: unknown[]) => {
+      throw new Error(format(...args));
+    });
+  }
 });

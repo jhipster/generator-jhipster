@@ -258,8 +258,22 @@ const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
 
 const previousState = () => router.go(-1);
 
+<%_ const editedCollections = relationships.filter(relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship); _%>
 const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
+<%_ if (editedCollections.length > 0) { _%>
+  // The server gives null for a collection without values, the select of the collection edits an array.
+  async (id, { signal }) => {
+    const entity = await <%- entityInstance %>Service().find(id, { signal });
+    return {
+      ...entity,
+  <%_ for (const relationship of editedCollections) { _%>
+      <%- relationship.relationshipFieldNamePlural %>: entity.<%- relationship.relationshipFieldNamePlural %> ?? [],
+  <%_ } _%>
+    };
+  },
+<%_ } else { _%>
   (id, { signal }) => <%- entityInstance %>Service().find(id, { signal }),
+<%_ } _%>
   {
     // The router reuses the component when the id of the route changes, and an update without id is a new entity.
     params: () => route.params?.<%- entityInstance %>Id as string | undefined,
