@@ -161,6 +161,26 @@ describe(`generator - ${helpers.commandName}`, () => {
     }
   });
 
+  describe('with the skipServer option', () => {
+    before(async () => {
+      await helpers
+        .runJHipster()
+        .withOptions({ skipServer: true })
+        .withMockedGenerators(['jhipster:spring-boot:bootstrap'])
+        .withSkipWritingPriorities();
+    });
+
+    it('should store skipServer', () => {
+      result.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { skipServer: true } });
+    });
+    it('should not compose the bootstrap of the backend', () => {
+      result.assertGeneratorNotComposed('jhipster:spring-boot:bootstrap');
+    });
+    it('should keep the layout of an application without the server', () => {
+      expect(result.application!.temporaryDir).toBe('temp/');
+    });
+  });
+
   describe('jdlStore', () => {
     describe('with application', () => {
       before(async () => {

@@ -81,11 +81,38 @@ describe(`generator - ${generator}`, () => {
 
   describe('with skipServer', () => {
     before(async () => {
-      await helpers.runJHipster(generator).withMockedGenerators(['jhipster:server:bootstrap']).withJHipsterConfig({ skipServer: true });
+      await helpers
+        .runJHipster(generator)
+        .withMockedGenerators(['jhipster:spring-boot:bootstrap'])
+        .withJHipsterConfig({ skipServer: true, databaseType: 'mongodb', searchEngine: 'elasticsearch' }, [
+          {
+            name: 'Author',
+            searchEngine: 'elasticsearch',
+            fields: [{ fieldName: 'name', fieldType: 'String' }],
+            relationships: [{ relationshipName: 'book', otherEntityName: 'book', relationshipType: 'one-to-many' }],
+          },
+          { name: 'Book', fields: [{ fieldName: 'title', fieldType: 'String' }] },
+        ]);
     });
 
-    it('should not compose the server bootstrap', () => {
-      runResult.assertGeneratorNotComposed('jhipster:server:bootstrap');
+    it('should not compose the bootstrap of the backend', () => {
+      runResult.assertGeneratorNotComposed('jhipster:spring-boot:bootstrap');
+    });
+
+    it('should keep the layout of an application without the server', () => {
+      expect(runResult.application!.temporaryDir).toBe('temp/');
+    });
+
+    it('should prepare the id of the entities for the database of the backend', () => {
+      expect((runResult.entities!.Author as any).primaryKey.type).toBe('String');
+    });
+
+    it('should prepare the search of the entities', () => {
+      expect(runResult.entities!.Author).toMatchObject({ searchEngine: 'elasticsearch', searchEngineElasticsearch: true });
+    });
+
+    it('should add the back-reference of the relationships', () => {
+      expect(runResult.entities!.Book.relationships!.map(({ relationshipName }) => relationshipName)).toEqual(['author']);
     });
   });
 

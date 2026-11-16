@@ -56,6 +56,9 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
   get composingBootstrap() {
     return this.asComposingBootstrapTaskGroup({
       async composeBackendType({ application }) {
+        // Without the server, the generators of the backend are not composed: the entities are still prepared for the client.
+        // Read here and not in beforeQueue, where a skipServer passed as option is not stored in the configuration yet.
+        if (application.skipServer) return;
         const { backendType = this.jhipsterConfigWithDefaults.backendType } = application;
         if (!backendType || ['spring-boot', 'java'].includes(backendType.toLowerCase())) {
           await this.composeWithJHipster('jhipster:spring-boot:bootstrap');
