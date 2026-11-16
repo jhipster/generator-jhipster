@@ -76,6 +76,8 @@ const sampleValues = (fieldName: string, javaFieldType: (typeof primaryKeyTypes)
 
 export const mutateField = {
   __override__: false,
+  // A MapStruct expression computes the field of the DTO: the REST API gives it, the domain class stores no column of it.
+  restType: ({ mapstructExpression }) => (mapstructExpression ? 'computed' : undefined),
   transient: ({ mapstructExpression }) => (mapstructExpression ? true : undefined),
   fieldInJavaBeanMethod: ({ fieldName }) => javaBeanCase(fieldName),
   propertyJavaBeanName: ({ propertyName }) => javaBeanCase(propertyName),

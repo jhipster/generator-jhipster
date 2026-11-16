@@ -52,6 +52,60 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a MapStruct expression', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          {
+            name: 'Foo',
+            dto: 'mapstruct',
+            fields: [
+              { fieldName: 'name', fieldType: 'String' },
+              { fieldName: 'preview', fieldType: 'ImageBlob', options: { mapstructExpression: 'java(null)' } },
+            ],
+          } as any,
+        ])
+        .withSkipWritingPriorities();
+    });
+
+    const field = (fieldName: string): Record<string, any> =>
+      (result.entities!.Foo as any).fields.find((field: any) => field.fieldName === fieldName);
+
+    it('should hold the field as computed by the backend, read only and stored in no column', () => {
+      expect(field('preview')).toMatchObject({ restType: 'computed', readonly: true, transient: true });
+    });
+
+    it('should hold the content type of a computed blob as its blob', () => {
+      expect(field('previewContentType')).toMatchObject({ restType: 'computed', readonly: true });
+    });
+
+    it('should hold the other fields as stored', () => {
+      expect(field('name')).toMatchObject({ restType: 'stored' });
+      expect(field('name').readonly).toBeUndefined();
+    });
+  });
+
+  describe('with a MapStruct expression without MapStruct DTO', () => {
+    it('should fail', async () => {
+      await expect(
+        helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withMockedSource()
+          .withJHipsterConfig({ skipUserManagement: true }, [
+            {
+              name: 'Foo',
+              fields: [{ fieldName: 'preview', fieldType: 'String', options: { mapstructExpression: 'java(null)' } }],
+            } as any,
+          ])
+          .withSkipWritingPriorities(),
+      ).rejects.toThrow('@MapstructExpression requires an Entity with mapstruct dto [Foo.preview].');
+    });
+  });
+
   describe('without client', () => {
     before(async () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withJHipsterConfig({ clientFramework: 'no' });
