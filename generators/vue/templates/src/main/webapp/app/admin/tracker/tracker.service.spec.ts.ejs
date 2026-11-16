@@ -66,6 +66,7 @@ describe('Tracker Service', () => {
     Object.assign({}, ...mockStomp.configure.mock.calls.map(([config]) => config as RxStompConfig)) as RxStompConfig;
 
   beforeEach(async () => {
+    vi.mocked(SockJS).mockClear();
     router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/:path(.*)*', component: { render: () => null } }] });
     await router.push('/');
     authenticated = ref(false);
@@ -155,19 +156,25 @@ describe('Tracker Service', () => {
   });
 
   it('Should open the connection to the tracker', () => {
-<%_ if (authenticationUsesCsrf) { _%>
-    document.cookie = `${CSRF_TOKEN_COOKIE_NAME}=token`;
-<%_ } _%>
     authenticated.value = true;
     mountTracker();
 
     configured().webSocketFactory!();
 
     expect(SockJS).toHaveBeenCalledWith(`//${window.location.host}/websocket/tracker`);
-<%_ if (authenticationUsesCsrf) { _%>
-    expect(configured().connectHeaders![CSRF_TOKEN_HEADER_NAME]).toMatch(/^[\w-]{14}$/);
-<%_ } _%>
   });
+<%_ if (authenticationUsesCsrf) { _%>
+
+  it('Should send the CSRF token when connecting', () => {
+    document.cookie = `${CSRF_TOKEN_COOKIE_NAME}=token`;
+    // With no random bytes, the masked token is the base64url of 5 zero bytes followed by 'token'.
+    vi.spyOn(crypto, 'getRandomValues').mockImplementation(array => array);
+    authenticated.value = true;
+    mountTracker();
+
+    expect(configured().connectHeaders).toEqual({ [CSRF_TOKEN_HEADER_NAME]: 'AAAAAAB0b2tlbg' });
+  });
+<%_ } _%>
 
   it('Should open the connection to the tracker under the base of the application', () => {
     document.head.innerHTML = '<base href="/app/" />';
