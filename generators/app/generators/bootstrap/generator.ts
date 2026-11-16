@@ -51,6 +51,8 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
     } else {
       await this.dependsOnBootstrap('javascript-simple-application');
       await this.dependsOnBootstrap('common');
+      // The database the entities are stored in, with or without the server: the other side of their relationships.
+      await this.dependsOnJHipster('jhipster:base-application:database-bootstrap');
       // Without the client or the server, their generators are not composed.
       if (!this.jhipsterConfigWithDefaults.skipClient) {
         await this.dependsOnBootstrap('client');

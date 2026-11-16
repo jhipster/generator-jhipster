@@ -29,7 +29,6 @@ import javaDomainCommand from '../../../java/generators/domain/command.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
 import { mutateApplication } from '../../application.ts';
 import {
-  addEntitiesOtherRelationships,
   getPrimaryKeyValue,
   prepareField as prepareServerFieldForTemplates,
   preparePostEntityServerDerivedProperties,
@@ -124,9 +123,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
         for (const { entityBootstrap } of entitiesToLoad) {
           loadRequiredConfigIntoEntity.call(this, entityBootstrap, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
         }
-      },
-      requiredOtherSideRelationships({ entitiesToLoad }) {
-        this.validateResult(addEntitiesOtherRelationships(entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap)));
       },
     });
   }

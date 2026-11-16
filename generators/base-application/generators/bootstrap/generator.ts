@@ -40,6 +40,7 @@ import {
   getChangelogDateForBuiltInEntities,
 } from '../../internal/utils.ts';
 import {
+  addEntitiesOtherRelationships,
   addFakerToEntity,
   derivedPrimaryKeyProperties,
   hasCyclicRequiredRelationship,
@@ -328,6 +329,10 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
               (relationship.relationshipType !== 'one-to-many' && relationship.relationshipSide === 'left');
           }
         }
+      },
+      addOtherRelationships({ entitiesToLoad }) {
+        // The other side every database needs; the database bootstrap adds the one of the relationships of its database.
+        this.validateResult(addEntitiesOtherRelationships(entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap)));
       },
     });
   }

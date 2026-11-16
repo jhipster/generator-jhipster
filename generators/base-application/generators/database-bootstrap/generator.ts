@@ -19,6 +19,7 @@
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../index.ts';
+import { addEntitiesOtherRelationships } from '../../support/relationship.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.d.ts';
 
 import {
@@ -68,6 +69,33 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
               databaseData[data.prodDatabaseType]?.defaultPort
             : getDatabaseTypeData(data.databaseType).defaultPort) ?? undefinedMarker,
         });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_LOADING_ENTITIES]() {
+    return this.asPostLoadingEntitiesTaskGroup({
+      addOtherRelationshipsOfTheDatabase({ application, entitiesToLoad }) {
+        const entities = entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap);
+        const { databaseType } = application;
+        if (databaseType === databaseTypes.NEO4J || databaseType === databaseTypes.NO) {
+          // The relationships of these databases have no back reference.
+          for (const relationship of entities.flatMap(entity => entity.relationships ?? [])) {
+            if (!relationship.otherRelationship) {
+              relationship.relationshipIgnoreBackReference ??= true;
+            }
+          }
+          return;
+        }
+        this.validateResult(
+          addEntitiesOtherRelationships(
+            entities,
+            (_entity, { relationshipType }) =>
+              relationshipType === 'one-to-many' ||
+              // OneToOne back reference is required due to filtering
+              (relationshipType === 'one-to-one' && databaseType === databaseTypes.SQL),
+          ),
+        );
       },
     });
   }
