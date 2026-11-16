@@ -85,12 +85,19 @@ describe('Websocket Middleware', () => {
   });
 
   it('should connect once the account is loaded', async () => {
+<%_ if (authenticationUsesCsrf) { _%>
+    // With no random bytes, the masked token is the base64url of 5 zero bytes followed by 'token'.
+    const randomValues = vi.spyOn(crypto, 'getRandomValues').mockImplementation(array => array);
+<%_ } _%>
     dispatch(accountOf('ROLE_USER'));
     dispatch(accountOf('ROLE_USER'));
+<%_ if (authenticationUsesCsrf) { _%>
+    randomValues.mockRestore();
+<%_ } _%>
 
     expect(SockJS).toHaveBeenCalledTimes(1);
     expect(SockJS).toHaveBeenCalledWith(expect.stringMatching(/\/websocket\/tracker$/));
-    expect(stompClient.connect).toHaveBeenCalledWith(<%- authenticationUsesCsrf ? '{ [CSRF_TOKEN_HEADER_NAME]: expect.any(String) }' : '{}' %>, expect.any(Function));
+    expect(stompClient.connect).toHaveBeenCalledWith(<%- authenticationUsesCsrf ? "{ [CSRF_TOKEN_HEADER_NAME]: 'AAAAAAB0b2tlbg' }" : '{}' %>, expect.any(Function));
 
     connected();
 
