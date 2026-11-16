@@ -52,8 +52,7 @@ export const useTrackerService = ({ stomp, authenticated }: { stomp?: RxStomp; a
 
   watch(
     authenticated,
-    (value, prevValue) => {
-      if (value === prevValue) return;
+    value => {
       if (value) {
         trackerService.connect();
       } else {
