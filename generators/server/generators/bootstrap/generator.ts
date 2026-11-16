@@ -22,6 +22,7 @@ import { mutateData } from '../../../../lib/utils/index.ts';
 import { upperFirst } from '../../../../lib/utils/string-utils.ts';
 import prepareSqlApplicationProperties from '../../../base-application/generators/database-bootstrap/support/application-properties.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
+import { addEntitiesOtherRelationships } from '../../../base-application/support/relationship.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import javaDomainCommand from '../../../java/generators/domain/command.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
@@ -113,6 +114,35 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
     return this.postPreparing;
+  }
+
+  get postLoadingEntities() {
+    return this.asPostLoadingEntitiesTaskGroup({
+      addOtherRelationshipsOfTheDatabase({ application, entitiesToLoad }) {
+        const entities = entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap);
+        const { databaseType } = application;
+        if (!application.relationshipsHaveBackReference) {
+          // The relationships of these databases have no back reference.
+          for (const relationship of entities.flatMap(entity => entity.relationships ?? [])) {
+            if (!relationship.otherRelationship) {
+              relationship.relationshipIgnoreBackReference ??= true;
+            }
+          }
+          return;
+        }
+        this.validateResult(
+          addEntitiesOtherRelationships(
+            entities,
+            // OneToOne back reference is required due to filtering
+            (_entity, { relationshipType }) => relationshipType === 'one-to-one' && databaseType === 'sql',
+          ),
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_LOADING_ENTITIES]() {
+    return this.postLoadingEntities;
   }
 
   get preparingEachEntity() {

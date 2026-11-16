@@ -23,7 +23,7 @@ import uniq from 'lodash-es/uniq.js';
 import { APPLICATION_TYPE_GATEWAY } from '../../../lib/core/application-types.ts';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
-import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
+import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { EntityAll, FieldAll } from '../../../lib/types/application-all.d.ts';
 import { getMicroserviceAppName, mutateData, stringHashCode } from '../../../lib/utils/index.ts';
 import { upperFirst } from '../../../lib/utils/string-utils.ts';
@@ -47,8 +47,6 @@ import { fieldIsEnum } from './field-utils.ts';
 const { CommonDBTypes } = fieldTypes;
 
 const { BOOLEAN, LONG, STRING, UUID, INTEGER } = CommonDBTypes;
-
-const { CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
 
 const { INSTANT, ZONED_DATE_TIME, DURATION, LOCAL_DATE, BIG_DECIMAL, LOCAL_TIME } = fieldTypes.CommonDBTypes;
 
@@ -401,10 +399,7 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties(
-  entity: BaseApplicationEntity,
-  application?: { databaseType?: string; reactive?: boolean },
-) {
+export function preparePostEntityCommonDerivedProperties(entity: BaseApplicationEntity) {
   const { fields } = entity;
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
@@ -431,13 +426,10 @@ export function preparePostEntityCommonDerivedProperties(
     entity.anyFieldHasTextContentType = blobFieldsContentType.includes(TEXT);
   }
 
-  preparePostEntityCommonDerivedPropertiesNotTyped(entity as EntityAll, application);
+  preparePostEntityCommonDerivedPropertiesNotTyped(entity as EntityAll);
 }
 
-function preparePostEntityCommonDerivedPropertiesNotTyped(
-  entity: EntityAll,
-  { databaseType, reactive }: { databaseType?: string; reactive?: boolean } = {},
-) {
+function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   const { relationships, fields } = entity;
   const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
@@ -504,11 +496,8 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
-  entity.implementsEagerLoadApis = // Cassandra doesn't provide *WithEagerRelationships apis
-    !([CASSANDRA, NEO4J] as string[]).includes(databaseType!) &&
-    // Only sql, mongodb and couchbase provide *WithEagerRelationships apis for imperative implementation
-    (reactive || ([SQL, MONGODB, COUCHBASE] as string[]).includes(databaseType!)) &&
-    entity.relationshipsContainEagerLoad;
+  // The backend tells whether its repositories load the eager relationships, the server bootstrap after it.
+  entity.implementsEagerLoadApis = false;
   entity.eagerRelations = entity.relationships.filter(rel => rel.relationshipEagerLoad);
   // Deprecated: kept for blueprints, not used by the generator anymore.
   entity.regularEagerRelations = entity.eagerRelations.filter(rel => rel.id !== true);

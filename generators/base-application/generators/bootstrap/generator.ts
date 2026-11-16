@@ -333,7 +333,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
       },
       addOtherRelationships({ application, entitiesToLoad }) {
         // The other side every database needs, and the one of a one-to-many but where the database tells it has none
-        // (relationshipsHaveBackReference, which an application without the server has not): the database bootstrap adds
+        // (relationshipsHaveBackReference, which an application without the server has not): the server bootstrap adds
         // the one of the relationships of its database.
         const { relationshipsHaveBackReference } = application as { relationshipsHaveBackReference?: boolean };
         this.validateResult(
@@ -437,8 +437,8 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
         const { derivedFields } = primaryKey;
         entity.fields.unshift(...derivedFields!);
       },
-      prepareEntityDerivedProperties({ application, entity }) {
-        preparePostEntityCommonDerivedProperties(entity, application as { databaseType?: string; reactive?: boolean });
+      prepareEntityDerivedProperties({ entity }) {
+        preparePostEntityCommonDerivedProperties(entity);
       },
     });
   }

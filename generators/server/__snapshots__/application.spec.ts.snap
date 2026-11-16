@@ -12,5 +12,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
     "http://localhost:devServerPortProxy",
     "https://localhost:devServerPortProxy",
   ],
+  "relationshipsHaveBackReference": true,
 }
 `;

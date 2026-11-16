@@ -39,6 +39,67 @@ describe(`generator - ${generator}`, () => {
     expect(runResult.getComposedGenerators()).toContain('jhipster:server:bootstrap');
   });
 
+  describe('with relationships without the other side', () => {
+    const author = { name: 'Author', changelogDate: '20200101000000', fields: [], relationships: [] as any[] };
+    const editor = { name: 'Editor', changelogDate: '20200101000050', fields: [], relationships: [] as any[] };
+    const book = {
+      name: 'Book',
+      changelogDate: '20200101000100',
+      fields: [],
+      relationships: [
+        { relationshipName: 'authors', otherEntityName: 'author', relationshipType: 'one-to-many' },
+        { relationshipName: 'editor', otherEntityName: 'editor', relationshipType: 'one-to-one', relationshipSide: 'left' },
+      ],
+    };
+    const otherSides = (entityName: string) =>
+      (runResult.entities![entityName] as any).relationships.map((relationship: any) => relationship.relationshipName);
+    const ignored = () =>
+      (runResult.entities!.Book as any).relationships.map((relationship: any) => relationship.relationshipIgnoreBackReference);
+
+    describe('in a relational database', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withJHipsterConfig({ databaseType: 'sql' }, [author, editor, book]);
+      });
+
+      it('should add the other side of a one-to-many and of a one-to-one', () => {
+        expect(otherSides('Author')).toEqual(['book']);
+        expect(otherSides('Editor')).toEqual(['book']);
+      });
+    });
+
+    describe('in a document database', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withJHipsterConfig({ databaseType: 'mongodb' }, [author, editor, book]);
+      });
+
+      it('should add the other side of a one-to-many only', () => {
+        expect(otherSides('Author')).toEqual(['book']);
+        expect(otherSides('Editor')).toEqual([]);
+      });
+    });
+
+    describe('in a graph database', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withJHipsterConfig({ databaseType: 'neo4j' }, [author, editor, book]);
+      });
+
+      it('should add no other side and ignore the back reference of the relationships', () => {
+        expect(otherSides('Author')).toEqual([]);
+        expect(otherSides('Editor')).toEqual([]);
+        expect(ignored()).toEqual([true, true]);
+      });
+    });
+  });
+
   describe('with', () => {
     describe('default config', () => {
       before(async () => {

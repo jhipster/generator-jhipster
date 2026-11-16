@@ -19,7 +19,6 @@
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../index.ts';
-import { addEntitiesOtherRelationships } from '../../support/relationship.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.d.ts';
 
 import {
@@ -62,8 +61,6 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
           databaseTypeSql: ({ databaseType }) => databaseType === databaseTypes.SQL,
           databaseTypeCassandra: ({ databaseType }) => databaseType === databaseTypes.CASSANDRA,
           databaseTypeNeo4j: ({ databaseType }) => databaseType === databaseTypes.NEO4J,
-          // Read by the base application once the entities are loaded, which adds the back reference of a one-to-many.
-          relationshipsHaveBackReference: ({ databaseType }) => databaseType !== databaseTypes.NEO4J && databaseType !== databaseTypes.NO,
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
           // The port of a relational database depends on its vendor, the one of another database on its type.
           prodDatabasePort: (data, { undefinedMarker }) =>
@@ -71,31 +68,6 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
               databaseData[data.prodDatabaseType]?.defaultPort
             : getDatabaseTypeData(data.databaseType).defaultPort) ?? undefinedMarker,
         });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_LOADING_ENTITIES]() {
-    return this.asPostLoadingEntitiesTaskGroup({
-      addOtherRelationshipsOfTheDatabase({ application, entitiesToLoad }) {
-        const entities = entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap);
-        const { databaseType } = application;
-        if (!application.relationshipsHaveBackReference) {
-          // The relationships of these databases have no back reference.
-          for (const relationship of entities.flatMap(entity => entity.relationships ?? [])) {
-            if (!relationship.otherRelationship) {
-              relationship.relationshipIgnoreBackReference ??= true;
-            }
-          }
-          return;
-        }
-        this.validateResult(
-          addEntitiesOtherRelationships(
-            entities,
-            // OneToOne back reference is required due to filtering
-            (_entity, { relationshipType }) => relationshipType === 'one-to-one' && databaseType === databaseTypes.SQL,
-          ),
-        );
       },
     });
   }

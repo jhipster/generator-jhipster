@@ -33,6 +33,11 @@ export type ServerAddedApplicationProperties = {
    * The patterns of the origins the backend allows in development.
    */
   corsAllowedOriginPatterns: string[];
+  /**
+   * Whether a one-to-many has a back reference in the database, which the base application adds once the entities are
+   * loaded: not in Neo4j nor without a database. An application without the server has no backend to tell it.
+   */
+  relationshipsHaveBackReference: boolean;
 };
 
 export const mutateApplication = {
@@ -57,4 +62,5 @@ export const mutateApplication = {
   }),
   // GitHub Codespaces
   corsAllowedOriginPatterns: () => ['https://*.githubpreview.dev'],
+  relationshipsHaveBackReference: ({ databaseType }) => databaseType !== 'neo4j' && databaseType !== 'no',
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<ServerApplication>, ServerAddedApplicationProperties>;
