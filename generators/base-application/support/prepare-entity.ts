@@ -23,7 +23,7 @@ import uniq from 'lodash-es/uniq.js';
 import { APPLICATION_TYPE_GATEWAY } from '../../../lib/core/application-types.ts';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
-import { databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.ts';
+import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { EntityAll, FieldAll } from '../../../lib/types/application-all.d.ts';
 import { getMicroserviceAppName, mutateData, stringHashCode } from '../../../lib/utils/index.ts';
 import { upperFirst } from '../../../lib/utils/string-utils.ts';
@@ -46,7 +46,6 @@ import type {
 import { createFaker } from './faker.ts';
 import { fieldIsEnum } from './field-utils.ts';
 
-const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { CommonDBTypes } = fieldTypes;
 
 const { BOOLEAN, LONG, STRING, UUID, INTEGER } = CommonDBTypes;
@@ -64,7 +63,6 @@ const BASE_TEMPLATE_DATA = {
   skipUiGrouping: false,
   anyFieldHasDocumentation: false,
   existingEnum: false,
-  searchEngine: NO_SEARCH_ENGINE,
   microserviceName: undefined,
   entityAuthority: undefined,
   entityReadAuthority: undefined,
@@ -413,23 +411,11 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
     // Workaround different paths
     clientFramework: (config as ClientApplication).clientFramework,
 
-    searchEngine: (config as SpringBootApplication).searchEngine,
-
     // jhiPrefix: config.jhiPrefix,
     // entitySuffix: config.entitySuffix,
     // dtoSuffix: config.dtoSuffix,
     // packageName: config.packageName,
   });
-  if ((entity as any).searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
-    // If the entity belongs to this application and searchEngine is true.
-    if (config.searchEngine && config.searchEngine !== NO_SEARCH_ENGINE) {
-      // Replace with the searchEngine from the application.
-      entity.searchEngine = config.searchEngine;
-    } else {
-      entity.searchEngine = NO_SEARCH_ENGINE;
-      this?.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
-    }
-  }
   return entity;
 }
 

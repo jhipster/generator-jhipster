@@ -31,7 +31,6 @@ import { mutateApplication } from '../../application.ts';
 import {
   addEntitiesOtherRelationships,
   getPrimaryKeyValue,
-  loadRequiredConfigDerivedProperties,
   prepareField as prepareServerFieldForTemplates,
   preparePostEntityServerDerivedProperties,
   prepareRelationship,
@@ -138,7 +137,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ application, entity, entityDefaults }) {
+      prepareEntity({ application, entityDefaults }) {
         entityDefaults(getEntityDerivedPropertyMutations(javaDomainCommand.entity), {
           entitySuffix: application.entitySuffix ?? '',
           dtoSuffix: application.dtoSuffix ?? 'DTO',
@@ -152,7 +151,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass),
           restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance),
         });
-        loadRequiredConfigDerivedProperties(entity);
       },
     });
   }
