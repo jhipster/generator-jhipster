@@ -374,12 +374,12 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
         requireContentTypeFieldWithBlob(field, entity.fields);
         prepareCommonFieldForTemplates(entity, field, this);
       },
-      prepareFieldRestType({ entity, field, fieldDefaults }) {
+      prepareFieldRestAccess({ entity, field, fieldDefaults }) {
         // Delayed: a backend sets it first for a field it computes, and the blob of a content type field is finalized before it.
         const blob = isContentTypeField(field) ? entity.fields.find(other => other.fieldName === field.contentTypeOf) : undefined;
         fieldDefaults({
-          restType: finalizeDefault((data: BaseApplicationField) => blob?.restType ?? (data.transient ? 'transient' : 'stored')),
-          readonly: finalizeDefaultOrUndefined(({ restType }: BaseApplicationField) => (restType === 'computed' ? true : undefined)),
+          restAccess: finalizeDefault((data: BaseApplicationField) => blob?.restAccess ?? (data.transient ? 'writeOnly' : 'readWrite')),
+          readonly: finalizeDefaultOrUndefined(({ restAccess }: BaseApplicationField) => (restAccess === 'readOnly' ? true : undefined)),
         });
       },
     });

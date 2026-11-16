@@ -53,12 +53,12 @@ export const mutateField = {
   fieldTypeTimed: ({ fieldType }) => fieldType === ZONED_DATE_TIME || fieldType === INSTANT,
   fieldTypeCharSequence: ({ fieldType }) => fieldType === STRING || fieldType === UUID || fieldType === TEXT_BLOB,
   fieldTypeTemporal: ({ fieldType }) => fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
-  // Only a field the REST API stores, but a collection, a binary (but a TextBlob), a @NotSortable or a UUID field. The default sort
-  // of the lists by the primary key does not depend on it. A backend sets it first for the fields it cannot sort by.
-  // Computed once the entity is prepared, with the restType a backend sets for a field it computes.
+  // Only a field the REST API reads and writes, but a collection, a binary (but a TextBlob), a @NotSortable or a UUID field. The
+  // default sort of the lists by the primary key does not depend on it. A backend sets it first for the fields it cannot sort by.
+  // Computed once the entity is prepared, with the restAccess a backend sets for a field it computes.
   fieldSupportsSortBy: finalizeDefault(
     (data: Field) =>
-      data.restType === 'stored' &&
+      data.restAccess === 'readWrite' &&
       !data.collection &&
       !(data.fieldTypeBinary && data.fieldTypeBlobContent !== 'text') &&
       !(data as { notSortable?: boolean }).notSortable &&
