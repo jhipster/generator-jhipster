@@ -20,7 +20,7 @@ import intersection from 'lodash-es/intersection.js';
 import sortedUniq from 'lodash-es/sortedUniq.js';
 import uniq from 'lodash-es/uniq.js';
 
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
+import { APPLICATION_TYPE_GATEWAY } from '../../../lib/core/application-types.ts';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.ts';
@@ -423,7 +423,6 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
     // entitySuffix: config.entitySuffix,
     // dtoSuffix: config.dtoSuffix,
     // packageName: config.packageName,
-    microserviceName: ({ builtIn }) => (!builtIn && config.applicationType === APPLICATION_TYPE_MICROSERVICE ? config.baseName : undefined),
   });
   if ((entity as any).searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
     // If the entity belongs to this application and searchEngine is true.
