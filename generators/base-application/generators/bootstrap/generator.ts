@@ -25,13 +25,14 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 
 import type { Entity as BaseEntity } from '../../../../lib/jhipster/types/entity.ts';
 import { finalizeMutations, isWin32, mutateData } from '../../../../lib/utils/index.ts';
+import { finalizeDefault, finalizeDefaultOrUndefined } from '../../../../lib/utils/object.ts';
 import { lowerFirst } from '../../../../lib/utils/string-utils.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import { mutateApplication } from '../../application.ts';
 import { mutateRelationship, mutateRelationshipWithEntity } from '../../entity.ts';
 import BaseApplicationGenerator from '../../index.ts';
-import { requireContentTypeFieldWithBlob, withContentTypeFields } from '../../internal/content-type-fields.ts';
+import { isContentTypeField, requireContentTypeFieldWithBlob, withContentTypeFields } from '../../internal/content-type-fields.ts';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../internal/types/field-types.ts';
 import {
   createAuthorityEntity,
@@ -56,7 +57,11 @@ import {
   stringifyApplicationData,
 } from '../../support/index.ts';
 import type { EntityToLoad } from '../../tasks.ts';
-import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.ts';
+import type {
+  Application as BaseApplicationApplication,
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+} from '../../types.ts';
 
 /**
  * Adds a built-in entity to the entities to load, in place of the entry of its `.jhipster` file, which customizes it.
@@ -384,6 +389,14 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
       prepareFieldsForTemplates({ entity, field }) {
         requireContentTypeFieldWithBlob(field, entity.fields);
         prepareCommonFieldForTemplates(entity, field, this);
+      },
+      prepareFieldRestType({ entity, field, fieldDefaults }) {
+        // Delayed: a backend sets it first for a field it computes, and the blob of a content type field is finalized before it.
+        const blob = isContentTypeField(field) ? entity.fields.find(other => other.fieldName === field.contentTypeOf) : undefined;
+        fieldDefaults({
+          restType: finalizeDefault((data: BaseApplicationField) => blob?.restType ?? (data.transient ? 'transient' : 'stored')),
+          readonly: finalizeDefaultOrUndefined(({ restType }: BaseApplicationField) => (restType === 'computed' ? true : undefined)),
+        });
       },
     });
   }

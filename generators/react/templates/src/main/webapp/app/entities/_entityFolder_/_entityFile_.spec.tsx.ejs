@@ -29,8 +29,8 @@
     const optionalNumberFields = readOnly ? [] : fields.filter(field => field.fieldTypeNumeric && !field.fieldValidationRequired && !field.id && !field.hidden && !field.readonly);
     const emptyNumbers = optionalNumberFields.map(field => `${field.fieldName}: ''`).join(', ');
     const nullNumbers = optionalNumberFields.map(field => `${field.fieldName}: null`).join(', ');
-    const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient && !field.hidden);
-    const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.transient && !field.hidden);
+    const booleanFields = fields.filter(field => field.fieldTypeBoolean && field.restType === 'stored' && !field.hidden);
+    const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && field.restType === 'stored' && !field.hidden);
     const requiredCollections = readOnly ? [] : screenRelationships.filter(rel => rel.collection && rel.relationshipRequired);
     const validatedForm = numericFormFields.length > 0 || builtInUserManagement || requiredCollections.length > 0;
 _%>

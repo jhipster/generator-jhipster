@@ -18,7 +18,7 @@
 -%>
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
 <%_ const timedFields = fields.filter(field => field.fieldTypeTimed); _%>
-<%_ const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient); _%>
+<%_ const booleanFields = fields.filter(field => field.fieldTypeBoolean && field.restType === 'stored'); _%>
 <%_ const collectionRelationships = relationships.filter(relationship => relationship.persistableRelationship && relationship.collection); _%>
 <%_ const requiredCollectionRelationships = collectionRelationships.filter(relationship => relationship.relationshipRequired); _%>
 import { beforeEach, describe, expect, it } from 'vitest';

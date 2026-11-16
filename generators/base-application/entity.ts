@@ -47,6 +47,12 @@ const mutateProperty = {
   propertyNameUpperSnakeCase: ({ propertyName }) => snakeCase(propertyName).toUpperCase(),
 } as const satisfies MutateDataParam<Property>;
 
+/**
+ * How the REST API holds a field: `stored` (read and written, sortable), `computed` (computed by the backend, read only) or
+ * `transient` (accepted, never stored).
+ */
+export type FieldRestType = 'stored' | 'computed' | 'transient';
+
 type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType', FieldType> &
   DerivedBooleanPropertiesOf<'fieldValidation', ValidationType> & {
     path?: string[];
@@ -81,7 +87,14 @@ type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType
 
     generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts', options?: FakeDataOptions) => any;
 
+    /** Stored in no column: an option of the entity file, or set by the backend. */
     transient?: boolean;
+    /**
+     * How the REST API holds the field, which the clients read rather than how the backend stores it. Once the entity is
+     * prepared it is `transient` for a transient field, the one of its blob for a content type field, else `stored`: a
+     * backend sets it first for a field it computes.
+     */
+    restType?: FieldRestType;
     id?: boolean;
     autoGenerate?: boolean;
     readonly?: boolean;
