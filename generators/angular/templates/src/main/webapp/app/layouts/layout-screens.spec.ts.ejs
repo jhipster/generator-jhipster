@@ -39,6 +39,9 @@ import Login from 'app/login/login';
 import { LoginService } from 'app/login/login.service';
 import { Alert } from 'app/shared/alert/alert';
 import { AlertError } from 'app/shared/alert/alert-error';
+<%_ if (enableTranslation) { _%>
+import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
+<%_ } _%>
 
 import Navbar from './navbar/navbar';
 import PageRibbon from './profiles/page-ribbon';
@@ -96,7 +99,9 @@ describe('Layout screens', () => {
       const translateService = TestBed.inject(TranslateService);
       const use = vi.spyOn(translateService, 'use');
       const fixture = TestBed.createComponent(Navbar);
-      Object.assign(fixture.componentInstance, { languages: ['en', 'en'] });
+      // two distinct languages show the menu in any application, whatever languages it has
+      vi.spyOn(FindLanguageFromKeyPipe.prototype, 'transform').mockImplementation(language => language);
+      Object.assign(fixture.componentInstance, { languages: ['en', 'fr'] });
       await fixture.whenStable();
 
       await clickAll(fixture, '[data-cy="navbar"] a, a.dropdown-item');
