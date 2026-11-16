@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { type Ref, defineComponent, inject } from 'vue';
+import { createApp, defineComponent, inject, ref } from 'vue';
 import { type Router } from 'vue-router';
 
 import { createTestingPinia } from '@pinia/testing';
@@ -28,17 +28,17 @@ import { type default as AccountService, accountServiceKey } from '@/account/acc
 <%_ if (authenticationUsesCsrf) { _%>
 import LoginService, { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
-import { authenticatedKey, currentUsernameKey } from '@/config/injection-keys';
+import { type CurrentAccount } from '@/config/injection-keys';
+import { type IUser } from '@/entities/user/user.model';
 
-import { useAccount } from './account';
+import { createCurrentAccount, useAccount, useCurrentAccount } from './account';
 
 describe('account', () => {
   let router: { beforeResolve: ReturnType<typeof vi.fn> };
   let account: ReturnType<typeof useAccount>;
   let injected: {
     accountService?: AccountService;
-    authenticated?: Readonly<Ref<boolean>>;
-    username?: Readonly<Ref<string | undefined>>;
+    currentAccount?: CurrentAccount;
 <%_ if (authenticationUsesCsrf) { _%>
     loginService?: LoginService;
 <%_ } _%>
@@ -54,8 +54,7 @@ describe('account', () => {
       setup() {
         injected = {
           accountService: inject(accountServiceKey),
-          authenticated: inject(authenticatedKey),
-          username: inject(currentUsernameKey),
+          currentAccount: useCurrentAccount(),
 <%_ if (authenticationUsesCsrf) { _%>
           loginService: inject(loginServiceKey),
 <%_ } _%>
@@ -80,18 +79,40 @@ describe('account', () => {
     expect(axios.interceptors.response.use).toHaveBeenCalledOnce();
   });
 
-  it('should provide the account service and the state of the user', () => {
+  it('should provide the account service and the current account', () => {
     expect(injected.accountService).toBe(account.accountService);
-    expect(injected.authenticated!.value).toBe(false);
-    expect(injected.username!.value).toBeUndefined();
+    expect(injected.currentAccount!.authenticated.value).toBe(false);
+    expect(injected.currentAccount!.username.value).toBeUndefined();
 <%_ if (authenticationUsesCsrf) { _%>
     expect(injected.loginService).toBeInstanceOf(LoginService);
 <%_ } _%>
 
     account.store.setAuthentication({ login: 'user' } as any);
 
-    expect(injected.authenticated!.value).toBe(true);
+    expect(injected.currentAccount!.authenticated.value).toBe(true);
     expect(account.authenticated.value).toBe(true);
-    expect(injected.username!.value).toBe('user');
+    expect(injected.currentAccount!.username.value).toBe('user');
+    expect(injected.currentAccount!.account.value).toBe(account.store.account);
+  });
+});
+
+describe('createCurrentAccount', () => {
+  it('should tell whether the user has any of the authorities', () => {
+    const account = ref<IUser | null>(null);
+    const currentAccount = createCurrentAccount(account);
+
+    expect(currentAccount.hasAnyAuthority('ROLE_USER')).toBe(false);
+
+    account.value = { login: 'user', authorities: ['ROLE_USER'] };
+
+    expect(currentAccount.hasAnyAuthority('ROLE_USER')).toBe(true);
+    expect(currentAccount.hasAnyAuthority(['ROLE_ADMIN', 'ROLE_USER'])).toBe(true);
+    expect(currentAccount.hasAnyAuthority(['ROLE_ADMIN'])).toBe(false);
+  });
+});
+
+describe('useCurrentAccount', () => {
+  it('should throw out of an application setting the account up', () => {
+    expect(() => createApp({}).runWithContext(() => useCurrentAccount())).toThrow('useAccount');
   });
 });

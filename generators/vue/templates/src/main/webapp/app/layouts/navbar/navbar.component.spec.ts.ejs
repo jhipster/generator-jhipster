@@ -23,14 +23,16 @@ import { type Router } from 'vue-router';
 import { createTestingPinia } from '@pinia/testing';
 import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
 import { type AxiosResponse } from 'axios';
+import { storeToRefs } from 'pinia';
 
 import { accountServiceKey } from '@/account/account.service';
 <%_ if (authenticationUsesCsrf) { _%>
 import type LoginService from '@/account/login.service';
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
+import { createCurrentAccount } from '@/composables';
+import { <%- enableTranslation ? 'changeLanguageKey, ' : '' %>currentAccountKey, currentLanguageKey } from '@/config/injection-keys';
 import { createRouter } from '@/router';
-import { <%- enableTranslation ? 'changeLanguageKey, ' : '' %>currentLanguageKey } from '@/config/injection-keys';
 import { slotsStub } from '@/testing/stubs';
 import { useStore } from '@/stores';
 
@@ -61,7 +63,6 @@ describe('JhiNavbar', () => {
   let loginService: LoginService;
 <%_ } _%>
   const accountService = {
-    hasAnyAuthorityAndCheckAuth: vi.fn().mockImplementation(() => Promise.resolve(true)),
     logout: vi.fn(() => store.logout()),
   };
 <%_ if (enableTranslation) { _%>
@@ -98,6 +99,7 @@ describe('JhiNavbar', () => {
           [changeLanguageKey as symbol]: changeLanguage,
 <%_ } _%>
           [accountServiceKey as symbol]: accountService,
+          [currentAccountKey as symbol]: createCurrentAccount(storeToRefs(store).account),
         },
       },
     });
@@ -135,10 +137,11 @@ describe('JhiNavbar', () => {
   });
 <%_ } _%>
 
-  it('should use account service', () => {
-    jhiNavbar.hasAnyAuthority('auth');
+  it('should tell whether the user has an authority', () => {
+    store.setAuthentication({ login: 'test', authorities: ['ROLE_ADMIN'] });
 
-    expect(accountService.hasAnyAuthorityAndCheckAuth).toHaveBeenCalled();
+    expect(jhiNavbar.hasAnyAuthority('ROLE_ADMIN')).toBe(true);
+    expect(jhiNavbar.hasAnyAuthority('ROLE_USER')).toBe(false);
   });
 
   it('logout should clear credentials and return to the home page when no provider URL is returned', async () => {
@@ -221,7 +224,7 @@ describe('JhiNavbar', () => {
 <%_ } _%>
 
   it('should render the menus of an authenticated user', async () => {
-    store.setAuthentication({ login: 'test' });
+    store.setAuthentication({ login: 'test', authorities: ['ROLE_ADMIN'] });
     store.setActiveProfiles(['api-docs']);
     await flushPromises();
 
@@ -240,7 +243,20 @@ describe('JhiNavbar', () => {
 <%_ if (enableTranslation) { _%>
   it('should default to the native language', () => {
     const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
-    const navbar = shallowMount(JhiNavbar, { global: { plugins: [pinia, router], stubs, provide: { [accountServiceKey as symbol]: accountService, [changeLanguageKey as symbol]: changeLanguage<%- authenticationUsesCsrf ? ', [loginServiceKey as symbol]: loginService' : '' %> } } });
+    const navbar = shallowMount(JhiNavbar, {
+      global: {
+        plugins: [pinia, router],
+        stubs,
+        provide: {
+          [accountServiceKey as symbol]: accountService,
+          [currentAccountKey as symbol]: createCurrentAccount(storeToRefs(store).account),
+          [changeLanguageKey as symbol]: changeLanguage,
+  <%_ if (authenticationUsesCsrf) { _%>
+          [loginServiceKey as symbol]: loginService,
+  <%_ } _%>
+        },
+      },
+    });
 
     expect(navbar.vm.currentLanguage).toBe('<%- nativeLanguage %>');
     language.mockRestore();

@@ -21,7 +21,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createTestingPinia } from '@pinia/testing';
 import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
+import { storeToRefs } from 'pinia';
 
+import { createCurrentAccount } from '@/composables';
+import { currentAccountKey } from '@/config/injection-keys';
 import { EMAIL_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
 import { formValues, setAllValues } from '@/testing/stubs';
 import { useStore } from '@/stores';
@@ -56,6 +59,9 @@ describe('Settings Component', () => {
     wrapper = shallowMount(Settings, {
       global: {
         plugins: [pinia],
+        provide: {
+          [currentAccountKey as symbol]: createCurrentAccount(storeToRefs(store).account),
+        },
       },
     });
     settings = wrapper.vm;

@@ -225,11 +225,8 @@ import { useI18n } from 'vue-i18n';
 import { type AxiosError } from 'axios';
 
 import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
-<%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], 'useEntityList', ...readOnly ? [] : ['useEntityRemove']]; _%>
+<%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], 'useEntityList', ...readOnly ? [] : ['useEntityRemove'], ...builtInUserManagement ? ['useCurrentAccount'] : []]; _%>
 import { <%- composables.join(', ') %> } from '@/composables';
-<%_ if (builtInUserManagement) { _%>
-import { currentUsernameKey } from '@/config/injection-keys';
-<%_ } _%>
 <%_ if (anyFieldHasFileBasedContentType) { _%>
 import useDataUtils from '@/composables/data-utils';
 <%_ } _%>
@@ -253,7 +250,7 @@ const dataUtils = useDataUtils();
 const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
 const alertService = inject(alertServiceKey, () => useAlertService(), true);
 <%_ if (builtInUserManagement) { _%>
-const username = inject(currentUsernameKey);
+const { username } = useCurrentAccount();
 <%_ } _%>
 
 <%_ const listProperties = [

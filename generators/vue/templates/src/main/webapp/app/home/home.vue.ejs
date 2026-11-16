@@ -64,7 +64,9 @@
 </template>
 
 <script setup lang="ts">
+<%_ if (authenticationTypeOauth2) { _%>
 import { inject } from 'vue';
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -72,7 +74,7 @@ import { useI18n } from 'vue-i18n';
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
-import { authenticatedKey, currentUsernameKey } from '@/config/injection-keys';
+import { useCurrentAccount } from '@/composables';
 
 <%_ if (enableTranslation) { _%>
 const { t: t$ } = useI18n();
@@ -80,8 +82,7 @@ const { t: t$ } = useI18n();
 <%_ if (authenticationTypeOauth2) { _%>
 const { login } = inject(loginServiceKey)!;
 <%_ } _%>
-const authenticated = inject(authenticatedKey);
-const username = inject(currentUsernameKey);
+const { authenticated, username } = useCurrentAccount();
 
 defineExpose({
   authenticated,

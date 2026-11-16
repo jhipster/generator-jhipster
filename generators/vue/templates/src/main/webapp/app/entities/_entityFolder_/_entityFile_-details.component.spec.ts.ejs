@@ -27,7 +27,7 @@ import { createBootstrap } from 'bootstrap-vue-next';
 
 import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
 <%_ if (builtInUserManagement) { _%>
-import { currentUsernameKey } from '@/config/injection-keys';
+import { currentAccountKey } from '@/config/injection-keys';
 <%_ } _%>
 import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/testing/stubs';
 
@@ -103,7 +103,7 @@ describe('Component Tests', () => {
           [alertServiceKey as symbol]: alertService,
           [<%- entityInstance %>ServiceKey as symbol]: () => <%- entityInstance %>ServiceStub,
 <%_ if (builtInUserManagement) { _%>
-          [currentUsernameKey as symbol]: ref('admin'),
+          [currentAccountKey as symbol]: { username: ref('admin') },
 <%_ } _%>
         },
       };
@@ -276,7 +276,7 @@ describe('Component Tests', () => {
         };
 
         // WHEN
-        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: {<%- builtInUserManagement ? " [currentUsernameKey as symbol]: ref('admin') " : '' %>}, plugins: [createBootstrap()] } });
+        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: {<%- builtInUserManagement ? " [currentAccountKey as symbol]: { username: ref('admin') } " : '' %>}, plugins: [createBootstrap()] } });
         await flushPromises();
 
         // THEN
