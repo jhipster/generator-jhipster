@@ -6,7 +6,7 @@
     "@ng-bootstrap/ng-bootstrap": "21.0.0",
     "@ngx-translate/core": "18.1.0",
     "@stomp/rx-stomp": "2.4.0",
-    "bootstrap": "5.3.8",
+    "bootstrap": "5.3.9",
     "bootswatch": "5.3.8",
     "es-module-shims": "2.8.4",
     "ngx-cookie-service": "22.0.0",
