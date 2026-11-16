@@ -299,11 +299,11 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
       if (field.fieldValidate === true) {
         if (field.fieldValidationMax) {
-          defaultValue = field.fieldValidateRulesMax;
+          defaultValue = Number.parseFloat(field.fieldValidateRulesMax);
           updatedValue = Number.parseInt(field.fieldValidateRulesMax) - 1;
         }
         if (field.fieldValidationMin) {
-          defaultValue = field.fieldValidateRulesMin;
+          defaultValue = Number.parseFloat(field.fieldValidateRulesMin);
           updatedValue = Number.parseInt(field.fieldValidateRulesMin) + 1;
         }
         if (field.fieldValidationMinBytes) {
@@ -363,10 +363,15 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
   <%_ } else if (field.fieldTypeBigDecimal) { _%>
 
-    private static final BigDecimal <%- defaultValueName %> = new BigDecimal(<%- defaultValue %>);
-    private static final BigDecimal <%- updatedValueName %> = new BigDecimal(<%- updatedValue %>);
+    <%_ const bigDecimalOf = value => Number.isInteger(value) ? `new BigDecimal(${value})` : `new BigDecimal("${value}")`; _%>
+    private static final BigDecimal <%- defaultValueName %> = <%- bigDecimalOf(defaultValue) %>;
+    private static final BigDecimal <%- updatedValueName %> = <%- bigDecimalOf(updatedValue) %>;
     <%_ if (needsSmallerValueName) { _%>
+      <%_ if (Number.isInteger(defaultValue)) { _%>
     private static final BigDecimal <%- smallerValueName %> = new BigDecimal(<%- defaultValue %> - 1);
+      <%_ } else { _%>
+    private static final BigDecimal <%- smallerValueName %> = <%- bigDecimalOf(defaultValue) %>.subtract(BigDecimal.ONE);
+      <%_ } _%>
     <%_ } _%>
   <%_ } else if (field.fieldTypeUUID) { _%>
 

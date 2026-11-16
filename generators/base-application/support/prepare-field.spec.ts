@@ -23,6 +23,7 @@ import { getConfigWithDefaults } from '../../../lib/jhipster/default-application
 import BaseGenerator from '../../base/index.ts';
 import { formatDateForChangelog } from '../../base/support/index.ts';
 
+import { createFaker } from './faker.ts';
 import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.ts';
 import { getEnumValuesWithCustomValues, prepareCommonFieldForTemplates } from './prepare-field.ts';
 
@@ -63,6 +64,31 @@ describe('generator - base-application - support - prepareField', () => {
       });
       it('should be unique with validation', () => {
         expect(field).toMatchObject({ unique: true, fieldValidate: true });
+      });
+    });
+    describe('when a BigDecimal field has a fractional min', () => {
+      let field: any;
+      let fakeData: any;
+      beforeEach(async () => {
+        field = prepareCommonFieldForTemplates(
+          { ...defaultEntity, faker: await createFaker() },
+          {
+            fieldName: 'rate',
+            fieldType: 'BigDecimal',
+            fieldValidateRules: ['min', 'max'],
+            fieldValidateRulesMin: '0.1',
+            fieldValidateRulesMax: '0.5',
+          } as any,
+          defaultGenerator as any,
+        );
+        fakeData = field.generateFakeData('json-serializable');
+      });
+      it('should keep the rules as declared once fake data is generated', () => {
+        expect(field).toMatchObject({ fieldValidateRulesMin: '0.1', fieldValidateRulesMax: '0.5' });
+      });
+      it('should generate fake data within the fractional bounds', () => {
+        expect(fakeData).toBeGreaterThanOrEqual(0.1);
+        expect(fakeData).toBeLessThanOrEqual(0.5);
       });
     });
   });
