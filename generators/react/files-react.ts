@@ -231,7 +231,7 @@ export const files = asWriteFilesSection({
       templates: ['shared/util/url-utils.ts'],
     },
     {
-      condition: generator => generator.authenticationTypeSession && generator.communicationSpringWebsocket,
+      condition: generator => generator.authenticationUsesCsrf && generator.communicationSpringWebsocket,
       ...clientApplicationTemplatesBlock(),
       templates: ['shared/util/cookie-utils.ts'],
     },
