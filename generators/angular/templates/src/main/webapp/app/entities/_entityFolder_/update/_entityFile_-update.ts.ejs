@@ -27,6 +27,8 @@ _%>
 <%_ const constantLabelPipes = [...new Map(fields.filter(field => field.angularFieldClientConstant?.angularConstantLabelPipe).map(field => [field.angularFieldClientConstant.angularConstantLabelPipe.importName, field.angularFieldClientConstant.angularConstantLabelPipe])).values()]; _%>
 <%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
+<%# The form service keeps the empty values of the edited entity for these fields -%>
+<%_ const keepsEmptyValues = fields.some(field => !field.fieldValidationRequired && !field.id && !field.clientConstantsAsValues && (field.fieldTypeBoolean || field.fieldTypeString || field.blobContentTypeText)); _%>
 <%_ const usesSelectOptions = fields.some(field => field.clientConstantsAsValues && field.collection) || relationships.some(rel => rel.relationshipSerializePrimaryKeyOnly || rel.persistableRelationship); _%>
 <%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
 import { HttpResponse } from '@angular/common/http';
@@ -225,7 +227,7 @@ export class <%- entityAngularName %>Update implements OnInit {
 
     save(): void {
         this.isSaving.set(true);
-        const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.<%- entityInstance %>Model());
+        const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.<%- entityInstance %>Model()<%- keepsEmptyValues ? `, this.${entityInstance}` : '' %>);
 <%_ if (primaryKey.autoGenerate || builtInUserManagement) { _%>
   <%_ if (updatableEntity) { _%>
         if (<%- entityInstance %>.<%- builtInUserManagement ? 'id' : primaryKey.name %> === null) {
