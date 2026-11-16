@@ -156,7 +156,9 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
       async writePlaywrightEntityFiles({ application, entities }) {
-        for (const entity of entities.filter(
+        // The fields the clients skip are left out, like the client entity files.
+        const clientEntities = application.filterEntitiesAndPropertiesForClient?.(entities) ?? entities;
+        for (const entity of clientEntities.filter(
           entity => entity.generateEntityPlaywright && !entity.embedded && !entity.builtInUser && !entity.entityClientModelOnly,
         )) {
           const context = { ...application, ...entity };

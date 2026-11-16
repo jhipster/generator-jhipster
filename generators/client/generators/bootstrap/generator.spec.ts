@@ -20,6 +20,7 @@ import { before, describe, expect, it } from 'expect-node';
 import { basename, resolve } from 'node:path';
 
 import { testBootstrapEntities } from '../../../../test/support/bootstrap-tests.ts';
+import type { Entity as ClientEntity } from '../../types.d.ts';
 
 import Generator from './generator.ts';
 
@@ -37,6 +38,26 @@ describe(`generator - ${generator}`, () => {
       .prepareEnvironment()
       .withMockedGenerators(['jhipster:client:bootstrap']);
     expect(runResult.getComposedGenerators()).toContain('jhipster:client:bootstrap');
+  });
+
+  describe('filterEntitiesAndPropertiesForClient', () => {
+    // A field the clients skip, which the entity files declare.
+    const hiddenField = { fieldName: 'hidden', fieldType: 'String', skipClient: true };
+
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({}, [{ name: 'Foo', fields: [{ fieldName: 'shown', fieldType: 'String' }, hiddenField] }]);
+    });
+
+    it('should leave out the fields the clients skip', () => {
+      const { application, entities } = runResult;
+      const [foo] = application!.filterEntitiesAndPropertiesForClient!([entities!.Foo as ClientEntity]);
+      expect(foo.fields.map(field => field.fieldName)).toEqual(['id', 'shown']);
+    });
+    it('should keep the fields of the entity', () => {
+      expect(runResult.entities!.Foo.fields!.map(field => field.fieldName)).toEqual(['id', 'shown', 'hidden']);
+    });
   });
 
   describe('withAdminUi', () => {

@@ -204,7 +204,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       },
 
       async writeCypressEntityFiles({ application, entities }) {
-        for (const entity of entities.filter(
+        // The fields the clients skip are left out, like the client entity files.
+        const clientEntities = application.filterEntitiesAndPropertiesForClient?.(entities) ?? entities;
+        for (const entity of clientEntities.filter(
           entity => entity.generateEntityCypress && !entity.embedded && !entity.builtInUser && !entity.entityClientModelOnly,
         )) {
           const context = { ...application, ...entity };
