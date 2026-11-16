@@ -28,7 +28,7 @@ import SockJS from 'sockjs-client';
 <%_ if (authenticationTypeJwt) { _%>
 import { clearAuthenticationToken, storeAuthenticationToken } from '@/account/authentication-token';
 <%_ } _%>
-import { authenticatedKey } from '@/config/injection-keys';
+import { currentAccountKey } from '@/config/injection-keys';
 <%_ if (authenticationUsesCsrf) { _%>
 import { CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN_HEADER_NAME } from '@/shared/jhipster/constants';
 <%_ } _%>
@@ -57,7 +57,7 @@ describe('Tracker Service', () => {
       global: {
         plugins: [router],
         provide: {
-          [authenticatedKey as symbol]: authenticated,
+          [currentAccountKey as symbol]: { authenticated },
         },
       },
     });

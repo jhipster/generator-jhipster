@@ -400,6 +400,41 @@ describe('Component Tests', () => {
       });
 
 <%_ } _%>
+<%_ const blobField = fields.find(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.hidden); _%>
+<%_ if (blobField) { _%>
+      it('Should mark a blob once its file changes', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        expect(comp.v$.<%- blobField.fieldName %>.$dirty).toBe(false);
+
+        // WHEN
+        await wrapper.find('#file_<%- blobField.fieldName %>').trigger('change');
+
+        // THEN
+        expect(comp.v$.<%- blobField.fieldName %>.$dirty).toBe(true);
+      });
+
+<%_ } _%>
+<%_ const blurredRelationship = allRelationshipsThatNeedSelectOptions.flat()[0]; _%>
+<%_ if (blurredRelationship) { _%>
+  <%_ const blurredRelationshipProperty = blurredRelationship.collection ? blurredRelationship.relationshipFieldNamePlural : blurredRelationship.relationshipFieldName; _%>
+      it('Should mark a relationship once its select is left', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        expect(comp.v$.<%- blurredRelationshipProperty %>.$dirty).toBe(false);
+
+        // WHEN
+        await wrapper.find('select[data-cy="<%- blurredRelationship.relationshipFieldName %>"]').trigger('blur');
+
+        // THEN
+        expect(comp.v$.<%- blurredRelationshipProperty %>.$dirty).toBe(true);
+      });
+
+<%_ } _%>
 <%_ if (fields.some(field => !field.id && field.fieldValidationRequired) || allRelationshipsThatNeedSelectOptions.flat().some(relationship => relationship.relationshipValidate && relationship.relationshipRequired)) { _%>
       it('Should show the validation errors', async () => {
         // GIVEN
@@ -530,6 +565,23 @@ describe('Component Tests', () => {
 
         // THEN
         expect(wrapper.vm.<%- entityInstance %>.<%- primaryKey.name %>).toBeUndefined();
+      });
+
+      it('Should leave the fields untouched when the id of the route changes', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        route = reactive({ params: { <%- entityInstance %>Id: '123' } });
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        await flushPromises();
+        wrapper.vm.v$.$touch();
+        expect(wrapper.vm.v$.$anyDirty).toBe(true);
+
+        // WHEN
+        route.params = { <%- entityInstance %>Id: '456' };
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.v$.$anyDirty).toBe(false);
       });
 
       it('Should not show the error of an aborted load', async () => {

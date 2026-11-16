@@ -48,16 +48,16 @@ _%>
                 <span class="pull-start">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
       <%_ } _%>
       <%_ if (field.blobContentTypeImage) { _%>
-                <button type="button" @click="clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>')" class="btn btn-secondary btn-xs pull-end">
+                <button type="button" @click="clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>'); v$.<%- fieldName %>.$touch()" class="btn btn-secondary btn-xs pull-end">
       <%_ } else { _%>
-                <button type="button" @click="<%- entityInstance %>.<%- fieldName %>=undefined;<%- entityInstance %>.<%- fieldName %>ContentType=undefined;"
+                <button type="button" @click="<%- entityInstance %>.<%- fieldName %>=undefined;<%- entityInstance %>.<%- fieldName %>ContentType=undefined; v$.<%- fieldName %>.$touch()"
                     class="btn btn-secondary btn-xs pull-end">
       <%_ } _%>
                   <font-awesome-icon icon="times"></font-awesome-icon>
                 </button>
               </div>
               <label for="file_<%- fieldName %>" class="btn btn-primary pull-end">{{ <%- fieldTypeBlobContent === 'image' ? 't$(\'entity.action.addimage\')' : 't$(\'entity.action.addblob\')' %> }}</label>
-              <input type="file" ref="file_<%- fieldName %>" id="file_<%- fieldName %>" style="display: none;" data-cy="<%- fieldName %>" @change="dataUtils.setFileData($event, <%- entityInstance %>, '<%- fieldName %>', <%- fieldTypeBlobContent === 'image' ? 'true)" accept="image/*"' : 'false)"' %>/>
+              <input type="file" ref="file_<%- fieldName %>" id="file_<%- fieldName %>" style="display: none;" data-cy="<%- fieldName %>" @change="dataUtils.setFileData($event, <%- entityInstance %>, '<%- fieldName %>', <%- fieldTypeBlobContent === 'image' ? 'true' : 'false' %>); v$.<%- fieldName %>.$touch()"<%- fieldTypeBlobContent === 'image' ? ' accept="image/*"' : '' %>/>
             </div>
     <%_ } _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
@@ -126,7 +126,7 @@ _%>
   <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
           <div class="mb-3">
             <label class="form-label" for="<%- entityFileName %>-<%- relationshipName %>">{{ t$('<%- translationKey %>') }}</label>
-            <select class="form-select" id="<%- entityFileName %>-<%- relationshipName %>" data-cy="<%- relationshipFieldName %>" name="<%- relationshipName %>" v-model="<%- entityInstance %>.<%- relationshipFieldName %>"<%- relationshipRequired ? ' required' : '' %>>
+            <select class="form-select" id="<%- entityFileName %>-<%- relationshipName %>" data-cy="<%- relationshipFieldName %>" name="<%- relationshipName %>" @blur="v$.<%- relationshipFieldName %>.$touch()" v-model="<%- entityInstance %>.<%- relationshipFieldName %>"<%- relationshipRequired ? ' required' : '' %>>
     <%_ if (relationshipRequired) { _%>
               <option v-if="!<%- entityInstance %>.<%- relationshipName %>" :value="null" selected></option>
     <%_ } else { _%>
@@ -138,7 +138,7 @@ _%>
   <%_ } else if (relationship.persistableRelationship) { _%>
           <div class="mb-3">
             <label class="form-label" for="<%- entityFileName %>-<%- relationshipFieldNamePlural %>">{{ t$('<%- translationKey %>') }}</label>
-            <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
+            <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" @blur="v$.<%- relationshipFieldNamePlural %>.$touch()" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
               <option :value="<% if (relationship.relationshipSerializePrimaryKeyOnly) { %><%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %><% } else { %>getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')<% } %>" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
             </select>
           </div>
@@ -176,7 +176,7 @@ _%>
     const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
     const usesGetSelected = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship && !rel.relationshipSerializePrimaryKeyOnly);
 _%>
-import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', ...enumTypeFields.length > 0 ? ['ref'] : []].join(', ') %> } from 'vue';
+import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', ...enumTypeFields.length > 0 ? ['ref'] : [], 'watch'].join(', ') %> } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -299,6 +299,12 @@ const v$ = useEntityValidation(<%- entityInstance %>, {
   <%- relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: <%- relationship.relationshipValidate ? '{ required: true }' : '{}' %>,
 <%_ } _%>
 });
+
+// The router reuses the component when the id of the route changes: the fields of the other entity are not touched yet.
+watch(
+  () => route.params?.<%- entityInstance %>Id,
+  () => v$.value.$reset(),
+);
 
 const { isSaving, save: saveEntity } = useEntitySave({
   alertService,

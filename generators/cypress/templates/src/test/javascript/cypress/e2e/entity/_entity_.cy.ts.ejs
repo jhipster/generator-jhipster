@@ -190,9 +190,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response?.statusCode).to.equal(200);
-        });
+        cy.wait('@entitiesRequest').its('response.statusCode').should('eq', 200);
         cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
       });
     });
@@ -263,9 +261,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.get(entityDetailsButtonSelector).first().click();
         cy.getEntityDetailsHeading('<%- entityInstance %>');
         cy.get(entityDetailsBackButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response?.statusCode).to.equal(200);
-        });
+        cy.wait('@entitiesRequest').its('response.statusCode').should('eq', 200);
         cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
       });
 
@@ -275,9 +271,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response?.statusCode).to.equal(200);
-        });
+        cy.wait('@entitiesRequest').its('response.statusCode').should('eq', 200);
         cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
       });
 
@@ -286,9 +280,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
         cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response?.statusCode).to.equal(200);
-        });
+        cy.wait('@entitiesRequest').its('response.statusCode').should('eq', 200);
         cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
       });
 
@@ -299,12 +291,8 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.get(entityDeleteButtonSelector).last().click();
         cy.getEntityDeleteDialogHeading('<%- entityInstance %>').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
-        cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response?.statusCode).to.equal(204);
-        });
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response?.statusCode).to.equal(200);
-        });
+        cy.wait('@deleteEntityRequest').its('response.statusCode').should('eq', 204);
+        cy.wait('@entitiesRequest').its('response.statusCode').should('eq', 200);
         cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
   <%_ if (cypressBootstrapEntities) { _%>
         <%- entityInstance %> = undefined;
@@ -370,9 +358,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         expect(response?.statusCode).to.equal(201);
         <%- entityInstance %> = response.body;
       });
-      cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response?.statusCode).to.equal(200);
-      });
+      cy.wait('@entitiesRequest').its('response.statusCode').should('eq', 200);
       cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
     });
   });

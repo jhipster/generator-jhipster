@@ -182,16 +182,15 @@
 </template>
 
 <script setup lang="ts">
-import { <%- microfrontend ? 'type Component, ' : '' %>computed, <%- microfrontend ? 'defineAsyncComponent, ' : '' %>inject, ref } from 'vue';
+import { <%- microfrontend ? 'type Component, ' : '' %>computed, <%- microfrontend ? 'defineAsyncComponent, ' : '' %>inject } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRouter } from 'vue-router';
-
 <%_ if (microfrontend) { _%>
+
 import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 <%_ } _%>
-import { storeToRefs } from 'pinia';
 
 import { accountServiceKey } from '@/account/account.service';
 <%_ if (authenticationUsesCsrf) { _%>
@@ -202,6 +201,7 @@ import { loginServiceKey } from '@/account/login.service';
 import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
 import getLanguages from '@/config/languages';
 <%_ } _%>
+import { useCurrentAccount } from '@/composables';
 import { useStore } from '@/stores';
 
 defineOptions({
@@ -243,27 +243,17 @@ const router = useRouter();
 const store = useStore();
 
 const version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
-const hasAnyAuthorityValues = ref<Record<string, boolean>>({});
 
 const openAPIEnabled = computed(() => store.activeProfiles.includes('api-docs'));
 <%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
 const inProduction = computed(() => store.activeProfiles.includes('prod'));
 <%_ } _%>
-const { authenticated } = storeToRefs(store);
+const { authenticated, hasAnyAuthority } = useCurrentAccount();
 
 const subIsActive = (input: string | string[]) => {
   const paths = Array.isArray(input) ? input : [input];
   // current path starts with this path string
   return paths.some(path => router.currentRoute.value.path.startsWith(path));
-};
-
-const hasAnyAuthority = (authorities: string): boolean => {
-  accountService.hasAnyAuthorityAndCheckAuth(authorities).then(value => {
-    if (hasAnyAuthorityValues.value[authorities] !== value) {
-      hasAnyAuthorityValues.value = { ...hasAnyAuthorityValues.value, [authorities]: value };
-    }
-  });
-  return hasAnyAuthorityValues.value[authorities] ?? false;
 };
 
 const logout = async () => {

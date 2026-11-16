@@ -59,6 +59,9 @@ public class <%- user.adminUserDto %> implements Serializable {
     @Size(max = <%- user.fieldsByName.lastName.fieldValidateRulesMaxlength %>)
     private String lastName;
 
+<%_ if (user.fieldsByName.email.fieldValidationRequired) { _%>
+    @NotNull
+<%_ } _%>
     @Email
     @Size(min = <%- user.fieldsByName.email.fieldValidateRulesMinlength %>, max = <%- user.fieldsByName.email.fieldValidateRulesMaxlength %>)
     private String email;

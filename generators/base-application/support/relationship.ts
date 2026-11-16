@@ -76,6 +76,21 @@ export const loadEntitiesOtherSide = (
 ): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities) {
+    if (entity.embedded && entity.relationships) {
+      // Relationships with embedded entities are unidirectional: an embedded entity has no back reference to the entity embedding it.
+      entity.relationships = entity.relationships.filter(relationship => {
+        const otherEntity = findEntityInEntities(upperFirst(relationship.otherEntityName), entities);
+        if (!otherEntity || !findOtherRelationshipInRelationships(entity.name, relationship, otherEntity.relationships ?? [])) {
+          return true;
+        }
+        result.warning.push(
+          `Ignoring the relationship '${relationship.relationshipName}' of the embedded entity '${entity.name}': relationships with embedded entities are unidirectional`,
+        );
+        return false;
+      });
+    }
+  }
+  for (const entity of entities) {
     for (const relationship of entity.relationships ?? []) {
       const otherEntity = findEntityInEntities(upperFirst(relationship.otherEntityName), entities);
       if (!otherEntity) {

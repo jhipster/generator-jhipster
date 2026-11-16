@@ -17,22 +17,19 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { computed, ref } from 'vue';
 
-import { createTestingPinia } from '@pinia/testing';
 import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
+import { currentAccountKey } from '@/config/injection-keys';
+import { type IUser } from '@/entities/user/user.model';
 import { EMAIL_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
 import { formValues, setAllValues } from '@/testing/stubs';
-import { useStore } from '@/stores';
 
 import Settings from './settings.vue';
 
 type SettingsComponentType = InstanceType<typeof Settings>;
-
-const pinia = createTestingPinia({ stubActions: false });
-
-const store = useStore();
 
 const axiosStub = {
   get: vi.spyOn(axios, 'get'),
@@ -47,15 +44,18 @@ describe('Settings Component', () => {
     lastName: 'Doe',
     email: 'john.doe@jhipster.org',
   };
+  const currentAccount = ref<IUser | null>(null);
 
   beforeEach(() => {
     axiosStub.get.mockResolvedValue({});
     axiosStub.post.mockReset();
 
-    store.setAuthentication(account);
+    currentAccount.value = account;
     wrapper = shallowMount(Settings, {
       global: {
-        plugins: [pinia],
+        provide: {
+          [currentAccountKey as symbol]: { account: currentAccount, username: computed(() => currentAccount.value?.login) },
+        },
       },
     });
     settings = wrapper.vm;
@@ -134,7 +134,7 @@ describe('Settings Component', () => {
   it('should show the errors of the form and save it', async () => {
     // GIVEN
     axiosStub.post.mockResolvedValue({});
-    store.setAuthentication({ ...account, login: 'jhi' });
+    currentAccount.value = { ...account, login: 'jhi' };
     await settings.$nextTick();
 
     // WHEN
