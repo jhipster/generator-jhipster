@@ -204,6 +204,8 @@ describe('Tracker Service', () => {
   });
 
   it('Should create its own connection', () => {
+    // The debug messages of the connection it deactivates.
+    vi.spyOn(console, 'log').mockReturnValue(undefined);
     mountTracker({});
 
     expect(trackerService.stomp).toBeInstanceOf(RxStomp);
