@@ -23,8 +23,10 @@ import chalk from 'chalk';
 import union from 'lodash-es/union.js';
 import semver from 'semver';
 import type { PackageJson } from 'type-fest';
+import type { Store } from 'yeoman-environment';
 
 import { packageJson } from '../../../lib/index.ts';
+import { registerBlueprintAliases } from '../../../lib/resolver/blueprint-aliases.ts';
 import { packageNameToNamespace } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/index.ts';
 import { CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE } from '../support/constants.ts';
@@ -124,6 +126,11 @@ export class BlueprintsResolver {
       blueprints.forEach(blueprint => {
         this.#checkJHipsterBlueprintVersion(blueprint.name);
       });
+    }
+    // The generators of the packages the blueprints take, under their namespace, for the blueprints looked up here.
+    const { store } = this.#env as unknown as { store: Store };
+    for (const blueprint of blueprints) {
+      registerBlueprintAliases(store, packageNameToNamespace(blueprint.name));
     }
     const blueprintNames = blueprints.map(blueprint => blueprint.name);
     // Kept for the blueprints reading it.
