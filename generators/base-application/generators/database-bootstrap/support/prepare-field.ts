@@ -19,6 +19,7 @@
 import { reservedKeywords } from '../../../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../../../lib/utils/index.ts';
 import { snakeCase } from '../../../../../lib/utils/string-utils.ts';
+import { isContentTypeField } from '../../../internal/content-type-fields.ts';
 import type { DatabaseEntity, DatabaseField } from '../types.d.ts';
 
 import { getUXConstraintName } from './naming.ts';
@@ -28,6 +29,7 @@ const { isReservedTableName } = reservedKeywords;
 /**
  * The column of a field: its name in snake case, prefixed by the table prefix of JHipster when it is a reserved keyword
  * of the database, and the name of its unique constraint. A name the field already has is kept, the column follows it.
+ * The column of the content type of a blob is named after the column of its blob, whatever the name of the blob.
  */
 export function prepareFieldColumnForDatabase({
   application,
@@ -40,6 +42,13 @@ export function prepareFieldColumnForDatabase({
   field: DatabaseField;
   log: { warn: (message: string) => void };
 }) {
+  const blob = isContentTypeField(field) ? entity.fields?.find(other => other.fieldName === field.contentTypeOf) : undefined;
+  if (field.fieldNameAsDatabaseColumn === undefined && blob) {
+    if (blob.columnName === undefined) {
+      prepareFieldColumnForDatabase({ application, entity, field: blob, log });
+    }
+    field.fieldNameAsDatabaseColumn = `${blob.columnName}_content_type`;
+  }
   if (field.fieldNameAsDatabaseColumn === undefined) {
     const fieldNameUnderscored = snakeCase(field.fieldName);
     if (isReservedTableName(fieldNameUnderscored, application.prodDatabaseType ?? application.databaseType!)) {

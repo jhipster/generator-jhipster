@@ -26,7 +26,7 @@ import { type ComponentMountingOptions, shallowMount } from '@vue/test-utils';
 import type LoginService from '@/account/login.service';
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
-import { authenticatedKey } from '@/config/injection-keys';
+import { currentAccountKey } from '@/config/injection-keys';
 
 import Error from './error.vue';
 
@@ -69,7 +69,7 @@ describe('Error component', () => {
 <%_ if (authenticationTypeOauth2) { _%>
           [loginServiceKey as symbol]: loginService,
 <%_ } _%>
-          [authenticatedKey as symbol]: authenticated,
+          [currentAccountKey as symbol]: { authenticated },
         },
       },
     };

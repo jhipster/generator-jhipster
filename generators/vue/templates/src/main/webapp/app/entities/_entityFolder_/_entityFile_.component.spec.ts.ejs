@@ -31,7 +31,7 @@ import { createBootstrap } from 'bootstrap-vue-next';
 
 import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
 <%_ if (builtInUserManagement) { _%>
-import { currentUsernameKey } from '@/config/injection-keys';
+import { currentAccountKey } from '@/config/injection-keys';
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
 import JhiSortHeader from '@/components/jhi-sort-header.vue';
@@ -115,7 +115,7 @@ describe('Component Tests', () => {
           [alertServiceKey as symbol]: alertService,
           [<%- entityInstance %>ServiceKey as symbol]: () => <%- entityInstance %>ServiceStub,
 <%_ if (builtInUserManagement) { _%>
-          [currentUsernameKey as symbol]: ref('admin'),
+          [currentAccountKey as symbol]: { username: ref('admin') },
 <%_ } _%>
         },
       };
@@ -341,7 +341,7 @@ describe('Component Tests', () => {
         const get = vi.spyOn(axios, 'get').mockResolvedValue({ headers: {}, data: [] });
 
         // WHEN
-        const wrapper = shallowMount(<%- entityAngularName %>, { global: { ...mountOptions, provide: {<%- builtInUserManagement ? " [currentUsernameKey as symbol]: ref('admin') " : '' %>}, plugins: [...(mountOptions?.plugins ?? []), createBootstrap()] } });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: { ...mountOptions, provide: {<%- builtInUserManagement ? " [currentAccountKey as symbol]: { username: ref('admin') } " : '' %>}, plugins: [...(mountOptions?.plugins ?? []), createBootstrap()] } });
         await flushPromises();
 
         // THEN
