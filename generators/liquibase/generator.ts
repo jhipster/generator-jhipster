@@ -216,7 +216,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareEntityRelationship({ application, entity, relationship }) {
         prepareRelationshipForLiquibase({ application, entity, relationship });
-        this.#prepareConstraintNames(entity, relationship);
+        this.#prepareConstraintNames(application, entity, relationship);
         relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.onDelete, this);
         relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.onUpdate, this);
       },
@@ -275,7 +275,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
               prepareRelationship.call(this, entity, relationship, true);
               prepareRelationshipForLiquibase({ application, entity, relationship });
               // The constraints of a removed relationship are dropped from the table of the entity as it is now.
-              this.#prepareConstraintNames(databaseChangelog.entity, relationship);
+              this.#prepareConstraintNames(application, databaseChangelog.entity, relationship);
             }
             postPrepareEntity.call(this, { application, entity } as any);
           }
@@ -809,11 +809,13 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
    * long told. The unique constraint of a relationship that is the id is named only when it is added to an existing table.
    */
   #prepareConstraintNames(
+    application: object,
     entity: LiquibaseEntity,
     relationship: LiquibaseRelationship & { otherEntity?: LiquibaseEntity },
     { idRelationship = false }: { idRelationship?: boolean } = {},
   ) {
-    const { entityTableName, prodDatabaseType } = entity as LiquibaseEntity & { prodDatabaseType: string };
+    const { entityTableName } = entity;
+    const { prodDatabaseType } = application as { prodDatabaseType: string };
     if (relationship.shouldWriteRelationship) {
       mutateData(relationship, {
         __override__: false,
@@ -937,7 +939,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     } else {
       entityChanges.addedRelationships = databaseChangelog.addedRelationships;
       for (const relationship of entityChanges.addedRelationships) {
-        this.#prepareConstraintNames(entity, relationship, { idRelationship: true });
+        this.#prepareConstraintNames(application, entity, relationship, { idRelationship: true });
       }
       entityChanges.removedRelationships = databaseChangelog.removedRelationships;
       entityChanges.relationshipsToRecreateForeignKeysOnly = databaseChangelog.relationshipsToRecreateForeignKeysOnly;
@@ -945,7 +947,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       entityChanges.addedDefaultValueFields = databaseChangelog.addedDefaultValueFields;
     }
 
-    const { prodDatabaseType, databaseType, authenticationType, jhiPrefix } = entity as any;
+    const { authenticationType, jhiPrefix } = entity as any;
+    const { prodDatabaseType, databaseType } = application as unknown as { prodDatabaseType: string; databaseType: string };
     /* Required by the templates */
     databaseChangelog.writeContext = {
       entity,
