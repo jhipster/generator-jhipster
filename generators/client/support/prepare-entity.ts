@@ -36,7 +36,7 @@ export function preparePostEntityClientDerivedProperties(entity: ClientEntity) {
   const options = { sep: `\n  ` };
 
   const [partialSample] = generateTsSamples(1, faker =>
-    clientFields.filter(field => field.id || field.fieldValidationRequired || (!field.transient && faker.datatype.boolean())),
+    clientFields.filter(field => field.id || field.fieldValidationRequired || (field.restType === 'stored' && faker.datatype.boolean())),
   );
   entity.tsSampleWithPartialData = stringifyTsEntity(partialSample, options);
 
@@ -48,7 +48,7 @@ export function preparePostEntityClientDerivedProperties(entity: ClientEntity) {
 
   const [fullSample] = generateTsSamples(
     3,
-    clientFields.filter(field => !field.transient),
+    clientFields.filter(field => field.restType === 'stored'),
   );
   entity.tsSampleWithFullData = stringifyTsEntity(fullSample, options);
 

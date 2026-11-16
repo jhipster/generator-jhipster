@@ -125,6 +125,43 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with the fields the REST API holds', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          {
+            name: 'Foo',
+            fields: [
+              { fieldName: 'name', fieldType: 'String' },
+              { fieldName: 'note', fieldType: 'String', options: { transient: true } },
+              { fieldName: 'photo', fieldType: 'ImageBlob' },
+              { fieldName: 'temp', fieldType: 'AnyBlob', options: { transient: true } },
+              { fieldName: 'preview', fieldType: 'ImageBlob', options: { mapstructExpression: 'java(null)' } },
+            ],
+          } as any,
+        ])
+        .withSkipWritingPriorities();
+    });
+
+    const restTypes = () => Object.fromEntries((result.entities!.Foo as any).fields.map((field: any) => [field.fieldName, field.restType]));
+
+    it('should hold a transient field as transient, the content type of a blob as its blob, and the others as stored', () => {
+      expect(restTypes()).toMatchObject({
+        name: 'stored',
+        note: 'transient',
+        photo: 'stored',
+        photoContentType: 'stored',
+        temp: 'transient',
+        tempContentType: 'transient',
+      });
+    });
+
+    it('should hold a field as stored when no backend computes it', () => {
+      expect(restTypes()).toMatchObject({ preview: 'stored', previewContentType: 'stored' });
+    });
+  });
+
   describe('security hardening', () => {
     before(async () => {
       await helpers

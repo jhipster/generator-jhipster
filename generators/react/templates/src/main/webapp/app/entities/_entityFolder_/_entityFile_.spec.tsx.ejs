@@ -26,8 +26,8 @@
     const primaryKeyName = primaryKey.name;
     const [firstKey, secondKey] = primaryKey.tsSampleValues;
     const numericFormFields = readOnly ? [] : fields.filter(field => field.fieldTypeNumeric && field.fieldValidate && !field.id && !field.hidden && !field.readonly);
-    const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient && !field.hidden);
-    const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.transient && !field.hidden);
+    const booleanFields = fields.filter(field => field.fieldTypeBoolean && field.restType === 'stored' && !field.hidden);
+    const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && field.restType === 'stored' && !field.hidden);
     const validatedForm = numericFormFields.length > 0 || builtInUserManagement;
 _%>
 import { afterEach, <%- validatedForm ? 'beforeAll, ' : '' %>beforeEach, describe, expect, it, vi } from 'vitest';

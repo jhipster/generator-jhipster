@@ -25,8 +25,8 @@
     }
     const primaryKeyName = primaryKey.name;
     const [firstKey, secondKey] = primaryKey.tsSampleValues;
-    const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient && !field.hidden);
-    const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.transient && !field.hidden);
+    const booleanFields = fields.filter(field => field.fieldTypeBoolean && field.restType === 'stored' && !field.hidden);
+    const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && field.restType === 'stored' && !field.hidden);
     // The properties of the update form whose messages of validation the screen shows.
     const validatedProperties = [
       ...fields.filter(field => field.fieldValidate && !field.hidden && !(builtInUserManagement && field.readonly) && !(field.id && field.autoGenerate)).map(field => field.fieldName),
@@ -179,7 +179,7 @@ describe('<%- entityAngularName %> screens', () => {
     });
 
 <%_ if (searchEngineAny) { _%>
-  <%_ const notSortableField = fields.find(field => !field.transient && field.fieldTypeString && !field.id); _%>
+  <%_ const notSortableField = fields.find(field => field.restType === 'stored' && field.fieldTypeString && !field.id); _%>
   <%_ if (notSortableField) { _%>
     it('should drop a sort that a search does not accept', async () => {
       Object.assign(TestBed.inject(ActivatedRoute), { queryParamMap: of(convertToParamMap({ search: 'term', sort: '<%- notSortableField.fieldName %>,asc' })) });
