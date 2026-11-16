@@ -22,7 +22,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { Observer, Subject, Subscription } from 'rxjs';
+import { Observer, Subject } from 'rxjs';
 
 import { TrackerActivity } from 'app/core/tracker/tracker-activity.model';
 import { TrackerService } from 'app/core/tracker/tracker.service';
@@ -33,7 +33,7 @@ describe('Tracker', () => {
   let comp: Tracker;
   let fixture: ComponentFixture<Tracker>;
   let activities: Subject<TrackerActivity>;
-  let trackerService: { subscribe: (observer: Partial<Observer<TrackerActivity>>) => Subscription; sendActivity: () => void };
+  let trackerService: Pick<TrackerService, 'subscribe' | 'sendActivity'>;
 
   const activity = (sessionId: string, page: string): TrackerActivity =>
     new TrackerActivity(sessionId, 'user', '127.0.0.1', page, '2026-01-02T03:04:05');
