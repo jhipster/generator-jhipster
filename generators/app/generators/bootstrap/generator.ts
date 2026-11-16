@@ -50,11 +50,14 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
       this.cancelCancellableTasks();
     } else {
       await this.dependsOnBootstrap('javascript-simple-application');
-      // Without the client, the generators of the client are not composed.
+      await this.dependsOnBootstrap('common');
+      // Without the client or the server, their generators are not composed.
       if (!this.jhipsterConfigWithDefaults.skipClient) {
         await this.dependsOnBootstrap('client');
       }
-      await this.dependsOnBootstrap('server');
+      if (!this.jhipsterConfigWithDefaults.skipServer) {
+        await this.dependsOnBootstrap('server');
+      }
     }
   }
 
