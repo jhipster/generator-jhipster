@@ -123,15 +123,9 @@ describe(`generator - ${generator}`, () => {
               fieldType: 'String',
               options: { mapstructExpression: 'java(s.getName())' },
             },
-            { fieldName: 'preview', fieldType: 'ImageBlob', options: { mapstructExpression: 'java(null)' } },
           ],
         },
       ]);
-    });
-
-    it('should omit a computed blob and its content type from the domain class and its test samples', () => {
-      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/MapstructExpression.java', 'preview');
-      result.assertNoFileContent('src/test/java/com/mycompany/myapp/domain/MapstructExpressionTestSamples.java', 'Preview');
     });
 
     it('should omit the field from the domain class without Liquibase', () => {
@@ -151,6 +145,7 @@ describe(`generator - ${generator}`, () => {
           fields: [
             { fieldName: 'name', fieldType: 'String' },
             { fieldName: 'note', fieldType: 'String', options: { transient: true } },
+            { fieldName: 'attachment', fieldType: 'AnyBlob', options: { transient: true } },
           ],
         },
       ]);
@@ -160,6 +155,11 @@ describe(`generator - ${generator}`, () => {
       result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/Memo.java', 'note');
       result.assertFileContent('src/test/java/com/mycompany/myapp/domain/MemoTestSamples.java', '.name(');
       result.assertNoFileContent('src/test/java/com/mycompany/myapp/domain/MemoTestSamples.java', '.note(');
+    });
+
+    it('should leave the content type of a transient blob out of the domain class and of its test samples', () => {
+      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/Memo.java', 'attachment');
+      result.assertNoFileContent('src/test/java/com/mycompany/myapp/domain/MemoTestSamples.java', 'attachmentContentType');
     });
   });
 

@@ -137,7 +137,7 @@ describe(`generator - ${generator}`, () => {
               { fieldName: 'note', fieldType: 'String', options: { transient: true } },
               { fieldName: 'photo', fieldType: 'ImageBlob' },
               { fieldName: 'temp', fieldType: 'AnyBlob', options: { transient: true } },
-              { fieldName: 'preview', fieldType: 'ImageBlob', options: { mapstructExpression: 'java(null)' } },
+              { fieldName: 'label', fieldType: 'String', options: { mapstructExpression: 'java(s.getName())' } },
             ],
           } as any,
         ])
@@ -165,7 +165,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should give a field read and write when no backend computes it', () => {
-      expect(restAccesses()).toMatchObject({ preview: 'readWrite', previewContentType: 'readWrite' });
+      expect(restAccesses()).toMatchObject({ label: 'readWrite' });
     });
   });
 

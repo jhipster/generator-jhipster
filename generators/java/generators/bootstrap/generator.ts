@@ -107,6 +107,11 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
             'mapstruct',
             `@MapstructExpression requires an Entity with mapstruct dto [${entity.name}.${field.fieldName}].`,
           );
+          // A blob of a file has a content type no expression gives: a TextBlob is a String.
+          assert.ok(
+            !field.fieldTypeBlobContent || field.fieldTypeBlobContent === 'text',
+            `@MapstructExpression does not support a blob of a file [${entity.name}.${field.fieldName}].`,
+          );
         }
         mutateData(field, mutateField);
       },
