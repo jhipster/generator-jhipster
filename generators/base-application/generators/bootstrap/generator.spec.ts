@@ -158,6 +158,12 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
+    it('should derive a boolean property of each access', () => {
+      const field = (fieldName: string) => (result.entities!.Foo as any).fields.find((field: any) => field.fieldName === fieldName);
+      expect(field('name')).toMatchObject({ restAccessReadWrite: true, restAccessReadOnly: false, restAccessWriteOnly: false });
+      expect(field('note')).toMatchObject({ restAccessReadWrite: false, restAccessReadOnly: false, restAccessWriteOnly: true });
+    });
+
     it('should give a field read and write when no backend computes it', () => {
       expect(restAccesses()).toMatchObject({ preview: 'readWrite', previewContentType: 'readWrite' });
     });

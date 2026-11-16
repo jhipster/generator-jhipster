@@ -1,5 +1,13 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`mutation object test expects fieldRestAccesses to match snapshot 1`] = `
+{
+  "0": "readWrite",
+  "1": "readOnly",
+  "2": "writeOnly",
+}
+`;
+
 exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
 {
   "clientRootFolder": "",
