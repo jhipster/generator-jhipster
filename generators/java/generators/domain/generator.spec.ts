@@ -123,9 +123,15 @@ describe(`generator - ${generator}`, () => {
               fieldType: 'String',
               options: { mapstructExpression: 'java(s.getName())' },
             },
+            { fieldName: 'preview', fieldType: 'ImageBlob', options: { mapstructExpression: 'java(null)' } },
           ],
         },
       ]);
+    });
+
+    it('should omit a computed blob and its content type from the domain class and its test samples', () => {
+      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/MapstructExpression.java', 'preview');
+      result.assertNoFileContent('src/test/java/com/mycompany/myapp/domain/MapstructExpressionTestSamples.java', 'Preview');
     });
 
     it('should omit the field from the domain class without Liquibase', () => {
