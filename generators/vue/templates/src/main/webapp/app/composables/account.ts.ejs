@@ -57,7 +57,7 @@ export const useAccount = ({ router }: { router: Router }) => {
 /**
  * The current account read from the account of the user signed in.
  */
-export const createCurrentAccount = (account: Readonly<Ref<IUser | null>>): CurrentAccount => ({
+const createCurrentAccount = (account: Readonly<Ref<IUser | null>>): CurrentAccount => ({
   account,
   authenticated: computed(() => !!account.value),
   username: computed(() => account.value?.login),

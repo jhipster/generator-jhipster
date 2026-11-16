@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { createApp, defineComponent, inject, ref } from 'vue';
+import { createApp, defineComponent, inject } from 'vue';
 import { type Router } from 'vue-router';
 
 import { createTestingPinia } from '@pinia/testing';
@@ -29,9 +29,8 @@ import { type default as AccountService, accountServiceKey } from '@/account/acc
 import LoginService, { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
 import { type CurrentAccount } from '@/config/injection-keys';
-import { type IUser } from '@/entities/user/user.model';
 
-import { createCurrentAccount, useAccount, useCurrentAccount } from './account';
+import { useAccount, useCurrentAccount } from './account';
 
 describe('account', () => {
   let router: { beforeResolve: ReturnType<typeof vi.fn> };
@@ -94,22 +93,18 @@ describe('account', () => {
     expect(injected.currentAccount!.username.value).toBe('user');
     expect(injected.currentAccount!.account.value).toBe(account.store.account);
   });
-});
 
-describe('createCurrentAccount', () => {
   it('should tell whether the user has any of the authorities', () => {
-    const account = ref<IUser | null>(null);
-    const currentAccount = createCurrentAccount(account);
+    expect(injected.currentAccount!.hasAnyAuthority('ROLE_USER')).toBe(false);
 
-    expect(currentAccount.hasAnyAuthority('ROLE_USER')).toBe(false);
+    account.store.setAuthentication({ login: 'user', authorities: ['ROLE_USER'] } as any);
 
-    account.value = { login: 'user', authorities: ['ROLE_USER'] };
-
-    expect(currentAccount.hasAnyAuthority('ROLE_USER')).toBe(true);
-    expect(currentAccount.hasAnyAuthority(['ROLE_ADMIN', 'ROLE_USER'])).toBe(true);
-    expect(currentAccount.hasAnyAuthority(['ROLE_ADMIN'])).toBe(false);
+    expect(injected.currentAccount!.hasAnyAuthority('ROLE_USER')).toBe(true);
+    expect(injected.currentAccount!.hasAnyAuthority(['ROLE_ADMIN', 'ROLE_USER'])).toBe(true);
+    expect(injected.currentAccount!.hasAnyAuthority(['ROLE_ADMIN'])).toBe(false);
   });
 });
+
 
 describe('useCurrentAccount', () => {
   it('should throw out of an application setting the account up', () => {

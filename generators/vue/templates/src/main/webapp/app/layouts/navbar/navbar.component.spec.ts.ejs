@@ -17,20 +17,18 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { type Router } from 'vue-router';
 
 import { createTestingPinia } from '@pinia/testing';
 import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
 import { type AxiosResponse } from 'axios';
-import { storeToRefs } from 'pinia';
 
 import { accountServiceKey } from '@/account/account.service';
 <%_ if (authenticationUsesCsrf) { _%>
 import type LoginService from '@/account/login.service';
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
-import { createCurrentAccount } from '@/composables';
 import { <%- enableTranslation ? 'changeLanguageKey, ' : '' %>currentAccountKey, currentLanguageKey } from '@/config/injection-keys';
 import { createRouter } from '@/router';
 import { slotsStub } from '@/testing/stubs';
@@ -62,8 +60,13 @@ describe('JhiNavbar', () => {
 <%_ if (authenticationUsesCsrf) { _%>
   let loginService: LoginService;
 <%_ } _%>
+  const authenticated = ref(false);
+  const hasAnyAuthority = vi.fn<(authorities: string | string[]) => boolean>();
+  const currentAccount = { authenticated, hasAnyAuthority };
   const accountService = {
-    logout: vi.fn(() => store.logout()),
+    logout: vi.fn(() => {
+      authenticated.value = false;
+    }),
   };
 <%_ if (enableTranslation) { _%>
   const changeLanguage = vi.fn();
@@ -82,6 +85,9 @@ describe('JhiNavbar', () => {
   };
 
   beforeEach(() => {
+    authenticated.value = false;
+    hasAnyAuthority.mockReset();
+    hasAnyAuthority.mockReturnValue(true);
     router = createRouter();
 <%_ if (authenticationUsesCsrf) { _%>
     loginService = { <%- authenticationTypeOauth2 ? 'login: vi.fn(), ' : '' %>logout: vi.fn() };
@@ -99,7 +105,7 @@ describe('JhiNavbar', () => {
           [changeLanguageKey as symbol]: changeLanguage,
 <%_ } _%>
           [accountServiceKey as symbol]: accountService,
-          [currentAccountKey as symbol]: createCurrentAccount(storeToRefs(store).account),
+          [currentAccountKey as symbol]: currentAccount,
         },
       },
     });
@@ -115,7 +121,7 @@ describe('JhiNavbar', () => {
   });
 
   it('should have user data set after authentication', () => {
-    store.setAuthentication({ login: 'test' });
+    authenticated.value = true;
 
     expect(jhiNavbar.authenticated).toBeTruthy();
   });
@@ -137,15 +143,15 @@ describe('JhiNavbar', () => {
   });
 <%_ } _%>
 
-  it('should tell whether the user has an authority', () => {
-    store.setAuthentication({ login: 'test', authorities: ['ROLE_ADMIN'] });
+  it('should check the authorities of the current account', () => {
+    hasAnyAuthority.mockReturnValue(false);
 
-    expect(jhiNavbar.hasAnyAuthority('ROLE_ADMIN')).toBe(true);
-    expect(jhiNavbar.hasAnyAuthority('ROLE_USER')).toBe(false);
+    expect(jhiNavbar.hasAnyAuthority('ROLE_ADMIN')).toBe(false);
+    expect(hasAnyAuthority).toHaveBeenCalledWith('ROLE_ADMIN');
   });
 
   it('logout should clear credentials and return to the home page when no provider URL is returned', async () => {
-    store.setAuthentication({ login: 'test' });
+    authenticated.value = true;
     await router.push('/forbidden');
 <%_ if (authenticationUsesCsrf) { _%>
     vi.mocked(loginService.logout).mockResolvedValue({} as AxiosResponse);
@@ -164,7 +170,7 @@ describe('JhiNavbar', () => {
 <%_ if (authenticationTypeOauth2) { _%>
 
   it('logout should not navigate with router for external url', async () => {
-    store.setAuthentication({ login: 'test' });
+    authenticated.value = true;
     const logoutUrl = 'http://keycloak:9080/logout';
     vi.mocked(loginService.logout).mockResolvedValue({ data: { logoutUrl } } as AxiosResponse);
     const routerPushSpy = vi.spyOn(router, 'push');
@@ -179,7 +185,7 @@ describe('JhiNavbar', () => {
   });
 
   it('logout should navigate with router to a relative url', async () => {
-    store.setAuthentication({ login: 'test' });
+    authenticated.value = true;
     vi.mocked(loginService.logout).mockResolvedValue({ data: { logoutUrl: '/forbidden' } } as AxiosResponse);
 
     await jhiNavbar.logout();
@@ -189,7 +195,7 @@ describe('JhiNavbar', () => {
 <%_ } _%>
 
   it('logout should stay at the home page', async () => {
-    store.setAuthentication({ login: 'test' });
+    authenticated.value = true;
 <%_ if (authenticationUsesCsrf) { _%>
     vi.mocked(loginService.logout).mockResolvedValue({} as AxiosResponse);
 <%_ } _%>
@@ -224,7 +230,7 @@ describe('JhiNavbar', () => {
 <%_ } _%>
 
   it('should render the menus of an authenticated user', async () => {
-    store.setAuthentication({ login: 'test', authorities: ['ROLE_ADMIN'] });
+    authenticated.value = true;
     store.setActiveProfiles(['api-docs']);
     await flushPromises();
 
@@ -249,7 +255,7 @@ describe('JhiNavbar', () => {
         stubs,
         provide: {
           [accountServiceKey as symbol]: accountService,
-          [currentAccountKey as symbol]: createCurrentAccount(storeToRefs(store).account),
+          [currentAccountKey as symbol]: currentAccount,
           [changeLanguageKey as symbol]: changeLanguage,
   <%_ if (authenticationUsesCsrf) { _%>
           [loginServiceKey as symbol]: loginService,
@@ -264,7 +270,7 @@ describe('JhiNavbar', () => {
 <%_ } _%>
 
   it('should log in from the menu of an anonymous user', async () => {
-    store.logout();
+    authenticated.value = false;
     await flushPromises();
 
     expect(wrapper.find('#entity-menu').exists()).toBe(false);
