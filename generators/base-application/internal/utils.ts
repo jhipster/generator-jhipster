@@ -26,7 +26,6 @@ import { formatDateForChangelog } from '../../base/support/timestamp.ts';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../../generator-constants.ts';
 import type BaseApplicationGenerator from '../generator.ts';
 import { getDatabaseTypeData } from '../generators/database-bootstrap/support/index.ts';
-import { loadRequiredConfigIntoEntity } from '../support/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Field as BaseApplicationField,
@@ -93,10 +92,6 @@ export function createUserEntity(
     i18nKeyPrefix: 'userManagement',
     ...customUserData,
   };
-
-  loadRequiredConfigIntoEntity(user, application);
-  // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
 
   const oauth2 = application.authenticationTypeOauth2;
   // If oauth2 or databaseType is cassandra, force type string, otherwise keep undefined for later processing.
@@ -358,10 +353,6 @@ export function createAuthorityEntity(
     entityRestLayer: application.backendTypeSpringBoot && !application.applicationTypeMicroservice,
     ...customAuthorityData,
   };
-
-  loadRequiredConfigIntoEntity(authorityEntity, application);
-  // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
 
   addOrExtendFields(authorityEntity.fields!, [
     {

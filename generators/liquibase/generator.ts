@@ -32,13 +32,12 @@ import {
 import { default as prepareSqlApplicationProperties } from '../base-application/generators/database-bootstrap/support/application-properties.ts';
 import { getJdbcUrl } from '../base-application/generators/database-bootstrap/support/database-url.ts';
 import {
-  loadRequiredConfigIntoEntity,
   prepareCommonFieldForTemplates,
   prepareEntity,
   prepareEntityPrimaryKeyForTemplates,
   prepareRelationship,
 } from '../base-application/support/index.ts';
-import type { Application as BaseApplicationApplication, DerivedField } from '../base-application/types.ts';
+import type { DerivedField } from '../base-application/types.ts';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
 import type { BaseChangelog, BaseChangelogData } from '../base-entity-changes/types.ts';
 import { mutateField as commonMutateField } from '../common/entity.ts';
@@ -250,7 +249,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             // Previous entities are not prepared using default jhipster priorities.
             // Prepare them.
             const entity = databaseChangelog.previousEntity!;
-            loadRequiredConfigIntoEntity(entity as unknown as ServerEntity, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
             // TODO fix types
             prepareEntity(entity, this);
             // TODO fix types

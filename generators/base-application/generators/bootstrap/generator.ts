@@ -427,7 +427,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
         entity.fields.unshift(...derivedFields!);
       },
       prepareEntityDerivedProperties({ application, entity }) {
-        preparePostEntityCommonDerivedProperties(entity, application as { databaseType?: string });
+        preparePostEntityCommonDerivedProperties(entity, application as { databaseType?: string; reactive?: boolean });
       },
     });
   }

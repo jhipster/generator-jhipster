@@ -55,8 +55,7 @@ export default function prepareField(
   field: ServerField & LiquibaseField & SpringBootField & SpringDataRelationalField,
   generator: CoreGenerator,
 ) {
-  const { reactive: entityReactive } = entityWithConfig;
-  const { prodDatabaseType, databaseType } = application;
+  const { prodDatabaseType, databaseType, reactive } = application;
   if (field.id && entityWithConfig.primaryKey) {
     field.autoGenerate ??= !entityWithConfig.primaryKey.composite && ([INTEGER, LONG, UUID] as string[]).includes(field.fieldType);
 
@@ -73,7 +72,7 @@ export default function prepareField(
       field.autoGenerateByRepository = !field.autoGenerateByService;
       field.requiresPersistableImplementation = false;
       field.readonly = true;
-    } else if (entityReactive) {
+    } else if (reactive) {
       field.liquibaseAutoIncrement = field.fieldType === LONG;
       field.jpaGeneratedValue = false;
       field.autoGenerateByService = !field.liquibaseAutoIncrement;

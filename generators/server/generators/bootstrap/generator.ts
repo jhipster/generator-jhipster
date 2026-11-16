@@ -22,8 +22,6 @@ import { mutateData } from '../../../../lib/utils/index.ts';
 import { upperFirst } from '../../../../lib/utils/string-utils.ts';
 import prepareSqlApplicationProperties from '../../../base-application/generators/database-bootstrap/support/application-properties.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
-import type { Application as BaseApplicationApplication } from '../../../base-application/types.d.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import javaDomainCommand from '../../../java/generators/domain/command.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
@@ -115,20 +113,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
     return this.postPreparing;
-  }
-
-  get postLoadingEntities() {
-    return this.asPostLoadingEntitiesTaskGroup({
-      loadingEntities({ entitiesToLoad }) {
-        for (const { entityBootstrap } of entitiesToLoad) {
-          loadRequiredConfigIntoEntity.call(this, entityBootstrap, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_LOADING_ENTITIES]() {
-    return this.postLoadingEntities;
   }
 
   get preparingEachEntity() {

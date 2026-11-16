@@ -30,10 +30,8 @@ import { upperFirst } from '../../../lib/utils/string-utils.ts';
 import { parseChangelog } from '../../base/support/timestamp.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import { getTypescriptKeyType } from '../../client/support/index.ts';
-import type { Application as ClientApplication } from '../../client/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
-import type { Application as SpringBootApplication } from '../../spring-boot/types.ts';
 import { mutateEntity } from '../entity.ts';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../generators/database-bootstrap/support/index.ts';
 import type {
@@ -392,34 +390,21 @@ function fieldToId(field: BaseApplicationField): any {
 }
 
 /**
- * Copy required application config into entity.
- * Some entity features are related to the backend instead of the current app.
- * This allows generating entity files based on the backend features.
+ * @deprecated the entity no longer gets a copy of the configuration of the application: the generators read the
+ * application, the common bootstrap prepares the microservice and the search engine of the entities.
  */
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: CoreGenerator | void,
   entity: E,
-  config: BaseApplicationApplication,
+  _config: BaseApplicationApplication,
 ): E {
-  mutateData(entity as Partial<ServerEntity>, {
-    __override__: false,
-    // applicationType: config.applicationType,
-    // baseName: config.baseName,
-    // authenticationType: config.authenticationType,
-    reactive: (config as SpringBootApplication).reactive,
-    microfrontend: (config as ClientApplication).microfrontend,
-    // Workaround different paths
-    clientFramework: (config as ClientApplication).clientFramework,
-
-    // jhiPrefix: config.jhiPrefix,
-    // entitySuffix: config.entitySuffix,
-    // dtoSuffix: config.dtoSuffix,
-    // packageName: config.packageName,
-  });
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties(entity: BaseApplicationEntity, application?: { databaseType?: string }) {
+export function preparePostEntityCommonDerivedProperties(
+  entity: BaseApplicationEntity,
+  application?: { databaseType?: string; reactive?: boolean },
+) {
   const { fields } = entity;
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
@@ -449,7 +434,10 @@ export function preparePostEntityCommonDerivedProperties(entity: BaseApplication
   preparePostEntityCommonDerivedPropertiesNotTyped(entity as EntityAll, application);
 }
 
-function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll, { databaseType }: { databaseType?: string } = {}) {
+function preparePostEntityCommonDerivedPropertiesNotTyped(
+  entity: EntityAll,
+  { databaseType, reactive }: { databaseType?: string; reactive?: boolean } = {},
+) {
   const { relationships, fields } = entity;
   const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
@@ -519,7 +507,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll, { d
   entity.implementsEagerLoadApis = // Cassandra doesn't provide *WithEagerRelationships apis
     !([CASSANDRA, NEO4J] as string[]).includes(databaseType!) &&
     // Only sql, mongodb and couchbase provide *WithEagerRelationships apis for imperative implementation
-    (entity.reactive || ([SQL, MONGODB, COUCHBASE] as string[]).includes(databaseType!)) &&
+    (reactive || ([SQL, MONGODB, COUCHBASE] as string[]).includes(databaseType!)) &&
     entity.relationshipsContainEagerLoad;
   entity.eagerRelations = entity.relationships.filter(rel => rel.relationshipEagerLoad);
   // Deprecated: kept for blueprints, not used by the generator anymore.
