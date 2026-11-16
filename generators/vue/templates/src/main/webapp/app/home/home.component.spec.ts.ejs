@@ -24,7 +24,7 @@ import { RouterLinkStub, type VueWrapper, shallowMount } from '@vue/test-utils';
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
-import { authenticatedKey, currentUsernameKey } from '@/config/injection-keys';
+import { currentAccountKey } from '@/config/injection-keys';
 
 import Home from './home.vue';
 
@@ -51,8 +51,7 @@ describe('Home', () => {
 <%_ if (authenticationTypeOauth2) { _%>
           [loginServiceKey as symbol]: loginService,
 <%_ } _%>
-          [authenticatedKey as symbol]: authenticated,
-          [currentUsernameKey as symbol]: currentUsername,
+          [currentAccountKey as symbol]: { authenticated, username: currentUsername },
         },
       },
     });

@@ -17,20 +17,16 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ref } from 'vue';
 
-import { createTestingPinia } from '@pinia/testing';
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import { useStore } from '@/stores';
+import { currentAccountKey } from '@/config/injection-keys';
 
 import Sessions from './sessions.vue';
 
 type SessionsComponentType = InstanceType<typeof Sessions>;
-
-const pinia = createTestingPinia({ stubActions: false });
-
-const store = useStore();
 
 const axiosStub = {
   get: vi.spyOn(axios, 'get'),
@@ -44,13 +40,11 @@ describe('Sessions Component', () => {
     axiosStub.get.mockResolvedValue({ data: [] });
     axiosStub.delete.mockReset();
 
-    store.setAuthentication({
-      login: 'username',
-    });
-
     const wrapper = shallowMount(Sessions, {
       global: {
-        plugins: [pinia],
+        provide: {
+          [currentAccountKey as symbol]: { authenticated: ref(true), username: ref('username') },
+        },
       },
     });
     sessions = wrapper.vm;
