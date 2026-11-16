@@ -44,13 +44,13 @@ export function preparePostEntityServerDerivedProperties(
   application?: { databaseType?: string; reactive?: boolean },
 ) {
   const { databaseType, reactive } = application ?? {};
-  const eagerEntity = entity as typeof entity & { implementsEagerLoadApis?: boolean; relationshipsContainEagerLoad?: boolean };
-  eagerEntity.implementsEagerLoadApis = // Cassandra doesn't provide *WithEagerRelationships apis
+  const { relationshipsContainEagerLoad } = entity as typeof entity & { relationshipsContainEagerLoad?: boolean };
+  entity.implementsEagerLoadApis = // Cassandra doesn't provide *WithEagerRelationships apis
     databaseType !== 'cassandra' &&
     databaseType !== 'neo4j' &&
     // Only sql, mongodb and couchbase provide *WithEagerRelationships apis for imperative implementation
     (reactive || databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') &&
-    eagerEntity.relationshipsContainEagerLoad;
+    Boolean(relationshipsContainEagerLoad);
   mutateData(entity, {
     uniqueEnums: ({ fields }) => [...new Set(fields.filter(field => field.fieldIsEnum))],
   });

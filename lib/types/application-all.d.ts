@@ -63,7 +63,6 @@ export interface EntityAll<F extends FieldAll = FieldAll, R extends Relationship
     SpringBootEntity<F, R> {
   updatableEntity?: boolean;
   eagerLoad?: boolean;
-  implementsEagerLoadApis?: boolean;
   requiresPersistableImplementation?: boolean;
 
   fieldsContainNoOwnerOneToOne?: boolean;

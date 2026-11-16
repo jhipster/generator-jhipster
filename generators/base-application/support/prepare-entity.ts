@@ -496,8 +496,6 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
-  // The backend tells whether its repositories load the eager relationships, the server bootstrap after it.
-  entity.implementsEagerLoadApis = false;
   entity.eagerRelations = entity.relationships.filter(rel => rel.relationshipEagerLoad);
   // Deprecated: kept for blueprints, not used by the generator anymore.
   entity.regularEagerRelations = entity.eagerRelations.filter(rel => rel.id !== true);

@@ -73,6 +73,8 @@ type CommonAddedEntityProperties = {
   entityApi: string;
   /** The REST API gives the entity through a DTO, whichever the backend maps it with. */
   dtoAny: boolean;
+  /** The backend loads the eager relationships of the entity through its own APIs, which the clients ask for. */
+  implementsEagerLoadApis: boolean;
 };
 
 type CommonCommandEntity = ExportEntityDerivedPropertiesFromCommand<typeof command>;
@@ -82,6 +84,8 @@ export const mutateEntity = {
   entityApi: ({ microserviceName }) => (microserviceName ? `services/${microserviceName.toLowerCase()}/` : ''),
   entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
   dtoAny: ({ dto }) => Boolean(dto) && dto !== 'no',
+  // A backend sets it first.
+  implementsEagerLoadApis: finalizeDefault(() => false),
   ...getEntityDerivedPropertyMutations(command.entity),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, CommonAddedEntityProperties>;
 
