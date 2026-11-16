@@ -29,8 +29,10 @@ import { type GeneratorDependency, resolveCommandDependencies, resolveGeneratorD
 const metaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
   const generators = lookupGeneratorCommands();
   return (namespace: string): StoreGeneratorMeta | undefined => {
-    const command = blueprints[namespace] ?? generators.find(generator => `jhipster:${generator.namespace}` === namespace)?.command;
-    return command ?
+    // A generator without a command module is registered too.
+    const generator = generators.find(generator => `jhipster:${generator.namespace}` === namespace);
+    const command = blueprints[namespace] ?? generator?.command;
+    return command || generator ?
         ({
           namespace,
           requireSibling: (name: string) => (name === 'command' ? { default: command } : undefined),
@@ -82,6 +84,29 @@ describe('resolver - generator dependencies', () => {
 
       const overriding = resolve(['git'], { 'jhipster-foo:git': { ...blueprint, override: true } }, ['jhipster-foo']);
       expect(namespaces(overriding)).toEqual(['jhipster-foo:git']);
+    });
+
+    it('should resolve an import of the same package against the package of the importing generator', () => {
+      const blueprints: Record<string, JHipsterCommandDefinition> = {
+        '@scope/jhipster-foo:server': { configs: {}, import: [':node-server'], override: true },
+        '@scope/jhipster-foo:node-server': { configs: {}, import: [':node-server:bootstrap', 'docker'] },
+        '@scope/jhipster-foo:node-server:bootstrap': { configs: {} },
+      };
+      expect(namespaces(resolve(['server'], blueprints, ['@scope/jhipster-foo']))).toEqual([
+        '@scope/jhipster-foo:server',
+        '@scope/jhipster-foo:node-server',
+        '@scope/jhipster-foo:node-server:bootstrap',
+        'docker',
+      ]);
+    });
+
+    it('should fail for an import that is not registered, of a blueprint too', () => {
+      expect(() => resolve(['git'], { 'jhipster-foo:git': { configs: {}, import: [':missing'] } }, ['jhipster-foo'])).toThrow(
+        'The generator jhipster-foo:missing imported by jhipster-foo:git is not registered',
+      );
+      expect(() => resolve(['jhipster-foo:foo'], { 'jhipster-foo:foo': { configs: {}, import: ['missing'] } as any })).toThrow(
+        'The generator missing imported by jhipster-foo:foo is not registered',
+      );
     });
 
     it('should add blueprint generators for a top-level generator requested by its namespace', () => {
