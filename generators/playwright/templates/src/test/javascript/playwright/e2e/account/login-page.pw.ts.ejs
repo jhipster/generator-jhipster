@@ -48,7 +48,6 @@ test.describe('login page', () => {
   });
 
   test('requires username', async ({ page }) => {
-    await expect(page.locator(passwordLoginSelector)).toBeVisible();
     await page.locator(passwordLoginSelector).fill('a-password');
     await page.locator(submitLoginSelector).click();
     await expect(page.locator(usernameLoginSelector)).toContainClass(classInvalid);
@@ -58,7 +57,6 @@ test.describe('login page', () => {
   });
 
   test('requires password', async ({ page }) => {
-    await expect(page.locator(usernameLoginSelector)).toBeVisible();
     await page.locator(usernameLoginSelector).fill('a-login');
     await page.locator(submitLoginSelector).click();
     await expect(page.locator(passwordLoginSelector)).toContainClass(classInvalid);
@@ -70,9 +68,7 @@ test.describe('login page', () => {
   test('errors when password is incorrect', async ({ page, jhi }) => {
     const { username } = jhi.credentials();
     const response = authenticate(page);
-    await expect(page.locator(usernameLoginSelector)).toBeVisible();
     await page.locator(usernameLoginSelector).fill(username);
-    await expect(page.locator(passwordLoginSelector)).toBeVisible();
     await page.locator(passwordLoginSelector).fill('bad-password');
     await page.locator(submitLoginSelector).click();
     expect((await response).status()).toBe(401);
@@ -82,9 +78,7 @@ test.describe('login page', () => {
   test('go to home page when successfully logs in', async ({ page, jhi }) => {
     const { username, password } = jhi.credentials();
     const response = authenticate(page);
-    await expect(page.locator(usernameLoginSelector)).toBeVisible();
     await page.locator(usernameLoginSelector).fill(username);
-    await expect(page.locator(passwordLoginSelector)).toBeVisible();
     await page.locator(passwordLoginSelector).fill(password);
     await page.locator(submitLoginSelector).click();
     expect((await response).status()).toBe(200);
