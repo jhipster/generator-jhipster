@@ -75,6 +75,11 @@ type CommonAddedEntityProperties = {
   dtoAny: boolean;
   /** The backend loads the eager relationships of the entity through its own APIs, which the clients ask for. */
   implementsEagerLoadApis: boolean;
+  /** The search engine of the entity, from its configuration or its JDL, which the backend resolves first. */
+  searchEngineAny: boolean;
+  searchEngineNo: boolean;
+  searchEngineElasticsearch: boolean;
+  searchEngineCouchbase: boolean;
 };
 
 type CommonCommandEntity = ExportEntityDerivedPropertiesFromCommand<typeof command>;
@@ -86,6 +91,10 @@ export const mutateEntity = {
   dtoAny: ({ dto }) => Boolean(dto) && dto !== 'no',
   // A backend sets it first.
   implementsEagerLoadApis: finalizeDefault(() => false),
+  searchEngineAny: ({ searchEngine }) => Boolean(searchEngine) && searchEngine !== 'no',
+  searchEngineNo: ({ searchEngineAny }) => !searchEngineAny,
+  searchEngineElasticsearch: ({ searchEngine }) => searchEngine === 'elasticsearch',
+  searchEngineCouchbase: ({ searchEngine }) => searchEngine === 'couchbase',
   ...getEntityDerivedPropertyMutations(command.entity),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, CommonAddedEntityProperties>;
 

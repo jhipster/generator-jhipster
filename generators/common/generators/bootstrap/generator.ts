@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { type MutateDataParam, mutateData } from '../../../../lib/utils/object.ts';
+import { mutateData } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { mutateApplication } from '../../application.ts';
 import { mutateEntity as commonMutateEntity, mutateField as commonMutateField } from '../../entity.ts';
@@ -83,17 +83,6 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
             microserviceName: ({ builtIn }, { undefinedMarker }) =>
               !builtIn && application.applicationTypeMicroservice ? application.baseName : undefinedMarker,
           });
-          const entity = entityBootstrap as { microserviceName?: string; searchEngine?: string | boolean };
-          if (entity.searchEngine === true && (!entity.microserviceName || entity.microserviceName === application.baseName)) {
-            // The search engine of the application, for an entity of the application that enables the search.
-            const { searchEngine } = application as { searchEngine?: string };
-            if (searchEngine && searchEngine !== 'no') {
-              entity.searchEngine = searchEngine;
-            } else {
-              entity.searchEngine = 'no';
-              this.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
-            }
-          }
         }
       },
     });
@@ -105,16 +94,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ application, entityDefaults }) {
-        // The search engine of the entity file, else the one of the application.
-        const searchEngineOf = ({ searchEngine }: { searchEngine?: string | boolean }): string | boolean =>
-          searchEngine ?? (application as { searchEngine?: string }).searchEngine ?? 'no';
-        entityDefaults(commonMutateEntity, {
-          searchEngineAny: (entity: CommonEntity) => searchEngineOf(entity) !== 'no',
-          searchEngineNo: (entity: CommonEntity) => searchEngineOf(entity) === 'no',
-          searchEngineElasticsearch: (entity: CommonEntity) => searchEngineOf(entity) === 'elasticsearch',
-          searchEngineCouchbase: (entity: CommonEntity) => searchEngineOf(entity) === 'couchbase',
-        } as MutateDataParam<CommonEntity>);
+      prepareEntity({ entityDefaults }) {
+        entityDefaults(commonMutateEntity);
       },
     });
   }

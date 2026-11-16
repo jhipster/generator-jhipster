@@ -118,6 +118,23 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get postLoadingEntities() {
     return this.asPostLoadingEntitiesTaskGroup({
+      prepareSearchEngine({ application, entitiesToLoad }) {
+        const { searchEngine: applicationSearchEngine = 'no' } = application as { searchEngine?: string };
+        for (const { entityBootstrap } of entitiesToLoad) {
+          const entity = entityBootstrap as { microserviceName?: string; searchEngine?: string | boolean };
+          // The search engine of the application, for an entity without one.
+          entity.searchEngine ??= applicationSearchEngine;
+          if (entity.searchEngine === true && (!entity.microserviceName || entity.microserviceName === application.baseName)) {
+            // The search engine of the application, for an entity of the application that enables the search.
+            if (applicationSearchEngine !== 'no') {
+              entity.searchEngine = applicationSearchEngine;
+            } else {
+              entity.searchEngine = 'no';
+              this.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
+            }
+          }
+        }
+      },
       addOtherRelationshipsOfTheDatabase({ application, entitiesToLoad }) {
         const entities = entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap);
         const { databaseType } = application;
