@@ -18,9 +18,7 @@
  */
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
-import { finalizeDefaultOrUndefined } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../index.ts';
-import { isContentTypeField } from '../../internal/content-type-fields.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.d.ts';
 
 import {
@@ -97,12 +95,6 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
         if (!field.transient) {
           prepareFieldForDatabase({ field });
         }
-      },
-      prepareContentTypeFieldStorage({ entity, field, fieldDefaults }) {
-        // Delayed: the content type of a blob is stored in no column when its blob has none, which the backend may decide after it.
-        if (!isContentTypeField(field)) return;
-        const blob = entity.fields.find(other => other.fieldName === field.contentTypeOf);
-        fieldDefaults({ transient: finalizeDefaultOrUndefined(() => (blob?.transient ? true : undefined)) });
       },
     });
   }
