@@ -71,6 +71,8 @@ export type { BaseApplicationRelationship as Relationship };
 type CommonAddedEntityProperties = {
   entityApiUrl: string;
   entityApi: string;
+  /** The REST API gives the entity through a DTO, whichever the backend maps it with. */
+  dtoAny: boolean;
 };
 
 type CommonCommandEntity = ExportEntityDerivedPropertiesFromCommand<typeof command>;
@@ -79,6 +81,7 @@ export const mutateEntity = {
   __override__: false,
   entityApi: ({ microserviceName }) => (microserviceName ? `services/${microserviceName.toLowerCase()}/` : ''),
   entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
+  dtoAny: ({ dto }) => Boolean(dto) && dto !== 'no',
   ...getEntityDerivedPropertyMutations(command.entity),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, CommonAddedEntityProperties>;
 

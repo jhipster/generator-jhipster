@@ -331,7 +331,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             !relationshipSerializePrimaryKeyOnly &&
             !entity.builtInUserManagement &&
             !otherEntity.embedded &&
-            ((entity as any).dtoMapstruct || otherEntity.builtInUser),
+            (entity.dtoAny || otherEntity.builtInUser),
         });
       },
     });
