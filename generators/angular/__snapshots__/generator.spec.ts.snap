@@ -1720,6 +1720,7 @@ export class UserManagementService extends UserManagementsService {
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.spec.ts": {
     "contents": "import { beforeEach, describe, expect, it } from "vitest";
+import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 
 import {
@@ -1737,89 +1738,96 @@ describe("UserManagement Form Service", () => {
   });
 
   describe("Service methods", () => {
-    describe("createUserManagementFormGroup", () => {
-      it("should create a new form with FormControl", () => {
-        const formGroup = service.createUserManagementFormGroup();
+    describe("createUserManagementFormModel", () => {
+      it("should create the model of a new entity", () => {
+        const model = service.createUserManagementFormModel();
 
-        expect(formGroup.controls).toEqual(
-          expect.objectContaining({
-            id: expect.any(Object),
-            login: expect.any(Object),
-            firstName: expect.any(Object),
-            lastName: expect.any(Object),
-            email: expect.any(Object),
-            activated: expect.any(Object),
-            imageUrl: expect.any(Object),
-            createdBy: expect.any(Object),
-            createdDate: expect.any(Object),
-            lastModifiedBy: expect.any(Object),
-            lastModifiedDate: expect.any(Object),
-            authorities: expect.any(Object),
-          }),
+        expect(Object.keys(model)).toEqual(
+          expect.arrayContaining([
+            "id",
+            "login",
+            "firstName",
+            "lastName",
+            "email",
+            "activated",
+            "imageUrl",
+            "createdBy",
+            "createdDate",
+            "lastModifiedBy",
+            "lastModifiedDate",
+            "authorities",
+          ]),
         );
       });
 
-      it("passing IUserManagement should create a new form with FormGroup", () => {
-        const formGroup = service.createUserManagementFormGroup(
-          sampleWithRequiredData,
-        );
-
-        expect(formGroup.controls).toEqual(
-          expect.objectContaining({
-            id: expect.any(Object),
-            login: expect.any(Object),
-            firstName: expect.any(Object),
-            lastName: expect.any(Object),
-            email: expect.any(Object),
-            activated: expect.any(Object),
-            imageUrl: expect.any(Object),
-            createdBy: expect.any(Object),
-            createdDate: expect.any(Object),
-            lastModifiedBy: expect.any(Object),
-            lastModifiedDate: expect.any(Object),
-            authorities: expect.any(Object),
-          }),
-        );
-      });
-
-      it("passing IUserManagement without dates nor relationships should create a new form with empty values", () => {
-        const formGroup = service.createUserManagementFormGroup({
+      it("passing IUserManagement without dates nor relationships should create a model with empty values", () => {
+        const model = service.createUserManagementFormModel({
           ...sampleWithRequiredData,
           createdDate: null,
           lastModifiedDate: null,
           authorities: null,
         });
 
-        expect(formGroup.controls.createdDate.value).toBeNull();
-        expect(formGroup.controls.lastModifiedDate.value).toBeNull();
-        expect(formGroup.controls.authorities.value).toEqual([]);
+        expect(model.createdDate).toBe("");
+        expect(model.lastModifiedDate).toBe("");
+        expect(model.authorities).toEqual([]);
+      });
+    });
+
+    describe("createUserManagementForm", () => {
+      it("should create the form of the model", () => {
+        const model = signal(
+          service.createUserManagementFormModel(sampleWithRequiredData),
+        );
+
+        const form = TestBed.runInInjectionContext(() =>
+          service.createUserManagementForm(model),
+        );
+
+        expect(form().value()).toEqual(model());
+      });
+
+      it("should accept the values of an entity with its required data, false booleans included", () => {
+        const entity = {
+          ...sampleWithRequiredData,
+          activated: false,
+        };
+        const form = TestBed.runInInjectionContext(() =>
+          service.createUserManagementForm(
+            signal(service.createUserManagementFormModel(entity)),
+          ),
+        );
+
+        expect(
+          form()
+            .errorSummary()
+            .map((error) => error.kind),
+        ).toEqual([]);
+        expect(form().valid()).toBe(true);
       });
     });
 
     describe("getUserManagement", () => {
       it("should return NewUserManagement for default UserManagement initial value", () => {
-        const formGroup =
-          service.createUserManagementFormGroup(sampleWithNewData);
-
-        const userManagement = service.getUserManagement(formGroup);
+        const userManagement = service.getUserManagement(
+          service.createUserManagementFormModel(sampleWithNewData),
+        );
 
         expect(userManagement).toMatchObject(sampleWithNewData);
       });
 
       it("should return NewUserManagement for empty UserManagement initial value", () => {
-        const formGroup = service.createUserManagementFormGroup();
-
-        const userManagement = service.getUserManagement(formGroup);
+        const userManagement = service.getUserManagement(
+          service.createUserManagementFormModel(),
+        );
 
         expect(userManagement).toMatchObject({});
       });
 
       it("should return IUserManagement", () => {
-        const formGroup = service.createUserManagementFormGroup(
-          sampleWithRequiredData,
+        const userManagement = service.getUserManagement(
+          service.createUserManagementFormModel(sampleWithRequiredData),
         );
-
-        const userManagement = service.getUserManagement(formGroup);
 
         expect(userManagement).toMatchObject(sampleWithRequiredData);
       });
@@ -1830,8 +1838,18 @@ describe("UserManagement Form Service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.ts": {
-    "contents": "import { Service } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+    "contents": "import { Service, WritableSignal } from "@angular/core";
+import {
+  FieldTree,
+  FormOptions,
+  email,
+  form,
+  maxLength,
+  minLength,
+  pattern,
+  readonly,
+  required,
+} from "@angular/forms/signals";
 
 import dayjs from "dayjs/esm";
 
@@ -1846,122 +1864,123 @@ type PartialWithRequiredKeyOf<T extends { login: unknown }> = Partial<
 > & { login: T["login"] };
 
 /**
- * Type for createFormGroup and resetForm argument.
- * It accepts IUserManagement for edit and NewUserManagementFormGroupInput for create.
+ * Type for the createFormModel argument.
+ * It accepts IUserManagement for edit and NewUserManagementFormInput for create.
  */
-type UserManagementFormGroupInput =
+type UserManagementFormInput =
   IUserManagement | PartialWithRequiredKeyOf<NewUserManagement>;
-
-/**
- * Type that converts some properties for forms.
- */
-type FormValueOf<T extends IUserManagement | NewUserManagement> = Omit<
-  T,
-  "createdDate" | "lastModifiedDate"
-> & {
-  createdDate?: string | null;
-  lastModifiedDate?: string | null;
-};
-
-type UserManagementFormRawValue = FormValueOf<IUserManagement>;
-
-type NewUserManagementFormRawValue = FormValueOf<NewUserManagement>;
 
 type UserManagementFormDefaults = Pick<
   NewUserManagement,
   "login" | "activated" | "createdDate" | "lastModifiedDate" | "authorities"
 >;
 
-type UserManagementFormGroupContent = {
-  id: FormControl<UserManagementFormRawValue["id"]>;
-  login: FormControl<
-    UserManagementFormRawValue["login"] | NewUserManagement["login"]
-  >;
-  firstName: FormControl<UserManagementFormRawValue["firstName"]>;
-  lastName: FormControl<UserManagementFormRawValue["lastName"]>;
-  email: FormControl<UserManagementFormRawValue["email"]>;
-  activated: FormControl<UserManagementFormRawValue["activated"]>;
-  imageUrl: FormControl<UserManagementFormRawValue["imageUrl"]>;
-  createdBy: FormControl<UserManagementFormRawValue["createdBy"]>;
-  createdDate: FormControl<UserManagementFormRawValue["createdDate"]>;
-  lastModifiedBy: FormControl<UserManagementFormRawValue["lastModifiedBy"]>;
-  lastModifiedDate: FormControl<UserManagementFormRawValue["lastModifiedDate"]>;
-  authorities: FormControl<UserManagementFormRawValue["authorities"]>;
+/**
+ * The value of the form: the text fields are strings, empty when the entity has no value, and the dates and times
+ * are the text of their inputs.
+ */
+export type UserManagementFormModel = {
+  id: NonNullable<IUserManagement["id"]> | null;
+  login: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  activated: boolean;
+  imageUrl: string;
+  createdBy: string;
+  createdDate: string;
+  lastModifiedBy: string;
+  lastModifiedDate: string;
+  authorities: NonNullable<IUserManagement["authorities"]>;
 };
 
-export type UserManagementFormGroup = FormGroup<UserManagementFormGroupContent>;
+export type UserManagementForm = FieldTree<UserManagementFormModel>;
 
 @Service()
 export class UserManagementFormService {
-  createUserManagementFormGroup(
-    userManagement?: UserManagementFormGroupInput,
-  ): UserManagementFormGroup {
-    const userManagementRawValue =
-      this.convertUserManagementToUserManagementRawValue({
-        ...this.getFormDefaults(),
-        ...(userManagement ?? { login: null }),
-      });
-
-    return new FormGroup<UserManagementFormGroupContent>({
-      id: new FormControl(userManagementRawValue.id),
-      login: new FormControl(userManagementRawValue.login, {
-        nonNullable: true,
-        validators: [
-          Validators.required,
-          Validators.maxLength(50),
-          Validators.pattern(
-            "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
-          ), // NOSONAR
-        ],
-      }),
-      firstName: new FormControl(userManagementRawValue.firstName, {
-        validators: [Validators.maxLength(50)],
-      }),
-      lastName: new FormControl(userManagementRawValue.lastName, {
-        validators: [Validators.maxLength(50)],
-      }),
-      email: new FormControl(userManagementRawValue.email, {
-        validators: [
-          Validators.required,
-          Validators.email,
-          Validators.minLength(5),
-          Validators.maxLength(191),
-        ],
-      }),
-      activated: new FormControl(userManagementRawValue.activated),
-      imageUrl: new FormControl(userManagementRawValue.imageUrl, {
-        validators: [Validators.maxLength(256)],
-      }),
-      createdBy: new FormControl(userManagementRawValue.createdBy),
-      createdDate: new FormControl(userManagementRawValue.createdDate),
-      lastModifiedBy: new FormControl(userManagementRawValue.lastModifiedBy),
-      lastModifiedDate: new FormControl(
-        userManagementRawValue.lastModifiedDate,
-      ),
-      authorities: new FormControl(userManagementRawValue.authorities ?? []),
-    });
+  createUserManagementFormModel(
+    userManagement?: UserManagementFormInput,
+  ): UserManagementFormModel {
+    const value: Partial<IUserManagement> | Partial<NewUserManagement> = {
+      ...this.getFormDefaults(),
+      ...userManagement,
+    };
+    return {
+      id: value.id ?? null,
+      login: value.login ?? "",
+      firstName: value.firstName ?? "",
+      lastName: value.lastName ?? "",
+      email: value.email ?? "",
+      activated: value.activated ?? false,
+      imageUrl: value.imageUrl ?? "",
+      createdBy: value.createdBy ?? "",
+      createdDate: value.createdDate
+        ? value.createdDate.format(DATE_TIME_FORMAT)
+        : "",
+      lastModifiedBy: value.lastModifiedBy ?? "",
+      lastModifiedDate: value.lastModifiedDate
+        ? value.lastModifiedDate.format(DATE_TIME_FORMAT)
+        : "",
+      authorities: value.authorities ?? [],
+    };
   }
 
-  getUserManagement(
-    form: UserManagementFormGroup,
-  ): IUserManagement | NewUserManagement {
-    return this.convertUserManagementRawValueToUserManagement(
-      form.getRawValue(),
+  /**
+   * The form of the model, its validation included, created in an injection context.
+   */
+  createUserManagementForm(
+    model: WritableSignal<UserManagementFormModel>,
+    options: FormOptions<UserManagementFormModel> = {},
+  ): UserManagementForm {
+    return form(
+      model,
+      (path) => {
+        readonly(path.id);
+        required(path.login);
+        maxLength(path.login, 50);
+        pattern(
+          path.login,
+          new RegExp(
+            "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+          ),
+        ); // NOSONAR
+        maxLength(path.firstName, 50);
+        maxLength(path.lastName, 50);
+        required(path.email);
+        email(path.email);
+        minLength(path.email, 5);
+        maxLength(path.email, 191);
+        maxLength(path.imageUrl, 256);
+        readonly(path.createdBy);
+        readonly(path.createdDate);
+        readonly(path.lastModifiedBy);
+        readonly(path.lastModifiedDate);
+      },
+      options,
     );
   }
 
-  resetForm(
-    form: UserManagementFormGroup,
-    userManagement: UserManagementFormGroupInput,
-  ): void {
-    const userManagementRawValue =
-      this.convertUserManagementToUserManagementRawValue({
-        ...this.getFormDefaults(),
-        ...userManagement,
-      });
-    form.reset({
-      ...userManagementRawValue,
-    });
+  getUserManagement(
+    model: UserManagementFormModel,
+  ): IUserManagement | NewUserManagement {
+    return {
+      id: model.id,
+      login: model.login || null,
+      firstName: model.firstName || null,
+      lastName: model.lastName || null,
+      email: model.email || null,
+      activated: model.activated,
+      imageUrl: model.imageUrl || null,
+      createdBy: model.createdBy || null,
+      createdDate: model.createdDate
+        ? dayjs(model.createdDate, DATE_TIME_FORMAT)
+        : null,
+      lastModifiedBy: model.lastModifiedBy || null,
+      lastModifiedDate: model.lastModifiedDate
+        ? dayjs(model.lastModifiedDate, DATE_TIME_FORMAT)
+        : null,
+      authorities: model.authorities,
+    };
   }
 
   private getFormDefaults(): UserManagementFormDefaults {
@@ -1975,39 +1994,6 @@ export class UserManagementFormService {
       authorities: [],
     };
   }
-
-  private convertUserManagementRawValueToUserManagement(
-    rawUserManagement:
-      UserManagementFormRawValue | NewUserManagementFormRawValue,
-  ): IUserManagement | NewUserManagement {
-    return {
-      ...rawUserManagement,
-      createdDate: dayjs(rawUserManagement.createdDate, DATE_TIME_FORMAT),
-      lastModifiedDate: dayjs(
-        rawUserManagement.lastModifiedDate,
-        DATE_TIME_FORMAT,
-      ),
-    };
-  }
-
-  private convertUserManagementToUserManagementRawValue(
-    userManagement:
-      | IUserManagement
-      | (Partial<NewUserManagement> & UserManagementFormDefaults),
-  ):
-    | UserManagementFormRawValue
-    | PartialWithRequiredKeyOf<NewUserManagementFormRawValue> {
-    return {
-      ...userManagement,
-      createdDate: userManagement.createdDate
-        ? userManagement.createdDate.format(DATE_TIME_FORMAT)
-        : undefined,
-      lastModifiedDate: userManagement.lastModifiedDate
-        ? userManagement.lastModifiedDate.format(DATE_TIME_FORMAT)
-        : undefined,
-      authorities: userManagement.authorities ?? [],
-    };
-  }
 }
 ",
     "stateCleared": "modified",
@@ -2015,7 +2001,7 @@ export class UserManagementFormService {
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.html": {
     "contents": "<div class="d-flex justify-content-center">
   <div class="col-8">
-    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+    <form name="editForm" novalidate [formRoot]="editForm">
       <h2
         id="jhi-user-management-heading"
         data-cy="UserManagementCreateUpdateHeading"
@@ -2026,26 +2012,25 @@ export class UserManagementFormService {
       <div>
         <jhi-alert-error />
 
-        @let loginRef = editForm.get('login')!;
+        @let loginRef = editForm.login();
         <div class="mb-3">
           <label class="form-label" for="field_login">Login</label>
           <input
             type="text"
             class="form-control"
-            name="login"
             id="field_login"
             data-cy="login"
-            formControlName="login"
+            [formField]="editForm.login"
           />
-          @if (loginRef.invalid && (loginRef.dirty || loginRef.touched)) {
+          @if (loginRef.invalid() && (loginRef.dirty() || loginRef.touched())) {
           <div>
-            @if (loginRef.errors?.required) {
+            @if (loginRef.getError('required')) {
             <small class="form-text text-danger">This field is required.</small>
-            } @if (loginRef.errors?.maxlength) {
+            } @if (loginRef.getError('maxLength')) {
             <small class="form-text text-danger"
               >This field cannot be longer than 50 characters.</small
             >
-            } @if (loginRef.errors?.pattern) {
+            } @if (loginRef.getError('pattern')) {
             <small class="form-text text-danger"
               >This field can only contain letters, digits and e-mail
               addresses.</small
@@ -2055,21 +2040,20 @@ export class UserManagementFormService {
           }
         </div>
 
-        @let firstNameRef = editForm.get('firstName')!;
+        @let firstNameRef = editForm.firstName();
         <div class="mb-3">
           <label class="form-label" for="field_firstName">First name</label>
           <input
             type="text"
             class="form-control"
-            name="firstName"
             id="field_firstName"
             data-cy="firstName"
-            formControlName="firstName"
+            [formField]="editForm.firstName"
           />
-          @if (firstNameRef.invalid && (firstNameRef.dirty ||
-          firstNameRef.touched)) {
+          @if (firstNameRef.invalid() && (firstNameRef.dirty() ||
+          firstNameRef.touched())) {
           <div>
-            @if (firstNameRef.errors?.maxlength) {
+            @if (firstNameRef.getError('maxLength')) {
             <small class="form-text text-danger"
               >This field cannot be longer than 50 characters.</small
             >
@@ -2078,21 +2062,20 @@ export class UserManagementFormService {
           }
         </div>
 
-        @let lastNameRef = editForm.get('lastName')!;
+        @let lastNameRef = editForm.lastName();
         <div class="mb-3">
           <label class="form-label" for="field_lastName">Last name</label>
           <input
             type="text"
             class="form-control"
-            name="lastName"
             id="field_lastName"
             data-cy="lastName"
-            formControlName="lastName"
+            [formField]="editForm.lastName"
           />
-          @if (lastNameRef.invalid && (lastNameRef.dirty ||
-          lastNameRef.touched)) {
+          @if (lastNameRef.invalid() && (lastNameRef.dirty() ||
+          lastNameRef.touched())) {
           <div>
-            @if (lastNameRef.errors?.maxlength) {
+            @if (lastNameRef.getError('maxLength')) {
             <small class="form-text text-danger"
               >This field cannot be longer than 50 characters.</small
             >
@@ -2101,46 +2084,44 @@ export class UserManagementFormService {
           }
         </div>
 
-        @let emailRef = editForm.get('email')!;
+        @let emailRef = editForm.email();
         <div class="mb-3">
           <label class="form-label" for="field_email">Email</label>
           <input
             type="text"
             class="form-control"
-            name="email"
             id="field_email"
             data-cy="email"
-            formControlName="email"
+            [formField]="editForm.email"
           />
-          @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
+          @if (emailRef.invalid() && (emailRef.dirty() || emailRef.touched())) {
           <div>
-            @if (emailRef.errors?.required) {
+            @if (emailRef.getError('required')) {
             <small class="form-text text-danger">This field is required.</small>
-            } @if (emailRef.errors?.minlength) {
+            } @if (emailRef.getError('minLength')) {
             <small class="form-text text-danger"
               >This field is required to be at least 5 characters.</small
             >
-            } @if (emailRef.errors?.maxlength) {
+            } @if (emailRef.getError('maxLength')) {
             <small class="form-text text-danger"
               >This field cannot be longer than 191 characters.</small
             >
-            } @if (emailRef.errors?.email) {
+            } @if (emailRef.getError('email')) {
             <small class="form-text text-danger">Your email is invalid.</small>
             }
           </div>
           }
         </div>
 
-        @if (editForm.controls.activated.value !== null) {
+        @if (editForm.activated().value() !== null) {
 
         <div class="mb-3 form-check">
           <input
             type="checkbox"
             class="form-check-input"
-            name="activated"
             id="field_activated"
             data-cy="activated"
-            formControlName="activated"
+            [formField]="editForm.activated"
           />
           <label class="form-check-label" for="field_activated"
             >Activated</label
@@ -2154,11 +2135,11 @@ export class UserManagementFormService {
             class="form-select"
             id="field_authority"
             multiple
-            name="authority"
-            formControlName="authorities"
+            [formField]="editForm.authorities"
+            [jhiSelectOptions]="authorities()"
           >
             @for (authority of authorities(); track $index) {
-            <option [value]="authority">{{ authority }}</option>
+            <option [value]="$index">{{ authority }}</option>
             }
           </select>
         </div>
@@ -2196,12 +2177,14 @@ export class UserManagementFormService {
 import { HttpResponse } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { submit } from "@angular/forms/signals";
 import { ActivatedRoute } from "@angular/router";
 
 import { Subject, from, of } from "rxjs";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
+import { sampleWithRequiredData } from "../user-management.test-samples";
 
 import { UserManagementFormService } from "./user-management-form.service";
 import { UserManagementUpdate } from "./user-management-update";
@@ -2246,22 +2229,31 @@ describe("UserManagement Management Update Component", () => {
   });
 
   describe("save", () => {
-    beforeEach(() => {
-      // The save is what is tested: the form is taken as valid, whatever the sample.
-      vi.spyOn(comp.editForm, "invalid", "get").mockReturnValue(false);
-    });
-
-    it("should mark the fields of an invalid form instead of saving it", () => {
+    it("should mark the fields of an invalid form instead of saving it", async () => {
       // GIVEN
-      vi.spyOn(comp.editForm, "invalid", "get").mockReturnValue(true);
-      vi.spyOn(comp.editForm, "markAllAsTouched");
+      vi.spyOn(comp, "save");
+      activatedRoute.data = of({ userManagement: null });
+      comp.ngOnInit();
 
       // WHEN
-      comp.save();
+      await submit(comp.editForm);
 
       // THEN
-      expect(comp.editForm.markAllAsTouched).toHaveBeenCalled();
-      expect(comp.isSaving()).toEqual(false);
+      expect(comp.editForm().touched()).toBe(true);
+      expect(comp.save).not.toHaveBeenCalled();
+    });
+
+    it("should save a valid submitted form", async () => {
+      // GIVEN
+      vi.spyOn(comp, "save").mockImplementation(() => undefined);
+      activatedRoute.data = of({ userManagement: sampleWithRequiredData });
+      comp.ngOnInit();
+
+      // WHEN
+      await submit(comp.editForm);
+
+      // THEN
+      expect(comp.save).toHaveBeenCalled();
     });
 
     it("should call update service on save for existing entity", () => {
@@ -2344,7 +2336,7 @@ describe("UserManagement Management Update Component", () => {
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
     "contents": "import { HttpResponse } from "@angular/common/http";
 import { Component, OnInit, computed, inject, signal } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormField, FormRoot } from "@angular/forms/signals";
 import { ActivatedRoute } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -2352,18 +2344,22 @@ import { Observable, finalize, map } from "rxjs";
 
 import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
 import { AlertError } from "app/shared/alert";
+import { SelectOptionsDirective } from "app/shared/form";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
 
-import {
-  UserManagementFormGroup,
-  UserManagementFormService,
-} from "./user-management-form.service";
+import { UserManagementFormService } from "./user-management-form.service";
 
 @Component({
   selector: "jhi-user-management-update",
   templateUrl: "./user-management-update.html",
-  imports: [FontAwesomeModule, AlertError, ReactiveFormsModule],
+  imports: [
+    FontAwesomeModule,
+    AlertError,
+    FormField,
+    FormRoot,
+    SelectOptionsDirective,
+  ],
 })
 export class UserManagementUpdate implements OnInit {
   readonly isSaving = signal(false);
@@ -2381,8 +2377,17 @@ export class UserManagementUpdate implements OnInit {
   );
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  editForm: UserManagementFormGroup =
-    this.userManagementFormService.createUserManagementFormGroup();
+  readonly userManagementModel = signal(
+    this.userManagementFormService.createUserManagementFormModel(),
+  );
+  // A submit marks the fields as touched and sends nothing while the form is invalid.
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly editForm = this.userManagementFormService.createUserManagementForm(
+    this.userManagementModel,
+    {
+      submission: { action: () => Promise.resolve(this.save()) },
+    },
+  );
 
   ngOnInit(): void {
     // Load the authorities used by the profiles select.
@@ -2400,14 +2405,9 @@ export class UserManagementUpdate implements OnInit {
   }
 
   save(): void {
-    if (this.editForm.invalid) {
-      // The fields are marked and their errors shown, nothing is sent.
-      this.editForm.markAllAsTouched();
-      return;
-    }
     this.isSaving.set(true);
     const userManagement = this.userManagementFormService.getUserManagement(
-      this.editForm,
+      this.userManagementModel(),
     );
     if (userManagement.id === null) {
       this.subscribeToSaveResponse(
@@ -2443,7 +2443,11 @@ export class UserManagementUpdate implements OnInit {
 
   private updateForm(userManagement: IUserManagement): void {
     this.userManagement = userManagement;
-    this.userManagementFormService.resetForm(this.editForm, userManagement);
+    this.userManagementModel.set(
+      this.userManagementFormService.createUserManagementFormModel(
+        userManagement,
+      ),
+    );
   }
 }
 ",
@@ -2456,6 +2460,7 @@ import {
   provideHttpClientTesting,
 } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { submit } from "@angular/forms/signals";
 import {
   ActivatedRoute,
   convertToParamMap,
@@ -2715,48 +2720,53 @@ describe("UserManagement screens", () => {
       ).not.toBeNull();
     });
 
-    it("should show the messages of the validations", async () => {
+    it("should show the messages of the validations once the fields are touched", async () => {
       TestBed.inject(ActivatedRoute).data = of({});
       const fixture = await render();
 
-      for (const control of Object.values(
-        fixture.componentInstance.editForm.controls,
-      )) {
-        control.markAsDirty();
-        control.setErrors({
-          required: true,
-          minlength: {},
-          maxlength: {},
-          min: {},
-          max: {},
-          pattern: {},
-          email: true,
-          number: true,
-          datetimelocal: true,
+      expect(
+        fixture.nativeElement.querySelector("small.text-danger"),
+      ).toBeNull();
+
+      // The fields get every error their messages read, then one none of them reads, once changed and once touched.
+      const { editForm } = fixture.componentInstance;
+      const fields = [
+        editForm.login,
+        editForm.firstName,
+        editForm.lastName,
+        editForm.email,
+      ];
+      const showErrors = async (kinds: string[]): Promise<void> => {
+        await submit(editForm, {
+          action: () =>
+            Promise.resolve(
+              fields.flatMap((fieldTree) =>
+                kinds.map((kind) => ({ kind, fieldTree })),
+              ),
+            ),
+          ignoreValidators: "all",
         });
-      }
-      await fixture.whenStable();
+        await fixture.whenStable();
+      };
+      fields.forEach((field) => field().markAsDirty());
+      await showErrors([
+        "required",
+        "minLength",
+        "maxLength",
+        "min",
+        "max",
+        "pattern",
+        "email",
+        "parse",
+      ]);
 
       expect(
         fixture.nativeElement.querySelector("small.text-danger"),
       ).not.toBeNull();
 
-      const controls = Object.values(
-        fixture.componentInstance.editForm.controls,
-      );
-      controls.forEach((control) => control.setErrors({ other: true }));
-      await fixture.whenStable();
-      controls.forEach((control) => {
-        control.markAsPristine();
-        control.markAsTouched();
-      });
-      await fixture.whenStable();
-      controls.forEach((control) => control.markAsUntouched());
-      await fixture.whenStable();
-
-      expect(
-        fixture.nativeElement.querySelector("small.text-danger"),
-      ).toBeNull();
+      // Touched, not changed, with an error no message reads: the messages of the validators of the fields only.
+      editForm().reset();
+      await showErrors(["other"]);
     });
 
     it("should save the form", async () => {
@@ -2765,16 +2775,9 @@ describe("UserManagement screens", () => {
         fixture.componentInstance,
         "previousState",
       );
-      // The save is what is tested: the form is taken as valid, whatever the sample.
-      vi.spyOn(
-        fixture.componentInstance.editForm,
-        "invalid",
-        "get",
-      ).mockReturnValue(false);
 
-      fixture.nativeElement
-        .querySelector("form")
-        .dispatchEvent(new Event("submit"));
+      // The save is what is tested, whatever the validity of the sample.
+      fixture.componentInstance.save();
       flushAll(sample);
 
       expect(previousState).toHaveBeenCalled();
@@ -3850,6 +3853,15 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/select-options.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/select-options.directive.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
@@ -5132,6 +5144,15 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/select-options.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/select-options.directive.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
@@ -6327,6 +6348,15 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/select-options.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/select-options.directive.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
@@ -7532,6 +7562,15 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/select-options.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/select-options.directive.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
@@ -9074,6 +9113,15 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/select-options.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/select-options.directive.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
@@ -10248,6 +10296,15 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/select-options.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/select-options.directive.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
@@ -11356,6 +11413,15 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/select-options.directive.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/select-options.directive.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/constants.ts": {

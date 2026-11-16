@@ -1,0 +1,74 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Directive, ElementRef, afterRenderEffect, inject, input, model, output } from '@angular/core';
+import { FormValueControl } from '@angular/forms/signals';
+
+/**
+ * Binds a field of a signal form to a native select whose options are any values, like entities, the multiple one
+ * included: an option is written with its index in the options as value, the empty one with an empty value.
+ *
+ * ```html
+ * <select [formField]="editForm.owner" [<%- jhiPrefix %>SelectOptions]="owners()" [compareWith]="compareOwner">
+ *   <option value=""></option>
+ *   @for (owner of owners(); track $index) {
+ *     <option [value]="$index">{{ owner.name }}</option>
+ *   }
+ * </select>
+ * ```
+ */
+@Directive({
+  selector: 'select[<%- jhiPrefix %>SelectOptions]',
+  host: {
+    '(change)': 'onChange()',
+    '(blur)': 'touch.emit()',
+  },
+})
+export class SelectOptionsDirective<T> implements FormValueControl<T | T[] | null> {
+  readonly value = model.required<T | T[] | null>();
+  readonly <%- jhiPrefix %>SelectOptions = input.required<readonly T[]>();
+  readonly compareWith = input<(o1: T, o2: T) => boolean>((o1, o2) => o1 === o2);
+  readonly touch = output();
+
+  private readonly select: HTMLSelectElement = inject<ElementRef<HTMLSelectElement>>(ElementRef).nativeElement;
+
+  constructor() {
+    // The options are rendered by the template of the select: they are marked once rendered.
+    afterRenderEffect(() => {
+      const value = this.value();
+      const compareWith = this.compareWith();
+      const options = this.<%- jhiPrefix %>SelectOptions();
+      for (const option of Array.from(this.select.options)) {
+        const item = option.value === '' ? undefined : options[Number(option.value)];
+        if (Array.isArray(value)) {
+          option.selected = item !== undefined && value.some(selected => compareWith(selected, item));
+        } else {
+          option.selected = item === undefined ? value === null : value !== null && compareWith(value, item);
+        }
+      }
+    });
+  }
+
+  onChange(): void {
+    const options = this.<%- jhiPrefix %>SelectOptions();
+    const selected = Array.from(this.select.selectedOptions)
+      .filter(option => option.value !== '')
+      .map(option => options[Number(option.value)]);
+    this.value.set(this.select.multiple ? selected : (selected[0] ?? null));
+  }
+}

@@ -27,10 +27,18 @@
     const [firstKey, secondKey] = primaryKey.tsSampleValues;
     const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient && !field.hidden);
     const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.transient && !field.hidden);
+    // The properties of the update form whose messages of validation the screen shows.
+    const validatedProperties = [
+      ...fields.filter(field => field.fieldValidate && !field.hidden && !(builtInUserManagement && field.readonly) && !(field.id && field.autoGenerate)).map(field => field.fieldName),
+      ...relationships.filter(relationship => relationship.relationshipValidate && relationship.persistableRelationship).map(relationship => relationship.propertyName),
+    ];
 _%>
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+<%_ if (!readOnly && validatedProperties.length > 0) { _%>
+import { submit } from '@angular/forms/signals';
+<%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
 import { By } from '@angular/platform-browser';
 <%_ } _%>
@@ -314,41 +322,44 @@ describe('<%- entityAngularName %> screens', () => {
       expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
     });
 
-  <%_ if (fields.some(field => field.fieldValidate && !field.hidden) || relationships.some(relationship => relationship.relationshipValidate && relationship.persistableRelationship)) { _%>
-    it('should show the messages of the validations', async () => {
+  <%_ if (validatedProperties.length > 0) { _%>
+    it('should show the messages of the validations once the fields are touched', async () => {
       TestBed.inject(ActivatedRoute).data = of({});
       const fixture = await render();
 
-      for (const control of Object.values(fixture.componentInstance.editForm.controls)) {
-        control.markAsDirty();
-        control.setErrors({ required: true, minlength: {}, maxlength: {}, min: {}, max: {}, pattern: {}, email: true, number: true, datetimelocal: true });
-      }
-      await fixture.whenStable();
+      expect(fixture.nativeElement.querySelector('small.text-danger')).toBeNull();
+
+      // The fields get every error their messages read, then one none of them reads, once changed and once touched.
+      const { editForm } = fixture.componentInstance;
+      const fields = [
+    <%_ for (const property of validatedProperties) { _%>
+        editForm.<%- property %>,
+    <%_ } _%>
+      ];
+      const showErrors = async (kinds: string[]): Promise<void> => {
+        await submit(editForm, {
+          action: () => Promise.resolve(fields.flatMap(fieldTree => kinds.map(kind => ({ kind, fieldTree })))),
+          ignoreValidators: 'all',
+        });
+        await fixture.whenStable();
+      };
+      fields.forEach(field => field().markAsDirty());
+      await showErrors(['required', 'minLength', 'maxLength', 'min', 'max', 'pattern', 'email', 'parse']);
 
       expect(fixture.nativeElement.querySelector('small.text-danger')).not.toBeNull();
 
-      const controls = Object.values(fixture.componentInstance.editForm.controls);
-      controls.forEach(control => control.setErrors({ other: true }));
-      await fixture.whenStable();
-      controls.forEach(control => {
-        control.markAsPristine();
-        control.markAsTouched();
-      });
-      await fixture.whenStable();
-      controls.forEach(control => control.markAsUntouched());
-      await fixture.whenStable();
-
-      expect(fixture.nativeElement.querySelector('small.text-danger')).toBeNull();
+      // Touched, not changed, with an error no message reads: the messages of the validators of the fields only.
+      editForm().reset();
+      await showErrors(['other']);
     });
 
   <%_ } _%>
     it('should save the form', async () => {
       const fixture = await render();
       const previousState = vi.spyOn(fixture.componentInstance, 'previousState');
-      // The save is what is tested: the form is taken as valid, whatever the sample.
-      vi.spyOn(fixture.componentInstance.editForm, 'invalid', 'get').mockReturnValue(false);
 
-      fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
+      // The save is what is tested, whatever the validity of the sample.
+      fixture.componentInstance.save();
       flushAll(sample);
 
       expect(previousState).toHaveBeenCalled();
