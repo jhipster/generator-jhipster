@@ -100,7 +100,7 @@ export function createUserEntity(
 
   const oauth2 = application.authenticationTypeOauth2;
   // If oauth2 or databaseType is cassandra, force type string, otherwise keep undefined for later processing.
-  const userIdType = oauth2 || user.databaseType === CASSANDRA ? TYPE_STRING : undefined;
+  const userIdType = oauth2 || (application as { databaseType?: string }).databaseType === CASSANDRA ? TYPE_STRING : undefined;
   const fieldValidateRulesMaxlength = userIdType === TYPE_STRING ? 100 : undefined;
 
   addOrExtendFields(user.fields!, [

@@ -41,6 +41,7 @@ export function loadRequiredConfigDerivedProperties(entity: any) {
 
 export function preparePostEntityServerDerivedProperties(
   entity: SpringBootEntity<SpringBootField, RelationshipWithEntity<SpringBootRelationship, SpringBootEntity>>,
+  application?: { databaseType?: string },
 ) {
   mutateData(entity, {
     uniqueEnums: ({ fields }) => [...new Set(fields.filter(field => field.fieldIsEnum))],
@@ -57,7 +58,7 @@ export function preparePostEntityServerDerivedProperties(
   entity.reactiveOtherEntities = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity));
   entity.reactiveUniqueEntityTypes = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity.entityNameCapitalized));
   entity.reactiveUniqueEntityTypes.add(entity.entityClass);
-  if (entity.databaseType === 'sql') {
+  if (application?.databaseType === 'sql') {
     for (const relationship of entity.relationships) {
       if (!relationship.otherEntity.embedded) {
         (relationship as DatabaseRelationship).joinColumnNames = relationship.otherEntity.primaryKey!.fields.map(

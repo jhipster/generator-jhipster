@@ -33,7 +33,6 @@ import { getTypescriptKeyType } from '../../client/support/index.ts';
 import type { Application as ClientApplication } from '../../client/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
-import type { Application as SpringDataRelationalApplication } from '../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../spring-boot/types.ts';
 import { mutateEntity } from '../entity.ts';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../generators/database-bootstrap/support/index.ts';
@@ -331,7 +330,7 @@ export function prepareEntityPrimaryKeyForTemplates(
       const idField = idFields[0];
       // Allow ids type to be empty and fallback to default type for the database.
       if (!idField.fieldType) {
-        idField.fieldType = application?.pkType ?? getDatabaseTypeData(entityWithConfig.databaseType).defaultPrimaryKeyType;
+        idField.fieldType = application?.pkType ?? getDatabaseTypeData(application?.databaseType).defaultPrimaryKeyType;
       }
       primaryKeyName = idField.fieldName;
       primaryKeyType = idField.fieldType;
@@ -414,9 +413,6 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
     // Workaround different paths
     clientFramework: (config as ClientApplication).clientFramework,
 
-    databaseType: (config as SpringBootApplication).databaseType,
-    prodDatabaseType: (config as SpringDataRelationalApplication).prodDatabaseType,
-
     searchEngine: (config as SpringBootApplication).searchEngine,
 
     // jhiPrefix: config.jhiPrefix,
@@ -437,7 +433,7 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties(entity: BaseApplicationEntity) {
+export function preparePostEntityCommonDerivedProperties(entity: BaseApplicationEntity, application?: { databaseType?: string }) {
   const { fields } = entity;
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
@@ -464,10 +460,10 @@ export function preparePostEntityCommonDerivedProperties(entity: BaseApplication
     entity.anyFieldHasTextContentType = blobFieldsContentType.includes(TEXT);
   }
 
-  preparePostEntityCommonDerivedPropertiesNotTyped(entity as EntityAll);
+  preparePostEntityCommonDerivedPropertiesNotTyped(entity as EntityAll, application);
 }
 
-function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
+function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll, { databaseType }: { databaseType?: string } = {}) {
   const { relationships, fields } = entity;
   const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
@@ -535,9 +531,9 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
   entity.implementsEagerLoadApis = // Cassandra doesn't provide *WithEagerRelationships apis
-    !([CASSANDRA, NEO4J] as string[]).includes(entity.databaseType) &&
+    !([CASSANDRA, NEO4J] as string[]).includes(databaseType!) &&
     // Only sql, mongodb and couchbase provide *WithEagerRelationships apis for imperative implementation
-    (entity.reactive || ([SQL, MONGODB, COUCHBASE] as string[]).includes(entity.databaseType)) &&
+    (entity.reactive || ([SQL, MONGODB, COUCHBASE] as string[]).includes(databaseType!)) &&
     entity.relationshipsContainEagerLoad;
   entity.eagerRelations = entity.relationships.filter(rel => rel.relationshipEagerLoad);
   // Deprecated: kept for blueprints, not used by the generator anymore.

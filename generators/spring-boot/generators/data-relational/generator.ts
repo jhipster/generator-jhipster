@@ -109,7 +109,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ entity }) {
+      prepareEntity({ application, entity }) {
         entity.relationships.forEach(relationship => {
           if (relationship.persistableRelationship === undefined && relationship.relationshipType === 'many-to-many') {
             relationship.persistableRelationship = true;
@@ -117,7 +117,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         });
 
         const entityAny = entity as any;
-        if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType ?? entity.databaseType) && entityAny.jhiPrefix) {
+        if (isReservedTableName(entity.entityInstance, application.prodDatabaseType ?? application.databaseType) && entityAny.jhiPrefix) {
           entity.entityJpqlInstance = `${entityAny.jhiPrefix}${entity.entityClass}`;
         } else {
           entity.entityJpqlInstance = entity.entityInstance;

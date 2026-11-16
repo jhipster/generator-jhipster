@@ -189,8 +189,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
-      prepareEntityDerivedProperties({ entity }) {
-        preparePostEntityServerDerivedProperties(entity as any);
+      prepareEntityDerivedProperties({ application, entity }) {
+        preparePostEntityServerDerivedProperties(entity as any, application);
       },
     });
   }
