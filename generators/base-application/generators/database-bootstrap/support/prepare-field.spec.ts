@@ -56,6 +56,36 @@ describe('generator - base-application:database-bootstrap - prepare-field', () =
       expect(prepareColumn({ fieldName: 'title', fieldNameAsDatabaseColumn: 'book_title' }).field.columnName).toBe('book_title');
     });
 
+    describe('of the content type of a blob', () => {
+      const prepareContentTypeColumn = (blob: Partial<DatabaseField>) => {
+        const contentType = { fieldName: `${blob.fieldName}ContentType`, fieldType: 'String', contentTypeOf: blob.fieldName };
+        const entity = { entityTableName: 'book', fields: [blob, contentType] } as unknown as DatabaseEntity;
+        for (const field of entity.fields) {
+          prepareFieldColumnForDatabase({
+            application: { jhiTablePrefix: 'jhi', databaseType: 'sql', prodDatabaseType: 'postgresql' },
+            entity,
+            field,
+            log: { warn: () => {} },
+          });
+        }
+        return contentType as unknown as DatabaseField;
+      };
+
+      it('should name it after the column of its blob', () => {
+        expect(prepareContentTypeColumn({ fieldName: 'coverImage' }).columnName).toBe('cover_image_content_type');
+      });
+
+      it('should name it after the column of a blob that is a reserved keyword of the database', () => {
+        expect(prepareContentTypeColumn({ fieldName: 'order' }).columnName).toBe('jhi_order_content_type');
+      });
+
+      it('should name it after the column a blob already has', () => {
+        expect(prepareContentTypeColumn({ fieldName: 'cover', fieldNameAsDatabaseColumn: 'book_cover' }).columnName).toBe(
+          'book_cover_content_type',
+        );
+      });
+    });
+
     it('should name the unique constraint of a unique field', () => {
       expect(prepareColumn({ fieldName: 'isbn', unique: true }).field.uniqueConstraintName).toBe('ux_book__isbn');
     });

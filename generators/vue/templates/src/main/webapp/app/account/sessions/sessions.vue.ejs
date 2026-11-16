@@ -40,14 +40,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import axios from 'axios';
 
-import { useStore } from '@/stores';
+import { useCurrentAccount } from '@/composables';
 
 defineOptions({ name: 'Sessions' });
 
@@ -58,7 +58,6 @@ interface Session {
   userAgent: string | null;
 }
 
-const store = useStore();
 <%_ if (enableTranslation) { _%>
 const { t: t$ } = useI18n();
 <%_ } _%>
@@ -67,8 +66,7 @@ const success = ref<string | null>(null);
 const error = ref<string | null>(null);
 const sessions = ref<Session[]>([]);
 
-const authenticated = computed(() => store.authenticated);
-const username = computed(() => store.account?.login ?? '');
+const { authenticated, username } = useCurrentAccount();
 
 const retrieveSessions = () =>
   axios.get<Session[]>('api/account/sessions').then(response => {
