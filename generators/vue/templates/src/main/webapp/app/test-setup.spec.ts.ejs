@@ -1,0 +1,48 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+import { defineComponent, h, inject } from 'vue';
+
+import { mount } from '@vue/test-utils';
+
+// Vue warns about the injection that nothing provides.
+const WarningComponent = defineComponent({
+  setup() {
+    inject('not-provided');
+    return () => h('div');
+  },
+});
+
+describe('test setup', () => {
+  it.fails('should fail the test that makes Vue print a warning', () => {
+    expect(mount(WarningComponent).exists()).toBe(true);
+  });
+
+  it.fails('should fail the next test that makes Vue print a warning too', () => {
+    expect(mount(WarningComponent).exists()).toBe(true);
+  });
+
+  it('should let the test that mocks the console expect a warning', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    mount(WarningComponent);
+
+    expect(warn.mock.calls[0][0]).toContain('injection "not-provided" not found');
+  });
+});

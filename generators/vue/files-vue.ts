@@ -79,6 +79,7 @@ export const vueFiles = asWriteFilesSection({
         'router/admin.ts',
         'router/pages.ts',
         'test-setup.ts',
+        'test-setup.spec.ts',
       ],
     },
   ],
