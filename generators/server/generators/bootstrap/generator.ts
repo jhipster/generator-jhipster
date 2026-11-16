@@ -177,6 +177,9 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
           restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass),
           restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance),
+          // The search engines the server supports, of the search engine it resolved once the entities were loaded.
+          searchEngineElasticsearch: ({ searchEngine }) => searchEngine === 'elasticsearch',
+          searchEngineCouchbase: ({ searchEngine }) => searchEngine === 'couchbase',
         });
       },
     });

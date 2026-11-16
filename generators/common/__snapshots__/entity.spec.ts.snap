@@ -10,10 +10,9 @@ exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
   "paginationInfiniteScroll": false,
   "paginationNo": false,
   "paginationPagination": true,
-  "searchEngineAny": true,
-  "searchEngineCouchbase": false,
-  "searchEngineElasticsearch": false,
-  "searchEngineNo": false,
+  "searchEngine": "no",
+  "searchEngineAny": false,
+  "searchEngineNo": true,
 }
 `;
 

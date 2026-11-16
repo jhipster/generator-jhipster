@@ -125,7 +125,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should prepare the search of the entities', () => {
-      expect(runResult.entities!.Author).toMatchObject({ searchEngineAny: true, searchEngineElasticsearch: true });
+      expect(runResult.entities!.Author).toMatchObject({ searchEngine: 'elasticsearch', searchEngineAny: true });
     });
 
     it('should give the entities the id of the database', () => {
