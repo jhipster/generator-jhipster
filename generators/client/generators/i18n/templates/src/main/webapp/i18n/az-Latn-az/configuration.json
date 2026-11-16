@@ -3,8 +3,11 @@
     "title": "Konfiqurasiya",
     "filter": "Filterlə (prefikslə)",
     "table": {
+      "title": "Konfiqurasiya xüsusiyyətləri",
       "prefix": "Prefiks",
-      "properties": "Xüsusiyyətlər"
+      "properties": "Xüsusiyyətlər",
+      "property": "Xüsusiyyət",
+      "value": "Dəyər"
     }
   }
 }

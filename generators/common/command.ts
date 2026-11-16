@@ -80,6 +80,17 @@ const command = {
       },
       scope: 'storage',
     },
+    skipUserRegistration: {
+      description: 'Skip the registration and the activation of an account by its user, the users are created by an administrator',
+      cli: {
+        type: Boolean,
+      },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
+      scope: 'storage',
+    },
     applicationType: {
       description: 'Application type to generate',
       cli: {

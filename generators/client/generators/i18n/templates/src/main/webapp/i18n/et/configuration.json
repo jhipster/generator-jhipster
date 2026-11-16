@@ -3,8 +3,11 @@
     "title": "Konfiguratsioon",
     "filter": "Filter (prefiksi alusel)",
     "table": {
+      "title": "Konfiguratsiooni omadused",
       "prefix": "Prefiks",
-      "properties": "Omadused"
+      "properties": "Omadused",
+      "property": "Omadus",
+      "value": "Väärtus"
     }
   }
 }

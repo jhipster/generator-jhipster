@@ -22,19 +22,20 @@ import { ReducersMapObject } from '@reduxjs/toolkit';
 import entitiesReducers from 'app/entities/reducers';
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
 import activate from 'app/modules/account/activate/activate.reducer';
+  <%_ } _%>
 import password from 'app/modules/account/password/password.reducer';
 import passwordReset from 'app/modules/account/password-reset/password-reset.reducer';
+  <%_ if (generateUserRegistration) { _%>
 import register from 'app/modules/account/register/register.reducer';
+  <%_ } _%>
   <%_ if (authenticationTypeSession) { _%>
 import sessions from 'app/modules/account/sessions/sessions.reducer';
   <%_ } _%>
 import settings from 'app/modules/account/settings/settings.reducer';
 <%_ } _%>
 import administration from 'app/modules/administration/administration.reducer';
-<%_ if (generateUserManagement) { _%>
-import userManagement from 'app/modules/administration/user-management/user-management.reducer';
-<%_ } _%>
 import loadingBar from 'app/shared/reducers/loading-bar';
 
 import applicationProfile from './application-profile';
@@ -42,8 +43,8 @@ import authentication from './authentication';
 <%_ if (enableTranslation) { _%>
 import locale from './locale';
 <%_ } _%>
-<%_ if (!generateUserManagement && authenticationTypeOauth2) { _%>
-import userManagement from './user-management';
+<%_ if (generateBuiltInUserEntity) { _%>
+import users from './user-management';
 <%_ } _%>
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -55,11 +56,13 @@ const rootReducer: ReducersMapObject = {
   applicationProfile,
   administration,
 <%_ if (generateBuiltInUserEntity) { _%>
-  userManagement,
+  users,
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
   register,
   activate,
+  <%_ } _%>
   passwordReset,
   password,
   settings,

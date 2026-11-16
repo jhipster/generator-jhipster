@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - spring-boot addTestSpringFactory should add a test spring factory 1`] = `
+exports[`generator - spring-boot addTestSpringFactory should add a test spring factory - snapshot 1`] = `
 {
   "src/test/resources/META-INF/spring.factories": {
     "contents": "key = first.value,second.value",
@@ -9,7 +9,7 @@ exports[`generator - spring-boot addTestSpringFactory should add a test spring f
 }
 `;
 
-exports[`generator - spring-boot gradle with consul service discovery should replace the placeholders in every configuration file 1`] = `
+exports[`generator - spring-boot gradle with consul service discovery should replace the placeholders in every configuration file - snapshot 1`] = `
 {
   "gradle/profile_dev.gradle": {
     "contents": "dependencies {
@@ -115,7 +115,7 @@ def integrationTest = tasks.register('integrationTest', Test) {
 }
 `;
 
-exports[`generator - spring-boot gradle with no service discovery should replace the placeholders in every configuration file 1`] = `
+exports[`generator - spring-boot gradle with no service discovery should replace the placeholders in every configuration file - snapshot 1`] = `
 {
   "gradle/profile_dev.gradle": {
     "contents": "dependencies {
@@ -316,6 +316,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "authenticationUsesRememberMe": true,
   "authority": Any<Object>,
   "backendType": "Java",
   "backendTypeJavaAny": true,
@@ -371,6 +372,16 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "clientThemeVariantPrimary": false,
   "commandName": "spring-boot",
   "communicationSpringWebsocket": false,
+  "corsAdditionalAllowedOrigins": [],
+  "corsAllowedOriginPatterns": [
+    "https://*.githubpreview.dev",
+  ],
+  "corsAllowedOrigins": [
+    "http://localhost:8100",
+    "https://localhost:8100",
+    "http://localhost:9060",
+    "https://localhost:9060",
+  ],
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": [],
   "cypressAudit": undefined,
@@ -594,6 +605,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "generateInMemoryUserCredentials": false,
   "generateSpringAuditor": true,
   "generateUserManagement": true,
+  "generateUserRegistration": true,
   "graalvmReachabilityMetadata": "GRAALVM_REACHABILITY_METADATA_VERSION",
   "graalvmSupport": undefined,
   "graalvmVersion": "25.3",
@@ -743,10 +755,14 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
+    "pnpm": "PNPM_VERSION",
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",
+  "nodePackageManagerAny": true,
   "nodePackageManagerCommand": "./npmw",
+  "nodePackageManagerNpm": true,
+  "nodePackageManagerPnpm": false,
   "nodeVersion": "NODE_VERSION",
   "nodeWebappBuildTarget": "webapp:build",
   "oauth2AppSchemes": undefined,
@@ -793,7 +809,10 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
     },
   ],
   "packageJsonNodeEngine": undefined,
-  "packageJsonScripts": {},
+  "packageJsonScripts": {
+    "pretry-it": "./mvnw clean && npm run java:jar:prod",
+    "try-it": "java -jar target/*.jar --spring.profiles.include=secret-samples",
+  },
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
   "prettierExtensions": [
@@ -851,6 +870,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "serverTestFrameworksAny": false,
   "serverTestFrameworksCucumber": false,
   "serverTestFrameworksGatling": false,
+  "serverUsesCsrf": false,
   "serviceDiscovery": "no",
   "serviceDiscoveryAny": false,
   "serviceDiscoveryConsul": false,
@@ -868,6 +888,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": false,
+  "skipUserRegistration": undefined,
   "springBoot4": true,
   "springBootBaseRepositoryClass": undefined,
   "springBootBaseRepositoryImport": undefined,
@@ -891,7 +912,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "user": Any<Object>,
   "userManagement": Any<Object>,
   "websocket": "no",
-  "withAdminUi": true,
+  "withAdminUi": undefined,
   "withGeneratedFlag": false,
   "wrapMono": [Function],
 }
@@ -956,6 +977,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/domain/User.java": {
     "stateCleared": "modified",
   },
@@ -986,6 +1010,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/main/java/com/mycompany/myapp/service/MailService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/service/RegistrationService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -1014,6 +1041,12 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/RegistrationResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/UserResource.java": {
@@ -1133,10 +1166,16 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/test/util/TestUtil.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
@@ -1151,7 +1190,10 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/test/java/com/mycompany/myapp/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
+  "src/test/java/com/mycompany/myapp/web/rest/RegistrationResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/UserResourceIT.java": {
@@ -1161,6 +1203,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
@@ -1209,6 +1254,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
+  "authenticationUsesRememberMe": false,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -1263,6 +1309,16 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "clientThemeVariantPrimary": false,
   "commandName": "spring-boot",
   "communicationSpringWebsocket": false,
+  "corsAdditionalAllowedOrigins": [],
+  "corsAllowedOriginPatterns": [
+    "https://*.githubpreview.dev",
+  ],
+  "corsAllowedOrigins": [
+    "http://localhost:8100",
+    "https://localhost:8100",
+    "http://localhost:9060",
+    "https://localhost:9060",
+  ],
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": [],
   "cypressAudit": undefined,
@@ -1489,6 +1545,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "generateInMemoryUserCredentials": false,
   "generateSpringAuditor": true,
   "generateUserManagement": false,
+  "generateUserRegistration": false,
   "graalvmReachabilityMetadata": "GRAALVM_REACHABILITY_METADATA_VERSION",
   "graalvmSupport": undefined,
   "graalvmVersion": "25.3",
@@ -1638,10 +1695,14 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
+    "pnpm": "PNPM_VERSION",
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",
+  "nodePackageManagerAny": true,
   "nodePackageManagerCommand": "./npmw",
+  "nodePackageManagerNpm": true,
+  "nodePackageManagerPnpm": false,
   "nodeVersion": "NODE_VERSION",
   "nodeWebappBuildTarget": "webapp:build",
   "oauth2AppSchemes": undefined,
@@ -1688,7 +1749,10 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
     },
   ],
   "packageJsonNodeEngine": undefined,
-  "packageJsonScripts": {},
+  "packageJsonScripts": {
+    "pretry-it": "./mvnw clean && npm run java:jar:prod",
+    "try-it": "java -jar target/*.jar --spring.profiles.include=secret-samples",
+  },
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
   "prettierExtensions": [
@@ -1746,6 +1810,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "serverTestFrameworksAny": false,
   "serverTestFrameworksCucumber": false,
   "serverTestFrameworksGatling": false,
+  "serverUsesCsrf": true,
   "serviceDiscovery": "no",
   "serviceDiscoveryAny": false,
   "serviceDiscoveryConsul": false,
@@ -1763,6 +1828,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": true,
+  "skipUserRegistration": undefined,
   "springBoot4": true,
   "springBootBaseRepositoryClass": undefined,
   "springBootBaseRepositoryImport": undefined,
@@ -1785,7 +1851,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "useNpmWrapper": true,
   "user": undefined,
   "websocket": "no",
-  "withAdminUi": true,
+  "withAdminUi": undefined,
   "withGeneratedFlag": false,
   "wrapMono": [Function],
 }
@@ -1847,6 +1913,9 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -1860,6 +1929,9 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/errors/BadRequestAlertException.java": {
@@ -1937,19 +2009,25 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/test/util/TestUtil.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
+  "src/test/java/com/mycompany/myapp/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/WithUnauthenticatedMockUser.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {

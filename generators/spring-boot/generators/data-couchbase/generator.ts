@@ -22,6 +22,11 @@ import writeCouchbaseEntityFilesTask, { cleanupCouchbaseEntityFilesTask } from '
 import writeCouchbaseFilesTask, { cleanupCouchbaseFilesTask } from './files.ts';
 
 export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
+  constructor(...[args, options, features]: ConstructorParameters<typeof SpringBootApplicationGenerator>) {
+    // Its templates write the content type of a blob through its content type field.
+    super(args, options, { ...features, contentTypeFields: true });
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

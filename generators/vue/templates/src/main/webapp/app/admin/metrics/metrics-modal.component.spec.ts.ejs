@@ -16,97 +16,60 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { shallowMount } from '@vue/test-utils';
 
+import { type MetricDetails } from '@/shared/jhipster/metrics.model';
+
 import MetricsModal from './metrics-modal.vue';
 
-type MetricsModalComponentType = InstanceType<typeof MetricsModal>;
+const details: MetricDetails = {
+  label: { text: 'Details' },
+  showLines: { text: 'Show' },
+  hideLines: { text: 'Hide' },
+  columns: [{ text: 'Column' }],
+  filters: [
+    { label: { text: 'All' }, count: 2, status: 'primary' },
+    { label: { text: 'One' }, value: 'ONE', count: 1, status: 'success' },
+  ],
+  items: [
+    { title: 'first', value: 'ONE', status: 'success', lines: ['a line'], cells: ['a cell'] },
+    { title: 'second', value: 'TWO', status: 'danger', lines: [], cells: [] },
+  ],
+};
 
 describe('MetricsModal', () => {
-  let metricsModal: MetricsModalComponentType;
+  it('should filter the items by value and by title', async () => {
+    const wrapper = shallowMount(MetricsModal, { props: { details } });
+    const filters = wrapper.findAll('.hand');
+    expect(wrapper.findAll('h6')).toHaveLength(2);
 
-  beforeEach(() => {
-    const wrapper = shallowMount(MetricsModal, {
-      props: {
-        threadDump: [
-          { name: 'test1', threadState: 'RUNNABLE' },
-          { name: 'test2', threadState: 'WAITING' },
-          { name: 'test3', threadState: 'TIMED_WAITING' },
-          { name: 'test4', threadState: 'BLOCKED' },
-          { name: 'test5', threadState: 'BLOCKED' },
-          { name: 'test5', threadState: 'NONE' },
-        ],
-      },
-    });
-    metricsModal = wrapper.vm;
+    await filters[1].trigger('click');
+    expect(wrapper.findAll('h6')).toHaveLength(1);
+
+    await filters[0].trigger('click');
+    await wrapper.find('input').setValue('SECOND');
+    expect(wrapper.text()).toContain('second');
+    expect(wrapper.text()).not.toContain('first');
   });
 
-  describe('init', () => {
-    it('should count the numbers of each thread type', () => {
-      expect(metricsModal.threadDumpData.threadDumpRunnable).toBe(1);
-      expect(metricsModal.threadDumpData.threadDumpWaiting).toBe(1);
-      expect(metricsModal.threadDumpData.threadDumpTimedWaiting).toBe(1);
-      expect(metricsModal.threadDumpData.threadDumpBlocked).toBe(2);
-      expect(metricsModal.threadDumpData.threadDumpAll).toBe(5);
-    });
+  it('should show and hide the lines of an item', async () => {
+    const wrapper = shallowMount(MetricsModal, { props: { details } });
+    expect(wrapper.text()).not.toContain('a line');
+
+    await wrapper.find('a').trigger('click');
+    expect(wrapper.text()).toContain('a line');
+    expect(wrapper.find('a').text()).toBe('Hide');
+
+    await wrapper.find('a').trigger('click');
+    expect(wrapper.text()).not.toContain('a line');
   });
 
-  describe('getBadgeClass', () => {
-    it('should return bg-success for RUNNABLE', () => {
-      expect(metricsModal.getBadgeClass('RUNNABLE')).toBe('bg-success');
-    });
+  it('should show the cells of the items', () => {
+    const wrapper = shallowMount(MetricsModal, { props: { details } });
 
-    it('should return bg-info for WAITING', () => {
-      expect(metricsModal.getBadgeClass('WAITING')).toBe('bg-info');
-    });
-
-    it('should return bg-warning for TIMED_WAITING', () => {
-      expect(metricsModal.getBadgeClass('TIMED_WAITING')).toBe('bg-warning');
-    });
-
-    it('should return bg-danger for BLOCKED', () => {
-      expect(metricsModal.getBadgeClass('BLOCKED')).toBe('bg-danger');
-    });
-
-    it('should return an empty string for anything else', () => {
-      expect(metricsModal.getBadgeClass('')).toBe('');
-    });
-  });
-});
-
-describe('MetricsModal view', () => {
-  it('should filter the threads and show their stack trace', async () => {
-    // GIVEN
-    const stackTrace = [{ className: 'Foo', methodName: 'bar', fileName: 'Foo.java', lineNumber: 1 }];
-    const threadDump = ['RUNNABLE', 'WAITING', 'TIMED_WAITING', 'BLOCKED'].map(threadState => ({ threadName: threadState, threadState, stackTrace }));
-    const wrapper = shallowMount(MetricsModal, { props: { threadDump } });
-
-    // WHEN
-    for (const element of wrapper.findAll('span.badge, a')) {
-      await element.trigger('click');
-    }
-    await wrapper.find('input').setValue('BLOCKED');
-
-    // THEN
-    expect(wrapper.vm.filteredThreadDump).toEqual([expect.objectContaining({ threadState: 'BLOCKED' })]);
-    expect(wrapper.text()).toContain('Foo.bar(Foo.java:1)');
-  });
-
-  it('should count no thread without a thread dump', () => {
-    // WHEN
-    const wrapper = shallowMount(MetricsModal, { props: { threadDump: null } });
-
-    // THEN
-    expect(wrapper.vm.threadDumpData.threadDumpAll).toBe(0);
-  });
-
-  it('should default to no thread', () => {
-    // WHEN
-    const wrapper = shallowMount(MetricsModal);
-
-    // THEN
-    expect(wrapper.vm.filteredThreadDump).toEqual([]);
+    expect(wrapper.text()).toContain('Column');
+    expect(wrapper.text()).toContain('a cell');
   });
 });

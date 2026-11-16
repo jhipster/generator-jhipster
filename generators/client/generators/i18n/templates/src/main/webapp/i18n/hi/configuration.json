@@ -3,8 +3,11 @@
     "title": "कॉन्फ़िगरेशन",
     "filter": "(उपसर्ग) द्वारा फ़िल्टर",
     "table": {
+      "title": "कॉन्फ़िगरेशन गुण",
       "prefix": "उपसर्ग",
-      "properties": "गुण"
+      "properties": "गुण",
+      "property": "गुण",
+      "value": "मान"
     }
   }
 }

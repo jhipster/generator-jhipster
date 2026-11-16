@@ -1,0 +1,147 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+import { defineComponent, inject, nextTick, ref } from 'vue';
+
+import { createTestingPinia } from '@pinia/testing';
+import { flushPromises, mount } from '@vue/test-utils';
+
+import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
+import { type AccountStore, useStore } from '@/stores';
+
+import { useLanguage } from './language';
+<%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
+
+vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime', () => ({
+  loadRemote: vi.fn().mockResolvedValue({ default: { remote: {} } }),
+}));
+<%_ } _%>
+
+describe('language', () => {
+  let store: AccountStore;
+  let loadTranslations: Mock<(language: string) => Promise<Record<string, any>>>;
+  let provided: { currentLanguage?: unknown; changeLanguage?: (language?: string | null) => Promise<void> };
+
+  const mountLanguage = (locale = 'xx') => {
+    const composer = { locale: ref(locale), setLocaleMessage: vi.fn(), mergeLocaleMessage: vi.fn() };
+    const Child = defineComponent({
+      setup() {
+        provided = { currentLanguage: inject(currentLanguageKey), changeLanguage: inject(changeLanguageKey) };
+        return () => null;
+      },
+    });
+    mount(
+      defineComponent({
+        components: { Child },
+        setup() {
+          useLanguage({ composer: composer as any, store, loadTranslations });
+        },
+        template: '<Child />',
+      }),
+    );
+    return composer;
+  };
+
+  beforeEach(() => {
+    localStorage.clear();
+    createTestingPinia({ stubActions: false });
+    store = useStore();
+    loadTranslations = vi.fn<(language: string) => Promise<Record<string, any>>>().mockResolvedValue({ global: {} });
+  });
+
+  it('should start with the first supported language and provide it', async () => {
+    const composer = mountLanguage();
+    await flushPromises();
+
+    expect(loadTranslations).toHaveBeenCalledWith('<%- nativeLanguage %>');
+    expect(composer.setLocaleMessage).toHaveBeenCalledWith('<%- nativeLanguage %>', { global: {} });
+    expect(composer.locale.value).toBe('<%- nativeLanguage %>');
+    expect(localStorage.getItem('currentLanguage')).toBe('<%- nativeLanguage %>');
+    expect(document.querySelector('html')?.getAttribute('lang')).toBe('<%- nativeLanguage %>');
+    expect(provided.currentLanguage).toBe(composer.locale);
+  });
+
+  it('should not load the language the application already has', async () => {
+    mountLanguage('<%- nativeLanguage %>');
+    await flushPromises();
+
+    expect(loadTranslations).not.toHaveBeenCalled();
+  });
+
+  it('should change the language on request', async () => {
+    const composer = mountLanguage('<%- nativeLanguage %>');
+    await flushPromises();
+
+    await provided.changeLanguage!('yy');
+    await nextTick();
+
+    expect(loadTranslations).toHaveBeenCalledWith('yy');
+    expect(composer.locale.value).toBe('yy');
+    expect(localStorage.getItem('currentLanguage')).toBe('yy');
+  });
+
+  it('should load a language once', async () => {
+    mountLanguage();
+    await flushPromises();
+
+    await provided.changeLanguage!('yy');
+    await nextTick();
+    await provided.changeLanguage!('<%- nativeLanguage %>');
+    await nextTick();
+
+    expect(loadTranslations.mock.calls.map(([language]) => language)).toEqual(['<%- nativeLanguage %>', 'yy']);
+  });
+
+  it('should take the language of the account when the user chose none', async () => {
+    mountLanguage('<%- nativeLanguage %>');
+    await flushPromises();
+    localStorage.clear();
+
+    store.setAuthentication({ login: 'user', langKey: 'zz' } as any);
+    await nextTick();
+    await flushPromises();
+
+    expect(loadTranslations).toHaveBeenCalledWith('zz');
+  });
+
+<%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
+  it('should load the translations of the microfrontends once authenticated', async () => {
+    const composer = mountLanguage();
+    await flushPromises();
+
+    store.setAuthentication({ login: 'user' } as any);
+    await nextTick();
+    await flushPromises();
+
+    expect(composer.mergeLocaleMessage).toHaveBeenCalledWith('<%- nativeLanguage %>', { remote: {} });
+  });
+
+<%_ } _%>
+  it('should keep the language the user chose over the one of the account', async () => {
+    localStorage.setItem('currentLanguage', '<%- nativeLanguage %>');
+    mountLanguage('<%- nativeLanguage %>');
+    await flushPromises();
+
+    store.setAuthentication({ login: 'user', langKey: 'zz' } as any);
+    await nextTick();
+    await flushPromises();
+
+    expect(loadTranslations).not.toHaveBeenCalled();
+  });
+});

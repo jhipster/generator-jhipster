@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import type { Page } from '@playwright/test';
+
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -65,7 +67,7 @@ const <%- entityInstance %>PageUrl = '/<%- entityPage %>';
 
 const <%- entityInstance %>ApiUrl = '/<%- baseApi + entityApiUrl %>';
 
-const entitiesRequest = (page: import('@playwright/test').Page) =>
+const entitiesRequest = (page: Page) =>
   page.waitForResponse(
     response => new URL(response.url()).pathname === <%- entityInstance %>ApiUrl && response.request().method() === 'GET',
   );
@@ -270,7 +272,7 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
         await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
       });
 
-      <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship missbehavior' : '' %>
+      <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship misbehavior' : '' %>
       test<%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '.skip' : '' %>('edit button click should load edit <%- entityNameCapitalized %> page and save', async ({ page, jhi }) => {
         await page.locator(entityEditButtonSelector).first().click();
         await expect(jhi.entity.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>')).toBeVisible();

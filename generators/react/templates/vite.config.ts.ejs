@@ -28,6 +28,9 @@ import { defineConfig, normalizePath } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ } _%>
 
+<%_ if (enableTranslation) { _%>
+import { i18nVitePlugin } from './build-plugins/i18n.ts';
+<%_ } _%>
 <%_ if (microfrontend) { _%>
 import federationConfig from './module-federation.config.ts';
 <%_ } _%>
@@ -46,6 +49,9 @@ const development = process.env.NODE_ENV !== 'production';
 const config = defineConfig({
   plugins: [
     react(),
+<%_ if (enableTranslation) { _%>
+    i18nVitePlugin(),
+<%_ } _%>
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
     viteStaticCopy({
       targets: [

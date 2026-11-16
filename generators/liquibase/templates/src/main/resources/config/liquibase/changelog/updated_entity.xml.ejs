@@ -26,9 +26,6 @@
         <addColumn tableName="<%- entity.entityTableName %>">
   <%_ for (field of addedFields) { _%>
             <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- field.liquibaseColumnAttributes %>/>
-    <%_ if (field.shouldCreateContentType) { _%>
-            <column name="<%- field.columnName %>_content_type" type="varchar(255)"/>
-    <%_ } _%>
   <%_ } _%>
   <%_ // End for (field of addedFields) _%>
         </addColumn>

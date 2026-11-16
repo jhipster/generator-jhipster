@@ -1,0 +1,16 @@
+// expect-node Snapshot v1, https://github.com/mshima/expect-node#snapshots
+
+exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
+{
+  "corsAdditionalAllowedOrigins": [],
+  "corsAllowedOriginPatterns": [
+    "https://*.githubpreview.dev",
+  ],
+  "corsAllowedOrigins": [
+    "http://localhost:8100",
+    "https://localhost:8100",
+    "http://localhost:devServerPortProxy",
+    "https://localhost:devServerPortProxy",
+  ],
+}
+`;

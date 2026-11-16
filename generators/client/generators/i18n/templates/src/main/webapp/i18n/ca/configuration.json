@@ -3,8 +3,11 @@
     "title": "Configuració",
     "filter": "Filtrar (per prefix)",
     "table": {
+      "title": "Propietats de configuració",
       "prefix": "Prefix",
-      "properties": "Propietats"
+      "properties": "Propietats",
+      "property": "Propietat",
+      "value": "Valor"
     }
   }
 }

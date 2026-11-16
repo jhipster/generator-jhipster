@@ -28,6 +28,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.r2dbc.convert.R2dbcConverter;
@@ -149,8 +150,18 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
         return template.count(Query.query(criteria), entityType);
     }
 
+    /**
+     * Whether the entity references an entity without id, which cannot be saved as a reference.
+     */
+    protected boolean hasReferenceWithoutId(T entity) {
+        return joinTables().stream().anyMatch(joinTable -> joinTable.referenceIds().apply(entity).stream().anyMatch(Objects::isNull));
+    }
+
     @Override
     public <S extends T> Mono<S> save(S entity) {
+        if (hasReferenceWithoutId(entity)) {
+            return Mono.error(new DataIntegrityViolationException("A referenced entity has no id"));
+        }
         return super.save(entity).flatMap(saved ->
             Flux.fromIterable(joinTables())
                 .concatMap(joinTable -> updateJoinTable(joinTable, saved))

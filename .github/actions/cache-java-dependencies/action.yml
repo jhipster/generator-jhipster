@@ -38,10 +38,13 @@ runs:
         echo "::group::jhipster-bom"
         ./mvnw dependency:go-offline --ntp
         # Builds the bom as jhipster/actions/build-jhipster-bom does, whose plugins are not all downloaded by dependency:go-offline.
-        npm run install-ci || true
+        status=0
+        npm run install-ci || status=$?
         # A job that does not build the bom must not find it in the cache.
         rm -rf ~/.m2/repository/tech/jhipster/*/0.0.0-CICD ~/.m2/repository/tech/jhipster/*/maven-metadata-local.xml
         echo "::endgroup::"
+        # The following steps run with always(), a failure here is reported without skipping them.
+        exit $status
       if: always() && inputs.jhipster-bom-path
       shell: bash
       working-directory: ${{ github.workspace }}/${{ inputs.jhipster-bom-path }}
@@ -53,10 +56,13 @@ runs:
       run: |
         echo "::group::maven(imperative)"
         jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --monorepository --skip-git --skip-jhipster-dependencies --skip-checks
-        npm run backend:build-cache -- --ntp || true
+        npm install --force
+        status=0
+        npm run backend:build-cache -- --ntp || status=$?
         cd app1
         ./npmw -v
         echo "::endgroup::"
+        exit $status
       shell: bash
       if: always()
       working-directory: ${{ github.workspace }}/tmp
@@ -67,10 +73,12 @@ runs:
     - name: 'mvn(reactive): cache dependencies'
       run: |
         echo "::group::maven(reactive)"
-        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --reactive --websocket no --monorepository --skip-git --skip-jhipster-dependencies --skip-checks
+        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --reactive --websocket no --cache-provider no --monorepository --skip-git --skip-jhipster-dependencies --skip-checks
         npm install --force
-        npm run backend:build-cache -- --ntp || true
+        status=0
+        npm run backend:build-cache -- --ntp || status=$?
         echo "::endgroup::"
+        exit $status
       shell: bash
       if: always()
       working-directory: ${{ github.workspace }}/tmp
@@ -83,10 +91,12 @@ runs:
         echo "::group::gradle(imperative)"
         jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --build gradle --monorepository --skip-git --skip-jhipster-dependencies --skip-checks
         npm install --force
-        npm run backend:build-cache || true
+        status=0
+        npm run backend:build-cache || status=$?
         cd app1
         ./npmw -v
         echo "::endgroup::"
+        exit $status
       shell: bash
       if: always()
       working-directory: ${{ github.workspace }}/tmp
@@ -97,10 +107,12 @@ runs:
     - name: 'gradle(reactive): cache dependencies'
       run: |
         echo "::group::gradle(reactive)"
-        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --build gradle --reactive --websocket no --monorepository --skip-git --skip-jhipster-dependencies --skip-checks
+        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --build gradle --reactive --websocket no --cache-provider no --monorepository --skip-git --skip-jhipster-dependencies --skip-checks
         npm install --force
-        npm run backend:build-cache || true
+        status=0
+        npm run backend:build-cache || status=$?
         echo "::endgroup::"
+        exit $status
       shell: bash
       if: always()
       working-directory: ${{ github.workspace }}/tmp

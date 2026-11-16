@@ -369,7 +369,7 @@ describe('generator - maven - needles', () => {
       );
     });
 
-    it('should match generated pom', () => {
+    it('should match generated pom snapshot', () => {
       expect(runResult.getSnapshot('**/pom.xml')).toMatchSnapshot();
     });
   });

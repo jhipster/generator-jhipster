@@ -56,7 +56,7 @@ describe(`generator - ${generator}`, () => {
       result.assertFileContent('checkstyle.xml', 'io.spring.nohttp.checkstyle.check.NoHttpCheck');
     });
 
-    it('should compose with generators', () => {
+    it('should compose with generators - snapshot', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:java-simple-application:maven",
@@ -97,7 +97,7 @@ describe(`generator - ${generator}`, () => {
       result.assertNoFileContent(gradleFile, /target\s*=/);
     });
 
-    it('should compose with generators', () => {
+    it('should compose with generators - snapshot', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:java-simple-application:gradle",

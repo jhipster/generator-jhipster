@@ -20,9 +20,9 @@
 package <%- entityAbsolutePackage %>.web.rest;
 
 import static <%- entityAbsolutePackage %>.domain.<%- persistClass %>Asserts.*;
-import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
+import static <%- packageName %>.test.util.TestUtil.createUpdateProxyForBean;
 <%_ if (!readOnly && updatableEntity) { _%>
-import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateBody;
+import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdateBody;
 <%_ } _%>
 <%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
@@ -50,34 +50,9 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
       }))
       .filter(({ observedField }) => observedField);
     const noCascadeOtherEntities = [...new Set(noCascadeRelationships.map(({ relationship }) => relationship.otherEntity))];
-    // A related entity is created for each relationship, and createEntity may already have persisted one of the same
-    // class: the unique fields of the created ones are randomized so that none of them collide. The id is randomized
-    // too when it is not generated and the same entity is related more than once.
-    const noCascadeFakeValues = new Map(
-      noCascadeRelationships.map(({ relationship }) => {
-        const { otherEntity } = relationship;
-        const relatedMoreThanOnce = noCascadeRelationships.filter(other => other.relationship.otherEntity === otherEntity).length > 1;
-        const fakedFields = [
-          ...relatedMoreThanOnce ? otherEntity.primaryKey.fields.filter(field => !field.autoGenerate) : [],
-          ...otherEntity.fields.filter(field => field.unique && !field.id),
-        ];
-        return [
-          relationship,
-          fakedFields
-            .map(field => ({
-              property: field.propertyConsumerName,
-              value: {
-                String: `"${faker.string.alpha({ length: Math.min(Math.max(10, field.fieldValidateRulesMinlength ?? 0), field.fieldValidateRulesMaxlength ?? 255) })}"`,
-                UUID: `UUID.fromString("${faker.string.uuid()}")`,
-                Long: `${faker.number.int({ min: 1, max: 1000000 })}L`,
-                Integer: `${faker.number.int({ min: 1, max: 1000000 })}`,
-              }[field.javaFieldType],
-            }))
-            .filter(fake => fake.value),
-        ];
-      }),
-    );
-    const noCascadeFakesUseUuid = [...noCascadeFakeValues.values()].flat().some(fake => fake.value.startsWith('UUID'));
+    // A related entity is created with createUpdatedEntity, whose values pass the validations and differ from the ones of
+    // createEntity, which may already have persisted one: the relationships to the same entity share it.
+    const noCascadeFirstRelationship = relationship => noCascadeRelationships.find(other => other.relationship.otherEntity === relationship.otherEntity).relationship;
     const hasUserRepository
       = filterTestableRelationships.some(rel => rel.otherEntity.builtInUser)
       || (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
@@ -96,9 +71,7 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
     }
     const transactionalAnnotation = databaseTypeSql && !reactive ? '\n    @Transactional' : '';
 _%>
-<%_ if (entityAbsolutePackage !== packageName) { _%>
-import <%- packageName %>.web.rest.TestUtil;
-<% } %>
+import <%- packageName %>.test.util.TestUtil;
 import <%- packageName %>.IntegrationTest;
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ const imported = [entityNameCapitalized]; _%>
@@ -253,7 +226,7 @@ import java.util.Base64;
 import java.util.stream.Stream;
 <%_ } _%>
 import java.util.List;
-<%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID || noCascadeFakesUseUuid) { _%>
+<%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
@@ -266,19 +239,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 <%_ } _%>
 
 <%_ if (anyFieldIsBigDecimal) { _%>
-import static <%- packageName %>.web.rest.TestUtil.sameNumber;
+import static <%- packageName %>.test.util.TestUtil.sameNumber;
 <%_ } _%>
 <%_ if (anyFieldIsZonedDateTime) { _%>
-import static <%- packageName %>.web.rest.TestUtil.sameInstant;
+import static <%- packageName %>.test.util.TestUtil.sameInstant;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 <%_ if (reactive) { _%>
 import static org.hamcrest.Matchers.is;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && reactive) { _%>
+<%_ if (serverUsesCsrf && reactive) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
-<%_ } else if (authenticationUsesCsrf) { _%>
+<%_ } else if (serverUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -447,8 +420,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     private static final byte[] <%- defaultValueName %> = TestUtil.createByteArray(1, "0");
     private static final byte[] <%- updatedValueName %> = TestUtil.createByteArray(1, "1");
     <%_ } _%>
-    private static final String <%- defaultValueName %>_CONTENT_TYPE = "image/jpg";
-    private static final String <%- updatedValueName %>_CONTENT_TYPE = "image/png";
   <%_ } else if (isEnum) { _%>
 
     private static final <%- fieldType %> <%- defaultValueName %> = <%- fieldType %>.<%- enumValue1.name %>;
@@ -546,9 +517,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
             .<%- field.fieldName %>(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .<%- field.fieldName %>ContentType(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)
-      <%_ } _%>
     <%_ } _%>;
     <%_ if (!anyRelationshipIsRequired) { _%>
     }
@@ -564,9 +532,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
         <%- createInstance %>.<%- field.propertyConsumerName %>(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        <%- createInstance %>.<%- field.propertyConsumerName %>ContentType(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_ const alreadyGeneratedEntities = []; _%>
@@ -642,7 +607,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
 
 <%_ } _%>
-<%_ if (reactive && authenticationUsesCsrf) { _%>
+<%_ if (reactive && serverUsesCsrf) { _%>
     @BeforeEach
     void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
@@ -701,7 +666,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             rest<%- entityClass %>MockMvc
                 .perform(
                   post(ENTITY_API_URL)
-    <%_ if (authenticationUsesCsrf) { _%>
+    <%_ if (serverUsesCsrf) { _%>
                   .with(csrf())
     <%_ } _%>
                   .contentType(MediaType.APPLICATION_JSON)
@@ -776,7 +741,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         rest<%- entityClass %>MockMvc
             .perform(
                 post(ENTITY_API_URL)
-    <%_ if (authenticationUsesCsrf) { _%>
+    <%_ if (serverUsesCsrf) { _%>
                 .with(csrf())
     <%_ } _%>
                 .contentType(MediaType.APPLICATION_JSON)
@@ -870,7 +835,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
       <%_ } _%>
                 .<%- primaryKey.propertySupplierName %>()
         )
-      <%_ if (authenticationUsesCsrf) { _%>
+      <%_ if (serverUsesCsrf) { _%>
             .with(csrf())
       <%_ } _%>
             .contentType(MediaType.APPLICATION_JSON)
@@ -934,7 +899,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
         <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -980,7 +945,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>Patch)))
             .andExpect(status().isBadRequest());
@@ -1054,9 +1019,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- reactive ? '' : ')' %>
 <%_ } _%>
 <%_ for (field of fieldsToTest) { _%>
-  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))<%- reactive ? '' : ')' %>
-  <%_ } _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
@@ -1102,33 +1064,84 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
         }
     }
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+  <%_ const sortRelationship = relationships.find(relationship => relationship.persistableRelationship && !relationship.collection && !relationship.otherEntity.embedded); _%>
 
-    @Test
+    @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
   <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL + "?sort=doesNotExist,asc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
   <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=doesNotExist,asc"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
   <%_ } _%>
     }
+  <%_ if (sortRelationship) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>SortedByWhatIsNotAPropertyOfARelationship() <%- reactive ? '' : 'throws Exception ' %>{
+    <%_ if (reactive) { _%>
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.doesNotExist,asc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
+    <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.doesNotExist,asc"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
+    <%_ } _%>
+    }
+    <%_ if (sortRelationship.otherEntity.builtInUser && !authenticationTypeOauth2) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>SortedByAPropertyOfARelationshipMarkedNotSortable() <%- reactive ? '' : 'throws Exception ' %>{
+      <%_ if (reactive) { _%>
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.password,asc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
+      <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.password,asc"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
+      <%_ } _%>
+    }
+    <%_ } _%>
+  <%_ } _%>
   <%_ if (searchEngineCouchbase) { _%>
 
-    @Test
+    @Test<%- transactionalAnnotation %>
     void search<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
     <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:doesNotExist&sort=doesNotExist,asc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.notsortable");
     <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:doesNotExist&sort=doesNotExist,asc"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.notsortable"));
     <%_ } _%>
     }
   <%_ } _%>
@@ -1188,9 +1201,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- primaryKey.name %>").value(<%- reactive ? 'is(' : '' %><%- idValue %>))
 <%_ } _%>
 <%_ for (field of fieldsToTest) { _%>
-  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- field.fieldName %>ContentType").value(<%- reactive ? 'is(' : '' %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))
-  <%_ } _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- field.fieldName %>").value(<%- reactive ? 'is(' : '' %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
@@ -1265,7 +1275,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         );
     }
     <%_ } _%>
-    <%_ if (searchBy.fieldTypeString) { _%>
+    <%_ if (searchBy.filterableField && searchBy.fieldTypeString) { _%>
     @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>ContainsSomething() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
@@ -1292,7 +1302,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
     <%_ } _%>
     <%_ // the range criteria _%>
-    <%_ if (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) { _%>
+    <%_ if (searchBy.filterableField && (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime)) { _%>
       <%_ const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           let biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
@@ -1431,9 +1441,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<% for (field of fieldsToTest) { %>
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))
-      <%_ } _%>
             .jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if
       (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
@@ -1473,9 +1480,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         }[primaryKey.type] || '';
     _%>
             .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% for (const field of fieldsToTest) { %>
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .andExpect(jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE)))
-      <%_ } _%>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
     if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
@@ -1581,14 +1585,10 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
   <%_ if (fluentMethods && fieldsToTest.length > 0) { _%>
         updated<%- persistClass %><% for (field of fieldsToTest) { %>
-            .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>
-            .<%- field.fieldName %>ContentType(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE)<% } %><% } %>;
+            .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% } %>;
   <%_ } else { _%>
     <%_ for (field of fieldsToTest) { _%>
         updated<%- persistClass %>.<%- field.propertyConsumerName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>);
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        updated<%- persistClass %>.<%- field.propertyConsumerName %>ContentType(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE);
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_ if (dtoMapstruct) { _%>
@@ -1603,7 +1603,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isOk();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- dtoMapstruct ? dtoInstance : `updated${persistClass}` %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- dtoMapstruct ? dtoInstance : `updated${persistClass}` %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- dtoMapstruct ? dtoInstance : `updated${persistClass}` %>)))
             .andExpect(status().isOk());
@@ -1662,7 +1662,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1702,7 +1702,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1743,7 +1743,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isEqualTo(405);
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
@@ -1779,14 +1779,15 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     void shouldNotUpdateRelatedEntitiesThrough<%- entityClass %>() throws Exception {
         // Persist the related entities and a <%- entityInstance %> related to them
     <%_ for (const { relationship, observedField } of noCascadeRelationships) { _%>
-        var <%- relatedVariable(relationship) %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- (databaseTypeSql && relationship.otherEntity.anyRelationshipIsRequired) ? entityManagerVariable : '' %>)<%- createEntityPostfix %>;
-      <%_ for (const { property, value } of noCascadeFakeValues.get(relationship)) { _%>
-        <%- relatedVariable(relationship) %>.<%- property %>(<%- value %>);
-      <%_ } _%>
-      <%_ if (databaseTypeSql && !reactive) { _%>
+      <%_ if (noCascadeFirstRelationship(relationship) === relationship) { _%>
+        var <%- relatedVariable(relationship) %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createUpdatedEntity(<%- (databaseTypeSql && relationship.otherEntity.anyRelationshipIsRequired) ? entityManagerVariable : '' %>)<%- createEntityPostfix %>;
+        <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%- relatedVariable(relationship) %>);
-      <%_ } else if (!databaseTypeSql) { _%>
+        <%_ } else if (!databaseTypeSql) { _%>
         <%- relatedVariable(relationship) %> = <%- relatedRepository(relationship) %>.save(<%- relatedVariable(relationship) %>)<%- callBlock %>;
+        <%_ } _%>
+      <%_ } else { _%>
+        var <%- relatedVariable(relationship) %> = <%- relatedVariable(noCascadeFirstRelationship(relationship)) %>;
       <%_ } _%>
         var <%- relatedVariable(relationship) %>Value = <%- relatedVariable(relationship) %>.<%- observedField.propertySupplierName %>();
         <%- persistInstance %>.<%- relationship.propertyConsumerName %>(<%- relationship.collection ? `new HashSet<>(Set.of(${relatedVariable(relationship)}))` : relatedVariable(relationship) %>);
@@ -1820,7 +1821,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isOk();
     <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(updateJson)))
             .andExpect(status().isOk());
@@ -1839,7 +1840,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isOk();
     <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(patchJson)))
             .andExpect(status().isOk());
@@ -1861,7 +1862,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- entityInstance %>Repository.delete(inserted<%- persistClass %>)<%- callBlock %>;
         inserted<%- persistClass %> = null;
       <%_ } _%>
-      <%_ for (const { relationship } of noCascadeRelationships) { _%>
+      <%_ for (const { relationship } of noCascadeRelationships.filter(({ relationship }) => noCascadeFirstRelationship(relationship) === relationship)) { _%>
         <%- relatedRepository(relationship) %>.delete(<%- relatedVariable(relationship) %>)<%- callBlock %>;
       <%_ } _%>
     <%_ } _%>
@@ -1930,7 +1931,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1969,7 +1970,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -2010,7 +2011,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isEqualTo(405);
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
@@ -2066,7 +2067,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus()
             .isNoContent();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- (primaryKey.typeUUID && databaseTypeSql) ? '.toString()' : '' %>)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+        rest<%- entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- (primaryKey.typeUUID && databaseTypeSql) ? '.toString()' : '' %>)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
   <%_ } _%>
@@ -2135,9 +2136,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- reactive ? '' : ')' %>
   <%_ } _%>
   <%_ for (field of fieldsToTest) { _%>
-    <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))<%- reactive ? '' : ')' %>
-    <%_ } _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else

@@ -1,0 +1,118 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { useState } from 'react';
+import { Badge, Button, Card, FormControl, Modal, Table } from 'react-bootstrap';
+<%_ if (enableTranslation) { _%>
+import { translate } from 'react-jhipster';
+<%_ } _%>
+
+import { type Label } from 'app/shared/jhipster/label';
+import { type MetricDetails } from 'app/shared/jhipster/metrics.model';
+
+<%_ if (enableTranslation) { _%>
+export const labelText = ({ text, translationKey }: Label): string => {
+  const translated: string | undefined = translationKey && translate(translationKey);
+  return !translated || translated.startsWith('translation-not-found') ? text : translated;
+};
+<%_ } else { _%>
+export const labelText = ({ text }: Label): string => text;
+<%_ } _%>
+
+export const MetricsDetailsModal = ({ details, handleClose }: { details: MetricDetails; handleClose: () => void }) => {
+  const [selectedValue, setSelectedValue] = useState<string>();
+  const [term, setTerm] = useState('');
+  const [shownItems, setShownItems] = useState<string[]>([]);
+
+  const items = details.items.filter(
+    ({ title, value }) => (!selectedValue || value === selectedValue) && title.toLowerCase().includes(term.toLowerCase()),
+  );
+
+  const toggle = (title: string) =>
+    setShownItems(shown => (shown.includes(title) ? shown.filter(item => item !== title) : [...shown, title]));
+
+  return (
+    <Modal show onHide={handleClose} size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>{labelText(details.label)}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {details.filters.map(filter => (
+          <Badge key={filter.value ?? 'all'} bg={filter.status} className="hand me-1" onClick={() => setSelectedValue(filter.value)}>
+            {labelText(filter.label)}&nbsp;
+            <Badge pill bg="secondary">
+              {filter.count}
+            </Badge>
+          </Badge>
+        ))}
+        <div className="mt-2">&nbsp;</div>
+        Filter
+        <FormControl type="text" value={term} onChange={event => setTerm(event.target.value)} />
+        {items.map(item => (
+          <div className="pad" key={item.title}>
+            <h6>
+              <Badge bg={item.status}>{item.value}</Badge>
+              &nbsp;{item.title}{' '}
+              {item.lines.length > 0 && (
+                <a className="hand" onClick={() => toggle(item.title)}>
+                  {labelText(shownItems.includes(item.title) ? details.hideLines : details.showLines)}
+                </a>
+              )}
+            </h6>
+            {shownItems.includes(item.title) && (
+              <Card>
+                <Card.Body>
+                  {item.lines.map((line, lineIndex) => (
+                    <div className="break" key={lineIndex}>
+                      <samp>{line}</samp>
+                    </div>
+                  ))}
+                </Card.Body>
+              </Card>
+            )}
+            <Table size="sm" responsive>
+              <thead>
+                <tr>
+                  {details.columns.map((column, columnIndex) => (
+                    <th key={columnIndex} scope="col">
+                      {labelText(column)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {item.cells.map((cell, cellIndex) => (
+                    <td key={cellIndex}>{cell}</td>
+                  ))}
+                </tr>
+              </tbody>
+            </Table>
+          </div>
+        ))}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="primary" onClick={handleClose}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export default MetricsDetailsModal;

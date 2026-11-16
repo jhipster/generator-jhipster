@@ -28,10 +28,14 @@ import { sendActivity } from 'app/config/websocket-middleware';
 <%_ } _%>
 import EntitiesRoutes from 'app/entities/routes';
 <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
 import Activate from 'app/modules/account/activate/activate';
+  <%_ } _%>
 import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
 import PasswordResetInit from 'app/modules/account/password-reset/init/password-reset-init';
+  <%_ if (generateUserRegistration) { _%>
 import Register from 'app/modules/account/register/register';
+  <%_ } _%>
 <%_ } _%>
 import Home from 'app/modules/home/home';
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -86,8 +90,10 @@ const AppRoutes = () => {
                 </PrivateRoute>
               }
             />
+  <%_ if (generateUserRegistration) { _%>
             <Route path="register" element={<Register />} />
             <Route path="activate" element={<Activate />} />
+  <%_ } _%>
             <Route path="reset">
               <Route path="request" element={<PasswordResetInit />} />
               <Route path="finish" element={<PasswordResetFinish />} />

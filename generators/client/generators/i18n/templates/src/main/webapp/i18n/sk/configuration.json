@@ -3,8 +3,11 @@
     "title": "Konfigurácia",
     "filter": "Filtrovať (podľa predpony)",
     "table": {
+      "title": "Vlastnosti konfigurácie",
       "prefix": "Predpona",
-      "properties": "Vlastnosti"
+      "properties": "Vlastnosti",
+      "property": "Vlastnosť",
+      "value": "Hodnota"
     }
   }
 }

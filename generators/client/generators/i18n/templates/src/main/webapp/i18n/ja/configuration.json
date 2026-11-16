@@ -3,8 +3,11 @@
     "title": "設定",
     "filter": "フィルター (by prefix)",
     "table": {
+      "title": "設定プロパティ",
       "prefix": "Prefix",
-      "properties": "プロパティ"
+      "properties": "プロパティ",
+      "property": "プロパティ",
+      "value": "値"
     }
   }
 }

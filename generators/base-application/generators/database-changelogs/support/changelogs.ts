@@ -169,8 +169,9 @@ const findChangelogs = (generator: Generator): EntityChangelogObject[] =>
     a.changelogDate.localeCompare(b.changelogDate),
   );
 
+/** The name of a changelog: a name of the JDL, which does not start with a digit, keeping the changelogs in the order of their dates. */
 const changelogName = ({ changelogDate, entityName }: Pick<EntityChangelogObject, 'changelogDate' | 'entityName'>): string =>
-  `${changelogDate}_${entityName}`;
+  `_${changelogDate}_${entityName}`;
 
 const newChangelogNames = (generator: Generator): Set<string> =>
   generator.getContextData<Set<string>>(CONTEXT_DATA_NEW_CHANGELOGS_KEY, { factory: () => new Set() });
@@ -202,7 +203,8 @@ const previousEntities = (generator: Generator): Map<string, EntityConfig> =>
 const recordAfter = (generator: Generator, last: EntityChangelogObject, changelog: Omit<EntityChangelogObject, 'type'>): void => {
   if (last.entity) {
     const { entity, ...lastWithoutEntity } = last;
-    generator.setObjectConfig(changelogName(last), lastWithoutEntity);
+    // Under the name it has: a changelog recorded before the names started with an underscore keeps its name.
+    generator.setObjectConfig((last as { name?: string }).name ?? changelogName(last), lastWithoutEntity);
     previousEntities(generator).set(changelogName(changelog), entity);
   }
   record(generator, changelog);

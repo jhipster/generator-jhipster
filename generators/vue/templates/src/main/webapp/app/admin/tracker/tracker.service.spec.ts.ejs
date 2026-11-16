@@ -24,7 +24,7 @@ import { type RxStomp } from '@stomp/rx-stomp';
 import { shallowMount } from '@vue/test-utils';
 import { Subject } from 'rxjs';
 
-import { authenticatedKey } from '@/shared/config/injection-keys';
+import { authenticatedKey } from '@/config/injection-keys';
 
 import type TrackerService from './tracker.service';
 import { useTrackerService } from './tracker.service';
@@ -59,7 +59,7 @@ describe('Tracker Service', () => {
       render: () => null,
       setup() {
         trackerService = useTrackerService({ stomp: mockStomp as unknown as RxStomp });
-        trackerService['buildUrl'] = () => '';
+        (trackerService as unknown as { buildUrl: () => string }).buildUrl = () => '';
       },
     };
   });

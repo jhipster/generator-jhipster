@@ -6,6 +6,17 @@
       "entity": "sqlfull"
     },
     {
+      "name": "react-default-additional",
+      "job-name": "react-default-additional",
+      "entity": "none",
+      "app-sample": "react-default",
+      "jdl-entity": "*",
+      "generatorOptions": {
+        "removeNeedles": true,
+        "e2eTls": true
+      }
+    },
+    {
       "name": "react-maven-h2mem-memcached",
       "app-sample": "react-maven-h2mem-memcached",
       "entity": "sql",

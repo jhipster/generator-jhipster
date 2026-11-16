@@ -47,12 +47,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 <&_ } -&>
 <%_ } -%>
 
-<%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
-<&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
-    @Field("<%- field.fieldNameUnderscored %>_content_type")
-<&_ } -&>
-<%_ } -%>
-
 <%_ for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (!reactive && (relationship.relationshipManyToMany || !relationship.otherEntity.embedded)) { _%>

@@ -27,6 +27,11 @@ import writeCassandraFilesTask from './files.ts';
 const { NO: NO_PAGINATION } = PaginationTypes;
 
 export default class CassandraGenerator extends SpringBootApplicationGenerator {
+  constructor(...[args, options, features]: ConstructorParameters<typeof SpringBootApplicationGenerator>) {
+    // Its templates write the content type of a blob through its content type field.
+    super(args, options, { ...features, contentTypeFields: true });
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -185,6 +190,13 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
         if (!application.reactive) return;
 
         source.addAllowBlockingCallsInside!({ classPath: 'io.netty.util.NetUtil', method: '<clinit>' });
+        // The driver shuts its executors down from Netty's global executor when a session closes. Waking an executor up
+        // takes the lock of its task queue, which blocks when the lock is contended: the error then keeps the session from
+        // closing, and the tests hang.
+        source.addAllowBlockingCallsInside!({
+          classPath: 'io.netty.util.concurrent.SingleThreadEventExecutor',
+          method: 'shutdownGracefully',
+        });
       },
       integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {

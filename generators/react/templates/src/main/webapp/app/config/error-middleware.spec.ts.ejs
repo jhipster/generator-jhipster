@@ -1,0 +1,78 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+import errorMiddleware from './error-middleware';
+import loggerMiddleware from './logger-middleware';
+
+describe('development middlewares', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  const run = (middleware: typeof errorMiddleware, action: Record<string, unknown>) => {
+    const next = vi.fn().mockReturnValue('next');
+    expect(middleware()(next)(action)).toBe('next');
+    expect(next).toHaveBeenCalledWith(action);
+  };
+
+  it('should only pass the actions on outside of development', () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const groupCollapsed = vi.spyOn(console, 'groupCollapsed').mockImplementation(() => {});
+
+    run(errorMiddleware, { type: 'entity/fetch/rejected', error: new Error('Failed') });
+    run(loggerMiddleware, { type: 'entity/fetch/rejected', error: new Error('Failed') });
+
+    expect(error).not.toHaveBeenCalled();
+    expect(groupCollapsed).not.toHaveBeenCalled();
+  });
+
+  it('should log the errors and their field errors in development', () => {
+    vi.stubGlobal('DEVELOPMENT', true);
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    run(errorMiddleware, { type: 'entity/fetch/fulfilled' });
+    run(errorMiddleware, { type: 'entity/fetch/rejected', error: { message: 'Failed' } });
+    run(errorMiddleware, { type: 'entity/fetch/rejected', error: { message: 'Failed', response: { data: { message: 'Invalid' } } } });
+    run(errorMiddleware, {
+      type: 'entity/fetch/rejected',
+      error: {
+        message: 'Failed',
+        response: { data: { message: 'Invalid', fieldErrors: [{ field: 'name', objectName: 'entity', message: 'NotNull' }] } },
+      },
+    });
+
+    expect(error).toHaveBeenCalledTimes(5);
+    expect(error).toHaveBeenLastCalledWith(expect.stringContaining('field: name, Object: entity, message: NotNull'));
+  });
+
+  it('should log the actions in development', () => {
+    vi.stubGlobal('DEVELOPMENT', true);
+    vi.spyOn(console, 'groupCollapsed').mockImplementation(() => {});
+    vi.spyOn(console, 'groupEnd').mockImplementation(() => {});
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    run(loggerMiddleware, { type: 'entity/fetch/fulfilled', payload: 'payload' });
+    run(loggerMiddleware, { type: 'entity/fetch/rejected', error: 'error' });
+
+    expect(log).toHaveBeenCalledWith('Payload:', 'payload');
+    expect(log).toHaveBeenCalledWith('Error:', 'error');
+  });
+});

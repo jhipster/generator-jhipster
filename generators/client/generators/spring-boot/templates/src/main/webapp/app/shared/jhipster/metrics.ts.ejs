@@ -1,0 +1,482 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ const label = (text, translationKey) => enableTranslation ? `{ text: '${text}', translationKey: '${translationKey}' }` : `{ text: __jhiTransformTranslateStringify__('${translationKey}') }`; _%>
+import { type MetricCell, type MetricColumn, type MetricDetailFilter, type MetricDetailItem, type MetricDetails, type MetricGauge, type MetricItem, type MetricStatus, type MetricsBlock, type MetricsSection } from './metrics.model';
+import { type Label } from './label';
+
+export interface JvmMetrics {
+  committed: number;
+  max: number;
+  used: number;
+}
+
+export interface MaxMeanCount {
+  max: number;
+  mean: number;
+  count: number;
+}
+
+export interface MetricsWithPercentile extends MaxMeanCount {
+  '0.0': number;
+  '0.5': number;
+  '0.75': number;
+  '0.95': number;
+  '0.99': number;
+}
+
+export interface Databases {
+  min: { value: number };
+  idle: { value: number };
+  max: { value: number };
+  active: { value: number };
+  usage: MetricsWithPercentile;
+  acquire: MetricsWithPercentile;
+  creation: MetricsWithPercentile;
+}
+
+export interface HttpServerRequests {
+  all: { count: number };
+  percode: Record<string, MaxMeanCount>;
+}
+
+export interface CacheMetrics {
+  'cache.gets.miss': number;
+  'cache.puts': number;
+  'cache.gets.hit': number;
+  'cache.removals': number;
+  'cache.evictions': number;
+}
+
+export interface GarbageCollector {
+  'jvm.gc.max.data.size': number;
+  /** Missing until a first pause of the garbage collector. */
+  'jvm.gc.pause'?: MetricsWithPercentile;
+  'jvm.gc.memory.promoted': number;
+  'jvm.gc.memory.allocated': number;
+  classesLoaded: number;
+  'jvm.gc.live.data.size': number;
+  classesUnloaded: number;
+}
+
+export interface ProcessMetrics {
+  'system.cpu.usage': number;
+  'system.cpu.count': number;
+  'system.load.average.1m'?: number;
+  'process.cpu.usage': number;
+  'process.files.max'?: number;
+  'process.files.open'?: number;
+  'process.start.time': number;
+  'process.uptime': number;
+}
+
+/** The response of the metrics endpoint, the groups that the backend has no data for may be empty. */
+export interface MetricsResponse {
+  jvm: Record<string, JvmMetrics>;
+  databases?: Partial<Databases>;
+  'http.server.requests'?: HttpServerRequests;
+  cache?: Record<string, CacheMetrics>;
+  garbageCollector?: GarbageCollector;
+  services?: Record<string, Record<string, MaxMeanCount>>;
+  processMetrics: ProcessMetrics;
+}
+
+export const ThreadState = {
+  Runnable: 'RUNNABLE',
+  TimedWaiting: 'TIMED_WAITING',
+  Waiting: 'WAITING',
+  Blocked: 'BLOCKED',
+  New: 'NEW',
+} as const;
+
+export type ThreadState = (typeof ThreadState)[keyof typeof ThreadState];
+
+/** A frame of the stack trace of a thread. */
+export interface StackTrace {
+  className: string;
+  methodName: string;
+  fileName: string;
+  lineNumber: number;
+}
+
+/** A thread of the thread dump endpoint. */
+export interface Thread {
+  threadName: string;
+  threadId: number;
+  threadState: ThreadState;
+  blockedTime: number;
+  blockedCount: number;
+  waitedTime: number;
+  waitedCount: number;
+  lockName: string | null;
+  stackTrace: StackTrace[];
+}
+
+/** The response of the thread dump endpoint. */
+export interface ThreadDump {
+  threads: Thread[];
+}
+
+/** The endpoints of the metrics page, their responses are given to `toMetrics` in this order. */
+export const metricsEndpoints = ['management/jhimetrics', 'management/threaddump'];
+
+const BYTES_PER_MEGABYTE = 1048576;
+
+const MILLISECONDS_PER_UNIT = {
+  year: 31557600000,
+  month: 2629746000,
+  day: 86400000,
+  hour: 3600000,
+  minute: 60000,
+  second: 1000,
+};
+
+/** The language of the page, which is not always the one of the browser. */
+const pageLocale = (): string | undefined => {
+  try {
+    return Intl.getCanonicalLocales(document.documentElement.lang)[0];
+  } catch {
+    return undefined;
+  }
+};
+
+const formatNumber = (value: number, maximumFractionDigits = 0): string =>
+  new Intl.NumberFormat(pageLocale(), { maximumFractionDigits }).format(Number.isNaN(value) ? 0 : value);
+
+const formatMegabytes = (bytes: number): string => `${formatNumber(bytes / BYTES_PER_MEGABYTE)}M`;
+
+const formatDuration = (milliseconds: number): string => {
+  const durations: string[] = [];
+  let remaining = milliseconds;
+  for (const [unit, millisecondsPerUnit] of Object.entries(MILLISECONDS_PER_UNIT)) {
+    const count = Math.floor(remaining / millisecondsPerUnit);
+    if (count > 0) {
+      durations.push(`${count} ${unit}${count > 1 ? 's' : ''}`);
+      remaining %= millisecondsPerUnit;
+    }
+  }
+  return durations.join(' ');
+};
+
+const formatDate = (milliseconds: number): string =>
+  new Intl.DateTimeFormat(pageLocale(), { dateStyle: 'full', timeStyle: 'medium' }).format(milliseconds);
+
+const toGauge = (value: number, max: number, status: MetricGauge['status'] = 'success'): MetricGauge => {
+  const percent = max > 0 ? (100 * value) / max : 0;
+  return { percent, text: `${formatNumber(percent)}%`, status };
+};
+
+const sortedEntries = <T>(values: Record<string, T>): [string, T][] => Object.entries(values).sort(([a], [b]) => a.localeCompare(b));
+
+const toMemoryItem = ([name, { used, max, committed }]: [string, JvmMetrics]): MetricItem =>
+  max === -1
+    ? { label: { text: name }, value: formatMegabytes(used) }
+    : {
+        label: { text: name },
+        value: `${formatMegabytes(used)} / ${formatMegabytes(max)}`,
+        note: `Committed: ${formatMegabytes(committed)}`,
+        gauge: toGauge(used, max),
+      };
+
+const threadStatuses: Record<ThreadState, MetricStatus> = {
+  RUNNABLE: 'success',
+  TIMED_WAITING: 'warning',
+  WAITING: 'info',
+  BLOCKED: 'danger',
+  NEW: 'secondary',
+};
+
+const toThreadDetailItem = ({ threadName, threadId, threadState, stackTrace, ...thread }: Thread): MetricDetailItem => ({
+  title: `${threadName} (ID ${threadId})`,
+  value: threadState,
+  status: threadStatuses[threadState],
+  lines: stackTrace.map(({ className, methodName, fileName, lineNumber }) => `${className}.${methodName}(${fileName}:${lineNumber})`),
+  cells: [
+    String(thread.blockedTime),
+    String(thread.blockedCount),
+    String(thread.waitedTime),
+    String(thread.waitedCount),
+    thread.lockName ?? '',
+  ],
+});
+
+const toThreadDetails = (threads: Thread[]): MetricDetails => {
+  const toFilter = (label: Label, value: ThreadState): MetricDetailFilter => ({
+    label,
+    value,
+    count: threads.filter(thread => thread.threadState === value).length,
+    status: threadStatuses[value],
+  });
+  return {
+    label: <%- label('Threads dump', 'metrics.jvm.threads.dump.title') %>,
+    showLines: <%- label('Show Stacktrace', 'metrics.jvm.threads.dump.show') %>,
+    hideLines: <%- label('Hide Stacktrace', 'metrics.jvm.threads.dump.hide') %>,
+    columns: [
+      <%- label('Blocked Time', 'metrics.jvm.threads.dump.blockedtime') %>,
+      <%- label('Blocked Count', 'metrics.jvm.threads.dump.blockedcount') %>,
+      <%- label('Waited Time', 'metrics.jvm.threads.dump.waitedtime') %>,
+      <%- label('Waited Count', 'metrics.jvm.threads.dump.waitedcount') %>,
+      <%- label('Lock name', 'metrics.jvm.threads.dump.lockname') %>,
+    ],
+    filters: [
+      { label: <%- label('All', 'metrics.jvm.threads.all') %>, count: threads.length, status: 'primary' },
+      toFilter(<%- label('Runnable', 'metrics.jvm.threads.runnable') %>, ThreadState.Runnable),
+      toFilter(<%- label('Waiting', 'metrics.jvm.threads.waiting') %>, ThreadState.Waiting),
+      toFilter(<%- label('Timed waiting', 'metrics.jvm.threads.timedwaiting') %>, ThreadState.TimedWaiting),
+      toFilter(<%- label('Blocked', 'metrics.jvm.threads.blocked') %>, ThreadState.Blocked),
+    ],
+    items: threads.map(toThreadDetailItem),
+  };
+};
+
+const toThreadsBlock = (threads: Thread[]): MetricsBlock => {
+  const count = (threadState: ThreadState): number => threads.filter(thread => thread.threadState === threadState).length;
+  const toThreadItem = (label: Label, threadState: ThreadState, status: MetricGauge['status']): MetricItem => ({
+    label,
+    value: formatNumber(count(threadState)),
+    gauge: toGauge(count(threadState), threads.length, status),
+  });
+  return {
+    label: <%- label('Threads', 'metrics.jvm.threads.title') %>,
+    items: [
+      toThreadItem(<%- label('Runnable', 'metrics.jvm.threads.runnable') %>, ThreadState.Runnable, 'success'),
+      toThreadItem(<%- label('Timed waiting', 'metrics.jvm.threads.timedwaiting') %>, ThreadState.TimedWaiting, 'warning'),
+      toThreadItem(<%- label('Waiting', 'metrics.jvm.threads.waiting') %>, ThreadState.Waiting, 'warning'),
+      toThreadItem(<%- label('Blocked', 'metrics.jvm.threads.blocked') %>, ThreadState.Blocked, 'danger'),
+      { label: { text: 'Total' }, value: formatNumber(threads.length) },
+    ],
+    details: toThreadDetails(threads),
+  };
+};
+
+const toSystemBlock = (system: ProcessMetrics): MetricsBlock => {
+  const optional = (text: string, value: number | undefined, maximumFractionDigits = 0): MetricItem[] =>
+    value === undefined ? [] : [{ label: { text }, value: formatNumber(value, maximumFractionDigits) }];
+  const toCpuItem = (text: string, usage: number): MetricItem => ({
+    label: { text },
+    value: `${formatNumber(100 * usage, 2)} %`,
+    gauge: toGauge(usage, 1),
+  });
+  return {
+    label: { text: 'System' },
+    items: [
+      { label: { text: 'Uptime' }, value: formatDuration(system['process.uptime']) },
+      { label: { text: 'Start time' }, value: formatDate(system['process.start.time']) },
+      toCpuItem('Process CPU usage', system['process.cpu.usage']),
+      toCpuItem('System CPU usage', system['system.cpu.usage']),
+      { label: { text: 'System CPU count' }, value: formatNumber(system['system.cpu.count']) },
+      ...optional('System 1m Load average', system['system.load.average.1m'], 2),
+      ...optional('Process files max', system['process.files.max']),
+      ...optional('Process files open', system['process.files.open']),
+    ],
+  };
+};
+
+const percentileColumns: MetricColumn[] = [
+  { label: <%- label('Count', 'metrics.servicesstats.table.count') %>, numeric: true },
+  { label: <%- label('Mean', 'metrics.servicesstats.table.mean') %>, numeric: true },
+  { label: <%- label('Min', 'metrics.servicesstats.table.min') %>, numeric: true },
+  { label: <%- label('p50', 'metrics.servicesstats.table.p50') %>, numeric: true },
+  { label: <%- label('p75', 'metrics.servicesstats.table.p75') %>, numeric: true },
+  { label: <%- label('p95', 'metrics.servicesstats.table.p95') %>, numeric: true },
+  { label: <%- label('p99', 'metrics.servicesstats.table.p99') %>, numeric: true },
+  { label: <%- label('Max', 'metrics.servicesstats.table.max') %>, numeric: true },
+];
+
+const toPercentileRow = (name: string, metric: MetricsWithPercentile): MetricCell[] => [
+  { text: name },
+  { text: formatNumber(metric.count) },
+  ...[metric.mean, metric['0.0'], metric['0.5'], metric['0.75'], metric['0.95'], metric['0.99'], metric.max].map(value => ({
+    text: formatNumber(value, 3),
+  })),
+];
+
+const toJvmSection = ({ jvm, processMetrics }: MetricsResponse, threads: Thread[]): MetricsSection => ({
+  id: 'jvmMetrics',
+  label: <%- label('JVM Metrics', 'metrics.jvm.title') %>,
+  blocks: [
+    { label: <%- label('Memory', 'metrics.jvm.memory.title') %>, items: sortedEntries(jvm).map(toMemoryItem) },
+    toThreadsBlock(threads),
+    toSystemBlock(processMetrics),
+  ],
+  tables: [],
+});
+
+const toGarbageCollectorSection = (garbageCollector: GarbageCollector): MetricsSection => {
+  const live = garbageCollector['jvm.gc.live.data.size'];
+  const max = garbageCollector['jvm.gc.max.data.size'];
+  const promoted = garbageCollector['jvm.gc.memory.promoted'];
+  const allocated = garbageCollector['jvm.gc.memory.allocated'];
+  const pause = garbageCollector['jvm.gc.pause'];
+  return {
+    id: 'garbageCollectorMetrics',
+    label: <%- label('Garbage collections', 'metrics.jvm.gc.title') %>,
+    blocks: [
+      {
+        items: [
+          {
+            label: { text: 'GC Live Data Size/GC Max Data Size' },
+            value: `${formatMegabytes(live)} / ${formatMegabytes(max)}`,
+            gauge: toGauge(live, max),
+          },
+        ],
+      },
+      {
+        items: [
+          {
+            label: { text: 'GC Memory Promoted/GC Memory Allocated' },
+            value: `${formatMegabytes(promoted)} / ${formatMegabytes(allocated)}`,
+            gauge: toGauge(promoted, allocated),
+          },
+        ],
+      },
+      {
+        items: [
+          { label: { text: 'Classes loaded' }, value: formatNumber(garbageCollector.classesLoaded) },
+          { label: { text: 'Classes unloaded' }, value: formatNumber(garbageCollector.classesUnloaded) },
+        ],
+      },
+    ],
+    tables: [
+      {
+        columns: [{ label: { text: '' } }, ...percentileColumns],
+        rows: pause ? [toPercentileRow('jvm.gc.pause', pause)] : [],
+      },
+    ],
+  };
+};
+
+const toRequestsSection = ({ all, percode }: HttpServerRequests): MetricsSection => ({
+  id: 'requestMetrics',
+  label: <%- label('HTTP requests (time in milliseconds)', 'metrics.jvm.http.title') %>,
+  blocks: [],
+  tables: [
+    {
+      columns: [
+        { label: <%- label('Code', 'metrics.jvm.http.table.code') %> },
+        { label: <%- label('Count', 'metrics.jvm.http.table.count') %> },
+        { label: <%- label('Mean', 'metrics.jvm.http.table.mean') %>, numeric: true },
+        { label: <%- label('Max', 'metrics.jvm.http.table.max') %>, numeric: true },
+      ],
+      rows: sortedEntries(percode).map(([code, { count, mean, max }]) => [
+        { text: code },
+        { gauge: { ...toGauge(count, all.count), text: formatNumber(count) } },
+        { text: formatNumber(mean, 2) },
+        { text: formatNumber(max, 2) },
+      ]),
+    },
+  ],
+});
+
+const toEndpointsSection = (services: Record<string, Record<string, MaxMeanCount>>): MetricsSection => ({
+  id: 'endpointsRequestsMetrics',
+  label: { text: 'Endpoints requests (time in milliseconds)' },
+  blocks: [],
+  tables: [
+    {
+      columns: [
+        { label: { text: 'Method' } },
+        { label: { text: 'Endpoint url' } },
+        { label: { text: 'Count' }, numeric: true },
+        { label: { text: 'Mean' }, numeric: true },
+      ],
+      rows: sortedEntries(services).flatMap(([url, methods]) =>
+        sortedEntries(methods).map(([method, { count, mean }]) => [
+          { text: method },
+          { text: url },
+          { text: formatNumber(count) },
+          { text: formatNumber(mean, 3) },
+        ]),
+      ),
+    },
+  ],
+});
+
+const toCacheRow = (name: string, cache: CacheMetrics): MetricCell[] => {
+  const hits = cache['cache.gets.hit'];
+  const misses = cache['cache.gets.miss'];
+  const gets = hits + misses;
+  return [
+    { text: name },
+    ...[hits, misses, gets, cache['cache.puts'], cache['cache.removals'], cache['cache.evictions']].map(value => ({
+      text: formatNumber(value),
+    })),
+    { text: formatNumber((100 * hits) / gets, 4) },
+    { text: formatNumber((100 * misses) / gets, 4) },
+  ];
+};
+
+const toCacheSection = (cache: Record<string, CacheMetrics>): MetricsSection => ({
+  id: 'cacheMetrics',
+  label: <%- label('Cache statistics', 'metrics.cache.title') %>,
+  blocks: [],
+  tables: [
+    {
+      columns: [
+        { label: <%- label('Cache name', 'metrics.cache.cachename') %> },
+        { label: <%- label('Cache Hits', 'metrics.cache.hits') %>, numeric: true },
+        { label: <%- label('Cache Misses', 'metrics.cache.misses') %>, numeric: true },
+        { label: <%- label('Cache Gets', 'metrics.cache.gets') %>, numeric: true },
+        { label: <%- label('Cache Puts', 'metrics.cache.puts') %>, numeric: true },
+        { label: <%- label('Cache Removals', 'metrics.cache.removals') %>, numeric: true },
+        { label: <%- label('Cache Evictions', 'metrics.cache.evictions') %>, numeric: true },
+        { label: <%- label('Cache Hit %', 'metrics.cache.hitPercent') %>, numeric: true },
+        { label: <%- label('Cache Miss %', 'metrics.cache.missPercent') %>, numeric: true },
+      ],
+      rows: sortedEntries(cache).map(([name, metrics]) => toCacheRow(name, metrics)),
+    },
+  ],
+});
+
+const toDatasourceSection = ({ active, min, max, idle, acquire, creation, usage }: Databases): MetricsSection => ({
+  id: 'datasourceMetrics',
+  label: <%- label('DataSource statistics (time in milliseconds)', 'metrics.datasource.title') %>,
+  blocks: [
+    {
+      items: [
+        {
+          label: <%- label('Connection Pool Usage', 'metrics.datasource.usage') %>,
+          value: `active: ${active.value}, min: ${min.value}, max: ${max.value}, idle: ${idle.value}`,
+        },
+      ],
+    },
+  ],
+  tables: [
+    {
+      columns: [{ label: <%- label('Pool usage', 'metrics.datasource.name') %> }, ...percentileColumns],
+      rows: [toPercentileRow('Acquire', acquire), toPercentileRow('Creation', creation), toPercentileRow('Usage', usage)],
+    },
+  ],
+});
+
+const isNotEmpty = <T extends object>(value: T | undefined): value is T => Object.keys(value ?? {}).length > 0;
+
+/** Converts the responses of the `metricsEndpoints` to the sections of the metrics page. */
+export const toMetrics = (responses: unknown[]): MetricsSection[] => {
+  const [metrics, { threads }] = responses as [MetricsResponse, ThreadDump];
+  const { garbageCollector, services, cache, databases } = metrics;
+  const requests = metrics['http.server.requests'];
+  return [
+    toJvmSection(metrics, threads),
+    ...(isNotEmpty(garbageCollector) ? [toGarbageCollectorSection(garbageCollector)] : []),
+    ...(isNotEmpty(requests) ? [toRequestsSection(requests)] : []),
+    ...(isNotEmpty(services) ? [toEndpointsSection(services)] : []),
+    ...(isNotEmpty(cache) ? [toCacheSection(cache)] : []),
+    ...(isNotEmpty(databases) ? [toDatasourceSection(databases as Databases)] : []),
+  ];
+};

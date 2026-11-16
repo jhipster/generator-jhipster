@@ -18,11 +18,12 @@
 -%>
 import { type JSX, useEffect } from 'react';
 import { Badge, Button, Table } from 'react-bootstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import PageTitle from 'app/shared/layout/page-title';
 import { getGatewayRoutes } from '../administration.reducer';
 
 export const GatewayPage = () => {
@@ -94,6 +95,7 @@ export const GatewayPage = () => {
 
     return (
       <div>
+        <PageTitle title={translate('gateway.title')} />
         <h2><Translate contentKey="gateway.title">Gateway</Translate></h2>
           <p>
             <Button onClick={gatewayRoutes} color={isFetching ? 'danger' : 'primary'} disabled={isFetching}>

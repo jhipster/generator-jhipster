@@ -38,10 +38,7 @@
     <description><%- projectDescription %></description>
 
     <properties>
-        <!--
-            Build properties
-            The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version}
-        -->
+        <!-- Build properties -->
         <spring.profiles.active>dev</spring.profiles.active>
         <maven.version>3.2.5</maven.version>
         <resource.delimiter>@</resource.delimiter>
@@ -490,8 +487,8 @@
                                                 <artifactId>frontend-maven-plugin</artifactId>
                                                 <versionRange>${frontend-maven-plugin.version}</versionRange>
                                                 <goals>
-                                                    <goal>install-node-and-npm</goal>
-                                                    <goal>npm</goal>
+                                                    <goal>install-node-and-<%- nodePackageManager %></goal>
+                                                    <goal><%- nodePackageManager %></goal>
                                                 </goals>
                                             </pluginExecutionFilter>
                                             <action>

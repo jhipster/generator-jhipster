@@ -81,7 +81,7 @@ describe('jdl - JSONToJDLConverter', () => {
           jdlFileContent = fs.readFileSync('app.jdl', 'utf-8');
         });
 
-        it('should write a JDL file with the application', () => {
+        it('should write a JDL file with the application - snapshot', () => {
           expect(jdlFileContent).toMatchInlineSnapshot(`
 "application {
   config {
@@ -126,7 +126,7 @@ describe('jdl - JSONToJDLConverter', () => {
           jdlFileContent = fs.readFileSync(path.join(dir, 'app.jdl'), 'utf-8');
         });
 
-        it('should export apps & entities', () => {
+        it('should export apps & entities - snapshot', () => {
           expect(jdlFileContent).toMatchInlineSnapshot(`
 "application {
   config {
@@ -246,7 +246,7 @@ paginate Country with pager
           jdlFileContent = fs.readFileSync(path.join(rootDir, jdlFilename), 'utf-8');
         });
 
-        it('should export each app', () => {
+        it('should export each app - snapshot', () => {
           expect(jdlFileContent).toMatchInlineSnapshot(`
 "application {
   config {
@@ -378,7 +378,7 @@ noFluentMethod Region, Country, Location
         convertToJDL(runtime, '.', file);
       });
 
-      it('should output it to the output file', () => {
+      it('should output it to the output file - snapshot', () => {
         expect(readFileSync(file, 'utf-8')).toMatchInlineSnapshot(`
 "application {
   config {

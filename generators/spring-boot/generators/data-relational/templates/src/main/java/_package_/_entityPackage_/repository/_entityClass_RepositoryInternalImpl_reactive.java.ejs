@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 <%_ const toOneRelationships = relationships.filter(rel => rel.ownerSide && !rel.collection);
+    const savedToOneRelationships = toOneRelationships.filter(rel => !rel.id);
     const eagerToOneRelationships = toOneRelationships.filter(rel => rel.relationshipEagerLoad);
     const referencedRelationships = toOneRelationships.filter(rel => !rel.relationshipEagerLoad);
     const joinTableRelationships = relationships.filter(rel => rel.shouldWriteJoinTable);
@@ -140,6 +141,16 @@ class <%- entityClass %>RepositoryInternalImpl extends AbstractR2dbcRepository<<
     @Override
     protected List<JoinTable<<%- persistClass %>>> joinTables() {
         return JOIN_TABLES;
+    }
+<%_ } _%>
+<%_ if (savedToOneRelationships.length > 0) { _%>
+
+    @Override
+    protected boolean hasReferenceWithoutId(<%- persistClass %> entity) {
+        return (
+            super.hasReferenceWithoutId(entity)<% for (const rel of savedToOneRelationships) { %> ||
+            (entity.<%- rel.propertySupplierName %>() != null && entity.<%- rel.propertySupplierName %>().<%- rel.otherEntity.primaryKey.propertySupplierName %>() == null)<% } %>
+        );
     }
 <%_ } _%>
 <%_ if (isUsingMapsId) { _%>

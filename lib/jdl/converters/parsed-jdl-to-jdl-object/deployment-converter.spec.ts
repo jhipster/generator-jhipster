@@ -44,7 +44,7 @@ describe('jdl - DeploymentConverter', () => {
         ]);
       });
 
-      it('should convert them', () => {
+      it('should convert them - snapshot', () => {
         expect(convertedDeployments).toMatchInlineSnapshot(`
 [
   JDLDeployment {

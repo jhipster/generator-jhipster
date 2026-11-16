@@ -1,0 +1,101 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+<%_ if (!authenticationTypeOauth2) { _%>
+import { type Router } from 'vue-router';
+<%_ } _%>
+
+import { type AxiosError } from 'axios';
+
+import type AccountService from './account.service';
+import { createUnauthorizedHandler } from './unauthorized-handler';
+
+const error = (status: number, url = 'api/foos') => ({ status, response: { status, config: { url } } }) as unknown as AxiosError;
+
+describe('unauthorized handler', () => {
+  let accountService: { logout: ReturnType<typeof vi.fn> };
+<%_ if (authenticationTypeOauth2) { _%>
+  let reload: ReturnType<typeof vi.fn>;
+<%_ } else { _%>
+  let router: { currentRoute: { value: { fullPath: string; path: string } }; push: ReturnType<typeof vi.fn> };
+<%_ } _%>
+  const handler = (axiosError: AxiosError) =>
+    createUnauthorizedHandler({
+      accountService: accountService as unknown as AccountService,
+<%_ if (!authenticationTypeOauth2) { _%>
+      router: router as unknown as Router,
+<%_ } _%>
+    })(axiosError);
+
+  beforeEach(() => {
+    accountService = { logout: vi.fn() };
+<%_ if (authenticationTypeOauth2) { _%>
+    reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+<%_ } else { _%>
+    router = { currentRoute: { value: { fullPath: '/foo?page=2', path: '/foo' } }, push: vi.fn() };
+<%_ } _%>
+  });
+
+  it('should sign the user out and ask for a new authentication on a 401', async () => {
+    await expect(handler(error(401))).rejects.toMatchObject({ status: 401 });
+
+    expect(accountService.logout).toHaveBeenCalledOnce();
+<%_ if (authenticationTypeOauth2) { _%>
+    expect(reload).toHaveBeenCalledOnce();
+<%_ } else { _%>
+    expect(router.push).toHaveBeenCalledWith({ path: '/login', query: { redirect: '/foo?page=2' } });
+<%_ } _%>
+  });
+
+  it('should sign the user out without asking for an authentication when the account is the request', async () => {
+    await expect(handler(error(401, 'api/account'))).rejects.toMatchObject({ status: 401 });
+
+    expect(accountService.logout).toHaveBeenCalledOnce();
+<%_ if (authenticationTypeOauth2) { _%>
+    expect(reload).not.toHaveBeenCalled();
+<%_ } else { _%>
+    expect(router.push).not.toHaveBeenCalled();
+<%_ } _%>
+  });
+<%_ if (!authenticationTypeOauth2) { _%>
+
+  it('should stay at the login page', async () => {
+    router.currentRoute.value = { fullPath: '/login', path: '/login' };
+
+    await expect(handler(error(401))).rejects.toMatchObject({ status: 401 });
+
+    expect(router.push).not.toHaveBeenCalled();
+  });
+<%_ } _%>
+
+  it('should read the status of the response when the error has none', async () => {
+    const withoutStatus = { response: { status: 401, config: { url: 'api/account' } } } as unknown as AxiosError;
+
+    await expect(handler(withoutStatus)).rejects.toBe(withoutStatus);
+
+    expect(accountService.logout).toHaveBeenCalledOnce();
+  });
+
+  it('should keep the session on another error', async () => {
+    await expect(handler(error(403))).rejects.toMatchObject({ status: 403 });
+
+    expect(accountService.logout).not.toHaveBeenCalled();
+  });
+});

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing with byte fields should create fake data file with required content 1`] = `
+exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing with byte fields should create fake data file with required content - snapshot 1`] = `
 {
   "src/main/resources/config/liquibase/fake-data/20200101000100_entity_smarty.csv": {
     "contents": "id;name;price;description;picture;picture_content_type;specification;specification_content_type;category;inventory
@@ -40,7 +40,7 @@ exports[`generator - app - --incremental-changelog entities with/without byte fi
 }
 `;
 
-exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing without byte fields should create fake data file with required content 1`] = `
+exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing without byte fields should create fake data file with required content - snapshot 1`] = `
 {
   "src/main/resources/config/liquibase/fake-data/20200101000100_entity_smarty.csv": {
     "contents": "id;name;age;height;income;expense;savings;category;happy;dob;exact_time;travel_time;moment

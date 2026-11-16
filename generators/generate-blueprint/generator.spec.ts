@@ -37,7 +37,7 @@ describe(`generator - ${generator}`, () => {
     expect(await helpers.forwardsFeaturesParameter()).toBe(true);
   });
   describe('help', () => {
-    it('should print expected information', async () => {
+    it('should print expected information - snapshot', async () => {
       expect(await helpers.getCommandHelpOutput()).toMatchSnapshot();
     });
   });

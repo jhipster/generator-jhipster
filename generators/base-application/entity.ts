@@ -79,7 +79,7 @@ type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType
 
     generateFakeDataFromPattern?: () => string | undefined;
 
-    generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts') => any;
+    generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts', options?: FakeDataOptions) => any;
 
     transient?: boolean;
     id?: boolean;
@@ -135,6 +135,14 @@ export type Field = Property &
         fieldIsEnum: false;
       }
   );
+
+/** How a field generates a value that must not repeat. */
+export type FakeDataOptions = {
+  /** The values already used, the generated one is added: `field.uniqueValue` by default. */
+  uniqueValues?: unknown[];
+  /** The value must not repeat, even if the field is not unique. */
+  unique?: boolean;
+};
 
 export const mutateField = {
   __override__: false,

@@ -717,6 +717,68 @@ entity Customer {
     });
   });
 
+  describe('when removing a blob field of a file', () => {
+    before(async () => {
+      await helpers.runJDL(`
+${jdlApplication}
+entity Customer {
+    original String
+    contract AnyBlob
+}
+`);
+
+      await helpers
+        .runJDLInApplication(
+          `
+${jdlApplication}
+entity Customer {
+    original String
+}
+`,
+        )
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
+        .withOptions({
+          creationTimestamp: '2020-01-02',
+        });
+    });
+
+    it('should drop the column of the blob and of its content type', () => {
+      const updatedChangelog = `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`;
+      runResult.assertFileContent(updatedChangelog, 'column name="contract"');
+      runResult.assertFileContent(updatedChangelog, 'column name="contract_content_type"');
+      runResult.assertNoFileContent(updatedChangelog, 'addColumn');
+    });
+  });
+
+  describe('when regenerating an entity with a blob field of a file', () => {
+    before(async () => {
+      const jdl = `
+${jdlApplication}
+entity Customer {
+    original String
+    contract AnyBlob
+}
+`;
+      await helpers.runJDL(jdl);
+
+      await helpers
+        .runJDLInApplication(jdl)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
+        .withOptions({
+          creationTimestamp: '2020-01-02',
+        });
+    });
+
+    it('should not write an update changelog for the content type', () => {
+      runResult.assertNoFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`]);
+    });
+    it('should not write the content type field to the entity file', () => {
+      runResult.assertNoFileContent(join('.jhipster', 'Customer.json'), 'contractContentType');
+    });
+  });
+
   describe('when removing a field with constraints', () => {
     before(async () => {
       await helpers.runJDL(`
@@ -1483,7 +1545,7 @@ entity Customer {
         it('should create entity initial fake data file', () => {
           runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`]);
         });
-        it('should create fake data file with required content', () => {
+        it('should create fake data file with required content - snapshot', () => {
           expect(
             runResult.getSnapshot(`**/${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_smarty.csv`),
           ).toMatchSnapshot();

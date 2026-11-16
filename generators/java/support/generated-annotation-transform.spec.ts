@@ -24,7 +24,7 @@ import { pipeline } from 'node:stream/promises';
 import generatedAnnotationTransform from './generated-annotation-transform.ts';
 
 describe('generators - java - generated-annotation-transform', () => {
-  it('should add GeneratedByJHipster to interface', async () => {
+  it('should add GeneratedByJHipster to interface - snapshot', async () => {
     const file = {
       contents: Buffer.from(`package package.name;
 
@@ -43,7 +43,7 @@ interface Foo {
 `);
   });
 
-  it('should add GeneratedByJHipster to @interface', async () => {
+  it('should add GeneratedByJHipster to @interface - snapshot', async () => {
     const file = {
       contents: Buffer.from(`package package.name;
 

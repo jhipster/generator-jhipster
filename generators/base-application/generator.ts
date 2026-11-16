@@ -29,8 +29,9 @@ import BaseGenerator from '../base-simple-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
+import { isContentTypeField } from './internal/content-type-fields.ts';
 import { getChangelogDateForBuiltInEntities } from './internal/utils.ts';
-import type { ApplicationObject, ApplicationObjectConfig } from './objects.ts';
+import { type ApplicationObject, type ApplicationObjectConfig, isJdlObjectName } from './objects.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
 import {
   CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
@@ -284,6 +285,10 @@ export default class BaseApplicationGenerator<
 
   /** Declares an object of the application, by its name, in the `objects` of the `.yo-rc.json` file. */
   setObjectConfig(name: string, config: ApplicationObjectConfig): void {
+    // An object already declared keeps its name, the project is warned about it once.
+    if (!isJdlObjectName(name) && this.#objectsStorage.get(name) === undefined) {
+      throw new Error(`The object ${name} cannot be declared: a name of the JDL starts with a letter or an underscore`);
+    }
     this.#objectsStorage.set(name, config);
   }
 
@@ -322,7 +327,16 @@ export default class BaseApplicationGenerator<
   /** The `objects` of the `.yo-rc.json` file, shared by the generators of the application. */
   get #objectsStorage(): Storage {
     return this.getContextData<Storage>(CONTEXT_DATA_APPLICATION_OBJECTS_STORAGE_KEY, {
-      factory: () => this.createStorage('.yo-rc.json', 'objects'),
+      factory: () => {
+        const storage = this.createStorage('.yo-rc.json', 'objects');
+        const names = Object.keys(storage.getAll()).filter(name => !isJdlObjectName(name));
+        if (names.length > 0) {
+          this.log.warn(
+            `The objects ${names.join(', ')} of the .yo-rc.json file cannot be declared in a JDL: a name of the JDL starts with a letter or an underscore`,
+          );
+        }
+        return storage;
+      },
     });
   }
 
@@ -621,6 +635,17 @@ export default class BaseApplicationGenerator<
       } else {
         args.entities = [...this.#entities.values()].filter(entity => entitiesToFilter.includes(entity.name));
       }
+    }
+    if (
+      args.entities &&
+      !this.features.contentTypeFields &&
+      ([PRIORITY_NAMES.WRITING_ENTITIES, PRIORITY_NAMES.POST_WRITING_ENTITIES] as string[]).includes(priorityName)
+    ) {
+      // A generator writes the content type of a blob by hand, from the blob field, unless it turns on the contentTypeFields feature.
+      args.entities = (args.entities as Entity[]).map(entity => ({
+        ...entity,
+        fields: entity.fields.filter(field => !isContentTypeField(field)),
+      }));
     }
     return args;
   }

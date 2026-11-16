@@ -47,8 +47,8 @@ JHipster configuration is stored in this file at `generator-jhipster` key. You m
 Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if omitted) or force. Lines starting with `#` are considered comments and are ignored.
 - `.jhipster/*.json` - JHipster entity configuration files
 <%_ if (!skipClient) { _%>
-- `npmw` - wrapper to use locally installed npm.
-JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop or test your application.
+- `<%- nodePackageManager %>w` - wrapper to use locally installed <%- nodePackageManager %>.
+JHipster installs Node and <%- nodePackageManager %> locally using the build tool by default. This wrapper makes sure <%- nodePackageManager %> is installed locally and uses it avoiding some differences different versions can cause. By using `./<%- nodePackageManager %>w` instead of the traditional `<%- nodePackageManager %>` you can configure a Node-less environment to develop or test your application.
 <%_ } _%>
 - `/<%- dockerServicesDir %>` - Docker configurations for the application and services that the application depends on
 
@@ -217,6 +217,16 @@ To launch your application's tests, run:
 <&_ if (fragment.productionSection) { -&>
 ### Packaging as jar
 
+To try the production build of the <%- baseName %> application locally, run:
+
+```bash
+<%- nodePackageManagerCommand %> run try-it
+```
+
+It cleans the build, builds the production jar (`npm run java:jar:prod`) and runs it with the `prod` and `secret-samples` profiles: `<%- packageJsonScripts['try-it'] %>`.
+The `secret-samples` profile, in `<%- srcMainResources %>config/application-secret-samples.yml`, holds sample passwords and secrets, for development and tests only.
+To run the application in production, do not activate it: provide your own passwords and secrets to the `prod` profile instead, for example with environment variables.
+
 To build the final jar and optimize the <%- baseName %> application for production, run:
 
 ```bash
@@ -234,12 +244,7 @@ This will concatenate and minify the client CSS and JavaScript files. It will al
 To ensure everything worked, run:
 
 ```bash
-<%_ if (buildToolMaven) { _%>
-java -jar target/*.jar
-<%_ } _%>
-<%_ if (buildToolGradle) { _%>
-java -jar build/libs/*.jar
-<%_ } _%>
+java -jar <%- javaPackagingDestDir %>*.jar --spring.profiles.include=secret-samples
 ```
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%- serverPort %>](http://localhost:<%- serverPort %>) in your browser.
@@ -339,7 +344,7 @@ You can also fully dockerize your application and all the services that it depen
 To achieve this, first build a Docker image of your app by running:
 
 ```bash
-npm run java:docker
+<%- nodePackageManagerCommand %> run java:docker
 ```
 
 The image is built for the architecture of your Docker daemon, arm64 on Apple Silicon chips (M\*) for instance.

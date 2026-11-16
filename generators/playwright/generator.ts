@@ -20,7 +20,6 @@
 import { mutateData, stringHashCode } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
-import { generateTestEntity } from '../client/support/index.ts';
 import type { Source as JavaSource } from '../java/types.d.ts';
 
 import { playwrightEntityFiles, playwrightFiles } from './files.ts';
@@ -29,7 +28,6 @@ import type {
   Config as PlaywrightConfig,
   Entity as PlaywrightEntity,
   Features as PlaywrightFeatures,
-  Field as PlaywrightField,
   Options as PlaywrightOptions,
 } from './types.ts';
 
@@ -158,7 +156,9 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
       async writePlaywrightEntityFiles({ application, entities }) {
-        for (const entity of entities.filter(
+        // The fields the clients skip are left out, like the client entity files.
+        const clientEntities = application.filterEntitiesAndPropertiesForClient?.(entities) ?? entities;
+        for (const entity of clientEntities.filter(
           entity => entity.generateEntityPlaywright && !entity.embedded && !entity.builtInUser && !entity.entityClientModelOnly,
         )) {
           const context = { ...application, ...entity };
@@ -191,6 +191,9 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
             '@playwright/test': true,
           },
         });
+        if (application.nodePackageManagerPnpm && !application.monorepository) {
+          this.mergeDestinationYaml('pnpm-workspace.yaml', { allowBuilds: { '@playwright/test': true } });
+        }
       },
       playwrightSchematics({ application }) {
         const { dasherizedBaseName, clientRootDir } = application;
@@ -236,9 +239,5 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
-  }
-
-  generateTestEntity(fields: PlaywrightField[]) {
-    return generateTestEntity(fields);
   }
 }

@@ -3,7 +3,7 @@
     "dayjs": "1.11.23"
   },
   "devDependencies": {
-    "axios": "1.21.0",
+    "axios": "1.21.1",
     "swagger-ui-dist": "5.34.1"
   },
   "packageManager": "npm@12"

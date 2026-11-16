@@ -48,6 +48,7 @@ const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/modules/administration/configuration/configuration.tsx`,
   `${clientSrcDir}app/modules/administration/health/health.tsx`,
   `${clientSrcDir}app/modules/administration/health/health-modal.tsx`,
+  `${clientSrcDir}app/modules/administration/metrics/metrics-details-modal.tsx`,
   `${clientSrcDir}app/modules/administration/metrics/metrics.tsx`,
   `${clientSrcDir}app/modules/administration/logs/logs.tsx`,
 ];
@@ -55,6 +56,26 @@ const clientAdminFiles = (clientSrcDir: string) => [
 describe(`generator - ${clientFramework}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('backend type', () => {
+    const run = (config: Record<string, unknown>) =>
+      helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withJHipsterConfig({ clientFramework, ...config });
+
+    it('should compose with client:spring-boot for Spring Boot', async () => {
+      await run({});
+      expect(runResult.getComposedGenerators()).toContain('jhipster:client:spring-boot');
+    });
+
+    it('should not compose with client:spring-boot for another backend', async () => {
+      await run({ backendType: 'Other' });
+      expect(runResult.getComposedGenerators()).not.toContain('jhipster:client:spring-boot');
+    });
+  });
   checkEnforcements({ client: true }, generator);
 
   it('samples matrix should match snapshot', () => {
@@ -138,7 +159,7 @@ describe(`generator - ${clientFramework}`, () => {
         it('should not share the locale reducer, so the microfrontend registers its own translations', () => {
           runResult.assertNoFileContent(`${clientRootDir}module-federation.config.ts`, "'app/shared/reducers/locale'");
         });
-        it('should share application modules in the dev server and the build', () => {
+        it('should share application modules in the dev server and the build - snapshot', () => {
           expect(runResult.getSnapshot('**/module-federation.config.ts')).toMatchSnapshot();
         });
       }
@@ -163,15 +184,11 @@ describe(`generator - ${clientFramework}`, () => {
             assertion(
               `${clientSrcDir}app/modules/administration/administration.reducer.ts`,
               'logs: {\n' +
-                '    loggers: [] as any[],\n' +
+                '    loggers: [] as Log[],\n' +
                 '  },\n' +
-                '  health: {} as any,\n' +
-                '  metrics: {} as any,\n' +
-                '  threadDump: [],\n' +
-                '  configuration: {\n' +
-                '    configProps: {} as any,\n' +
-                '    env: {} as any,\n' +
-                '  },',
+                '  health: [] as HealthCheck[],\n' +
+                '  metrics: [] as MetricsSection[],\n' +
+                '  configuration: [] as ConfigurationSection[],',
             );
 
             if (enableTranslation) {
@@ -426,7 +443,7 @@ describe(`generator - ${clientFramework}`, () => {
         .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
     });
 
-    it('should keep the translations registered by the host when registering its own', () => {
+    it('should keep the translations registered by the host when registering its own - snapshot', () => {
       expect(runResult.getSnapshot('**/app/shared/reducers/locale*.ts')).toMatchSnapshot();
     });
   });

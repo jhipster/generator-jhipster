@@ -32,7 +32,6 @@ import {
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
 import type { Field as ClientField } from '../client/types.ts';
-import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
@@ -44,6 +43,7 @@ import type {
   Config as VueConfig,
   Entity as VueEntity,
   Features as VueFeatures,
+  Field as VueField,
   Options as VueOptions,
   Source as VueSource,
   VueFieldClientConstant,
@@ -58,7 +58,7 @@ const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
  */
 const vueClientConstants: Record<string, VueFieldClientConstant> = {
   Languages: {
-    vueConstantImport: "import languages from '@/shared/config/languages';",
+    vueConstantImport: "import languages from '@/config/languages';",
     vueConstantValues: 'Object.keys(languages())',
   },
   Authority: {
@@ -89,6 +89,23 @@ const hasClientValidation = (field: Field): boolean =>
       field.fieldValidationMax ||
       field.fieldValidationPattern),
   );
+
+/** The rules of the field for useEntityValidation, as a TypeScript object literal. */
+const validationRules = (field: VueField, login: boolean): string => {
+  if (!field.fieldValidate) return '{}';
+  const rules = [
+    field.fieldValidationRequired && 'required: true',
+    field.fieldValidationEmail && 'email: true',
+    field.fieldValidationMinLength && `minLength: ${field.fieldValidateRulesMinlength}`,
+    field.fieldValidationMaxLength && `maxLength: ${field.fieldValidateRulesMaxlength}`,
+    (field.fieldTypeInteger || field.fieldTypeLong) && 'integer: true',
+    field.fieldValidationMin && `min: ${field.fieldValidateRulesMin}`,
+    field.fieldValidationMax && `max: ${field.fieldValidateRulesMax}`,
+    field.fieldValidationPattern &&
+      `pattern: { regex: new RegExp('${field.fieldValidateRulesPatternVue}'), name: '${field.fieldNameHumanized}'${login ? ', login: true' : ''} }`,
+  ].filter(Boolean);
+  return rules.length > 0 ? `{ ${rules.join(', ')} }` : '{}';
+};
 
 /** A TypeScript expression of a value failing a validation of the field other than required, which an empty value fails. */
 const invalidValue = (field: Field): string | undefined => {
@@ -181,11 +198,7 @@ export default class VueGenerator extends VueApplicationGenerator {
           __override__: true,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
         });
-
-        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
-          // When we have a java backend, 'src/**' is already added by java:bootstrap
-          application.prettierFolders.push(`${application.clientSrcDir}**/`);
-        }
+        application.prettierFolders.push('build-plugins/**/');
       },
       javaNodeBuildPaths({ application }) {
         const { clientBundlerRsbuild, clientBundlerVite, microfrontend, enableTranslation, enableI18nRTL, javaNodeBuildPaths } =
@@ -222,6 +235,8 @@ export default class VueGenerator extends VueApplicationGenerator {
               entityAngularName,
               readOnly,
             } = entity;
+            // The pages of an entity of the administration are among the administration ones.
+            const adminPage = Boolean(entity.adminEntity && !application.applicationTypeMicroservice);
 
             this.editFile(
               `${application.clientSrcDir}/app/entities/entities.routes.ts`,
@@ -270,12 +285,17 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 },`
                   )
                 }`,
-                contentToCheck: `path: '${entityFileName}'`,
+                contentToCheck: `path: '${adminPage ? entityPage : entityFileName}'`,
               }),
             );
 
             this.editFile(
-              `${application.clientSrcDir}/app/entities/entities.component.ts`,
+              `${application.clientSrcDir}/app/entities/entities.vue`,
+              createNeedleCallback({
+                needle: 'jhipster-needle-add-entity-service-to-entities-component-import',
+                contentToAdd: "import { provide } from 'vue';",
+                contentToCheck: /import \{[^}]*\bprovide\b[^}]*\} from 'vue'/,
+              }),
               createNeedleCallback({
                 needle: 'jhipster-needle-add-entity-service-to-entities-component-import',
                 contentToAdd: `import ${entityAngularName}Service, { ${entityInstance}ServiceKey } from './${entityFolderName}/${entityFileName}.service';`,
@@ -293,7 +313,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             // Admin entities, like the authorities, go to the admin menu.
             this.editFile(
               entity.adminEntity ?
-                `${application.clientSrcDir}/app/core/jhi-navbar/jhi-navbar.vue`
+                `${application.clientSrcDir}/app/layouts/navbar/navbar.vue`
               : `${application.clientSrcDir}/app/entities/entities-menu.vue`,
               createNeedleCallback({
                 needle: entity.adminEntity ? 'add-element-to-admin-menu' : 'add-entity-to-menu',
@@ -309,6 +329,20 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 
   get [VueApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      async composeSpringBoot({ application }) {
+        if (application.backendTypeSpringBoot) {
+          await this.composeWithJHipster('jhipster:client:spring-boot');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get preparingEachEntityField() {
@@ -342,6 +376,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             __override__: false,
             vueClientValidation: () => hasClientValidation(field),
             vueInvalidValue: () => (field.fieldValidate ? invalidValue(field) : undefined),
+            vueValidationRules: () => validationRules(field, Boolean(entity.builtInUserManagement && field.fieldName === 'login')),
           });
         }
       },
@@ -356,11 +391,26 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           entityVueReadAuthorities: () =>
             asAuthorities([...(entity.entityAuthority?.split(',') ?? []), ...(entity.entityReadAuthority?.split(',') ?? [])]),
           entityClientFields: () =>
-            this.generateEntityClientFields(entity.primaryKey, fieldsWithoutId, entity.relationships, entity.dto, 'Date', entity.embedded),
+            this.generateEntityClientFields(
+              entity.primaryKey,
+              fieldsWithoutId,
+              entity.relationships,
+              entity.dto,
+              'string',
+              entity.embedded,
+            ),
           entityClientImports: () => this.generateEntityClientImports(entity.relationships, entity.dto),
           entityClientFieldDefaultValues: () => this.generateEntityClientFieldDefaultValues(fieldsWithoutId),
           entityModelEnumImports: () => this.generateEntityClientEnumImports(fieldsWithoutId),
           entityClientEnumImports: () => this.generateEntityClientEnumImports(entity.fields),
+          vueFormTimeFields: () =>
+            entity.fields.some(
+              field =>
+                (field.fieldTypeInstant || field.fieldTypeZonedDateTime) &&
+                (!field.id || entity.builtInUserManagement || !field.autoGenerate) &&
+                !field.hidden &&
+                !(entity.builtInUserManagement && field.readonly),
+            ),
         });
       },
     });
@@ -372,6 +422,15 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 
   get default() {
     return this.asDefaultTaskGroup({
+      prepareEntitySamples({ entities }) {
+        for (const entity of entities) {
+          // The model types the dates as the strings of the server, the samples of the client (written at default) as dayjs.
+          const toVueSample = (sample?: string) => sample?.replaceAll(/dayjs\(('[^']*')\)/g, '$1');
+          entity.vueTsSampleWithFullData = toVueSample(entity.tsSampleWithFullData);
+          entity.vueTsSampleWithRequiredData = toVueSample(entity.tsSampleWithRequiredData);
+          entity.vueTsSampleWithPartialData = toVueSample(entity.tsSampleWithPartialData);
+        }
+      },
       queueTranslateTransform({ application }) {
         const { clientI18nDir, enableTranslation, getWebappTranslation } = application;
 
@@ -408,6 +467,45 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     return this.asWritingTaskGroup({
       async cleanup({ control, application }) {
         await control.cleanupFiles({
+          '9.5.0': [
+            // The login modal was replaced with a login page
+            `${application.clientSrcDir}app/account/login-modal.ts`,
+            `${application.clientSrcDir}app/account/login-modal.spec.ts`,
+            `${application.clientSrcDir}app/core/error/error-loading.vue`,
+            `${application.clientSrcDir}app/core/error/error.component.spec.ts`,
+            `${application.clientSrcDir}app/core/error/error.vue`,
+            `${application.clientSrcDir}app/core/home/home.component.spec.ts`,
+            `${application.clientSrcDir}app/core/home/home.vue`,
+            `${application.clientSrcDir}app/core/jhi-footer/jhi-footer.vue`,
+            `${application.clientSrcDir}app/core/jhi-navbar/jhi-navbar.component.spec.ts`,
+            `${application.clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
+            `${application.clientSrcDir}app/core/ribbon/ribbon.component.spec.ts`,
+            `${application.clientSrcDir}app/core/ribbon/ribbon.vue`,
+            `${application.clientSrcDir}app/locale/translation.service.ts`,
+            `${application.clientSrcDir}app/shared/composables/date-format.ts`,
+            `${application.clientSrcDir}app/shared/composables/index.ts`,
+            `${application.clientSrcDir}app/shared/composables/validation.ts`,
+            `${application.clientSrcDir}app/shared/computables/arrays.ts`,
+            `${application.clientSrcDir}app/shared/computables/index.ts`,
+            `${application.clientSrcDir}app/shared/config/axios-interceptor.spec.ts`,
+            `${application.clientSrcDir}app/shared/config/axios-interceptor.ts`,
+            `${application.clientSrcDir}app/shared/config/config-bootstrap-vue.ts`,
+            `${application.clientSrcDir}app/shared/config/config.ts`,
+            `${application.clientSrcDir}app/shared/config/dayjs.ts`,
+            `${application.clientSrcDir}app/shared/config/languages.ts`,
+            `${application.clientSrcDir}app/shared/config/store/account-store.ts`,
+            `${application.clientSrcDir}app/shared/config/store/translation-store.ts`,
+            `${application.clientSrcDir}app/shared/data/data-utils.service.spec.ts`,
+            `${application.clientSrcDir}app/shared/data/data-utils.service.ts`,
+            `${application.clientSrcDir}app/shared/jhi-item-count.vue`,
+            `${application.clientSrcDir}app/shared/sort/sorts.spec.ts`,
+            `${application.clientSrcDir}app/shared/sort/sorts.ts`,
+            `${application.clientSrcDir}app/store.ts`,
+            // The language is kept by useLanguage
+            `${application.clientSrcDir}app/shared/language/translation.service.ts`,
+            `${application.clientSrcDir}app/stores/translation-store.ts`,
+            `${application.clientSrcDir}app/stores/translation-store.spec.ts`,
+          ],
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
           '8.7.4': [
             [

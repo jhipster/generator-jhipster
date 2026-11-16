@@ -82,6 +82,12 @@ const accountFiles = asWriteFilesSection<SpringBootApplication>({
       templates: ['web/rest/vm/ManagedUserVM.java'],
     },
     {
+      condition: data => data.generateUserRegistration,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/rest/RegistrationResource.java'],
+    },
+    {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
@@ -91,6 +97,12 @@ const accountFiles = asWriteFilesSection<SpringBootApplication>({
           return 'web/rest/AccountResourceIT_skipUserManagement.java';
         },
       ],
+    },
+    {
+      condition: data => data.generateUserRegistration,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/RegistrationResourceIT.java'],
     },
   ],
 });
@@ -121,16 +133,21 @@ const userManagementFiles = asWriteFilesSection<SpringBootApplication>({
     },
     {
       path: SERVER_MAIN_RES_DIR,
-      templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
+      templates: ['templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
     },
     {
       path: SERVER_TEST_RES_DIR,
-      templates: [
-        'templates/mail/activationEmail.html',
-        'templates/mail/creationEmail.html',
-        'templates/mail/passwordResetEmail.html',
-        'templates/mail/testEmail.html',
-      ],
+      templates: ['templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html', 'templates/mail/testEmail.html'],
+    },
+    {
+      condition: data => data.generateUserRegistration,
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['templates/mail/activationEmail.html'],
+    },
+    {
+      condition: data => data.generateUserRegistration,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['templates/mail/activationEmail.html'],
     },
   ],
 });
@@ -231,7 +248,13 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       condition: generator => generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['security/PersistentTokenRememberMeServices.java', 'domain/PersistentToken.java'],
+      templates: ['security/PersistentTokenRememberMeServices.java', 'domain/PersistentToken.java', 'security/OpenSessions.java'],
+    },
+    {
+      condition: generator => generator.generateUserManagement && generator.authenticationTypeSession && !generator.reactive,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['domain/PersistentTokenTest.java', 'security/OpenSessionsTest.java'],
     },
     {
       condition: generator =>
@@ -316,6 +339,18 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       renameTo: moveToJavaPackageSrcDir,
       templates: ['domain/AbstractAuditingEntity.java'],
     },
+    {
+      condition: ctx => !ctx.databaseTypeNo && !ctx.databaseTypeCassandra,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['domain/NotSortable.java', 'web/rest/SortValidator.java'],
+    },
+    {
+      condition: ctx => !ctx.databaseTypeNo && !ctx.databaseTypeCassandra,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['web/rest/SortValidatorTest.java'],
+    },
   ],
   serverJavaWebError: [
     {
@@ -371,7 +406,11 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['web/rest/TestUtil.java', 'web/rest/errors/ExceptionTranslatorTestController.java'],
+      templates: [
+        'test/util/TestUtil.java',
+        'web/rest/errors/ExceptionTranslatorTest.java',
+        'web/rest/errors/ExceptionTranslatorTestController.java',
+      ],
     },
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,

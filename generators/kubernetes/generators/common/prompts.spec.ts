@@ -52,7 +52,7 @@ describe('generator - kubernetes:common - prompts', () => {
   describe('kubernetes', () => {
     before(() => runDeployment('kubernetes'));
 
-    it('should ask questions in order', () => {
+    it('should ask questions in order - snapshot', () => {
       expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "deploymentApplicationType",
@@ -76,7 +76,7 @@ describe('generator - kubernetes:common - prompts', () => {
   describe('kubernetes:helm', () => {
     before(() => runDeployment('kubernetes:helm'));
 
-    it('should ask questions in order', () => {
+    it('should ask questions in order - snapshot', () => {
       expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "deploymentApplicationType",
@@ -98,7 +98,7 @@ describe('generator - kubernetes:common - prompts', () => {
   describe('kubernetes:knative', () => {
     before(() => runDeployment('kubernetes:knative'));
 
-    it('should ask questions in order', () => {
+    it('should ask questions in order - snapshot', () => {
       expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "directoryPath",

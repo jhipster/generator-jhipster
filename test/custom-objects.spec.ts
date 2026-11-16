@@ -558,5 +558,15 @@ describe('custom objects', () => {
     it('fails for an object not declared', () => {
       expect(() => generator.getObject('Unknown')).toThrow(/The object Unknown is not declared/);
     });
+
+    it('fails to declare an object whose name is not a name of the JDL', () => {
+      expect(() => generator.setObjectConfig('1Quote', { type: 'record' })).toThrow(/The object 1Quote cannot be declared/);
+      expect(generator.getObjectConfig('1Quote')).toBeUndefined();
+    });
+
+    it('declares an object whose name starts with an underscore', () => {
+      generator.setObjectConfig('_1Quote', { type: 'record' });
+      expect(generator.getObjectConfig('_1Quote')).toEqual({ type: 'record' });
+    });
   });
 });

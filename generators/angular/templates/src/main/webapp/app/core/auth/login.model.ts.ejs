@@ -20,6 +20,8 @@ export class Login {
   constructor(
     public username: string,
     public password: string,
+<%_ if (authenticationUsesRememberMe) { _%>
     public rememberMe: boolean,
+<%_ } _%>
   ) {}
 }

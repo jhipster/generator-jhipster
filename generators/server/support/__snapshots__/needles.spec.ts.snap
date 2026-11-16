@@ -146,6 +146,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/domain/User.java": {
     "stateCleared": "modified",
   },
@@ -176,6 +179,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/java/com/mycompany/myapp/security/DomainUserDetailsService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/security/JwtCredentialsValidator.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
@@ -195,6 +201,9 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/RegistrationService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/service/UserService.java": {
@@ -240,6 +249,12 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/RegistrationResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/UserResource.java": {
@@ -386,6 +401,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/security/DomainUserDetailsServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/security/JwtCredentialsValidatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
@@ -404,10 +422,16 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/service/RegistrationServiceIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/test/util/TestUtil.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
@@ -425,7 +449,10 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
+  "src/test/java/com/mycompany/myapp/web/rest/RegistrationResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/SortValidatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/UserResourceIT.java": {
@@ -435,6 +462,9 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {

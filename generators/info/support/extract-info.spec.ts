@@ -28,7 +28,7 @@ import { markdownDetails } from './markdown-content.ts';
 
 describe('extract-info', () => {
   describe('extractDataFromInfo', () => {
-    it('should extract empty object from the jhipster info template', async () => {
+    it('should extract empty object from the jhipster info template - snapshot', async () => {
       expect(extractDataFromInfo((await readFile(getPackageRoot('.github/ISSUE_TEMPLATE/BUG_REPORT.md'))).toString()))
         .toMatchInlineSnapshot(`
 {
@@ -38,7 +38,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should extract info from jhipster info', () => {
+    it('should extract info from jhipster info - snapshot', () => {
       expect(
         extractDataFromInfo(
           markdownDetails({
@@ -62,7 +62,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should extract info from jhipster info with 2 .yo-rc files', () => {
+    it('should extract info from jhipster info with 2 .yo-rc files - snapshot', () => {
       expect(
         extractDataFromInfo(
           markdownDetails({
@@ -95,7 +95,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should extract empty object from the jdl template', async () => {
+    it('should extract empty object from the jdl template - snapshot', async () => {
       expect(extractDataFromInfo((await readFile(getPackageRoot('.github/ISSUE_TEMPLATE/BUG_REPORT_JDL.md'))).toString()))
         .toMatchInlineSnapshot(`
 {
@@ -105,7 +105,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should extract empty from non-jdl JDL definitions', () => {
+    it('should extract empty from non-jdl JDL definitions - snapshot', () => {
       expect(extractDataFromInfo(markdownDetails({ title: 'JDL definitions', content: 'foo' }))).toMatchInlineSnapshot(`
 {
   "files": [],
@@ -114,7 +114,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should extract application from JDL definitions', () => {
+    it('should extract application from JDL definitions - snapshot', () => {
       expect(extractDataFromInfo(markdownDetails({ title: 'JDL definitions', content: 'application { config {} }' })))
         .toMatchInlineSnapshot(`
 {
@@ -132,7 +132,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should extract more than one application from JDL definitions', () => {
+    it('should extract more than one application from JDL definitions - snapshot', () => {
       expect(
         extractDataFromInfo(
           markdownDetails({ title: 'JDL definitions', content: 'application { config { baseName first } }' }) +
@@ -161,7 +161,7 @@ describe('extract-info', () => {
   });
 
   describe('filterData', () => {
-    it('should keep .yo-rc.json files', () => {
+    it('should keep .yo-rc.json files - snapshot', () => {
       const data = {
         yoRcBlank: true,
         files: [
@@ -186,7 +186,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should keep .jdl files', () => {
+    it('should keep .jdl files - snapshot', () => {
       const data = {
         yoRcBlank: true,
         files: [
@@ -217,7 +217,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should keep .jhipster/*.json files', () => {
+    it('should keep .jhipster/*.json files - snapshot', () => {
       const data = {
         yoRcBlank: true,
         files: [
@@ -248,7 +248,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should reject empty .jhipster json filename', () => {
+    it('should reject empty .jhipster json filename - snapshot', () => {
       const data = {
         yoRcBlank: true,
         files: [{ filename: '.jhipster/.json', content: '{}', type: 'json' as const }],
@@ -264,7 +264,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should filter out non-matching files', () => {
+    it('should filter out non-matching files - snapshot', () => {
       const data = {
         yoRcBlank: true,
         files: [
@@ -328,7 +328,7 @@ describe('extract-info', () => {
       expect(filterData(data)).toEqual({ yoRcBlank: true, files: [], ignoredFiles: data.files.map(file => file.filename) });
     });
 
-    it('should handle empty files array', () => {
+    it('should handle empty files array - snapshot', () => {
       const data = {
         yoRcBlank: true,
         files: [],
@@ -341,7 +341,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should forbid .jhipster/package.json files', () => {
+    it('should forbid .jhipster/package.json files - snapshot', () => {
       const data = {
         yoRcBlank: true,
         files: [
@@ -372,7 +372,7 @@ describe('extract-info', () => {
 `);
     });
 
-    it('should preserve other properties in InfoData', () => {
+    it('should preserve other properties in InfoData - snapshot', () => {
       const data = {
         yoRcBlank: false,
         yoRcValid: true,

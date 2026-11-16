@@ -86,6 +86,11 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   LiquibaseOptions,
   LiquibaseSource
 > {
+  constructor(...[args, options, features]: ConstructorParameters<typeof BaseEntityChangesGenerator>) {
+    // Its templates write the content type of a blob through its content type field.
+    super(args, options, { ...features, contentTypeFields: true });
+  }
+
   #masterXml?: string;
   numberOfRows!: number;
   databaseChangelogs: BaseChangelog<LiquibaseEntity>[] = [];
@@ -152,12 +157,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
           },
         });
         this.numberOfRows = application.clientFrameworkReact ? 10 : 30;
-      },
-      liquibaseNeo4j({ application }) {
-        // TODO drop hardcoded version
-        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.3') {
-          application.javaDependencies['liquibase-neo4j'] = '5.0.0';
-        }
       },
       addNeedles({ source, application }) {
         source.addLiquibaseChangelog = changelog =>
@@ -492,7 +491,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
                 hibernateNamingImplicitStrategy: application.hibernateNamingImplicitStrategy,
                 packageName: application.packageName!,
                 srcMainResources: application.srcMainResources,
-                authenticationTypeOauth2: application.authenticationTypeOauth2,
                 devDatabaseTypeH2Any: relationalApplication.devDatabaseTypeH2Any!,
                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 driver: liquibasePluginJdbcDriver!,
@@ -978,12 +976,12 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
     if (entityChanges.requiresUpdateChangelogs) {
       entityChanges.hasFieldConstraint = entityChanges.addedFields.some(
-        field => field.unique || (field.columnRequired && !field.liquibaseDefaultValueAttributeValue) || field.shouldCreateContentType,
+        field => field.unique || (field.columnRequired && !field.liquibaseDefaultValueAttributeValue),
       );
       // The required columns added without a default value: the existing rows have none, Liquibase stops at their constraints.
       entityChanges.requiredAddedColumnNames = entityChanges.addedFields
         .filter(field => field.columnRequired && !field.liquibaseDefaultValueAttributeValue)
-        .flatMap(field => (field.shouldCreateContentType ? [field.columnName!, `${field.columnName}_content_type`] : [field.columnName!]));
+        .map(field => field.columnName!);
       if (entityChanges.requiredAddedColumnNames.length > 0) {
         this.log.warn(
           `The required columns ${entityChanges.requiredAddedColumnNames.join(', ')} added to ${entity.entityTableName} have no value in its existing rows: fill them in a changelog before ${databaseChangelog.changelogDate}_updated_entity_constraints_${entity.entityClass}.xml, Liquibase stops at it otherwise.`,

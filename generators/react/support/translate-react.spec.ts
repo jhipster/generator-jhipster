@@ -39,7 +39,7 @@ describe('generator - react - transform', () => {
       describe('.tsx files', () => {
         const extension = '.tsx';
 
-        it('should replace Translate tag', () => {
+        it('should replace Translate tag - snapshot', () => {
           const body = `
 <Translate contentKey="home.subtitle">This is your homepage</Translate>
 `;
@@ -50,7 +50,7 @@ home.subtitle-translated-value-0
 `);
         });
 
-        it('should replace multiline Translate tag with contentKey coming first', () => {
+        it('should replace multiline Translate tag with contentKey coming first - snapshot', () => {
           const body = `
 <Translate contentKey="sessions.title" interpolate={{ username: account.login }}>
 Active sessions for [<strong>{account.login}</strong>]
@@ -63,7 +63,7 @@ sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-val
 `);
         });
 
-        it('should replace multiline Translate tag with interpolate coming first', () => {
+        it('should replace multiline Translate tag with interpolate coming first - snapshot', () => {
           const body = `
 <Translate interpolate={{ username: account.login }} contentKey="sessions.title">
 Active sessions for [<strong>{account.login}</strong>]
@@ -76,7 +76,7 @@ sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-val
 `);
         });
 
-        it('should replace translate function', () => {
+        it('should replace translate function - snapshot', () => {
           const body = `
 translate('global')
 `;
@@ -87,7 +87,7 @@ translate('global')
 `);
         });
 
-        it('should replace translate function with interpolation', () => {
+        it('should replace translate function with interpolation - snapshot', () => {
           const body = `
 translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
   anotherPattern: "^[a-zA-Z0-9]*$",
@@ -101,7 +101,22 @@ translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
 `);
         });
 
-        it('should replace wrapped translate function with interpolation', () => {
+        it('should replace translate function with a closing brace in an interpolated string', () => {
+          const body = `
+translate('global', { pattern: '^[a-z$&{|}~]+$' })
+`;
+          expect(replaceReactTranslations(body, extension)).not.toContain('translate(');
+        });
+
+        it('should write the quotes of an interpolated string for a double quoted translation', () => {
+          const body = String.raw`translate('global', { pattern: '^[a-z\'"]+$' })`;
+          const result = replaceReactTranslations(body, extension);
+          // The translation of the spec is the data as JSON.
+          expect(result).toContain(JSON.stringify(String.raw`[a-z'\"]`).slice(1, -1));
+          expect(result).not.toContain(String.raw`\'`);
+        });
+
+        it('should replace wrapped translate function with interpolation - snapshot', () => {
           const body = `
 {translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
   anotherPattern: "^[a-zA-Z0-9]*$",
@@ -115,7 +130,7 @@ translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
 `);
         });
 
-        it('should translate tsx file', () => {
+        it('should translate tsx file - snapshot', () => {
           const body = `
 import React from 'react';
 import { Link } from 'react-router';

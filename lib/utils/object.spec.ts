@@ -31,6 +31,7 @@ import {
   finalizeDefaultOrUndefined,
   finalizeMutations,
   mutateData,
+  overrideMutateDataProperty,
   removeFieldsWithNullishValues,
 } from './object.ts';
 
@@ -94,9 +95,62 @@ _shouldAcceptNumberProperties.nr satisfies
 }) satisfies MutateDataParam<{ readonly readonly: string; str: string }>;
 
 ({
-  // @ts-expect-error fails to build because index signatures should be removed
-  str: ctx => ctx.readonly,
-}) satisfies MutateDataParam<Record<string, any>>;
+  // @ts-expect-error index signatures of a type with named properties should be removed
+  other: 'baz',
+}) satisfies MutateDataParam<{ str: string; [key: string]: string }>;
+
+// A record accepts any key with the type of its values
+({
+  __override__: false,
+  'try-it': 'java -jar app.jar',
+}) satisfies MutateDataParam<Record<string, string>>;
+
+// A record accepts callbacks, with the record as context
+({
+  'pretry-it': ctx => `${ctx['try-it']} --build`,
+}) satisfies MutateDataParam<Record<string, string>>;
+
+({
+  // @ts-expect-error a record should not accept values of another type
+  'try-it': 1,
+}) satisfies MutateDataParam<Record<string, string>>;
+
+({
+  // @ts-expect-error callbacks of a record should return the type of its values
+  'try-it': () => 1,
+}) satisfies MutateDataParam<Record<string, string>>;
+
+// A record of literal keys accepts its keys
+({
+  foo: ctx => `${ctx.foo} --build`,
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+({
+  // @ts-expect-error a record of literal keys should not accept other keys
+  bar: 'baz',
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+({
+  // @ts-expect-error a record of literal keys should not accept values of another type
+  foo: 1,
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+// mutateData accepts the keys of a record
+const _scripts: Record<string, string> = {};
+mutateData(_scripts, { __override__: false, 'try-it': 'java -jar app.jar' });
+// @ts-expect-error mutateData should not accept values of another type for a record
+mutateData(_scripts, { 'try-it': 1 });
+
+// A record of functions takes a callback that returns the function, like a named property
+const _fns: Record<string, () => string> = {};
+mutateData(_fns, { a: () => () => 'x' });
+// @ts-expect-error mutateData should not accept a bare function for a record of functions
+mutateData(_fns, { a: () => 'x' });
+
+// A readonly record is not mutated
+const _readonlyScripts: Readonly<Record<string, string>> = {};
+// @ts-expect-error mutateData should not accept the keys of a readonly record
+mutateData(_readonlyScripts, { 'try-it': 'java -jar app.jar' });
 
 describe('utils - object', () => {
   describe('deepCleanup', () => {
@@ -123,6 +177,53 @@ describe('utils - object', () => {
       data.prop = 'bar';
       finalizeMutations(data);
       expect(data.prop2).toBe('bar2');
+    });
+
+    describe('reading another finalizeDefault of the context', () => {
+      const finalized = (...mutations: Record<string, any>[]) => {
+        const data: Record<string, any> = { name: 'Foo' };
+        enableDelayedMutations(data);
+        mutateData(data, ...mutations.map(mutation => ({ __override__: false, ...mutation })));
+        finalizeMutations(data);
+        return data;
+      };
+      const tableName = { tableName: finalizeDefault(({ name }: any) => name.toLowerCase()) };
+      const label = { label: finalizeDefault(({ tableName }: any) => `label of ${tableName}`) };
+
+      it('waits for it when declared first', () => {
+        expect(finalized(label, tableName)).toMatchObject({ tableName: 'foo', label: 'label of foo' });
+      });
+
+      it('reads it when declared after it', () => {
+        expect(finalized(tableName, label)).toMatchObject({ tableName: 'foo', label: 'label of foo' });
+      });
+
+      it('waits through a chain of them', () => {
+        const title = { title: finalizeDefault(({ label }: any) => `title of ${label}`) };
+        expect(finalized(title, label, tableName)).toMatchObject({ title: 'title of label of foo' });
+      });
+
+      it('does not give way to a mutation of the same key registered before it while it waits', () => {
+        const before = { label: finalizeDefault(() => 'before') };
+        const last = { label: finalizeDefault(({ tableName }: any) => `last of ${tableName}`) };
+        expect(finalized(before, last, tableName)).toMatchObject({ label: 'last of foo' });
+      });
+
+      it('computes a cycle with the value of the one not computed yet undefined', () => {
+        const left = { left: finalizeDefault(({ right }: any) => `left of ${right}`) };
+        const right = { right: finalizeDefault(({ left }: any) => `right of ${left}`) };
+        expect(finalized(left, right)).toMatchObject({ left: 'left of undefined', right: 'right of left of undefined' });
+      });
+
+      it('computes one reading its own key', () => {
+        const own = { own: finalizeDefault(({ own }: any) => `own of ${own}`) };
+        expect(finalized(own)).toMatchObject({ own: 'own of undefined' });
+      });
+
+      it('reads a property nothing sets as undefined', () => {
+        const unset = { unset: finalizeDefault(({ missing }: any) => `unset of ${missing}`) };
+        expect(finalized(unset)).toMatchObject({ unset: 'unset of undefined' });
+      });
     });
 
     it('is computed at once without a mutation context', () => {
@@ -248,6 +349,25 @@ describe('utils - object', () => {
         expect(droppedMutationMessage(dropped[0])).toBe(
           'The delayed default of prop2 was dropped: it waited for prop, and another mutation set prop2 ("first") first.',
         );
+      });
+    });
+
+    describe('with an auto-delayed override of a property already set', () => {
+      const mutatedData: { list: string[]; prop?: string } = createDelayedMutationContext({ autoDelay: true });
+
+      before(() => {
+        mutatedData.list = ['first'];
+        mutateData(mutatedData, {
+          __override__: false,
+          list: overrideMutateDataProperty(({ list, prop }: { list: string[]; prop?: string }) => [...list, prop!]),
+        });
+        mutatedData.list.push('second');
+        mutateData(mutatedData, { prop: 'resolved' });
+        finalizeMutations(mutatedData);
+      });
+
+      it('should apply it once the property it reads is set', () => {
+        expect(mutatedData).toEqual({ list: ['first', 'second', 'resolved'], prop: 'resolved' });
       });
     });
 

@@ -220,6 +220,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
   <%_ if (databaseTypeNeo4j && databaseMigrationLiquibase) { _%>
     @Property("password_hash")
   <%_ } _%>
+    @NotSortable
     private String password;
 <%_ } _%>
 
@@ -325,6 +326,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
   <%_ if (databaseTypeNeo4j) { _%>
     @Property("image_url")
   <%_ } _%>
+    @NotSortable
     private String imageUrl;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -349,6 +351,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @Column("activation_key")
   <%_ } _%>
     @JsonIgnore
+    @NotSortable
     private String activationKey;
 
     @Size(max = 20)
@@ -371,6 +374,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @Column("reset_key")
   <%_ } _%>
     @JsonIgnore
+    @NotSortable
     private String resetKey;
 
   <%_ if (databaseTypeSql || databaseTypeCassandra && reactive) { _%>
@@ -382,6 +386,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
   <%_ } else if (databaseTypeNeo4j) { _%>
     @Property("reset_date")
   <%_ } _%>
+    @NotSortable
     private Instant resetDate = null;
 <%_ } _%>
 

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { describe, expect, it<%- microfrontend ? ', vi' : '' %> } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import router from './index';
 <%_ if (microfrontend) { _%>
@@ -44,11 +44,14 @@ vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime',
 describe('Router', () => {
 <%_ if (microfrontend) { _%>
   it('should navigate to a route of a remote once loaded', async () => {
+    // The route of the remote is not known yet when the navigation starts.
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const navigation = router.push('/<%- microfrontends[0].moduleFederationName %>');
     remotes.release();
     await navigation;
 
     expect(router.currentRoute.value.name).toBe('<%- microfrontends[0].moduleFederationName %>-entities');
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('/<%- microfrontends[0].moduleFederationName %>'));
   });
 
 <%_ } _%>
@@ -63,9 +66,12 @@ describe('Router', () => {
   });
 
   it('should redirect an unknown route to the not found page', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     await router.push('/an-unknown-route');
 
     expect(router.currentRoute.value.name).toBe('NotFound');
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('/an-unknown-route'));
   });
 <%_ if (microfrontend) { _%>
 

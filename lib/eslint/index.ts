@@ -26,5 +26,6 @@ import recommended from './recommended.ts';
 const configs: { recommended: Config; base: Config } = { recommended, base };
 
 export { plugin };
+export { jsRules } from './base.ts';
 
 export default configs;

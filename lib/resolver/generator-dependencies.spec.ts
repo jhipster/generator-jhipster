@@ -83,6 +83,16 @@ describe('resolver - generator dependencies', () => {
       const overriding = resolve(['git'], { 'jhipster-foo:git': { ...blueprint, override: true } }, ['jhipster-foo']);
       expect(namespaces(overriding)).toEqual(['jhipster-foo:git']);
     });
+
+    it('should add blueprint generators for a top-level generator requested by its namespace', () => {
+      const blueprint = {
+        configs: { fooOption: { cli: { type: Boolean }, scope: 'storage' } },
+        import: [],
+      } as const satisfies JHipsterCommandDefinition;
+      const dependencies = resolve(['jhipster:git'], { 'jhipster-foo:git': blueprint }, ['jhipster-foo']);
+      expect(namespaces(dependencies)).toEqual(['jhipster-foo:git', 'jhipster:git']);
+      expect(dependencies[0].blueprintNamespace).toBe('jhipster-foo');
+    });
   });
 
   describe('resolveCommandDependencies', () => {

@@ -9,6 +9,7 @@
       "500": "Erro interno do servidor"
     },
     "concurrencyFailure": "Outro utilizador modificou esses dados ao mesmo tempo que você. Suas alterações foram rejeitadas.",
+    "dataIntegrityViolation": "Os dados entram em conflito com dados existentes ou não são válidos. As suas alterações foram rejeitadas.",
     "validation": "Erro de validação no servidor."
   }
 }

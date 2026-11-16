@@ -1,0 +1,231 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.test.util;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import tools.jackson.databind.ObjectMapper;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.MethodInterceptor;
+<%_ if (databaseTypeCouchbase) { _%>
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.test.context.TestSecurityContextHolder;
+<%_ } _%>
+
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+<%_ if (databaseTypeSql) { _%>
+import java.util.List;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+<%_ } _%>
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * Utility class for testing.
+ */
+public final class TestUtil {
+
+    /**
+     * Create a byte array with a specific size filled with specified data.
+     *
+     * @param size the size of the byte array.
+     * @param data the data to put in the byte array.
+     * @return the JSON byte array.
+     */
+    public static byte[] createByteArray(int size, String data) {
+        byte[] byteArray = new byte[size];
+        Arrays.fill(byteArray, Byte.parseByte(data, 2));
+        return byteArray;
+    }
+<%_ if (databaseTypeCouchbase) { _%>
+
+    /**
+     * Mock user authentication
+     */
+    public static void mockAuthentication() {
+        TestSecurityContextHolder.getContext().setAuthentication(new TestingAuthenticationToken("user", null));
+    }
+<%_ } _%>
+
+    /**
+     * A matcher that tests that the examined string represents the same instant as the reference datetime.
+     */
+    public static class ZonedDateTimeMatcher extends TypeSafeDiagnosingMatcher<String> {
+
+        private final ZonedDateTime date;
+
+        public ZonedDateTimeMatcher(ZonedDateTime date) {
+            this.date = date;
+        }
+
+        @Override
+        protected boolean matchesSafely(String item, Description mismatchDescription) {
+            try {
+                if (!date.isEqual(ZonedDateTime.parse(item))) {
+                    mismatchDescription.appendText("was ").appendValue(item);
+                    return false;
+                }
+                return true;
+            } catch (DateTimeParseException e) {
+                mismatchDescription.appendText("was ").appendValue(item).appendText(", which could not be parsed as a ZonedDateTime");
+                return false;
+            }
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("a String representing the same Instant as ").appendValue(date);
+        }
+    }
+
+    /**
+     * Creates a matcher that matches when the examined string represents the same instant as the reference datetime.
+     *
+     * @param date the reference datetime against which the examined string is checked.
+     */
+    public static ZonedDateTimeMatcher sameInstant(ZonedDateTime date) {
+        return new ZonedDateTimeMatcher(date);
+    }
+
+    /**
+     * A matcher that tests that the examined number represents the same value - it can be Long, Double, etc - as the reference BigDecimal.
+     */
+    public static class NumberMatcher extends TypeSafeMatcher<Number> {
+
+        final BigDecimal value;
+
+        public NumberMatcher(BigDecimal value) {
+            this.value = value;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("a numeric value is ").appendValue(value);
+        }
+
+        @Override
+        protected boolean matchesSafely(Number item) {
+            BigDecimal bigDecimal = asDecimal(item);
+            return bigDecimal != null && value.compareTo(bigDecimal) == 0;
+        }
+
+        private static BigDecimal asDecimal(Number item) {
+            return switch (item) {
+                case null -> null;
+                case BigDecimal bigDecimal -> bigDecimal;
+                case Long l -> BigDecimal.valueOf(l);
+                case Integer i -> BigDecimal.valueOf(i);
+                case Double v -> BigDecimal.valueOf(v);
+                case Float v -> BigDecimal.valueOf(v);
+                default -> BigDecimal.valueOf(item.doubleValue());
+            };
+        }
+    }
+
+    /**
+     * Creates a matcher that matches when the examined number represents the same value as the reference BigDecimal.
+     *
+     * @param number the reference BigDecimal against which the examined number is checked.
+     */
+    public static NumberMatcher sameNumber(BigDecimal number) {
+        return new NumberMatcher(number);
+    }
+
+    /**
+     * Verifies the equals/hashcode contract on the domain object.
+     */
+    public static <T> void equalsVerifier(Class<T> clazz) throws Exception {
+        T domainObject1 = clazz.getConstructor().newInstance();
+        assertThat(domainObject1.toString()).isNotNull();
+        assertThat(domainObject1).isEqualTo(domainObject1);
+        assertThat(domainObject1).hasSameHashCodeAs(domainObject1);
+        // Test with an instance of another class
+        Object testOtherObject = new Object();
+        assertThat(domainObject1).isNotEqualTo(testOtherObject);
+        assertThat(domainObject1).isNotEqualTo(null);
+        // Test with an instance of the same class
+        T domainObject2 = clazz.getConstructor().newInstance();
+        assertThat(domainObject1).isNotEqualTo(domainObject2);
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
+        // HashCodes are equal because the objects are not persisted yet
+        assertThat(domainObject1).hasSameHashCodeAs(domainObject2);
+<%_ } _%>
+    }
+<%_ if (databaseTypeSql) { _%>
+
+    /**
+     * Executes a query on the EntityManager finding all stored objects.
+     * @param <T> The type of objects to be searched
+     * @param em The instance of the EntityManager
+     * @param clazz The class type to be searched
+     * @return A list of all found objects
+     */
+    public static <T> List<T> findAll(EntityManager em, Class<T> clazz) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<T> cq = cb.createQuery(clazz);
+        Root<T> rootEntry = cq.from(clazz);
+        CriteriaQuery<T> all = cq.select(rootEntry);
+        TypedQuery<T> allQuery = em.createQuery(all);
+        return allQuery.getResultList();
+    }
+<%_ } _%>
+
+    @SuppressWarnings("unchecked")
+    public static <T> T createUpdateProxyForBean(T update, T original) {
+        Enhancer e = new Enhancer();
+        e.setSuperclass(original.getClass());
+        e.setCallback(
+            (MethodInterceptor) (obj, method, args, proxy) -> {
+                Object val = update.getClass().getMethod(method.getName(), method.getParameterTypes()).invoke(update, args);
+                if (val == null) {
+                    return original.getClass().getMethod(method.getName(), method.getParameterTypes()).invoke(original, args);
+                }
+                return val;
+            }
+        );
+        return (T) e.create();
+    }
+
+    private TestUtil() {}
+
+    /**
+     * Serializes the non-null properties of an object, as the body of a partial update.
+     *
+     * @param om the application object mapper.
+     * @param object the object to serialize.
+     * @return the JSON bytes.
+     */
+    public static byte[] convertObjectToPartialUpdateBody(ObjectMapper om, Object object) {
+        return om
+            .rebuild()
+            .changeDefaultPropertyInclusion(inclusion -> inclusion.withValueInclusion(JsonInclude.Include.NON_NULL))
+            .build()
+            .writeValueAsBytes(object);
+    }
+}

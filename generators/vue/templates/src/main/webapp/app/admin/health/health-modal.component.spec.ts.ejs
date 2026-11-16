@@ -16,78 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { shallowMount } from '@vue/test-utils';
 
 import HealthModal from './health-modal.vue';
 
-type HealthModalComponentType = InstanceType<typeof HealthModal>;
-
-describe('Health Modal Component', () => {
-  let healthModal: HealthModalComponentType;
-
-  beforeEach(() => {
-    const wrapper = shallowMount(HealthModal, {
-      props: {
-        currentHealth: {},
-      },
-      global: {
-        stubs: {
-          'font-awesome-icon': true,
-        },
-      },
-    });
-    healthModal = wrapper.vm;
-  });
-
-  describe('readableValue should transform data', () => {
-    it('to string when is an object', () => {
-      const result = healthModal.readableValue({ data: 1000 });
-
-      expect(result).toBe('{"data":1000}');
-    });
-
-    it('to string when is a string', () => {
-      const result = healthModal.readableValue('data');
-
-      expect(result).toBe('data');
-    });
-  });
-});
-
-describe('Health Modal Component for diskSpace', () => {
-  let healthModal: HealthModalComponentType;
-
-  beforeEach(() => {
-    const wrapper = shallowMount(HealthModal, {
-      props: {
-        currentHealth: { name: 'diskSpace' },
-      },
-    });
-    healthModal = wrapper.vm;
-  });
-
-  describe('readableValue should transform data', () => {
-    it('to GB when needed', () => {
-      const result = healthModal.readableValue(2147483648);
-
-      expect(result).toBe('2.00 GB');
-    });
-
-    it('to MB when needed', () => {
-      const result = healthModal.readableValue(214748);
-
-      expect(result).toBe('0.20 MB');
-    });
-  });
-});
-
 describe('Health Modal view', () => {
   it('should show the details and the error of a health', () => {
     // WHEN
     const wrapper = shallowMount(HealthModal, {
-      props: { currentHealth: { name: 'db', details: { details: { database: 'H2' } }, error: 'failed' } },
+      props: {
+        currentCheck: {
+          id: 'db',
+          label: { text: 'db' },
+          status: { text: 'DOWN' },
+          healthy: false,
+          details: [{ key: 'database', value: 'H2' }],
+          error: 'failed',
+        },
+      },
     });
 
     // THEN
@@ -100,6 +48,6 @@ describe('Health Modal view', () => {
     const wrapper = shallowMount(HealthModal);
 
     // THEN
-    expect(wrapper.vm.currentHealth).toEqual({});
+    expect(wrapper.text()).not.toContain('failed');
   });
 });

@@ -18,10 +18,11 @@
 -%>
 import { useEffect } from 'react';
 import { Alert, Col, Row } from 'react-bootstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, translate } from 'react-jhipster';
 import { Link, useSearchParams } from 'react-router';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import PageTitle from 'app/shared/layout/page-title';
 
 import { activateAction, reset } from './activate.reducer';
 
@@ -63,6 +64,7 @@ export const ActivatePage = () => {
 
   return (
     <div>
+      <PageTitle title={translate('activate.title')} />
       <Row className="justify-content-center">
         <Col md="8">
           <h1>

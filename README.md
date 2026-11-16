@@ -125,10 +125,10 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [jhipster-url]: https://www.jhipster.tech/
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster
-[github-actions-generator-image]: https://github.com/jhipster/generator-jhipster/workflows/Generator/badge.svg
-[github-actions-angular-image]: https://github.com/jhipster/generator-jhipster/workflows/Angular/badge.svg
-[github-actions-react-image]: https://github.com/jhipster/generator-jhipster/workflows/React/badge.svg
-[github-actions-vue-image]: https://github.com/jhipster/generator-jhipster/workflows/Vue/badge.svg
+[github-actions-generator-image]: https://github.com/jhipster/generator-jhipster/actions/workflows/generator.yml/badge.svg?branch=main
+[github-actions-angular-image]: https://github.com/jhipster/generator-jhipster/actions/workflows/angular.yml/badge.svg?branch=main
+[github-actions-react-image]: https://github.com/jhipster/generator-jhipster/actions/workflows/react.yml/badge.svg?branch=main
+[github-actions-vue-image]: https://github.com/jhipster/generator-jhipster/actions/workflows/vue.yml/badge.svg?branch=main
 [github-actions-url]: https://github.com/jhipster/generator-jhipster/actions
 [backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=70&width=890
 [backers-url]: https://opencollective.com/generator-jhipster

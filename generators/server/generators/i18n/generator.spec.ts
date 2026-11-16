@@ -39,7 +39,7 @@ describe(`generator - ${generator}`, () => {
         .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'en', languages: ['en', 'fr'] });
     });
 
-    it('should write the messages to the folder', () => {
+    it('should write the messages to the folder - snapshot', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });

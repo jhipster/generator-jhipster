@@ -20,6 +20,7 @@ import { before, describe, expect, it } from 'expect-node';
 import { basename, resolve } from 'node:path';
 
 import { testBootstrapEntities } from '../../../../test/support/bootstrap-tests.ts';
+import type { Entity as ClientEntity } from '../../types.d.ts';
 
 import Generator from './generator.ts';
 
@@ -39,13 +40,77 @@ describe(`generator - ${generator}`, () => {
     expect(runResult.getComposedGenerators()).toContain('jhipster:client:bootstrap');
   });
 
+  describe('filterEntitiesAndPropertiesForClient', () => {
+    // A field the clients skip, which the entity files declare.
+    const hiddenField = { fieldName: 'hidden', fieldType: 'String', skipClient: true };
+
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({}, [{ name: 'Foo', fields: [{ fieldName: 'shown', fieldType: 'String' }, hiddenField] }]);
+    });
+
+    it('should leave out the fields the clients skip', () => {
+      const { application, entities } = runResult;
+      const [foo] = application!.filterEntitiesAndPropertiesForClient!([entities!.Foo as ClientEntity]);
+      expect(foo.fields.map(field => field.fieldName)).toEqual(['id', 'shown']);
+    });
+    it('should keep the fields of the entity', () => {
+      expect(runResult.entities!.Foo.fields!.map(field => field.fieldName)).toEqual(['id', 'shown', 'hidden']);
+    });
+  });
+
+  describe('withAdminUi', () => {
+    const run = (config: Record<string, unknown>) => helpers.runJHipster(generator).withJHipsterConfig(config);
+
+    it('should default to true with a Spring Boot backend', async () => {
+      await run({});
+      expect(runResult.application?.withAdminUi).toBe(true);
+    });
+
+    it('should default to false with another backend', async () => {
+      await run({ backendType: 'Other' });
+      expect(runResult.application?.withAdminUi).toBe(false);
+    });
+
+    it('should keep the value set for another backend', async () => {
+      await run({ backendType: 'Other', withAdminUi: true });
+      expect(runResult.application?.withAdminUi).toBe(true);
+    });
+
+    it('should default to false in a microservice', async () => {
+      await run({ applicationType: 'microservice' });
+      expect(runResult.application?.withAdminUi).toBe(false);
+    });
+  });
+
+  describe('prettierFolders', () => {
+    const prettierFoldersFor = async (config: Record<string, unknown>, application: Record<string, unknown> = {}) => {
+      await helpers.runJHipster(generator).withSharedApplication(application).withJHipsterConfig(config);
+      return runResult.application!.prettierFolders;
+    };
+
+    it('should format the sources of the client', async () => {
+      expect(await prettierFoldersFor({ clientFramework: 'angular' })).toContain('src/main/webapp/**/');
+      expect(await prettierFoldersFor({ clientFramework: 'angular', clientRootDir: 'client/' })).toContain('client/src/**/');
+    });
+
+    it('should not format them without a client', async () => {
+      expect(await prettierFoldersFor({ clientFramework: 'no' })).not.toContain('src/main/webapp/**/');
+    });
+
+    it('should not add the sources a folder already formats', async () => {
+      expect(await prettierFoldersFor({ clientFramework: 'angular' }, { prettierFolders: ['', 'src/**/'] })).toEqual(['', 'src/**/']);
+    });
+  });
+
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig();
       });
 
-      it('should succeed', () => {
+      it('should succeed - snapshot', () => {
         expect(runResult.getSnapshot()).toMatchInlineSnapshot(`
 {
   ".yo-rc.json": {

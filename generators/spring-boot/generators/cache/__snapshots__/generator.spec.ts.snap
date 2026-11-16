@@ -14,7 +14,7 @@ exports[`generator - spring-boot:cache caffeine-gradle should match files snapsh
 }
 `;
 
-exports[`generator - spring-boot:cache caffeine-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache caffeine-gradle should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -97,7 +97,7 @@ exports[`generator - spring-boot:cache caffeine-maven should match files snapsho
 }
 `;
 
-exports[`generator - spring-boot:cache caffeine-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache caffeine-maven should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -168,7 +168,7 @@ exports[`generator - spring-boot:cache ehcache-gradle should match files snapsho
 }
 `;
 
-exports[`generator - spring-boot:cache ehcache-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache ehcache-gradle should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -231,7 +231,7 @@ exports[`generator - spring-boot:cache ehcache-maven should match files snapshot
 }
 `;
 
-exports[`generator - spring-boot:cache ehcache-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache ehcache-maven should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -294,7 +294,7 @@ exports[`generator - spring-boot:cache hazelcast-gradle should match files snaps
 }
 `;
 
-exports[`generator - spring-boot:cache hazelcast-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache hazelcast-gradle should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -382,7 +382,7 @@ exports[`generator - spring-boot:cache hazelcast-maven should match files snapsh
 }
 `;
 
-exports[`generator - spring-boot:cache hazelcast-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache hazelcast-maven should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -450,7 +450,7 @@ exports[`generator - spring-boot:cache infinispan-gradle should match files snap
 }
 `;
 
-exports[`generator - spring-boot:cache infinispan-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache infinispan-gradle should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -546,7 +546,7 @@ exports[`generator - spring-boot:cache infinispan-maven should match files snaps
 }
 `;
 
-exports[`generator - spring-boot:cache infinispan-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache infinispan-maven should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -642,7 +642,7 @@ exports[`generator - spring-boot:cache memcached-gradle should match files snaps
 }
 `;
 
-exports[`generator - spring-boot:cache memcached-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache memcached-gradle should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -715,7 +715,7 @@ exports[`generator - spring-boot:cache memcached-maven should match files snapsh
 }
 `;
 
-exports[`generator - spring-boot:cache memcached-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache memcached-maven should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -791,7 +791,7 @@ exports[`generator - spring-boot:cache redis-gradle should match files snapshot 
 }
 `;
 
-exports[`generator - spring-boot:cache redis-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache redis-gradle should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {
@@ -883,7 +883,7 @@ exports[`generator - spring-boot:cache redis-maven should match files snapshot 1
 }
 `;
 
-exports[`generator - spring-boot:cache redis-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache redis-maven should match source calls snapshot 1`] = `
 {
   "addEntityToCache": [
     {

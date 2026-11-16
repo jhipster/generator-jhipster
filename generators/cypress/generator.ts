@@ -20,7 +20,6 @@
 import { mutateData, stringHashCode } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
-import { generateTestEntity } from '../client/support/index.ts';
 import type { Source as ClientSource } from '../client/types.ts';
 import type { Source as JavaSource } from '../java/types.d.ts';
 
@@ -30,7 +29,6 @@ import type {
   Config as CypressConfig,
   Entity as CypressEntity,
   Features as CypressFeatures,
-  Field as CypressField,
   Options as CypressOptions,
 } from './types.ts';
 
@@ -206,7 +204,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       },
 
       async writeCypressEntityFiles({ application, entities }) {
-        for (const entity of entities.filter(
+        // The fields the clients skip are left out, like the client entity files.
+        const clientEntities = application.filterEntitiesAndPropertiesForClient?.(entities) ?? entities;
+        for (const entity of clientEntities.filter(
           entity => entity.generateEntityCypress && !entity.embedded && !entity.builtInUser && !entity.entityClientModelOnly,
         )) {
           const context = { ...application, ...entity };
@@ -253,6 +253,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             cypress: true,
           },
         });
+        if (application.nodePackageManagerPnpm && !application.monorepository) {
+          this.mergeDestinationYaml('pnpm-workspace.yaml', { allowBuilds: { cypress: true } });
+        }
       },
       configureAudits({ application }) {
         if (!application.cypressAudit) return;
@@ -358,9 +361,5 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
-  }
-
-  generateTestEntity(fields: CypressField[]) {
-    return generateTestEntity(fields);
   }
 }

@@ -19,7 +19,9 @@
 
 CREATE TABLE IF NOT EXISTS <%- entityInstance %> (
 <%_ for (const field of fields) { _%>
-  <%_ const { fieldName, fieldNameUnderscored } = field; _%>
+  <%_ // The column of the content type of a blob keeps its underscored name.
+      const fieldName = field.contentTypeOf ? field.fieldNameUnderscored : field.fieldName;
+  _%>
   <%_ if (field.fieldTypeUUID) { _%>
     <%- fieldName %> uuid,
   <%_ } else if (field.fieldTypeString || field.fieldIsEnum) { _%>
@@ -51,7 +53,6 @@ CREATE TABLE IF NOT EXISTS <%- entityInstance %> (
     <%- fieldName %> text,
     <%_ } else { _%>
     <%- fieldName %> blob,
-    <%- fieldNameUnderscored %>_content_type text,
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>

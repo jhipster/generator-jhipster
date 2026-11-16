@@ -40,11 +40,6 @@
         <addNotNullConstraint tableName="<%- entityTableName %>"
             columnName="<%- field.columnName %>"
             columnDataType="<%- field.columnType %>"/>
-      <%_ if (field.shouldCreateContentType) { _%>
-        <addNotNullConstraint tableName="<%- entityTableName %>"
-            columnName="<%- field.columnName %>_content_type"
-            columnDataType="varchar(255)"/>
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
     </changeSet>

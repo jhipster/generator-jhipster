@@ -52,7 +52,7 @@ describe(`generator - ${generator}`, () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
 
-    it('should compose with generators', () => {
+    it('should compose with generators - snapshot', () => {
       expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
     });
   });
@@ -101,6 +101,27 @@ describe(`generator - ${generator}`, () => {
         ],
       });
       result.assertNoFileContent('.jhipster/Foo.json', 'fieldTypeBlobContent');
+    });
+  });
+
+  describe('with an entity with a Blob field', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          { name: 'Foo', fields: [{ fieldName: 'attachment', fieldType: 'Blob' }] } as any,
+        ])
+        .withSkipWritingPriorities();
+    });
+
+    it('should prepare it as a blob of any content', () => {
+      const field = (result.entities!.Foo as any).fields.find((field: any) => field.fieldName === 'attachment');
+      expect(field).toMatchObject({
+        fieldTypeBlobContent: 'any',
+        blobContentTypeAny: true,
+        blobContentTypeImage: false,
+        blobContentTypeText: false,
+      });
     });
   });
 

@@ -1,0 +1,60 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+import { Route, Routes } from 'react-router';
+
+import { renderWithStore } from 'app/shared/util/test-utils';
+import { administrationState } from './admin-test-utils';
+
+import AdministrationRoutes from './index';
+
+<%_ if (withAdminUi) { _%>
+vi.mock('./administration.reducer', async importOriginal => ({
+  ...(await importOriginal<typeof import('./administration.reducer')>()),
+  getConfiguration: vi.fn(() => ({ type: 'test/getConfiguration' })),
+  getLoggers: vi.fn(() => ({ type: 'test/getLoggers' })),
+  getSystemHealth: vi.fn(() => ({ type: 'test/getSystemHealth' })),
+  getSystemMetrics: vi.fn(() => ({ type: 'test/getSystemMetrics' })),
+}));
+<%_ } _%>
+
+const renderPage = (path: string) =>
+  renderWithStore(
+    <Routes>
+      <Route path="/admin/*" element={<AdministrationRoutes />} />
+    </Routes>,
+    `/admin/${path}`,
+    administrationState(),
+  );
+
+describe('AdministrationRoutes', () => {
+  it.each([
+<%_ if (withAdminUi) { _%>
+    ['health', '#health-page-heading'],
+    ['metrics', '#metrics-page-heading'],
+    ['configuration', '#configuration-page-heading'],
+    ['logs', '#logs-page-heading'],
+<%_ } _%>
+    ['docs', 'iframe'],
+  ])('should render the %s screen', (path, selector) => {
+    renderPage(path);
+
+    expect(document.querySelector(selector)).not.toBeNull();
+  });
+});

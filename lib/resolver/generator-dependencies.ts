@@ -77,10 +77,13 @@ export const resolveGeneratorDependencies = (
       return command?.override;
     };
 
+    // A top-level generator may be overridden by a blueprint whether it is requested by its name (`app`) or by its
+    // namespace (`jhipster:app`); a sub-generator (`spring-boot:cache`) is not overridden.
+    const topLevelName = namespace.startsWith(`${namespacePrefix}:`) ? namespace.slice(namespacePrefix.length + 1) : namespace;
     let overridden = false;
-    if (!namespace.includes(':')) {
+    if (!topLevelName.includes(':')) {
       for (const nextBlueprint of blueprintNamespaces) {
-        const blueprintSubGenerator = `${nextBlueprint}:${namespace}`;
+        const blueprintSubGenerator = `${nextBlueprint}:${topLevelName}`;
         if (
           !isRegistered(blueprintSubGenerator) &&
           lookupGeneratorAndImports({ namespace: blueprintSubGenerator, blueprintNamespace: nextBlueprint })
