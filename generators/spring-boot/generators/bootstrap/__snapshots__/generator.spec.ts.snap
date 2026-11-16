@@ -231,6 +231,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "reactivePrefix": "",
   "reactorBlock": "",
   "reactorBlockOptional": "",
+  "relationshipsHaveBackReference": true,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
   "routes": undefined,

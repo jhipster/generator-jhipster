@@ -231,6 +231,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "reactivePrefix": "",
   "reactorBlock": "",
   "reactorBlockOptional": "",
+  "relationshipsHaveBackReference": true,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
   "routes": undefined,

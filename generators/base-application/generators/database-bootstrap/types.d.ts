@@ -28,6 +28,11 @@ import type {
 export type Application = {
   /** Derived from the `databaseType` the generator of the backend declares, when it does not derive them. */
   databaseTypeAny?: boolean;
+  /**
+   * Whether a one-to-many has a back reference in the database, which the base application adds: not in Neo4j nor
+   * without a database.
+   */
+  relationshipsHaveBackReference?: boolean;
   databaseTypeSql?: boolean;
   databaseTypeCassandra?: boolean;
   databaseTypeNeo4j?: boolean;

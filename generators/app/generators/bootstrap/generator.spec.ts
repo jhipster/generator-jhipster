@@ -103,7 +103,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withMockedGenerators(['jhipster:server:bootstrap'])
+        .withMockedGenerators(['jhipster:server:bootstrap', 'jhipster:base-application:database-bootstrap'])
         .withJHipsterConfig({ skipServer: true, databaseType: 'mongodb', searchEngine: 'elasticsearch' }, [
           {
             name: 'Author',
@@ -114,6 +114,10 @@ describe(`generator - ${generator}`, () => {
           },
           { name: 'Book', changelogDate: '20200101000100', fields: [{ fieldName: 'title', fieldType: 'String' }] },
         ] as any);
+    });
+
+    it('should not compose the database bootstrap', () => {
+      runResult.assertGeneratorNotComposed('jhipster:base-application:database-bootstrap');
     });
 
     it('should add the other side of the relationships', () => {
