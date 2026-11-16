@@ -19,6 +19,8 @@
 import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { Field as BaseApplicationField } from '../types.ts';
 
+import { isContentTypeField } from './content-type-fields.ts';
+
 const { BOOLEAN, INTEGER, LONG } = fieldTypes.CommonDBTypes;
 
 /** The largest range of integers listed as a domain. */
@@ -55,40 +57,46 @@ type GenerateValue<F extends BaseApplicationField> = (field: F) => any;
 /** A sample written as TypeScript code: the values are expressions. */
 export const generateTsSample = <F extends BaseApplicationField>(fields: F[], generateValue: GenerateValue<F>): Record<string, any> =>
   Object.fromEntries(
-    fields.flatMap(field => {
-      const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate, collection } = field;
-      let fakeData = generateValue(field);
-      if (collection) {
-        fakeData = fakeData === undefined ? '[]' : `[${fakeData}]`;
-      }
-      if (fieldWithContentType) {
-        return [
-          [field.propertyName, fakeData],
-          [contentTypeFieldName, "'unknown'"],
-        ];
-      }
-      if (fieldTypeTimed || fieldTypeLocalDate) {
-        return [[field.propertyName, `dayjs(${fakeData})`]];
-      }
-      return [[field.propertyName, fakeData]];
-    }),
+    // The blob gives the content type of its sample, its content type field is left out.
+    fields
+      .filter(field => !isContentTypeField(field))
+      .flatMap(field => {
+        const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate, collection } = field;
+        let fakeData = generateValue(field);
+        if (collection) {
+          fakeData = fakeData === undefined ? '[]' : `[${fakeData}]`;
+        }
+        if (fieldWithContentType) {
+          return [
+            [field.propertyName, fakeData],
+            [contentTypeFieldName, "'unknown'"],
+          ];
+        }
+        if (fieldTypeTimed || fieldTypeLocalDate) {
+          return [[field.propertyName, `dayjs(${fakeData})`]];
+        }
+        return [[field.propertyName, fakeData]];
+      }),
   );
 
 /** A sample with values that can be serialized to JSON. */
 export const generateJsonSample = <F extends BaseApplicationField>(fields: F[], generateValue: GenerateValue<F>): Record<string, any> =>
   Object.fromEntries(
-    fields.flatMap(field => {
-      const { fieldWithContentType, contentTypeFieldName, collection } = field;
-      let fakeData = generateValue(field);
-      if (collection) {
-        fakeData = fakeData === undefined ? [] : [fakeData];
-      }
-      if (fieldWithContentType) {
-        return [
-          [field.propertyName, fakeData],
-          [contentTypeFieldName, 'unknown'],
-        ];
-      }
-      return [[field.propertyName, fakeData]];
-    }),
+    // The blob gives the content type of its sample, its content type field is left out.
+    fields
+      .filter(field => !isContentTypeField(field))
+      .flatMap(field => {
+        const { fieldWithContentType, contentTypeFieldName, collection } = field;
+        let fakeData = generateValue(field);
+        if (collection) {
+          fakeData = fakeData === undefined ? [] : [fakeData];
+        }
+        if (fieldWithContentType) {
+          return [
+            [field.propertyName, fakeData],
+            [contentTypeFieldName, 'unknown'],
+          ];
+        }
+        return [[field.propertyName, fakeData]];
+      }),
   );

@@ -37,14 +37,6 @@ import jakarta.validation.constraints.*;
 <&_ } -&>
 <%_ } -%>
 
-<%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
-<&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
-  <%_ if (field.fieldValidationRequired) { _%>
-      @NotNull
-  <%_ } _%>
-<&_ } -&>
-<%_ } -%>
-
 <%_ for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
 <&_ } -&>

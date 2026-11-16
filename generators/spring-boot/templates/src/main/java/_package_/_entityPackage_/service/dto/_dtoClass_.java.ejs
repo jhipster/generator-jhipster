@@ -97,10 +97,6 @@ public class <%- dtoClass %> implements Serializable {
     @Lob
   <%_ } _%>
     private <%- property.propertyDtoJavaType %> <%- property.propertyName %><%- property.collection && relationship ? ' = new HashSet<>()' : '' %>;
-  <%_ if (property.fieldWithContentType) { _%>
-
-    private String <%- property.propertyName %>ContentType;
-  <%_ } _%>
 <%_ } _%>
 <%_ for (property of restProperties) { _%>
 
@@ -111,16 +107,6 @@ public class <%- dtoClass %> implements Serializable {
     public void <%- property.propertyConsumerName %>(<%- property.propertyDtoJavaType %> <%- property.propertyName %>) {
         this.<%- property.propertyName %> = <%- property.propertyName %>;
     }
-  <%_ if (property.fieldWithContentType) { _%>
-
-    public String <%- property.propertySupplierName %>ContentType() {
-        return <%- property.propertyName %>ContentType;
-    }
-
-    public void <%- property.propertyConsumerName %>ContentType(String <%- property.propertyName %>ContentType) {
-        this.<%- property.propertyName %>ContentType = <%- property.propertyName %>ContentType;
-    }
-  <%_ } _%>
 <%_ } _%>
 <%_ const idNames = primaryKey ? [...primaryKey.fields.map(f => f.propertyName)] : []; _%>
 

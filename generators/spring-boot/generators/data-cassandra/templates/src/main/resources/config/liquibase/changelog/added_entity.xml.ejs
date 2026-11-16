@@ -30,7 +30,8 @@
     <changeSet id="<%- changelogDate %>-1" author="jhipster">
         <createTable tableName="<%- entityInstance %>">
 <%_ for (const field of fields) { _%>
-  <%_ const { fieldName, fieldNameUnderscored } = field;
+  <%_ // The column of the content type of a blob keeps its underscored name.
+      const fieldName = field.contentTypeOf ? field.fieldNameUnderscored : field.fieldName;
       let columnType;
   _%>
   <%_ if (field.fieldTypeUUID) { _%>
@@ -67,9 +68,6 @@
             </column>
     <%_ } else { _%>
             <column name="<%- fieldName %>" type="<%- columnType %>"/>
-    <%_ } _%>
-    <%_ if (field.fieldTypeByteBuffer && !field.blobContentTypeText) { _%>
-            <column name="<%- fieldNameUnderscored %>_content_type" type="text"/>
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>

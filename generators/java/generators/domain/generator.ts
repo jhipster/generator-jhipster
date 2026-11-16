@@ -27,6 +27,11 @@ import { isReservedJavaKeyword } from '../../support/reserved-keywords.ts';
 import { entityServerFiles, enumFiles } from './entity-files.ts';
 
 export default class DomainGenerator extends JavaApplicationGenerator {
+  constructor(...[args, options, features]: ConstructorParameters<typeof JavaApplicationGenerator>) {
+    // Its templates write the content type of a blob through its content type field.
+    super(args, options, { ...features, contentTypeFields: true });
+  }
+
   generateEntities!: boolean;
   useJakartaValidation!: boolean;
   useJacksonIdentityInfo!: boolean;

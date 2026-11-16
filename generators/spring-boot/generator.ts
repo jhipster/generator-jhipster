@@ -26,6 +26,7 @@ import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFramework
 import { mutateData } from '../../lib/utils/index.ts';
 import { lowerFirst } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
+import { isContentTypeField } from '../base-application/internal/content-type-fields.ts';
 import { generateEntitySamples } from '../base-application/support/index.ts';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
@@ -77,7 +78,8 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
   fakeKeytool!: boolean;
 
   constructor(args?: string[], options?: Options, features?: Features) {
-    super(args, options, { ...features, loadCommand: ['jhipster:client'] });
+    // Its templates write the content type of a blob through its content type field.
+    super(args, options, { ...features, loadCommand: ['jhipster:client'], contentTypeFields: true });
   }
 
   async beforeQueue() {
@@ -527,7 +529,9 @@ ${classProperties
       prepareEntity({ field }) {
         field.fieldJavaBuildSpecification = getSpecificationBuildForType(field.fieldType as FieldType);
 
-        field.filterableField = !([TYPE_BYTES, TYPE_BYTE_BUFFER] as string[]).includes(field.fieldType) && !field.transient;
+        // The content type of a blob is not filtered, like the blob.
+        field.filterableField =
+          !([TYPE_BYTES, TYPE_BYTE_BUFFER] as string[]).includes(field.fieldType) && !field.transient && !isContentTypeField(field);
         if (field.filterableField) {
           const { fieldType } = field;
           mutateData(field, mutateFilterableField);
@@ -629,6 +633,11 @@ ${classProperties
           }
           let sampleTextString = 'A'.repeat(sampleTextLength);
           let updatedTextString = 'B'.repeat(sampleTextLength);
+          if (isContentTypeField(field)) {
+            // The content types of the files of the test.
+            sampleTextString = 'image/jpg';
+            updatedTextString = 'image/png';
+          }
           if (field.fieldValidateRulesPattern !== undefined) {
             const [sample, updated] = patternSamples[patternFields.indexOf(field)].map(
               patternSample => patternSample[field.fieldName] as string | undefined,

@@ -34,9 +34,6 @@
     field<%- field.fieldNameCapitalized %>CustomDeclarationSection: 1,
     field<%- field.fieldNameCapitalized %>CustomMethodsSection: 1,
     field<%- field.fieldNameCapitalized %>AnnotationSection: 0,
-  <%_ if (field.fieldWithContentType) { _%>
-    field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection: 0,
-  <%_ } _%>
     field<%- field.fieldNameCapitalized %>CustomSetSection: 1,
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
@@ -133,11 +130,6 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
 <&- fragments.field<%- field.fieldNameCapitalized %>AnnotationSection() -&>
     private <%- field.javaFieldType %> <%- field.fieldName %>;
 
-  <%_ if (field.fieldWithContentType) { _%>
-<&- fragments.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection() -&>
-    private String <%- field.fieldName %>ContentType;
-
-  <%_ } _%>
 <&_ } -&>
 <%_ } _%>
 <&- fragments.classAdditionalFieldsSection() -&>
@@ -209,23 +201,6 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
         this.<%- field.fieldName %> = <%- field.fieldName %>;
     }
   <&_ } -&>
-  <%_ if (field.fieldWithContentType) { _%>
-
-    public String <%- field.propertySupplierName %>ContentType() {
-        return this.<%- field.fieldName %>ContentType;
-    }
-    <%_ if (fluentMethods) { _%>
-
-    public <%- persistClass %> <%- field.fieldName %>ContentType(String <%- field.fieldName %>ContentType) {
-        this.<%- field.fieldName %>ContentType = <%- field.fieldName %>ContentType;
-        return this;
-    }
-    <%_ } _%>
-
-    public void <%- field.propertyConsumerName %>ContentType(String <%- field.fieldName %>ContentType) {
-        this.<%- field.fieldName %>ContentType = <%- field.fieldName %>ContentType;
-    }
-  <%_ } _%>
 <&_ } -&>
 <%_ } _%>
 
@@ -371,9 +346,6 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
   <%_ const isNumeric = field.fieldTypeNumeric; _%>
             ", <%- field.fieldName %>=<%- isNumeric ? '' : '\'' %>" + <%- field.propertySupplierName %>() <%- isNumeric ? '' : '+ "\'" ' %>+
-  <%_ if (field.fieldWithContentType) { _%>
-            ", <%- field.fieldName %>ContentType='" + <%- field.propertySupplierName %>ContentType() + "'" +
-  <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.otherEntity.embedded) { _%>

@@ -25,16 +25,12 @@ partialUpdated<%- persistClass %>.<%- primaryKey.propertyConsumerName %>(<%- per
 
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
     partialUpdated<%- persistClass %><% for (field of fieldsToUpdate) { %>
-        .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% if (field.fieldWithContentType) { %>
-            .<%- field.fieldName %>ContentType(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE)<% } %><% } %>;
+        .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% } %>;
 <%_ } else { _%>
   <%_ for (field of fieldsToUpdate) { _%>
     <%_ if (field.includeField) { _%>
 
     partialUpdated<%- persistClass %>.<%- field.propertyConsumerName %>(<%- field.updateWithValue %>);
-      <%_ if (field.fieldWithContentType) { _%>
-        partialUpdated<%- persistClass %>.<%- field.propertyConsumerName %>ContentType(<%- field.updateWithValue %>_CONTENT_TYPE);
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>

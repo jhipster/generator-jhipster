@@ -39,11 +39,6 @@
                 <constraints nullable="<%- !field.columnRequired %>" />
   <%_ } _%>
             </column>
-  <%_ if (field.shouldCreateContentType) { _%>
-            <column name="<%- field.columnName %>_content_type" type="varchar(255)">
-                <constraints nullable="<%- !field.columnRequired %>" />
-            </column>
-  <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
   <%_ if ((relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one' && relationship.ownerSide) && !relationship.id) { _%>
@@ -107,9 +102,6 @@
                   usePreparedStatements="true">
   <%_ for (field of fields) { _%>
             <column name="<%- field.columnName %>" type="<%- field.loadColumnType %>"/>
-    <%_ if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
-            <column name="<%- field.columnName %>_content_type" type="string"/>
-    <%_ } _%>
   <%_ } _%>
   <%_ for (relationship of relationships.filter(relationship => !relationship.id && relationship.columnRequired && relationship.persistableRelationship && !relationship.collection)) { _%>
     <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>

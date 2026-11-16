@@ -29,6 +29,7 @@ import BaseGenerator from '../base-simple-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
+import { isContentTypeField } from './internal/content-type-fields.ts';
 import { getChangelogDateForBuiltInEntities } from './internal/utils.ts';
 import { type ApplicationObject, type ApplicationObjectConfig, isJdlObjectName } from './objects.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
@@ -634,6 +635,17 @@ export default class BaseApplicationGenerator<
       } else {
         args.entities = [...this.#entities.values()].filter(entity => entitiesToFilter.includes(entity.name));
       }
+    }
+    if (
+      args.entities &&
+      !this.features.contentTypeFields &&
+      ([PRIORITY_NAMES.WRITING_ENTITIES, PRIORITY_NAMES.POST_WRITING_ENTITIES] as string[]).includes(priorityName)
+    ) {
+      // A generator writes the content type of a blob by hand, from the blob field, unless it turns on the contentTypeFields feature.
+      args.entities = (args.entities as Entity[]).map(entity => ({
+        ...entity,
+        fields: entity.fields.filter(field => !isContentTypeField(field)),
+      }));
     }
     return args;
   }
