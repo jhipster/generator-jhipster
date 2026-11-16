@@ -30,24 +30,7 @@ export default class AccountService {
   constructor(private readonly store: AccountStore) {}
 
   async update(): Promise<void> {
-    if (!this.store.profilesLoaded) {
-      await this.retrieveProfiles();
-      this.store.setProfilesLoaded();
-    }
     await this.loadAccount();
-  }
-
-  async retrieveProfiles(): Promise<boolean> {
-    try {
-      const res = await axios.get<{ activeProfiles?: string[]; 'display-ribbon-on-profiles'?: string }>('management/info');
-      if (res.data?.activeProfiles) {
-        this.store.setRibbonOnProfiles(res.data['display-ribbon-on-profiles'] ?? '');
-        this.store.setActiveProfiles(res.data.activeProfiles);
-      }
-      return true;
-    } catch {
-      return false;
-    }
   }
 
   async retrieveAccount(): Promise<boolean> {

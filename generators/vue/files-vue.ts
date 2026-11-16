@@ -124,6 +124,8 @@ export const vueFiles = asWriteFilesSection({
         'composables/index.ts',
         'composables/controlled-request.ts',
         'composables/controlled-request.spec.ts',
+        'composables/env-profiles.ts',
+        'composables/env-profiles.spec.ts',
         'composables/validation.ts',
         'composables/validation.spec.ts',
         'utils/arrays.ts',
