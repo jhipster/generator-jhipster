@@ -75,6 +75,59 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with relationships written by an older version', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          {
+            name: 'Order',
+            annotations: { changelogDate: '20200101000100' },
+            fields: [],
+            relationships: [
+              { relationshipName: 'publisher', otherEntityName: 'member', relationshipType: 'one-to-one', relationshipSide: 'left' },
+              { relationshipName: 'owner', otherEntityName: 'member', relationshipType: 'many-to-one', relationshipSide: 'left' },
+            ],
+          } as any,
+          { name: 'Member', annotations: { changelogDate: '20200101000200' }, fields: [] } as any,
+        ])
+        .doInDir(cwd => writeFileSync(join(cwd, '.yo-rc.json'), JSON.stringify({ 'generator-jhipster': { jhipsterVersion: '9.4.0' } })))
+        .withSkipWritingPriorities();
+    });
+
+    it('should save the back reference name the older version derived', () => {
+      const { relationships } = result.fs.readJSON(join(result.cwd, '.jhipster/Order.json')) as { relationships: any[] };
+      expect(relationships.map(({ relationshipName, options }) => ({ relationshipName, options }))).toEqual([
+        { relationshipName: 'publisher', options: { backReferenceName: 'order' } },
+        { relationshipName: 'owner', options: undefined },
+      ]);
+    });
+  });
+
+  describe('with relationships of a new application', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          {
+            name: 'Order',
+            annotations: { changelogDate: '20200101000100' },
+            fields: [],
+            relationships: [
+              { relationshipName: 'publisher', otherEntityName: 'member', relationshipType: 'one-to-one', relationshipSide: 'left' },
+              { relationshipName: 'owner', otherEntityName: 'member', relationshipType: 'many-to-one', relationshipSide: 'left' },
+            ],
+          } as any,
+          { name: 'Member', annotations: { changelogDate: '20200101000200' }, fields: [] } as any,
+        ])
+        .withSkipWritingPriorities();
+    });
+
+    it('should save no back reference name', () => {
+      result.assertNoFileContent('.jhipster/Order.json', 'backReferenceName');
+    });
+  });
+
   describe('with an entity with blob fields stored as byte[]', () => {
     before(async () => {
       await helpers

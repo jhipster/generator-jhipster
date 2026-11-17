@@ -19,14 +19,16 @@
 
 import { describe, expect, it } from 'expect-node';
 
+import { saveLegacyBackReferenceNames } from '../../base-application/support/relationship.ts';
+
 import { addEntitiesOtherRelationships } from './relationship.ts';
 
-const createEntities = (relationshipType: string) => {
+const createEntities = (relationshipNames: string[], relationshipType = 'one-to-one') => {
   const member: any = { name: 'Member', databaseType: 'sql', relationships: [] };
   const order: any = {
     name: 'Order',
     databaseType: 'sql',
-    relationships: ['recipient', 'publisher'].map(relationshipName => ({
+    relationships: relationshipNames.map(relationshipName => ({
       relationshipName,
       relationshipType,
       otherEntityName: 'member',
@@ -37,31 +39,86 @@ const createEntities = (relationshipType: string) => {
   return { order, member };
 };
 
+/** The back reference names on Member, by the relationship of Order they point back to. */
+const backReferences = (relationshipNames: string[], relationshipType?: string) => {
+  const { order, member } = createEntities(relationshipNames, relationshipType);
+  addEntitiesOtherRelationships([order, member]);
+  return Object.fromEntries(
+    member.relationships.map((relationship: any) => [relationship.otherEntityRelationshipName, relationship.relationshipName]),
+  );
+};
+
 describe('generator - server - support - relationship', () => {
   describe('addEntitiesOtherRelationships', () => {
+    it('should name the back reference of a single relationship after the relationship', () => {
+      expect(backReferences(['publisher'])).toEqual({ publisher: 'orderAsPublisher' });
+    });
+
     for (const relationshipType of ['one-to-one', 'many-to-many']) {
-      describe(`with two unidirectional ${relationshipType} relationships to the same entity`, () => {
-        it('should give the back references of the other entity distinct names', () => {
-          const { order, member } = createEntities(relationshipType);
-
-          addEntitiesOtherRelationships([order, member]);
-
-          expect(member.relationships.map((relationship: any) => relationship.relationshipName)).toEqual(['order', 'orderAsPublisher']);
-          expect(order.relationships.map((relationship: any) => relationship.otherEntityRelationshipName)).toEqual([
-            'order',
-            'orderAsPublisher',
-          ]);
+      it(`should give two unidirectional ${relationshipType} relationships to the same entity distinct back references`, () => {
+        expect(backReferences(['recipient', 'publisher'], relationshipType)).toEqual({
+          recipient: 'orderAsRecipient',
+          publisher: 'orderAsPublisher',
         });
       });
     }
 
-    it('should keep the back reference name a relationship gives', () => {
-      const { order, member } = createEntities('one-to-one');
+    it('should keep the name of a back reference whatever the other relationships and their order', () => {
+      expect(backReferences(['publisher']).publisher).toBe('orderAsPublisher');
+      expect(backReferences(['recipient', 'publisher']).publisher).toBe('orderAsPublisher');
+      expect(backReferences(['publisher', 'recipient']).publisher).toBe('orderAsPublisher');
+    });
+
+    it('should keep the name a relationship gives and the backReferenceName option', () => {
+      const { order, member } = createEntities(['recipient', 'publisher']);
+      order.relationships[0].options = { backReferenceName: 'order' };
       order.relationships[1].otherEntityRelationshipName = 'publishedOrder';
 
       addEntitiesOtherRelationships([order, member]);
 
       expect(member.relationships.map((relationship: any) => relationship.relationshipName)).toEqual(['order', 'publishedOrder']);
+    });
+  });
+
+  describe('saveLegacyBackReferenceNames', () => {
+    it('should save the name older versions derived, so the back reference keeps it', () => {
+      const { order, member } = createEntities(['publisher']);
+
+      expect(saveLegacyBackReferenceNames(order)).toBe(true);
+      expect(order.relationships[0].options).toEqual({ backReferenceName: 'order' });
+
+      addEntitiesOtherRelationships([order, member]);
+      expect(member.relationships[0].relationshipName).toBe('order');
+    });
+
+    it('should save no name for two relationships to the same entity, which older versions could not generate', () => {
+      const { order } = createEntities(['recipient', 'publisher']);
+
+      expect(saveLegacyBackReferenceNames(order)).toBe(false);
+      expect(order.relationships.map((relationship: any) => relationship.options)).toEqual([undefined, undefined]);
+    });
+
+    it('should save no name for a relationship without a back reference, with a name or with one saved', () => {
+      const { order } = createEntities(['owner', 'publisher', 'recipient', 'reviewer']);
+      order.relationships[0].relationshipType = 'many-to-one';
+      order.relationships[1].otherEntityRelationshipName = 'publishedOrder';
+      order.relationships[2].options = { backReferenceName: 'receivedOrder' };
+      order.relationships[3].otherEntityName = 'reviewer';
+
+      saveLegacyBackReferenceNames(order);
+
+      expect(order.relationships.map((relationship: any) => relationship.options)).toEqual([
+        undefined,
+        undefined,
+        { backReferenceName: 'receivedOrder' },
+        { backReferenceName: 'order' },
+      ]);
+    });
+
+    it('should save no name for a one-to-one of an entity without SQL, which gets no back reference', () => {
+      const { order } = createEntities(['publisher']);
+
+      expect(saveLegacyBackReferenceNames(order, 'mongodb')).toBe(false);
     });
   });
 });

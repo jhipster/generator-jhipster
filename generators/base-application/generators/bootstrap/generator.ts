@@ -40,6 +40,7 @@ import {
   getChangelogDateForBuiltInEntities,
 } from '../../internal/utils.ts';
 import {
+  DERIVED_BACK_REFERENCE_NAME_VERSION,
   addFakerToEntity,
   derivedPrimaryKeyProperties,
   hasCyclicRequiredRelationship,
@@ -51,6 +52,7 @@ import {
   prepareEntityPrimaryKeyForTemplates,
   preparePostEntityCommonDerivedProperties,
   prepareRelationship,
+  saveLegacyBackReferenceNames,
   stringifyApplicationData,
 } from '../../support/index.ts';
 import type { EntityToLoad } from '../../tasks.ts';
@@ -163,6 +165,16 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           if (incrementalChangelog && changelogDate && !otherAnnotations.incrementalChangelogDate) {
             entityConfig.annotations = { ...otherAnnotations, incrementalChangelogDate: changelogDate };
           }
+        }
+        // Older versions named the back reference of a relationship without a name after the entity, kept for the existing fields and columns.
+        if (
+          control.isJhipsterVersionLessThan(DERIVED_BACK_REFERENCE_NAME_VERSION) &&
+          saveLegacyBackReferenceNames(
+            { name: entityName, relationships: entityConfig.relationships },
+            (entityConfig as { databaseType?: string }).databaseType ?? application.databaseType,
+          )
+        ) {
+          entityStorage.save();
         }
         const annotations = entityConfig.annotations!;
         if (annotations.changelogDate && annotations.incrementalChangelogDate) {

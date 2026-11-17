@@ -60,6 +60,22 @@ type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: strin
  * it in its cli. The applications it generates in their own folders use the blueprints their jdl declares, not the ones
  * given to it.
  */
+/**
+ * Keeps the back reference name an entity file saved for a relationship the jdl gives again without one: the relationships of
+ * the jdl replace the ones of the file, and a jdl written before the name was saved does not have it.
+ */
+const keepBackReferenceNames = (oldConfig: { relationships?: any[] }, entity: { relationships?: any[] }): void => {
+  for (const relationship of entity.relationships ?? []) {
+    if (relationship.otherEntityRelationshipName || relationship.options?.backReferenceName !== undefined) continue;
+    const backReferenceName = oldConfig.relationships?.find(
+      old => old.relationshipName === relationship.relationshipName && old.otherEntityName === relationship.otherEntityName,
+    )?.options?.backReferenceName;
+    if (backReferenceName !== undefined) {
+      relationship.options = { ...relationship.options, backReferenceName };
+    }
+  }
+};
+
 export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOptions> {
   jdlFiles?: string[];
   inline?: string;
@@ -393,6 +409,7 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
         const configFile = this.destinationPath(`${appPath}${JHIPSTER_CONFIG_DIR}/${upperFirst(entity.name)}.json`);
         // An entity written before, in memory or on the disk, keeps what the jdl does not state, like its changelog date.
         const oldConfig: any = fs.readJSON(configFile, {});
+        keepBackReferenceNames(oldConfig, entity);
         fs.writeJSON(configFile, mergeConfigContent(oldConfig, entity));
       }
     }

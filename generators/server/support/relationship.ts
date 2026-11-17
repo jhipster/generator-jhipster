@@ -17,12 +17,9 @@
  * limitations under the License.
  */
 
-import { databaseTypes } from '../../../lib/jhipster/index.ts';
-import { addOtherRelationship } from '../../base-application/support/relationship.ts';
+import { addOtherRelationship, relationshipAddsBackReference } from '../../base-application/support/relationship.ts';
 import type { Entity as BaseApplicationEntity } from '../../base-application/types.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
-
-const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 
 export const addEntitiesOtherRelationships = (entities: BaseApplicationEntity[]): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
@@ -31,11 +28,7 @@ export const addEntitiesOtherRelationships = (entities: BaseApplicationEntity[])
       if (
         !relationship.otherRelationship &&
         !relationship.otherEntity.embedded &&
-        (relationship.otherEntityRelationshipName ||
-          relationship.relationshipType === 'many-to-many' ||
-          // OneToOne back reference is required due to filtering
-          (relationship.relationshipType === 'one-to-one' && entity.databaseType === SQL) ||
-          (relationship.relationshipType === 'one-to-many' && entity.databaseType !== NEO4J && entity.databaseType !== NO_DATABASE))
+        (relationship.otherEntityRelationshipName || relationshipAddsBackReference(relationship.relationshipType, entity.databaseType))
       ) {
         if (relationship.otherEntity.builtIn) {
           result.warning.push(
