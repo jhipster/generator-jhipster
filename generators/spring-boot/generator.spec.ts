@@ -159,7 +159,7 @@ describe(`generator - ${generator}`, () => {
     it('should keep the values of a number field within its limits, the default one the smaller', () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_COUNT = 15;');
       runResult.assertFileContent(resourceIT, 'UPDATED_COUNT = 18;');
-      runResult.assertFileContent(resourceIT, 'SMALLER_COUNT = 15 - 1;');
+      runResult.assertFileContent(resourceIT, 'SMALLER_COUNT = DEFAULT_COUNT - 1;');
     });
 
     it('should test a float with multiples of a quarter', () => {

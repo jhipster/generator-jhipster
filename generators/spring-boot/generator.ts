@@ -33,7 +33,7 @@ import { editPropertiesFileCallback } from '../base-core/support/properties-file
 import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
 import type { Source as CommonSource } from '../common/types.ts';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
-import { addJavaImport, createKeyStore, javaBeanCase } from '../java/support/index.ts';
+import { addJavaImport, createKeyStore, javaBeanCase, javaSmallerValue, javaValue } from '../java/support/index.ts';
 import type { JavaArtifactType } from '../java-simple-application/types.ts';
 import {
   getJavaValueGeneratorForType,
@@ -650,7 +650,19 @@ ${classProperties
         const getSamples = (field: (typeof sampleFields)[number]) =>
           samples[sampleFields.indexOf(field)].map(sample => sample[field.fieldName]);
 
-        const toJavaString = (value: string) => value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        // The values written as Java code, with a smaller value than the default constant for the range filters of the test.
+        const setTestValues = (
+          field: (typeof entity.fields)[number],
+          sample: string | number | boolean,
+          updated: string | number | boolean,
+        ) =>
+          mutateData(field, {
+            __override__: false,
+            sbTestDefaultValue: javaValue(field, sample),
+            sbTestUpdatedValue: javaValue(field, updated),
+            sbTestSmallerValue: javaSmallerValue(field, `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}`),
+          });
+
         for (const field of textFields) {
           let sampleTextLength = 10;
           if (field.fieldValidateRulesMinlength! > sampleTextLength) {
@@ -675,11 +687,11 @@ ${classProperties
                 );
               }
             } else {
-              sampleTextString = toJavaString(sample);
-              updatedTextString = toJavaString(updated);
+              sampleTextString = sample;
+              updatedTextString = updated;
             }
           }
-          mutateData(field, { __override__: false, sbTestSampleText: sampleTextString, sbTestUpdatedText: updatedTextString });
+          setTestValues(field, sampleTextString, updatedTextString);
         }
 
         for (const field of numberFields) {
@@ -707,7 +719,7 @@ ${classProperties
           }
           // The default value is the smaller one, the range filters of the test look for a value above and below it.
           const [sample, updated] = (values as number[]).toSorted((a, b) => a - b);
-          mutateData(field, { __override__: false, sbTestSampleNumber: sample, sbTestUpdatedNumber: updated });
+          setTestValues(field, sample, updated);
         }
 
         for (const field of valueFields) {
@@ -719,7 +731,7 @@ ${classProperties
             sample ??= field.enumValues![0].name;
             updated = sample;
           }
-          mutateData(field, { __override__: false, sbTestSampleValue: sample, sbTestUpdatedValue: updated });
+          setTestValues(field, sample!, updated!);
         }
 
         // A duration is written as its minutes, the other values as ISO 8601 texts, which sort by their text.
@@ -745,7 +757,7 @@ ${classProperties
           const [sample, updated] = (values as string[]).toSorted((a, b) =>
             field.fieldTypeDuration ? durationMinutes(a) - durationMinutes(b) : a.localeCompare(b),
           );
-          mutateData(field, { __override__: false, sbTestSampleValue: sample, sbTestUpdatedValue: updated });
+          setTestValues(field, sample, updated);
         }
       },
       prepareFilters({ application, entity }) {

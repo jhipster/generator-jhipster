@@ -80,18 +80,12 @@ export type Field = ServerField &
 
     requiresPersistableImplementation?: boolean;
     fieldNameAsDatabaseColumn?: string;
-    /** The first text value of a text field in the resource integration test, escaped for a Java string. */
-    sbTestSampleText?: string;
-    /** The second text value of a text field in the resource integration test, escaped for a Java string. */
-    sbTestUpdatedText?: string;
-    /** The default value of a number field in the resource integration test, smaller than the updated one. */
-    sbTestSampleNumber?: number;
-    /** The updated value of a number field in the resource integration test. */
-    sbTestUpdatedNumber?: number;
-    /** The default value of a UUID, boolean, enum, date, time or duration field in the resource integration test, as its sample gives it. */
-    sbTestSampleValue?: string | boolean;
-    /** The updated value of a UUID, boolean, enum, date, time or duration field in the resource integration test, as its sample gives it. */
-    sbTestUpdatedValue?: string | boolean;
+    /** The default value of the field in the resource integration test, written as Java code. */
+    sbTestDefaultValue?: string;
+    /** The updated value of the field in the resource integration test, written as Java code. */
+    sbTestUpdatedValue?: string;
+    /** A value smaller than the default one, for the range filters of the resource integration test, written as Java code from its constant. */
+    sbTestSmallerValue?: string;
   };
 
 export interface Relationship extends ServerRelationship, SpringBootAddedPropertyProperties, SpringBootProperty, JavaRelationship {
