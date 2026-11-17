@@ -29,10 +29,9 @@ import { accountServiceKey } from '@/account/account.service';
 import type LoginService from '@/account/login.service';
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
-import { <%- enableTranslation ? 'changeLanguageKey, ' : '' %>currentAccountKey, currentLanguageKey } from '@/config/injection-keys';
+import { <%- enableTranslation ? 'changeLanguageKey, ' : '' %>currentAccountKey, currentLanguageKey, envProfilesKey } from '@/config/injection-keys';
 import { createRouter } from '@/router';
 import { slotsStub } from '@/testing/stubs';
-import { useStore } from '@/stores';
 
 import JhiNavbar from './navbar.vue';
 <%_ if (microfrontend) { _%>
@@ -45,7 +44,6 @@ vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime',
 type JhiNavbarComponentType = InstanceType<typeof JhiNavbar>;
 
 const pinia = createTestingPinia({ stubActions: false });
-const store = useStore();
 
 <%_ if (enableTranslation) { _%>
 // Two languages show the menu of the languages.
@@ -71,6 +69,7 @@ describe('JhiNavbar', () => {
 <%_ if (enableTranslation) { _%>
   const changeLanguage = vi.fn();
 <%_ } _%>
+  const activeProfiles = ref<string[]>([]);
   let router: Router;
   const stubs = {
     'font-awesome-icon': true,
@@ -88,6 +87,7 @@ describe('JhiNavbar', () => {
     authenticated.value = false;
     hasAnyAuthority.mockReset();
     hasAnyAuthority.mockReturnValue(true);
+    activeProfiles.value = [];
     router = createRouter();
 <%_ if (authenticationUsesCsrf) { _%>
     loginService = { <%- authenticationTypeOauth2 ? 'login: vi.fn(), ' : '' %>logout: vi.fn() };
@@ -106,6 +106,7 @@ describe('JhiNavbar', () => {
 <%_ } _%>
           [accountServiceKey as symbol]: accountService,
           [currentAccountKey as symbol]: currentAccount,
+          [envProfilesKey as symbol]: { activeProfiles, ribbonOnProfiles: ref('') },
         },
       },
     });
@@ -127,7 +128,7 @@ describe('JhiNavbar', () => {
   });
 
   it('should have profile info set after info retrieved', () => {
-    store.setActiveProfiles(['prod', 'api-docs']);
+    activeProfiles.value = ['prod', 'api-docs'];
 
     expect(jhiNavbar.openAPIEnabled).toBeTruthy();
 <%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
@@ -231,7 +232,7 @@ describe('JhiNavbar', () => {
 
   it('should render the menus of an authenticated user', async () => {
     authenticated.value = true;
-    store.setActiveProfiles(['api-docs']);
+    activeProfiles.value = ['api-docs'];
     await flushPromises();
 
     expect(wrapper.find('#entity-menu').exists()).toBe(true);
@@ -256,6 +257,7 @@ describe('JhiNavbar', () => {
         provide: {
           [accountServiceKey as symbol]: accountService,
           [currentAccountKey as symbol]: currentAccount,
+          [envProfilesKey as symbol]: { activeProfiles, ribbonOnProfiles: ref('') },
           [changeLanguageKey as symbol]: changeLanguage,
   <%_ if (authenticationUsesCsrf) { _%>
           [loginServiceKey as symbol]: loginService,

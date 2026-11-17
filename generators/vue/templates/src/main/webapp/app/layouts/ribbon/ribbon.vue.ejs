@@ -10,16 +10,15 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import { useStore } from '@/stores';
+import { useCurrentEnvProfiles } from '@/composables';
 
 defineOptions({ name: 'Ribbon' });
 
 <%_ if (enableTranslation) { _%>
 const { t: t$ } = useI18n();
 <%_ } _%>
-const store = useStore();
-const ribbonEnv = computed(() => store.ribbonOnProfiles);
-const ribbonEnabled = computed(() => store.ribbonOnProfiles && store.activeProfiles.indexOf(store.ribbonOnProfiles) > -1);
+const { activeProfiles, ribbonOnProfiles: ribbonEnv } = useCurrentEnvProfiles();
+const ribbonEnabled = computed(() => !!ribbonEnv.value && activeProfiles.value.includes(ribbonEnv.value));
 
 defineExpose({
   ribbonEnabled,

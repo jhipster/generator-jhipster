@@ -33,6 +33,7 @@ import { currentLanguageKey } from '@/config/injection-keys';
 <%_ } _%>
 import JhiItemCount from '@/components/jhi-item-count.vue';
 import { useAccount } from '@/composables/account';
+import { useEnvProfiles } from '@/composables/env-profiles';
 <%_ if (enableTranslation) { _%>
 import { useLanguage } from '@/composables/language';
 <%_ } _%>
@@ -69,6 +70,7 @@ const i18n = initI18N();
 const app = createApp({
   setup() {
     const { store<%- communicationSpringWebsocket ? ', authenticated' : '' %> } = useAccount({ router });
+    useEnvProfiles();
 <%_ if (enableTranslation) { _%>
     useLanguage({ composer: useI18n(), store });
 <%_ } else { _%>
