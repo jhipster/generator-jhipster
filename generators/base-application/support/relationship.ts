@@ -143,7 +143,12 @@ export const addOtherRelationship = <const R extends BaseApplicationRelationship
   otherEntity: BaseApplicationEntity,
   relationship: R,
 ): RelationshipWithEntity<R, BaseApplicationEntity> => {
-  relationship.otherEntityRelationshipName ??= lowerFirst(entity.name);
+  if (!relationship.otherEntityRelationshipName) {
+    // Two relationships to the same entity, like Order{recipient} and Order{publisher} to Member, would add two `order` back references.
+    const name = lowerFirst(entity.name);
+    const taken = otherEntity.relationships?.some(otherRelationship => otherRelationship.relationshipName === name);
+    relationship.otherEntityRelationshipName = taken ? `${name}As${upperFirst(relationship.relationshipName)}` : name;
+  }
   const otherRelationship = {
     otherEntityName: lowerFirst(entity.name),
     otherEntityRelationshipName: relationship.relationshipName,
