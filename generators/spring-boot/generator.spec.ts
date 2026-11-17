@@ -137,6 +137,11 @@ describe(`generator - ${generator}`, () => {
             { fieldName: 'active', fieldType: 'Boolean' },
             { fieldName: 'unit', fieldType: 'Unit', fieldValues: 'GRAM,KILO,TON' },
             { fieldName: 'kind', fieldType: 'Kind', fieldValues: 'ONLY' },
+            { fieldName: 'day', fieldType: 'LocalDate' },
+            { fieldName: 'moment', fieldType: 'Instant' },
+            { fieldName: 'zoned', fieldType: 'ZonedDateTime' },
+            { fieldName: 'hour', fieldType: 'LocalTime' },
+            { fieldName: 'lasting', fieldType: 'Duration' },
           ],
         },
       ]);
@@ -193,6 +198,32 @@ describe(`generator - ${generator}`, () => {
     it('should test an enum of a single value with it twice', () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_KIND = Kind.ONLY;');
       runResult.assertFileContent(resourceIT, 'UPDATED_KIND = Kind.ONLY;');
+    });
+
+    it('should test the dates, times and durations with two values from the entity samples, the default one the earlier', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_DAY = LocalDate.parse("2022-01-27");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_DAY = LocalDate.parse("2022-01-28");');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_MOMENT = Instant.parse("2022-01-28T06:53:56.701Z");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_MOMENT = Instant.parse("2022-01-28T11:27:58.146Z");');
+      runResult.assertFileContent(
+        resourceIT,
+        'DEFAULT_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-28T18:00:32.751Z"), ZoneOffset.UTC);',
+      );
+      runResult.assertFileContent(
+        resourceIT,
+        'UPDATED_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-28T20:40:15.665Z"), ZoneOffset.UTC);',
+      );
+      runResult.assertFileContent(resourceIT, 'DEFAULT_HOUR = LocalTime.parse("01:00:00");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_HOUR = LocalTime.parse("23:44:00");');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_LASTING = Duration.parse("PT36M");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_LASTING = Duration.parse("PT59M");');
+    });
+
+    it('should test the range filters of a date and a duration with a value before the default one', () => {
+      runResult.assertFileContent(resourceIT, 'SMALLER_DAY = DEFAULT_DAY.minusDays(1);');
+      runResult.assertFileContent(resourceIT, 'SMALLER_ZONED = DEFAULT_ZONED.minusSeconds(1);');
+      runResult.assertFileContent(resourceIT, 'SMALLER_LASTING = DEFAULT_LASTING.minusMinutes(1);');
+      runResult.assertFileContent(resourceIT, '"day.greaterThanOrEqual=" + UPDATED_DAY');
     });
 
     it('should compare a number field above its default value with its updated value', () => {

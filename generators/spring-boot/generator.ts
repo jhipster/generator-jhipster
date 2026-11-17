@@ -627,11 +627,21 @@ ${classProperties
         const valueFields = entity.fields.filter(
           field => !field.id && (field.fieldTypeUUID || field.fieldTypeBoolean || field.fieldIsEnum),
         );
+        const timeFields = entity.fields.filter(
+          field =>
+            !field.id &&
+            (field.fieldTypeLocalDate ||
+              field.fieldTypeInstant ||
+              field.fieldTypeZonedDateTime ||
+              field.fieldTypeLocalTime ||
+              field.fieldTypeDuration),
+        );
         const sampleFields = [
           ...patternFields,
           ...sampleTextFields.filter(field => field.fieldValidateRulesPattern === undefined),
           ...numberFields,
           ...valueFields,
+          ...timeFields,
         ];
         const samples = generateEntitySamples(entity, {
           seed: 'resource-it',
@@ -709,6 +719,32 @@ ${classProperties
             sample ??= field.enumValues![0].name;
             updated = sample;
           }
+          mutateData(field, { __override__: false, sbTestSampleValue: sample, sbTestUpdatedValue: updated });
+        }
+
+        // A duration is written as its minutes, the other values as ISO 8601 texts, which sort by their text.
+        const durationMinutes = (duration: string) => Number(/^PT(\d+)M$/.exec(duration)![1]);
+        for (const field of timeFields) {
+          let values = (getSamples(field) as (string | Date | undefined)[]).map(value =>
+            value instanceof Date ? value.toISOString() : value,
+          );
+          if (values.some(value => value === undefined) || values[0] === values[1]) {
+            // The values from the epoch to the changelog date of the entity.
+            const changelogDate = entity.changelogDateForRecent.toISOString();
+            if (field.fieldTypeLocalDate) {
+              values = ['1970-01-01', changelogDate.split('T')[0]];
+            } else if (field.fieldTypeLocalTime) {
+              values = ['12:00:00', '23:59:59'];
+            } else if (field.fieldTypeDuration) {
+              values = ['PT360M', 'PT720M'];
+            } else {
+              values = ['1970-01-01T00:00:00Z', changelogDate];
+            }
+          }
+          // The default value is the earlier one, the range filters of the test look for a value after and before it.
+          const [sample, updated] = (values as string[]).toSorted((a, b) =>
+            field.fieldTypeDuration ? durationMinutes(a) - durationMinutes(b) : a.localeCompare(b),
+          );
           mutateData(field, { __override__: false, sbTestSampleValue: sample, sbTestUpdatedValue: updated });
         }
       },

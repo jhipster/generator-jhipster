@@ -210,9 +210,6 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering && fieldsToTest.some(field => field.filterableField && field.fieldValidate && field.fieldValidationMax && (field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime))) { _%>
-import java.time.temporal.ChronoUnit;
-<%_ } _%>
 <%_ if (anyFieldIsLocalTime) { _%>
 import java.time.LocalTime;
 <%_ } _%>
@@ -342,38 +339,38 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     private static final UUID <%- updatedValueName %> = UUID.fromString("<%- field.sbTestUpdatedValue %>");
   <%_ } else if (field.fieldTypeLocalDate) { _%>
 
-    private static final LocalDate <%- defaultValueName %> = LocalDate.ofEpochDay(0L);
-    private static final LocalDate <%- updatedValueName %> = LocalDate.parse("<%- new Date(creationTimestamp).toISOString().split('T')[0] %>");
+    private static final LocalDate <%- defaultValueName %> = LocalDate.parse("<%- field.sbTestSampleValue %>");
+    private static final LocalDate <%- updatedValueName %> = LocalDate.parse("<%- field.sbTestUpdatedValue %>");
     <%_ if (needsSmallerValueName) { _%>
-    private static final LocalDate <%- smallerValueName %> = LocalDate.ofEpochDay(-1L);
+    private static final LocalDate <%- smallerValueName %> = <%- defaultValueName %>.minusDays(1);
     <%_ } _%>
   <%_ } else if (field.fieldTypeInstant) { _%>
 
-    private static final Instant <%- defaultValueName %> = Instant.ofEpochMilli(0L);
-    private static final Instant <%- updatedValueName %> = Instant.ofEpochMilli(<%- creationTimestamp %>L);
+    private static final Instant <%- defaultValueName %> = Instant.parse("<%- field.sbTestSampleValue %>");
+    private static final Instant <%- updatedValueName %> = Instant.parse("<%- field.sbTestUpdatedValue %>");
     <%_ if (needsSmallerValueName) { _%>
-    private static final Instant <%- smallerValueName %> = Instant.ofEpochMilli(-1L);
+    private static final Instant <%- smallerValueName %> = <%- defaultValueName %>.minusSeconds(1);
     <%_ } _%>
   <%_ } else if (field.fieldTypeZonedDateTime) { _%>
 
-    private static final ZonedDateTime <%- defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime <%- updatedValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(<%- creationTimestamp %>L), ZoneOffset.UTC);
+    private static final ZonedDateTime <%- defaultValueName %> = ZonedDateTime.ofInstant(Instant.parse("<%- field.sbTestSampleValue %>"), ZoneOffset.UTC);
+    private static final ZonedDateTime <%- updatedValueName %> = ZonedDateTime.ofInstant(Instant.parse("<%- field.sbTestUpdatedValue %>"), ZoneOffset.UTC);
     <%_ if (needsSmallerValueName) { _%>
-    private static final ZonedDateTime <%- smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+    private static final ZonedDateTime <%- smallerValueName %> = <%- defaultValueName %>.minusSeconds(1);
     <%_ } _%>
   <%_ } else if (field.fieldTypeLocalTime) { _%>
 
-    private static final LocalTime <%- defaultValueName %> = LocalTime.NOON;
-    private static final LocalTime <%- updatedValueName %> = LocalTime.MAX.withNano(0);
+    private static final LocalTime <%- defaultValueName %> = LocalTime.parse("<%- field.sbTestSampleValue %>");
+    private static final LocalTime <%- updatedValueName %> = LocalTime.parse("<%- field.sbTestUpdatedValue %>");
     <%_ if (needsSmallerValueName) { _%>
     private static final LocalTime <%- smallerValueName %> = LocalTime.MIN;
     <%_ } _%>
   <%_ } else if (field.fieldTypeDuration) { _%>
 
-    private static final Duration <%- defaultValueName %> = Duration.ofHours(6);
-    private static final Duration <%- updatedValueName %> = Duration.ofHours(12);
+    private static final Duration <%- defaultValueName %> = Duration.parse("<%- field.sbTestSampleValue %>");
+    private static final Duration <%- updatedValueName %> = Duration.parse("<%- field.sbTestUpdatedValue %>");
     <%_ if (needsSmallerValueName) { _%>
-    private static final Duration <%- smallerValueName %> = Duration.ofHours(5);
+    private static final Duration <%- smallerValueName %> = <%- defaultValueName %>.minusMinutes(1);
     <%_ } _%>
   <%_ } else if (field.fieldTypeBoolean) { _%>
 
@@ -1272,12 +1269,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ // the range criteria _%>
     <%_ if (searchBy.filterableField && (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime)) { _%>
       <%_ const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
-          let biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
+          // The updated value is the bigger one.
+          const biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
-          // The updated value of a number is the bigger one; if a maximum is specified the updated date is smaller than the default one!
-          if (searchBy.fieldValidate && searchBy.fieldValidationMax && (searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime)) {
-            biggerValue = `(${defaultValue}.plus(1, ChronoUnit.DAYS))`;
-          }
       _%>
 
     @Test<%- transactionalAnnotation %>
