@@ -33,7 +33,7 @@ import { editPropertiesFileCallback } from '../base-core/support/properties-file
 import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
 import type { Source as CommonSource } from '../common/types.ts';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
-import { addJavaImport, createKeyStore, javaBeanCase, javaSmallerValue, javaValue } from '../java/support/index.ts';
+import { addJavaImport, createKeyStore, javaBeanCase, javaValue } from '../java/support/index.ts';
 import type { JavaArtifactType } from '../java-simple-application/types.ts';
 import {
   getJavaValueGeneratorForType,
@@ -624,8 +624,17 @@ ${classProperties
           field.fieldTypeZonedDateTime ||
           field.fieldTypeLocalTime ||
           field.fieldTypeDuration;
-        // The values of the resource integration test, two of each field, the default and the updated one, drawn as entity
-        // samples in this order: the texts of a pattern, the other texts, the numbers, the UUID, boolean and enum fields, the times.
+        // A type with an order has a smaller value too, which the range filters of the test look for below the default one.
+        const durationMinutes = (duration: TestValue) => Number(/^PT(\d+)M$/.exec(duration as string)![1]);
+        const compareTestValues = (field: TestField): ((a: TestValue, b: TestValue) => number) | undefined => {
+          if (isNumber(field)) return (a, b) => (a as number) - (b as number);
+          if (field.fieldTypeDuration) return (a, b) => durationMinutes(a) - durationMinutes(b);
+          return isTime(field) ? (a, b) => (a as string).localeCompare(b as string) : undefined;
+        };
+        const testValuesCount = (field: TestField) => (compareTestValues(field) ? 3 : 2);
+        // The values of the resource integration test, the default and the updated one of each field, and the smaller one of a
+        // type with an order, drawn as entity samples in this order: the texts of a pattern, the other texts, the numbers,
+        // the UUID, boolean and enum fields, the times.
         const sampleGroups: ((field: TestField) => boolean | undefined)[] = [
           field => field.fieldTypeString && field.fieldValidateRulesPattern !== undefined,
           field => field.fieldTypeString,
@@ -639,10 +648,15 @@ ${classProperties
           .toSorted((a, b) => sampleGroup(a) - sampleGroup(b));
         const samples = generateEntitySamples(entity, {
           seed: 'resource-it',
-          batches: sampleFields.map(field => ({ fields: [field], format: 'json-serializable', count: 2, distinct: true })),
+          batches: sampleFields.map(field => ({
+            fields: [field],
+            format: 'json-serializable',
+            count: testValuesCount(field),
+            distinct: true,
+          })),
         });
 
-        // The values next to the limits of the field, when the samples give no two values the test can tell apart.
+        // The values next to the limits of the field, when the samples give no values the test can tell apart.
         const fixedValues = (field: TestField, sample?: TestValue): TestValue[] => {
           const min = field.fieldValidationMin ? Number(field.fieldValidateRulesMin) : undefined;
           const max = field.fieldValidationMax ? Number(field.fieldValidateRulesMax) : undefined;
@@ -662,17 +676,18 @@ ${classProperties
             return ['A'.repeat(length), 'B'.repeat(length)];
           }
           if (isNumber(field)) {
-            if (min !== undefined) return [min, min + 1];
-            return max === undefined ? [1, 2] : [max - 1, max];
+            // The smaller value is only looked for, it can be out of the limits.
+            if (min !== undefined) return [min - 1, min, min + 1];
+            return max === undefined ? [0, 1, 2] : [max - 2, max - 1, max];
           }
           if (field.fieldIsEnum) {
             // An enum of a single value tests it twice.
             return [sample ?? field.enumValues![0].name, sample ?? field.enumValues![0].name];
           }
-          if (field.fieldTypeLocalDate) return ['1970-01-01', changelogDate.split('T')[0]];
-          if (field.fieldTypeLocalTime) return ['12:00:00', '23:59:59'];
-          if (field.fieldTypeDuration) return ['PT360M', 'PT720M'];
-          if (isTime(field)) return ['1970-01-01T00:00:00Z', changelogDate];
+          if (field.fieldTypeLocalDate) return ['1969-12-31', '1970-01-01', changelogDate.split('T')[0]];
+          if (field.fieldTypeLocalTime) return ['00:00:00', '12:00:00', '23:59:59'];
+          if (field.fieldTypeDuration) return ['PT300M', 'PT360M', 'PT720M'];
+          if (isTime(field)) return ['1969-12-31T23:59:59Z', '1970-01-01T00:00:00Z', changelogDate];
           return [false, true];
         };
 
@@ -685,21 +700,15 @@ ${classProperties
           return field.fieldTypeDouble || field.fieldTypeBigDecimal ? Number(value.toFixed(2)) : value;
         };
         // The filters of the test tell the values apart: neither text contains the other, and the numbers are within their limits.
-        const isTestable = (field: TestField, [sample, updated]: (TestValue | undefined)[]) => {
-          if (sample === undefined || updated === undefined || sample === updated) return false;
+        const isTestable = (field: TestField, values: (TestValue | undefined)[]) => {
+          const [sample, updated] = values;
+          if (values.length < testValuesCount(field) || values.includes(undefined) || new Set(values).size < values.length) return false;
           if (typeof sample === 'string' && typeof updated === 'string' && field.fieldTypeString) {
             return !sample.includes(updated) && !updated.includes(sample);
           }
           const min = field.fieldValidationMin ? Number(field.fieldValidateRulesMin) : -Infinity;
           const max = field.fieldValidationMax ? Number(field.fieldValidateRulesMax) : Infinity;
-          return !isNumber(field) || [sample, updated].every(value => (value as number) >= min && (value as number) <= max);
-        };
-        // The default value is the smaller one, the range filters of the test look for a value after and before it.
-        const durationMinutes = (duration: TestValue) => Number(/^PT(\d+)M$/.exec(duration as string)![1]);
-        const compareTestValues = (field: TestField): ((a: TestValue, b: TestValue) => number) | undefined => {
-          if (isNumber(field)) return (a, b) => (a as number) - (b as number);
-          if (field.fieldTypeDuration) return (a, b) => durationMinutes(a) - durationMinutes(b);
-          return isTime(field) ? (a, b) => (a as string).localeCompare(b as string) : undefined;
+          return !isNumber(field) || values.every(value => (value as number) >= min && (value as number) <= max);
         };
 
         for (const field of entity.fields.filter(
@@ -719,13 +728,16 @@ ${classProperties
             values = fixedValues(field, drawn[0]);
           }
           const compare = compareTestValues(field);
-          const [sample, updated] = compare ? values.toSorted(compare) : values;
-          // The values written as Java code, with a smaller value than the default constant for the range filters of the test.
+          const [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
+            TestValue | undefined,
+            TestValue,
+            TestValue,
+          ];
           mutateData(field, {
             __override__: false,
             sbTestDefaultValue: javaValue(field, sample),
             sbTestUpdatedValue: javaValue(field, updated),
-            sbTestSmallerValue: javaSmallerValue(field, `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}`),
+            sbTestSmallerValue: smaller === undefined ? undefined : javaValue(field, smaller),
           });
         }
       },

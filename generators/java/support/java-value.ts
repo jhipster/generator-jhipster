@@ -38,19 +38,6 @@ const javaValues: Partial<Record<string, JavaCode>> = {
   Duration: value => `Duration.parse("${value}")`,
 };
 
-/** A value smaller than a value of a Java type, written as Java code from the code of that value. */
-const javaSmallerValues: Partial<Record<string, (value: string) => string>> = {
-  Integer: value => `${value} - 1`,
-  Long: value => `${value} - 1L`,
-  Float: value => `${value} - 1F`,
-  Double: value => `${value} - 1D`,
-  BigDecimal: value => `${value}.subtract(BigDecimal.ONE)`,
-  LocalDate: value => `${value}.minusDays(1)`,
-  Instant: value => `${value}.minusSeconds(1)`,
-  ZonedDateTime: value => `${value}.minusSeconds(1)`,
-  Duration: value => `${value}.minusMinutes(1)`,
-};
-
 /**
  * A value of a field written as Java code, from the value a json-serializable sample gives: undefined for a type it does
  * not write, like a blob.
@@ -60,13 +47,3 @@ const javaSmallerValues: Partial<Record<string, (value: string) => string>> = {
  */
 export const javaValue = ({ fieldIsEnum, javaFieldType }: JavaValueField, value: string | number | boolean): string | undefined =>
   fieldIsEnum ? `${javaFieldType}.${value}` : javaValues[javaFieldType]?.(value);
-
-/**
- * A value smaller than a value of a field, written as Java code from the code of that value, like the constant that
- * holds it: undefined for a type without an order, like a text or an enum.
- *
- * @example
- * javaSmallerValue(field, 'DEFAULT_DAY'); // DEFAULT_DAY.minusDays(1) for a LocalDate field
- */
-export const javaSmallerValue = ({ fieldIsEnum, javaFieldType }: JavaValueField, value: string): string | undefined =>
-  fieldIsEnum ? undefined : javaSmallerValues[javaFieldType]?.(value);

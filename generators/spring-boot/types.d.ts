@@ -84,7 +84,7 @@ export type Field = ServerField &
     sbTestDefaultValue?: string;
     /** The updated value of the field in the resource integration test, written as Java code. */
     sbTestUpdatedValue?: string;
-    /** A value smaller than the default one, for the range filters of the resource integration test, written as Java code from its constant. */
+    /** A value smaller than the default one, for the range filters of the resource integration test, written as Java code. */
     sbTestSmallerValue?: string;
   };
 

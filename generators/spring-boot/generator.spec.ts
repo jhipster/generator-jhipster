@@ -151,31 +151,32 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_LABEL = "conseque";');
       runResult.assertFileContent(resourceIT, 'UPDATED_LABEL = "glaring ";');
       runResult.assertFileContent(resourceIT, 'DEFAULT_TOTAL = 12735L;');
-      runResult.assertFileContent(resourceIT, 'UPDATED_TOTAL = 30471L;');
-      runResult.assertFileContent(resourceIT, 'DEFAULT_WEIGHT = 7275.24D;');
-      runResult.assertFileContent(resourceIT, 'UPDATED_WEIGHT = 16995.14D;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_TOTAL = 13727L;');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_WEIGHT = 17519.57D;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_WEIGHT = 20333.16D;');
     });
 
-    it('should keep the values of a number field within its limits, the default one the smaller', () => {
-      runResult.assertFileContent(resourceIT, 'DEFAULT_COUNT = 15;');
-      runResult.assertFileContent(resourceIT, 'UPDATED_COUNT = 18;');
-      runResult.assertFileContent(resourceIT, 'SMALLER_COUNT = DEFAULT_COUNT - 1;');
+    it('should keep the values of a number field within its limits, the smaller one, the default one, then the updated one', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_COUNT = 18;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_COUNT = 20;');
+      runResult.assertFileContent(resourceIT, 'SMALLER_COUNT = 15;');
     });
 
     it('should test a float with multiples of a quarter', () => {
-      runResult.assertFileContent(resourceIT, 'DEFAULT_RATIO = 4934F;');
-      runResult.assertFileContent(resourceIT, 'UPDATED_RATIO = 13727.5F;');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_RATIO = 16995.25F;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_RATIO = 29620.25F;');
     });
 
     it('should write a big decimal from its decimal text', () => {
-      runResult.assertFileContent(resourceIT, 'DEFAULT_PRICE = new BigDecimal("6159.79");');
-      runResult.assertFileContent(resourceIT, 'UPDATED_PRICE = new BigDecimal("29620.17");');
-      runResult.assertFileContent(resourceIT, 'SMALLER_PRICE = DEFAULT_PRICE.subtract(BigDecimal.ONE);');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_PRICE = new BigDecimal("21452.59");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_PRICE = new BigDecimal("25746.85");');
+      runResult.assertFileContent(resourceIT, 'SMALLER_PRICE = new BigDecimal("16714.89");');
     });
 
-    it('should test a number field without two values with the values next to its minimum', () => {
+    it('should test a number field without three values with the values next to its minimum', () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_LEVEL = 5;');
       runResult.assertFileContent(resourceIT, 'UPDATED_LEVEL = 6;');
+      runResult.assertFileContent(resourceIT, 'SMALLER_LEVEL = 4;');
     });
 
     it('should test a text field whose values contain one another with the default values', () => {
@@ -184,15 +185,15 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should test a UUID with two fixed values from the entity samples', () => {
-      runResult.assertFileContent(resourceIT, 'DEFAULT_REFERENCE = UUID.fromString("898ca194-6314-470d-9a60-aa757a798c17");');
-      runResult.assertFileContent(resourceIT, 'UPDATED_REFERENCE = UUID.fromString("658ced32-b999-4fe1-87a1-811a92c6fb17");');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_REFERENCE = UUID.fromString("19463147-0da6-40aa-b757-a798c177658c");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_REFERENCE = UUID.fromString("d32b999f-e17a-4181-a1a9-2c6fb171a155");');
     });
 
     it('should test a boolean and an enum with two values from the entity samples', () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_ACTIVE = false;');
       runResult.assertFileContent(resourceIT, 'UPDATED_ACTIVE = true;');
       runResult.assertFileContent(resourceIT, 'DEFAULT_UNIT = Unit.KILO;');
-      runResult.assertFileContent(resourceIT, 'UPDATED_UNIT = Unit.TON;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_UNIT = Unit.GRAM;');
     });
 
     it('should test an enum of a single value with it twice', () => {
@@ -201,28 +202,31 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should test the dates, times and durations with two values from the entity samples, the default one the earlier', () => {
-      runResult.assertFileContent(resourceIT, 'DEFAULT_DAY = LocalDate.parse("2022-01-27");');
-      runResult.assertFileContent(resourceIT, 'UPDATED_DAY = LocalDate.parse("2022-01-28");');
-      runResult.assertFileContent(resourceIT, 'DEFAULT_MOMENT = Instant.parse("2022-01-28T06:53:56.701Z");');
-      runResult.assertFileContent(resourceIT, 'UPDATED_MOMENT = Instant.parse("2022-01-28T11:27:58.146Z");');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_DAY = LocalDate.parse("2022-01-28");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_DAY = LocalDate.parse("2022-01-29");');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_MOMENT = Instant.parse("2022-01-28T20:37:25.633Z");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_MOMENT = Instant.parse("2022-01-29T01:45:40.197Z");');
       runResult.assertFileContent(
         resourceIT,
-        'DEFAULT_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-28T18:00:32.751Z"), ZoneOffset.UTC);',
+        'DEFAULT_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-29T01:21:37.741Z"), ZoneOffset.UTC);',
       );
       runResult.assertFileContent(
         resourceIT,
-        'UPDATED_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-28T20:40:15.665Z"), ZoneOffset.UTC);',
+        'UPDATED_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-29T02:41:46.815Z"), ZoneOffset.UTC);',
       );
-      runResult.assertFileContent(resourceIT, 'DEFAULT_HOUR = LocalTime.parse("01:00:00");');
-      runResult.assertFileContent(resourceIT, 'UPDATED_HOUR = LocalTime.parse("23:44:00");');
-      runResult.assertFileContent(resourceIT, 'DEFAULT_LASTING = Duration.parse("PT36M");');
-      runResult.assertFileContent(resourceIT, 'UPDATED_LASTING = Duration.parse("PT59M");');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_HOUR = LocalTime.parse("23:18:00");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_HOUR = LocalTime.parse("23:39:00");');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_LASTING = Duration.parse("PT18M");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_LASTING = Duration.parse("PT34M");');
     });
 
-    it('should test the range filters of a date and a duration with a value before the default one', () => {
-      runResult.assertFileContent(resourceIT, 'SMALLER_DAY = DEFAULT_DAY.minusDays(1);');
-      runResult.assertFileContent(resourceIT, 'SMALLER_ZONED = DEFAULT_ZONED.minusSeconds(1);');
-      runResult.assertFileContent(resourceIT, 'SMALLER_LASTING = DEFAULT_LASTING.minusMinutes(1);');
+    it('should test the range filters of a date and a duration with a third value, before the default one', () => {
+      runResult.assertFileContent(resourceIT, 'SMALLER_DAY = LocalDate.parse("2022-01-27");');
+      runResult.assertFileContent(
+        resourceIT,
+        'SMALLER_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-28T20:55:37.637Z"), ZoneOffset.UTC);',
+      );
+      runResult.assertFileContent(resourceIT, 'SMALLER_LASTING = Duration.parse("PT17M");');
       runResult.assertFileContent(resourceIT, '"day.greaterThanOrEqual=" + UPDATED_DAY');
     });
 

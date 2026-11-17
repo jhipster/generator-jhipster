@@ -20,7 +20,7 @@ import { describe, expect, it } from 'expect-node';
 
 import type { Field as JavaField } from '../types.ts';
 
-import { javaSmallerValue, javaValue } from './java-value.ts';
+import { javaValue } from './java-value.ts';
 
 const field = (javaFieldType: string, fieldIsEnum = false) => ({ javaFieldType, fieldIsEnum }) as JavaField;
 
@@ -48,26 +48,6 @@ describe('generator - java - support - java-value', () => {
 
     it('should write no value of a blob', () => {
       expect(javaValue(field('byte[]'), 'file')).toBeUndefined();
-    });
-  });
-
-  describe('javaSmallerValue', () => {
-    it('should write a smaller value of each ordered type from its code', () => {
-      expect(javaSmallerValue(field('Integer'), '15')).toBe('15 - 1');
-      expect(javaSmallerValue(field('Long'), '12L')).toBe('12L - 1L');
-      expect(javaSmallerValue(field('Float'), '1.25F')).toBe('1.25F - 1F');
-      expect(javaSmallerValue(field('Double'), '2.5D')).toBe('2.5D - 1D');
-      expect(javaSmallerValue(field('BigDecimal'), 'X')).toBe('X.subtract(BigDecimal.ONE)');
-      expect(javaSmallerValue(field('LocalDate'), 'X')).toBe('X.minusDays(1)');
-      expect(javaSmallerValue(field('Instant'), 'X')).toBe('X.minusSeconds(1)');
-      expect(javaSmallerValue(field('ZonedDateTime'), 'X')).toBe('X.minusSeconds(1)');
-      expect(javaSmallerValue(field('Duration'), 'X')).toBe('X.minusMinutes(1)');
-    });
-
-    it('should write no smaller value of a type without an order', () => {
-      expect(javaSmallerValue(field('String'), '"text"')).toBeUndefined();
-      expect(javaSmallerValue(field('Boolean'), 'true')).toBeUndefined();
-      expect(javaSmallerValue(field('Long', true), 'Long.A')).toBeUndefined();
     });
   });
 });
