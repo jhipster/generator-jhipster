@@ -18,7 +18,7 @@ exports[`generator - Heroku microservice application with JAR deployment should 
     "stateCleared": "modified",
   },
   "Procfile": {
-    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
+    "contents": "web: java -XX:-UseBASE64Intrinsics $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
 ",
     "stateCleared": "modified",
   },
@@ -237,7 +237,7 @@ exports[`generator - Heroku monolith application in the EU should match files sn
     "stateCleared": "modified",
   },
   "Procfile": {
-    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
+    "contents": "web: java -XX:-UseBASE64Intrinsics $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
 ",
     "stateCleared": "modified",
   },
@@ -454,7 +454,7 @@ exports[`generator - Heroku monolith application in the US should match files sn
     "stateCleared": "modified",
   },
   "Procfile": {
-    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
+    "contents": "web: java -XX:-UseBASE64Intrinsics $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
 ",
     "stateCleared": "modified",
   },
@@ -726,7 +726,7 @@ exports[`generator - Heroku monolith application with Git deployment should matc
     "stateCleared": "modified",
   },
   "Procfile": {
-    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
+    "contents": "web: java -XX:-UseBASE64Intrinsics $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
 ",
     "stateCleared": "modified",
   },
@@ -945,7 +945,7 @@ exports[`generator - Heroku monolith application with PostgreSQL should match fi
     "stateCleared": "modified",
   },
   "Procfile": {
-    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
+    "contents": "web: java -XX:-UseBASE64Intrinsics $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
 ",
     "stateCleared": "modified",
   },
@@ -1186,7 +1186,7 @@ exports[`generator - Heroku monolith application with an unavailable app name sh
     "stateCleared": "modified",
   },
   "Procfile": {
-    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
+    "contents": "web: java -XX:-UseBASE64Intrinsics $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
 ",
     "stateCleared": "modified",
   },
@@ -1967,7 +1967,7 @@ exports[`generator - Heroku monolith application with elasticsearch should match
     "stateCleared": "modified",
   },
   "Procfile": {
-    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
+    "contents": "web: java -XX:-UseBASE64Intrinsics $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
 ",
     "stateCleared": "modified",
   },
@@ -2173,7 +2173,7 @@ exports[`generator - Heroku monolith application with existing app should match 
     "stateCleared": "modified",
   },
   "Procfile": {
-    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
+    "contents": "web: java -XX:-UseBASE64Intrinsics $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku
 ",
     "stateCleared": "modified",
   },
