@@ -1,0 +1,173 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { WritableSignal, signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { Router, provideRouter } from '@angular/router';
+
+import { RxStomp, RxStompConfig, RxStompState } from '@stomp/rx-stomp';
+import { of } from 'rxjs';
+import SockJS from 'sockjs-client';
+
+import { <%- authenticationTypeJwt ? 'AuthServerProvider' : 'CSRFService' %> } from 'app/core/auth';
+import { Account } from 'app/core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
+<%_ if (authenticationUsesCsrf) { _%>
+import { CSRF_TOKEN_HEADER_NAME } from 'app/shared/jhipster/constants';
+<%_ } _%>
+
+import { TrackerActivity } from './tracker-activity.model';
+import { TrackerService } from './tracker.service';
+
+vi.mock('sockjs-client', () => ({ default: vi.fn(() => ({})) }));
+
+describe('TrackerService', () => {
+  let service: TrackerService;
+  let account: WritableSignal<Account | null>;
+
+  beforeEach(() => {
+    vi.mocked(SockJS).mockClear();
+    vi.spyOn(RxStomp.prototype, 'activate').mockReturnValue(undefined);
+    vi.spyOn(RxStomp.prototype, 'deactivate').mockResolvedValue(undefined);
+    vi.spyOn(RxStomp.prototype, 'publish').mockReturnValue(undefined);
+    vi.spyOn(RxStomp.prototype, 'configure');
+    account = signal<Account | null>(null);
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([{ path: 'home', children: [] }]),
+        { provide: AccountService, useValue: { account } },
+      ],
+    });
+    service = TestBed.inject(TrackerService);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  const setup = (): void => TestBed.runInInjectionContext(() => service.setup());
+  // The configuration of the connection of the service, not of another one a test of the application may create.
+  const configured = (): RxStompConfig => {
+    const { calls, contexts } = vi.mocked(RxStomp.prototype.configure).mock;
+    return Object.assign({}, ...calls.filter((_call, index) => contexts[index] === service.stomp).map(([config]) => config)) as RxStompConfig;
+  };
+  const connect = (): void => {
+    setup();
+    account.set({ login: 'user' } as Account);
+    TestBed.tick();
+  };
+  const published = (): unknown[] => vi.mocked(RxStomp.prototype.publish).mock.calls.map(([params]) => JSON.parse(params.body!) as unknown);
+
+  it('should fail to use the connection before setup', () => {
+    expect(() => service.stomp).toThrow('Stomp connection not initialized');
+  });
+
+  it('should connect while a user is logged in', () => {
+    setup();
+    TestBed.tick();
+    expect(RxStomp.prototype.activate).not.toHaveBeenCalled();
+
+    account.set({ login: 'user' } as Account);
+    TestBed.tick();
+    expect(RxStomp.prototype.activate).toHaveBeenCalled();
+
+    vi.mocked(RxStomp.prototype.deactivate).mockClear();
+    account.set(null);
+    TestBed.tick();
+    expect(RxStomp.prototype.deactivate).toHaveBeenCalledTimes(1);
+  });
+
+  it('should send the page once connected and at every navigation', async () => {
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/');
+    setup();
+
+    service.stomp.connectionState$.next(RxStompState.OPEN);
+    expect(published()).toEqual([{ page: '/' }]);
+
+    await router.navigateByUrl('/home');
+    expect(published()).toEqual([{ page: '/' }, { page: '/home' }]);
+  });
+
+  it('should stop sending the page at every navigation once disconnected', async () => {
+    connect();
+    service.stomp.connectionState$.next(RxStompState.OPEN);
+
+    account.set(null);
+    TestBed.tick();
+    await TestBed.inject(Router).navigateByUrl('/home');
+
+    expect(published()).toHaveLength(1);
+  });
+
+  it('should log the debug messages of the connection', () => {
+    const log = vi.spyOn(console, 'log').mockReturnValue(undefined);
+    setup();
+
+    configured().debug!('message');
+
+    expect(log).toHaveBeenCalledWith(expect.any(Date), 'message');
+  });
+
+  it('should open the connection to the tracker', () => {
+    connect();
+
+    configured().webSocketFactory!();
+
+    expect(SockJS).toHaveBeenCalledWith(expect.stringMatching(/\/websocket\/tracker$/));
+  });
+<%_ if (authenticationTypeJwt) { _%>
+
+  it('should open the connection to the tracker with the authentication token', () => {
+    vi.spyOn(TestBed.inject(AuthServerProvider), 'getToken').mockReturnValue('token');
+    connect();
+
+    configured().webSocketFactory!();
+
+    expect(SockJS).toHaveBeenCalledWith(expect.stringMatching(/\/websocket\/tracker\?access_token=token$/));
+  });
+<%_ } _%>
+<%_ if (authenticationUsesCsrf) { _%>
+
+  it('should send the CSRF token when connecting', () => {
+    vi.spyOn(TestBed.inject(CSRFService), 'getCSRF').mockReturnValue('token');
+    // with no random bytes, the masked token is the base64url of 5 zero bytes followed by 'token'
+    vi.spyOn(crypto, 'getRandomValues').mockImplementation(array => array);
+    connect();
+
+    expect(configured().connectHeaders).toEqual({ [CSRF_TOKEN_HEADER_NAME]: 'AAAAAAB0b2tlbg' });
+  });
+<%_ } _%>
+
+  it('should give the activities of the tracker', () => {
+    const activity = new TrackerActivity('1', 'user', '127.0.0.1', 'home', '2026-01-02T03:04:05');
+    vi.spyOn(RxStomp.prototype, 'watch').mockReturnValue(of({ body: JSON.stringify(activity) }) as ReturnType<RxStomp['watch']>);
+    setup();
+    const received: TrackerActivity[] = [];
+
+    service.subscribe({ next: value => received.push(value) });
+
+    expect(RxStomp.prototype.watch).toHaveBeenCalledWith('/topic/tracker');
+    expect(received).toEqual([JSON.parse(JSON.stringify(activity))]);
+  });
+});
