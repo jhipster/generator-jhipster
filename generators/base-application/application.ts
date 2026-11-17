@@ -82,7 +82,7 @@ export const mutateApplication = {
   entitySuffix: '',
   dtoSuffix: 'DTO',
   // A backend sets it first, by its database.
-  defaultIdType: finalizeDefault(({ pkType }: Application<any> & { pkType?: string }) => pkType ?? 'Long'),
+  defaultIdType: finalizeDefault((data: Application<any>) => (data as { pkType?: string }).pkType ?? 'Long'),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<Application<any>>,
   BaseApplicationAddedApplicationProperties<Entity>
