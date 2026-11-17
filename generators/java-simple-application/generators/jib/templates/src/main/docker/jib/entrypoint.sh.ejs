@@ -39,7 +39,7 @@ file_env 'SPRING_LIQUIBASE_PASSWORD'
 <%_ } _%>
 file_env 'JHIPSTER_REGISTRY_PASSWORD'
 
-# -XX:-UseBASE64Intrinsics turns off the JVM's hardware-accelerated Base64 decoding, which has an out-of-bounds write on
-# x86-64 processors with AVX-512 in JDKs older than the November 2026 updates (CVE-2026-114938). It only costs Base64 speed.
-# It comes before JAVA_OPTS, so -XX:+UseBASE64Intrinsics there turns it back on.
-exec java -XX:-UseBASE64Intrinsics ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -cp /app/resources/:/app/classes/:/app/libs/* "<%- packageName %>.<%- mainClass %>"  "$@"
+# -XX:-UseBASE64Intrinsics turns off the JVM's hardware-accelerated Base64 decoding, to mitigate Java4Shell (CVE-2026-114938,
+# https://openjdk.org/groups/vulnerability/advisories/2026-11-17) until the JDK of the image is patched. It only costs Base64
+# speed, and it comes after JAVA_OPTS so an option there can't turn the intrinsic back on.
+exec java ${JAVA_OPTS} -XX:-UseBASE64Intrinsics -noverify -XX:+AlwaysPreTouch -cp /app/resources/:/app/classes/:/app/libs/* "<%- packageName %>.<%- mainClass %>"  "$@"
