@@ -655,70 +655,20 @@ ${classProperties
           if (field.fieldTypeFloat) return Math.round(value * 4) / 4;
           return field.fieldTypeDouble || field.fieldTypeBigDecimal ? Number(value.toFixed(2)) : value;
         };
-        const drawSamples = (seed: string, fields: TestField[], { distinct = true, extra = 0 } = {}) => {
-          const samples = generateEntitySamples(entity, {
-            seed,
-            batches: fields.map(field => ({
-              fields: [field],
-              format: 'json-serializable',
-              count: testValuesCount(field) + extra,
-              distinct,
-            })),
-          });
-          return new Map(fields.map((field, index) => [field, samples[index].map(sample => testValue(field, sample[field.fieldName]))]));
-        };
+        // The values of a field do not repeat, but for a field with fewer values than the test needs, like an enum of a
+        // single value, whose samples repeat.
+        const samples = generateEntitySamples(entity, {
+          seed: 'resource-it',
+          batches: sampleFields.map(field => ({
+            fields: [field],
+            format: 'json-serializable',
+            count: testValuesCount(field),
+            distinct: (getFieldFakeDataDomain(field)?.length ?? Infinity) >= testValuesCount(field),
+          })),
+        });
 
-        // The first samples the filters of the test tell apart: distinct values within the limits of the field, and two texts
-        // neither of which contains the other.
-        const pickTestValues = (field: TestField, drawn: (TestValue | undefined)[]): TestValue[] | undefined => {
-          const min = field.fieldValidationMin ? Number(field.fieldValidateRulesMin) : -Infinity;
-          const max = field.fieldValidationMax ? Number(field.fieldValidateRulesMax) : Infinity;
-          const values = [
-            ...new Set(
-              drawn.filter(
-                (value): value is TestValue =>
-                  value !== undefined && (!isNumber(field) || ((value as number) >= min && (value as number) <= max)),
-              ),
-            ),
-          ];
-          if (field.fieldTypeString) {
-            const texts = values as string[];
-            const sample = texts.find(text => texts.some(other => !text.includes(other) && !other.includes(text)));
-            const updated = texts.find(text => sample !== undefined && !text.includes(sample) && !sample.includes(text));
-            return sample === undefined ? undefined : [sample, updated!];
-          }
-          return values.length < testValuesCount(field) ? undefined : values.slice(0, testValuesCount(field));
-        };
-
-        // The samples the test needs, more samples to choose from for a field whose samples the filters cannot tell apart,
-        // and its samples repeated when it has fewer distinct values than the test needs, like an enum of a single value.
-        const testValues = new Map<TestField, TestValue[] | undefined>();
-        const fewValues = (field: TestField) => (getFieldFakeDataDomain(field)?.length ?? Infinity) < testValuesCount(field);
-        for (const [field, drawn] of drawSamples(
-          'resource-it',
-          sampleFields.filter(field => !fewValues(field)),
-        )) {
-          testValues.set(field, pickTestValues(field, drawn));
-        }
-        const unpicked = () => sampleFields.filter(field => !testValues.get(field));
-        for (const [field, drawn] of drawSamples(
-          'resource-it-more',
-          unpicked().filter(field => !fewValues(field)),
-          { extra: 3 },
-        )) {
-          testValues.set(field, pickTestValues(field, drawn));
-        }
-        for (const [field, drawn] of drawSamples('resource-it-repeated', unpicked(), { distinct: false })) {
-          if (field.fieldValidateRulesPattern !== undefined) {
-            this.log.warn(
-              `The pattern "${field.fieldValidateRulesPattern}" of entity "${entity.entityClass}" field "${field.fieldName}" gives no two test values the filters tell apart.`,
-            );
-          }
-          testValues.set(field, drawn as TestValue[]);
-        }
-
-        for (const field of sampleFields) {
-          const values = testValues.get(field)!;
+        for (const [index, field] of sampleFields.entries()) {
+          const values = samples[index].map(sample => testValue(field, sample[field.fieldName])!);
           const compare = compareTestValues(field);
           const [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
             TestValue | undefined,
