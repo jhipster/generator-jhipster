@@ -88,6 +88,10 @@ export type Field = ServerField &
     sbTestSampleNumber?: number;
     /** The updated value of a number field in the resource integration test. */
     sbTestUpdatedNumber?: number;
+    /** The default value of a UUID, boolean or enum field in the resource integration test, as its sample gives it. */
+    sbTestSampleValue?: string | boolean;
+    /** The updated value of a UUID, boolean or enum field in the resource integration test, as its sample gives it. */
+    sbTestUpdatedValue?: string | boolean;
   };
 
 export interface Relationship extends ServerRelationship, SpringBootAddedPropertyProperties, SpringBootProperty, JavaRelationship {

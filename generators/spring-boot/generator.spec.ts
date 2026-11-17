@@ -133,6 +133,10 @@ describe(`generator - ${generator}`, () => {
               fieldValidateRulesMax: 5,
             },
             { fieldName: 'code', fieldType: 'String', fieldValidateRules: ['pattern'], fieldValidateRulesPattern: '^a{1,2}$' },
+            { fieldName: 'reference', fieldType: 'UUID' },
+            { fieldName: 'active', fieldType: 'Boolean' },
+            { fieldName: 'unit', fieldType: 'Unit', fieldValues: 'GRAM,KILO,TON' },
+            { fieldName: 'kind', fieldType: 'Kind', fieldValues: 'ONLY' },
           ],
         },
       ]);
@@ -172,6 +176,23 @@ describe(`generator - ${generator}`, () => {
     it('should test a text field whose values contain one another with the default values', () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_CODE = "AAAAAAAAAA";');
       runResult.assertFileContent(resourceIT, 'UPDATED_CODE = "BBBBBBBBBB";');
+    });
+
+    it('should test a UUID with two fixed values from the entity samples', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_REFERENCE = UUID.fromString("898ca194-6314-470d-9a60-aa757a798c17");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_REFERENCE = UUID.fromString("658ced32-b999-4fe1-87a1-811a92c6fb17");');
+    });
+
+    it('should test a boolean and an enum with two values from the entity samples', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_ACTIVE = false;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_ACTIVE = true;');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_UNIT = Unit.KILO;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_UNIT = Unit.TON;');
+    });
+
+    it('should test an enum of a single value with it twice', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_KIND = Kind.ONLY;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_KIND = Kind.ONLY;');
     });
 
     it('should compare a number field above its default value with its updated value', () => {

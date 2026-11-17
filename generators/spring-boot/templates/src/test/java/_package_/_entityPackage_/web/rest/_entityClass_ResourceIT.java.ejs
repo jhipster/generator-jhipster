@@ -296,17 +296,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
       const { fieldType, sbTestSampleNumber: defaultValue, sbTestUpdatedNumber: updatedValue } = field;
       const isEnum = field.fieldIsEnum;
-      let enumValue1;
-      let enumValue2;
-      if (isEnum) {
-        const { enumValues } = field;
-        enumValue1 = enumValues[0];
-        if (enumValues.length > 1) {
-          enumValue2 = enumValues[1];
-        } else {
-          enumValue2 = enumValue1;
-        }
-      }
   _%>
   <%_ if (field.fieldTypeString || field.blobContentTypeText) { _%>
 
@@ -349,8 +338,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
   <%_ } else if (field.fieldTypeUUID) { _%>
 
-    private static final UUID <%- defaultValueName %> = UUID.randomUUID();
-    private static final UUID <%- updatedValueName %> = UUID.randomUUID();
+    private static final UUID <%- defaultValueName %> = UUID.fromString("<%- field.sbTestSampleValue %>");
+    private static final UUID <%- updatedValueName %> = UUID.fromString("<%- field.sbTestUpdatedValue %>");
   <%_ } else if (field.fieldTypeLocalDate) { _%>
 
     private static final LocalDate <%- defaultValueName %> = LocalDate.ofEpochDay(0L);
@@ -388,8 +377,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
   <%_ } else if (field.fieldTypeBoolean) { _%>
 
-    private static final Boolean <%- defaultValueName %> = false;
-    private static final Boolean <%- updatedValueName %> = true;
+    private static final Boolean <%- defaultValueName %> = <%- field.sbTestSampleValue %>;
+    private static final Boolean <%- updatedValueName %> = <%- field.sbTestUpdatedValue %>;
   <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
 
     <%_ if (databaseTypeCassandra) { _%>
@@ -401,8 +390,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
   <%_ } else if (isEnum) { _%>
 
-    private static final <%- fieldType %> <%- defaultValueName %> = <%- fieldType %>.<%- enumValue1.name %>;
-    private static final <%- fieldType %> <%- updatedValueName %> = <%- fieldType %>.<%- enumValue2.name %>;
+    private static final <%- fieldType %> <%- defaultValueName %> = <%- fieldType %>.<%- field.sbTestSampleValue %>;
+    private static final <%- fieldType %> <%- updatedValueName %> = <%- fieldType %>.<%- field.sbTestUpdatedValue %>;
   <%_ } _%>
 <%_ } _%>
 

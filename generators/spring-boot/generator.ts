@@ -624,10 +624,14 @@ ${classProperties
             !field.id &&
             (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeFloat || field.fieldTypeDouble || field.fieldTypeBigDecimal),
         );
+        const valueFields = entity.fields.filter(
+          field => !field.id && (field.fieldTypeUUID || field.fieldTypeBoolean || field.fieldIsEnum),
+        );
         const sampleFields = [
           ...patternFields,
           ...sampleTextFields.filter(field => field.fieldValidateRulesPattern === undefined),
           ...numberFields,
+          ...valueFields,
         ];
         const samples = generateEntitySamples(entity, {
           seed: 'resource-it',
@@ -694,6 +698,18 @@ ${classProperties
           // The default value is the smaller one, the range filters of the test look for a value above and below it.
           const [sample, updated] = (values as number[]).toSorted((a, b) => a - b);
           mutateData(field, { __override__: false, sbTestSampleNumber: sample, sbTestUpdatedNumber: updated });
+        }
+
+        for (const field of valueFields) {
+          let [sample, updated] = getSamples(field) as (string | boolean | undefined)[];
+          if (field.fieldTypeBoolean && (sample === undefined || updated === undefined)) {
+            [sample, updated] = [false, true];
+          } else if (field.fieldIsEnum && updated === undefined) {
+            // An enum of a single value tests it twice.
+            sample ??= field.enumValues![0].name;
+            updated = sample;
+          }
+          mutateData(field, { __override__: false, sbTestSampleValue: sample, sbTestUpdatedValue: updated });
         }
       },
       prepareFilters({ application, entity }) {
