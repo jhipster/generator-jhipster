@@ -48,6 +48,8 @@ export type Config = CoreConfig &
     lastChangelogTimestamp?: number;
     /** @deprecated The former name of `lastChangelogTimestamp`, read from the projects that have it. */
     lastLiquibaseTimestamp?: number;
+    /** The back references of the relationships without a name are named after their relationship, see `hasLegacyBackReferenceNames`. */
+    derivedBackReferenceNames?: boolean;
     creationTimestamp?: number;
     blueprints?: { name: string; version?: string }[];
   };

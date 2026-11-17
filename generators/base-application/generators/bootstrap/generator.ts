@@ -41,10 +41,10 @@ import {
   getChangelogDateForBuiltInEntities,
 } from '../../internal/utils.ts';
 import {
-  DERIVED_BACK_REFERENCE_NAME_VERSION,
   addFakerToEntity,
   derivedPrimaryKeyProperties,
   hasCyclicRequiredRelationship,
+  hasLegacyBackReferenceNames,
   isRequiredRelationship,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
@@ -168,7 +168,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           }
         }
         // Older versions named the back reference of a relationship without a name after the entity, kept for the existing fields and columns.
-        if (control.isJhipsterVersionLessThan(DERIVED_BACK_REFERENCE_NAME_VERSION)) {
+        if (hasLegacyBackReferenceNames(control, this.config.path)) {
           // The relationships of the entity file on the disk, the ones the older version generated: a jdl imported in this run
           // writes its relationships in memory only.
           const entityConfigPath = this.getEntityConfigPath(entityName);
@@ -189,6 +189,8 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
             entityStorage.save();
           }
         }
+        // The back references of this application are named after their relationship from now on, see `hasLegacyBackReferenceNames`.
+        this.jhipsterConfig.derivedBackReferenceNames = true;
         const annotations = entityConfig.annotations!;
         if (annotations.changelogDate && annotations.incrementalChangelogDate) {
           throw new Error(`Entity ${entityName} cannot have both changelogDate and incrementalChangelogDate.`);

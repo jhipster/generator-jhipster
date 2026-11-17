@@ -120,6 +120,37 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with relationships of an application a development build generated with derived names', () => {
+    const publisher = {
+      relationshipName: 'publisher',
+      otherEntityName: 'member',
+      relationshipType: 'one-to-one',
+      relationshipSide: 'left',
+    };
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          { name: 'Order', annotations: { changelogDate: '20200101000100' }, fields: [], relationships: [publisher] } as any,
+          { name: 'Member', annotations: { changelogDate: '20200101000200' }, fields: [] } as any,
+        ])
+        .doInDir(cwd => {
+          // A development build writes the version of the last release, with the marker.
+          writeFileSync(
+            join(cwd, '.yo-rc.json'),
+            JSON.stringify({ 'generator-jhipster': { jhipsterVersion: '9.4.0', derivedBackReferenceNames: true } }),
+          );
+          mkdirSync(join(cwd, '.jhipster'), { recursive: true });
+          writeFileSync(join(cwd, '.jhipster/Order.json'), JSON.stringify({ name: 'Order', relationships: [publisher] }));
+        })
+        .withSkipWritingPriorities();
+    });
+
+    it('should save no back reference name', () => {
+      result.assertNoFileContent('.jhipster/Order.json', 'backReferenceName');
+    });
+  });
+
   describe('with relationships of a new application', () => {
     before(async () => {
       await helpers
@@ -141,6 +172,10 @@ describe(`generator - ${generator}`, () => {
 
     it('should save no back reference name', () => {
       result.assertNoFileContent('.jhipster/Order.json', 'backReferenceName');
+    });
+
+    it('should mark the application as naming its back references after their relationship', () => {
+      result.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { derivedBackReferenceNames: true } });
     });
   });
 

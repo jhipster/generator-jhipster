@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import { existsSync, readFileSync } from 'node:fs';
+
 import { databaseTypes } from '../../../lib/jhipster/index.ts';
 import { lowerFirst, upperFirst } from '../../../lib/utils/string-utils.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
@@ -34,6 +36,20 @@ const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 
 /** The version from which a back reference without a name is named after its relationship, see `backReferenceName`. */
 export const DERIVED_BACK_REFERENCE_NAME_VERSION = '9.4.1';
+
+/**
+ * Whether the application on the disk names the back references after the entity: written by a version older than 9.4.1,
+ * and not marked with `derivedBackReferenceNames`, which every generation since writes. The marker tells an application a
+ * development build generated, whose version stays the one of the last release.
+ */
+export const hasLegacyBackReferenceNames = (
+  control: { isJhipsterVersionLessThan(version: string): boolean },
+  yoRcPath: string,
+): boolean => {
+  if (!control.isJhipsterVersionLessThan(DERIVED_BACK_REFERENCE_NAME_VERSION)) return false;
+  const config = existsSync(yoRcPath) ? JSON.parse(readFileSync(yoRcPath, 'utf-8'))['generator-jhipster'] : undefined;
+  return !config?.derivedBackReferenceNames;
+};
 
 /**
  * Whether a relationship without `otherEntityRelationshipName` gets a back reference on the other entity: a many-to-many,

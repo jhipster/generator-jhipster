@@ -23,7 +23,7 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import { withContentTypeFields } from '../base-application/internal/content-type-fields.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import {
-  DERIVED_BACK_REFERENCE_NAME_VERSION,
+  hasLegacyBackReferenceNames,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
   saveLegacyBackReferenceNames,
@@ -107,7 +107,7 @@ export default abstract class BaseEntityChangesGenerator<
       this.#entityChanges ??= this.generateIncrementalChanges({
         application,
         entities,
-        legacyBackReferenceNames: control.isJhipsterVersionLessThan(DERIVED_BACK_REFERENCE_NAME_VERSION),
+        legacyBackReferenceNames: hasLegacyBackReferenceNames(control, this.config.path),
       });
       return { ...firstArg, entityChanges: this.#entityChanges };
     }
