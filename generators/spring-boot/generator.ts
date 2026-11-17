@@ -647,13 +647,10 @@ ${classProperties
         const sampleFields = entity.fields
           .filter(field => !field.id && !isContentTypeField(field) && sampleGroup(field) !== -1)
           .toSorted((a, b) => sampleGroup(a) - sampleGroup(b));
-        // A float is written back as its shortest decimal, which the test reads as a double: a multiple of a quarter is the
-        // same in both. A date is written as its ISO 8601 text.
-        const testValue = (field: TestField, value: unknown): TestValue | undefined => {
+        // A date is written as its ISO 8601 text, a decimal number with its two decimals.
+        const testValue = (value: unknown): TestValue | undefined => {
           if (value instanceof Date) return value.toISOString();
-          if (typeof value !== 'number') return value as TestValue | undefined;
-          if (field.fieldTypeFloat) return Math.round(value * 4) / 4;
-          return field.fieldTypeDouble || field.fieldTypeBigDecimal ? Number(value.toFixed(2)) : value;
+          return typeof value === 'number' && !Number.isInteger(value) ? Number(value.toFixed(2)) : (value as TestValue | undefined);
         };
         // The values of a field do not repeat, but for a field with fewer values than the test needs, like an enum of a
         // single value, whose samples repeat.
@@ -668,7 +665,7 @@ ${classProperties
         });
 
         for (const [index, field] of sampleFields.entries()) {
-          const values = samples[index].map(sample => testValue(field, sample[field.fieldName])!);
+          const values = samples[index].map(sample => testValue(sample[field.fieldName])!);
           const compare = compareTestValues(field);
           const [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
             TestValue | undefined,

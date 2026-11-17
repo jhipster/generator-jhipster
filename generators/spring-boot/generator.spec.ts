@@ -162,9 +162,15 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent(resourceIT, 'SMALLER_COUNT = 15;');
     });
 
-    it('should test a float with multiples of a quarter', () => {
-      runResult.assertFileContent(resourceIT, 'DEFAULT_RATIO = 16995.25F;');
-      runResult.assertFileContent(resourceIT, 'UPDATED_RATIO = 29620.25F;');
+    it('should test a float with its decimals, read back from the JSON as its shortest decimal', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_RATIO = 16995.14F;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_RATIO = 29620.17F;');
+      runResult.assertFileContent(resourceIT, 'jsonPath("$.ratio").value(Double.valueOf(DEFAULT_RATIO.toString()))');
+    });
+
+    it('should filter a text by a longer text than its value, which it never contains', () => {
+      runResult.assertFileContent(resourceIT, '"label.contains=" + DEFAULT_LABEL + "x"');
+      runResult.assertFileContent(resourceIT, '"label.doesNotContain=" + DEFAULT_LABEL + "x"');
     });
 
     it('should write a big decimal from its decimal text', () => {

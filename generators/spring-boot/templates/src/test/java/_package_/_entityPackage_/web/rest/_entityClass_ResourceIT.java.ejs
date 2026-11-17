@@ -904,9 +904,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ for (field of fieldsToTest) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+  if (field.fieldTypeFloat) { %>.toString())<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1086,9 +1086,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ for (field of fieldsToTest) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- field.fieldName %>").value(<%- reactive ? 'is(' : '' %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+  if (field.fieldTypeFloat) { %>.toString())<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1164,10 +1164,10 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> contains
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> contains, a longer text than the value being never contained
         default<%- entityClass %>Filtering(
             "<%- searchBy.fieldName %>.contains=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
-            "<%- searchBy.fieldName %>.contains=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
+            "<%- searchBy.fieldName %>.contains=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %> + "x"
         );
     }
 
@@ -1176,9 +1176,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> does not contain
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> does not contain, a longer text than the value being never contained
         default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.doesNotContain=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
+            "<%- searchBy.fieldName %>.doesNotContain=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %> + "x",
             "<%- searchBy.fieldName %>.doesNotContain=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
         );
     }
@@ -1318,9 +1318,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if
       (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
       if (field.fieldTypeLong) { %>.intValue()<% } else
-      if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+      if (field.fieldTypeFloat) { %>.toString())<% } else
       if (field.fieldTypeBigDecimal) { %>)<% } else
       if (field.fieldTypeZonedDateTime) { %>)<% } else
       if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1356,9 +1356,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% for (const field of fieldsToTest) { %>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
     if (field.fieldTypeLong) { %>.intValue()<% } else
-    if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+    if (field.fieldTypeFloat) { %>.toString())<% } else
     if (field.fieldTypeBigDecimal) { %>)<% } else
     if (field.fieldTypeZonedDateTime) { %>)<% } else
     if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -2012,9 +2012,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ for (field of fieldsToTest) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+  if (field.fieldTypeFloat) { %>.toString())<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
