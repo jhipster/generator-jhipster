@@ -21,7 +21,42 @@ import type { Field as BaseApplicationField } from '../types.ts';
 
 import { isContentTypeField } from './content-type-fields.ts';
 
-const { BOOLEAN, INTEGER, LONG } = fieldTypes.CommonDBTypes;
+const {
+  CommonDBTypes: { BIG_DECIMAL, BOOLEAN, DOUBLE, FLOAT, INTEGER, LONG },
+  RelationalOnlyDBTypes: { BYTES },
+} = fieldTypes;
+
+/** A fake data value serializable to JSON: a date and time is a Date, a blob of bytes its base64 text. */
+export type FakeDataValue = string | number | boolean | Date;
+
+/** A format the fake data is written for: TypeScript code, the input of a Cypress test, or a value serializable to JSON. */
+export type FakeDataFormat = 'cypress' | 'json-serializable' | 'ts';
+
+/**
+ * A fake data value of a field, serializable to JSON, converted for a format without changing it: a date and time is
+ * written as YYYY-MM-DDTHH:mm, as it is drawn at the minute, a blob of bytes is the file its base64 text tells.
+ */
+export const formatFakeData = (field: BaseApplicationField, value: FakeDataValue | undefined, format: FakeDataFormat): any => {
+  if (value === undefined || format === 'json-serializable') {
+    return value;
+  }
+  let data = value;
+  if (data instanceof Date) {
+    data = data.toISOString().slice(0, 16);
+  } else if (field.fieldType === BYTES) {
+    data = Buffer.from(data as string, 'base64').toString();
+  }
+  if (format === 'cypress') {
+    return data;
+  }
+  // eslint-disable-next-line no-template-curly-in-string
+  if (![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
+    data = `'${String(data)
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, String.raw`\'`)}'`;
+  }
+  return data;
+};
 
 /** The largest range of integers listed as a domain. */
 const MAX_DOMAIN_RANGE = 1000;

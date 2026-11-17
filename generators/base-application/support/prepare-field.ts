@@ -25,7 +25,7 @@ import { kebabCase, lowerFirst } from '../../../lib/utils/string-utils.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { type FakeDataOptions, mutateField } from '../entity.ts';
-import { type FieldDomainValue, getFieldFakeDataDomain } from '../internal/fake-data.ts';
+import { type FieldDomainValue, formatFakeData, getFieldFakeDataDomain } from '../internal/fake-data.ts';
 import type { Entity as BaseApplicationEntity, Field as BaseApplicationField } from '../types.ts';
 
 import type { FakerWithRandexp } from './faker.ts';
@@ -139,7 +139,7 @@ function generateFakeDataForField(
   field: BaseApplicationField,
   faker: FakerWithRandexp,
   changelogDate: Date,
-  type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
+  type: 'csv' | 'json-serializable' = 'csv',
   domainValue?: FieldDomainValue,
   recentDays = 1,
 ) {
@@ -168,7 +168,7 @@ function generateFakeDataForField(
     if (!originalData) {
       return {};
     }
-    if (type === 'csv' || type === 'cypress') {
+    if (type === 'csv') {
       data = originalData.replace(/"/g, '');
     } else {
       data = originalData;
@@ -187,7 +187,7 @@ function generateFakeDataForField(
       this.log.warn(`Enum ${field.fieldType} is not valid`);
       data = undefined;
     }
-  } else if (field.fieldType === DURATION && (type === 'cypress' || type === 'json-serializable')) {
+  } else if (field.fieldType === DURATION && type === 'json-serializable') {
     data = `PT${faker.number.int({ min: 1, max: 59 })}M`;
 
     // eslint-disable-next-line no-template-curly-in-string
@@ -214,16 +214,14 @@ function generateFakeDataForField(
       // default time input fields are set to support HH:mm. Some databases require :00 during loading of fake data to detect the datatype.
       data = `${timeWithoutMilliseconds.slice(0, timeWithoutMilliseconds.lastIndexOf(':'))}:00`;
     } else if (type === 'json-serializable') {
+      // A date and time at the minute, as an input of type datetime-local takes it.
+      date.setUTCSeconds(0, 0);
       data = date;
     } else {
       // Write the date without milliseconds so Java can parse it
       // See https://stackoverflow.com/a/34053802/150868
       // YYYY-MM-DDTHH:mm:ss
       data = originalData.split('.')[0];
-      if (type === 'cypress' || type === 'ts') {
-        // YYYY-MM-DDTHH:mm
-        data = data.slice(0, -3);
-      }
     }
   } else if (field.fieldTypeBinary && field.fieldTypeBlobContent !== TEXT) {
     data = '../fake-data/blob/hipster.png';
@@ -279,13 +277,8 @@ function generateFakeDataForField(
   // The value as it is written, to tell if it repeats: a max length or a date without its time can make two values equal.
   const uniqueData = data instanceof Date ? data.toISOString() : data;
 
-  if (data !== undefined) {
-    // eslint-disable-next-line no-template-curly-in-string
-    if (type === 'ts' && ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
-      data = `'${typeof data === 'string' ? data.replace(/\\/g, '\\\\').replace(/'/g, String.raw`\'`) : data}'`;
-    } else if (type === 'csv' && field.fieldValidate && field.fieldValidateRules?.includes(PATTERN)) {
-      data = `"${typeof data === 'string' ? data.replace(/"/g, String.raw`\"`) : data}"`;
-    }
+  if (data !== undefined && type === 'csv' && field.fieldValidate && field.fieldValidateRules?.includes(PATTERN)) {
+    data = `"${typeof data === 'string' ? data.replace(/"/g, String.raw`\"`) : data}"`;
   }
 
   return { data, uniqueData };
@@ -356,7 +349,15 @@ export function prepareCommonFieldForTemplates(
     { uniqueValues = field.uniqueValue!, unique = field.unique || field.id }: FakeDataOptions = {},
   ) => {
     const generate = (domainValue?: FieldDomainValue, recentDays?: number) =>
-      generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type, domainValue, recentDays);
+      generateFakeDataForField.call(
+        generator,
+        field,
+        faker,
+        entityWithConfig.changelogDateForRecent,
+        type === 'csv' ? 'csv' : 'json-serializable',
+        domainValue,
+        recentDays,
+      );
     let generated: Partial<ReturnType<typeof generate>> = generate();
     // manage uniqueness
     if (unique) {
@@ -383,7 +384,7 @@ export function prepareCommonFieldForTemplates(
     if (generated.data === undefined) {
       generator.log.warn(`Error generating fake data for field ${entityWithConfig.name}.${field.fieldName}`);
     }
-    return generated.data;
+    return type === 'csv' ? generated.data : formatFakeData(field, generated.data, type);
   };
 
   return field;

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { mutateData } from '../../../lib/utils/object.ts';
-import { type EntitySamplesBatch, generateEntitySamples } from '../../base-application/support/entity-samples.ts';
+import { type EntitySamplesBatch, formatEntitySample, generateEntitySamples } from '../../base-application/support/entity-samples.ts';
 import type { Entity as ClientEntity, Field as ClientField } from '../types.ts';
 
 import { isClientField } from './filter-entities.ts';
@@ -32,7 +32,9 @@ export function preparePostEntityClientDerivedProperties(entity: ClientEntity) {
     clientFields = clientFields.filter(field => ['id', 'login'].includes(field.fieldName));
   }
   const generateTsSamples = (seed: number, fields: EntitySamplesBatch<ClientField>['fields'], count?: number) =>
-    generateEntitySamples(entity, { seed: `${SEED}-${seed}`, batches: [{ fields, format: 'ts', count }] })[0];
+    generateEntitySamples(entity, { seed: `${SEED}-${seed}`, batches: [{ fields, count }] })[0].map(sample =>
+      formatEntitySample(typeof fields === 'function' ? clientFields : fields, sample, 'ts'),
+    );
   const options = { sep: `\n  ` };
 
   const [partialSample] = generateTsSamples(1, faker =>
