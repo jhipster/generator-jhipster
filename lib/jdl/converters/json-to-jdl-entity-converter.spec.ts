@@ -21,9 +21,12 @@ import { before, describe, expect, it } from 'expect-node';
 import fs from 'node:fs';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../core/application-types.ts';
+import { getDefaultRuntime } from '../../jdl-config/jdl-runtime.ts';
 import { getTestFile } from '../core/__test-support__/index.ts';
 import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.ts';
+import { parse, performJDLPostParsingTasks } from '../core/parsing/index.ts';
 
+import { astToFiles } from './ast-to-files/ast-to-files.ts';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.ts';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
@@ -207,7 +210,64 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           expect(relationship!.commentInFrom).toBe('Another side of the same relationship');
           expect(relationship!.commentInTo).toBe('A relationship');
         });
-        it('should parse destination-side relationship options', () => {
+        it('should keep the options of each side of a relationship when the jdl is imported again', () => {
+          const entities = new Map<string, any>([
+            [
+              'Order',
+              {
+                fields: [],
+                relationships: [
+                  {
+                    relationshipType: 'one-to-one',
+                    relationshipName: 'publisher',
+                    otherEntityName: 'member',
+                    relationshipSide: 'left',
+                    options: { leftOption: 'value' },
+                  },
+                  {
+                    relationshipType: 'many-to-one',
+                    relationshipName: 'recipient',
+                    otherEntityName: 'member',
+                    relationshipSide: 'left',
+                    otherEntityRelationshipName: 'receivedOrder',
+                    options: { ownerOption: true },
+                  },
+                ],
+              },
+            ],
+            [
+              'Member',
+              {
+                fields: [],
+                relationships: [
+                  {
+                    relationshipType: 'one-to-many',
+                    relationshipName: 'receivedOrder',
+                    otherEntityName: 'order',
+                    relationshipSide: 'right',
+                    otherEntityRelationshipName: 'recipient',
+                    options: { inverseOption: true },
+                  },
+                ],
+              },
+            ],
+          ]);
+          const jdl = convertEntitiesToJDL(entities).toString();
+          const runtime = getDefaultRuntime();
+          const { files } = astToFiles(performJDLPostParsingTasks(parse(jdl, runtime, { onWarning: () => {} })), runtime);
+
+          const options = (entityName: string) =>
+            files[`.jhipster/${entityName}.json`].relationships.map(({ relationshipName, options }: any) => ({
+              relationshipName,
+              options,
+            }));
+          expect(options('Order')).toEqual([
+            { relationshipName: 'publisher', options: { leftOption: 'value' } },
+            { relationshipName: 'recipient', options: { ownerOption: true } },
+          ]);
+          expect(options('Member')).toEqual([{ relationshipName: 'receivedOrder', options: { inverseOption: true } }]);
+        });
+        it('should write the destination-side relationship options before the source entity', () => {
           const entities = new Map<string, any>([
             [
               'EntityA',
@@ -244,7 +304,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           const result = convertEntitiesToJDL(entities);
           const relationship = result.relationships.getOneToMany('OneToMany_EntityA{entityB}_EntityB{entityA}');
           expect(relationship).toBeDefined();
-          expect(relationship!.options.destination).toEqual({ destAnnotation: true });
+          expect(relationship!.options.source).toEqual({ destAnnotation: true });
         });
         it('should parse required relationships in owner', () => {
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
