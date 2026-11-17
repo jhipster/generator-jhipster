@@ -103,6 +103,82 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with text and number fields', () => {
+    const resourceIT = `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/MeasureResourceIT.java`;
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'Measure',
+          changelogDate: '20220129025419',
+          service: 'serviceClass',
+          jpaMetamodelFiltering: true,
+          fields: [
+            { fieldName: 'label', fieldType: 'String', fieldValidateRules: ['maxlength'], fieldValidateRulesMaxlength: 8 },
+            {
+              fieldName: 'count',
+              fieldType: 'Integer',
+              fieldValidateRules: ['min', 'max'],
+              fieldValidateRulesMin: 10,
+              fieldValidateRulesMax: 20,
+            },
+            { fieldName: 'total', fieldType: 'Long' },
+            { fieldName: 'ratio', fieldType: 'Float' },
+            { fieldName: 'weight', fieldType: 'Double' },
+            { fieldName: 'price', fieldType: 'BigDecimal' },
+            {
+              fieldName: 'level',
+              fieldType: 'Integer',
+              fieldValidateRules: ['min', 'max'],
+              fieldValidateRulesMin: 5,
+              fieldValidateRulesMax: 5,
+            },
+            { fieldName: 'code', fieldType: 'String', fieldValidateRules: ['pattern'], fieldValidateRulesPattern: '^a{1,2}$' },
+          ],
+        },
+      ]);
+    });
+
+    it('should test the resource with two values of each field from the entity samples', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_LABEL = "conseque";');
+      runResult.assertFileContent(resourceIT, 'UPDATED_LABEL = "glaring ";');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_TOTAL = 12735L;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_TOTAL = 30471L;');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_WEIGHT = 7275.24D;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_WEIGHT = 16995.14D;');
+    });
+
+    it('should keep the values of a number field within its limits, the default one the smaller', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_COUNT = 15;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_COUNT = 18;');
+      runResult.assertFileContent(resourceIT, 'SMALLER_COUNT = 15 - 1;');
+    });
+
+    it('should test a float with multiples of a quarter', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_RATIO = 4934F;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_RATIO = 13727.5F;');
+    });
+
+    it('should write a big decimal from its decimal text', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_PRICE = new BigDecimal("6159.79");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_PRICE = new BigDecimal("29620.17");');
+      runResult.assertFileContent(resourceIT, 'SMALLER_PRICE = DEFAULT_PRICE.subtract(BigDecimal.ONE);');
+    });
+
+    it('should test a number field without two values with the values next to its minimum', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_LEVEL = 5;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_LEVEL = 6;');
+    });
+
+    it('should test a text field whose values contain one another with the default values', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_CODE = "AAAAAAAAAA";');
+      runResult.assertFileContent(resourceIT, 'UPDATED_CODE = "BBBBBBBBBB";');
+    });
+
+    it('should compare a number field above its default value with its updated value', () => {
+      runResult.assertFileContent(resourceIT, '"count.greaterThanOrEqual=" + UPDATED_COUNT');
+    });
+  });
+
   describe('with graalvm support and an existing cache provider', () => {
     before(async () => {
       await helpers

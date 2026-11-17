@@ -84,6 +84,10 @@ export type Field = ServerField &
     sbTestSampleText?: string;
     /** The second text value of a text field in the resource integration test, escaped for a Java string. */
     sbTestUpdatedText?: string;
+    /** The default value of a number field in the resource integration test, smaller than the updated one. */
+    sbTestSampleNumber?: number;
+    /** The updated value of a number field in the resource integration test. */
+    sbTestUpdatedNumber?: number;
   };
 
 export interface Relationship extends ServerRelationship, SpringBootAddedPropertyProperties, SpringBootProperty, JavaRelationship {

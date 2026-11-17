@@ -294,28 +294,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
       const needsSmallerValueName = jpaMetamodelFiltering && field.filterableField
         && (field.fieldTypeNumeric || field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime);
 
-      let defaultValue = 1;
-      let updatedValue = 2;
-
-      if (field.fieldValidate === true) {
-        if (field.fieldValidationMax) {
-          defaultValue = field.fieldValidateRulesMax;
-          updatedValue = Number.parseInt(field.fieldValidateRulesMax) - 1;
-        }
-        if (field.fieldValidationMin) {
-          defaultValue = field.fieldValidateRulesMin;
-          updatedValue = Number.parseInt(field.fieldValidateRulesMin) + 1;
-        }
-        if (field.fieldValidationMinBytes) {
-          defaultValue = field.fieldValidateRulesMinbytes;
-          updatedValue = field.fieldValidateRulesMinbytes;
-        }
-        if (field.fieldValidationMaxBytes) {
-          updatedValue = field.fieldValidateRulesMaxbytes;
-        }
-      }
-
-      const { fieldType } = field;
+      const { fieldType, sbTestSampleNumber: defaultValue, sbTestUpdatedNumber: updatedValue } = field;
       const isEnum = field.fieldIsEnum;
       let enumValue1;
       let enumValue2;
@@ -363,10 +342,10 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
   <%_ } else if (field.fieldTypeBigDecimal) { _%>
 
-    private static final BigDecimal <%- defaultValueName %> = new BigDecimal(<%- defaultValue %>);
-    private static final BigDecimal <%- updatedValueName %> = new BigDecimal(<%- updatedValue %>);
+    private static final BigDecimal <%- defaultValueName %> = new BigDecimal("<%- defaultValue %>");
+    private static final BigDecimal <%- updatedValueName %> = new BigDecimal("<%- updatedValue %>");
     <%_ if (needsSmallerValueName) { _%>
-    private static final BigDecimal <%- smallerValueName %> = new BigDecimal(<%- defaultValue %> - 1);
+    private static final BigDecimal <%- smallerValueName %> = <%- defaultValueName %>.subtract(BigDecimal.ONE);
     <%_ } _%>
   <%_ } else if (field.fieldTypeUUID) { _%>
 
@@ -1306,15 +1285,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
       <%_ const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           let biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
-          if (searchBy.fieldValidate && searchBy.fieldValidationMax) {
-            // if maximum is specified the updated variable is smaller than the default one!
-            if (searchBy.fieldTypeBigDecimal) {
-              biggerValue = `(${defaultValue}.add(BigDecimal.ONE))`;
-            } else if (searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) {
-              biggerValue = `(${defaultValue}.plus(1, ChronoUnit.DAYS))`;
-            } else {
-              biggerValue = `(${defaultValue} + 1)`;
-            }
+          // The updated value of a number is the bigger one; if a maximum is specified the updated date is smaller than the default one!
+          if (searchBy.fieldValidate && searchBy.fieldValidationMax && (searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime)) {
+            biggerValue = `(${defaultValue}.plus(1, ChronoUnit.DAYS))`;
           }
       _%>
 

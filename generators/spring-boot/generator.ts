@@ -613,15 +613,29 @@ ${classProperties
           }
         }
       },
-      prepareTestTextValues({ entity }) {
-        // The text values of the resource integration test: the minimum and maximum lengths respected, matching the pattern.
+      prepareTestValues({ entity }) {
+        // The values of the resource integration test, two of each field, the default and the updated one.
         const textFields = entity.fields.filter(field => field.fieldTypeString || field.blobContentTypeText);
-        // Two different values of each pattern, the default and the updated one.
-        const patternFields = textFields.filter(field => field.fieldValidateRulesPattern !== undefined);
-        const patternSamples = generateEntitySamples(entity, {
+        const sampleTextFields = textFields.filter(field => field.fieldTypeString && !isContentTypeField(field));
+        // The fields of a pattern first, the other fields drawing after them from the seed.
+        const patternFields = sampleTextFields.filter(field => field.fieldValidateRulesPattern !== undefined);
+        const numberFields = entity.fields.filter(
+          field =>
+            !field.id &&
+            (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeFloat || field.fieldTypeDouble || field.fieldTypeBigDecimal),
+        );
+        const sampleFields = [
+          ...patternFields,
+          ...sampleTextFields.filter(field => field.fieldValidateRulesPattern === undefined),
+          ...numberFields,
+        ];
+        const samples = generateEntitySamples(entity, {
           seed: 'resource-it',
-          batches: patternFields.map(field => ({ fields: [field], format: 'json-serializable', count: 2, distinct: true })),
+          batches: sampleFields.map(field => ({ fields: [field], format: 'json-serializable', count: 2, distinct: true })),
         });
+        const getSamples = (field: (typeof sampleFields)[number]) =>
+          samples[sampleFields.indexOf(field)].map(sample => sample[field.fieldName]);
+
         const toJavaString = (value: string) => value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
         for (const field of textFields) {
           let sampleTextLength = 10;
@@ -637,21 +651,49 @@ ${classProperties
             // The content types of the files of the test.
             sampleTextString = 'image/jpg';
             updatedTextString = 'image/png';
-          }
-          if (field.fieldValidateRulesPattern !== undefined) {
-            const [sample, updated] = patternSamples[patternFields.indexOf(field)].map(
-              patternSample => patternSample[field.fieldName] as string | undefined,
-            );
-            if (sample === undefined || updated === undefined) {
-              this.log.warn(
-                `The pattern "${field.fieldValidateRulesPattern}" of entity "${entity.entityClass}" field "${field.fieldName}" gives no two different test values, generating default values for this field.`,
-              );
+          } else if (sampleTextFields.includes(field)) {
+            const [sample, updated] = getSamples(field) as (string | undefined)[];
+            // The filters of the test tell the values apart by their content: neither value contains the other.
+            if (sample === undefined || updated === undefined || sample.includes(updated) || updated.includes(sample)) {
+              if (field.fieldValidateRulesPattern !== undefined) {
+                this.log.warn(
+                  `The pattern "${field.fieldValidateRulesPattern}" of entity "${entity.entityClass}" field "${field.fieldName}" gives no two different test values, generating default values for this field.`,
+                );
+              }
             } else {
               sampleTextString = toJavaString(sample);
               updatedTextString = toJavaString(updated);
             }
           }
           mutateData(field, { __override__: false, sbTestSampleText: sampleTextString, sbTestUpdatedText: updatedTextString });
+        }
+
+        for (const field of numberFields) {
+          const min = field.fieldValidationMin ? Number(field.fieldValidateRulesMin) : undefined;
+          const max = field.fieldValidationMax ? Number(field.fieldValidateRulesMax) : undefined;
+          // A float is written back as its shortest decimal, which the test reads as a double: a multiple of a quarter is the same in both.
+          const toTestNumber = (value: number) => {
+            if (field.fieldTypeFloat) {
+              return Math.round(value * 4) / 4;
+            }
+            return field.fieldTypeDouble || field.fieldTypeBigDecimal ? Number(value.toFixed(2)) : value;
+          };
+          let values = (getSamples(field) as (number | undefined)[]).map(value => (value === undefined ? undefined : toTestNumber(value)));
+          if (
+            values.some(value => value === undefined || (min !== undefined && value < min) || (max !== undefined && value > max)) ||
+            values[0] === values[1]
+          ) {
+            // The values next to the limits of the field, the minimum first.
+            values = [1, 2];
+            if (min !== undefined) {
+              values = [min, min + 1];
+            } else if (max !== undefined) {
+              values = [max - 1, max];
+            }
+          }
+          // The default value is the smaller one, the range filters of the test look for a value above and below it.
+          const [sample, updated] = (values as number[]).toSorted((a, b) => a - b);
+          mutateData(field, { __override__: false, sbTestSampleNumber: sample, sbTestUpdatedNumber: updated });
         }
       },
       prepareFilters({ application, entity }) {
