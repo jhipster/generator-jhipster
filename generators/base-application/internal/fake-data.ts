@@ -22,19 +22,32 @@ import type { Field as BaseApplicationField } from '../types.ts';
 import { isContentTypeField } from './content-type-fields.ts';
 
 const {
-  CommonDBTypes: { BIG_DECIMAL, BOOLEAN, DOUBLE, FLOAT, INTEGER, LONG },
+  CommonDBTypes: { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, FLOAT, INTEGER, LONG },
   RelationalOnlyDBTypes: { BYTES },
 } = fieldTypes;
 
 /** A fake data value serializable to JSON: a date and time is a Date, a blob of bytes its base64 text. */
 export type FakeDataValue = string | number | boolean | Date;
 
-/** A format the fake data is written for: TypeScript code, the input of a Cypress test, or a value serializable to JSON. */
-export type FakeDataFormat = 'cypress' | 'json-serializable' | 'ts';
+/**
+ * A format the fake data is written for: a value of a Liquibase CSV, TypeScript code, the input of a Cypress test, or a
+ * value serializable to JSON.
+ */
+export type FakeDataFormat = 'csv' | 'cypress' | 'json-serializable' | 'ts';
+
+const NANOSECONDS = { H: 3_600_000_000_000, M: 60_000_000_000, S: 1_000_000_000 };
+
+/** The nanoseconds of an ISO 8601 duration of hours, minutes and seconds, as Hibernate keeps a duration in a bigint column. */
+const durationNanoseconds = (duration: string): number =>
+  [...duration.matchAll(/(\d+)([HMS])/g)].reduce(
+    (nanoseconds, [, amount, unit]) => nanoseconds + Number(amount) * NANOSECONDS[unit as keyof typeof NANOSECONDS],
+    0,
+  );
 
 /**
  * A fake data value of a field, serializable to JSON, converted for a format without changing it: a date and time is
- * written as YYYY-MM-DDTHH:mm, as it is drawn at the minute, a blob of bytes is the file its base64 text tells.
+ * written as YYYY-MM-DDTHH:mm (YYYY-MM-DDTHH:mm:ss in a CSV), as it is drawn at the minute, a blob of bytes is the file
+ * its base64 text tells, a duration in a CSV its nanoseconds.
  */
 export const formatFakeData = (field: BaseApplicationField, value: FakeDataValue | undefined, format: FakeDataFormat): any => {
   if (value === undefined || format === 'json-serializable') {
@@ -42,12 +55,18 @@ export const formatFakeData = (field: BaseApplicationField, value: FakeDataValue
   }
   let data = value;
   if (data instanceof Date) {
-    data = data.toISOString().slice(0, 16);
+    data = data.toISOString().slice(0, format === 'csv' ? 19 : 16);
   } else if (field.fieldType === BYTES) {
     data = Buffer.from(data as string, 'base64').toString();
+  } else if (format === 'csv' && field.fieldType === DURATION) {
+    data = durationNanoseconds(data as string);
   }
   if (format === 'cypress') {
     return data;
+  }
+  if (format === 'csv') {
+    // A text of a pattern can have the separator: it is quoted, a quote written twice as RFC 4180 tells.
+    return field.fieldValidate && field.fieldValidateRules?.includes('pattern') ? `"${String(data).replace(/"/g, '""')}"` : data;
   }
   // eslint-disable-next-line no-template-curly-in-string
   if (![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {

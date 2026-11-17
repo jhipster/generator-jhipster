@@ -95,8 +95,8 @@ export function generateEntitySamples<F extends BaseApplicationField>(
 }
 
 /**
- * A sample of an entity written for a format, by the fields it has among the ones given: TypeScript code, the input of a
- * Cypress test, or values serializable to JSON. The TypeScript and JSON samples give each blob the content type of its
+ * A sample of an entity written for a format, by the fields it has among the ones given: the values of a Liquibase CSV,
+ * TypeScript code, the input of a Cypress test, or values serializable to JSON. The TypeScript and JSON samples give each blob the content type of its
  * file, the content type fields are left out.
  *
  * @example

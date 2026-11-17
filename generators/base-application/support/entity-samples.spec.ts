@@ -179,6 +179,7 @@ describe('generator - base-application - support - generateEntitySamples', () =>
           fieldValidateRulesPattern: '^"?[a-z]+$',
         }),
         prepareField({ fieldName: 'file', fieldType: 'byte[]', fieldTypeBlobContent: 'text' }),
+        prepareField({ fieldName: 'time', fieldType: 'Duration' }),
       ];
     });
 
@@ -209,6 +210,17 @@ describe('generator - base-application - support - generateEntitySamples', () =>
         at,
         code: '"ab',
         file,
+      });
+    });
+
+    it('should write a sample as the values of a Liquibase CSV', () => {
+      expect(formatEntitySample(fields, { name: "it's", count: 3, at, code: '"a;b', file, time: 'PT1H2M3S' }, 'csv')).toEqual({
+        name: "it's",
+        count: 3,
+        at: '2026-01-01T10:15:00',
+        code: '"""a;b"',
+        file: '../fake-data/blob/hipster.txt',
+        time: 3_723_000_000_000,
       });
     });
 
