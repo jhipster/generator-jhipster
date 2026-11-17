@@ -27,6 +27,7 @@ import { mutateData } from '../../lib/utils/index.ts';
 import { lowerFirst } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { isContentTypeField } from '../base-application/internal/content-type-fields.ts';
+import { getFieldFakeDataDomain } from '../base-application/internal/fake-data.ts';
 import { generateEntitySamples } from '../base-application/support/index.ts';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
@@ -646,51 +647,6 @@ ${classProperties
         const sampleFields = entity.fields
           .filter(field => !field.id && !isContentTypeField(field) && sampleGroup(field) !== -1)
           .toSorted((a, b) => sampleGroup(a) - sampleGroup(b));
-        const samples = generateEntitySamples(entity, {
-          seed: 'resource-it',
-          batches: sampleFields.map(field => ({
-            fields: [field],
-            format: 'json-serializable',
-            count: testValuesCount(field),
-            distinct: true,
-          })),
-        });
-
-        // The values next to the limits of the field, when the samples give no values the test can tell apart.
-        const fixedValues = (field: TestField, sample?: TestValue): TestValue[] => {
-          const min = field.fieldValidationMin ? Number(field.fieldValidateRulesMin) : undefined;
-          const max = field.fieldValidationMax ? Number(field.fieldValidateRulesMax) : undefined;
-          const changelogDate = entity.changelogDateForRecent.toISOString();
-          if (isContentTypeField(field)) {
-            // The content types of the files of the test.
-            return ['image/jpg', 'image/png'];
-          }
-          if (field.fieldTypeString || field.blobContentTypeText) {
-            let length = 10;
-            if (field.fieldValidateRulesMinlength! > length) {
-              length = field.fieldValidateRulesMinlength!;
-            }
-            if (field.fieldValidateRulesMaxlength! < length) {
-              length = field.fieldValidateRulesMaxlength!;
-            }
-            return ['A'.repeat(length), 'B'.repeat(length)];
-          }
-          if (isNumber(field)) {
-            // The smaller value is only looked for, it can be out of the limits.
-            if (min !== undefined) return [min - 1, min, min + 1];
-            return max === undefined ? [0, 1, 2] : [max - 2, max - 1, max];
-          }
-          if (field.fieldIsEnum) {
-            // An enum of a single value tests it twice.
-            return [sample ?? field.enumValues![0].name, sample ?? field.enumValues![0].name];
-          }
-          if (field.fieldTypeLocalDate) return ['1969-12-31', '1970-01-01', changelogDate.split('T')[0]];
-          if (field.fieldTypeLocalTime) return ['00:00:00', '12:00:00', '23:59:59'];
-          if (field.fieldTypeDuration) return ['PT300M', 'PT360M', 'PT720M'];
-          if (isTime(field)) return ['1969-12-31T23:59:59Z', '1970-01-01T00:00:00Z', changelogDate];
-          return [false, true];
-        };
-
         // A float is written back as its shortest decimal, which the test reads as a double: a multiple of a quarter is the
         // same in both. A date is written as its ISO 8601 text.
         const testValue = (field: TestField, value: unknown): TestValue | undefined => {
@@ -699,34 +655,70 @@ ${classProperties
           if (field.fieldTypeFloat) return Math.round(value * 4) / 4;
           return field.fieldTypeDouble || field.fieldTypeBigDecimal ? Number(value.toFixed(2)) : value;
         };
-        // The filters of the test tell the values apart: neither text contains the other, and the numbers are within their limits.
-        const isTestable = (field: TestField, values: (TestValue | undefined)[]) => {
-          const [sample, updated] = values;
-          if (values.length < testValuesCount(field) || values.includes(undefined) || new Set(values).size < values.length) return false;
-          if (typeof sample === 'string' && typeof updated === 'string' && field.fieldTypeString) {
-            return !sample.includes(updated) && !updated.includes(sample);
-          }
-          const min = field.fieldValidationMin ? Number(field.fieldValidateRulesMin) : -Infinity;
-          const max = field.fieldValidationMax ? Number(field.fieldValidateRulesMax) : Infinity;
-          return !isNumber(field) || values.every(value => (value as number) >= min && (value as number) <= max);
+        const drawSamples = (seed: string, fields: TestField[], { distinct = true, extra = 0 } = {}) => {
+          const samples = generateEntitySamples(entity, {
+            seed,
+            batches: fields.map(field => ({
+              fields: [field],
+              format: 'json-serializable',
+              count: testValuesCount(field) + extra,
+              distinct,
+            })),
+          });
+          return new Map(fields.map((field, index) => [field, samples[index].map(sample => testValue(field, sample[field.fieldName]))]));
         };
 
-        for (const field of entity.fields.filter(
-          field => sampleFields.includes(field) || isContentTypeField(field) || field.blobContentTypeText,
-        )) {
-          const drawn =
-            sampleFields.includes(field) ?
-              samples[sampleFields.indexOf(field)].map(sample => testValue(field, sample[field.fieldName]))
-            : [];
-          let values = drawn as TestValue[];
-          if (!isTestable(field, drawn)) {
-            if (field.fieldTypeString && field.fieldValidateRulesPattern !== undefined) {
-              this.log.warn(
-                `The pattern "${field.fieldValidateRulesPattern}" of entity "${entity.entityClass}" field "${field.fieldName}" gives no two different test values, generating default values for this field.`,
-              );
-            }
-            values = fixedValues(field, drawn[0]);
+        // The first samples the filters of the test tell apart: distinct values within the limits of the field, and two texts
+        // neither of which contains the other.
+        const pickTestValues = (field: TestField, drawn: (TestValue | undefined)[]): TestValue[] | undefined => {
+          const min = field.fieldValidationMin ? Number(field.fieldValidateRulesMin) : -Infinity;
+          const max = field.fieldValidationMax ? Number(field.fieldValidateRulesMax) : Infinity;
+          const values = [
+            ...new Set(
+              drawn.filter(
+                (value): value is TestValue =>
+                  value !== undefined && (!isNumber(field) || ((value as number) >= min && (value as number) <= max)),
+              ),
+            ),
+          ];
+          if (field.fieldTypeString) {
+            const texts = values as string[];
+            const sample = texts.find(text => texts.some(other => !text.includes(other) && !other.includes(text)));
+            const updated = texts.find(text => sample !== undefined && !text.includes(sample) && !sample.includes(text));
+            return sample === undefined ? undefined : [sample, updated!];
           }
+          return values.length < testValuesCount(field) ? undefined : values.slice(0, testValuesCount(field));
+        };
+
+        // The samples the test needs, more samples to choose from for a field whose samples the filters cannot tell apart,
+        // and its samples repeated when it has fewer distinct values than the test needs, like an enum of a single value.
+        const testValues = new Map<TestField, TestValue[] | undefined>();
+        const fewValues = (field: TestField) => (getFieldFakeDataDomain(field)?.length ?? Infinity) < testValuesCount(field);
+        for (const [field, drawn] of drawSamples(
+          'resource-it',
+          sampleFields.filter(field => !fewValues(field)),
+        )) {
+          testValues.set(field, pickTestValues(field, drawn));
+        }
+        const unpicked = () => sampleFields.filter(field => !testValues.get(field));
+        for (const [field, drawn] of drawSamples(
+          'resource-it-more',
+          unpicked().filter(field => !fewValues(field)),
+          { extra: 3 },
+        )) {
+          testValues.set(field, pickTestValues(field, drawn));
+        }
+        for (const [field, drawn] of drawSamples('resource-it-repeated', unpicked(), { distinct: false })) {
+          if (field.fieldValidateRulesPattern !== undefined) {
+            this.log.warn(
+              `The pattern "${field.fieldValidateRulesPattern}" of entity "${entity.entityClass}" field "${field.fieldName}" gives no two test values the filters tell apart.`,
+            );
+          }
+          testValues.set(field, drawn as TestValue[]);
+        }
+
+        for (const field of sampleFields) {
+          const values = testValues.get(field)!;
           const compare = compareTestValues(field);
           const [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
             TestValue | undefined,
@@ -738,6 +730,16 @@ ${classProperties
             sbTestDefaultValue: javaValue(field, sample),
             sbTestUpdatedValue: javaValue(field, updated),
             sbTestSmallerValue: smaller === undefined ? undefined : javaValue(field, smaller),
+          });
+        }
+
+        // The blobs give no value as a sample: the fake data of a blob is a file.
+        for (const field of entity.fields.filter(field => isContentTypeField(field) || field.blobContentTypeText)) {
+          const [sample, updated] = isContentTypeField(field) ? ['image/jpg', 'image/png'] : ['AAAAAAAAAA', 'BBBBBBBBBB'];
+          mutateData(field, {
+            __override__: false,
+            sbTestDefaultValue: javaValue(field, sample),
+            sbTestUpdatedValue: javaValue(field, updated),
           });
         }
       },
