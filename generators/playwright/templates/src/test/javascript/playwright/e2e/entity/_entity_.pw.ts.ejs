@@ -315,7 +315,7 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
 
     <% if (skipCreateTest) { %>// Reason: <%- reason %><% } %>
     test<%- skipCreateTest %>('should create an instance of <%- entityNameCapitalized %>', async ({ page<%- createTestUsesFixture ? ', jhi' : '' %> }) => {
-  <%_ for (const field of fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly)) { _%>
+  <%_ for (const field of createTestFields) { _%>
     <%_ const { fieldName, fieldIsEnum } = field;
         let fieldValue = e2eFieldsFakeData[field.fieldName];
         if (fieldValue === undefined) {
