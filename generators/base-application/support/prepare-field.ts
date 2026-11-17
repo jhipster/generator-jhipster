@@ -145,20 +145,23 @@ function generateFakeDataForField(
 ) {
   let originalData: string | number | boolean | Date | undefined;
   let data: string | number | boolean | Date | undefined;
-  for (const prop of [
-    'fieldValidateRulesMax',
-    'fieldValidateRulesMin',
-    'fieldValidateRulesMaxlength',
-    'fieldValidateRulesMinlength',
-  ] as const) {
-    if (prop in field && typeof field[prop] === 'string') {
-      try {
-        field[prop] = Number.parseInt(field[prop], 10);
-      } catch {
-        throw new Error(`Error parsing ${prop} for field ${field.fieldName}`);
-      }
+  const parseRule = (
+    prop: 'fieldValidateRulesMax' | 'fieldValidateRulesMin' | 'fieldValidateRulesMaxlength' | 'fieldValidateRulesMinlength',
+  ) => {
+    const value = field[prop];
+    if (value === undefined || value === null) {
+      return undefined;
     }
-  }
+    const parsed = Number.parseFloat(`${value}`);
+    if (Number.isNaN(parsed)) {
+      throw new Error(`Error parsing ${prop} for field ${field.fieldName}`);
+    }
+    return parsed;
+  };
+  const max = parseRule('fieldValidateRulesMax');
+  const min = parseRule('fieldValidateRulesMin');
+  const maxlength = parseRule('fieldValidateRulesMaxlength');
+  const minlength = parseRule('fieldValidateRulesMinlength') ?? 0;
 
   if (field.fakerTemplate) {
     originalData = faker.helpers.fake(field.fakerTemplate);
@@ -193,14 +196,14 @@ function generateFakeDataForField(
     // eslint-disable-next-line no-template-curly-in-string
   } else if ([FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
     data = faker.number.float({
-      max: field.fieldValidateRulesMax ?? 32767,
-      min: field.fieldValidateRulesMin ?? 0,
+      max: max ?? 32767,
+      min: min ?? 0,
       multipleOf: 0.01,
     });
   } else if (([INTEGER, LONG, DURATION] as string[]).includes(field.fieldType)) {
     data = faker.number.int({
-      max: field.fieldValidateRulesMax ?? 32767,
-      min: field.fieldValidateRulesMin ?? 0,
+      max: max ?? 32767,
+      min: min ?? 0,
     });
   } else if (([INSTANT, ZONED_DATE_TIME, LOCAL_DATE, LOCAL_TIME] as string[]).includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
@@ -244,11 +247,9 @@ function generateFakeDataForField(
 
   // Validation rules
   if (data !== undefined && field.fieldValidate && field.fieldValidateRules) {
-    const { fieldValidateRulesMinlength = 0, fieldValidateRulesMaxlength } = field;
     // manage String max length
-    if (field.fieldValidateRules.includes(MAXLENGTH) && fieldValidateRulesMaxlength !== undefined) {
+    if (field.fieldValidateRules.includes(MAXLENGTH) && maxlength !== undefined) {
       if (typeof data === 'string') {
-        const maxlength = field.fieldValidateRulesMaxlength;
         data = data.slice(0, maxlength);
       } else {
         this.log.error(`Error at field ${field.fieldName}: maxLength validation rule is only supported for string fields.`);
@@ -256,9 +257,9 @@ function generateFakeDataForField(
     }
 
     // manage String min length
-    if (field.fieldValidateRules.includes(MINLENGTH) && fieldValidateRulesMinlength !== undefined) {
+    if (field.fieldValidateRules.includes(MINLENGTH)) {
       if (typeof data === 'string') {
-        data = data.length > fieldValidateRulesMinlength ? data : data + 'X'.repeat(fieldValidateRulesMinlength - data.length);
+        data = data.length > minlength ? data : data + 'X'.repeat(minlength - data.length);
       } else {
         this.log.error(`Error at field ${field.fieldName}: minLength validation rule is only supported for string fields.`);
       }
