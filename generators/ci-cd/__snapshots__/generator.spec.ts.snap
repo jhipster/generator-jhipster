@@ -140,6 +140,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultPackaging": "jar",
   "defaultPackagingAny": true,
   "defaultPackagingJar": true,

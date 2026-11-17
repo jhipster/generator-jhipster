@@ -82,6 +82,12 @@ describe(`generator - ${generator}`, () => {
         expect(otherSides('Author')).toEqual(['book']);
         expect(otherSides('Editor')).toEqual([]);
       });
+
+      it('should give the entities and the user the id type of the database', () => {
+        expect((runResult.application as any).defaultIdType).toBe('String');
+        expect((runResult.entities!.Author as any).primaryKey.type).toBe('String');
+        expect((runResult.application as any).user.primaryKey.type).toBe('String');
+      });
     });
 
     describe('in a graph database', () => {

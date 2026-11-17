@@ -48,6 +48,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultUserPassword": "user",
   "defaultUserRoles": Any<Array>,
   "defaultUserUsername": "user",

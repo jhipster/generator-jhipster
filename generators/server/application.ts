@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, finalizeDefault } from '../../lib/utils/object.ts';
+import { getDatabaseTypeData } from '../base-application/generators/database-bootstrap/support/index.ts';
 
 import type { Application as ServerApplication } from './types.ts';
 
@@ -63,4 +64,6 @@ export const mutateApplication = {
   // GitHub Codespaces
   corsAllowedOriginPatterns: () => ['https://*.githubpreview.dev'],
   relationshipsHaveBackReference: ({ databaseType }) => databaseType !== 'neo4j' && databaseType !== 'no',
+  // The type of the ids of the database, unless configured.
+  defaultIdType: data => (data as { pkType?: string }).pkType ?? getDatabaseTypeData(data.databaseType!).defaultPrimaryKeyType,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<ServerApplication>, ServerAddedApplicationProperties>;

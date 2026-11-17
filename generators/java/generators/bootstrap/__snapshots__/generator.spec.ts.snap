@@ -74,6 +74,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultPackaging": "jar",
   "defaultPackagingAny": true,
   "defaultPackagingJar": true,

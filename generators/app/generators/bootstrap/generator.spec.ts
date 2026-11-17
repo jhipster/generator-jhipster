@@ -128,8 +128,10 @@ describe(`generator - ${generator}`, () => {
       expect(runResult.entities!.Author).toMatchObject({ searchEngine: 'elasticsearch', searchEngineAny: true });
     });
 
-    it('should give the entities the id of the database', () => {
-      expect((runResult.entities!.Author as any).primaryKey.type).toBe('String');
+    it('should give the entities and the user the default id type', () => {
+      expect((runResult.application as any).defaultIdType).toBe('Long');
+      expect((runResult.entities!.Author as any).primaryKey.type).toBe('Long');
+      expect((runResult.application as any).user.primaryKey.type).toBe('Long');
     });
   });
 

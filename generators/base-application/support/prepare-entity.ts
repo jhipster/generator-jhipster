@@ -33,7 +33,7 @@ import { getTypescriptKeyType } from '../../client/support/index.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import { mutateEntity } from '../entity.ts';
-import { getDatabaseTypeData, hibernateSnakeCase } from '../generators/database-bootstrap/support/index.ts';
+import { hibernateSnakeCase } from '../generators/database-bootstrap/support/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
@@ -322,9 +322,9 @@ export function prepareEntityPrimaryKeyForTemplates(
       primaryKeyType = `${(entityWithConfig as EntityAll).entityClass}Id`;
     } else {
       const idField = idFields[0];
-      // Allow ids type to be empty and fallback to default type for the database.
+      // Allow ids type to be empty and fallback to the default id type of the application.
       if (!idField.fieldType) {
-        idField.fieldType = application?.pkType ?? getDatabaseTypeData(application?.databaseType).defaultPrimaryKeyType;
+        idField.fieldType = application?.defaultIdType ?? CommonDBTypes.LONG;
       }
       primaryKeyName = idField.fieldName;
       primaryKeyType = idField.fieldType;

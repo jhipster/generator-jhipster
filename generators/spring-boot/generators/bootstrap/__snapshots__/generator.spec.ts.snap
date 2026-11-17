@@ -74,6 +74,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultPackaging": "jar",
   "defaultPackagingAny": true,
   "defaultPackagingJar": true,
