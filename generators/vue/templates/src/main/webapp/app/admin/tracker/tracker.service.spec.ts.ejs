@@ -16,78 +16,91 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
-import { type Component, type Ref, ref } from 'vue';
-import { type RouteLocationNormalizedLoaded, type Router, createMemoryHistory, createRouter } from 'vue-router';
+import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { type Component, type Ref, nextTick, ref } from 'vue';
+import { type Router, createMemoryHistory, createRouter } from 'vue-router';
 
-import { type RxStomp } from '@stomp/rx-stomp';
+import { RxStomp, type RxStompConfig, RxStompState } from '@stomp/rx-stomp';
 import { shallowMount } from '@vue/test-utils';
-import { Subject } from 'rxjs';
+import { Subject, of } from 'rxjs';
+import SockJS from 'sockjs-client';
 
+<%_ if (authenticationTypeJwt) { _%>
+import { clearAuthenticationToken, storeAuthenticationToken } from '@/account/authentication-token';
+<%_ } _%>
 import { currentAccountKey } from '@/config/injection-keys';
+<%_ if (authenticationUsesCsrf) { _%>
+import { CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN_HEADER_NAME } from '@/shared/jhipster/constants';
+<%_ } _%>
 
 import type TrackerService from './tracker.service';
-import { useTrackerService } from './tracker.service';
+import { type TrackerActivity, useTrackerService } from './tracker.service';
+
+vi.mock('sockjs-client', () => ({ default: vi.fn() }));
 
 describe('Tracker Service', () => {
   let trackerService: TrackerService;
-  let TrackerApp: Component;
   let authenticated: Ref<boolean>;
 
   let mockStomp: { publish: Mock; watch: Mock; configure: Mock; activate: Mock; deactivate: Mock; connectionState$: Subject<number> };
   let router: Router;
 
-  beforeEach(() => {
-    router = createRouter({ history: createMemoryHistory(), routes: [] });
-    vi.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/' } as RouteLocationNormalizedLoaded);
-    router.afterEach = vi.fn();
-    authenticated = ref(false);
+  const mountTracker = (options: { stomp?: RxStomp } = { stomp: mockStomp as unknown as RxStomp }) => {
+    const TrackerApp: Component = {
+      name: 'TrackerApp',
+      render: () => null,
+      setup() {
+        trackerService = useTrackerService(options);
+      },
+    };
+    return shallowMount(TrackerApp, {
+      global: {
+        plugins: [router],
+        provide: {
+          [currentAccountKey as symbol]: { authenticated },
+        },
+      },
+    });
+  };
+  const configured = (): RxStompConfig =>
+    Object.assign({}, ...mockStomp.configure.mock.calls.map(([config]) => config as RxStompConfig)) as RxStompConfig;
 
-    const watch$ = new Subject<unknown>();
+  beforeEach(async () => {
+    vi.mocked(SockJS).mockClear();
+    router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/:path(.*)*', component: { render: () => null } }] });
+    await router.push('/');
+    authenticated = ref(false);
 
     mockStomp = {
       publish: vi.fn(),
-      watch: vi.fn().mockReturnValue(watch$),
+      watch: vi.fn(),
       configure: vi.fn(),
       activate: vi.fn(),
       deactivate: vi.fn(),
       connectionState$: new Subject<number>(),
     };
-
-    TrackerApp = {
-      name: 'TrackerApp',
-      render: () => null,
-      setup() {
-        trackerService = useTrackerService({ stomp: mockStomp as unknown as RxStomp });
-        (trackerService as unknown as { buildUrl: () => string }).buildUrl = () => '';
-      },
-    };
   });
 
-  it('Should subscribe router activity', async () => {
-    shallowMount(TrackerApp, {
-      global: {
-        plugins: [router],
-        provide: {
-          [currentAccountKey as symbol]: { authenticated },
-        },
-      },
-    });
-    expect(router.afterEach).toHaveBeenCalledOnce();
+  afterEach(() => {
+    vi.restoreAllMocks();
+    document.head.innerHTML = '';
+<%_ if (authenticationTypeJwt) { _%>
+    clearAuthenticationToken();
+<%_ } _%>
   });
 
-  it('Should call activate on authenticated', async () => {
+  it('Should send the page at every navigation', async () => {
+    mountTracker();
+
+    await router.push('/admin');
+
+    expect(mockStomp.publish).toHaveBeenLastCalledWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
+  });
+
+  it('Should call activate on authenticated', () => {
     // WHEN
     authenticated.value = true;
-    const wrapper = shallowMount(TrackerApp, {
-      global: {
-        plugins: [router],
-        provide: {
-          [currentAccountKey as symbol]: { authenticated },
-        },
-      },
-    });
-    await wrapper.vm.$nextTick();
+    mountTracker();
 
     // THEN
     expect(mockStomp.activate).toHaveBeenCalledOnce();
@@ -95,42 +108,113 @@ describe('Tracker Service', () => {
 
   it('Should send activity on connected', async () => {
     // GIVEN
-    vi.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/admin' } as RouteLocationNormalizedLoaded);
-    const wrapper = shallowMount(TrackerApp, {
-      global: {
-        plugins: [router],
-        provide: {
-          [currentAccountKey as symbol]: { authenticated },
-        },
-      },
-    });
+    await router.push('/admin');
+    mountTracker();
 
     // WHEN
-    mockStomp.connectionState$.next(1);
-    await wrapper.vm.$nextTick();
+    mockStomp.connectionState$.next(RxStompState.OPEN);
+    await nextTick();
 
     // THEN
     expect(mockStomp.publish).toHaveBeenCalledExactlyOnceWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
   });
 
+  it('Should follow the state of the connection', () => {
+    mountTracker();
+
+    for (const [state, status] of [
+      [RxStompState.CONNECTING, 'connecting'],
+      [RxStompState.OPEN, 'open'],
+      [RxStompState.CLOSING, 'closing'],
+      [RxStompState.CLOSED, 'closed'],
+    ] as const) {
+      mockStomp.connectionState$.next(state);
+      expect(trackerService.status.value).toBe(status);
+    }
+  });
+
   it('Should disconnect on logout', async () => {
     // GIVEN
     authenticated.value = true;
-    const wrapper = shallowMount(TrackerApp, {
-      global: {
-        plugins: [router],
-        provide: {
-          [currentAccountKey as symbol]: { authenticated },
-        },
-      },
-    });
-    await wrapper.vm.n;
+    mountTracker();
 
     // WHEN
     authenticated.value = false;
-    await wrapper.vm.$nextTick();
+    await nextTick();
 
     // THEN
     expect(mockStomp.deactivate).toHaveBeenCalledOnce();
+  });
+
+  it('Should log the debug messages of the connection', () => {
+    const log = vi.spyOn(console, 'log').mockReturnValue(undefined);
+    mountTracker();
+
+    configured().debug!('message');
+
+    expect(log).toHaveBeenCalledWith(expect.any(Date), 'message');
+  });
+
+  it('Should open the connection to the tracker', () => {
+    authenticated.value = true;
+    mountTracker();
+
+    configured().webSocketFactory!();
+
+    expect(SockJS).toHaveBeenCalledWith(`//${window.location.host}/websocket/tracker`);
+  });
+<%_ if (authenticationUsesCsrf) { _%>
+
+  it('Should send the CSRF token when connecting', () => {
+    document.cookie = `${CSRF_TOKEN_COOKIE_NAME}=token`;
+    // With no random bytes, the masked token is the base64url of 5 zero bytes followed by 'token'.
+    vi.spyOn(crypto, 'getRandomValues').mockImplementation(array => array);
+    authenticated.value = true;
+    mountTracker();
+
+    expect(configured().connectHeaders).toEqual({ [CSRF_TOKEN_HEADER_NAME]: 'AAAAAAB0b2tlbg' });
+  });
+<%_ } _%>
+
+  it('Should open the connection to the tracker under the base of the application', () => {
+    document.head.innerHTML = '<base href="/app/" />';
+    authenticated.value = true;
+    mountTracker();
+
+    configured().webSocketFactory!();
+
+    expect(SockJS).toHaveBeenCalledWith(`//${window.location.host}/app/websocket/tracker`);
+  });
+
+<%_ if (authenticationTypeJwt) { _%>
+  it('Should open the connection to the tracker with the authentication token', () => {
+    storeAuthenticationToken('token');
+    authenticated.value = true;
+    mountTracker();
+
+    configured().webSocketFactory!();
+
+    expect(SockJS).toHaveBeenCalledWith(`//${window.location.host}/websocket/tracker?access_token=token`);
+  });
+
+<%_ } _%>
+  it('Should give the activities of the tracker', () => {
+    const activity: TrackerActivity = { sessionId: '1', userLogin: 'user', ipAddress: '127.0.0.1', page: 'home', time: '2026-01-02' };
+    mockStomp.watch.mockReturnValue(of({ body: JSON.stringify(activity) }));
+    mountTracker();
+    const observer = vi.fn();
+
+    trackerService.subscribe(observer);
+
+    expect(mockStomp.watch).toHaveBeenCalledWith('/topic/tracker');
+    expect(observer).toHaveBeenCalledWith(activity);
+  });
+
+  it('Should create its own connection', () => {
+    // The debug messages of the connection it deactivates.
+    vi.spyOn(console, 'log').mockReturnValue(undefined);
+    mountTracker({});
+
+    expect(trackerService.stomp).toBeInstanceOf(RxStomp);
   });
 });
