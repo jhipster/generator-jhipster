@@ -614,150 +614,119 @@ ${classProperties
         }
       },
       prepareTestValues({ entity }) {
-        // The values of the resource integration test, two of each field, the default and the updated one.
-        const textFields = entity.fields.filter(field => field.fieldTypeString || field.blobContentTypeText);
-        const sampleTextFields = textFields.filter(field => field.fieldTypeString && !isContentTypeField(field));
-        // The fields of a pattern first, the other fields drawing after them from the seed.
-        const patternFields = sampleTextFields.filter(field => field.fieldValidateRulesPattern !== undefined);
-        const numberFields = entity.fields.filter(
-          field =>
-            !field.id &&
-            (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeFloat || field.fieldTypeDouble || field.fieldTypeBigDecimal),
-        );
-        const valueFields = entity.fields.filter(
-          field => !field.id && (field.fieldTypeUUID || field.fieldTypeBoolean || field.fieldIsEnum),
-        );
-        const timeFields = entity.fields.filter(
-          field =>
-            !field.id &&
-            (field.fieldTypeLocalDate ||
-              field.fieldTypeInstant ||
-              field.fieldTypeZonedDateTime ||
-              field.fieldTypeLocalTime ||
-              field.fieldTypeDuration),
-        );
-        const sampleFields = [
-          ...patternFields,
-          ...sampleTextFields.filter(field => field.fieldValidateRulesPattern === undefined),
-          ...numberFields,
-          ...valueFields,
-          ...timeFields,
+        type TestField = (typeof entity.fields)[number];
+        type TestValue = string | number | boolean;
+        const isNumber = (field: TestField) =>
+          field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeFloat || field.fieldTypeDouble || field.fieldTypeBigDecimal;
+        const isTime = (field: TestField) =>
+          field.fieldTypeLocalDate ||
+          field.fieldTypeInstant ||
+          field.fieldTypeZonedDateTime ||
+          field.fieldTypeLocalTime ||
+          field.fieldTypeDuration;
+        // The values of the resource integration test, two of each field, the default and the updated one, drawn as entity
+        // samples in this order: the texts of a pattern, the other texts, the numbers, the UUID, boolean and enum fields, the times.
+        const sampleGroups: ((field: TestField) => boolean | undefined)[] = [
+          field => field.fieldTypeString && field.fieldValidateRulesPattern !== undefined,
+          field => field.fieldTypeString,
+          isNumber,
+          field => field.fieldTypeUUID || field.fieldTypeBoolean || field.fieldIsEnum,
+          isTime,
         ];
+        const sampleGroup = (field: TestField) => sampleGroups.findIndex(inGroup => inGroup(field));
+        const sampleFields = entity.fields
+          .filter(field => !field.id && !isContentTypeField(field) && sampleGroup(field) !== -1)
+          .toSorted((a, b) => sampleGroup(a) - sampleGroup(b));
         const samples = generateEntitySamples(entity, {
           seed: 'resource-it',
           batches: sampleFields.map(field => ({ fields: [field], format: 'json-serializable', count: 2, distinct: true })),
         });
-        const getSamples = (field: (typeof sampleFields)[number]) =>
-          samples[sampleFields.indexOf(field)].map(sample => sample[field.fieldName]);
 
-        // The values written as Java code, with a smaller value than the default constant for the range filters of the test.
-        const setTestValues = (
-          field: (typeof entity.fields)[number],
-          sample: string | number | boolean,
-          updated: string | number | boolean,
-        ) =>
+        // The values next to the limits of the field, when the samples give no two values the test can tell apart.
+        const fixedValues = (field: TestField, sample?: TestValue): TestValue[] => {
+          const min = field.fieldValidationMin ? Number(field.fieldValidateRulesMin) : undefined;
+          const max = field.fieldValidationMax ? Number(field.fieldValidateRulesMax) : undefined;
+          const changelogDate = entity.changelogDateForRecent.toISOString();
+          if (isContentTypeField(field)) {
+            // The content types of the files of the test.
+            return ['image/jpg', 'image/png'];
+          }
+          if (field.fieldTypeString || field.blobContentTypeText) {
+            let length = 10;
+            if (field.fieldValidateRulesMinlength! > length) {
+              length = field.fieldValidateRulesMinlength!;
+            }
+            if (field.fieldValidateRulesMaxlength! < length) {
+              length = field.fieldValidateRulesMaxlength!;
+            }
+            return ['A'.repeat(length), 'B'.repeat(length)];
+          }
+          if (isNumber(field)) {
+            if (min !== undefined) return [min, min + 1];
+            return max === undefined ? [1, 2] : [max - 1, max];
+          }
+          if (field.fieldIsEnum) {
+            // An enum of a single value tests it twice.
+            return [sample ?? field.enumValues![0].name, sample ?? field.enumValues![0].name];
+          }
+          if (field.fieldTypeLocalDate) return ['1970-01-01', changelogDate.split('T')[0]];
+          if (field.fieldTypeLocalTime) return ['12:00:00', '23:59:59'];
+          if (field.fieldTypeDuration) return ['PT360M', 'PT720M'];
+          if (isTime(field)) return ['1970-01-01T00:00:00Z', changelogDate];
+          return [false, true];
+        };
+
+        // A float is written back as its shortest decimal, which the test reads as a double: a multiple of a quarter is the
+        // same in both. A date is written as its ISO 8601 text.
+        const testValue = (field: TestField, value: unknown): TestValue | undefined => {
+          if (value instanceof Date) return value.toISOString();
+          if (typeof value !== 'number') return value as TestValue | undefined;
+          if (field.fieldTypeFloat) return Math.round(value * 4) / 4;
+          return field.fieldTypeDouble || field.fieldTypeBigDecimal ? Number(value.toFixed(2)) : value;
+        };
+        // The filters of the test tell the values apart: neither text contains the other, and the numbers are within their limits.
+        const isTestable = (field: TestField, [sample, updated]: (TestValue | undefined)[]) => {
+          if (sample === undefined || updated === undefined || sample === updated) return false;
+          if (typeof sample === 'string' && typeof updated === 'string' && field.fieldTypeString) {
+            return !sample.includes(updated) && !updated.includes(sample);
+          }
+          const min = field.fieldValidationMin ? Number(field.fieldValidateRulesMin) : -Infinity;
+          const max = field.fieldValidationMax ? Number(field.fieldValidateRulesMax) : Infinity;
+          return !isNumber(field) || [sample, updated].every(value => (value as number) >= min && (value as number) <= max);
+        };
+        // The default value is the smaller one, the range filters of the test look for a value after and before it.
+        const durationMinutes = (duration: TestValue) => Number(/^PT(\d+)M$/.exec(duration as string)![1]);
+        const compareTestValues = (field: TestField): ((a: TestValue, b: TestValue) => number) | undefined => {
+          if (isNumber(field)) return (a, b) => (a as number) - (b as number);
+          if (field.fieldTypeDuration) return (a, b) => durationMinutes(a) - durationMinutes(b);
+          return isTime(field) ? (a, b) => (a as string).localeCompare(b as string) : undefined;
+        };
+
+        for (const field of entity.fields.filter(
+          field => sampleFields.includes(field) || isContentTypeField(field) || field.blobContentTypeText,
+        )) {
+          const drawn =
+            sampleFields.includes(field) ?
+              samples[sampleFields.indexOf(field)].map(sample => testValue(field, sample[field.fieldName]))
+            : [];
+          let values = drawn as TestValue[];
+          if (!isTestable(field, drawn)) {
+            if (field.fieldTypeString && field.fieldValidateRulesPattern !== undefined) {
+              this.log.warn(
+                `The pattern "${field.fieldValidateRulesPattern}" of entity "${entity.entityClass}" field "${field.fieldName}" gives no two different test values, generating default values for this field.`,
+              );
+            }
+            values = fixedValues(field, drawn[0]);
+          }
+          const compare = compareTestValues(field);
+          const [sample, updated] = compare ? values.toSorted(compare) : values;
+          // The values written as Java code, with a smaller value than the default constant for the range filters of the test.
           mutateData(field, {
             __override__: false,
             sbTestDefaultValue: javaValue(field, sample),
             sbTestUpdatedValue: javaValue(field, updated),
             sbTestSmallerValue: javaSmallerValue(field, `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}`),
           });
-
-        for (const field of textFields) {
-          let sampleTextLength = 10;
-          if (field.fieldValidateRulesMinlength! > sampleTextLength) {
-            sampleTextLength = field.fieldValidateRulesMinlength!;
-          }
-          if (field.fieldValidateRulesMaxlength! < sampleTextLength) {
-            sampleTextLength = field.fieldValidateRulesMaxlength!;
-          }
-          let sampleTextString = 'A'.repeat(sampleTextLength);
-          let updatedTextString = 'B'.repeat(sampleTextLength);
-          if (isContentTypeField(field)) {
-            // The content types of the files of the test.
-            sampleTextString = 'image/jpg';
-            updatedTextString = 'image/png';
-          } else if (sampleTextFields.includes(field)) {
-            const [sample, updated] = getSamples(field) as (string | undefined)[];
-            // The filters of the test tell the values apart by their content: neither value contains the other.
-            if (sample === undefined || updated === undefined || sample.includes(updated) || updated.includes(sample)) {
-              if (field.fieldValidateRulesPattern !== undefined) {
-                this.log.warn(
-                  `The pattern "${field.fieldValidateRulesPattern}" of entity "${entity.entityClass}" field "${field.fieldName}" gives no two different test values, generating default values for this field.`,
-                );
-              }
-            } else {
-              sampleTextString = sample;
-              updatedTextString = updated;
-            }
-          }
-          setTestValues(field, sampleTextString, updatedTextString);
-        }
-
-        for (const field of numberFields) {
-          const min = field.fieldValidationMin ? Number(field.fieldValidateRulesMin) : undefined;
-          const max = field.fieldValidationMax ? Number(field.fieldValidateRulesMax) : undefined;
-          // A float is written back as its shortest decimal, which the test reads as a double: a multiple of a quarter is the same in both.
-          const toTestNumber = (value: number) => {
-            if (field.fieldTypeFloat) {
-              return Math.round(value * 4) / 4;
-            }
-            return field.fieldTypeDouble || field.fieldTypeBigDecimal ? Number(value.toFixed(2)) : value;
-          };
-          let values = (getSamples(field) as (number | undefined)[]).map(value => (value === undefined ? undefined : toTestNumber(value)));
-          if (
-            values.some(value => value === undefined || (min !== undefined && value < min) || (max !== undefined && value > max)) ||
-            values[0] === values[1]
-          ) {
-            // The values next to the limits of the field, the minimum first.
-            values = [1, 2];
-            if (min !== undefined) {
-              values = [min, min + 1];
-            } else if (max !== undefined) {
-              values = [max - 1, max];
-            }
-          }
-          // The default value is the smaller one, the range filters of the test look for a value above and below it.
-          const [sample, updated] = (values as number[]).toSorted((a, b) => a - b);
-          setTestValues(field, sample, updated);
-        }
-
-        for (const field of valueFields) {
-          let [sample, updated] = getSamples(field) as (string | boolean | undefined)[];
-          if (field.fieldTypeBoolean && (sample === undefined || updated === undefined)) {
-            [sample, updated] = [false, true];
-          } else if (field.fieldIsEnum && updated === undefined) {
-            // An enum of a single value tests it twice.
-            sample ??= field.enumValues![0].name;
-            updated = sample;
-          }
-          setTestValues(field, sample!, updated!);
-        }
-
-        // A duration is written as its minutes, the other values as ISO 8601 texts, which sort by their text.
-        const durationMinutes = (duration: string) => Number(/^PT(\d+)M$/.exec(duration)![1]);
-        for (const field of timeFields) {
-          let values = (getSamples(field) as (string | Date | undefined)[]).map(value =>
-            value instanceof Date ? value.toISOString() : value,
-          );
-          if (values.some(value => value === undefined) || values[0] === values[1]) {
-            // The values from the epoch to the changelog date of the entity.
-            const changelogDate = entity.changelogDateForRecent.toISOString();
-            if (field.fieldTypeLocalDate) {
-              values = ['1970-01-01', changelogDate.split('T')[0]];
-            } else if (field.fieldTypeLocalTime) {
-              values = ['12:00:00', '23:59:59'];
-            } else if (field.fieldTypeDuration) {
-              values = ['PT360M', 'PT720M'];
-            } else {
-              values = ['1970-01-01T00:00:00Z', changelogDate];
-            }
-          }
-          // The default value is the earlier one, the range filters of the test look for a value after and before it.
-          const [sample, updated] = (values as string[]).toSorted((a, b) =>
-            field.fieldTypeDuration ? durationMinutes(a) - durationMinutes(b) : a.localeCompare(b),
-          );
-          setTestValues(field, sample, updated);
         }
       },
       prepareFilters({ application, entity }) {

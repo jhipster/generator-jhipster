@@ -18,6 +18,39 @@
  */
 import type { Field as JavaField } from '../types.ts';
 
+type JavaValueField = Pick<JavaField, 'fieldIsEnum' | 'javaFieldType'>;
+type JavaCode = (value: string | number | boolean) => string;
+
+/** The values of a Java type written as Java code, from the value a json-serializable sample gives. */
+const javaValues: Partial<Record<string, JavaCode>> = {
+  String: value => `"${String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`,
+  Integer: value => `${value}`,
+  Boolean: value => `${value}`,
+  Long: value => `${value}L`,
+  Float: value => `${value}F`,
+  Double: value => `${value}D`,
+  BigDecimal: value => `new BigDecimal("${value}")`,
+  UUID: value => `UUID.fromString("${value}")`,
+  LocalDate: value => `LocalDate.parse("${value}")`,
+  Instant: value => `Instant.parse("${value}")`,
+  ZonedDateTime: value => `ZonedDateTime.ofInstant(Instant.parse("${value}"), ZoneOffset.UTC)`,
+  LocalTime: value => `LocalTime.parse("${value}")`,
+  Duration: value => `Duration.parse("${value}")`,
+};
+
+/** A value smaller than a value of a Java type, written as Java code from the code of that value. */
+const javaSmallerValues: Partial<Record<string, (value: string) => string>> = {
+  Integer: value => `${value} - 1`,
+  Long: value => `${value} - 1L`,
+  Float: value => `${value} - 1F`,
+  Double: value => `${value} - 1D`,
+  BigDecimal: value => `${value}.subtract(BigDecimal.ONE)`,
+  LocalDate: value => `${value}.minusDays(1)`,
+  Instant: value => `${value}.minusSeconds(1)`,
+  ZonedDateTime: value => `${value}.minusSeconds(1)`,
+  Duration: value => `${value}.minusMinutes(1)`,
+};
+
 /**
  * A value of a field written as Java code, from the value a json-serializable sample gives: undefined for a type it does
  * not write, like a blob.
@@ -25,80 +58,15 @@ import type { Field as JavaField } from '../types.ts';
  * @example
  * javaValue(field, '2026-01-01'); // LocalDate.parse("2026-01-01") for a LocalDate field
  */
-export const javaValue = (field: JavaField, value: string | number | boolean): string | undefined => {
-  if (field.fieldIsEnum) {
-    return `${field.fieldType}.${value}`;
-  }
-  if (field.fieldTypeString || field.blobContentTypeText) {
-    return `"${String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
-  }
-  if (field.fieldTypeInteger || field.fieldTypeBoolean) {
-    return `${value}`;
-  }
-  if (field.fieldTypeLong) {
-    return `${value}L`;
-  }
-  if (field.fieldTypeFloat) {
-    return `${value}F`;
-  }
-  if (field.fieldTypeDouble) {
-    return `${value}D`;
-  }
-  if (field.fieldTypeBigDecimal) {
-    return `new BigDecimal("${value}")`;
-  }
-  if (field.fieldTypeUUID) {
-    return `UUID.fromString("${value}")`;
-  }
-  if (field.fieldTypeLocalDate) {
-    return `LocalDate.parse("${value}")`;
-  }
-  if (field.fieldTypeInstant) {
-    return `Instant.parse("${value}")`;
-  }
-  if (field.fieldTypeZonedDateTime) {
-    return `ZonedDateTime.ofInstant(Instant.parse("${value}"), ZoneOffset.UTC)`;
-  }
-  if (field.fieldTypeLocalTime) {
-    return `LocalTime.parse("${value}")`;
-  }
-  if (field.fieldTypeDuration) {
-    return `Duration.parse("${value}")`;
-  }
-  return undefined;
-};
+export const javaValue = ({ fieldIsEnum, javaFieldType }: JavaValueField, value: string | number | boolean): string | undefined =>
+  fieldIsEnum ? `${javaFieldType}.${value}` : javaValues[javaFieldType]?.(value);
 
 /**
  * A value smaller than a value of a field, written as Java code from the code of that value, like the constant that
- * holds it: undefined for a type without an order, like a text.
+ * holds it: undefined for a type without an order, like a text or an enum.
  *
  * @example
  * javaSmallerValue(field, 'DEFAULT_DAY'); // DEFAULT_DAY.minusDays(1) for a LocalDate field
  */
-export const javaSmallerValue = (field: JavaField, value: string): string | undefined => {
-  if (field.fieldTypeInteger) {
-    return `${value} - 1`;
-  }
-  if (field.fieldTypeLong) {
-    return `${value} - 1L`;
-  }
-  if (field.fieldTypeFloat) {
-    return `${value} - 1F`;
-  }
-  if (field.fieldTypeDouble) {
-    return `${value} - 1D`;
-  }
-  if (field.fieldTypeBigDecimal) {
-    return `${value}.subtract(BigDecimal.ONE)`;
-  }
-  if (field.fieldTypeLocalDate) {
-    return `${value}.minusDays(1)`;
-  }
-  if (field.fieldTypeInstant || field.fieldTypeZonedDateTime) {
-    return `${value}.minusSeconds(1)`;
-  }
-  if (field.fieldTypeDuration) {
-    return `${value}.minusMinutes(1)`;
-  }
-  return undefined;
-};
+export const javaSmallerValue = ({ fieldIsEnum, javaFieldType }: JavaValueField, value: string): string | undefined =>
+  fieldIsEnum ? undefined : javaSmallerValues[javaFieldType]?.(value);
