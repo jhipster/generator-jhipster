@@ -150,8 +150,8 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
     const response = entitiesRequest(page);
     await page.goto('/');
     await jhi.navbar.clickOn<%- adminEntity && !applicationTypeMicroservice ? 'Admin' : 'Entity' %>MenuItem('<%- entityPage %>');
-    // Chrome drops the response body once the page navigates, unlike the cypress proxy, so the table
-    // assertion is only made when the payload is still readable.
+    // Chrome drops the response body once the page navigates, so the table assertion is only made when
+    // the payload is still readable.
     const body = (await (await response).json().catch(() => undefined)) as unknown[] | undefined;
     if (Array.isArray(body)) {
       if (body.length === 0) {
@@ -232,8 +232,7 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
           { times: 1 },
         );
 
-        // Cypress waited on the stubbed request (cy.wait('@entitiesRequestInternal')); without it the test
-        // can act before the row is rendered.
+        // Wait for the stubbed request; without it the test can act before the row is rendered.
         const stubbedRequest = entitiesRequest(page);
         await page.goto(<%- entityInstance %>PageUrl);
         await stubbedRequest;
