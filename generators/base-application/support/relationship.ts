@@ -48,14 +48,18 @@ export const relationshipAddsBackReference = (relationshipType: string, database
  * Up to 9.4.0 the back reference of a relationship without `otherEntityRelationshipName` was named after the entity, `order`
  * for `Order{publisher} to Member`. Saves that name as the `backReferenceName` option of each such relationship of an
  * application written by such a version, so its fields and columns keep their names; the relationships added later get the
- * derived name. Two of them to the same entity stopped the generation, so they keep no name. Returns whether it saved any.
+ * derived name. Two of them to the same entity stopped the generation, so they keep no name. Only the relationships
+ * `generated` tells are saved, the ones the older version generated, not the ones added since. Returns whether it saved any.
  */
 export const saveLegacyBackReferenceNames = (
   entity: { name: string; databaseType?: string; relationships?: BaseApplicationRelationship[] },
   databaseType = entity.databaseType,
+  generated: (relationship: BaseApplicationRelationship) => boolean = () => true,
 ): boolean => {
+  const legacyName = lowerFirst(entity.name);
   const relationships = (entity.relationships ?? []).filter(
     relationship =>
+      generated(relationship) &&
       !relationship.otherEntityRelationshipName &&
       relationship.options?.backReferenceName === undefined &&
       // A built-in entity gets no back reference.
@@ -63,10 +67,15 @@ export const saveLegacyBackReferenceNames = (
       relationshipAddsBackReference(relationship.relationshipType, databaseType),
   );
   const toSave = relationships.filter(
-    relationship => relationships.filter(other => other.otherEntityName === relationship.otherEntityName).length === 1,
+    relationship =>
+      relationships.filter(other => other.otherEntityName === relationship.otherEntityName).length === 1 &&
+      // The name is already saved for another relationship to that entity.
+      !entity.relationships!.some(
+        other => other.otherEntityName === relationship.otherEntityName && other.options?.backReferenceName === legacyName,
+      ),
   );
   for (const relationship of toSave) {
-    relationship.options = { ...relationship.options, backReferenceName: lowerFirst(entity.name) };
+    relationship.options = { ...relationship.options, backReferenceName: legacyName };
   }
   return toSave.length > 0;
 };

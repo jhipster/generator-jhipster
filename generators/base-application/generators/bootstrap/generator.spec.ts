@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'expect-node';
-import { writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 
 import Generator from './generator.ts';
@@ -76,30 +76,46 @@ describe(`generator - ${generator}`, () => {
   });
 
   describe('with relationships written by an older version', () => {
+    const publisher = {
+      relationshipName: 'publisher',
+      otherEntityName: 'member',
+      relationshipType: 'one-to-one',
+      relationshipSide: 'left',
+    };
+    const owner = { relationshipName: 'owner', otherEntityName: 'member', relationshipType: 'many-to-one', relationshipSide: 'left' };
+    const recipient = {
+      relationshipName: 'recipient',
+      otherEntityName: 'member',
+      relationshipType: 'one-to-one',
+      relationshipSide: 'left',
+    };
     before(async () => {
       await helpers
         .runJHipster(generator)
         .withJHipsterConfig({ skipUserManagement: true }, [
+          // recipient is added in this run, like by a jdl import: it is not in the entity file on the disk.
           {
             name: 'Order',
             annotations: { changelogDate: '20200101000100' },
             fields: [],
-            relationships: [
-              { relationshipName: 'publisher', otherEntityName: 'member', relationshipType: 'one-to-one', relationshipSide: 'left' },
-              { relationshipName: 'owner', otherEntityName: 'member', relationshipType: 'many-to-one', relationshipSide: 'left' },
-            ],
+            relationships: [publisher, owner, recipient],
           } as any,
           { name: 'Member', annotations: { changelogDate: '20200101000200' }, fields: [] } as any,
         ])
-        .doInDir(cwd => writeFileSync(join(cwd, '.yo-rc.json'), JSON.stringify({ 'generator-jhipster': { jhipsterVersion: '9.4.0' } })))
+        .doInDir(cwd => {
+          writeFileSync(join(cwd, '.yo-rc.json'), JSON.stringify({ 'generator-jhipster': { jhipsterVersion: '9.4.0' } }));
+          mkdirSync(join(cwd, '.jhipster'), { recursive: true });
+          writeFileSync(join(cwd, '.jhipster/Order.json'), JSON.stringify({ name: 'Order', relationships: [publisher, owner] }));
+        })
         .withSkipWritingPriorities();
     });
 
-    it('should save the back reference name the older version derived', () => {
+    it('should save the back reference name the older version derived for the relationships it generated', () => {
       const { relationships } = result.fs.readJSON(join(result.cwd, '.jhipster/Order.json')) as { relationships: any[] };
       expect(relationships.map(({ relationshipName, options }) => ({ relationshipName, options }))).toEqual([
         { relationshipName: 'publisher', options: { backReferenceName: 'order' } },
         { relationshipName: 'owner', options: undefined },
+        { relationshipName: 'recipient', options: undefined },
       ]);
     });
   });

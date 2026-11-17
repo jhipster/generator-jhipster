@@ -115,6 +115,20 @@ describe('generator - server - support - relationship', () => {
       ]);
     });
 
+    it('should save no name already saved for another relationship to the same entity, or for one added since', () => {
+      const { order } = createEntities(['publisher', 'recipient', 'reviewer']);
+      order.relationships[0].options = { backReferenceName: 'order' };
+      order.relationships[2].otherEntityName = 'reviewer';
+
+      saveLegacyBackReferenceNames(order, 'sql', relationship => relationship.relationshipName !== 'reviewer');
+
+      expect(order.relationships.map((relationship: any) => relationship.options)).toEqual([
+        { backReferenceName: 'order' },
+        undefined,
+        undefined,
+      ]);
+    });
+
     it('should save no name for a one-to-one of an entity without SQL, which gets no back reference', () => {
       const { order } = createEntities(['publisher']);
 

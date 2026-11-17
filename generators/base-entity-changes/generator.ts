@@ -18,6 +18,7 @@
  */
 import { existsSync, readFileSync } from 'node:fs';
 
+import type { Control } from '../base/types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { withContentTypeFields } from '../base-application/internal/content-type-fields.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
@@ -100,7 +101,9 @@ export default abstract class BaseEntityChangesGenerator<
   ): TaskParamWithApplication<Application> {
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
-      const { application, control, entities } = firstArg as Tasks['DefaultTaskParam'];
+      const { application, entities } = firstArg as Tasks['DefaultTaskParam'];
+      // The control the bootstrap created, which the first argument of the tasks gets only later.
+      const control = this.getContextData<Control>('jhipster:control');
       this.#entityChanges ??= this.generateIncrementalChanges({
         application,
         entities,

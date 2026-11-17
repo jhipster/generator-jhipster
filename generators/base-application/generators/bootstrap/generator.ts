@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
+import { existsSync, readFileSync } from 'node:fs';
 
 import { passthrough } from '@yeoman/transform';
 import chalk from 'chalk';
@@ -167,14 +168,26 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           }
         }
         // Older versions named the back reference of a relationship without a name after the entity, kept for the existing fields and columns.
-        if (
-          control.isJhipsterVersionLessThan(DERIVED_BACK_REFERENCE_NAME_VERSION) &&
-          saveLegacyBackReferenceNames(
-            { name: entityName, relationships: entityConfig.relationships },
-            (entityConfig as { databaseType?: string }).databaseType ?? application.databaseType,
-          )
-        ) {
-          entityStorage.save();
+        if (control.isJhipsterVersionLessThan(DERIVED_BACK_REFERENCE_NAME_VERSION)) {
+          // The relationships of the entity file on the disk, the ones the older version generated: a jdl imported in this run
+          // writes its relationships in memory only.
+          const entityConfigPath = this.getEntityConfigPath(entityName);
+          const generatedRelationships: { relationshipName: string; otherEntityName: string }[] =
+            existsSync(entityConfigPath) ? (JSON.parse(readFileSync(entityConfigPath, 'utf-8')).relationships ?? []) : [];
+          if (
+            saveLegacyBackReferenceNames(
+              { name: entityName, relationships: entityConfig.relationships },
+              (entityConfig as { databaseType?: string }).databaseType ?? application.databaseType,
+              relationship =>
+                generatedRelationships.some(
+                  generated =>
+                    generated.relationshipName === relationship.relationshipName &&
+                    generated.otherEntityName === relationship.otherEntityName,
+                ),
+            )
+          ) {
+            entityStorage.save();
+          }
         }
         const annotations = entityConfig.annotations!;
         if (annotations.changelogDate && annotations.incrementalChangelogDate) {
