@@ -169,8 +169,19 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should filter a text by a longer text than its value, which it never contains', () => {
-      runResult.assertFileContent(resourceIT, '"label.contains=" + DEFAULT_LABEL + "x"');
-      runResult.assertFileContent(resourceIT, '"label.doesNotContain=" + DEFAULT_LABEL + "x"');
+      runResult.assertFileContent(resourceIT, 'defaultMeasureFiltering("label.contains", DEFAULT_LABEL, DEFAULT_LABEL + "x");');
+      runResult.assertFileContent(resourceIT, 'defaultMeasureFiltering("label.doesNotContain", DEFAULT_LABEL + "x", DEFAULT_LABEL);');
+    });
+
+    it('should send the values of a filter as request parameters, each value of the in filter in a parameter of its own', () => {
+      runResult.assertFileContent(resourceIT, 'defaultMeasureFiltering("label.equals", DEFAULT_LABEL, UPDATED_LABEL);');
+      runResult.assertFileContent(resourceIT, 'defaultMeasureShouldBeFound("label.in", DEFAULT_LABEL, UPDATED_LABEL);');
+      runResult.assertFileContent(resourceIT, 'defaultMeasureShouldNotBeFound("label.in", UPDATED_LABEL);');
+      runResult.assertFileContent(resourceIT, 'get(ENTITY_API_URL + "?sort=id,desc").param(filter, filterValues(values))');
+      runResult.assertFileContent(resourceIT, 'get(ENTITY_API_URL + "/count?sort=id,desc").param(filter, filterValues(values))');
+      runResult.assertFileContent(resourceIT, 'return Stream.of(values).map(String::valueOf).toArray(String[]::new);');
+      runResult.assertFileContent(resourceIT, 'import java.util.stream.Stream;');
+      runResult.assertNoFileContent(resourceIT, '+ filter');
     });
 
     it('should write a big decimal from its decimal text', () => {
@@ -233,11 +244,39 @@ describe(`generator - ${generator}`, () => {
         'SMALLER_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-28T20:55:37.637Z"), ZoneOffset.UTC);',
       );
       runResult.assertFileContent(resourceIT, 'SMALLER_LASTING = Duration.parse("PT17M");');
-      runResult.assertFileContent(resourceIT, '"day.greaterThanOrEqual=" + UPDATED_DAY');
+      runResult.assertFileContent(resourceIT, 'defaultMeasureFiltering("day.greaterThanOrEqual", DEFAULT_DAY, UPDATED_DAY);');
     });
 
     it('should compare a number field above its default value with its updated value', () => {
-      runResult.assertFileContent(resourceIT, '"count.greaterThanOrEqual=" + UPDATED_COUNT');
+      runResult.assertFileContent(resourceIT, 'defaultMeasureFiltering("count.greaterThanOrEqual", DEFAULT_COUNT, UPDATED_COUNT);');
+    });
+  });
+
+  describe('with reactive and a filtered text field', () => {
+    const resourceIT = `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/PlaceResourceIT.java`;
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true, reactive: true }, [
+        {
+          name: 'Place',
+          changelogDate: '20220129025419',
+          service: 'serviceClass',
+          jpaMetamodelFiltering: true,
+          fields: [{ fieldName: 'country', fieldType: 'String' }],
+        },
+      ]);
+    });
+
+    it('should send the values of a filter as URI variables, encoded as a whole', () => {
+      runResult.assertFileContent(resourceIT, 'defaultPlaceShouldBeFound("country.in", DEFAULT_COUNTRY, UPDATED_COUNTRY);');
+      runResult.assertFileContent(resourceIT, 'uri(uriBuilder -> filterUri(uriBuilder, ENTITY_API_URL, filter, values))');
+      runResult.assertFileContent(resourceIT, 'uri(uriBuilder -> filterUri(uriBuilder, ENTITY_API_URL + "/count", filter, values))');
+      runResult.assertFileContent(resourceIT, '.queryParam("sort", "id,desc")');
+      runResult.assertFileContent(resourceIT, '.queryParam(filter, Collections.nCopies(values.length, "{value}"))');
+      runResult.assertFileContent(resourceIT, '.build(values);');
+      runResult.assertFileContent(resourceIT, 'import java.net.URI;');
+      runResult.assertFileContent(resourceIT, 'import java.util.Collections;');
+      runResult.assertFileContent(resourceIT, 'import org.springframework.web.util.UriBuilder;');
+      runResult.assertNoFileContent(resourceIT, '+ filter');
     });
   });
 
