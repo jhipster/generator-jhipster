@@ -166,7 +166,7 @@ describe('Shared utilities', () => {
       TestBed.runInInjectionContext(() => {
         const pipe = new FindLanguageFromKeyPipe();
 
-        expect(pipe.transform('en')).toBe('English');
+        expect(pipe.transform('<%- nativeLanguageDefinition.languageTag %>')).toBe('<%- nativeLanguageDefinition.displayName %>');
       });
     });
   });
