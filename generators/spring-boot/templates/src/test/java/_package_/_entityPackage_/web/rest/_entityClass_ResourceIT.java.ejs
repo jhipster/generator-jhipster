@@ -210,9 +210,6 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering && fieldsToTest.some(field => field.filterableField && field.fieldValidate && field.fieldValidationMax && (field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime))) { _%>
-import java.time.temporal.ChronoUnit;
-<%_ } _%>
 <%_ if (anyFieldIsLocalTime) { _%>
 import java.time.LocalTime;
 <%_ } _%>
@@ -293,125 +290,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
       const smallerValueName = `SMALLER_${field.fieldNameUnderscored.toUpperCase()}`;
       const needsSmallerValueName = jpaMetamodelFiltering && field.filterableField
         && (field.fieldTypeNumeric || field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime);
-
-      let defaultValue = 1;
-      let updatedValue = 2;
-
-      if (field.fieldValidate === true) {
-        if (field.fieldValidationMax) {
-          defaultValue = field.fieldValidateRulesMax;
-          updatedValue = Number.parseInt(field.fieldValidateRulesMax) - 1;
-        }
-        if (field.fieldValidationMin) {
-          defaultValue = field.fieldValidateRulesMin;
-          updatedValue = Number.parseInt(field.fieldValidateRulesMin) + 1;
-        }
-        if (field.fieldValidationMinBytes) {
-          defaultValue = field.fieldValidateRulesMinbytes;
-          updatedValue = field.fieldValidateRulesMinbytes;
-        }
-        if (field.fieldValidationMaxBytes) {
-          updatedValue = field.fieldValidateRulesMaxbytes;
-        }
-      }
-
-      const { fieldType } = field;
-      const isEnum = field.fieldIsEnum;
-      let enumValue1;
-      let enumValue2;
-      if (isEnum) {
-        const { enumValues } = field;
-        enumValue1 = enumValues[0];
-        if (enumValues.length > 1) {
-          enumValue2 = enumValues[1];
-        } else {
-          enumValue2 = enumValue1;
-        }
-      }
   _%>
-  <%_ if (field.fieldTypeString || field.blobContentTypeText) { _%>
-
-    private static final String <%- defaultValueName %> = "<%- field.sbTestSampleText %>";
-    private static final String <%- updatedValueName %> = "<%- field.sbTestUpdatedText %>";
-  <%_ } else if (field.fieldTypeInteger) { _%>
-
-    private static final Integer <%- defaultValueName %> = <%- defaultValue %>;
-    private static final Integer <%- updatedValueName %> = <%- updatedValue %>;
-    <%_ if (needsSmallerValueName) { _%>
-    private static final Integer <%- smallerValueName %> = <%- defaultValue %> - 1;
-    <%_ } _%>
-  <%_ } else if (field.fieldTypeLong) { _%>
-
-    private static final Long <%- defaultValueName %> = <%- defaultValue %>L;
-    private static final Long <%- updatedValueName %> = <%- updatedValue %>L;
-    <%_ if (needsSmallerValueName) { _%>
-    private static final Long <%- smallerValueName %> = <%- defaultValue %>L - 1L;
-    <%_ } _%>
-  <%_ } else if (field.fieldTypeFloat) { _%>
-
-    private static final <%- fieldType %> <%- defaultValueName %> = <%- defaultValue %>F;
-    private static final <%- fieldType %> <%- updatedValueName %> = <%- updatedValue %>F;
-    <%_ if (needsSmallerValueName) { _%>
-    private static final <%- fieldType %> <%- smallerValueName %> = <%- defaultValue %>F - 1F;
-    <%_ } _%>
-  <%_ } else if (field.fieldTypeDouble) { _%>
-
-    private static final <%- fieldType %> <%- defaultValueName %> = <%- defaultValue %>D;
-    private static final <%- fieldType %> <%- updatedValueName %> = <%- updatedValue %>D;
-    <%_ if (needsSmallerValueName) { _%>
-    private static final <%- fieldType %> <%- smallerValueName %> = <%- defaultValue %>D - 1D;
-    <%_ } _%>
-  <%_ } else if (field.fieldTypeBigDecimal) { _%>
-
-    private static final BigDecimal <%- defaultValueName %> = new BigDecimal(<%- defaultValue %>);
-    private static final BigDecimal <%- updatedValueName %> = new BigDecimal(<%- updatedValue %>);
-    <%_ if (needsSmallerValueName) { _%>
-    private static final BigDecimal <%- smallerValueName %> = new BigDecimal(<%- defaultValue %> - 1);
-    <%_ } _%>
-  <%_ } else if (field.fieldTypeUUID) { _%>
-
-    private static final UUID <%- defaultValueName %> = UUID.randomUUID();
-    private static final UUID <%- updatedValueName %> = UUID.randomUUID();
-  <%_ } else if (field.fieldTypeLocalDate) { _%>
-
-    private static final LocalDate <%- defaultValueName %> = LocalDate.ofEpochDay(0L);
-    private static final LocalDate <%- updatedValueName %> = LocalDate.parse("<%- new Date(creationTimestamp).toISOString().split('T')[0] %>");
-    <%_ if (needsSmallerValueName) { _%>
-    private static final LocalDate <%- smallerValueName %> = LocalDate.ofEpochDay(-1L);
-    <%_ } _%>
-  <%_ } else if (field.fieldTypeInstant) { _%>
-
-    private static final Instant <%- defaultValueName %> = Instant.ofEpochMilli(0L);
-    private static final Instant <%- updatedValueName %> = Instant.ofEpochMilli(<%- creationTimestamp %>L);
-    <%_ if (needsSmallerValueName) { _%>
-    private static final Instant <%- smallerValueName %> = Instant.ofEpochMilli(-1L);
-    <%_ } _%>
-  <%_ } else if (field.fieldTypeZonedDateTime) { _%>
-
-    private static final ZonedDateTime <%- defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime <%- updatedValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(<%- creationTimestamp %>L), ZoneOffset.UTC);
-    <%_ if (needsSmallerValueName) { _%>
-    private static final ZonedDateTime <%- smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
-    <%_ } _%>
-  <%_ } else if (field.fieldTypeLocalTime) { _%>
-
-    private static final LocalTime <%- defaultValueName %> = LocalTime.NOON;
-    private static final LocalTime <%- updatedValueName %> = LocalTime.MAX.withNano(0);
-    <%_ if (needsSmallerValueName) { _%>
-    private static final LocalTime <%- smallerValueName %> = LocalTime.MIN;
-    <%_ } _%>
-  <%_ } else if (field.fieldTypeDuration) { _%>
-
-    private static final Duration <%- defaultValueName %> = Duration.ofHours(6);
-    private static final Duration <%- updatedValueName %> = Duration.ofHours(12);
-    <%_ if (needsSmallerValueName) { _%>
-    private static final Duration <%- smallerValueName %> = Duration.ofHours(5);
-    <%_ } _%>
-  <%_ } else if (field.fieldTypeBoolean) { _%>
-
-    private static final Boolean <%- defaultValueName %> = false;
-    private static final Boolean <%- updatedValueName %> = true;
-  <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
 
     <%_ if (databaseTypeCassandra) { _%>
     private static final ByteBuffer <%- defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "0"));
@@ -420,10 +300,13 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     private static final byte[] <%- defaultValueName %> = TestUtil.createByteArray(1, "0");
     private static final byte[] <%- updatedValueName %> = TestUtil.createByteArray(1, "1");
     <%_ } _%>
-  <%_ } else if (isEnum) { _%>
+  <%_ } else if (field.sbTestDefaultValue !== undefined) { _%>
 
-    private static final <%- fieldType %> <%- defaultValueName %> = <%- fieldType %>.<%- enumValue1.name %>;
-    private static final <%- fieldType %> <%- updatedValueName %> = <%- fieldType %>.<%- enumValue2.name %>;
+    private static final <%- field.javaFieldType %> <%- defaultValueName %> = <%- field.sbTestDefaultValue %>;
+    private static final <%- field.javaFieldType %> <%- updatedValueName %> = <%- field.sbTestUpdatedValue %>;
+    <%_ if (needsSmallerValueName) { _%>
+    private static final <%- field.javaFieldType %> <%- smallerValueName %> = <%- field.sbTestSmallerValue %>;
+    <%_ } _%>
   <%_ } _%>
 <%_ } _%>
 
@@ -1304,18 +1187,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ // the range criteria _%>
     <%_ if (searchBy.filterableField && (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime)) { _%>
       <%_ const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
-          let biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
+          // The updated value is the bigger one.
+          const biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
-          if (searchBy.fieldValidate && searchBy.fieldValidationMax) {
-            // if maximum is specified the updated variable is smaller than the default one!
-            if (searchBy.fieldTypeBigDecimal) {
-              biggerValue = `(${defaultValue}.add(BigDecimal.ONE))`;
-            } else if (searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) {
-              biggerValue = `(${defaultValue}.plus(1, ChronoUnit.DAYS))`;
-            } else {
-              biggerValue = `(${defaultValue} + 1)`;
-            }
-          }
       _%>
 
     @Test<%- transactionalAnnotation %>

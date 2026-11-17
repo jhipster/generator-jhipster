@@ -103,6 +103,138 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with text and number fields', () => {
+    const resourceIT = `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/MeasureResourceIT.java`;
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'Measure',
+          changelogDate: '20220129025419',
+          service: 'serviceClass',
+          jpaMetamodelFiltering: true,
+          fields: [
+            { fieldName: 'label', fieldType: 'String', fieldValidateRules: ['maxlength'], fieldValidateRulesMaxlength: 8 },
+            {
+              fieldName: 'count',
+              fieldType: 'Integer',
+              fieldValidateRules: ['min', 'max'],
+              fieldValidateRulesMin: 10,
+              fieldValidateRulesMax: 20,
+            },
+            { fieldName: 'total', fieldType: 'Long' },
+            { fieldName: 'ratio', fieldType: 'Float' },
+            { fieldName: 'weight', fieldType: 'Double' },
+            { fieldName: 'price', fieldType: 'BigDecimal' },
+            {
+              fieldName: 'level',
+              fieldType: 'Integer',
+              fieldValidateRules: ['min', 'max'],
+              fieldValidateRulesMin: 5,
+              fieldValidateRulesMax: 5,
+            },
+            { fieldName: 'code', fieldType: 'String', fieldValidateRules: ['pattern'], fieldValidateRulesPattern: '^a{1,2}$' },
+            { fieldName: 'reference', fieldType: 'UUID' },
+            { fieldName: 'active', fieldType: 'Boolean' },
+            { fieldName: 'unit', fieldType: 'Unit', fieldValues: 'GRAM,KILO,TON' },
+            { fieldName: 'kind', fieldType: 'Kind', fieldValues: 'ONLY' },
+            { fieldName: 'day', fieldType: 'LocalDate' },
+            { fieldName: 'moment', fieldType: 'Instant' },
+            { fieldName: 'zoned', fieldType: 'ZonedDateTime' },
+            { fieldName: 'hour', fieldType: 'LocalTime' },
+            { fieldName: 'lasting', fieldType: 'Duration' },
+          ],
+        },
+      ]);
+    });
+
+    it('should test the resource with two values of each field from the entity samples', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_LABEL = "conseque";');
+      runResult.assertFileContent(resourceIT, 'UPDATED_LABEL = "glaring ";');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_TOTAL = 12735L;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_TOTAL = 13727L;');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_WEIGHT = 17519.57D;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_WEIGHT = 20333.16D;');
+    });
+
+    it('should keep the values of a number field within its limits, the smaller one, the default one, then the updated one', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_COUNT = 18;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_COUNT = 20;');
+      runResult.assertFileContent(resourceIT, 'SMALLER_COUNT = 15;');
+    });
+
+    it('should test a float with multiples of a quarter', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_RATIO = 16995.25F;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_RATIO = 29620.25F;');
+    });
+
+    it('should write a big decimal from its decimal text', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_PRICE = new BigDecimal("21452.59");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_PRICE = new BigDecimal("25746.85");');
+      runResult.assertFileContent(resourceIT, 'SMALLER_PRICE = new BigDecimal("16714.89");');
+    });
+
+    it('should test a number field without three values with the values next to its minimum', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_LEVEL = 5;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_LEVEL = 6;');
+      runResult.assertFileContent(resourceIT, 'SMALLER_LEVEL = 4;');
+    });
+
+    it('should test a text field whose values contain one another with the default values', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_CODE = "AAAAAAAAAA";');
+      runResult.assertFileContent(resourceIT, 'UPDATED_CODE = "BBBBBBBBBB";');
+    });
+
+    it('should test a UUID with two fixed values from the entity samples', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_REFERENCE = UUID.fromString("19463147-0da6-40aa-b757-a798c177658c");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_REFERENCE = UUID.fromString("d32b999f-e17a-4181-a1a9-2c6fb171a155");');
+    });
+
+    it('should test a boolean and an enum with two values from the entity samples', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_ACTIVE = false;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_ACTIVE = true;');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_UNIT = Unit.KILO;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_UNIT = Unit.GRAM;');
+    });
+
+    it('should test an enum of a single value with it twice', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_KIND = Kind.ONLY;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_KIND = Kind.ONLY;');
+    });
+
+    it('should test the dates, times and durations with two values from the entity samples, the default one the earlier', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_DAY = LocalDate.parse("2022-01-28");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_DAY = LocalDate.parse("2022-01-29");');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_MOMENT = Instant.parse("2022-01-28T20:37:25.633Z");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_MOMENT = Instant.parse("2022-01-29T01:45:40.197Z");');
+      runResult.assertFileContent(
+        resourceIT,
+        'DEFAULT_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-29T01:21:37.741Z"), ZoneOffset.UTC);',
+      );
+      runResult.assertFileContent(
+        resourceIT,
+        'UPDATED_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-29T02:41:46.815Z"), ZoneOffset.UTC);',
+      );
+      runResult.assertFileContent(resourceIT, 'DEFAULT_HOUR = LocalTime.parse("23:18:00");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_HOUR = LocalTime.parse("23:39:00");');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_LASTING = Duration.parse("PT18M");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_LASTING = Duration.parse("PT34M");');
+    });
+
+    it('should test the range filters of a date and a duration with a third value, before the default one', () => {
+      runResult.assertFileContent(resourceIT, 'SMALLER_DAY = LocalDate.parse("2022-01-27");');
+      runResult.assertFileContent(
+        resourceIT,
+        'SMALLER_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-28T20:55:37.637Z"), ZoneOffset.UTC);',
+      );
+      runResult.assertFileContent(resourceIT, 'SMALLER_LASTING = Duration.parse("PT17M");');
+      runResult.assertFileContent(resourceIT, '"day.greaterThanOrEqual=" + UPDATED_DAY');
+    });
+
+    it('should compare a number field above its default value with its updated value', () => {
+      runResult.assertFileContent(resourceIT, '"count.greaterThanOrEqual=" + UPDATED_COUNT');
+    });
+  });
+
   describe('with graalvm support and an existing cache provider', () => {
     before(async () => {
       await helpers
