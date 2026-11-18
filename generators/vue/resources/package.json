@@ -37,7 +37,7 @@
     "@types/sockjs-client": "1.5.4",
     "@vitejs/plugin-vue": "6.0.11",
     "@vitest/eslint-plugin": "1.6.28",
-    "@vue/test-utils": "2.5.1",
+    "@vue/test-utils": "2.6.0",
     "@vue/tsconfig": "0.9.1",
     "autoprefixer": "10.6.2",
     "axios-mock-adapter": "2.1.0",
