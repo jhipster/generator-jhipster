@@ -125,6 +125,42 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with readonly fields', () => {
+    const entityFile = 'src/main/java/com/mycompany/myapp/domain/Foo.java';
+    const assertsFile = 'src/test/java/com/mycompany/myapp/domain/FooAsserts.java';
+    const resourceFile = 'src/test/java/com/mycompany/myapp/web/rest/FooResourceIT.java';
+
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedSource({ except: ['addTestSpringFactory'] })
+        .withJHipsterConfig({ skipClient: true, prodDatabaseType: 'mysql' }, [
+          {
+            name: 'Foo',
+            changelogDate: '20160926101210',
+            fields: [
+              { fieldName: 'name', fieldType: 'String' },
+              { fieldName: 'readonlyField', fieldType: 'String', options: { readonly: true } },
+              { fieldName: 'readonlyUuid', fieldType: 'UUID', options: { readonly: true } },
+            ],
+          },
+        ]);
+    });
+
+    it('should not insert nor update the readonly fields', () => {
+      runResult.assertFileContent(entityFile, /@Column\(\s*name = "readonly_field"\s*, updatable = false, insertable = false\s*\)/);
+      runResult.assertFileContent(entityFile, /@Column\(name = "readonly_uuid", length = 36, updatable = false, insertable = false\)/);
+      expect(runResult.fs.read(entityFile).match(/updatable = false/g)).toHaveLength(2);
+    });
+
+    it('should not assert the readonly fields as persisted', () => {
+      runResult.assertNoFileContent(assertsFile, 'ReadonlyField');
+      runResult.assertNoFileContent(assertsFile, 'ReadonlyUuid');
+      runResult.assertNoFileContent(resourceFile, 'ReadonlyField');
+      runResult.assertNoFileContent(resourceFile, 'ReadonlyUuid');
+    });
+  });
+
   describe('with a filtering entity declaring no service', () => {
     before(async () => {
       await helpers
