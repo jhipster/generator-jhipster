@@ -22,8 +22,13 @@ import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
 import { mutateEntity, mutateField } from '../../entity.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
-import { isClientField } from '../../support/filter-entities.ts';
-import { filterEntitiesForClient, filterEntityPropertiesForClient, preparePostEntityClientDerivedProperties } from '../../support/index.ts';
+import {
+  filterEntitiesForClient,
+  filterEntityFieldsForClient,
+  filterEntityPropertiesForClient,
+  isClientField,
+  preparePostEntityClientDerivedProperties,
+} from '../../support/index.ts';
 import type { Application as ClientApplication, Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
 
 export default class ClientBootstrap extends ClientApplicationGenerator {
@@ -102,7 +107,10 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
               : entityFileName;
           },
           enumTypeFields: ({ fields }) => {
-            const enumFields = fields.filter(field => fieldIsEnum(field.fieldType) && !field.clientConstantsAsValues);
+            // The enum of a field the clients skip has no file, the forms list no value of it.
+            const enumFields = fields.filter(
+              field => fieldIsEnum(field.fieldType) && !field.clientConstantsAsValues && isClientField(field),
+            );
             return enumFields.filter((field, index) => enumFields.findIndex(({ fieldType }) => fieldType === field.fieldType) === index);
           },
         });
@@ -133,7 +141,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
         application.filterEntityPropertiesForClient ??= filterEntityPropertiesForClient;
         application.filterEntitiesAndPropertiesForClient ??= entities =>
           // The fields the clients skip are left out; the relationships are kept as they are.
-          application.filterEntitiesForClient!(entities).map(entity => ({ ...entity, fields: entity.fields.filter(isClientField) }));
+          application.filterEntitiesForClient!(entities).map(filterEntityFieldsForClient);
       },
       postPreparingEntity({ entities }) {
         for (const entity of entities) {

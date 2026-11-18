@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { prepareEntityAnyFieldDerivedProperties } from '../../base-application/support/prepare-entity.ts';
 import type { RelationshipWithEntity } from '../../base-application/types.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.ts';
 
@@ -33,6 +34,18 @@ export const filterEntityPropertiesForClient = <const E extends ClientEntity>(en
   fields: entity.fields.filter(field => isClientField(field)),
   relationships: entity.relationships.filter(rel => isClientRelationship(rel)),
 });
+
+/**
+ * Clone the entity without the fields the clients skip, the relationships being kept as they are.
+ * The `anyField*` properties follow the fields that are left, as the templates import and declare what they tell.
+ */
+export const filterEntityFieldsForClient = <const E extends ClientEntity>(entity: E): E => {
+  const clientEntity = { ...entity, fields: entity.fields.filter(field => isClientField(field)) };
+  if (clientEntity.fields.length !== entity.fields.length) {
+    prepareEntityAnyFieldDerivedProperties(clientEntity);
+  }
+  return clientEntity;
+};
 
 /**
  * Filter entities for frontend templates.

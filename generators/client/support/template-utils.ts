@@ -30,6 +30,7 @@ import type {
 } from '../../base-application/types.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.ts';
 
+import { isClientField } from './filter-entities.ts';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.ts';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
@@ -93,9 +94,11 @@ export const generateEntityClientEnumImports = (fields: BaseApplicationField[], 
   const uniqueEnums: Record<string, string> = {};
   for (const field of fields) {
     const { enumFileName, fieldType } = field;
+    // The enum of a field the clients skip has no file to import.
     if (
       field.fieldIsEnum &&
       !field.clientConstantsAsValues &&
+      isClientField(field as ClientField) &&
       (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues?.length !== 0))
     ) {
       const importType = fieldType;
