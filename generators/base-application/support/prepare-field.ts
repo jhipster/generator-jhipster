@@ -192,15 +192,17 @@ function generateFakeDataForField(
 
     // eslint-disable-next-line no-template-curly-in-string
   } else if ([FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
+    const min = field.fieldValidateRulesMin ?? 0;
     data = faker.number.float({
-      max: field.fieldValidateRulesMax ?? 32767,
-      min: field.fieldValidateRulesMin ?? 0,
+      max: field.fieldValidateRulesMax ?? Math.max(32767, min + 1),
+      min,
       multipleOf: 0.01,
     });
   } else if (([INTEGER, LONG, DURATION] as string[]).includes(field.fieldType)) {
+    const min = field.fieldValidateRulesMin ?? 0;
     data = faker.number.int({
-      max: field.fieldValidateRulesMax ?? 32767,
-      min: field.fieldValidateRulesMin ?? 0,
+      max: field.fieldValidateRulesMax ?? Math.max(32767, min + 1),
+      min,
     });
   } else if (([INSTANT, ZONED_DATE_TIME, LOCAL_DATE, LOCAL_TIME] as string[]).includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
