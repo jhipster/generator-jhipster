@@ -254,7 +254,9 @@ const { username } = useCurrentAccount();
 <%_ } _%>
 
 <%_ const listProperties = [
-      `items: ${entityInstancePlural}`, 'isFetching', 'reload',
+      `items: ${entityInstancePlural}`,
+      'isFetching',
+      'reload',
       ...searchEngineAny ? ['currentSearch', 'search', 'clear'] : [],
       ...paginationNo ? [] : ['propOrder', 'reverse', 'changeOrder'],
       ...paginationPagination && !databaseTypeCassandra ? ['page', 'itemsPerPage', 'totalItems'] : [],
