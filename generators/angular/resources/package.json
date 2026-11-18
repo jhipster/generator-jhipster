@@ -9,7 +9,7 @@
     "bootstrap": "5.3.9",
     "bootswatch": "5.3.8",
     "es-module-shims": "2.8.4",
-    "ngx-cookie-service": "22.0.0",
+    "ngx-cookie-service": "22.2.0",
     "ngx-infinite-scroll": "22.0.0",
     "rxjs": "7.8.2",
     "sockjs-client": "1.6.1",
