@@ -56,7 +56,7 @@ import org.hibernate.type.SqlTypes;
   <%_ } _%>
   <%_ if (field.fieldTypeUUID && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb)) { _%>
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<%- field.fieldValidationRequired ? ', nullable = false' : '' %><%- field.fieldValidationUnique ? ', unique = true' : '' %>)
+    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<%- field.fieldValidationRequired ? ', nullable = false' : '' %><%- field.fieldValidationUnique ? ', unique = true' : '' %><%- field.readonly && !field.id && !field.transient ? ', updatable = false, insertable = false' : '' %>)
   <%_ } else { _%>
     @Column(
       name = "<%- field.fieldNameAsDatabaseColumn %>"
@@ -71,6 +71,9 @@ import org.hibernate.type.SqlTypes;
     <%_ } _%>
     <%_ if (field.fieldValidationUnique) { _%>
       , unique = true
+    <%_ } _%>
+    <%_ if (field.readonly && !field.id && !field.transient) { _%>
+      , updatable = false, insertable = false
     <%_ } _%>
   )
   <%_ } _%>

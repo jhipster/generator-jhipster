@@ -25,7 +25,7 @@ import static <%- packageName %>.test.util.TestUtil.createUpdateProxyForBean;
 import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdateBody;
 <%_ } _%>
 <%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => (rel.persistableRelationship || (databaseTypeSql && rel.relationshipManyToMany)) && !rel.otherEntity.hasCyclicRequiredRelationship);
-    const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
+    const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient && !field.readonly);
     // Fields a request may not set to null. Each is patched to null by the same test.
     const requiredFields = fieldsToTest.filter(field => field.fieldValidate && field.fieldValidationRequired);
     // Owner side relationships whose related entity has a field that can be observed after a request carrying a
@@ -44,7 +44,12 @@ import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdate
       .map(relationship => ({
         relationship,
         observedField: relationship.otherEntity.fields.find(
-          field => !field.id && !field.transient && !field.mapstructExpression && (field.fieldTypeString || field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeUUID),
+          field =>
+            !field.id
+            && !field.transient
+            && !field.mapstructExpression
+            && !field.readonly
+            && (field.fieldTypeString || field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeUUID),
         ),
       }))
       .filter(({ observedField }) => observedField);
