@@ -31,7 +31,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicInteger;
 <%_ } _%>
 
-<%_ const sampleFields = fields.filter(field => !field.transient && (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID)); _%>
+<%_ const compositeIdFields = primaryKey?.composite ? primaryKey.fields : [];
+    const sampleFields = fields.filter(field => !compositeIdFields.includes(field) && !field.transient && (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID));
+_%>
 public class <%- persistClass %>TestSamples {
 <%_ if (fields.some(field => field.fieldTypeLong || field.fieldTypeInteger)) { _%>
     private static final Random random = new Random();
@@ -45,9 +47,12 @@ public class <%- persistClass %>TestSamples {
 
     public static <%- persistClass %> get<%- persistClass %>Sample1() {
 <%_ if (fluentMethods) { _%>
-        return new <%- persistClass %>()<% for (const field of sampleFields) { %>.<%- field.fieldName %>(<%- field.javaValueSample1 %>)<% } %>;
+        return new <%- persistClass %>()<% if (primaryKey?.composite) { %>.<%- primaryKey.name %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.javaValueSample1).join(', ') %>))<% } %><% for (const field of sampleFields) { %>.<%- field.fieldName %>(<%- field.javaValueSample1 %>)<% } %>;
 <%_ } else { _%>
         <%- persistClass %> <%- persistInstance %> = new <%- persistClass %>();
+  <%_ if (primaryKey?.composite) { _%>
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.javaValueSample1).join(', ') %>));
+  <%_ } _%>
   <%_ for (const field of sampleFields) { _%>
         <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.javaValueSample1 %>);
   <%_ } _%>
@@ -57,9 +62,12 @@ public class <%- persistClass %>TestSamples {
 
     public static <%- persistClass %> get<%- persistClass %>Sample2() {
 <%_ if (fluentMethods) { _%>
-        return new <%- persistClass %>()<% for (const field of sampleFields) { %>.<%- field.fieldName %>(<%- field.javaValueSample2 %>)<% } %>;
+        return new <%- persistClass %>()<% if (primaryKey?.composite) { %>.<%- primaryKey.name %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.javaValueSample2).join(', ') %>))<% } %><% for (const field of sampleFields) { %>.<%- field.fieldName %>(<%- field.javaValueSample2 %>)<% } %>;
 <%_ } else { _%>
         <%- persistClass %> <%- persistInstance %> = new <%- persistClass %>();
+  <%_ if (primaryKey?.composite) { _%>
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.javaValueSample2).join(', ') %>));
+  <%_ } _%>
   <%_ for (const field of sampleFields) { _%>
         <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.javaValueSample2 %>);
   <%_ } _%>
@@ -69,11 +77,14 @@ public class <%- persistClass %>TestSamples {
 
     public static <%- persistClass %> get<%- persistClass %>RandomSampleGenerator() {
 <%_ if (fluentMethods) { _%>
-        return new <%- persistClass %>()<% for (const field of sampleFields) { %>.<%- field.fieldName %>(<%- field.javaValueGenerator %>)<% } %>;
+        return new <%- persistClass %>()<% if (primaryKey?.composite) { %>.<%- primaryKey.name %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.fieldJavaValueGenerator).join(', ') %>))<% } %><% for (const field of sampleFields) { %>.<%- field.fieldName %>(<%- field.fieldJavaValueGenerator %>)<% } %>;
 <%_ } else { _%>
         <%- persistClass %> <%- persistInstance %> = new <%- persistClass %>();
+  <%_ if (primaryKey?.composite) { _%>
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.fieldJavaValueGenerator).join(', ') %>));
+  <%_ } _%>
   <%_ for (const field of sampleFields) { _%>
-        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.javaValueGenerator %>);
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
   <%_ } _%>
         return <%- persistInstance %>;
 <%_ } _%>

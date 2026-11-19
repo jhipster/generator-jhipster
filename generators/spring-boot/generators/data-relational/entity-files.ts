@@ -18,6 +18,7 @@
  */
 import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../../../base-application/support/task-type-inference.ts';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/index.ts';
+import { javaStringToTypeExpressions } from '../../../server/support/index.ts';
 
 import type { Application, Entity } from './types.ts';
 
@@ -36,7 +37,17 @@ const useSimpleR2dbcRepository = (ctx: any): boolean =>
     ctx.isUsingMapsId
   );
 
+const entityIdFilesBlock = javaMainPackageTemplatesBlock('_entityPackage_');
+
 const domainFiles = asWriteFilesBlock([
+  {
+    condition: ctx => !ctx.reactive && ctx.primaryKey?.composite && ctx.entityDomainLayer,
+    ...entityIdFilesBlock,
+    templates: ['domain/_entityClass_Id.java'],
+    renameTo(this: any, data: any, filePath: string) {
+      return entityIdFilesBlock.renameTo!.call(this, data, filePath.replace('_entityClass_Id', `${data.entityClass}Id`));
+    },
+  },
   {
     condition: generator => !generator.reactive && generator.entityDomainLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
@@ -140,7 +151,7 @@ export default asWritingEntitiesTask<Entity, Application>(async function writeEn
     } else {
       await this.writeFiles({
         sections: sqlFiles,
-        context: { ...application, ...entity },
+        context: { ...application, ...entity, javaStringToTypeExpressions },
       });
     }
   }

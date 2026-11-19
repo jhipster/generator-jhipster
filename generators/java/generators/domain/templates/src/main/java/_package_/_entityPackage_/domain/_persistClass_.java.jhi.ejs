@@ -111,9 +111,24 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
     @Serial
     private static final long serialVersionUID = 1L;
 
-<%_ if (!embedded && primaryKey.composite) { _%>
-    @Id
+<%_ if (!embedded && primaryKey?.composite) { _%>
+    @EmbeddedId
     private <%- primaryKey.type %> <%- primaryKey.name %>;
+
+    public <%- primaryKey.type %> <%- primaryKey.propertySupplierName %>() {
+        return this.<%- primaryKey.name %>;
+    }
+  <%_ if (fluentMethods) { _%>
+
+    public <%- persistClass %> <%- primaryKey.name %>(<%- primaryKey.type %> <%- primaryKey.name %>) {
+        this.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.name %>);
+        return this;
+    }
+  <%_ } _%>
+
+    public void <%- primaryKey.propertyConsumerName %>(<%- primaryKey.type %> <%- primaryKey.name %>) {
+        this.<%- primaryKey.name %> = <%- primaryKey.name %>;
+    }
 
 <%_ } _%>
 <&- fragments.classStaticFieldsSection() -&>

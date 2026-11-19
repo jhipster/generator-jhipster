@@ -26,6 +26,9 @@ _%>
 import <%- entityAbsolutePackage %>.service.<%- entityClass %>Service;
 <%_ } _%>
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
+<%_ if (primaryKey.composite) { _%>
+import <%- entityAbsolutePackage %>.domain.<%- primaryKey.type %>;
+<%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
 import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
