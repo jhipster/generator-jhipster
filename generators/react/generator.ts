@@ -119,6 +119,8 @@ export default class ReactGenerator extends ReactApplicationGenerator {
       async composing() {
         await this.composeWithJHipster('jhipster:javascript-simple-application:eslint');
         await this.composeWithJHipster('jhipster:client:common');
+        // The models of the entities are the types of the REST API.
+        await this.composeWithJHipster('jhipster:client:rest-domain');
         if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
         }
