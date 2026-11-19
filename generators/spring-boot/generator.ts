@@ -37,6 +37,7 @@ import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
 import { addJavaImport, createKeyStore, javaBeanCase, javaValue } from '../java/support/index.ts';
 import type { JavaArtifactType } from '../java-simple-application/types.ts';
 import {
+  compositeIdFieldTypes,
   getJavaValueGeneratorForType,
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
@@ -253,6 +254,11 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      supportCompositePrimaryKey({ application }) {
+        // Signals to the server generator that this backend implements composite primary keys.
+        // A blueprint replacing the Spring Boot generator does not set it and keeps the generic rejection.
+        application.compositePrimaryKeySupport = true;
+      },
       loading({ applicationDefaults }) {
         applicationDefaults({
           communicationSpringWebsocket: ({ websocket }) => websocket === SPRING_WEBSOCKET,
@@ -602,14 +608,46 @@ ${classProperties
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      checkCompositePrimaryKey({ application, entity, entityName }) {
+        const { primaryKey } = entity;
+        if (!primaryKey?.composite || entity.embedded) return;
+
+        const unsupported = (reason: string): never => {
+          throw new Error(`Composite primary keys are not supported ${reason} yet (entity ${entityName}).`);
+        };
+        if (application.reactive) unsupported('by reactive applications');
+        if (!application.databaseTypeSql) unsupported(`with the "${entity.databaseType}" database`);
+        if (entity.dtoMapstruct) unsupported('with MapStruct DTOs');
+        if (entity.jpaMetamodelFiltering) unsupported('with JPA metamodel filtering');
+        if (entity.searchEngineAny) unsupported('with a search engine');
+        if (entity.relationships.some(relationship => relationship.id)) unsupported('with @Id relationships');
+        const unsupportedFields = primaryKey.ownFields!.filter(field => !compositeIdFieldTypes.includes(field.javaFieldType));
+        if (unsupportedFields.length > 0) {
+          throw new Error(
+            `Composite primary key field type(s) ${unsupportedFields
+              .map(field => `"${field.fieldType}" (${field.fieldName})`)
+              .join(', ')} of entity ${entityName} are not supported yet. Supported types are: ${compositeIdFieldTypes.join(', ')}.`,
+          );
+        }
+
+        entity.skipClient = true;
+        if (application.clientFrameworkAny) {
+          this.log.warn(
+            `Entity ${entityName} has a composite primary key, the ${application.clientFramework} client is not generated for it.`,
+          );
+        }
+      },
       prepareEntity({ entity }) {
         const { primaryKey } = entity;
         if (primaryKey) {
           primaryKey.javaBuildSpecification = getSpecificationBuildForType(primaryKey.type);
-          primaryKey.javaValueGenerator = getJavaValueGeneratorForType(primaryKey.type);
           for (const field of primaryKey.fields) {
             field.fieldJavaValueGenerator = getJavaValueGeneratorForType(field.fieldType);
           }
+          primaryKey.javaValueGenerator =
+            primaryKey.composite ?
+              `new ${primaryKey.type}(${primaryKey.fields.map(field => field.fieldJavaValueGenerator).join(', ')})`
+            : getJavaValueGeneratorForType(primaryKey.type);
         }
       },
       prepareTestValues({ entity }) {
@@ -734,6 +772,19 @@ ${classProperties
 
   get default() {
     return this.asDefaultTaskGroup({
+      checkCompositeKeyRelationships({ entities }) {
+        // A relationship to a composite key entity is not supported: the related entity's id is a synthetic key class
+        // that neither the REST layer nor the client knows how to serialize or look up.
+        for (const entity of entities) {
+          for (const relationship of entity.relationships) {
+            if (relationship.otherEntity.primaryKey?.composite) {
+              throw new Error(
+                `Relationships to entities with a composite primary key are not supported yet (${entity.name} -> ${relationship.otherEntity.name}).`,
+              );
+            }
+          }
+        }
+      },
       publicRestIntegrationTests({ entities }) {
         // Integration tests of entities referenced from another package are used across packages, so they must be public.
         for (const entity of entities) {

@@ -1,0 +1,9 @@
+/*
+ * Composite primary key, modeled with several @Id fields.
+ */
+@ChangelogDate(20240101000000)
+entity EntityCompositeId {
+  @Id orderId Long
+  @Id lineCode String
+  name String required
+}

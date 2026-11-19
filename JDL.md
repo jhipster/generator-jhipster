@@ -177,6 +177,25 @@ Validations follow the type, separated by spaces:
 Each type accepts its own set of validations (`minlength` on a `String`, `min` on a number, ...); a validation the type does not
 accept, an unknown validation, or a decimal where an integer is expected (`maxlength(1.5)`) is an error.
 
+### Primary keys
+
+An entity without an `@Id` field gets a generated `id`. The `@Id` annotation marks a field as the primary key, and an entity
+with several `@Id` fields has a composite primary key:
+
+```jdl
+entity OrderLine {
+  @Id orderId Long
+  @Id lineNumber Integer
+  quantity Integer required
+}
+```
+
+Generators that support composite primary keys generate an embeddable key class (`OrderLineId` above) as the entity
+identifier, and write it in URLs as its parts joined by commas. They accept `String`, `Integer`, `Long` and `UUID` key
+fields: other field types, and composite primary keys with MapStruct DTOs, JPA metamodel filtering, a search engine, `@Id`
+relationships, a reactive application or a non-SQL database, are errors. An entity with a composite primary key is
+server-only: its Angular, React or Vue client is not generated.
+
 ## Annotations
 
 An annotation is `@name` or `@name(value)`, where the value is a string, an integer, a decimal, `true`, `false` or a name.
