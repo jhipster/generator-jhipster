@@ -39,13 +39,6 @@
       })),
       ...enumFields.map(field => ({ names: field.fieldType, path: `${relativeDir(entityDir, webappEnumerationsDir)}${field.enumFileName}.model` })),
     ].sort((a, b) => a.path.localeCompare(b.path));
-    // The properties the server generates: a generated primary key is sent as null, a generated field may be null.
-    const newRestProperties = [
-      ...primaryKey?.autoGenerate ? [{ name: primaryKey.name, type: 'null' }] : [],
-      ...fields
-        .filter(field => field.autoGenerate && !field.id && !field.nullable)
-        .map(field => ({ name: field.fieldName, type: `${field.restDomainType} | null` })),
-    ];
 _%>
 <%_ for (const { names, path } of restImports) { _%>
 import type { <%- names %> } from '<%- path %>';
@@ -59,7 +52,7 @@ import type { <%- names %> } from '<%- path %>';
 export interface <%- restDomainTypeName %> {
 <%_ for (const field of fields) { _%>
   <%_ if (field.fieldWithContentType) { _%>
-  <%- field.fieldName %>ContentType: <%- field.nullable ? 'string | null' : 'string' %>;
+  <%- field.fieldName %>ContentType: <%- field.restDomainNullable ? 'string | null' : 'string' %>;
   <%_ } _%>
   <%- field.fieldName %>: <%- field.restDomainType %>;
 <%_ } _%>
@@ -69,11 +62,11 @@ export interface <%- restDomainTypeName %> {
 }
 <%_ if (primaryKey && !readOnly) { _%>
 
-  <%_ if (newRestProperties.length > 0) { _%>
+  <%_ if (restDomainNewProperties.length > 0) { _%>
 /**
  * A new <%- entityAngularName %>, sent to the REST API without the values the server generates.
  */
-export type New<%- restDomainTypeName %> = Omit<<%- restDomainTypeName %>, <%- newRestProperties.map(({ name }) => `'${name}'`).join(' | ') %>> & { <%- newRestProperties.map(({ name, type }) => `${name}: ${type}`).join('; ') %> };
+export type New<%- restDomainTypeName %> = Omit<<%- restDomainTypeName %>, <%- restDomainNewProperties.map(({ name }) => `'${name}'`).join(' | ') %>> & { <%- restDomainNewProperties.map(({ name, type }) => `${name}: ${type}`).join('; ') %> };
   <%_ } else { _%>
 /**
  * A new <%- entityAngularName %>, sent to the REST API with its primary key, which the server does not generate.

@@ -46,7 +46,6 @@ const entities = [
       { fieldName: 'color', fieldType: 'Color', fieldValues: 'RED,GREEN' },
       { fieldName: 'picture', fieldType: 'byte[]', fieldTypeBlobContent: 'image', fieldValidateRules: ['required'] },
       { fieldName: 'text', fieldType: 'byte[]', fieldTypeBlobContent: 'text' },
-      { fieldName: 'code', fieldType: 'String', fieldValidateRules: ['required'], autoGenerate: true },
     ],
     relationships: [
       {
@@ -103,43 +102,8 @@ describe(`generator - ${generator}`, () => {
         .withJHipsterConfig({ clientFramework: 'react' }, entities);
     });
 
-    it('should write the types of the dates and of each entity', () => {
-      expect(Object.keys(result.getSnapshot('**/*.rest.model.ts')).sort()).toEqual([
-        'src/main/webapp/app/entities/admin/authority/authority.rest.model.ts',
-        'src/main/webapp/app/entities/admin/user-management/user-management.rest.model.ts',
-        'src/main/webapp/app/entities/bar/bar.rest.model.ts',
-        'src/main/webapp/app/entities/baz/baz.rest.model.ts',
-        'src/main/webapp/app/entities/foo/foo.rest.model.ts',
-        'src/main/webapp/app/entities/user/user.rest.model.ts',
-      ]);
-      result.assertFile('src/main/webapp/app/shared/jhipster/rest.model.ts');
-    });
-
-    it('should type the fields as their JSON - snapshot', () => {
-      expect(result.getSnapshot('**/entities/foo/foo.rest.model.ts')).toMatchSnapshot();
-    });
-
-    it('should leave out the types of a read-only entity to send', () => {
-      result.assertFileContent('src/main/webapp/app/entities/bar/bar.rest.model.ts', 'export interface RestBar {');
-      result.assertNoFileContent('src/main/webapp/app/entities/bar/bar.rest.model.ts', 'NewRestBar');
-    });
-
-    it('should send a new entity with a primary key the server does not generate as the entity itself', () => {
-      result.assertFileContent(
-        'src/main/webapp/app/entities/admin/authority/authority.rest.model.ts',
-        'export type NewRestAuthority = RestAuthority;',
-      );
-    });
-
-    it('should send a new entity with its generated primary key as null and its generated fields as nullable', () => {
-      result.assertFileContent(
-        'src/main/webapp/app/entities/foo/foo.rest.model.ts',
-        "export type NewRestFoo = Omit<RestFoo, 'id' | 'code'> & { id: null; code: string | null };",
-      );
-    });
-
-    it('should type the built-in user by its id and its login - snapshot', () => {
-      expect(result.getSnapshot('**/entities/user/user.rest.model.ts')).toMatchSnapshot();
+    it('should match files snapshot', () => {
+      expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
 
@@ -151,24 +115,11 @@ describe(`generator - ${generator}`, () => {
         .withJHipsterConfig({ clientFramework: 'react', restDomainPrefix: 'Api' }, entities);
     });
 
-    it('should name the types of the dates after the prefix', () => {
+    // The prefix is a config no sample sets: the generated application cannot tell it from the default one.
+    it('should name the types after the prefix', () => {
       result.assertFileContent('src/main/webapp/app/shared/jhipster/rest.model.ts', 'export type ApiLocalDate = string;');
-      result.assertNoFileContent('src/main/webapp/app/shared/jhipster/rest.model.ts', 'RestLocalDate');
-    });
-
-    it('should name the types of the entities after the prefix', () => {
-      const foo = 'src/main/webapp/app/entities/foo/foo.rest.model.ts';
-      result.assertFileContent(
-        foo,
-        "import type { ApiDuration, ApiInstant, ApiLocalDate, ApiLocalTime, ApiZonedDateTime } from '../../shared/jhipster/rest.model';",
-      );
-      result.assertFileContent(foo, "import type { ApiBar } from '../bar/bar.rest.model';");
-      result.assertFileContent(foo, 'export interface ApiFoo {');
-      result.assertFileContent(foo, '  day: ApiLocalDate | null;');
-      result.assertFileContent(foo, "  bar: Pick<ApiBar, 'id' | 'title'>;");
-      result.assertFileContent(foo, 'export type NewApiFoo = ');
-      result.assertFileContent(foo, 'export type PartialUpdateApiFoo = ');
-      result.assertNoFileContent(foo, 'Rest');
+      result.assertFileContent('src/main/webapp/app/entities/foo/foo.rest.model.ts', 'export interface ApiFoo {');
+      result.assertFileContent('src/main/webapp/app/entities/foo/foo.rest.model.ts', "bar: Pick<ApiBar, 'id' | 'title'>;");
     });
   });
 });

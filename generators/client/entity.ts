@@ -35,6 +35,8 @@ type ClientAddedFieldProperties = {
   hideListView?: boolean;
   /** The TypeScript type of the JSON value of the field in the REST API, written by client:rest-domain. */
   restDomainType?: string;
+  /** Whether the JSON value of the field in the REST API is null when the database has no value. */
+  restDomainNullable?: boolean;
 };
 
 const htmlInputTypeForTsType: Record<string, string> = {
@@ -109,6 +111,8 @@ type ClientAddedEntityProperties = {
   enumTypeFields?: Field[];
   /** The name of the TypeScript type of the entity in the REST API, written by client:rest-domain: the restDomainPrefix and its name. */
   restDomainTypeName?: string;
+  /** The properties a new entity sends otherwise in the REST API, written by client:rest-domain. */
+  restDomainNewProperties?: { name: string; type: string }[];
 };
 
 export const mutateEntity = {

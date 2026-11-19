@@ -21,7 +21,7 @@ import { ClientApplicationGenerator } from '../../generator.ts';
 import { clientApplicationTemplatesBlock } from '../../support/files.ts';
 import { filterEntitiesAndPropertiesForClient } from '../../support/filter-entities.ts';
 
-import { mutateRestDomainField, mutateRestDomainRelationship } from './support/rest-domain-types.ts';
+import { getRestDomainNewProperties, mutateRestDomainField, mutateRestDomainRelationship } from './support/rest-domain-types.ts';
 
 /**
  * Writes the types of the REST API of the entities, as their JSON is sent and received: the dates are the strings of the
@@ -58,6 +58,9 @@ export default class RestDomainGenerator extends ClientApplicationGenerator {
           mutateData(relationship, mutateRestDomainRelationship);
         }
       },
+      prepareRestDomainNewProperties({ entity }) {
+        entity.restDomainNewProperties ??= getRestDomainNewProperties(entity);
+      },
     });
   }
 
@@ -80,7 +83,14 @@ export default class RestDomainGenerator extends ClientApplicationGenerator {
         );
         for (const entity of builtInUser ? [...clientEntities, builtInUser] : clientEntities) {
           await this.writeFiles({
-            blocks: [clientApplicationTemplatesBlock({ templates: ['entities/_entityFolder_/_entityFile_.rest.model.ts'] })],
+            blocks: [
+              clientApplicationTemplatesBlock({
+                templates: [
+                  'entities/_entityFolder_/_entityFile_.rest.model.ts',
+                  'entities/_entityFolder_/_entityFile_.rest.model.spec.ts',
+                ],
+              }),
+            ],
             context: {
               ...application,
               ...entity,

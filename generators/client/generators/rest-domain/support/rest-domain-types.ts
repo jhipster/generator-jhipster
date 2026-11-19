@@ -71,6 +71,8 @@ const asArray = (type: string) => (type.includes(' ') ? `(${type})[]` : `${type}
 export const mutateRestDomainField = ({ restDomainPrefix }: { restDomainPrefix: string }) =>
   ({
     __override__: false,
+    // The primary key is always sent, the other fields are null when the database has no value.
+    restDomainNullable: field => !field.id && Boolean((field as DatabaseProperty).nullable),
     restDomainType: field => {
       let type: string;
       if (field.fieldIsEnum) {
@@ -82,9 +84,19 @@ export const mutateRestDomainField = ({ restDomainPrefix }: { restDomainPrefix: 
       if (field.collection) {
         type = asArray(type);
       }
-      return !field.id && (field as DatabaseProperty).nullable ? `${type} | null` : type;
+      return field.restDomainNullable ? `${type} | null` : type;
     },
   }) as const satisfies MutateDataParam<ClientField>;
+
+/**
+ * The properties a new entity sends otherwise: a primary key the server generates is null, a field it generates may be null.
+ */
+export const getRestDomainNewProperties = (entity: ClientEntity): { name: string; type: string }[] => [
+  ...(entity.primaryKey?.autoGenerate ? [{ name: entity.primaryKey.name, type: 'null' }] : []),
+  ...entity.fields
+    .filter(field => field.autoGenerate && !field.id && !field.restDomainNullable)
+    .map(field => ({ name: field.fieldName, type: `${field.restDomainType} | null` })),
+];
 
 export const mutateRestDomainRelationship = {
   __override__: false,

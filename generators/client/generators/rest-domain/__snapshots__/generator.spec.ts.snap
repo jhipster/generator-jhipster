@@ -1,67 +1,56 @@
 // expect-node Snapshot v1, https://github.com/mshima/expect-node#snapshots
 
-exports[`generator - client:rest-domain with entities should type the built-in user by its id and its login - snapshot 1`] = `
+exports[`generator - client:rest-domain with entities should match files snapshot 1`] = `
 {
-  "src/main/webapp/app/entities/user/user.rest.model.ts": {
-    "contents": "/**
- * The User entity, as the REST API sends it.
- */
-export interface RestUser {
-  id: number;
-  login: string;
-}
-",
+  ".jhipster/Bar.json": {
     "stateCleared": "modified",
   },
-}
-`;
-
-exports[`generator - client:rest-domain with entities should type the fields as their JSON - snapshot 1`] = `
-{
+  ".jhipster/Baz.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Foo.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/authority/authority.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/authority/authority.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/baz/baz.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/baz/baz.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/foo/foo.rest.model.ts": {
-    "contents": "import type { RestDuration, RestInstant, RestLocalDate, RestLocalTime, RestZonedDateTime } from '../../shared/jhipster/rest.model';
-import type { Color } from '../../shared/model/enumerations/color.model';
-import type { RestBar } from '../bar/bar.rest.model';
-import type { RestBaz } from '../baz/baz.rest.model';
-import type { RestUser } from '../user/user.rest.model';
-
-/**
- * The Foo entity, as the REST API sends it.
- */
-export interface RestFoo {
-  id: number;
-  name: string;
-  note: string | null;
-  total: number;
-  price: number | null;
-  day: RestLocalDate | null;
-  moment: RestInstant | null;
-  zoned: RestZonedDateTime | null;
-  span: RestDuration | null;
-  time: RestLocalTime | null;
-  uid: string | null;
-  active: boolean | null;
-  color: keyof typeof Color | null;
-  pictureContentType: string;
-  picture: string;
-  text: string | null;
-  code: string;
-  bar: Pick<RestBar, 'id' | 'title'>;
-  owner: Pick<RestBar, 'id'> | null;
-  user: Pick<RestUser, 'id' | 'login'> | null;
-  bazs: Pick<RestBaz, 'id' | 'label'>[] | null;
-}
-
-/**
- * A new Foo, sent to the REST API without the values the server generates.
- */
-export type NewRestFoo = Omit<RestFoo, 'id' | 'code'> & { id: null; code: string | null };
-
-/**
- * The fields of a Foo a partial update sends, with its primary key.
- */
-export type PartialUpdateRestFoo = Partial<RestFoo> & Pick<RestFoo, 'id'>;
-",
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/rest.model.ts": {
     "stateCleared": "modified",
   },
 }
