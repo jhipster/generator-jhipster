@@ -19,6 +19,7 @@
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
 <%_ const timedFields = fields.filter(field => field.fieldTypeTimed); _%>
 <%_ const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient); _%>
+<%_ const emptyValueFields = fields.filter(field => !field.fieldValidationRequired && !field.id && !field.clientConstantsAsValues && (field.fieldTypeBoolean || field.fieldTypeString || field.blobContentTypeText)); _%>
 <%_ const collectionRelationships = relationships.filter(relationship => relationship.persistableRelationship && relationship.collection); _%>
 import { beforeEach, describe, expect, it } from 'vitest';
 import { signal } from '@angular/core';
@@ -143,6 +144,38 @@ describe('<%- entityAngularName %> Form Service', () => {
 
         expect(<%- entityInstance %>).toMatchObject(sampleWithRequiredData);
       });
+<%_ if (emptyValueFields.length > 0) { _%>
+
+      it('should keep the empty values of the edited entity', () => {
+        const entity = {
+          ...sampleWithRequiredData,
+  <%_ for (const field of emptyValueFields) { _%>
+          <%- field.fieldName %>: <%- field.fieldTypeBoolean ? 'null' : "''" %>,
+  <%_ } _%>
+        };
+
+        const <%- entityInstance %> = service.get<%- entityAngularName %>(service.create<%- entityAngularName %>FormModel(entity), entity);
+
+  <%_ for (const field of emptyValueFields) { _%>
+        expect(<%- entityInstance %>.<%- field.fieldName %>).toBe(<%- field.fieldTypeBoolean ? 'null' : "''" %>);
+  <%_ } _%>
+      });
+
+      it('should return the empty values of an entity without them', () => {
+        const entity = {
+          ...sampleWithRequiredData,
+  <%_ for (const field of emptyValueFields) { _%>
+          <%- field.fieldName %>: <%- field.fieldTypeBoolean ? 'false' : 'null' %>,
+  <%_ } _%>
+        };
+
+        const <%- entityInstance %> = service.get<%- entityAngularName %>(service.create<%- entityAngularName %>FormModel(entity), entity);
+
+  <%_ for (const field of emptyValueFields) { _%>
+        expect(<%- entityInstance %>.<%- field.fieldName %>).toBe(<%- field.fieldTypeBoolean ? 'false' : 'null' %>);
+  <%_ } _%>
+      });
+<%_ } _%>
     });
   });
 });

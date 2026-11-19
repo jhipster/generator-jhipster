@@ -1831,6 +1831,54 @@ describe("UserManagement Form Service", () => {
 
         expect(userManagement).toMatchObject(sampleWithRequiredData);
       });
+
+      it("should keep the empty values of the edited entity", () => {
+        const entity = {
+          ...sampleWithRequiredData,
+          firstName: "",
+          lastName: "",
+          activated: null,
+          imageUrl: "",
+          createdBy: "",
+          lastModifiedBy: "",
+        };
+
+        const userManagement = service.getUserManagement(
+          service.createUserManagementFormModel(entity),
+          entity,
+        );
+
+        expect(userManagement.firstName).toBe("");
+        expect(userManagement.lastName).toBe("");
+        expect(userManagement.activated).toBe(null);
+        expect(userManagement.imageUrl).toBe("");
+        expect(userManagement.createdBy).toBe("");
+        expect(userManagement.lastModifiedBy).toBe("");
+      });
+
+      it("should return the empty values of an entity without them", () => {
+        const entity = {
+          ...sampleWithRequiredData,
+          firstName: null,
+          lastName: null,
+          activated: false,
+          imageUrl: null,
+          createdBy: null,
+          lastModifiedBy: null,
+        };
+
+        const userManagement = service.getUserManagement(
+          service.createUserManagementFormModel(entity),
+          entity,
+        );
+
+        expect(userManagement.firstName).toBe(null);
+        expect(userManagement.lastName).toBe(null);
+        expect(userManagement.activated).toBe(false);
+        expect(userManagement.imageUrl).toBe(null);
+        expect(userManagement.createdBy).toBe(null);
+        expect(userManagement.lastModifiedBy).toBe(null);
+      });
     });
   });
 });
@@ -1960,22 +2008,31 @@ export class UserManagementFormService {
     );
   }
 
+  /**
+   * The entity of the form. An empty value of the form keeps the empty value of the edited entity, a null one included.
+   */
   getUserManagement(
     model: UserManagementFormModel,
+    userManagement?: UserManagementFormInput | null,
   ): IUserManagement | NewUserManagement {
     return {
       id: model.id,
       login: model.login || null,
-      firstName: model.firstName || null,
-      lastName: model.lastName || null,
+      firstName:
+        model.firstName || (userManagement?.firstName === "" ? "" : null),
+      lastName: model.lastName || (userManagement?.lastName === "" ? "" : null),
       email: model.email || null,
-      activated: model.activated,
-      imageUrl: model.imageUrl || null,
-      createdBy: model.createdBy || null,
+      activated:
+        model.activated || (userManagement?.activated === null ? null : false),
+      imageUrl: model.imageUrl || (userManagement?.imageUrl === "" ? "" : null),
+      createdBy:
+        model.createdBy || (userManagement?.createdBy === "" ? "" : null),
       createdDate: model.createdDate
         ? dayjs(model.createdDate, DATE_TIME_FORMAT)
         : null,
-      lastModifiedBy: model.lastModifiedBy || null,
+      lastModifiedBy:
+        model.lastModifiedBy ||
+        (userManagement?.lastModifiedBy === "" ? "" : null),
       lastModifiedDate: model.lastModifiedDate
         ? dayjs(model.lastModifiedDate, DATE_TIME_FORMAT)
         : null,
@@ -2275,7 +2332,10 @@ describe("UserManagement Management Update Component", () => {
       saveSubject.complete();
 
       // THEN
-      expect(userManagementFormService.getUserManagement).toHaveBeenCalled();
+      expect(userManagementFormService.getUserManagement).toHaveBeenCalledWith(
+        comp.userManagementModel(),
+        userManagement,
+      );
       expect(comp.previousState).toHaveBeenCalled();
       expect(userManagementService.update).toHaveBeenCalledWith(
         expect.objectContaining(userManagement),
@@ -2408,6 +2468,7 @@ export class UserManagementUpdate implements OnInit {
     this.isSaving.set(true);
     const userManagement = this.userManagementFormService.getUserManagement(
       this.userManagementModel(),
+      this.userManagement,
     );
     if (userManagement.id === null) {
       this.subscribeToSaveResponse(
