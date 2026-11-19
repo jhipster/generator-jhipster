@@ -42,14 +42,14 @@ const details: MetricDetails = {
 describe('MetricsDetailsModal', () => {
   it('should filter the items by value and by title', () => {
     render(<MetricsDetailsModal details={details} handleClose={vi.fn()} />);
-    expect(screen.queryByText(/second/)).not.toBeNull();
+    expect(screen.getByText(/second/)).not.toBeNull();
 
     fireEvent.click(screen.getByText(/^One/));
     expect(screen.queryByText(/second/)).toBeNull();
 
     fireEvent.click(screen.getByText(/^All/));
     fireEvent.change(screen.getByRole('textbox'), { target: { value: 'SECOND' } });
-    expect(screen.queryByText(/second/)).not.toBeNull();
+    expect(screen.getByText(/second/)).not.toBeNull();
     expect(screen.queryByText(/first/)).toBeNull();
   });
 
@@ -58,7 +58,7 @@ describe('MetricsDetailsModal', () => {
     expect(screen.queryByText('a line')).toBeNull();
 
     fireEvent.click(screen.getByText('Show'));
-    expect(screen.queryByText('a line')).not.toBeNull();
+    expect(screen.getByText('a line')).not.toBeNull();
 
     fireEvent.click(screen.getByText('Hide'));
     expect(screen.queryByText('a line')).toBeNull();
