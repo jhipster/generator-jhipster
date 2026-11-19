@@ -288,7 +288,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         }
         mutateData(field, {
           angularFieldNameSingular: ({ fieldName }) => pluralize.singular(fieldName),
-          fieldTsDefaultValue: ({ fieldTsDefaultValue, defaultValue, fieldTypeCharSequence, fieldTypeTimed, fieldIsEnum }) => {
+          fieldTsDefaultValue: ({ fieldTsDefaultValue, defaultValue, fieldTypeCharSequence, fieldTypeTemporal, fieldIsEnum }) => {
             let returnValue: string | undefined;
             if (fieldTsDefaultValue !== undefined || defaultValue !== undefined) {
               let fieldDefaultValue;
@@ -300,10 +300,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
               fieldDefaultValue = String(fieldDefaultValue).replace(/'/g, String.raw`\'`);
 
-              if (fieldTypeCharSequence || fieldIsEnum) {
+              // The dates of the entity are the strings of the REST API.
+              if (fieldTypeCharSequence || fieldIsEnum || fieldTypeTemporal) {
                 returnValue = `'${fieldDefaultValue}'`;
-              } else if (fieldTypeTimed) {
-                returnValue = `dayjs('${fieldDefaultValue}')`;
               } else {
                 returnValue = fieldDefaultValue;
               }
@@ -378,6 +377,20 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
+      prepareEntitySamples({ entities }) {
+        for (const entity of entities) {
+          // The model types the dates as the strings of the REST API, the samples of the client as dayjs: a date stays
+          // its text, a date and time is the ISO text the form gives back from its input, in UTC.
+          const toAngularSample = (sample?: string) =>
+            sample
+              ?.replaceAll(/dayjs\('(\d{4}-\d{2}-\d{2})'\)/g, "'$1'")
+              .replaceAll(/dayjs\('(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})'\)/g, "'$1:00.000Z'");
+          entity.angularTsSampleWithFullData = toAngularSample(entity.tsSampleWithFullData);
+          entity.angularTsSampleWithRequiredData = toAngularSample(entity.tsSampleWithRequiredData);
+          entity.angularTsSampleWithPartialData = toAngularSample(entity.tsSampleWithPartialData);
+          entity.angularTsSampleWithNewData = toAngularSample(entity.tsSampleWithNewData);
+        }
+      },
       queueTranslateTransform({ application }) {
         const { enableTranslation, jhiPrefix } = application;
         this.queueTransformStream(

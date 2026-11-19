@@ -93,6 +93,40 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with the blobs of an entity', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withJHipsterConfig({ databaseType: 'sql' }, [
+          {
+            name: 'Document',
+            changelogDate: '20200101000000',
+            fields: [
+              { fieldName: 'binary', fieldType: 'AnyBlob', fieldValidateRules: ['required'] },
+              { fieldName: 'scan', fieldType: 'ImageBlob', options: { fieldNameAsDatabaseColumn: 'scanned' } },
+              { fieldName: 'preview', fieldType: 'ImageBlob', options: { transient: true } },
+            ],
+            relationships: [],
+          } as any,
+        ]);
+    });
+
+    const field = (fieldName: string): Record<string, any> =>
+      (result.entities!.Document as Record<string, any>).fields.find((field: Record<string, any>) => field.fieldName === fieldName);
+
+    it('should name the column of a content type after the column of its blob', () => {
+      expect(field('binary').columnName).toBe('jhi_binary');
+      expect(field('binaryContentType')).toMatchObject({ columnName: 'jhi_binary_content_type', columnRequired: true });
+      expect(field('scanContentType').columnName).toBe('scanned_content_type');
+    });
+
+    it('should keep the content type of a transient blob transient, stored in no column', () => {
+      expect(field('previewContentType')).toMatchObject({ transient: true });
+      expect(field('previewContentType').columnRequired).toBeUndefined();
+    });
+  });
+
   describe('with a prefix of its own', () => {
     before(async () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withJHipsterConfig({ jhiPrefix: 'myPrefix' });

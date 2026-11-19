@@ -249,8 +249,10 @@ export const files = asWriteFilesSection({
       templates: [
         'admin/tracker/tracker.ts',
         'admin/tracker/tracker.html',
+        'admin/tracker/tracker.spec.ts',
         'core/tracker/tracker-activity.model.ts',
         'core/tracker/tracker.service.ts',
+        'core/tracker/tracker.service.spec.ts',
       ],
     },
     {

@@ -137,6 +137,26 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a transient field', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({}, [
+        {
+          name: 'Memo',
+          fields: [
+            { fieldName: 'name', fieldType: 'String' },
+            { fieldName: 'note', fieldType: 'String', options: { transient: true } },
+          ],
+        },
+      ]);
+    });
+
+    it('should leave it out of the domain class and of its test samples', () => {
+      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/Memo.java', 'note');
+      result.assertFileContent('src/test/java/com/mycompany/myapp/domain/MemoTestSamples.java', '.name(');
+      result.assertNoFileContent('src/test/java/com/mycompany/myapp/domain/MemoTestSamples.java', '.note(');
+    });
+  });
+
   describe('with a single character field name', () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig({}, [

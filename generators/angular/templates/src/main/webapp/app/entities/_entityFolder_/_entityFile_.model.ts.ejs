@@ -17,10 +17,6 @@
  limitations under the License.
 -%>
 <%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant?.angularConstantTsType.includes(field.angularFieldClientConstant.angularConstantName)).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
-<%_ if (anyFieldIsDateDerived) { _%>
-import dayjs from 'dayjs/esm';
-<%_ } _%>
-
 <%_ for (const { angularConstantName, angularConstantImportPath } of clientConstants) { _%>
 import { <%- angularConstantName %> } from '<%- angularConstantImportPath %>';
 <%_ } _%>
@@ -36,7 +32,8 @@ export interface I<%- entityAngularName %> {
 <%# TODO - handle required fields (and thus non-nullable) - currently all fields are optional and nullable) #-%>
 <%_ for (const field of fields) { _%>
   <%_ const { fieldName/* , fieldValidationRequired */, id } = field;
-      const tsType = `${field.fieldIsEnum && !field.clientConstantsAsValues ? 'keyof typeof ' : ''}${field.tsType}${field.collection ? '[]' : ''}`;
+      // The dates are the strings the REST API sends, converted by the form and the display.
+      const tsType = `${field.fieldIsEnum && !field.clientConstantsAsValues ? 'keyof typeof ' : ''}${field.fieldTypeTemporal ? 'string' : field.tsType}${field.collection ? '[]' : ''}`;
   _%>
   <%- fieldName %><%- id ? '' : '?' %>: <%- tsType %><%- id ? '' : ' | null' %>;
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>

@@ -31,7 +31,7 @@ import { CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN_HEADER_NAME } from 'app/shared/jhips
 import { encodeCsrfToken } from 'app/shared/jhipster/encode-csrf-token';
 <%_ } _%>
 import { getAccount<%- authenticationTypeJwt ? ', logoutSession' : ',logoutServer' %> } from 'app/shared/reducers/authentication';
-<%_ if (authenticationTypeSession) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
 import cookie from 'app/shared/util/cookie-utils';
 <%_ } _%>
 

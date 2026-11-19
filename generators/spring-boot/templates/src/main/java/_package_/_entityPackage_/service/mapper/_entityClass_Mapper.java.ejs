@@ -26,8 +26,7 @@ package <%- entityAbsolutePackage %>.service.mapper;
       .map(otherEntity =>
         dtoRelationships
           .filter(relationship => relationship.otherEntity === otherEntity)
-          .map(({ relatedField, collection }) => ({ otherEntity, relatedField, collection })),
-      )
+          .map(({ relatedField, collection }) => ({ otherEntity, relatedField, collection })))
       .flat();
 _%>
 <%_ for (const a of otherEntitiesFields) { _%>

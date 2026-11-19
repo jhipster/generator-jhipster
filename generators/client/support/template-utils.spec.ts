@@ -21,13 +21,32 @@ import { describe, expect, it } from 'expect-node';
 
 import { entityOptions } from '../../../lib/jhipster/index.ts';
 
-import { generateEntityClientImports, generateTestEntityId } from './template-utils.ts';
+import generateEntityClientFields from './entity-definition.ts';
+import { generateEntityClientEnumImports, generateEntityClientImports, generateTestEntityId } from './template-utils.ts';
 
 const { MapperTypes } = entityOptions;
 
 const NO_DTO = MapperTypes.NO;
 
 describe('generator - client - support - template-utils', () => {
+  describe('with a field the clients skip', () => {
+    const fields = [
+      { fieldName: 'color', fieldType: 'Color', fieldIsEnum: true, enumFileName: 'color' },
+      { fieldName: 'secret', fieldType: 'Hidden', fieldIsEnum: true, enumFileName: 'hidden', skipClient: true },
+      { fieldName: 'moment', fieldType: 'Instant', skipClient: true },
+    ];
+
+    it('generateEntityClientEnumImports should import the enums of the other fields only', () => {
+      const imports = generateEntityClientEnumImports(fields as any, 'react');
+      expect([...imports.entries()]).toEqual([['Color', 'app/shared/model/enumerations/color.model']]);
+    });
+    it('generateEntityClientFields should declare the other fields only', () => {
+      expect(generateEntityClientFields(undefined, fields as any, [], NO_DTO, 'dayjs.Dayjs', false, 'react')).toEqual([
+        'color?: keyof typeof Color',
+      ]);
+    });
+  });
+
   describe('generateEntityClientImports', () => {
     describe('with relationships to entities', () => {
       const relationships = [

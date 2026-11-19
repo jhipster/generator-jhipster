@@ -724,6 +724,8 @@ ${jdlApplication}
 entity Customer {
     original String
     contract AnyBlob
+    binary AnyBlob
+    @transient temp AnyBlob
 }
 `);
 
@@ -748,6 +750,17 @@ entity Customer {
       runResult.assertFileContent(updatedChangelog, 'column name="contract"');
       runResult.assertFileContent(updatedChangelog, 'column name="contract_content_type"');
       runResult.assertNoFileContent(updatedChangelog, 'addColumn');
+    });
+
+    it('should drop the column of the content type named after the column of its blob, a reserved keyword', () => {
+      const updatedChangelog = `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`;
+      runResult.assertFileContent(updatedChangelog, 'column name="jhi_binary"');
+      runResult.assertFileContent(updatedChangelog, 'column name="jhi_binary_content_type"');
+    });
+
+    it('should drop no column of a transient blob, nor of its content type', () => {
+      const updatedChangelog = `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`;
+      runResult.assertNoFileContent(updatedChangelog, 'column name="temp');
     });
   });
 

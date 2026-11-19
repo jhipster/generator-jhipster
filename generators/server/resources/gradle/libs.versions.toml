@@ -1,7 +1,7 @@
 [libraries]
 springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '3.2.0' }
 
-cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '8.0.4' }
+cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '8.1.0' }
 
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
 
@@ -24,7 +24,7 @@ node-gradle = { id = 'com.github.node-gradle.node', version = '7.1.0' }
 
 gradle-liquibase = { id = 'org.liquibase.gradle', version = '3.1.1' }
 
-gradle-sonarqube = { id = 'org.sonarqube', version = '7.5.0.8588' }
+gradle-sonarqube = { id = 'org.sonarqube', version = '7.6.0.18749' }
 
 spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '8.11.0' }
 

@@ -47,9 +47,8 @@ test.describe('/account/settings', () => {
     await expect(page.locator(emailSettingsSelector)).toHaveValue(testUserEmail);
   });
 
-  // Cypress restores the test account between tests and the original one at the end. Restoring the original
-  // one after every test reaches the same final state without a worker scoped fixture, and beforeEach puts the
-  // test email back before each test.
+  // Restoring the original account after every test needs no worker scoped fixture; beforeEach puts the test
+  // email back before each test.
   test.afterEach(async ({ jhi }) => {
     const { username, password } = jhi.credentials();
     await jhi.login(username, password);
@@ -89,8 +88,7 @@ test.describe('/account/settings', () => {
     const testAdminEmail = 'admin@localhost.fr';
     let originalAdminAccount: Account;
 
-    // Cypress ran this once in a `before`, so it happened before the outer hook opened the settings page.
-    // A playwright beforeEach runs after the outer one and login navigates away, so the page is reopened here.
+    // This beforeEach runs after the outer one and login navigates away, so the settings page is reopened here.
     test.beforeEach(async ({ page, jhi }) => {
       const { adminUsername, adminPassword, username, password } = jhi.credentials();
       await jhi.login(adminUsername, adminPassword);

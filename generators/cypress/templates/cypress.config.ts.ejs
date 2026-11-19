@@ -19,12 +19,10 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
-  video: false,
   fixturesFolder: '<%- relativeDir(clientRootDir, cypressDir) %>fixtures',
   screenshotsFolder: '<%- relativeDir(clientRootDir, cypressTemporaryDir) %>screenshots',
   downloadsFolder: '<%- relativeDir(clientRootDir, cypressTemporaryDir) %>downloads',
   videosFolder: '<%- relativeDir(clientRootDir, cypressTemporaryDir) %>videos',
-  chromeWebSecurity: true,
   viewportWidth: 1200,
   viewportHeight: 720,
   retries: 2,

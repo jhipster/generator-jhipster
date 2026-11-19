@@ -32,6 +32,8 @@ import {
 import { default as prepareSqlApplicationProperties } from '../base-application/generators/database-bootstrap/support/application-properties.ts';
 import { getJdbcUrl } from '../base-application/generators/database-bootstrap/support/database-url.ts';
 import {
+  formatEntitySample,
+  generateEntitySamples,
   prepareCommonFieldForTemplates,
   prepareEntity,
   prepareEntityPrimaryKeyForTemplates,
@@ -902,34 +904,36 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       configurable: true,
     });
 
-    for (let rowNumber = 0; rowNumber < this.numberOfRows; rowNumber++) {
-      const rowData: Record<string, any> = {};
-      const fields: LiquibaseField[] =
-        databaseChangelog.newEntity ?
-          // generate id fields first to improve reproducibility
-          [...entityChanges.fields.filter(f => f.id), ...entityChanges.fields.filter(f => !f.id)]
-        : [...entityChanges.allFields.filter(f => f.id), ...entityChanges.addedFields.filter(f => !f.id)];
-      fields.forEach(field => {
-        if ('derived' in field && field.derived) {
-          const derivedField = field as DerivedField<LiquibaseEntity, LiquibaseField>;
-          Object.defineProperty(rowData, field.fieldName, {
-            get: () => {
-              if (!derivedField.derivedEntity.liquibaseFakeData || rowNumber >= derivedField.derivedEntity.liquibaseFakeData.length) {
-                return undefined;
-              }
-              return derivedField.derivedEntity.liquibaseFakeData[rowNumber][field.fieldName];
-            },
-          });
-          return;
-        }
-        let data;
-        if (field.id && ([TYPE_INTEGER, TYPE_LONG] as string[]).includes(field.fieldType)) {
-          data = rowNumber + 1;
-        } else {
-          data = field.generateFakeData!();
-        }
-        rowData[field.fieldName] = data;
-      });
+    const fields: LiquibaseField[] =
+      databaseChangelog.newEntity ?
+        // generate id fields first to improve reproducibility
+        [...entityChanges.fields.filter(f => f.id), ...entityChanges.fields.filter(f => !f.id)]
+      : [...entityChanges.allFields.filter(f => f.id), ...entityChanges.addedFields.filter(f => !f.id)];
+    const isDerived = (field: LiquibaseField) => 'derived' in field && Boolean(field.derived);
+    // A numeric id is the number of the row, a derived field the value of the row of its entity.
+    const isRowNumber = (field: LiquibaseField) => field.id && ([TYPE_INTEGER, TYPE_LONG] as string[]).includes(field.fieldType);
+    const sampleFields = fields.filter(field => !isDerived(field) && !isRowNumber(field));
+    const [samples] = generateEntitySamples(entity, {
+      seed: `${application.baseName}-${seed}`,
+      batches: [{ fields: sampleFields, count: this.numberOfRows }],
+    });
+
+    for (const [rowNumber, sample] of samples.entries()) {
+      const rowData = formatEntitySample(sampleFields, sample, 'csv');
+      for (const field of fields.filter(field => isRowNumber(field))) {
+        rowData[field.fieldName] = rowNumber + 1;
+      }
+      for (const field of fields.filter(field => isDerived(field))) {
+        const derivedField = field as DerivedField<LiquibaseEntity, LiquibaseField>;
+        Object.defineProperty(rowData, field.fieldName, {
+          get: () => {
+            if (!derivedField.derivedEntity.liquibaseFakeData || rowNumber >= derivedField.derivedEntity.liquibaseFakeData.length) {
+              return undefined;
+            }
+            return derivedField.derivedEntity.liquibaseFakeData[rowNumber][field.fieldName];
+          },
+        });
+      }
 
       entity.liquibaseFakeData.push(rowData);
     }

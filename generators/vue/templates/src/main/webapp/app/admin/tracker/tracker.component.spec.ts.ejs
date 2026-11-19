@@ -91,6 +91,22 @@ describe('<%- jhiPrefixCapitalized %>Tracker', () => {
     expect(subscriptionSpy).toHaveBeenCalledOnce();
   });
 
+  it('should unmount without a subscription', () => {
+    // GIVEN
+    trackerServiceStub.subscribe.mockReturnValue(null);
+    wrapper = shallowMount(<%- jhiPrefixCapitalized %>Tracker, {
+      global: {
+        plugins: [router],
+        provide: {
+          [trackerServiceKey as symbol]: trackerServiceStub,
+        },
+      },
+    });
+
+    // THEN
+    expect(() => wrapper.unmount()).not.toThrow();
+  });
+
   it('should add new activity', () => {
     // GIVEN
     const activity1 = trackerActivity('123', 'login');
