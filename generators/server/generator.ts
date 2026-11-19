@@ -266,7 +266,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
   /** @inheritdoc */
   get default() {
     return this.asDefaultTaskGroup({
-      checkCompositeIds({ entities }) {
+      checkCompositeIds({ application, entities }) {
+        // Composite ids are only supported by the Spring Boot generator (and only by its imperative SQL applications).
+        if (application.compositePrimaryKeySupport && application.databaseTypeSql && !application.reactive) return;
         const entitiesWithCompositeIds = entities.filter(entity => entity.primaryKey?.composite);
         if (entitiesWithCompositeIds.length > 0) {
           throw new Error(

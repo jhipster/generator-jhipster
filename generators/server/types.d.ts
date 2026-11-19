@@ -48,6 +48,8 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 export type Application<E extends BaseApplicationEntity = Entity> = ExportApplicationPropertiesFromCommand<typeof Command> &
   CommonApplication<E> &
   JavaApplication<E> & {
+    /** Set by the Spring Boot generator, which implements composite primary keys. */
+    compositePrimaryKeySupport?: boolean;
     oauth2AppSchemes?: string[];
     devDatabaseTypeH2Any?: boolean;
     /** The server authenticates the requests by a session cookie and protects them with a CSRF token. */
