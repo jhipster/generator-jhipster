@@ -38,6 +38,12 @@ exports[`generator - client:rest-domain with entities should match files snapsho
   "src/main/webapp/app/entities/baz/baz.rest.model.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/enumerations/color.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/enumerations/color.rest.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/foo/foo.rest.model.spec.ts": {
     "stateCleared": "modified",
   },

@@ -37,6 +37,8 @@ type ClientAddedFieldProperties = {
   restDomainType?: string;
   /** Whether the JSON value of the field in the REST API is null when the database has no value. */
   restDomainNullable?: boolean;
+  /** The name of the TypeScript type of the enum of the field in the REST API, written by client:rest-domain. */
+  restDomainEnumTypeName?: string;
 };
 
 const htmlInputTypeForTsType: Record<string, string> = {

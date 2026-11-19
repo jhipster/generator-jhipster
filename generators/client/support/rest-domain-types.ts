@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { fieldTypes } from '../../../../../lib/jhipster/index.ts';
-import type { MutateDataParam } from '../../../../../lib/utils/object.ts';
-import type { RelationshipWithEntity } from '../../../../base-application/types.ts';
-import type { DatabaseProperty } from '../../../../liquibase/types.d.ts';
-import getTypescriptKeyType from '../../../support/types-utils.ts';
-import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../../../types.d.ts';
+import { fieldTypes } from '../../../lib/jhipster/index.ts';
+import type { MutateDataParam } from '../../../lib/utils/object.ts';
+import type { RelationshipWithEntity } from '../../base-application/types.ts';
+import type { DatabaseProperty } from '../../liquibase/types.d.ts';
+import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.d.ts';
+
+import getTypescriptKeyType from './types-utils.ts';
 
 const {
   BIG_DECIMAL,
@@ -73,10 +74,13 @@ export const mutateRestDomainField = ({ restDomainPrefix }: { restDomainPrefix: 
     __override__: false,
     // The primary key is always sent, the other fields are null when the database has no value.
     restDomainNullable: field => !field.id && Boolean((field as DatabaseProperty).nullable),
+    // The enum of the REST API, the names of its values, which client:rest-domain writes.
+    restDomainEnumTypeName: field =>
+      field.fieldIsEnum && !field.clientConstantsAsValues ? `${restDomainPrefix}${field.fieldType}` : undefined,
     restDomainType: field => {
       let type: string;
       if (field.fieldIsEnum) {
-        type = field.clientConstantsAsValues ? 'string' : `keyof typeof ${field.fieldType}`;
+        type = field.restDomainEnumTypeName ?? 'string';
       } else {
         const dateType = restDomainDateTypeByFieldType[field.fieldType];
         type = dateType ? `${restDomainPrefix}${dateType}` : (restDomainTypeByFieldType[field.fieldType] ?? 'any');

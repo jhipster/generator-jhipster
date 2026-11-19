@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
+import { mutateData, overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
 import { fieldIsEnum } from '../../../base-application/support/field-utils.ts';
 import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
@@ -26,7 +26,10 @@ import {
   filterEntitiesForClient,
   filterEntityFieldsForClient,
   filterEntityPropertiesForClient,
+  getRestDomainNewProperties,
   isClientField,
+  mutateRestDomainField,
+  mutateRestDomainRelationship,
   preparePostEntityClientDerivedProperties,
 } from '../../support/index.ts';
 import type { Application as ClientApplication, Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
@@ -128,11 +131,31 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
       preparing({ fieldDefaults }) {
         fieldDefaults(mutateField);
       },
+      prepareRestDomainField({ application, field }) {
+        // The command of the client gives the prefix its default.
+        mutateData(field, mutateRestDomainField({ restDomainPrefix: application.restDomainPrefix! }));
+      },
     });
   }
 
   get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareRestDomainRelationships({ entity }) {
+        // The types of the REST API, which client:rest-domain writes, read the other entities once they are prepared.
+        for (const relationship of entity.relationships) {
+          mutateData(relationship, mutateRestDomainRelationship);
+        }
+        entity.restDomainNewProperties ??= getRestDomainNewProperties(entity);
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get default() {

@@ -29,7 +29,7 @@
       .filter(relationship => !relationship.relationshipSerializePrimaryKeyOnly && relationship.otherEntity.entityAngularName !== entityAngularName)
       .map(relationship => relationship.otherEntity))];
     const enumFields = fields.filter((field, index) =>
-      field.fieldIsEnum && !field.clientConstantsAsValues && fields.findIndex(other => other.fieldType === field.fieldType) === index);
+      field.restDomainEnumTypeName && fields.findIndex(other => other.fieldType === field.fieldType) === index);
     // The imports in the order of their paths, as the linter sorts them.
     const restImports = [
       ...restDateTypes.length > 0 ? [{ names: restDateTypes.join(', '), path: `${relativeDir(entityDir, `${clientSrcDir}app/shared/jhipster/`)}rest.model` }] : [],
@@ -37,7 +37,7 @@
         names: otherEntity.restDomainTypeName,
         path: `${relativeDir(entityDir, `${clientSrcDir}app/entities/${otherEntity.entityFolderName}/`)}${otherEntity.entityFileName}.rest.model`,
       })),
-      ...enumFields.map(field => ({ names: field.fieldType, path: `${relativeDir(entityDir, webappEnumerationsDir)}${field.enumFileName}.model` })),
+      ...enumFields.map(field => ({ names: field.restDomainEnumTypeName, path: `${relativeDir(entityDir, `${clientSrcDir}app/entities/enumerations/`)}${field.enumFileName}.rest.model` })),
     ].sort((a, b) => a.path.localeCompare(b.path));
 _%>
 <%_ for (const { names, path } of restImports) { _%>

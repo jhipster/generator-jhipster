@@ -95,11 +95,7 @@ describe(`generator - ${generator}`, () => {
 
   describe('with entities', () => {
     before(async () => {
-      await helpers
-        .runJHipster(generator)
-        // The folder of the enumerations is the one of the client framework, which this generator does not compose.
-        .withSharedApplication({ webappEnumerationsDir: 'src/main/webapp/app/shared/model/enumerations/' })
-        .withJHipsterConfig({ clientFramework: 'react' }, entities);
+      await helpers.runJHipster(generator).withJHipsterConfig({ clientFramework: 'react' }, entities);
     });
 
     it('should match files snapshot', () => {
@@ -109,10 +105,7 @@ describe(`generator - ${generator}`, () => {
 
   describe('with a prefix', () => {
     before(async () => {
-      await helpers
-        .runJHipster(generator)
-        .withSharedApplication({ webappEnumerationsDir: 'src/main/webapp/app/shared/model/enumerations/' })
-        .withJHipsterConfig({ clientFramework: 'react', restDomainPrefix: 'Api' }, entities);
+      await helpers.runJHipster(generator).withJHipsterConfig({ clientFramework: 'react', restDomainPrefix: 'Api' }, entities);
     });
 
     // The prefix is a config no sample sets: the generated application cannot tell it from the default one.
@@ -120,6 +113,7 @@ describe(`generator - ${generator}`, () => {
       result.assertFileContent('src/main/webapp/app/shared/jhipster/rest.model.ts', 'export type ApiLocalDate = string;');
       result.assertFileContent('src/main/webapp/app/entities/foo/foo.rest.model.ts', 'export interface ApiFoo {');
       result.assertFileContent('src/main/webapp/app/entities/foo/foo.rest.model.ts', "bar: Pick<ApiBar, 'id' | 'title'>;");
+      result.assertFileContent('src/main/webapp/app/entities/enumerations/color.rest.model.ts', "export type ApiColor = 'RED' | 'GREEN';");
     });
   });
 });

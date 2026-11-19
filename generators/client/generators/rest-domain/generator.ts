@@ -16,12 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../../lib/utils/object.ts';
+import { getEnumInfo } from '../../../base-application/support/index.ts';
+import { CLIENT_MAIN_SRC_DIR } from '../../../generator-constants.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
 import { clientApplicationTemplatesBlock } from '../../support/files.ts';
 import { filterEntitiesAndPropertiesForClient } from '../../support/filter-entities.ts';
-
-import { getRestDomainNewProperties, mutateRestDomainField, mutateRestDomainRelationship } from './support/rest-domain-types.ts';
 
 /**
  * Writes the types of the REST API of the entities, as their JSON is sent and received: the dates are the strings of the
@@ -36,36 +35,6 @@ export default class RestDomainGenerator extends ClientApplicationGenerator {
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('client');
     }
-  }
-
-  get preparingEachEntityField() {
-    return this.asPreparingEachEntityFieldTaskGroup({
-      prepareRestDomainField({ application, field }) {
-        // The command of the client gives the prefix its default.
-        mutateData(field, mutateRestDomainField({ restDomainPrefix: application.restDomainPrefix! }));
-      },
-    });
-  }
-
-  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
-  }
-
-  get postPreparingEachEntity() {
-    return this.asPostPreparingEachEntityTaskGroup({
-      prepareRestDomainRelationships({ entity }) {
-        for (const relationship of entity.relationships) {
-          mutateData(relationship, mutateRestDomainRelationship);
-        }
-      },
-      prepareRestDomainNewProperties({ entity }) {
-        entity.restDomainNewProperties ??= getRestDomainNewProperties(entity);
-      },
-    });
-  }
-
-  get [ClientApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get writingEntities() {
@@ -102,6 +71,23 @@ export default class RestDomainGenerator extends ClientApplicationGenerator {
                   readOnly: true,
                 }
               : {}),
+            },
+          });
+        }
+        // Each enum once, its type the names of its values, which the entities import.
+        const enumFields = clientEntities
+          .flatMap(entity => entity.fields.filter(field => field.restDomainEnumTypeName).map(field => ({ entity, field })))
+          .filter(({ field }, index, all) => all.findIndex(other => other.field.fieldType === field.fieldType) === index);
+        for (const { entity, field } of enumFields) {
+          await this.writeFiles({
+            templates: ['enum.rest.model.ts', 'enum.rest.model.spec.ts'].map(file => ({
+              sourceFile: `${CLIENT_MAIN_SRC_DIR}app/entities/enumerations/${file}`,
+              destinationFile: `${application.clientSrcDir}app/entities/enumerations/${file.replace('enum', field.enumFileName!)}`,
+            })),
+            context: {
+              ...getEnumInfo(field, entity.clientRootFolder),
+              enumFileName: field.enumFileName,
+              restDomainEnumTypeName: field.restDomainEnumTypeName,
             },
           });
         }
