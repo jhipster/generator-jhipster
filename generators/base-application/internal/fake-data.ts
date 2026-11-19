@@ -44,7 +44,7 @@ export function getFieldFakeDataDomain(field: BaseApplicationField): FieldDomain
   }
   if (([INTEGER, LONG] as string[]).includes(field.fieldType)) {
     const min = Number.parseInt(`${field.fieldValidateRulesMin ?? 0}`, 10);
-    const max = Number.parseInt(`${field.fieldValidateRulesMax ?? 32767}`, 10);
+    const max = Number.parseInt(`${field.fieldValidateRulesMax ?? Math.max(32767, min + 1)}`, 10);
     if (max - min <= MAX_DOMAIN_RANGE) {
       return Array.from({ length: max - min + 1 }, (_, index) => min + index);
     }
