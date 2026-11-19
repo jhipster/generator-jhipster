@@ -443,7 +443,11 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties(entity: BaseApplicationEntity) {
+/**
+ * The `anyField*` properties of the entity, which follow its fields: a copy of the entity with part of the fields takes
+ * the ones of the fields it keeps.
+ */
+export function prepareEntityAnyFieldDerivedProperties(entity: BaseApplicationEntity) {
   const { fields } = entity;
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
@@ -462,13 +466,15 @@ export function preparePostEntityCommonDerivedProperties(entity: BaseApplication
   entity.anyFieldIsDateDerived = entity.anyFieldIsTimeDerived || entity.anyFieldIsLocalDate;
 
   entity.anyFieldIsBlobDerived = intersection(fieldsType, [BYTES, BYTE_BUFFER]).length > 0;
-  if (entity.anyFieldIsBlobDerived) {
-    const blobFields = fields.filter(({ fieldType }) => ([BYTES, BYTE_BUFFER] as string[]).includes(fieldType));
-    const blobFieldsContentType = sortedUniq(blobFields.map(({ fieldTypeBlobContent }) => fieldTypeBlobContent));
-    entity.anyFieldHasImageContentType = blobFieldsContentType.includes(IMAGE);
-    entity.anyFieldHasFileBasedContentType = blobFieldsContentType.some(fieldTypeBlobContent => fieldTypeBlobContent !== TEXT);
-    entity.anyFieldHasTextContentType = blobFieldsContentType.includes(TEXT);
-  }
+  const blobFields = fields.filter(({ fieldType }) => ([BYTES, BYTE_BUFFER] as string[]).includes(fieldType));
+  const blobFieldsContentType = sortedUniq(blobFields.map(({ fieldTypeBlobContent }) => fieldTypeBlobContent));
+  entity.anyFieldHasImageContentType = blobFieldsContentType.includes(IMAGE);
+  entity.anyFieldHasFileBasedContentType = blobFieldsContentType.some(fieldTypeBlobContent => fieldTypeBlobContent !== TEXT);
+  entity.anyFieldHasTextContentType = blobFieldsContentType.includes(TEXT);
+}
+
+export function preparePostEntityCommonDerivedProperties(entity: BaseApplicationEntity) {
+  prepareEntityAnyFieldDerivedProperties(entity);
 
   preparePostEntityCommonDerivedPropertiesNotTyped(entity as EntityAll);
 }

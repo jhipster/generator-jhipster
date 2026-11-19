@@ -31,6 +31,9 @@ import { of, throwError } from 'rxjs';
 
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
+<%_ if (enableTranslation) { _%>
+import { StateStorageService } from 'app/core/auth/state-storage.service';
+<%_ } _%>
 import { AlertModel, AlertService } from 'app/core/util/alert.service';
 import Home from 'app/home/home';
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -39,6 +42,9 @@ import Login from 'app/login/login';
 import { LoginService } from 'app/login/login.service';
 import { Alert } from 'app/shared/alert/alert';
 import { AlertError } from 'app/shared/alert/alert-error';
+<%_ if (enableTranslation) { _%>
+import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
+<%_ } _%>
 
 import Navbar from './navbar/navbar';
 import PageRibbon from './profiles/page-ribbon';
@@ -93,17 +99,34 @@ describe('Layout screens', () => {
     it('should change the language', async () => {
       TestBed.inject(AccountService).authenticate(null);
       vi.spyOn(TestBed.inject(ProfileService), 'getProfileInfo').mockReturnValue(of({}));
-      const translateService = TestBed.inject(TranslateService);
-      const use = vi.spyOn(translateService, 'use');
+      const names: Record<string, string> = { aa: 'Language A', bb: 'Language B' };
+      vi.spyOn(FindLanguageFromKeyPipe.prototype, 'transform').mockImplementation(language => names[language]);
+      const use = vi.spyOn(TestBed.inject(TranslateService), 'use');
       const fixture = TestBed.createComponent(Navbar);
-      Object.assign(fixture.componentInstance, { languages: ['en', 'en'] });
+      Object.assign(fixture.componentInstance, { languages: Object.keys(names) });
       await fixture.whenStable();
+
+      expect(fixture.nativeElement.querySelector('[data-cy="language-aa"]').textContent.trim()).toBe('Language A');
+      expect(fixture.nativeElement.querySelector('[data-cy="language-bb"]').textContent.trim()).toBe('Language B');
 
       await clickAll(fixture, '[data-cy="navbar"] a, a.dropdown-item');
-      translateService.use('en');
+
+      expect(use).toHaveBeenCalledWith('aa');
+      expect(use).toHaveBeenCalledWith('bb');
+      TestBed.inject(TranslateService).use('<%- nativeLanguage %>');
+      TestBed.inject(StateStorageService).clearLocale();
+      await fixture.whenStable();
+    });
+
+    it('should hide the language menu with a single language', async () => {
+      TestBed.inject(AccountService).authenticate(null);
+      vi.spyOn(TestBed.inject(ProfileService), 'getProfileInfo').mockReturnValue(of({}));
+      const fixture = TestBed.createComponent(Navbar);
+      Object.assign(fixture.componentInstance, { languages: ['aa'] });
       await fixture.whenStable();
 
-      expect(use).toHaveBeenCalledWith('en');
+      expect(fixture.nativeElement.querySelector('[data-cy="navbar"]')).not.toBeNull();
+      expect(fixture.nativeElement.querySelector('[data-cy="languageMenu"]')).toBeNull();
     });
 
 <%_ } _%>

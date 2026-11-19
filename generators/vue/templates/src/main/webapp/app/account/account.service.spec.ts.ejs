@@ -31,9 +31,6 @@ import AccountService from './account.service';
 const resetStore = (store: AccountStore) => {
   store.logout();
   store.authenticate(null);
-  store.profilesLoaded = false;
-  store.activeProfiles = [];
-  store.ribbonOnProfiles = '';
 };
 
 const axiosStub = {
@@ -70,12 +67,7 @@ describe('Account Service test suite', () => {
   });
 
   it('should init service and do not retrieve account', async () => {
-    axiosStub.get.mockImplementation((...args: unknown[]) => {
-      if (args[0] === 'management/info') {
-        return Promise.resolve({ status: 200, data: { 'display-ribbon-on-profiles': 'dev', activeProfiles: ['dev', 'test'] } });
-      }
-      return Promise.resolve({});
-    });
+    axiosStub.get.mockResolvedValue({});
 
     accountService = new AccountService(store);
     await accountService.update();
@@ -83,13 +75,9 @@ describe('Account Service test suite', () => {
     expect(store.logon).toBeNull();
     expect(accountService.authenticated).toBe(false);
     expect(store.account).toBeNull();
-    expect(axiosStub.get).toHaveBeenCalledWith('management/info');
-    expect(store.activeProfiles[0]).toBe('dev');
-    expect(store.activeProfiles[1]).toBe('test');
-    expect(store.ribbonOnProfiles).toBe('dev');
   });
 
-  it('should init service and retrieve profiles if already logged in before but no account found', async () => {
+  it('should init service and log out if already logged in before but no account found', async () => {
     axiosStub.get.mockResolvedValue({});
     accountService = new AccountService(store);
     await accountService.update();
@@ -97,10 +85,9 @@ describe('Account Service test suite', () => {
     expect(store.logon).toBeNull();
     expect(accountService.authenticated).toBe(false);
     expect(store.account).toBeNull();
-    expect(axiosStub.get).toHaveBeenCalledWith('management/info');
   });
 
-  it('should init service and retrieve profiles if already logged in before but exception occurred and should be logged out', async () => {
+  it('should init service and log out if already logged in before but exception occurred', async () => {
     axiosStub.get.mockImplementation((...args: unknown[]) => {
       if (args[0] === 'api/account') return Promise.reject(new Error());
       return Promise.resolve({});
@@ -110,7 +97,6 @@ describe('Account Service test suite', () => {
 
     expect(accountService.authenticated).toBe(false);
     expect(store.account).toBeNull();
-    expect(axiosStub.get).toHaveBeenCalledWith('management/info');
   });
 
   it('should init service and check for authority after retrieving account but getAccount failed', async () => {
@@ -153,7 +139,7 @@ describe('Account Service test suite', () => {
     });
   });
 
-  it('should not load the profiles nor the account twice', async () => {
+  it('should not load the account twice', async () => {
 <%_ if (authenticationTypeJwt) { _%>
     localStorage.clear();
     sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, 'token');
@@ -164,7 +150,7 @@ describe('Account Service test suite', () => {
     await accountService.update();
     await accountService.update();
 
-    expect(axiosStub.get).toHaveBeenCalledTimes(2);
+    expect(axiosStub.get).toHaveBeenCalledOnce();
 <%_ if (authenticationTypeJwt) { _%>
     sessionStorage.clear();
 <%_ } _%>

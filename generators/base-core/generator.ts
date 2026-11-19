@@ -50,6 +50,7 @@ import {
 } from '../../lib/command/mutations.ts';
 import { packageJson } from '../../lib/index.ts';
 import { requireGeneratorCommand } from '../../lib/resolver/generator-command.ts';
+import { resolveGeneratorNamespace } from '../../lib/resolver/namespace.ts';
 import {
   CRLF,
   LF,
@@ -458,21 +459,35 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       return mergedConfigs;
     };
 
+    type NamespaceCommand = { namespace: string; command: JHipsterCommandDefinition };
+    /** The imports of a command, `:<generator>` being a generator of the package of the importing one. */
+    const importsOf = ({ namespace, command }: NamespaceCommand) =>
+      (command.import ?? []).map(imported => ({ imported, importedBy: namespace }));
+
+    /**
+     * The commands of the generators, with their imports when `loadImports`. A generator imported (`importedBy`) is
+     * required to be registered.
+     */
     const collectNamespaceCommands = async (
       { loadImports }: { loadImports: boolean },
-      ...namespaces: string[]
-    ): Promise<JHipsterCommandDefinition[]> => {
-      const result: JHipsterCommandDefinition[] = [];
-      for (let namespace of namespaces) {
-        namespace = namespace.includes(':') ? namespace : `jhipster:${namespace}`;
+      ...generators: { imported: string; importedBy?: string }[]
+    ): Promise<NamespaceCommand[]> => {
+      const result: NamespaceCommand[] = [];
+      for (const { imported, importedBy } of generators) {
+        const namespace = resolveGeneratorNamespace(imported, { from: importedBy });
         const commandsToLoad = this.#commandsToLoad;
         if (!commandsToLoad.has(namespace)) {
           commandsToLoad.add(namespace);
-          const command = requireGeneratorCommand(this.env.getGeneratorMeta(namespace));
+          const meta = this.env.getGeneratorMeta(namespace);
+          if (!meta && importedBy) {
+            throw new Error(`The generator ${namespace} imported by ${importedBy} is not registered`);
+          }
+          const command = requireGeneratorCommand(meta);
           if (command) {
-            result.push(command);
+            const namespaceCommand = { namespace, command };
+            result.push(namespaceCommand);
             if (loadImports) {
-              result.push(...(await collectNamespaceCommands({ loadImports: true }, ...(command.import ?? []))));
+              result.push(...(await collectNamespaceCommands({ loadImports: true }, ...importsOf(namespaceCommand))));
             }
           }
         }
@@ -480,7 +495,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       return result;
     };
 
-    const directCommands: JHipsterCommandDefinition[] = [];
+    const directCommands: NamespaceCommand[] = [];
     let directCommandsMergedConfigs: JHipsterConfigs = {};
     this.queueTask({
       queueName: QUEUES.LOADING_QUEUE,
@@ -493,9 +508,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             const command = this.#getCurrentJHipsterCommand();
             if (command.configs) {
               commandsToLoad.add(this.options.namespace);
-              directCommands.push(command);
+              directCommands.push({ namespace: this.options.namespace, command });
             } else {
-              directCommands.push(...(await collectNamespaceCommands({ loadImports: false }, this.options.namespace)));
+              directCommands.push(...(await collectNamespaceCommands({ loadImports: false }, { imported: this.options.namespace })));
             }
           }
         } catch {
@@ -505,10 +520,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         const split = this.options.namespace.split(':');
         if (split.length === 3 && split[2] === 'bootstrap') {
           const mainNamespace = this.options.namespace.replace(':bootstrap', '');
-          directCommands.push(...(await collectNamespaceCommands({ loadImports: false }, mainNamespace)));
+          directCommands.push(...(await collectNamespaceCommands({ loadImports: false }, { imported: mainNamespace })));
         }
 
-        directCommandsMergedConfigs = mergeCommandsConfigs(directCommands);
+        directCommandsMergedConfigs = mergeCommandsConfigs(directCommands.map(({ command }) => command));
 
         if (this.blueprintStorage) {
           mutateData(this.context, getCommandBlueprintLoadingMutations(this as unknown as BaseGenerator, directCommandsMergedConfigs));
@@ -527,7 +542,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           getCommandDerivedPropertyMutations(directCommandsMergedConfigs),
         );
 
-        const imports = directCommands.flatMap(command => command.import ?? []);
+        const imports = directCommands.flatMap(importsOf);
         if (imports.length > 0 || loadCommand.length > 0) {
           // Populate imported commands and loadCommand, to allow the generator itself to load them.
           this.queueTask({
@@ -535,14 +550,19 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             taskName: 'preparingImportedCommand',
             cancellable: true,
             async method() {
+              // The commands the generator loads, and the imports of a command it loads, are of the generator.
+              const importedBy = this.options.namespace;
               const importedCommandNamespaces = [
-                ...loadCommand.filter(l => typeof l === 'string'),
-                ...loadCommand.filter(l => typeof l === 'object').flatMap(l => l.import ?? []),
+                ...loadCommand.filter(l => typeof l === 'string').map(imported => ({ imported, importedBy })),
+                ...loadCommand
+                  .filter(l => typeof l === 'object')
+                  .flatMap(l => l.import ?? [])
+                  .map(imported => ({ imported, importedBy })),
                 ...imports,
               ];
               const importedCommands = [
                 ...loadCommand.filter(l => typeof l === 'object'),
-                ...(await collectNamespaceCommands({ loadImports: true }, ...importedCommandNamespaces)),
+                ...(await collectNamespaceCommands({ loadImports: true }, ...importedCommandNamespaces)).map(({ command }) => command),
               ];
               const mergedImportedConfigs = mergeCommandsConfigs(importedCommands);
               mutateData(
@@ -905,7 +925,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     assert(typeof gen === 'string', 'generator should be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
-      const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
+      // `:<generator>` is a generator of the package of this one.
+      const namespace = resolveGeneratorNamespace(generator, { from: this.options.namespace });
       if (await this.env.get(namespace)) {
         generator = namespace;
       } else {

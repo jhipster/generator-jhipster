@@ -16,33 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const tsKeyId = primaryKey.tsSampleValues[0];
-    const requiresRestTypeConversion = anyFieldIsDateDerived || builtInUserManagement;
-    const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
-_%>
+<%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-<%_ if (anyFieldIsLocalDate) { _%>
-import { DATE_FORMAT } from 'app/config';
-<%_ } _%>
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../<%- entityFileName %>.test-samples';
 
-import { <%- entityAngularName %>Service, <%- entityAngularNamePlural %>Service<% if (requiresRestTypeConversion) { %>, <%- entityRestName %><% } %> } from './<%- entityFileName %>.service';
+import { <%- entityAngularName %>Service, <%- entityAngularNamePlural %>Service } from './<%- entityFileName %>.service';
 
-const requireRestSample: <% if (requiresRestTypeConversion) { %><%- entityRestName %><% } else { %>I<%- entityAngularName %><% } %> = {
+const requireRestSample: I<%- entityAngularName %> = {
   ...sampleWithRequiredData,
-<%_ if (requiresRestTypeConversion) { _%>
-  <%_ for (const field of fields) { _%>
-    <%_ if (field.fieldTypeLocalDate) { _%>
-  <%- field.fieldName %>: sampleWithRequiredData.<%- field.fieldName %>?.format(DATE_FORMAT),
-    <%_ } else if (field.fieldTypeTimed) { _%>
-  <%- field.fieldName %>: sampleWithRequiredData.<%- field.fieldName %>?.toJSON(),
-    <%_ } _%>
-  <%_ } _%>
-<%_ } _%>
 };
 
 describe('<%- entityAngularName %> Service', () => {
@@ -114,15 +99,11 @@ describe('<%- entityAngularName %> Service', () => {
   <%_ const dateFields = fields.filter(field => field.fieldTypeTimed || field.fieldTypeLocalDate); _%>
   <%_ if (dateFields.length > 0) { _%>
 
-        it('should send null for the dates a partial update does not have', () => {
+        it('should send a partial update as it is, without the dates it does not have', () => {
             service.partialUpdate({ <%- primaryKey.name %>: sampleWithRequiredData.<%- primaryKey.name %> }).subscribe();
 
             const req = httpMock.expectOne({ method: 'PATCH' });
-            expect(req.request.body).toMatchObject({
-    <%_ for (const field of dateFields) { _%>
-                <%- field.fieldName %>: null,
-    <%_ } _%>
-            });
+            expect(req.request.body).toEqual({ <%- primaryKey.name %>: sampleWithRequiredData.<%- primaryKey.name %> });
             req.flush(requireRestSample);
         });
   <%_ } _%>
@@ -139,16 +120,6 @@ describe('<%- entityAngularName %> Service', () => {
             req.flush([returnedFromService]);
             expect(expectedResult).toMatchObject([expected]);
         });
-<%_ if (requiresRestTypeConversion) { _%>
-
-        it('should return an empty list of <%- entityAngularName %>', () => {
-            let body: I<%- entityAngularName %>[] | null | undefined;
-            service.query().subscribe(resp => body = resp.body);
-
-            httpMock.expectOne({ method: 'GET' }).flush(null);
-            expect(body).toBeNull();
-        });
-<%_ } _%>
 
 <%_ if (!readOnly) { _%>
         it('should delete a <%- entityAngularName %>', () => {

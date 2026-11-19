@@ -27,6 +27,7 @@ import type { PackageJson } from 'type-fest';
 
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { packageJson } from '../../lib/index.ts';
+import { getGeneratorAlias, getGeneratorAliasVersion } from '../../lib/resolver/blueprint-aliases.ts';
 import { requireGeneratorCommand } from '../../lib/resolver/generator-command.ts';
 import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
 import { packageNameToNamespace } from '../../lib/utils/index.ts';
@@ -144,11 +145,21 @@ export default class BaseGenerator<
       const { storeBlueprintVersion, storeJHipsterVersion, queueCommandTasks = true } = this.features;
       if (this.fromBlueprint && storeBlueprintVersion && !this.options.reproducibleTests) {
         try {
-          if (this.blueprintConfig!.blueprintVersion) {
-            this.getContextData(this.#getBlueprintOldVersionKey(), { factory: () => this.blueprintConfig!.blueprintVersion });
+          const alias = getGeneratorAlias(this._meta);
+          if (alias) {
+            // A generator of a package the blueprint takes stores the version of that package, by its name.
+            const aliasVersions: Record<string, string> = this.blueprintConfig!.aliasVersions ?? {};
+            if (aliasVersions[alias.aliasOf]) {
+              this.getContextData(this.#getBlueprintOldVersionKey(), { factory: () => aliasVersions[alias.aliasOf] });
+            }
+            this.blueprintConfig!.aliasVersions = { ...aliasVersions, [alias.aliasOf]: getGeneratorAliasVersion(alias) };
+          } else {
+            if (this.blueprintConfig!.blueprintVersion) {
+              this.getContextData(this.#getBlueprintOldVersionKey(), { factory: () => this.blueprintConfig!.blueprintVersion });
+            }
+            const blueprintPackageJson = this._meta.getPackageJson!<PackageJson>()!;
+            this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
           }
-          const blueprintPackageJson = this._meta.getPackageJson!<PackageJson>()!;
-          this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
         } catch {
           this.log(`Could not retrieve version of blueprint '${this.options.namespace}'`);
         }
@@ -163,7 +174,9 @@ export default class BaseGenerator<
   }
 
   #getBlueprintOldVersionKey(): string {
-    return `oldVersion:${this.rootGeneratorName()}`;
+    // The old version of a package the blueprint takes is its own, the blueprint and the package may be both declared.
+    const alias = getGeneratorAlias(this._meta);
+    return alias ? `oldVersion:${this.rootGeneratorName()}:${alias.aliasOf}` : `oldVersion:${this.rootGeneratorName()}`;
   }
 
   #getBlueprintOldVersion(): string | undefined {

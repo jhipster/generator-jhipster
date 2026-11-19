@@ -224,6 +224,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,

@@ -58,6 +58,14 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   angularEntityListRequiresTranslationPipe?: boolean;
   angularEntityDetailsRequiresTranslationPipe?: boolean;
   angularEntityUpdateRequiresTranslationPipe?: boolean;
+  /** The sample with the data of every field, its dates written as the strings of the REST API like the model types them. */
+  angularTsSampleWithFullData?: string;
+  /** The sample with the data of the required fields, its dates written as the strings of the REST API. */
+  angularTsSampleWithRequiredData?: string;
+  /** The sample with the data of some fields, its dates written as the strings of the REST API. */
+  angularTsSampleWithPartialData?: string;
+  /** The sample of a new entity, its dates written as the strings of the REST API. */
+  angularTsSampleWithNewData?: string;
 }
 
 export type Application<E extends Entity = Entity> = {
