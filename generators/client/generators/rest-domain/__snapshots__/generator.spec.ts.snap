@@ -45,6 +45,7 @@ export interface RestFoo {
   pictureContentType: string;
   picture: string;
   text: string | null;
+  code: string;
   bar: Pick<RestBar, 'id' | 'title'>;
   owner: Pick<RestBar, 'id'> | null;
   user: Pick<RestUser, 'id' | 'login'> | null;
@@ -52,9 +53,9 @@ export interface RestFoo {
 }
 
 /**
- * A new Foo, sent to the REST API without its primary key.
+ * A new Foo, sent to the REST API without the values the server generates.
  */
-export type NewRestFoo = Omit<RestFoo, 'id'> & { id: null };
+export type NewRestFoo = Omit<RestFoo, 'id' | 'code'> & { id: null; code: string | null };
 
 /**
  * The fields of a Foo a partial update sends, with its primary key.

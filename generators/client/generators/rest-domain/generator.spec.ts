@@ -46,6 +46,7 @@ const entities = [
       { fieldName: 'color', fieldType: 'Color', fieldValues: 'RED,GREEN' },
       { fieldName: 'picture', fieldType: 'byte[]', fieldTypeBlobContent: 'image', fieldValidateRules: ['required'] },
       { fieldName: 'text', fieldType: 'byte[]', fieldTypeBlobContent: 'text' },
+      { fieldName: 'code', fieldType: 'String', fieldValidateRules: ['required'], autoGenerate: true },
     ],
     relationships: [
       {
@@ -121,6 +122,20 @@ describe(`generator - ${generator}`, () => {
     it('should leave out the types of a read-only entity to send', () => {
       result.assertFileContent('src/main/webapp/app/entities/bar/bar.rest.model.ts', 'export interface RestBar {');
       result.assertNoFileContent('src/main/webapp/app/entities/bar/bar.rest.model.ts', 'NewRestBar');
+    });
+
+    it('should send a new entity with a primary key the server does not generate as the entity itself', () => {
+      result.assertFileContent(
+        'src/main/webapp/app/entities/admin/authority/authority.rest.model.ts',
+        'export type NewRestAuthority = RestAuthority;',
+      );
+    });
+
+    it('should send a new entity with its generated primary key as null and its generated fields as nullable', () => {
+      result.assertFileContent(
+        'src/main/webapp/app/entities/foo/foo.rest.model.ts',
+        "export type NewRestFoo = Omit<RestFoo, 'id' | 'code'> & { id: null; code: string | null };",
+      );
     });
 
     it('should type the built-in user by its id and its login - snapshot', () => {
