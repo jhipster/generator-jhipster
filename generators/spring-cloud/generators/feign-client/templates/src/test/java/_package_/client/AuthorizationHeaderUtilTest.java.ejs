@@ -21,6 +21,12 @@ package <%- packageName %>.client;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -31,13 +37,11 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.restclient.RestTemplateBuilder;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -51,8 +55,10 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.client.ResponseErrorHandler;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.web.client.ResponseActions;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestClient;
 
 /**
  * Test class for the {@link AuthorizationHeaderUtil} utility class.
@@ -67,17 +73,18 @@ class AuthorizationHeaderUtilTest {
     private OAuth2AuthorizedClientService clientService;
 
     @Mock
-    private RestTemplateBuilder restTemplateBuilder;
-
-    @Mock
     private SecurityContext securityContext;
 
-    @InjectMocks
+    private MockRestServiceServer mockServer;
+
     private AuthorizationHeaderUtil authorizationHeaderUtil;
 
     @BeforeEach
     void setup() {
         SecurityContextHolder.setContext(securityContext);
+        RestClient.Builder restClientBuilder = RestClient.builder();
+        mockServer = MockRestServiceServer.bindTo(restClientBuilder).build();
+        authorizationHeaderUtil = new AuthorizationHeaderUtil(clientService, restClientBuilder);
     }
 
     @Test
@@ -129,69 +136,45 @@ class AuthorizationHeaderUtilTest {
 
     @Test
     void getAuthorizationHeader_OAuth2Authentication_RefreshToken() {
-        doReturn(restTemplateBuilder)
-            .when(restTemplateBuilder)
-            .additionalMessageConverters(any(HttpMessageConverter.class), any(HttpMessageConverter.class));
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).errorHandler(any(ResponseErrorHandler.class));
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).basicAuthentication(anyString(), anyString());
-
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken(VALID_REGISTRATION_ID);
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient(true);
 
         doReturn(oauth2Token).when(securityContext).getAuthentication();
         doReturn(authorizedClient).when(clientService).loadAuthorizedClient(eq(VALID_REGISTRATION_ID), eq(SUB_VALUE));
 
-        RestTemplate restTemplate = mock(RestTemplate.class);
-        ResponseEntity<OAuthIdpTokenResponseDTO> refreshResponse = ResponseEntity.of(getTestOAuthIdpTokenResponseDTO(true));
-        doReturn(refreshResponse).when(restTemplate).exchange(any(RequestEntity.class), eq(OAuthIdpTokenResponseDTO.class));
-        doReturn(restTemplate).when(restTemplateBuilder).build();
+        expectRefreshToken().andRespond(withSuccess(getTestTokenResponse(true), MediaType.APPLICATION_JSON));
 
         Optional<String> header = authorizationHeaderUtil.getAuthorizationHeader();
-        Assertions.assertThat(header).isNotNull().isNotEmpty().get().isEqualTo("Bearer tokenVal");
+        Assertions.assertThat(header).isNotNull().isNotEmpty().get().isEqualTo("Bearer refreshedTokenVal");
+        mockServer.verify();
     }
 
     @Test
     void getAuthorizationHeader_OAuth2Authentication_RefreshToken_NoRefreshToken() {
-        doReturn(restTemplateBuilder)
-            .when(restTemplateBuilder)
-            .additionalMessageConverters(any(HttpMessageConverter.class), any(HttpMessageConverter.class));
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).errorHandler(any(ResponseErrorHandler.class));
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).basicAuthentication(anyString(), anyString());
-
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken(VALID_REGISTRATION_ID);
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient(true);
 
         doReturn(oauth2Token).when(securityContext).getAuthentication();
         doReturn(authorizedClient).when(clientService).loadAuthorizedClient(eq(VALID_REGISTRATION_ID), eq(SUB_VALUE));
 
-        RestTemplate restTemplate = mock(RestTemplate.class);
-        ResponseEntity<OAuthIdpTokenResponseDTO> refreshResponse = ResponseEntity.of(getTestOAuthIdpTokenResponseDTO(false));
-        doReturn(refreshResponse).when(restTemplate).exchange(any(RequestEntity.class), eq(OAuthIdpTokenResponseDTO.class));
-        doReturn(restTemplate).when(restTemplateBuilder).build();
+        expectRefreshToken().andRespond(withSuccess(getTestTokenResponse(false), MediaType.APPLICATION_JSON));
 
         Optional<String> header = authorizationHeaderUtil.getAuthorizationHeader();
-        Assertions.assertThat(header).isNotNull().isNotEmpty().get().isEqualTo("Bearer tokenVal");
+        Assertions.assertThat(header).isNotNull().isNotEmpty().get().isEqualTo("Bearer refreshedTokenVal");
+        mockServer.verify();
     }
 
     @Test
     void getAuthorizationHeader_OAuth2Authentication_RefreshTokenFails() {
-        doReturn(restTemplateBuilder)
-            .when(restTemplateBuilder)
-            .additionalMessageConverters(any(HttpMessageConverter.class), any(HttpMessageConverter.class));
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).errorHandler(any(ResponseErrorHandler.class));
-        doReturn(restTemplateBuilder).when(restTemplateBuilder).basicAuthentication(anyString(), anyString());
-
         OAuth2AuthenticationToken oauth2Token = getTestOAuth2AuthenticationToken(VALID_REGISTRATION_ID);
         OAuth2AuthorizedClient authorizedClient = getTestOAuth2AuthorizedClient(true);
 
         doReturn(oauth2Token).when(securityContext).getAuthentication();
         doReturn(authorizedClient).when(clientService).loadAuthorizedClient(eq(VALID_REGISTRATION_ID), eq(SUB_VALUE));
 
-        RestTemplate restTemplate = mock(RestTemplate.class);
-        doThrow(new OAuth2AuthorizationException(new OAuth2Error("E"), "error"))
-            .when(restTemplate)
-            .exchange(any(RequestEntity.class), eq(OAuthIdpTokenResponseDTO.class));
-        doReturn(restTemplate).when(restTemplateBuilder).build();
+        expectRefreshToken().andRespond(
+            withBadRequest().contentType(MediaType.APPLICATION_JSON).body("{\"error\":\"invalid_grant\",\"error_description\":\"error\"}")
+        );
 
         Assertions.assertThatThrownBy(() -> {
             authorizationHeaderUtil.getAuthorizationHeader();
@@ -245,16 +228,33 @@ class AuthorizationHeaderUtilTest {
         );
     }
 
-    private Optional<OAuthIdpTokenResponseDTO> getTestOAuthIdpTokenResponseDTO(boolean hasRefreshToken) {
-        OAuthIdpTokenResponseDTO dto = new OAuthIdpTokenResponseDTO();
-        dto.setAccessToken("tokenVal");
-        dto.setIdToken("tokenVal");
-        dto.setNotBefore(0L);
-        dto.setRefreshExpiresIn("1800");
-        dto.setSessionState("ccea4a55");
-        dto.setExpiresIn(300L);
-        dto.setRefreshToken(hasRefreshToken ? "tokenVal" : null);
-        dto.setScope("openid email profile offline_access");
-        return Optional.of(dto);
+    private ResponseActions expectRefreshToken() {
+        return mockServer
+            .expect(requestTo("https://localhost:8080/auth/realms/master/protocol/openid-connect/token"))
+            .andExpect(method(HttpMethod.POST))
+            .andExpect(header(HttpHeaders.AUTHORIZATION, "Basic d2ViLWFwcDpzZWNyZXQ="))
+            .andExpect(
+                content()
+                    .formData(
+                        new LinkedMultiValueMap<>(
+                            Map.of("grant_type", List.of("refresh_token"), "refresh_token", List.of("refreshVal"), "client_id", List.of("web-app"))
+                        )
+                    )
+            );
+    }
+
+    private String getTestTokenResponse(boolean hasRefreshToken) {
+        return """
+            {
+              "access_token": "refreshedTokenVal",
+              "id_token": "tokenVal",
+              "not-before-policy": 0,
+              "refresh_expires_in": "1800",
+              "session_state": "ccea4a55",
+              "expires_in": 300,
+              %s
+              "scope": "openid email profile offline_access"
+            }
+            """.formatted(hasRefreshToken ? "\"refresh_token\": \"refreshedRefreshVal\"," : "");
     }
 }
