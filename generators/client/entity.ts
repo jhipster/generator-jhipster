@@ -33,6 +33,8 @@ type ClientAddedFieldProperties = {
   htmlInputType: string;
   hidden?: boolean;
   hideListView?: boolean;
+  /** The TypeScript type of the JSON value of the field in the REST API, written by client:rest-domain. */
+  restDomainType?: string;
 };
 
 const htmlInputTypeForTsType: Record<string, string> = {
@@ -64,6 +66,8 @@ export type Field = CommonField & LanguagesField & ClientAddedFieldProperties;
 
 export interface Relationship extends CommonRelationship, LanguagesRelationship {
   propertyTsType?: string;
+  /** The TypeScript type of the JSON value of the relationship in the REST API, written by client:rest-domain. */
+  restDomainType?: string;
 }
 
 type ClientAddedEntityProperties = {
@@ -103,6 +107,8 @@ type ClientAddedEntityProperties = {
   entityAngularJSSuffix: string;
   /** The first field of each enum type the client imports, the enums the entity forms list the values of. */
   enumTypeFields?: Field[];
+  /** The name of the TypeScript type of the entity in the REST API, written by client:rest-domain: the restDomainPrefix and its name. */
+  restDomainTypeName?: string;
 };
 
 export const mutateEntity = {

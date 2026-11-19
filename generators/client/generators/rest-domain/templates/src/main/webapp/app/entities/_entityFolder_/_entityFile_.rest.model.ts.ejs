@@ -1,0 +1,76 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ const entityDir = `${clientSrcDir}app/entities/${entityFolderName}/`;
+    const restRelationships = relationships.filter(relationship => relationship.persistableRelationship || relationship.relationshipEagerLoad);
+    const restDateTypes = [
+      anyFieldIsDuration && `${restDomainPrefix}Duration`,
+      anyFieldIsInstant && `${restDomainPrefix}Instant`,
+      anyFieldIsLocalDate && `${restDomainPrefix}LocalDate`,
+      anyFieldIsLocalTime && `${restDomainPrefix}LocalTime`,
+      anyFieldIsZonedDateTime && `${restDomainPrefix}ZonedDateTime`,
+    ].filter(Boolean);
+    const otherEntities = [...new Set(restRelationships
+      .filter(relationship => !relationship.relationshipSerializePrimaryKeyOnly && relationship.otherEntity.entityAngularName !== entityAngularName)
+      .map(relationship => relationship.otherEntity))];
+    const enumFields = fields.filter((field, index) =>
+      field.fieldIsEnum && !field.clientConstantsAsValues && fields.findIndex(other => other.fieldType === field.fieldType) === index);
+    // The imports in the order of their paths, as the linter sorts them.
+    const restImports = [
+      ...restDateTypes.length > 0 ? [{ names: restDateTypes.join(', '), path: `${relativeDir(entityDir, `${clientSrcDir}app/shared/jhipster/`)}rest.model` }] : [],
+      ...otherEntities.map(otherEntity => ({
+        names: otherEntity.restDomainTypeName,
+        path: `${relativeDir(entityDir, `${clientSrcDir}app/entities/${otherEntity.entityFolderName}/`)}${otherEntity.entityFileName}.rest.model`,
+      })),
+      ...enumFields.map(field => ({ names: field.fieldType, path: `${relativeDir(entityDir, webappEnumerationsDir)}${field.enumFileName}.model` })),
+    ].sort((a, b) => a.path.localeCompare(b.path));
+_%>
+<%_ for (const { names, path } of restImports) { _%>
+import type { <%- names %> } from '<%- path %>';
+<%_ } _%>
+<%_ if (restImports.length > 0) { _%>
+
+<%_ } _%>
+/**
+ * The <%- entityAngularName %> entity, as the REST API sends it.
+ */
+export interface <%- restDomainTypeName %> {
+<%_ for (const field of fields) { _%>
+  <%_ if (field.fieldWithContentType) { _%>
+  <%- field.fieldName %>ContentType: <%- field.nullable ? 'string | null' : 'string' %>;
+  <%_ } _%>
+  <%- field.fieldName %>: <%- field.restDomainType %>;
+<%_ } _%>
+<%_ for (const relationship of restRelationships) { _%>
+  <%- relationship.propertyName %>: <%- relationship.restDomainType %>;
+<%_ } _%>
+}
+<%_ if (primaryKey && !readOnly) { _%>
+
+/**
+ * A new <%- entityAngularName %>, sent to the REST API without its primary key.
+ */
+export type New<%- restDomainTypeName %> = Omit<<%- restDomainTypeName %>, '<%- primaryKey.name %>'> & { <%- primaryKey.name %>: null };
+  <%_ if (updatableEntity) { _%>
+
+/**
+ * The fields of a <%- entityAngularName %> a partial update sends, with its primary key.
+ */
+export type PartialUpdate<%- restDomainTypeName %> = Partial<<%- restDomainTypeName %>> & Pick<<%- restDomainTypeName %>, '<%- primaryKey.name %>'>;
+  <%_ } _%>
+<%_ } _%>

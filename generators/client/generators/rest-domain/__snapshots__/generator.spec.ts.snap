@@ -1,0 +1,67 @@
+// expect-node Snapshot v1, https://github.com/mshima/expect-node#snapshots
+
+exports[`generator - client:rest-domain with entities should type the built-in user by its id and its login - snapshot 1`] = `
+{
+  "src/main/webapp/app/entities/user/user.rest.model.ts": {
+    "contents": "/**
+ * The User entity, as the REST API sends it.
+ */
+export interface RestUser {
+  id: number;
+  login: string;
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - client:rest-domain with entities should type the fields as their JSON - snapshot 1`] = `
+{
+  "src/main/webapp/app/entities/foo/foo.rest.model.ts": {
+    "contents": "import type { RestDuration, RestInstant, RestLocalDate, RestLocalTime, RestZonedDateTime } from '../../shared/jhipster/rest.model';
+import type { Color } from '../../shared/model/enumerations/color.model';
+import type { RestBar } from '../bar/bar.rest.model';
+import type { RestBaz } from '../baz/baz.rest.model';
+import type { RestUser } from '../user/user.rest.model';
+
+/**
+ * The Foo entity, as the REST API sends it.
+ */
+export interface RestFoo {
+  id: number;
+  name: string;
+  note: string | null;
+  total: number;
+  price: number | null;
+  day: RestLocalDate | null;
+  moment: RestInstant | null;
+  zoned: RestZonedDateTime | null;
+  span: RestDuration | null;
+  time: RestLocalTime | null;
+  uid: string | null;
+  active: boolean | null;
+  color: keyof typeof Color | null;
+  pictureContentType: string;
+  picture: string;
+  text: string | null;
+  bar: Pick<RestBar, 'id' | 'title'>;
+  owner: Pick<RestBar, 'id'> | null;
+  user: Pick<RestUser, 'id' | 'login'> | null;
+  bazs: Pick<RestBaz, 'id' | 'label'>[] | null;
+}
+
+/**
+ * A new Foo, sent to the REST API without its primary key.
+ */
+export type NewRestFoo = Omit<RestFoo, 'id'> & { id: null };
+
+/**
+ * The fields of a Foo a partial update sends, with its primary key.
+ */
+export type PartialUpdateRestFoo = Partial<RestFoo> & Pick<RestFoo, 'id'>;
+",
+    "stateCleared": "modified",
+  },
+}
+`;

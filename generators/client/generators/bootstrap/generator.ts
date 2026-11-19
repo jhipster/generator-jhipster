@@ -113,6 +113,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
             );
             return enumFields.filter((field, index) => enumFields.findIndex(({ fieldType }) => fieldType === field.fieldType) === index);
           },
+          restDomainTypeName: ({ entityAngularName }) => `${application.restDomainPrefix}${entityAngularName}`,
         });
       },
     });
