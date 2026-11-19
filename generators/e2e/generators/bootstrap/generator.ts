@@ -18,7 +18,8 @@
  */
 import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import { generateEntitySamples } from '../../../base-application/support/index.ts';
+import { isContentTypeField } from '../../../base-application/internal/content-type-fields.ts';
+import { type EntitySample, formatEntitySample, generateEntitySamples } from '../../../base-application/support/index.ts';
 import { mutateApplication } from '../../application.ts';
 import type { Application as E2eApplication, Entity as E2eEntity } from '../../types.ts';
 
@@ -50,19 +51,21 @@ export default class E2eBootstrapGenerator extends BaseApplicationGenerator<E2eE
     return this.asPostPreparingEachEntityTaskGroup({
       prepareTestEntities({ entity }) {
         const { fields } = entity;
-        const entityFields = fields.filter(field => !field.autoGenerate);
-        const [[e2eTestEntitySample], [e2eTestEntity], [e2eFakeData]] = generateEntitySamples(entity, {
+        // The JSON samples give each blob the content type of its file, without its content type field.
+        const jsonFields = fields.filter(field => !field.autoGenerate && !isContentTypeField(field));
+        const [[testEntitySample], [testEntity], [fakeData]]: (EntitySample | undefined)[][] = generateEntitySamples(entity, {
           seed: 'e2e',
           batches: [
-            { fields: entityFields.filter(field => !(field as { nullable?: boolean }).nullable), format: 'json-serializable' },
-            { fields: entityFields, format: 'json-serializable' },
-            { fields: fields.filter(field => !field.id || !field.autoGenerate), format: 'cypress' },
+            { fields: jsonFields.filter(field => !(field as { nullable?: boolean }).nullable) },
+            { fields: jsonFields },
+            { fields: fields.filter(field => !field.id || !field.autoGenerate) },
           ],
         });
+        const e2eFakeData = fakeData && formatEntitySample(fields, fakeData, 'cypress');
         mutateData(entity, {
           __override__: false,
-          e2eTestEntitySample,
-          e2eTestEntity,
+          e2eTestEntitySample: testEntitySample && formatEntitySample(fields, testEntitySample, 'json-serializable'),
+          e2eTestEntity: testEntity && formatEntitySample(fields, testEntity, 'json-serializable'),
           e2eFakeData,
           e2eFieldsFakeData: e2eFakeData,
         });

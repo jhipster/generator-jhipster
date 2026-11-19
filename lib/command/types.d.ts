@@ -275,16 +275,16 @@ export type JHipsterCommandDefinition<ConfigContext = BaseCoreGenerator> = {
   /** The options of the relationships, written in the entity files and set by the jdl option statements. */
   readonly relationship?: JHipsterRelationshipConfigs;
   /**
-   * Import options from a generator.
-   * @example ['server', 'jhipster-blueprint:server']
+   * Import options from a generator, `:<generator>` being a generator of the package of this one.
+   * @example ['server', 'jhipster-blueprint:server', ':node-server']
    */
-  readonly import?: readonly (keyof GeneratorsByNamespace | 'base' | 'base-workspaces')[];
+  readonly import?: readonly (keyof GeneratorsByNamespace | 'base' | 'base-workspaces' | `:${string}`)[];
   /**
    * @experimental
-   * Compose with generator.
-   * @example ['server', 'jhipster-blueprint:server']
+   * Compose with generator, `:<generator>` being a generator of the package of this one.
+   * @example ['server', 'jhipster-blueprint:server', ':node-server']
    */
-  readonly compose?: readonly (keyof GeneratorsByNamespace | 'base')[];
+  readonly compose?: readonly (keyof GeneratorsByNamespace | 'base' | `:${string}`)[];
   /**
    * Override options from the generator been blueprinted.
    */

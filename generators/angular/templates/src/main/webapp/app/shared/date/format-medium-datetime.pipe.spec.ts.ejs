@@ -42,4 +42,8 @@ describe('FormatMediumDatetimePipe', () => {
   it('should format date like this D MMM YYYY HH:mm:ss', () => {
     expect(formatMediumDatetimePipe.transform(dayjs('2020-11-16').locale('fr'))).toBe('16 Nov 2020 00:00:00');
   });
+
+  it('should format the string of a date and time like this D MMM YYYY HH:mm:ss', () => {
+    expect(formatMediumDatetimePipe.transform('2020-11-16T10:20:30')).toBe('16 Nov 2020 10:20:30');
+  });
 });

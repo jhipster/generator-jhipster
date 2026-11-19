@@ -71,6 +71,7 @@ Options:
   --client-test-framework <value>          undefined (default: vitest) (choices: "vitest")
   --with-admin-ui                          Generate administrative user interface
   --client-root-dir <value>                Client root
+  --rest-domain-prefix <value>             Add prefix before the names of the types of the REST API in the client (default: Rest)
   --cypress-coverage                       Enable Cypress code coverage report generation
   --cypress-audit                          Enable cypress-audit/lighthouse report generation
   --skip-git                               Skip git repository initialization
