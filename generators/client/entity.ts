@@ -113,6 +113,8 @@ type ClientAddedEntityProperties = {
   enumTypeFields?: Field[];
   /** The name of the TypeScript type of the entity in the REST API, written by client:rest-domain: the restDomainPrefix and its name. */
   restDomainTypeName?: string;
+  /** The fields of the entity in the REST API, the content type of each blob included, written by client:rest-domain. */
+  restDomainFields?: Field[];
   /** The properties a new entity sends otherwise in the REST API, written by client:rest-domain. */
   restDomainNewProperties?: { name: string; type: string }[];
 };

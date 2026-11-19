@@ -23,7 +23,7 @@ import type { <%- writeNew ? `New${restDomainTypeName}, ` : '' %><%- restDomainT
 
 describe('<%- restDomainTypeName %>', () => {
   it('should be null only for the fields the database may have no value of', () => {
-<%_ for (const field of fields) { _%>
+<%_ for (const field of restDomainFields) { _%>
     expectTypeOf<<%- restDomainTypeName %>['<%- field.fieldName %>']>()<%- field.restDomainNullable ? '' : '.not' %>.toBeNullable();
 <%_ } _%>
   });

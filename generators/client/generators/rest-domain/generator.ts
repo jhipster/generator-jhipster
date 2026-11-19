@@ -66,7 +66,7 @@ export default class RestDomainGenerator extends ClientApplicationGenerator {
               // The built-in user is sent by the relationships as its id and its login only.
               ...(entity.builtInUser ?
                 {
-                  fields: entity.fields.filter(field => ['id', 'login'].includes(field.fieldName)),
+                  restDomainFields: entity.fields.filter(field => ['id', 'login'].includes(field.fieldName)),
                   relationships: [],
                   readOnly: true,
                 }

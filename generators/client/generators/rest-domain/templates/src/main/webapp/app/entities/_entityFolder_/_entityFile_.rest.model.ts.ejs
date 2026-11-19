@@ -28,8 +28,8 @@
     const otherEntities = [...new Set(restRelationships
       .filter(relationship => !relationship.relationshipSerializePrimaryKeyOnly && relationship.otherEntity.entityAngularName !== entityAngularName)
       .map(relationship => relationship.otherEntity))];
-    const enumFields = fields.filter((field, index) =>
-      field.restDomainEnumTypeName && fields.findIndex(other => other.fieldType === field.fieldType) === index);
+    const enumFields = restDomainFields.filter((field, index) =>
+      field.restDomainEnumTypeName && restDomainFields.findIndex(other => other.fieldType === field.fieldType) === index);
     // The imports in the order of their paths, as the linter sorts them.
     const restImports = [
       ...restDateTypes.length > 0 ? [{ names: restDateTypes.join(', '), path: `${relativeDir(entityDir, `${clientSrcDir}app/shared/jhipster/`)}rest.model` }] : [],
@@ -50,10 +50,7 @@ import type { <%- names %> } from '<%- path %>';
  * The <%- entityAngularName %> entity, as the REST API sends it.
  */
 export interface <%- restDomainTypeName %> {
-<%_ for (const field of fields) { _%>
-  <%_ if (field.fieldWithContentType) { _%>
-  <%- field.fieldName %>ContentType: <%- field.restDomainNullable ? 'string | null' : 'string' %>;
-  <%_ } _%>
+<%_ for (const field of restDomainFields) { _%>
   <%- field.fieldName %>: <%- field.restDomainType %>;
 <%_ } _%>
 <%_ for (const relationship of restRelationships) { _%>

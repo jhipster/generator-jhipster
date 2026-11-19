@@ -471,6 +471,7 @@ exports[`generator - app:bootstrap with default config should prepare EntityA - 
   "requiresPersistableImplementation": false,
   "resetFakerSeed": Any<Function>,
   "restClass": "EntityADTO",
+  "restDomainFields": Any<Array>,
   "restDomainNewProperties": [
     {
       "name": "id",
@@ -1511,6 +1512,7 @@ exports[`generator - app:bootstrap with default config should prepare User - sna
   "requiresPersistableImplementation": false,
   "resetFakerSeed": Any<Function>,
   "restClass": "UserDTO",
+  "restDomainFields": Any<Array>,
   "restDomainNewProperties": [
     {
       "name": "id",
@@ -1834,6 +1836,7 @@ exports[`generator - app:bootstrap with skipUserManagement should prepare Entity
   "requiresPersistableImplementation": false,
   "resetFakerSeed": Any<Function>,
   "restClass": "EntityA",
+  "restDomainFields": Any<Array>,
   "restDomainNewProperties": [
     {
       "name": "id",
