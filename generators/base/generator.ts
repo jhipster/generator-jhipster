@@ -163,7 +163,7 @@ export default class BaseGenerator<
         }
       }
       if (!this.fromBlueprint && !this.delegateToBlueprint && storeJHipsterVersion && !this.options.reproducibleTests) {
-        this.jhipsterConfig.jhipsterVersion = packageJson.version;
+        this.jhipsterConfig.jhipsterVersion = this._meta.getPackageVersion?.();
       }
       if ((this.fromBlueprint || !this.delegateToBlueprint) && queueCommandTasks) {
         this._queueCurrentJHipsterCommandTasks();

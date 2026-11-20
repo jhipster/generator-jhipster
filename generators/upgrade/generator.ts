@@ -26,7 +26,6 @@ import semver from 'semver';
 import { ResetMode } from 'simple-git';
 
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
-import { packageJson } from '../../lib/index.ts';
 import BaseGenerator from '../base/index.ts';
 import { GENERATOR_JHIPSTER, SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
 import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
@@ -65,7 +64,8 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
     return this.asInitializingTaskGroup({
       displayLogo() {
         this.log.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
-        this.log.log(chalk.green(`This will upgrade your current application codebase to JHipster version ${packageJson.version}`));
+        const jhipsterVersion = this._meta.getPackageVersion?.();
+        this.log.log(chalk.green(`This will upgrade your current application codebase to JHipster version ${jhipsterVersion}`));
         this.log.log(
           chalk.green(
             'For advanced options, please use the jhipster-migrate blueprint (https://github.com/jhipster/generator-jhipster-migrate/)',
@@ -235,7 +235,8 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
         await this.rmRf(`${SERVER_MAIN_RES_DIR}config/tls/keystore-samples.p12`);
 
         // Commit changes
-        await git.add('.').commit(`generated ${UPGRADE_BRANCH} using JHipster ${packageJson.version}`, ['--no-verify']);
+        const jhipsterVersion = this._meta.getPackageVersion?.();
+        await git.add('.').commit(`generated ${UPGRADE_BRANCH} using JHipster ${jhipsterVersion}`, ['--no-verify']);
 
         this.log.info('upgrade commit created');
 

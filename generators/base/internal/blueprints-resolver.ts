@@ -25,7 +25,6 @@ import semver from 'semver';
 import type { PackageJson } from 'type-fest';
 import type { Store } from 'yeoman-environment';
 
-import { packageJson } from '../../../lib/index.ts';
 import { registerBlueprintAliases } from '../../../lib/resolver/blueprint-aliases.ts';
 import { packageNameToNamespace } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/index.ts';
@@ -176,7 +175,11 @@ export class BlueprintsResolver {
       this.#log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
       return;
     }
-    const mainGeneratorJhipsterVersion = packageJson.version;
+    const mainGeneratorJhipsterVersion = this.#generator._meta.getPackageVersion?.();
+    if (!mainGeneratorJhipsterVersion) {
+      this.#log.warn(`Could not retrieve version of JHipster to check blueprint '${blueprintPkgName}'`);
+      return;
+    }
     const compatibleJhipsterRange =
       blueprintPackageJson.engines?.['generator-jhipster'] ??
       blueprintPackageJson.dependencies?.['generator-jhipster'] ??

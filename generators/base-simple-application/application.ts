@@ -25,7 +25,8 @@ import type { ProjectNameAddedApplicationProperties } from '../project-name/appl
 export type BaseSimpleApplicationLoadingAddedApplicationProperties = WriteContext;
 
 export type BaseSimpleApplicationPreparingAddedApplicationProperties = {
-  jhipsterVersion: string;
+  /** The version of jhipster, set by the bootstrap generator from its meta. */
+  jhipsterVersion?: string;
   documentationArchiveUrl: string;
 
   jhiPrefix: string;
@@ -75,7 +76,6 @@ export const mutateApplicationLoading = {
 export const mutateApplicationPreparing = {
   __override__: false,
 
-  jhipsterVersion: packageJson.version,
   jhiPrefix: 'jhi',
   jhiPrefixCapitalized: ({ jhiPrefix }) => upperFirst(jhiPrefix),
   jhiPrefixDashed: ({ jhiPrefix }) => kebabCase(jhiPrefix),

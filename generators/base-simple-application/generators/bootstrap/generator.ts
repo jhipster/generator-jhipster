@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
 import { finalizeMutations, removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
@@ -71,11 +72,9 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ applicationDefaults }) {
-        if (this.useVersionPlaceholders) {
-          applicationDefaults({
-            jhipsterVersion: 'JHIPSTER_VERSION',
-          });
-        }
+        applicationDefaults({
+          jhipsterVersion: this.useVersionPlaceholders ? 'JHIPSTER_VERSION' : this._meta.getPackageVersion?.(),
+        });
 
         applicationDefaults(mutateApplicationPreparing);
       },
