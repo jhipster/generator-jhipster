@@ -147,7 +147,9 @@ _%>
     ) {
         LOG.debug("Converting Exception to Problem Details:", ex);
         ProblemDetailWithCause pdCause = wrapAndCustomizeProblem(ex, request);
-        return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
+        // An Error, like the one of an assertion, is not an Exception: it is wrapped to be handled as one
+        Exception exception = ex instanceof Exception e ? e : new IllegalStateException(ex);
+        return handleExceptionInternal(exception, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
     }
 
     @SuppressWarnings("java:S2638")

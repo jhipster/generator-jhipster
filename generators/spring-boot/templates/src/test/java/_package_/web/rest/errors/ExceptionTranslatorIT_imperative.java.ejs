@@ -255,4 +255,13 @@ class ExceptionTranslatorIT {
             .andExpect(jsonPath("$.title").value("Internal Server Error"));
     }
 
+    @Test
+    void testError() throws Exception {
+        mockMvc.perform(get("/api/exception-translator-test/error")<%- serverUsesCsrf ? '.with(csrf())' : '' %>)
+            .andExpect(status().isInternalServerError())
+            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(jsonPath("$.message").value("error.http.500"))
+            .andExpect(jsonPath("$.title").value("Internal Server Error"));
+    }
+
 }
