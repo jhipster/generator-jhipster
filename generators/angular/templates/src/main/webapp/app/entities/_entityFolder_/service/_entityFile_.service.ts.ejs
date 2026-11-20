@@ -16,25 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const searchType = paginationPagination || paginationInfiniteScroll ? 'SearchWithPagination' : 'Search';
-    const requiresRestTypeConversion = anyFieldIsDateDerived || builtInUserManagement;
-    const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
-    const bodyArg = requiresRestTypeConversion ? 'copy' : entityInstance;
-    const convertResponsePipe = requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '';
-_%>
+<%_ const searchType = paginationPagination || paginationInfiniteScroll ? 'SearchWithPagination' : 'Search'; _%>
 import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
 import { Service, computed, inject, signal } from '@angular/core';
 
-<%_ if (anyFieldIsDateDerived) { _%>
-import dayjs from 'dayjs/esm';
-<%_ } _%>
 import {
 <%_ if (searchEngineAny) { _%>
   asapScheduler,
   catchError,
-<%_ } _%>
-<%_ if (requiresRestTypeConversion) { _%>
-  map,
 <%_ } _%>
   Observable,
 <%_ if (searchEngineAny) { _%>
@@ -42,7 +31,7 @@ import {
 <%_ } _%>
 } from 'rxjs';
 
-import { <%- (applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName ? 'microserviceContextPath, ' : '' %>serverApiUrl<%- anyFieldIsLocalDate ? ', DATE_FORMAT' : '' %> } from 'app/config';
+import { <%- (applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config';
 import { createRequestOption<%- searchEngineAny ? `, ${searchType}` : '' %> } from 'app/core/request';
 import { I<%- entityAngularName %><% if (!readOnly) { %>, New<%- entityAngularName %><% } %> } from '../<%- entityFileName %>.model';
 <%_ if (!readOnly && updatableEntity) { _%>
@@ -50,22 +39,10 @@ import { I<%- entityAngularName %><% if (!readOnly) { %>, New<%- entityAngularNa
 export type PartialUpdate<%- entityAngularName %> = Partial<I<%- entityAngularName %>> & Pick<I<%- entityAngularName %>, '<%- primaryKey.name %>'>;
 <%_ } _%>
 
-<%_ if (requiresRestTypeConversion) { _%>
-type RestOf<T extends I<%- entityAngularName %><% if (!readOnly) { %> | New<%- entityAngularName %><% } %>> =
-  Omit<T, '<%- fields.filter(field => field.fieldTypeTemporal).map(field => field.fieldName).join("' | '") %>'> &
-  {
-  <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
-  <%- field.fieldName %>?: string | null;
-  <%_ } _%>
-};
-
-export type <%- entityRestName %> = RestOf<I<%- entityAngularName %>>;
-<%_ } _%>
-
 @Service()
 export class <%- entityAngularNamePlural %>Service {
   readonly <%- entityInstancePlural %>Params = signal<Record<string, string | number | boolean | readonly (string | number | boolean)[]> | undefined>(undefined);
-  readonly <%- entityInstancePlural %>Resource = httpResource<<%- entityRestName %>[]>(() => {
+  readonly <%- entityInstancePlural %>Resource = httpResource<I<%- entityAngularName %>[]>(() => {
     const params = this.<%- entityInstancePlural %>Params();
     if (!params) {
       return undefined;
@@ -76,24 +53,10 @@ export class <%- entityAngularNamePlural %>Service {
    * This signal holds the list of <%- entityInstance %> that have been fetched. It is updated when the <%- entityInstancePlural %>Resource emits a new value.
    * In case of error while fetching the <%- entityInstancePlural %>, the signal is set to an empty array.
    */
-  readonly <%- entityInstancePlural %> = computed(() => (this.<%- entityInstancePlural %>Resource.hasValue() ? this.<%- entityInstancePlural %>Resource.value() : [])
-    <%- requiresRestTypeConversion ? '.map(item => this.convertValueFromServer(item))' : '' %>
-  );
+  readonly <%- entityInstancePlural %> = computed(() => (this.<%- entityInstancePlural %>Resource.hasValue() ? this.<%- entityInstancePlural %>Resource.value() : []));
   protected readonly resourceUrl = `${serverApiUrl}<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>${microserviceContextPath}<%- microserviceName.toLowerCase() %>/<% } %>api/<%- entityApiUrl %>`;
 <%_ if (searchEngineAny) { _%>
   protected readonly resourceSearchUrl = `${serverApiUrl}<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>${microserviceContextPath}<%- microserviceName.toLowerCase() %>/<% } %>api/<%- entityApiUrl %>/_search`;
-<%_ } _%>
-<%_ if (requiresRestTypeConversion) { _%>
-
-  protected convertValueFromServer(rest<%- entityAngularName %>: <%- entityRestName %>): I<%- entityAngularName %> {
-    return {
-      ...rest<%- entityAngularName %>,
-  <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
-      <%- field.fieldName %>: rest<%- entityAngularName %>.<%- field.fieldName %> ? dayjs(rest<%- entityAngularName %>.<%- field.fieldName %>) : undefined,
-  <%_ } _%>
-    }
-  }
-
 <%_ } _%>
 }
 
@@ -103,48 +66,27 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
 
 <%_ if (!readOnly) { _%>
     create(<%- entityInstance %>: New<%- entityAngularName %>): Observable<I<%- entityAngularName %>> {
-  <%_ if (requiresRestTypeConversion) { _%>
-        const copy = this.convertValueFromClient(<%- entityInstance %>);
-  <%_ } _%>
-        return this.http.post<<%- entityRestName %>>(
-          this.resourceUrl,
-          <%- bodyArg %>
-        )
-        <%- convertResponsePipe %>;
+        return this.http.post<I<%- entityAngularName %>>(this.resourceUrl, <%- entityInstance %>);
     }
 <%_ } _%>
 <%_ if (!readOnly && updatableEntity) { _%>
 
     update(<%- entityInstance %>: I<%- entityAngularName %>): Observable<I<%- entityAngularName %>> {
-  <%_ if (requiresRestTypeConversion) { _%>
-        const copy = this.convertValueFromClient(<%- entityInstance %>);
-  <%_ } _%>
-        return this.http.put<<%- entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%- entityAngularName %>Identifier(<%- entityInstance %>))}`,
-                <%- bodyArg %>,
-                )
-        <%- convertResponsePipe %>;
+        return this.http.put<I<%- entityAngularName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%- entityAngularName %>Identifier(<%- entityInstance %>))}`, <%- entityInstance %>);
     }
 
     partialUpdate(<%- entityInstance %>: PartialUpdate<%- entityAngularName %>): Observable<I<%- entityAngularName %>> {
-  <%_ if (requiresRestTypeConversion) { _%>
-        const copy = this.convertValueFromClient(<%- entityInstance %>);
-  <%_ } _%>
-        return this.http.patch<<%- entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%- entityAngularName %>Identifier(<%- entityInstance %>))}`,
-                <%- bodyArg %>,
-                )
-        <%- convertResponsePipe %>;
+        return this.http.patch<I<%- entityAngularName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%- entityAngularName %>Identifier(<%- entityInstance %>))}`, <%- entityInstance %>);
     }
 <%_ } _%>
 
     find(<%- primaryKey.name %>: <%- tsKeyType %>): Observable<I<%- entityAngularName %>> {
-        return this.http.get<<%- entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(<%- primaryKey.name %>)}`)
-            <%- convertResponsePipe %>;
+        return this.http.get<I<%- entityAngularName %>>(`${this.resourceUrl}/${encodeURIComponent(<%- primaryKey.name %>)}`);
     }
 
     query(req?: any): Observable<HttpResponse<I<%- entityAngularName %>[]>> {
         const options = createRequestOption(req);
-        return this.http.get<<%- entityRestName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
-            <%- requiresRestTypeConversion ? '.pipe(map(res => res.clone({ body: res.body && this.convertResponseArrayFromServer(res.body) })))' : '' %>;
+        return this.http.get<I<%- entityAngularName %>[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 
 <%_ if (!readOnly) { _%>
@@ -156,11 +98,8 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
 <%_ if (searchEngineAny) { _%>
     search(req: <%- searchType %>): Observable<I<%- entityAngularName %>[]> {
         const options = createRequestOption(req);
-        return this.http.get<<%- entityRestName %>[]>(this.resourceSearchUrl, { params: options })
-            .pipe(
-              <%- requiresRestTypeConversion ? 'map(res => this.convertResponseArrayFromServer(res)), ' : '' %>
-              catchError(() => scheduled([], asapScheduler)),
-            );
+        return this.http.get<I<%- entityAngularName %>[]>(this.resourceSearchUrl, { params: options })
+            .pipe(catchError(() => scheduled([], asapScheduler)));
     }
 <%_ } _%>
 
@@ -188,28 +127,4 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
         }
         return <%- entityInstance %>Collection;
     }
-
-<%_ if (requiresRestTypeConversion) { _%>
-  protected convertValueFromClient<T extends I<%- entityAngularName %><% if (!readOnly) { %> | New<%- entityAngularName %><% } %><% if (!readOnly && updatableEntity) { %> | PartialUpdate<%- entityAngularName %><% } %>>(<%- entityInstance %>: T): RestOf<T> {
-    return {
-      ...<%- entityInstance %>,
-  <%_ for (const field of fields) { _%>
-    <%_ if (field.fieldTypeTimed) { _%>
-    <%- field.fieldName %>: <%- entityInstance %>.<%- field.fieldName %>?.toJSON() ?? null,
-    <%_ } _%>
-    <%_ if (field.fieldTypeLocalDate) { _%>
-    <%- field.fieldName %>: <%- entityInstance %>.<%- field.fieldName %>?.format(DATE_FORMAT) ?? null,
-    <%_ } _%>
-  <%_ } _%>
-    };
-  }
-
-  protected convertResponseFromServer(res: <%- entityRestName %>): I<%- entityAngularName %> {
-    return this.convertValueFromServer(res);
-  }
-
-  protected convertResponseArrayFromServer(res: <%- entityRestName %>[]): I<%- entityAngularName %>[] {
-    return res.map(item => this.convertValueFromServer(item));
-  }
-<%_ } _%>
 }

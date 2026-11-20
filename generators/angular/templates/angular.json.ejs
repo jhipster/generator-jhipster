@@ -203,10 +203,12 @@
         },
 <%_ } _%>
         "test": {
-          "builder": "@angular/build:unit-test",
+          "builder": "<%- microfrontend ? '@angular/build:unit-test' : '@angular-builders/custom-esbuild:unit-test' %>",
           "options": {
+<%_ if (microfrontend) { _%>
             "runner": "vitest",
-            "buildTarget": "<%- microfrontend ? `${dasherizedBaseName}:esbuild:development` : '::development' %>",
+<%_ } _%>
+            "buildTarget": "<%- dasherizedBaseName %>:<%- microfrontend ? 'esbuild' : 'build' %>:development",
             "runnerConfig": true,
             "coverageReporters": ["text", "lcov"],
             "coverageThresholds": {

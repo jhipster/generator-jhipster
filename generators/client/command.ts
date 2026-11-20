@@ -245,6 +245,19 @@ const command = {
       },
       scope: 'storage',
     },
+    restDomainPrefix: {
+      description: 'Add prefix before the names of the types of the REST API in the client',
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      default: 'Rest',
+      scope: 'storage',
+    },
   },
   entity: {
     clientRootFolder: { description: 'Client folder of the entities', jdl: { type: 'binary' } },

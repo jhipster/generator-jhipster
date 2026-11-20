@@ -16,18 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it<%- (applicationTypeGateway && microfrontend) || (enableTranslation && languages.length > 1) ? ', vi' : '' %> } from 'vitest';
-<%_ if (enableTranslation && languages.length > 1) { _%>
+import { beforeEach, describe, expect, it<%- (applicationTypeGateway && microfrontend) || enableTranslation ? ', vi' : '' %> } from 'vitest';
+<%_ if (enableTranslation) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 import { MemoryRouter } from 'react-router';
 
-import { act, <%- enableTranslation && languages.length > 1 ? 'fireEvent, ' : '' %>render<%- enableTranslation && languages.length > 1 ? ', waitFor' : '' %> } from '@testing-library/react';
+import { act, <%- enableTranslation ? 'fireEvent, ' : '' %>render<%- enableTranslation ? ', waitFor' : '' %> } from '@testing-library/react';
 import { Provider } from 'react-redux';
 
 import initStore from 'app/config/store';
 import { hideLoading, showLoading } from 'app/shared/reducers/loading-bar';
-<%_ if (enableTranslation && languages.length > 1) { _%>
+<%_ if (enableTranslation) { _%>
 import { setLocale } from 'app/shared/reducers/locale';
 <%_ } _%>
 
@@ -39,7 +39,14 @@ vi.mock('@module-federation/runtime', () => ({
   init: vi.fn(),
 }));
 <%_ } _%>
-<%_ if (enableTranslation && languages.length > 1) { _%>
+<%_ if (enableTranslation) { _%>
+
+// Two languages show the menu of the languages, whatever the languages of the application.
+vi.mock('app/config/translation', async importOriginal => ({
+  ...(await importOriginal<typeof import('app/config/translation')>()),
+  languages: { aa: { name: 'Language A' }, bb: { name: 'Language B' } },
+  locales: ['aa', 'bb'],
+}));
 
 vi.mock('app/shared/reducers/locale', async importOriginal => ({
   ...(await importOriginal<typeof import('app/shared/reducers/locale')>()),
@@ -53,7 +60,7 @@ describe('Header', () => {
     isAuthenticated: true,
     isAdmin: true,
 <%_ if (enableTranslation) { _%>
-    currentLocale: 'en',
+    currentLocale: 'aa',
 <%_ } _%>
     ribbonEnv: 'dev',
     isInProduction: false,
@@ -167,7 +174,7 @@ describe('Header', () => {
     expect(store.getState().loadingBar.count).toBe(0);
     expect(container.querySelector('.loading-bar')).not.toBeNull();
   });
-<%_ if (enableTranslation && languages.length > 1) { _%>
+<%_ if (enableTranslation) { _%>
 
   it('should change the language from the locale menu', async () => {
     const { container } = render(
@@ -179,11 +186,26 @@ describe('Header', () => {
     );
 
     fireEvent.click(container.querySelector('[data-cy="languageMenu"] .dropdown-toggle')!);
-    await waitFor(() => expect(container.querySelector('[data-cy="language-<%- languages[0] %>"]')).not.toBeNull());
-    fireEvent.click(container.querySelector('[data-cy="language-<%- languages[0] %>"]')!);
+    await waitFor(() => expect(container.querySelector('[data-cy="language-aa"]')).not.toBeNull());
+    expect(container.querySelector('[data-cy="language-aa"]')!.textContent).toBe('Language A');
+    expect(container.querySelector('[data-cy="language-bb"]')!.textContent).toBe('Language B');
+    fireEvent.click(container.querySelector('[data-cy="language-bb"]')!);
 
-    expect(Storage.session.get('locale')).toBe('<%- languages[0] %>');
-    expect(setLocale).toHaveBeenCalledWith('<%- languages[0] %>');
+    expect(Storage.session.get('locale')).toBe('bb');
+    expect(setLocale).toHaveBeenCalledWith('bb');
+    Storage.session.remove('locale');
+  });
+
+  it('should show the name of the current language in the locale menu', () => {
+    const { container } = render(
+      <Provider store={initStore()}>
+        <MemoryRouter>
+          <Header {...prodProps} />
+        </MemoryRouter>
+      </Provider>,
+    );
+
+    expect(container.querySelector('[data-cy="languageMenu"] .dropdown-toggle')!.textContent).toContain('Language A');
   });
 <%_ } _%>
 });

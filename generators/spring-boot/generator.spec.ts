@@ -199,15 +199,15 @@ describe(`generator - ${generator}`, () => {
     it('should test the dates, times and durations with two values from the entity samples, the default one the earlier', () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_DAY = LocalDate.parse("2022-01-28");');
       runResult.assertFileContent(resourceIT, 'UPDATED_DAY = LocalDate.parse("2022-01-29");');
-      runResult.assertFileContent(resourceIT, 'DEFAULT_MOMENT = Instant.parse("2022-01-28T20:37:25.633Z");');
-      runResult.assertFileContent(resourceIT, 'UPDATED_MOMENT = Instant.parse("2022-01-29T01:45:40.197Z");');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_MOMENT = Instant.parse("2022-01-28T20:37:00.000Z");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_MOMENT = Instant.parse("2022-01-29T01:45:00.000Z");');
       runResult.assertFileContent(
         resourceIT,
-        'DEFAULT_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-29T01:21:37.741Z"), ZoneOffset.UTC);',
+        'DEFAULT_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-29T01:21:00.000Z"), ZoneOffset.UTC);',
       );
       runResult.assertFileContent(
         resourceIT,
-        'UPDATED_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-29T02:41:46.815Z"), ZoneOffset.UTC);',
+        'UPDATED_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-29T02:41:00.000Z"), ZoneOffset.UTC);',
       );
       runResult.assertFileContent(resourceIT, 'DEFAULT_HOUR = LocalTime.parse("23:18:00");');
       runResult.assertFileContent(resourceIT, 'UPDATED_HOUR = LocalTime.parse("23:39:00");');
@@ -219,7 +219,7 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent(resourceIT, 'SMALLER_DAY = LocalDate.parse("2022-01-27");');
       runResult.assertFileContent(
         resourceIT,
-        'SMALLER_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-28T20:55:37.637Z"), ZoneOffset.UTC);',
+        'SMALLER_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-28T20:55:00.000Z"), ZoneOffset.UTC);',
       );
       runResult.assertFileContent(resourceIT, 'SMALLER_LASTING = Duration.parse("PT17M");');
       runResult.assertFileContent(resourceIT, 'defaultMeasureFiltering("day.greaterThanOrEqual", DEFAULT_DAY, UPDATED_DAY);');

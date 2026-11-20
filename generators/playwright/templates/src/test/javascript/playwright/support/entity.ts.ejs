@@ -43,7 +43,6 @@ export const entityConfirmDeleteButtonSelector = '[data-cy="entityConfirmDeleteB
 
 const fixturesDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'fixtures');
 
-/** Ports the Cypress entity commands; every selector is the one the clients already render. */
 export class EntityHelper {
   constructor(private readonly page: Page) {}
 
@@ -63,10 +62,9 @@ export class EntityHelper {
     return this.page.locator(`[data-cy="${entityInstanceName}DeleteDialogHeading"]`);
   }
 
-  /** Ports `setFieldImageAsBytesOfEntity`: Playwright sets the file on the input directly. */
   async setFieldImageAsBytesOfEntity(fieldName: string, fileName: string, mimeType: string): Promise<void> {
     const buffer = await readFile(join(fixturesDir, fileName));
-    // The blob widget renders more than one element with the field's data-cy; the cypress command used el[0].
+    // The blob widget renders more than one element with the field's data-cy; the file input is the first one.
     await this.page.locator(`[data-cy="${fieldName}"]`).first().setInputFiles({ name: fileName, mimeType, buffer });
   }
 }

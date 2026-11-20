@@ -40,8 +40,7 @@ import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdate
           && !relationship.otherEntity.embedded
           && !relationship.otherEntity.skipServer
           && relationship.otherEntity.entityClass !== entityClass
-          && relationship.otherEntity.primaryKey.ids.length === 1,
-      )
+          && relationship.otherEntity.primaryKey.ids.length === 1)
       .map(relationship => ({
         relationship,
         observedField: relationship.otherEntity.fields.find(
