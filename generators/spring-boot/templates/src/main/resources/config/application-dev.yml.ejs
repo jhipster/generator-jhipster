@@ -202,10 +202,7 @@ spring:
 server:
   port: <%- serverPort %>
   # make sure requests the proxy uri instead of the server one
-  request:
-    header:
-      forwarded:
-        strategy: web-server
+  forward-headers-strategy: native
 
 # ===================================================================
 # JHipster specific properties
