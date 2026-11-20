@@ -140,11 +140,7 @@ export class BlueprintsResolver {
    * The meta of the package of the blueprint used, at the path its lookup registered.
    */
   #getBlueprintPackageMeta(blueprintPkgName: string): StorePackageMeta | undefined {
-    const packageMeta = this.#store.getPackageMeta(packageNameToNamespace(blueprintPkgName));
-    if (!packageMeta) {
-      this.#log.warn(`Could not retrieve packagePath of blueprint '${blueprintPkgName}'`);
-    }
-    return packageMeta;
+    return this.#store.getPackageMeta(packageNameToNamespace(blueprintPkgName));
   }
 
   /**
@@ -154,7 +150,6 @@ export class BlueprintsResolver {
     const version = this.#getBlueprintPackageMeta(blueprintPkgName)?.getPackageVersion();
     if (!version) {
       this.#log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
-      return undefined;
     }
     return version;
   }

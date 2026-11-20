@@ -24,9 +24,13 @@ import type { ProjectNameAddedApplicationProperties } from '../project-name/appl
 
 export type BaseSimpleApplicationLoadingAddedApplicationProperties = WriteContext;
 
+/** The properties the bootstrap generator sets, from the generator itself. */
+export type BaseSimpleApplicationBootstrapAddedApplicationProperties = {
+  /** The version of jhipster, the one the meta of the bootstrap generator tells. */
+  jhipsterVersion: string;
+};
+
 export type BaseSimpleApplicationPreparingAddedApplicationProperties = {
-  /** The version of jhipster, set by the bootstrap generator from its meta. */
-  jhipsterVersion?: string;
   documentationArchiveUrl: string;
 
   jhiPrefix: string;
@@ -62,6 +66,7 @@ export type BaseSimpleApplicationPreparingAddedApplicationProperties = {
 };
 
 export type BaseSimpleApplicationAddedApplicationProperties = BaseSimpleApplicationLoadingAddedApplicationProperties &
+  BaseSimpleApplicationBootstrapAddedApplicationProperties &
   BaseSimpleApplicationPreparingAddedApplicationProperties;
 
 export const mutateApplicationLoading = {

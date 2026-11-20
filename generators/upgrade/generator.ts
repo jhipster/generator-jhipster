@@ -54,6 +54,11 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   executable!: string;
   verbose!: boolean;
 
+  /** The version of JHipster, the one the meta of this generator tells. */
+  get #jhipsterVersion(): string | undefined {
+    return this._meta.getPackageVersion?.();
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -64,8 +69,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
     return this.asInitializingTaskGroup({
       displayLogo() {
         this.log.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
-        const jhipsterVersion = this._meta.getPackageVersion?.();
-        this.log.log(chalk.green(`This will upgrade your current application codebase to JHipster version ${jhipsterVersion}`));
+        this.log.log(chalk.green(`This will upgrade your current application codebase to JHipster version ${this.#jhipsterVersion}`));
         this.log.log(
           chalk.green(
             'For advanced options, please use the jhipster-migrate blueprint (https://github.com/jhipster/generator-jhipster-migrate/)',
@@ -235,8 +239,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
         await this.rmRf(`${SERVER_MAIN_RES_DIR}config/tls/keystore-samples.p12`);
 
         // Commit changes
-        const jhipsterVersion = this._meta.getPackageVersion?.();
-        await git.add('.').commit(`generated ${UPGRADE_BRANCH} using JHipster ${jhipsterVersion}`, ['--no-verify']);
+        await git.add('.').commit(`generated ${UPGRADE_BRANCH} using JHipster ${this.#jhipsterVersion}`, ['--no-verify']);
 
         this.log.info('upgrade commit created');
 
