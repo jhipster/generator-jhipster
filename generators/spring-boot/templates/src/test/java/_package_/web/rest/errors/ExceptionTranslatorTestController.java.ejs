@@ -154,6 +154,11 @@ public class ExceptionTranslatorTestController {
         throw new RuntimeException();
     }
 
+    @GetMapping("/error")
+    public void error() {
+        throw new AssertionError("test error");
+    }
+
     public static class TestBinding {
 
         private Integer number;
