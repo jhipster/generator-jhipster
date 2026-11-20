@@ -16,14 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import fs from 'node:fs';
-import path from 'node:path';
-
 import chalk from 'chalk';
 import union from 'lodash-es/union.js';
 import semver from 'semver';
 import type { PackageJson } from 'type-fest';
 import type { Store } from 'yeoman-environment';
+import type { StorePackageMeta } from 'yeoman-environment/store';
 
 import { registerBlueprintAliases } from '../../../lib/resolver/blueprint-aliases.ts';
 import { packageNameToNamespace } from '../../../lib/utils/index.ts';
@@ -46,6 +44,7 @@ type Generator = CoreGenerator<BaseConfig, BaseOptions>;
 export class BlueprintsResolver {
   readonly #generator: Generator;
   readonly #env: Generator['env'];
+  readonly #store: Store;
   readonly #log: Generator['log'];
   #blueprints: Promise<string[]>;
   #resolvedNames: string[] = [];
@@ -54,6 +53,7 @@ export class BlueprintsResolver {
   constructor(generator: Generator) {
     this.#generator = generator;
     this.#env = generator.env;
+    this.#store = (generator.env as unknown as { store: Store }).store;
     this.#log = generator.log;
     this.#blueprints = this.#resolveBlueprints();
     this.#listenToConfigChanges();
@@ -127,9 +127,8 @@ export class BlueprintsResolver {
       });
     }
     // The generators of the packages the blueprints take, under their namespace, for the blueprints looked up here.
-    const { store } = this.#env as unknown as { store: Store };
     for (const blueprint of blueprints) {
-      registerBlueprintAliases(store, packageNameToNamespace(blueprint.name));
+      registerBlueprintAliases(this.#store, packageNameToNamespace(blueprint.name));
     }
     const blueprintNames = blueprints.map(blueprint => blueprint.name);
     // Kept for the blueprints reading it.
@@ -138,30 +137,21 @@ export class BlueprintsResolver {
   }
 
   /**
-   * Try to retrieve the package.json of the blueprint used, as an object.
+   * The meta of the package of the blueprint used, at the path its lookup registered.
    */
-  #findBlueprintPackageJson(blueprintPkgName: string): PackageJson | undefined {
-    const blueprintGeneratorName = packageNameToNamespace(blueprintPkgName);
-    const blueprintPackagePath = this.#env.getPackagePath(blueprintGeneratorName);
-    if (!blueprintPackagePath) {
+  #getBlueprintPackageMeta(blueprintPkgName: string): StorePackageMeta | undefined {
+    const packageMeta = this.#store.getPackageMeta(packageNameToNamespace(blueprintPkgName));
+    if (!packageMeta) {
       this.#log.warn(`Could not retrieve packagePath of blueprint '${blueprintPkgName}'`);
-      return undefined;
     }
-    const packageJsonFile = path.join(blueprintPackagePath, 'package.json');
-    if (!fs.existsSync(packageJsonFile)) {
-      return undefined;
-    }
-    return JSON.parse(fs.readFileSync(packageJsonFile).toString());
+    return packageMeta;
   }
 
   /**
    * Try to retrieve the version of the blueprint used.
    */
   #findBlueprintVersion(blueprintPkgName: string): string | undefined {
-    const blueprintPackageJson: { version?: string; yeoman?: { meta?: { packageVersion?: string } } } | undefined =
-      this.#findBlueprintPackageJson(blueprintPkgName);
-    // The version the `getPackageVersion` of the meta of its generators tells.
-    const version = blueprintPackageJson?.yeoman?.meta?.packageVersion ?? blueprintPackageJson?.version;
+    const version = this.#getBlueprintPackageMeta(blueprintPkgName)?.getPackageVersion();
     if (!version) {
       this.#log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
       return undefined;
@@ -170,7 +160,7 @@ export class BlueprintsResolver {
   }
 
   #checkJHipsterBlueprintVersion(blueprintPkgName: string) {
-    const blueprintPackageJson = this.#findBlueprintPackageJson(blueprintPkgName);
+    const blueprintPackageJson = this.#getBlueprintPackageMeta(blueprintPkgName)?.getPackageJson<PackageJson>();
     if (!blueprintPackageJson) {
       this.#log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
       return;
