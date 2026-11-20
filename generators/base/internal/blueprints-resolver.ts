@@ -159,12 +159,15 @@ export class BlueprintsResolver {
    * Try to retrieve the version of the blueprint used.
    */
   #findBlueprintVersion(blueprintPkgName: string): string | undefined {
-    const blueprintPackageJson = this.#findBlueprintPackageJson(blueprintPkgName);
-    if (!blueprintPackageJson?.version) {
+    const blueprintPackageJson: { version?: string; yeoman?: { meta?: { packageVersion?: string } } } | undefined =
+      this.#findBlueprintPackageJson(blueprintPkgName);
+    // The version the `getPackageVersion` of the meta of its generators tells.
+    const version = blueprintPackageJson?.yeoman?.meta?.packageVersion ?? blueprintPackageJson?.version;
+    if (!version) {
       this.#log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
       return undefined;
     }
-    return blueprintPackageJson.version;
+    return version;
   }
 
   #checkJHipsterBlueprintVersion(blueprintPkgName: string) {

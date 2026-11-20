@@ -23,11 +23,10 @@ import { relative } from 'node:path';
 
 import chalk from 'chalk';
 import { lt as semverLessThan } from 'semver';
-import type { PackageJson } from 'type-fest';
 
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { packageJson } from '../../lib/index.ts';
-import { getGeneratorAlias, getGeneratorAliasVersion } from '../../lib/resolver/blueprint-aliases.ts';
+import { getGeneratorAlias } from '../../lib/resolver/blueprint-aliases.ts';
 import { requireGeneratorCommand } from '../../lib/resolver/generator-command.ts';
 import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
 import { packageNameToNamespace } from '../../lib/utils/index.ts';
@@ -152,13 +151,12 @@ export default class BaseGenerator<
             if (aliasVersions[alias.aliasOf]) {
               this.getContextData(this.#getBlueprintOldVersionKey(), { factory: () => aliasVersions[alias.aliasOf] });
             }
-            this.blueprintConfig!.aliasVersions = { ...aliasVersions, [alias.aliasOf]: getGeneratorAliasVersion(alias) };
+            this.blueprintConfig!.aliasVersions = { ...aliasVersions, [alias.aliasOf]: alias.getPackageVersion?.() };
           } else {
             if (this.blueprintConfig!.blueprintVersion) {
               this.getContextData(this.#getBlueprintOldVersionKey(), { factory: () => this.blueprintConfig!.blueprintVersion });
             }
-            const blueprintPackageJson = this._meta.getPackageJson!<PackageJson>()!;
-            this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
+            this.blueprintConfig!.blueprintVersion = this._meta.getPackageVersion?.();
           }
         } catch {
           this.log(`Could not retrieve version of blueprint '${this.options.namespace}'`);
