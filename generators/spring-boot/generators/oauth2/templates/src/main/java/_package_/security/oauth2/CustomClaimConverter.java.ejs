@@ -24,15 +24,11 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import <%- packageName %>.security.SecurityUtils;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.jwt.MappedJwtClaimSetConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -51,7 +47,7 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
 
     private final MappedJwtClaimSetConverter delegate = MappedJwtClaimSetConverter.withDefaults(Map.of());
 
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
 
     private final ClientRegistration registration;
 
@@ -63,9 +59,9 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
         .recordStats()
         .build();
 
-    public CustomClaimConverter(ClientRegistration registration, RestTemplate restTemplate) {
+    public CustomClaimConverter(ClientRegistration registration, RestClient restClient) {
         this.registration = registration;
-        this.restTemplate = restTemplate;
+        this.restClient = restClient;
     }
 
     public Map<String, Object> convert(Map<String, Object> claims) {
@@ -78,19 +74,16 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
         if (attributes instanceof ServletRequestAttributes) {
             // Retrieve and set the token
             String token = bearerTokenResolver.resolve(((ServletRequestAttributes) attributes).getRequest());
-            HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth(token);
 
             // Retrieve user info from OAuth provider if not already loaded
-            ObjectNode user = users.get(claims.get("sub").toString(), s -> {
-                ResponseEntity<ObjectNode> userInfo = restTemplate.exchange(
-                    registration.getProviderDetails().getUserInfoEndpoint().getUri(),
-                    HttpMethod.GET,
-                    new HttpEntity<String>(headers),
-                    ObjectNode.class
-                );
-                return userInfo.getBody();
-            });
+            ObjectNode user = users.get(claims.get("sub").toString(), s ->
+                restClient
+                    .get()
+                    .uri(registration.getProviderDetails().getUserInfoEndpoint().getUri())
+                    .headers(headers -> headers.setBearerAuth(token))
+                    .retrieve()
+                    .body(ObjectNode.class)
+            );
 
             // Add custom claims
             if (user != null) {
