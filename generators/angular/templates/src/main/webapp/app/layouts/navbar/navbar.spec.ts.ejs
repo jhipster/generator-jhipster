@@ -27,7 +27,6 @@ import { provideTranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 import { Account, AccountService } from 'app/core/auth';
-import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginService } from 'app/login/login.service';
 
@@ -77,7 +76,7 @@ describe('Navbar Component', () => {
 
   it('should call profileService.getProfileInfo on init', () => {
     // GIVEN
-    vi.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
+    vi.spyOn(profileService, 'getProfileInfo').mockReturnValue(of({}));
 
     // WHEN
     comp.ngOnInit();
