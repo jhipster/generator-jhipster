@@ -22,13 +22,15 @@
     ];
     const containDefaultProperties = formDefaultProperties.length > 0;
     const anyFieldTimed = fields.some(field => field.fieldTypeTimed);
+    const anyFieldDate = fields.some(field => field.fieldTypeLocalDate && !field.collection);
     // How a field is kept in the form: the text ones as strings, empty when the entity has no value.
     const formValueKinds = [
       ['id', field => field.id && field.autoGenerate && field.fieldTypeNumeric],
       ['boolean', field => field.fieldTypeBoolean],
       ['timed', field => field.fieldTypeTimed],
       ['collection', field => field.collection],
-      ['nullable', field => field.fieldTypeNumeric || field.fieldTypeLocalDate],
+      ['date', field => field.fieldTypeLocalDate],
+      ['nullable', field => field.fieldTypeNumeric],
       ['option', field => field.fieldIsEnum || field.clientConstantsAsValues],
     ];
     const formValueKind = field => formValueKinds.find(([, matches]) => matches(field))?.[0] ?? 'text';
@@ -52,10 +54,10 @@ _%>
 import { Service, <%- editableId ? 'Signal, ' : '' %>WritableSignal } from '@angular/core';
 import { <%- [...new Set(signalFormsImports)].sort().join(', ') %> } from '@angular/forms/signals';
 
-<%_ if (anyFieldTimed) { _%>
+<%_ if (anyFieldTimed || anyFieldDate) { _%>
 import dayjs from 'dayjs/esm';
 
-import { DATE_TIME_FORMAT } from 'app/config';
+import { <%- [anyFieldDate && 'DATE_FORMAT', anyFieldTimed && 'DATE_TIME_FORMAT'].filter(Boolean).join(', ') %> } from 'app/config';
 <%_ } _%>
 import { I<%- entityAngularName %>, New<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 
@@ -86,6 +88,8 @@ export type <%- entityAngularName %>FormModel = {
   <%- fieldName %>: boolean;
   <%_ } else if (kind === 'timed' || kind === 'text') { _%>
   <%- fieldName %>: string;
+  <%_ } else if (kind === 'date') { _%>
+  <%- fieldName %>: dayjs.Dayjs | null;
   <%_ } else if (kind === 'collection') { _%>
   <%- fieldName %>: NonNullable<I<%- entityAngularName %>['<%- fieldName %>']>;
   <%_ } else if (kind === 'option' && field.fieldIsEnum && !field.clientConstantsAsValues) { _%>
@@ -114,7 +118,9 @@ export class <%- entityAngularName %>FormService {
   <%_ } else if (kind === 'boolean') { _%>
       <%- fieldName %>: value.<%- fieldName %> ?? false,
   <%_ } else if (kind === 'timed') { _%>
-      <%- fieldName %>: value.<%- fieldName %> ? value.<%- fieldName %>.format(DATE_TIME_FORMAT) : '',
+      <%- fieldName %>: value.<%- fieldName %> ? dayjs(value.<%- fieldName %>).format(DATE_TIME_FORMAT) : '',
+  <%_ } else if (kind === 'date') { _%>
+      <%- fieldName %>: value.<%- fieldName %> ? dayjs(value.<%- fieldName %>) : null,
   <%_ } else if (kind === 'text' || kind === 'option') { _%>
       <%- fieldName %>: value.<%- fieldName %> ?? '',
   <%_ } else if (kind === 'collection') { _%>
@@ -181,7 +187,9 @@ export class <%- entityAngularName %>FormService {
     return {
 <%_ for (const { fieldName, kind } of formFields) { _%>
   <%_ if (kind === 'timed') { _%>
-      <%- fieldName %>: model.<%- fieldName %> ? dayjs(model.<%- fieldName %>, DATE_TIME_FORMAT) : null,
+      <%- fieldName %>: model.<%- fieldName %> ? dayjs(model.<%- fieldName %>, DATE_TIME_FORMAT).toJSON() : null,
+  <%_ } else if (kind === 'date') { _%>
+      <%- fieldName %>: model.<%- fieldName %> ? model.<%- fieldName %>.format(DATE_FORMAT) : null,
   <%_ } else if (kind === 'text' || kind === 'option') { _%>
       <%- fieldName %>: model.<%- fieldName %> || null,
   <%_ } else { _%>
@@ -197,7 +205,7 @@ export class <%- entityAngularName %>FormService {
 
   private getFormDefaults(): <%- entityAngularName %>FormDefaults {
   <%_ if (anyFieldTimed) { _%>
-    const currentTime = dayjs();
+    const currentTime = dayjs().toJSON();
 
   <%_ } _%>
     return {

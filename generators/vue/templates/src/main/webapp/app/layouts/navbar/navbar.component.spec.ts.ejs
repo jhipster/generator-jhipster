@@ -241,6 +241,8 @@ describe('JhiNavbar', () => {
     expect(wrapper.find('#login').exists()).toBe(false);
 <%_ if (enableTranslation) { _%>
 
+    expect(wrapper.find('[data-cy="language-en"]').text()).toBe('English');
+    expect(wrapper.find('[data-cy="language-fr"]').text()).toBe('Français');
     // The items of the languages, after the content of the button.
     await wrapper.findAll('#languagesnavBarDropdown > div')[0].trigger('click');
     expect(changeLanguage).toHaveBeenCalledWith('en');

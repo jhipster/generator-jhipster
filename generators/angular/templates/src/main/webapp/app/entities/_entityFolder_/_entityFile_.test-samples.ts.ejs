@@ -16,20 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (anyFieldIsDateDerived) { _%>
-import dayjs from 'dayjs/esm';
-<%_ } _%>
-
 import { I<%- entityAngularName %><% if (!readOnly && primaryKey) { %>, New<%- entityAngularName %><% } %> } from './<%- entityFileName %>.model';
 
-export const sampleWithRequiredData: I<%- entityAngularName %> = <%- tsSampleWithRequiredData %>;
+export const sampleWithRequiredData: I<%- entityAngularName %> = <%- angularTsSampleWithRequiredData %>;
 
-export const sampleWithPartialData: I<%- entityAngularName %> = <%- tsSampleWithPartialData %>;
+export const sampleWithPartialData: I<%- entityAngularName %> = <%- angularTsSampleWithPartialData %>;
 
-export const sampleWithFullData: I<%- entityAngularName %> = <%- tsSampleWithFullData %>;
+export const sampleWithFullData: I<%- entityAngularName %> = <%- angularTsSampleWithFullData %>;
 <%_ if (!readOnly && primaryKey) { _%>
 
-export const sampleWithNewData: New<%- entityAngularName %> = <%- tsSampleWithNewData %>;
+export const sampleWithNewData: New<%- entityAngularName %> = <%- angularTsSampleWithNewData %>;
 
 Object.freeze(sampleWithNewData);
 <%_ } _%>

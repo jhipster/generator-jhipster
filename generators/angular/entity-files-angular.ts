@@ -93,7 +93,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
 });
 
 export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, AngularApplication, AngularSource>(
-  async function (this, taskParam) {
+  function (this, taskParam) {
     const { application, source } = taskParam;
     const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(taskParam.entities).filter(
       entity => !entity.builtInUser && !entity.embedded && !entity.entityClientModelOnly,

@@ -23,7 +23,13 @@ export * from './doc.ts';
 export * from './enum.ts';
 export * from './entity.ts';
 export * from './entities.ts';
-export { type EntitySampleFormat, type EntitySamplesBatch, generateEntitySamples } from './entity-samples.ts';
+export {
+  type EntitySample,
+  type EntitySampleFormat,
+  type EntitySamplesBatch,
+  formatEntitySample,
+  generateEntitySamples,
+} from './entity-samples.ts';
 export * from './faker.ts';
 export * from './field-utils.ts';
 export { default as prepareEntity } from './prepare-entity.ts';

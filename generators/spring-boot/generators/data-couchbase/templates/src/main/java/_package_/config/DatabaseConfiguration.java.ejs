@@ -181,7 +181,8 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     public Couchmove couchmove(Cluster cluster) {
         LOG.debug("Configuring Couchmove");
         Bucket bucket = cluster.bucket(getBucketName());
-        bucket.waitUntilReady(Duration.ofMinutes(1));
+        // A Couchbase server that just started can take more than a minute to get the bucket ready
+        bucket.waitUntilReady(Duration.ofMinutes(3));
         Collection collection = bucket.scope(getScopeName()).collection(CHANGELOG_COLLECTION);
         Couchmove couchmove = new Couchmove(collection, cluster, extractChangelog());
         couchmove.migrate();

@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "9.4.0",
+  "version": "9.4.1-snapshot",
   "description": "Spring Boot + Angular/React/Vue in one handy generator",
   "keywords": [
     "yeoman-generator",
@@ -167,24 +167,24 @@
     "piscina": "5.3.2",
     "pluralize": "8.0.0",
     "prettier": "3.10.1",
-    "prettier-plugin-java": "2.11.0",
+    "prettier-plugin-java": "2.12.0",
     "prettier-plugin-packagejson": "3.1.0",
     "prettier-plugin-properties": "0.3.1",
     "randexp": "0.6.0",
     "semver": "7.8.6",
-    "simple-git": "4.0.2",
+    "simple-git": "4.1.0",
     "smol-toml": "1.9.1",
     "sort-keys": "6.0.1",
     "tinyglobby": "0.2.17",
     "type-fest": "5.10.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.72.2",
+    "typescript-eslint": "8.73.0",
     "yaml": "2.9.1",
-    "yeoman-environment": "8.5.1",
-    "yeoman-generator": "10.3.0"
+    "yeoman-environment": "8.6.0",
+    "yeoman-generator": "10.3.1"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "5.10.0",
+    "@stylistic/eslint-plugin": "6.0.1",
     "@types/debug": "4.1.13",
     "@types/didyoumean": "1.2.3",
     "@types/node": "22.20.5",
@@ -206,7 +206,7 @@
     "yeoman-test": "11.8.2"
   },
   "peerDependencies": {
-    "@stylistic/eslint-plugin": "^5.10.0",
+    "@stylistic/eslint-plugin": "^5.10.0 || ^6.0.1",
     "eslint-plugin-ejs-templates": "^0.6.1",
     "yeoman-test": "11.8.2"
   },
