@@ -400,4 +400,21 @@ class ExceptionTranslatorIT {
             .isEqualTo("Internal Server Error");
     }
 
+    @Test
+    void testError() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/error")
+            .exchange()
+            .expectStatus()
+            .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.500")
+            .jsonPath("$.title")
+            .isEqualTo("Internal Server Error");
+    }
+
 }

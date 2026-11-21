@@ -92,7 +92,7 @@ class <%- upperFirstCamelCaseBaseName %>KafkaResourceIT {
             .pollInterval(Duration.ofMillis(100))
             .until(() -> {
                 input.send(testMessage);
-                return mvcResult.getResponse().getContentAsString().contains("data:value-consume");
+                return mvcResult.getResponse().getContentAsString().contains("data: value-consume");
             });
         restMockMvc.perform(get("/api/<%- dasherizedBaseName %>-kafka/unregister"));
     }
