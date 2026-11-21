@@ -45,7 +45,7 @@ import org.springframework.context.annotation.Import;
 <%_ } _%>
 public class TestSecurityConfiguration {
 
-    private static final String NO_END_SESSION_ENDPOINT_REGISTRATION_ID = "oidc-no-end-session-endpoint";
+    public static final String NO_END_SESSION_ENDPOINT_REGISTRATION_ID = "oidc-no-end-session-endpoint";
 
     @Bean
     ClientRegistration clientRegistration() {

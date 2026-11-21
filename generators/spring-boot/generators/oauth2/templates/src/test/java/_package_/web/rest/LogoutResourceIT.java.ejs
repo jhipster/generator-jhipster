@@ -18,6 +18,7 @@
 -%>
 package <%- packageName %>.web.rest;
 
+import static <%- packageName %>.config.TestSecurityConfiguration.NO_END_SESSION_ENDPOINT_REGISTRATION_ID;
 import static <%- packageName %>.test.util.OAuth2TestUtil.ID_TOKEN;
 import static <%- packageName %>.test.util.OAuth2TestUtil.authenticationToken;
 import static <%- packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
@@ -59,8 +60,6 @@ import java.util.Map;
  */
 @IntegrationTest
 class LogoutResourceIT {
-
-    private static final String NO_END_SESSION_ENDPOINT_REGISTRATION_ID = "oidc-no-end-session-endpoint";
 
     @Autowired
     private <%- reactivePrefix %>ClientRegistrationRepository registrations;
@@ -177,10 +176,8 @@ class LogoutResourceIT {
             authentication.getAuthorities(),
             NO_END_SESSION_ENDPOINT_REGISTRATION_ID
         );
-        ClientRegistration clientRegistrationWithoutEndSessionEndpoint = ClientRegistration.withClientRegistration(clientRegistration)
-            .registrationId(NO_END_SESSION_ENDPOINT_REGISTRATION_ID)
-            .providerConfigurationMetadata(Map.of())
-            .build();
+        ClientRegistration clientRegistrationWithoutEndSessionEndpoint = this.registrations
+            .findByRegistrationId(NO_END_SESSION_ENDPOINT_REGISTRATION_ID)<%- reactive ? '.block()' : '' %>;
 <%_ if (reactive) { _%>
         this.webTestClient.mutateWith(csrf())
             .mutateWith(
