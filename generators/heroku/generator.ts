@@ -229,7 +229,17 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
       },
 
       async herokuCreate() {
-        if (!this.hasHerokuCli || this.herokuAppExists) return;
+        if (!this.hasHerokuCli) return;
+
+        if (this.herokuAppExists) {
+          if (this.herokuDeployType === 'git') {
+            const remotes = await this.createSimpleGit().getRemotes();
+            if (!remotes.some(({ name }) => name === 'heroku')) {
+              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!], { reject: true });
+            }
+          }
+          return;
+        }
 
         const regionParams = this.herokuRegion === 'us' ? [] : ['--region', this.herokuRegion];
 
@@ -262,13 +272,17 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
               },
             ]);
             if (props.herokuForceName === 'Yes') {
-              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!], { reject: true });
+              if (await this.createSimpleGit().checkIsRepo()) {
+                await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!], { reject: true });
+              }
             } else {
               const { stdout } = await this.spawnHeroku(['create', ...regionParams]);
               // Extract from "Created random-app-name-1234... done"
               this.herokuAppName = stdout.substring(stdout.lastIndexOf('/') + 1, stdout.indexOf('.git'));
               // ensure that the git remote is the same as the appName
-              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
+              if (await this.createSimpleGit().checkIsRepo()) {
+                await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
+              }
               this.jhipsterConfig.herokuAppName = this.herokuAppName;
             }
           } else if (stderr.includes('Invalid credentials')) {
