@@ -638,10 +638,10 @@ export default class BaseApplicationGenerator<
     }
     if (
       args.entities &&
-      !this.features.contentTypeFields &&
+      this.features.contentTypeFields === false &&
       ([PRIORITY_NAMES.WRITING_ENTITIES, PRIORITY_NAMES.POST_WRITING_ENTITIES] as string[]).includes(priorityName)
     ) {
-      // A generator writes the content type of a blob by hand, from the blob field, unless it turns on the contentTypeFields feature.
+      // A generator that turns off the contentTypeFields feature writes the content type of a blob by hand, from the blob field.
       args.entities = (args.entities as Entity[]).map(entity => ({
         ...entity,
         fields: entity.fields.filter(field => !isContentTypeField(field)),
