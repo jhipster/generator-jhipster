@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { IsEqual, OmitIndexSignature, ReadonlyKeysOf, RequiredKeysOf, SetRequired, Simplify } from 'type-fest';
+import type { IsEqual, KeysOfUnion, OmitIndexSignature, ReadonlyKeysOf, RequiredKeysOf, SetRequired, Simplify } from 'type-fest';
 
 const filterNullishValues = (value: unknown): boolean => value != null;
 
@@ -108,7 +108,7 @@ export type MutateDataParam<T extends object> = Simplify<
  */
 export type MutateDataPropertiesWithRequiredProperties<D extends Record<string, any>, N extends Record<string, any>> = SetRequired<
   D,
-  RequiredKeysOf<N>
+  Extract<RequiredKeysOf<N>, KeysOfUnion<D>>
 >;
 
 const OverrideMutation = Symbol('OverrideMutation');
