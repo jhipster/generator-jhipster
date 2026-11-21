@@ -86,6 +86,9 @@ public class <%- dtoClass %> implements Serializable {
     <%_ if (property.fieldValidate) { _%>
     <%- field.javaFieldValidatorsPartial %>
     <%_ } _%>
+    <%_ if (field.javaContentTypeValidatorsPartial) { _%>
+    <%- field.javaContentTypeValidatorsPartial %>
+    <%_ } _%>
   <%_ } _%>
   <%_ if (relationship && relationship.relationshipRequired) { _%>
     @NotNull

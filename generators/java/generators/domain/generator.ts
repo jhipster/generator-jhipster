@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { mutateData } from '../../../../lib/utils/index.ts';
+import { isContentTypeField } from '../../../base-application/internal/content-type-fields.ts';
 import { getEnumInfo } from '../../../base-application/support/index.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { mutateValidatedField } from '../../application.ts';
@@ -25,6 +26,12 @@ import { javaTestPackageTemplatesBlock } from '../../support/index.ts';
 import { isReservedJavaKeyword } from '../../support/reserved-keywords.ts';
 
 import { entityServerFiles, enumFiles } from './entity-files.ts';
+
+/**
+ * The validator of the content type field of an ImageBlob: image content types only, except XML based images like SVG which
+ * can execute scripts when rendered. An AnyBlob accepts any content type, clients are expected to open it as a download.
+ */
+const javaImageContentTypeValidator = String.raw`@Pattern(regexp = "^(?i)image/(?![^;]*\\+xml)[^;]+(;.*)?$")`;
 
 export default class DomainGenerator extends JavaApplicationGenerator {
   constructor(...[args, options, features]: ConstructorParameters<typeof JavaApplicationGenerator>) {
@@ -120,6 +127,14 @@ export default class DomainGenerator extends JavaApplicationGenerator {
       validators({ entity }) {
         for (const field of entity.fields.filter(f => f.fieldValidate)) {
           mutateData(field, mutateValidatedField);
+        }
+        // The content type field of an ImageBlob accepts the content types of an image only.
+        for (const field of entity.fields.filter(isContentTypeField)) {
+          const { contentTypeOf } = field as { contentTypeOf?: string };
+          const blob = entity.fields.find(other => other.fieldName === contentTypeOf);
+          if (blob?.blobContentTypeImage) {
+            (field as { javaContentTypeValidatorsPartial?: string }).javaContentTypeValidatorsPartial ??= javaImageContentTypeValidator;
+          }
         }
       },
     });
