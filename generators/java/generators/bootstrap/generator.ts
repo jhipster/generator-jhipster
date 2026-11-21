@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import assert from 'node:assert';
 
 import { mutateData, overrideMutateDataProperty } from '../../../../lib/utils/index.ts';
 import { pluralize, upperFirst } from '../../../../lib/utils/string-utils.ts';
@@ -99,7 +100,19 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      prepareEntity({ field }) {
+      prepareEntity({ entity, field }) {
+        if (field.mapstructExpression) {
+          assert.equal(
+            entity.dto,
+            'mapstruct',
+            `@MapstructExpression requires an Entity with mapstruct dto [${entity.name}.${field.fieldName}].`,
+          );
+          // A blob of a file has a content type no expression gives: a TextBlob is a String.
+          assert.ok(
+            !field.fieldTypeBlobContent || field.fieldTypeBlobContent === 'text',
+            `@MapstructExpression does not support a blob of a file [${entity.name}.${field.fieldName}].`,
+          );
+        }
         mutateData(field, mutateField);
       },
     });

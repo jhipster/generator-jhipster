@@ -18,7 +18,7 @@
 -%>
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
 <%_ const timedFields = fields.filter(field => field.fieldTypeTimed); _%>
-<%_ const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient); _%>
+<%_ const booleanFields = fields.filter(field => field.fieldTypeBoolean && field.restAccessReadWrite); _%>
 <%_ const collectionRelationships = relationships.filter(relationship => relationship.persistableRelationship && relationship.collection); _%>
 import { beforeEach, describe, expect, it } from 'vitest';
 import { signal } from '@angular/core';

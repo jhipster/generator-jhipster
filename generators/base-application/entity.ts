@@ -47,8 +47,18 @@ const mutateProperty = {
   propertyNameUpperSnakeCase: ({ propertyName }) => snakeCase(propertyName).toUpperCase(),
 } as const satisfies MutateDataParam<Property>;
 
+/**
+ * What a client can do with a field through the REST API, as the `readOnly` and `writeOnly` of OpenAPI: `readWrite` (read,
+ * written and sortable), `readOnly` (given by the backend, which computes it) or `writeOnly` (accepted, never given back).
+ */
+export const fieldRestAccesses = ['readWrite', 'readOnly', 'writeOnly'] as const;
+
+export type FieldRestAccess = (typeof fieldRestAccesses)[number];
+
 type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType', FieldType> &
-  DerivedBooleanPropertiesOf<'fieldValidation', ValidationType> & {
+  DerivedBooleanPropertiesOf<'fieldValidation', ValidationType> &
+  /** Derived from `restAccess`, once the entity is prepared. */
+  Partial<DerivedBooleanPropertiesOf<'restAccess', FieldRestAccess>> & {
     path?: string[];
 
     fieldNameCapitalized: string;
@@ -81,7 +91,14 @@ type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType
 
     generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts', options?: FakeDataOptions) => any;
 
+    /** Stored in no column: an option of the entity file, or set by the backend. */
     transient?: boolean;
+    /**
+     * What a client can do with the field through the REST API, which the clients read rather than how the backend stores
+     * it. Once the entity is prepared it is `writeOnly` for a transient field, the one of its blob for a content type field,
+     * else `readWrite`: a backend sets it first for a field it computes.
+     */
+    restAccess?: FieldRestAccess;
     id?: boolean;
     autoGenerate?: boolean;
     readonly?: boolean;

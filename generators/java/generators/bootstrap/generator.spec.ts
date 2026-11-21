@@ -52,6 +52,81 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a MapStruct expression', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          {
+            name: 'Foo',
+            dto: 'mapstruct',
+            fields: [
+              { fieldName: 'name', fieldType: 'String' },
+              { fieldName: 'label', fieldType: 'String', options: { mapstructExpression: 'java(s.getName())' } },
+            ],
+          } as any,
+        ])
+        .withSkipWritingPriorities();
+    });
+
+    const field = (fieldName: string): Record<string, any> =>
+      (result.entities!.Foo as any).fields.find((field: any) => field.fieldName === fieldName);
+
+    it('should give the field read only, computed by the backend and stored in no column', () => {
+      expect(field('label')).toMatchObject({
+        restAccess: 'readOnly',
+        restAccessReadOnly: true,
+        restAccessReadWrite: false,
+        readonly: true,
+        transient: true,
+      });
+    });
+
+    it('should give the other fields read and write', () => {
+      expect(field('name')).toMatchObject({ restAccess: 'readWrite' });
+      expect(field('name').readonly).toBeUndefined();
+    });
+  });
+
+  describe('with a MapStruct expression without MapStruct DTO', () => {
+    it('should fail', async () => {
+      await expect(
+        helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withMockedSource()
+          .withJHipsterConfig({ skipUserManagement: true }, [
+            {
+              name: 'Foo',
+              fields: [{ fieldName: 'preview', fieldType: 'String', options: { mapstructExpression: 'java(null)' } }],
+            } as any,
+          ])
+          .withSkipWritingPriorities(),
+      ).rejects.toThrow('@MapstructExpression requires an Entity with mapstruct dto [Foo.preview].');
+    });
+  });
+
+  describe('with a MapStruct expression of a blob of a file', () => {
+    it('should fail', async () => {
+      await expect(
+        helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withMockedSource()
+          .withJHipsterConfig({ skipUserManagement: true }, [
+            {
+              name: 'Foo',
+              dto: 'mapstruct',
+              fields: [{ fieldName: 'preview', fieldType: 'ImageBlob', options: { mapstructExpression: 'java(null)' } }],
+            } as any,
+          ])
+          .withSkipWritingPriorities(),
+      ).rejects.toThrow('@MapstructExpression does not support a blob of a file [Foo.preview].');
+    });
+  });
+
   describe('without client', () => {
     before(async () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withJHipsterConfig({ clientFramework: 'no' });

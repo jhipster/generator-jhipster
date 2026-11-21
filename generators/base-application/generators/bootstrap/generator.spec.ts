@@ -125,6 +125,50 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with the access of its fields through the REST API', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          {
+            name: 'Foo',
+            fields: [
+              { fieldName: 'name', fieldType: 'String' },
+              { fieldName: 'note', fieldType: 'String', options: { transient: true } },
+              { fieldName: 'photo', fieldType: 'ImageBlob' },
+              { fieldName: 'temp', fieldType: 'AnyBlob', options: { transient: true } },
+              { fieldName: 'label', fieldType: 'String', options: { mapstructExpression: 'java(s.getName())' } },
+            ],
+          } as any,
+        ])
+        .withSkipWritingPriorities();
+    });
+
+    const restAccesses = () =>
+      Object.fromEntries((result.entities!.Foo as any).fields.map((field: any) => [field.fieldName, field.restAccess]));
+
+    it('should give a transient field write only, a content type field the access of its blob, the others read and write', () => {
+      expect(restAccesses()).toMatchObject({
+        name: 'readWrite',
+        note: 'writeOnly',
+        photo: 'readWrite',
+        photoContentType: 'readWrite',
+        temp: 'writeOnly',
+        tempContentType: 'writeOnly',
+      });
+    });
+
+    it('should derive a boolean property of each access', () => {
+      const field = (fieldName: string) => (result.entities!.Foo as any).fields.find((field: any) => field.fieldName === fieldName);
+      expect(field('name')).toMatchObject({ restAccessReadWrite: true, restAccessReadOnly: false, restAccessWriteOnly: false });
+      expect(field('note')).toMatchObject({ restAccessReadWrite: false, restAccessReadOnly: false, restAccessWriteOnly: true });
+    });
+
+    it('should give a field read and write when no backend computes it', () => {
+      expect(restAccesses()).toMatchObject({ label: 'readWrite' });
+    });
+  });
+
   describe('security hardening', () => {
     before(async () => {
       await helpers
