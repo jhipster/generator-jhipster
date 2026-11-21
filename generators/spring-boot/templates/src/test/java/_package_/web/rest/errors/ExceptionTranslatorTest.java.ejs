@@ -20,6 +20,9 @@ package <%- packageName %>.web.rest.errors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+<%_ if (!reactive) { _%>
+import jakarta.servlet.ServletException;
+<%_ } _%>
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +76,16 @@ class ExceptionTranslatorTest {
             detailWithProfile(JHipsterConstants.SPRING_PROFILE_PRODUCTION, new NoClassDefFoundError("com/mycompany/internal/Foo"))
         ).isEqualTo("Unexpected runtime exception");
     }
+<%_ if (!reactive) { _%>
+
+    @Test
+    void shouldReplaceInProductionTheDetailOfAnErrorWrappedByTheDispatcherServlet() {
+        Error error = new NoClassDefFoundError("com/mycompany/internal/Foo");
+        assertThat(
+            detailWithProfile(JHipsterConstants.SPRING_PROFILE_PRODUCTION, new ServletException("Handler dispatch failed: " + error, error))
+        ).isEqualTo("Unexpected runtime exception");
+    }
+<%_ } _%>
 
     @Test
     void shouldAnswerAnErrorWithAProblemDetail() {

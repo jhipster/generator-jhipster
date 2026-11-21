@@ -412,8 +412,9 @@ _%>
     }
 
     private String getProductionErrorDetails(Throwable err) {
-        // The message of an Error, like a class not found, can tell the internals of the application
-        if (err instanceof Error) return "Unexpected runtime exception";
+        // The message of an Error, like a class not found, can tell the internals of the application.
+        // A servlet application gets the Error as the cause of the ServletException of the DispatcherServlet.
+        if (err instanceof Error || err.getCause() instanceof Error) return "Unexpected runtime exception";
         if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
 <%_ if (!databaseTypeNo) { _%>
         if (isInvalidSortProperty(err)) return "Invalid sort property";
