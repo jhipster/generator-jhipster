@@ -740,6 +740,16 @@ ${classProperties
             sbTestSmallerValue: smaller === undefined ? undefined : javaValue(field, smaller),
           });
         }
+
+        // The blob of a file of the test has one byte, or a size within its minbytes and maxbytes.
+        for (const field of entity.fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText)) {
+          const minBytes = field.fieldValidationMinBytes ? Number(field.fieldValidateRulesMinbytes) : 0;
+          const maxBytes = field.fieldValidationMaxBytes ? Number(field.fieldValidateRulesMaxbytes) : Infinity;
+          mutateData(field, {
+            __override__: false,
+            sbTestBlobSize: Math.min(Math.max(1, minBytes), maxBytes),
+          });
+        }
       },
       prepareFilters({ application, entity }) {
         mutateData(entity, {

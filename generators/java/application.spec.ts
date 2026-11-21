@@ -44,4 +44,29 @@ describe('application mutation test', () => {
       expect(field.transient).toBe(true);
     });
   });
+
+  describe('mutateValidatedField', () => {
+    const validatorsOf = (field: Record<string, unknown>): string => {
+      const data: any = { ...field };
+      mutateData(data, { javaFieldValidatorsPartial: entityData.mutateValidatedField.javaFieldValidatorsPartial });
+      return data.javaFieldValidatorsPartial.trim();
+    };
+
+    it('requires a required blob', () => {
+      expect(validatorsOf({ fieldTypeBytes: true, fieldValidationRequired: true })).toBe('@NotNull');
+    });
+
+    it('limits the size of a blob of a file by its minbytes and maxbytes', () => {
+      const blob = { fieldTypeBytes: true, fieldValidateRulesMinbytes: 2, fieldValidateRulesMaxbytes: 8 };
+      expect(validatorsOf({ ...blob, fieldValidationMinBytes: true, fieldValidationMaxBytes: true })).toBe('@Size(min = 2, max = 8)');
+      expect(validatorsOf({ ...blob, fieldValidationMinBytes: true })).toBe('@Size(min = 2)');
+      expect(validatorsOf({ ...blob, fieldValidationMaxBytes: true })).toBe('@Size(max = 8)');
+    });
+
+    it('does not limit the size of a text blob nor of a ByteBuffer by bytes', () => {
+      const rules = { fieldValidationMinBytes: true, fieldValidateRulesMinbytes: 2 };
+      expect(validatorsOf({ ...rules, fieldTypeBytes: true, blobContentTypeText: true })).toBe('');
+      expect(validatorsOf({ ...rules, fieldTypeByteBuffer: true })).toBe('');
+    });
+  });
 });

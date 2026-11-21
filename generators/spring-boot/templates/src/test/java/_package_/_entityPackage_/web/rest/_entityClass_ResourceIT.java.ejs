@@ -27,7 +27,7 @@ import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdate
 <%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
     // Fields a request may not set to null. Each is patched to null by the same test.
-    const requiredFields = fieldsToTest.filter(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired);
+    const requiredFields = fieldsToTest.filter(field => field.fieldValidate && field.fieldValidationRequired);
     // Owner side relationships whose related entity has a field that can be observed after a request carrying a
     // nested related object, to check the request does not write into the related entity.
     const noCascadeRelationships = readOnly || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
@@ -130,7 +130,7 @@ import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
 import <%- entityAbsolutePackage %>.service.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
 import tools.jackson.databind.ObjectMapper;
-<%_ if ((updatableEntity && fields.some(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired)) || noCascadeRelationships.length > 0) { _%>
+<%_ if ((updatableEntity && fields.some(field => field.fieldValidate && field.fieldValidationRequired)) || noCascadeRelationships.length > 0) { _%>
 import tools.jackson.databind.node.ObjectNode;
 <%_ } _%>
 <%_ if (noCascadeRelationships.some(({ relationship }) => relationship.collection)) { _%>
@@ -296,8 +296,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     private static final ByteBuffer <%- defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "0"));
     private static final ByteBuffer <%- updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "1"));
     <%_ } else { _%>
-    private static final byte[] <%- defaultValueName %> = TestUtil.createByteArray(1, "0");
-    private static final byte[] <%- updatedValueName %> = TestUtil.createByteArray(1, "1");
+    private static final byte[] <%- defaultValueName %> = TestUtil.createByteArray(<%- field.sbTestBlobSize ?? 1 %>, "0");
+    private static final byte[] <%- updatedValueName %> = TestUtil.createByteArray(<%- field.sbTestBlobSize ?? 1 %>, "1");
     <%_ } _%>
   <%_ } else if (field.sbTestDefaultValue !== undefined) { _%>
 
@@ -752,12 +752,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
   <%_ for (field of fieldsToTest) { _%>
     <%_ if (field.fieldValidate) { _%>
-      <%_ let required = false;
-          if (!field.fieldTypeBytes && field.fieldValidationRequired) {
-            required = true;
-          }
-      _%>
-      <%_ if (required) { _%>
+      <%_ if (field.fieldValidationRequired) { _%>
 
     @Test<%- transactionalAnnotation %>
     void check<%- field.fieldInJavaBeanMethod %>IsRequired() throws Exception {

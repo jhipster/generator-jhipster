@@ -101,9 +101,8 @@ export const mutateValidatedField = {
   javaFieldValidatorsPartial: dontOverrideMutateDataProperty(field => {
     const validators = [];
     const MAX_VALUE = 2147483647;
-    const isBlob = field.fieldTypeBytes;
 
-    if (field.fieldValidationRequired && !isBlob) {
+    if (field.fieldValidationRequired) {
       // reactive tests need a default validation message because lookup is blocking
       validators.push(`@NotNull`);
     }
@@ -116,16 +115,16 @@ export const mutateValidatedField = {
     if (field.fieldValidationMinLength && field.fieldValidationMaxLength) {
       validators.push(`@Size(min = ${field.fieldValidateRulesMinlength}, max = ${field.fieldValidateRulesMaxlength})`);
     }
-    // Not supported anymore because the server can't check the size of the blob before downloading it completely.
-    // if (rules.includes('minbytes') && !rules.includes('maxbytes')) {
-    //   validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ')');
-    // }
-    // if (rules.includes('maxbytes') && !rules.includes('minbytes')) {
-    //   validators.push('@Size(max = ' + field.fieldValidateRulesMaxbytes + ')');
-    // }
-    // if (rules.includes('minbytes') && rules.includes('maxbytes')) {
-    //   validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ', max = ' + field.fieldValidateRulesMaxbytes + ')');
-    // }
+    // The size of a blob of a file is the one of its bytes: a text blob is a String, a ByteBuffer has no size to validate.
+    if (field.fieldTypeBytes && !field.blobContentTypeText) {
+      const sizes = [
+        ...(field.fieldValidationMinBytes ? [`min = ${field.fieldValidateRulesMinbytes}`] : []),
+        ...(field.fieldValidationMaxBytes ? [`max = ${field.fieldValidateRulesMaxbytes}`] : []),
+      ];
+      if (sizes.length > 0) {
+        validators.push(`@Size(${sizes.join(', ')})`);
+      }
+    }
     if (field.fieldValidationMin) {
       if (field.fieldTypeFloat || field.fieldTypeDouble || field.fieldTypeBigDecimal) {
         validators.push(`@DecimalMin(value = "${field.fieldValidateRulesMin}")`);
