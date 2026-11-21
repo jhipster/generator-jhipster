@@ -18,6 +18,7 @@
  */
 import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
 import { finalizeMutations, removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
+import packageJson from '../../../../package.json' with { type: 'json' };
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import BaseSimpleApplicationGenerator from '../../index.ts';
 
@@ -71,11 +72,10 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ applicationDefaults }) {
-        if (this.useVersionPlaceholders) {
-          applicationDefaults({
-            jhipsterVersion: 'JHIPSTER_VERSION',
-          });
-        }
+        applicationDefaults({
+          // The version of package.json when the meta has none, like a generator registered without its packagePath.
+          jhipsterVersion: this.useVersionPlaceholders ? 'JHIPSTER_VERSION' : (this._meta.getPackageVersion?.() ?? packageJson.version),
+        });
 
         applicationDefaults(mutateApplicationPreparing);
       },
