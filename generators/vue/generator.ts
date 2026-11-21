@@ -30,6 +30,7 @@ import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
+  isClientField,
 } from '../client/support/index.ts';
 import type { Field as ClientField } from '../client/types.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
@@ -381,7 +382,8 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         }
       },
       prepareEntityModel({ entity }) {
-        const fieldsWithoutId = entity.fields.filter(field => !field.id);
+        // The fields the clients skip are left out of the model.
+        const fieldsWithoutId = entity.fields.filter(field => !field.id && isClientField(field));
         // The authorities of the routes, like Angular: ROLE_USER when the entity declares none.
         const asAuthorities = (authorities: string[]): string =>
           (authorities.length > 0 ? authorities : ['ROLE_USER']).map(authority => `'${authority}'`).join(', ');

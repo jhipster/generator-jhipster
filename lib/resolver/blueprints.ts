@@ -25,6 +25,7 @@ import type { Store, StoreGeneratorMeta } from 'yeoman-environment';
 
 import type { CliCommand } from '../../cli/types.ts';
 
+import { registerBlueprintAliases } from './blueprint-aliases.ts';
 import { getJHipsterStore, lookupJHipsterGenerators } from './lookups.ts';
 
 export type LookupBlueprintsOptions = {
@@ -114,6 +115,10 @@ export class GeneratorsResolver {
       });
     }
     const notFound = this.findMissing(namespaces);
+    for (const namespace of missing.filter(namespace => !notFound.includes(namespace))) {
+      // The generators of the packages the blueprint takes, under its namespace.
+      registerBlueprintAliases(this.store, namespace);
+    }
     this.blueprints.push(...namespaces.filter(namespace => !notFound.includes(namespace) && !this.blueprints.includes(namespace)));
     return notFound;
   }

@@ -34,16 +34,12 @@ export interface AuthenticatedRequest {
   failOnStatusCode?: boolean;
 }
 
-/**
- * The Cypress suite relies on custom commands (`cy.login`, `cy.authenticatedRequest`, …). Playwright has no
- * command registry, so the same surface is exposed through fixtures and the specs stay a line-by-line port.
- */
 export class JHipster {
   constructor(readonly page: Page) {}
 
   /**
-   * `cy.request` shares the browser's cookie jar. The standalone `request` fixture does not: it is an isolated
-   * context, so session and oauth2 applications would answer 401. `page.request` is the sharing equivalent.
+   * The standalone `request` fixture is an isolated context without the browser's cookies, so session and oauth2
+   * applications would answer 401. `page.request` shares them.
    */
   get request(): APIRequestContext {
     return this.page.request;
@@ -63,7 +59,6 @@ export class JHipster {
   }
 <%_ } _%>
 
-  /** Mirrors `cy.authenticatedRequest`: attaches the credentials the client stores after a login. */
   async authenticatedRequest({ method = 'GET', url, body, form, headers = {} }: AuthenticatedRequest): Promise<APIResponse> {
 <%_ if (authenticationTypeJwt) { _%>
     const token = await this.bearerToken();
@@ -85,15 +80,14 @@ export class JHipster {
 <%_ } _%>
   }
 
-  /** Mirrors `cy.login`. Cypress caches this with `cy.session`; Playwright reuses the browser context per file. */
   async login(username: string, password: string): Promise<void> {
 <%_ if (authenticationTypeOauth2) { _%>
     const { oauthLogin } = await import('./oauth2');
     await oauthLogin(this.page, username, password);
 <%_ } else { _%>
     await this.page.goto('/');
-    // Cypress warms the cookie jar with a GET and then posts through its authenticatedRequest command, which
-    // carries the CSRF header. Posting directly is rejected by a session application.
+    // The GET sets the XSRF-TOKEN cookie, which authenticatedRequest sends back as a header: a session
+    // application rejects the login POST without it.
     await this.request.get('/api/account');
     const response = await this.authenticatedRequest({
       method: 'POST',
@@ -115,7 +109,6 @@ export class JHipster {
 <%_ } _%>
   }
 
-  /** Mirrors `cy.getManagementInfo`. */
   async managementInfo(): Promise<Record<string, unknown>> {
     return managementInfo(this.request);
   }

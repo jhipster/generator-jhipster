@@ -1,0 +1,63 @@
+// expect-node Snapshot v1, https://github.com/mshima/expect-node#snapshots
+
+exports[`generator - client:rest-domain with entities should match files snapshot 1`] = `
+{
+  ".jhipster/Bar.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Baz.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Foo.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/authority/authority.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/authority/authority.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/bar/bar.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/baz/baz.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/baz/baz.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/enumerations/color.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/enumerations/color.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.rest.model.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.rest.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/rest.model.ts": {
+    "stateCleared": "modified",
+  },
+}
+`;
