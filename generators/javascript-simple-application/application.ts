@@ -67,6 +67,9 @@ export const mutateApplicationLoading = {
 export const mutateApplicationPreparing = {
   __override__: false,
 
+  // A snapshot of main is not on npm, so a package.json that depends on it could not be installed.
+  // An explicit --skip-jhipster-dependencies or --no-skip-jhipster-dependencies keeps its value.
+  skipJhipsterDependencies: ({ jhipsterVersion }) => (jhipsterVersion.endsWith('-snapshot') ? true : undefined),
   typescriptEslint: finalizeDefault(() => true),
   nodeVersion: RECOMMENDED_NODE_VERSION,
   nodePackageManager: 'npm',

@@ -40,7 +40,8 @@ describe('generator - upgrade', function () {
           skipServer: true,
           baseName: 'upgradeTest',
         })
-        .withOptions({ skipGit: false, useVersionPlaceholders: false });
+        // The upgrade reads the version of generator-jhipster in package.json, which a snapshot build leaves out by default.
+        .withOptions({ skipGit: false, useVersionPlaceholders: false, skipJhipsterDependencies: false });
       await helpers.runJHipsterInApplication('upgrade').withSpawnMock().withOptions({ useVersionPlaceholders: false });
     });
 
