@@ -23,7 +23,7 @@ import { type Options, clearConfigCache, format, resolveConfig } from 'prettier'
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 // @ts-expect-error No types available
-import prettierPluginProperties from 'prettier-plugin-properties';
+import * as prettierPluginProperties from 'prettier-plugin-properties';
 
 import { addLineNumbers } from '../internal/transform-utils.ts';
 
