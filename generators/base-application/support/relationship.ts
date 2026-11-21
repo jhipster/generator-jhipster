@@ -157,3 +157,35 @@ export const addOtherRelationship = <const R extends BaseApplicationRelationship
   otherEntity.relationships.push(otherRelationship);
   return otherRelationship;
 };
+
+/** Whether a relationship needs the other side whatever the database: the one it names, and the one of a many-to-many. */
+export const needsOtherRelationship = (_entity: BaseApplicationEntity, relationship: BaseApplicationRelationship): boolean =>
+  Boolean(relationship.otherEntityRelationshipName) || relationship.relationshipType === 'many-to-many';
+
+/**
+ * Adds the other side of the relationships of the entities that need it and miss it, a built-in entity at the other side
+ * being left as it is with a warning.
+ */
+export const addEntitiesOtherRelationships = (
+  entities: BaseApplicationEntity[],
+  needsIt: (
+    entity: BaseApplicationEntity,
+    relationship: RelationshipWithEntity<BaseApplicationRelationship, BaseApplicationEntity>,
+  ) => boolean = needsOtherRelationship,
+): ValidationResult => {
+  const result: { warning: string[] } = { warning: [] };
+  for (const entity of entities.filter(entity => !entity.builtIn)) {
+    for (const relationship of entity.relationships ?? []) {
+      if (!relationship.otherRelationship && !relationship.otherEntity.embedded && needsIt(entity, relationship)) {
+        if (relationship.otherEntity.builtIn) {
+          result.warning.push(
+            `Ignoring '${entity.name}' definitions as it is using a built-in Entity '${relationship.otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`,
+          );
+        } else {
+          relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);
+        }
+      }
+    }
+  }
+  return result;
+};

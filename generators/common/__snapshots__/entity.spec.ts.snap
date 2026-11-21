@@ -2,12 +2,17 @@
 
 exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
 {
+  "dtoAny": true,
   "entityApi": "services/microservicename/",
   "entityApiUrl": "entityNamePluralizedAndSpinalCased",
+  "implementsEagerLoadApis": false,
   "paginationAny": true,
   "paginationInfiniteScroll": false,
   "paginationNo": false,
   "paginationPagination": true,
+  "searchEngine": "no",
+  "searchEngineAny": false,
+  "searchEngineNo": true,
 }
 `;
 

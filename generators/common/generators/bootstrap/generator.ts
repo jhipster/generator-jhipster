@@ -73,6 +73,25 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     return this.preparing;
   }
 
+  get postLoadingEntities() {
+    return this.asPostLoadingEntitiesTaskGroup({
+      loadEntities({ application, entitiesToLoad }) {
+        for (const { entityBootstrap } of entitiesToLoad) {
+          mutateData(entityBootstrap, {
+            __override__: false,
+            // The entities of a microservice belong to it, but the built-in ones.
+            microserviceName: ({ builtIn }, { undefinedMarker }) =>
+              !builtIn && application.applicationTypeMicroservice ? application.baseName : undefinedMarker,
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_LOADING_ENTITIES]() {
+    return this.postLoadingEntities;
+  }
+
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entityDefaults }) {

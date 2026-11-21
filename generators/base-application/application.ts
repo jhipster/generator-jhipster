@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, finalizeDefault } from '../../lib/utils/object.ts';
 
 import type { Application, Entity } from './types.ts';
 
@@ -70,6 +70,9 @@ export type BaseApplicationAddedApplicationProperties<E extends Entity> = UserMa
 
   blueprints?: { name: string; version: string }[];
   testFrameworks?: string[];
+
+  /** The type of the ids an entity does not declare, the configured one or the one of the backend. */
+  defaultIdType: string;
 };
 
 export const mutateApplication = {
@@ -78,6 +81,8 @@ export const mutateApplication = {
   javaNodeBuildPaths: (): string[] => [],
   entitySuffix: '',
   dtoSuffix: 'DTO',
+  // A backend sets it first, by its database.
+  defaultIdType: finalizeDefault((data: Application<any>) => (data as { pkType?: string }).pkType ?? 'Long'),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<Application<any>>,
   BaseApplicationAddedApplicationProperties<Entity>

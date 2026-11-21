@@ -90,6 +90,52 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with the skipServer option of a first run', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withMockedGenerators(['jhipster:server:bootstrap']).withOptions({ skipServer: true });
+    });
+
+    it('should not compose the server bootstrap', () => {
+      runResult.assertGeneratorNotComposed('jhipster:server:bootstrap');
+    });
+  });
+
+  describe('with skipServer and entities', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedGenerators(['jhipster:server:bootstrap', 'jhipster:base-application:database-bootstrap'])
+        .withJHipsterConfig({ skipServer: true, databaseType: 'mongodb', searchEngine: 'elasticsearch' }, [
+          {
+            name: 'Author',
+            changelogDate: '20200101000000',
+            searchEngine: 'elasticsearch',
+            fields: [{ fieldName: 'name', fieldType: 'String' }],
+            relationships: [{ relationshipName: 'book', otherEntityName: 'book', relationshipType: 'one-to-many' }],
+          },
+          { name: 'Book', changelogDate: '20200101000100', fields: [{ fieldName: 'title', fieldType: 'String' }] },
+        ] as any);
+    });
+
+    it('should not compose the database bootstrap', () => {
+      runResult.assertGeneratorNotComposed('jhipster:base-application:database-bootstrap');
+    });
+
+    it('should add the other side of the relationships', () => {
+      expect(runResult.entities!.Book.relationships!.map(({ relationshipName }) => relationshipName)).toEqual(['author']);
+    });
+
+    it('should prepare the search of the entities', () => {
+      expect(runResult.entities!.Author).toMatchObject({ searchEngine: 'elasticsearch', searchEngineAny: true });
+    });
+
+    it('should give the entities and the user the default id type', () => {
+      expect((runResult.application as any).defaultIdType).toBe('Long');
+      expect((runResult.entities!.Author as any).primaryKey.type).toBe('Long');
+      expect((runResult.application as any).user.primaryKey.type).toBe('Long');
+    });
+  });
+
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
