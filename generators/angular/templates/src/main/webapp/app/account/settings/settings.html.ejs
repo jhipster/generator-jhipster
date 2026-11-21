@@ -30,7 +30,7 @@
       <<%- jhiPrefixDashed %>-alert-error />
 
     @if (login()) {
-      <form name="form" [formRoot]="settingsForm" novalidate>
+      <form name="form" [formRoot]="settingsForm">
         <div class="mb-3">
           <label class="form-label" for="firstName">__jhiTranslateTag__('settings.form.firstname')</label>
           <input

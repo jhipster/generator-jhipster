@@ -18,7 +18,7 @@
 -%>
 <div class="d-flex justify-content-center">
     <div class="col-8">
-        <form name="editForm" novalidate [formRoot]="editForm">
+        <form name="editForm" [formRoot]="editForm">
             <h2 id="<%- jhiPrefixDashed %>-<%- entityFileName %>-heading" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createOrEditLabel')</h2>
 
             <div>
