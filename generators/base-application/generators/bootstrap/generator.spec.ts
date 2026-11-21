@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'expect-node';
-import { writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 
 import Generator from './generator.ts';
@@ -72,6 +72,110 @@ describe(`generator - ${generator}`, () => {
       result.assertJsonFileContent('.jhipster/Foo.json', { annotations: { incrementalChangelogDate: '20200101000100' } });
       result.assertNoFileContent('.jhipster/Foo.json', '"changelogDate"');
       result.assertNoFileContent('.jhipster/Foo.json', '"incrementalChangelog"');
+    });
+  });
+
+  describe('with relationships written by an older version', () => {
+    const publisher = {
+      relationshipName: 'publisher',
+      otherEntityName: 'member',
+      relationshipType: 'one-to-one',
+      relationshipSide: 'left',
+    };
+    const owner = { relationshipName: 'owner', otherEntityName: 'member', relationshipType: 'many-to-one', relationshipSide: 'left' };
+    const recipient = {
+      relationshipName: 'recipient',
+      otherEntityName: 'member',
+      relationshipType: 'one-to-one',
+      relationshipSide: 'left',
+    };
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          // recipient is added in this run, like by a jdl import: it is not in the entity file on the disk.
+          {
+            name: 'Order',
+            annotations: { changelogDate: '20200101000100' },
+            fields: [],
+            relationships: [publisher, owner, recipient],
+          } as any,
+          { name: 'Member', annotations: { changelogDate: '20200101000200' }, fields: [] } as any,
+        ])
+        .doInDir(cwd => {
+          writeFileSync(join(cwd, '.yo-rc.json'), JSON.stringify({ 'generator-jhipster': { jhipsterVersion: '9.4.0' } }));
+          mkdirSync(join(cwd, '.jhipster'), { recursive: true });
+          writeFileSync(join(cwd, '.jhipster/Order.json'), JSON.stringify({ name: 'Order', relationships: [publisher, owner] }));
+        })
+        .withSkipWritingPriorities();
+    });
+
+    it('should save the back reference name the older version derived for the relationships it generated', () => {
+      const { relationships } = result.fs.readJSON(join(result.cwd, '.jhipster/Order.json')) as { relationships: any[] };
+      expect(relationships.map(({ relationshipName, options }) => ({ relationshipName, options }))).toEqual([
+        { relationshipName: 'publisher', options: { backReferenceName: 'order' } },
+        { relationshipName: 'owner', options: undefined },
+        { relationshipName: 'recipient', options: undefined },
+      ]);
+    });
+  });
+
+  describe('with relationships of an application a development build generated with derived names', () => {
+    const publisher = {
+      relationshipName: 'publisher',
+      otherEntityName: 'member',
+      relationshipType: 'one-to-one',
+      relationshipSide: 'left',
+    };
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          { name: 'Order', annotations: { changelogDate: '20200101000100' }, fields: [], relationships: [publisher] } as any,
+          { name: 'Member', annotations: { changelogDate: '20200101000200' }, fields: [] } as any,
+        ])
+        .doInDir(cwd => {
+          // A development build writes the version of the last release, with the marker.
+          writeFileSync(
+            join(cwd, '.yo-rc.json'),
+            JSON.stringify({ 'generator-jhipster': { jhipsterVersion: '9.4.0', derivedBackReferenceNames: true } }),
+          );
+          mkdirSync(join(cwd, '.jhipster'), { recursive: true });
+          writeFileSync(join(cwd, '.jhipster/Order.json'), JSON.stringify({ name: 'Order', relationships: [publisher] }));
+        })
+        .withSkipWritingPriorities();
+    });
+
+    it('should save no back reference name', () => {
+      result.assertNoFileContent('.jhipster/Order.json', 'backReferenceName');
+    });
+  });
+
+  describe('with relationships of a new application', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          {
+            name: 'Order',
+            annotations: { changelogDate: '20200101000100' },
+            fields: [],
+            relationships: [
+              { relationshipName: 'publisher', otherEntityName: 'member', relationshipType: 'one-to-one', relationshipSide: 'left' },
+              { relationshipName: 'owner', otherEntityName: 'member', relationshipType: 'many-to-one', relationshipSide: 'left' },
+            ],
+          } as any,
+          { name: 'Member', annotations: { changelogDate: '20200101000200' }, fields: [] } as any,
+        ])
+        .withSkipWritingPriorities();
+    });
+
+    it('should save no back reference name', () => {
+      result.assertNoFileContent('.jhipster/Order.json', 'backReferenceName');
+    });
+
+    it('should mark the application as naming its back references after their relationship', () => {
+      result.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { derivedBackReferenceNames: true } });
     });
   });
 

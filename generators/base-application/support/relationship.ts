@@ -17,6 +17,9 @@
  * limitations under the License.
  */
 
+import { existsSync, readFileSync } from 'node:fs';
+
+import { databaseTypes } from '../../../lib/jhipster/index.ts';
 import { lowerFirst, upperFirst } from '../../../lib/utils/string-utils.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
 import type {
@@ -28,6 +31,70 @@ import type {
 
 import { stringifyApplicationData } from './debug.ts';
 import { findEntityInEntities } from './entity.ts';
+
+const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
+
+/** The version from which a back reference without a name is named after its relationship, see `backReferenceName`. */
+export const DERIVED_BACK_REFERENCE_NAME_VERSION = '9.4.1';
+
+/**
+ * Whether the application on the disk names the back references after the entity: written by a version older than 9.4.1,
+ * and not marked with `derivedBackReferenceNames`, which every generation since writes. The marker tells an application a
+ * development build generated, whose version stays the one of the last release.
+ */
+export const hasLegacyBackReferenceNames = (
+  control: { isJhipsterVersionLessThan(version: string): boolean },
+  yoRcPath: string,
+): boolean => {
+  if (!control.isJhipsterVersionLessThan(DERIVED_BACK_REFERENCE_NAME_VERSION)) return false;
+  const config = existsSync(yoRcPath) ? JSON.parse(readFileSync(yoRcPath, 'utf-8'))['generator-jhipster'] : undefined;
+  return !config?.derivedBackReferenceNames;
+};
+
+/**
+ * Whether a relationship without `otherEntityRelationshipName` gets a back reference on the other entity: a many-to-many,
+ * a one-to-one of a SQL entity (for its filters), and a one-to-many of an entity with a database that has it.
+ */
+export const relationshipAddsBackReference = (relationshipType: string, databaseType?: string): boolean =>
+  relationshipType === 'many-to-many' ||
+  (relationshipType === 'one-to-one' && databaseType === SQL) ||
+  (relationshipType === 'one-to-many' && databaseType !== NEO4J && databaseType !== NO_DATABASE);
+
+/**
+ * Up to 9.4.0 the back reference of a relationship without `otherEntityRelationshipName` was named after the entity, `order`
+ * for `Order{publisher} to Member`. Saves that name as the `backReferenceName` option of each such relationship of an
+ * application written by such a version, so its fields and columns keep their names; the relationships added later get the
+ * derived name. Two of them to the same entity stopped the generation, so they keep no name. Only the relationships
+ * `generated` tells are saved, the ones the older version generated, not the ones added since. Returns whether it saved any.
+ */
+export const saveLegacyBackReferenceNames = (
+  entity: { name: string; databaseType?: string; relationships?: BaseApplicationRelationship[] },
+  databaseType = entity.databaseType,
+  generated: (relationship: BaseApplicationRelationship) => boolean = () => true,
+): boolean => {
+  const legacyName = lowerFirst(entity.name);
+  const relationships = (entity.relationships ?? []).filter(
+    relationship =>
+      generated(relationship) &&
+      !relationship.otherEntityRelationshipName &&
+      relationship.options?.backReferenceName === undefined &&
+      // A built-in entity gets no back reference.
+      !(relationship as { relationshipWithBuiltInEntity?: boolean }).relationshipWithBuiltInEntity &&
+      relationshipAddsBackReference(relationship.relationshipType, databaseType),
+  );
+  const toSave = relationships.filter(
+    relationship =>
+      relationships.filter(other => other.otherEntityName === relationship.otherEntityName).length === 1 &&
+      // The name is already saved for another relationship to that entity.
+      !entity.relationships!.some(
+        other => other.otherEntityName === relationship.otherEntityName && other.options?.backReferenceName === legacyName,
+      ),
+  );
+  for (const relationship of toSave) {
+    relationship.options = { ...relationship.options, backReferenceName: legacyName };
+  }
+  return toSave.length > 0;
+};
 
 export const otherRelationshipType = (relationshipType: string): string => relationshipType.split('-').reverse().join('-');
 
@@ -143,7 +210,11 @@ export const addOtherRelationship = <const R extends BaseApplicationRelationship
   otherEntity: BaseApplicationEntity,
   relationship: R,
 ): RelationshipWithEntity<R, BaseApplicationEntity> => {
-  relationship.otherEntityRelationshipName ??= lowerFirst(entity.name);
+  // Named after the relationship alone, `orderAsPublisher` for `Order{publisher} to Member`: adding, removing or reordering the
+  // other relationships never renames it. The name an older version derived is kept, see `saveLegacyBackReferenceNames`.
+  relationship.otherEntityRelationshipName ??=
+    (relationship.options?.backReferenceName as string | undefined) ??
+    `${lowerFirst(entity.name)}As${upperFirst(relationship.relationshipName)}`;
   const otherRelationship = {
     otherEntityName: lowerFirst(entity.name),
     otherEntityRelationshipName: relationship.relationshipName,

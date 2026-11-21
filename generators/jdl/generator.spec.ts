@@ -619,6 +619,45 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('over relationships with a saved back reference name', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withFiles({
+          '.yo-rc.json': { 'generator-jhipster': { baseName: 'jhipster', creationTimestamp: 1577836800000 } },
+          '.jhipster/Order.json': {
+            name: 'Order',
+            annotations: { changelogDate: '20200101000100' },
+            fields: [],
+            relationships: [
+              {
+                relationshipName: 'publisher',
+                otherEntityName: 'member',
+                relationshipType: 'one-to-one',
+                relationshipSide: 'left',
+                options: { backReferenceName: 'order' },
+              },
+            ],
+          },
+        })
+        .withOptions({
+          jsonOnly: true,
+          inline: `application { config { baseName jhipster } entities * }
+entity Order
+entity Member
+relationship OneToOne { Order{publisher} to Member Order{recipient} to Member }`,
+        });
+    });
+
+    it('should keep the saved name of a relationship the jdl gives again without it', () => {
+      const { relationships } = JSON.parse(runResult.getSnapshot()['.jhipster/Order.json'].contents!);
+      expect(relationships.map(({ relationshipName, options }: any) => ({ relationshipName, options }))).toEqual([
+        { relationshipName: 'publisher', options: { backReferenceName: 'order' } },
+        { relationshipName: 'recipient', options: undefined },
+      ]);
+    });
+  });
+
   describe('--json-only option', () => {
     describe('for entities only jdl', () => {
       describe('with valid parameters', () => {

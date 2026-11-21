@@ -18,10 +18,16 @@
  */
 import { existsSync, readFileSync } from 'node:fs';
 
+import type { Control } from '../base/types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { withContentTypeFields } from '../base-application/internal/content-type-fields.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
-import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.ts';
+import {
+  hasLegacyBackReferenceNames,
+  loadEntitiesAnnotations,
+  loadEntitiesOtherSide,
+  saveLegacyBackReferenceNames,
+} from '../base-application/support/index.ts';
 import type { TaskTypes as ApplicationTaskTypes } from '../base-application/tasks.ts';
 import type { TaskParamWithApplication } from '../base-simple-application/tasks.ts';
 import { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from '../liquibase/support/index.ts';
@@ -96,7 +102,13 @@ export default abstract class BaseEntityChangesGenerator<
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       const { application, entities } = firstArg as Tasks['DefaultTaskParam'];
-      this.#entityChanges ??= this.generateIncrementalChanges({ application, entities });
+      // The control the bootstrap created, which the first argument of the tasks gets only later.
+      const control = this.getContextData<Control>('jhipster:control');
+      this.#entityChanges ??= this.generateIncrementalChanges({
+        application,
+        entities,
+        legacyBackReferenceNames: hasLegacyBackReferenceNames(control, this.config.path),
+      });
       return { ...firstArg, entityChanges: this.#entityChanges };
     }
     return firstArg;
@@ -108,7 +120,11 @@ export default abstract class BaseEntityChangesGenerator<
   protected generateIncrementalChanges({
     application,
     entities: paramEntities,
-  }: Pick<Tasks['DefaultTaskParam'], 'application' | 'entities'>): BaseEntityChangesChangelog<Entity>[] {
+    legacyBackReferenceNames = false,
+  }: Pick<Tasks['DefaultTaskParam'], 'application' | 'entities'> & {
+    /** The entity files were written by a version that named the back references after the entity. */
+    legacyBackReferenceNames?: boolean;
+  }): BaseEntityChangesChangelog<Entity>[] {
     const { recreateInitialChangelog } = this;
     const { incrementalChangelog } = application;
     const entityNames = paramEntities.filter(e => !e.skipDbChangelog).map(e => e.name);
@@ -129,6 +145,10 @@ export default abstract class BaseEntityChangesGenerator<
     for (const entity of Object.values(previousEntitiesByName)) {
       // The content type fields of the blobs, which the entity files never have, like the current entities.
       entity.fields = withContentTypeFields(entity.fields ?? []) as Entity['fields'];
+      // The back references these files had, as the bootstrap saves them for the current entities.
+      if (legacyBackReferenceNames) {
+        saveLegacyBackReferenceNames(entity, entity.databaseType ?? application.databaseType);
+      }
     }
     // The primary keys as the entity files declare them, before the entities are prepared.
     const previousIdSignatures = Object.fromEntries(
