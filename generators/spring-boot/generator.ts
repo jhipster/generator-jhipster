@@ -909,6 +909,11 @@ ${classProperties
           classPath: 'org.springframework.web.method.annotation.HandlerMethodValidator',
           method: 'validateArguments',
         });
+        // The method validation of a @Validated resource, like the email of a password reset, loads the messages bundle at its first error.
+        source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.validation.beanvalidation.MethodValidationAdapter',
+          method: 'invokeValidatorForArguments',
+        });
         source.addAllowBlockingCallsInside!({
           classPath: `${application.packageName}.service.MailService`,
           method: 'sendEmailFromTemplate',
