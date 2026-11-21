@@ -92,7 +92,7 @@ const command = {
       }),
       choices: [
         { value: 'consul', name: 'Consul (recommended)' },
-        { value: 'eureka', name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)' },
+        { value: 'eureka', name: 'JHipster Registry (uses Eureka, provides Spring Cloud Config support)' },
         { value: 'no', name: 'No service discovery' },
       ],
       internal: {
