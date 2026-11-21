@@ -16,11 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export class Registration {
-  constructor(
-    public login: string,
-    public email: string,
-    public password: string,
-    public langKey: string,
-  ) {}
+export interface Registration {
+  login: string;
+  email: string;
+  password: string;
+  langKey: string;
 }
