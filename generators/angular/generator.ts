@@ -368,6 +368,29 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               )),
         });
       },
+      prepareFormEmptyValues({ entity }) {
+        for (const field of entity.fields) {
+          mutateData(field, {
+            __override__: false,
+            angularFormKeepsEmptyValue: ({
+              fieldValidationRequired,
+              id,
+              clientConstantsAsValues,
+              fieldTypeBoolean,
+              fieldTypeString,
+              blobContentTypeText,
+            }) =>
+              !fieldValidationRequired &&
+              !id &&
+              !clientConstantsAsValues &&
+              Boolean(fieldTypeBoolean || fieldTypeString || blobContentTypeText),
+          });
+        }
+        mutateData(entity, {
+          __override__: false,
+          angularFormKeepsEmptyValues: ({ fields }) => fields.some(field => field.angularFormKeepsEmptyValue),
+        });
+      },
     });
   }
 

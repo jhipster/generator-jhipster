@@ -19,7 +19,7 @@
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
 <%_ const timedFields = fields.filter(field => field.fieldTypeTimed); _%>
 <%_ const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient); _%>
-<%_ const emptyValueFields = fields.filter(field => !field.fieldValidationRequired && !field.id && !field.clientConstantsAsValues && (field.fieldTypeBoolean || field.fieldTypeString || field.blobContentTypeText)); _%>
+<%_ const emptyValueFields = fields.filter(field => field.angularFormKeepsEmptyValue); _%>
 <%_ const collectionRelationships = relationships.filter(relationship => relationship.persistableRelationship && relationship.collection); _%>
 import { beforeEach, describe, expect, it } from 'vitest';
 import { signal } from '@angular/core';

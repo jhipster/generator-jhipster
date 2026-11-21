@@ -38,9 +38,6 @@
       ? [{ field, fieldName: field.fieldName, kind: 'text' }, { field, fieldName: `${field.fieldName}ContentType`, kind: 'text', contentType: true }]
       : [{ field, fieldName: field.fieldName, kind: formValueKind(field) }]);
     const formRelationships = relationships.filter(relationship => relationship.persistableRelationship);
-    // The fields with a single empty value in the form for two of the entity: an unchecked box for null and false, an empty text for null and ''.
-    const keepsEmptyValue = field => !field.fieldValidationRequired && !field.id && !field.clientConstantsAsValues && (field.fieldTypeBoolean || field.fieldTypeString || field.blobContentTypeText);
-    const keepsEmptyValues = fields.some(keepsEmptyValue);
     const editableId = !primaryKey.autoGenerate && !builtInUserManagement;
     const signalFormsImports = ['FieldTree', 'FormOptions', 'form'];
     if (fields.some(field => field.id && field.autoGenerate) || fields.some(field => field.readonly)) signalFormsImports.push('readonly');
@@ -186,21 +183,21 @@ export class <%- entityAngularName %>FormService {
     );
   }
 
-<%_ if (keepsEmptyValues) { _%>
+<%_ if (angularFormKeepsEmptyValues) { _%>
   /**
    * The entity of the form. An empty value of the form keeps the empty value of the edited entity, a null one included.
    */
 <%_ } _%>
-  get<%- entityAngularName %>(model: <%- entityAngularName %>FormModel<%- keepsEmptyValues ? `, ${entityInstance}?: ${entityAngularName}FormInput | null` : '' %>):<% if (updatableEntity) { %> I<%- entityAngularName %> |<% } %> New<%- entityAngularName %> {
+  get<%- entityAngularName %>(model: <%- entityAngularName %>FormModel<%- angularFormKeepsEmptyValues ? `, ${entityInstance}?: ${entityAngularName}FormInput | null` : '' %>):<% if (updatableEntity) { %> I<%- entityAngularName %> |<% } %> New<%- entityAngularName %> {
     return {
 <%_ for (const { field, fieldName, kind } of formFields) { _%>
   <%_ if (kind === 'timed') { _%>
       <%- fieldName %>: model.<%- fieldName %> ? dayjs(model.<%- fieldName %>, DATE_TIME_FORMAT).toJSON() : null,
   <%_ } else if (kind === 'date') { _%>
       <%- fieldName %>: model.<%- fieldName %> ? model.<%- fieldName %>.format(DATE_FORMAT) : null,
-  <%_ } else if (kind === 'boolean' && keepsEmptyValue(field)) { _%>
+  <%_ } else if (kind === 'boolean' && field.angularFormKeepsEmptyValue) { _%>
       <%- fieldName %>: model.<%- fieldName %> || (<%- entityInstance %>?.<%- fieldName %> === null ? null : false),
-  <%_ } else if (kind === 'text' && keepsEmptyValue(field)) { _%>
+  <%_ } else if (kind === 'text' && field.angularFormKeepsEmptyValue) { _%>
       <%- fieldName %>: model.<%- fieldName %> || (<%- entityInstance %>?.<%- fieldName %> === '' ? '' : null),
   <%_ } else if (kind === 'text' || kind === 'option') { _%>
       <%- fieldName %>: model.<%- fieldName %> || null,
