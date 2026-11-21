@@ -17,9 +17,12 @@
  * limitations under the License.
  */
 import { Faker, type LocaleDefinition, type Randomizer, base, en, generateMersenne53Randomizer } from '@faker-js/faker';
-import Randexp from 'randexp';
+import RandexpModule from 'randexp';
 
 import { languageToFakerLanguage } from '../../languages/support/languages.ts';
+
+// randexp is a CommonJS module that exports its class as module.exports, while its types declare a default export.
+const Randexp = RandexpModule as unknown as typeof RandexpModule.default;
 
 class RandexpWithFaker extends Randexp {
   faker: Faker;
