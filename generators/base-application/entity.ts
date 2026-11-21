@@ -228,8 +228,8 @@ export const mutateRelationship = {
   collection: ({ relationshipType }) => relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
 
   relationshipFieldName: ({ relationshipName }) => lowerFirst(relationshipName),
-  relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName, { force: true }),
-  relationshipNamePlural: ({ relationshipName }) => pluralize(relationshipName, { force: true }),
+  relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName),
+  relationshipNamePlural: ({ relationshipName }) => pluralize(relationshipName),
   relationshipNameCapitalized: ({ relationshipName }) => upperFirst(relationshipName),
   relationshipNameHumanized: ({ relationshipName }) => startCase(relationshipName),
 
@@ -415,8 +415,8 @@ export const mutateEntity = {
   entityNameCapitalized: ({ name }) => upperFirst(name),
   entityClass: ({ entityNameCapitalized }) => upperFirst(entityNameCapitalized),
   entityNameKebabCase: ({ name }) => kebabCase(name),
-  entityNamePlural: ({ name }) => pluralize(name, { force: true }),
-  entityNamePluralizedAndSpinalCased: ({ name }) => kebabCase(pluralize(name, { force: false })),
+  entityNamePlural: ({ name }) => pluralize(name),
+  entityNamePluralizedAndSpinalCased: ({ name }) => kebabCase(pluralize(name)),
   entityInstance: ({ name }) => lowerFirst(name),
   entityInstancePlural: ({ entityNamePlural }) => lowerFirst(entityNamePlural),
   entityAuthority: ({ adminEntity }) => (adminEntity ? 'ROLE_ADMIN' : undefined),
@@ -424,5 +424,5 @@ export const mutateEntity = {
     clientRootFolder && !skipUiGrouping ? camelCase(`${clientRootFolder}${entityClass}`) : entityInstance,
 
   entityNameHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
-  entityNamePluralHumanized: ({ entityNameHumanized }) => pluralize(entityNameHumanized, { force: false }),
+  entityNamePluralHumanized: ({ entityNameHumanized }) => pluralize(entityNameHumanized),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, BaseApplicationAddedEntityProperties>;
