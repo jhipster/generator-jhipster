@@ -27,11 +27,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.restclient.RestTemplateBuilder;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -41,12 +38,11 @@ import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorH
 import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
-import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -55,12 +51,12 @@ import java.util.stream.Collectors;
 public class AuthorizationHeaderUtil {
 
     private final OAuth2AuthorizedClientService clientService;
-    private final RestTemplateBuilder restTemplateBuilder;
+    private final RestClient.Builder restClientBuilder;
     private static final Logger LOG = LoggerFactory.getLogger(AuthorizationHeaderUtil.class);
 
-    public AuthorizationHeaderUtil(OAuth2AuthorizedClientService clientService, RestTemplateBuilder restTemplateBuilder) {
+    public AuthorizationHeaderUtil(OAuth2AuthorizedClientService clientService, RestClient.Builder restClientBuilder) {
         this.clientService = clientService;
-        this.restTemplateBuilder = restTemplateBuilder;
+        this.restClientBuilder = restClientBuilder;
     }
 
     public Optional<String> getAuthorizationHeader() {
@@ -123,18 +119,18 @@ public class AuthorizationHeaderUtil {
         formParameters.add(OAuth2ParameterNames.GRANT_TYPE, AuthorizationGrantType.REFRESH_TOKEN.getValue());
         formParameters.add(OAuth2ParameterNames.REFRESH_TOKEN, currentClient.getRefreshToken().getTokenValue());
         formParameters.add(OAuth2ParameterNames.CLIENT_ID, currentClient.getClientRegistration().getClientId());
-        RequestEntity requestEntity = RequestEntity.post(
-            URI.create(currentClient.getClientRegistration().getProviderDetails().getTokenUri())
-        )
-            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .body(formParameters);
         try {
-            RestTemplate r = restTemplate(
+            OAuthIdpTokenResponseDTO response = restClient(
                 currentClient.getClientRegistration().getClientId(),
                 currentClient.getClientRegistration().getClientSecret()
-            );
-            ResponseEntity<OAuthIdpTokenResponseDTO> responseEntity = r.exchange(requestEntity, OAuthIdpTokenResponseDTO.class);
-            return toOAuth2AccessTokenResponse(responseEntity.getBody());
+            )
+                .post()
+                .uri(URI.create(currentClient.getClientRegistration().getProviderDetails().getTokenUri()))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(formParameters)
+                .retrieve()
+                .body(OAuthIdpTokenResponseDTO.class);
+            return toOAuth2AccessTokenResponse(response);
         } catch (OAuth2AuthorizationException e) {
             LOG.error("Unable to refresh token", e);
             throw new OAuth2AuthenticationException(e.getError(), e);
@@ -156,11 +152,15 @@ public class AuthorizationHeaderUtil {
             .build();
     }
 
-    private RestTemplate restTemplate(String clientId, String clientSecret) {
-        return restTemplateBuilder
-            .additionalMessageConverters(new FormHttpMessageConverter(), new OAuth2AccessTokenResponseHttpMessageConverter())
-            .errorHandler(new OAuth2ErrorResponseErrorHandler())
-            .basicAuthentication(clientId, clientSecret)
+    private RestClient restClient(String clientId, String clientSecret) {
+        // The builder is shared and mutable: each client gets its own copy.
+        OAuth2ErrorResponseErrorHandler errorHandler = new OAuth2ErrorResponseErrorHandler();
+        return restClientBuilder
+            .clone()
+            .defaultStatusHandler(HttpStatusCode::isError, (request, response) ->
+                errorHandler.handleError(request.getURI(), request.getMethod(), response)
+            )
+            .defaultHeaders(headers -> headers.setBasicAuth(clientId, clientSecret))
             .build();
     }
 
