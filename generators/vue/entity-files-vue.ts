@@ -59,16 +59,18 @@ export const writeEntityFiles = asWritingEntitiesTask<ClientEntity, ClientApplic
   }
 });
 
-export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication, ClientSource>(
-  async function postWriteEntityFiles({ application, entities, source }) {
-    source.addEntitiesToClient({
-      application,
-      entities: (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
-        entity => !entity.builtInUser && !entity.embedded,
-      ),
-    });
-  },
-);
+export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication, ClientSource>(function postWriteEntityFiles({
+  application,
+  entities,
+  source,
+}) {
+  source.addEntitiesToClient({
+    application,
+    entities: (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
+      entity => !entity.builtInUser && !entity.embedded,
+    ),
+  });
+});
 
 export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(function cleanupEntitiesFiles({
   application,

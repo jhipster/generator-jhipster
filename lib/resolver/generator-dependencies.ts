@@ -21,6 +21,7 @@ import type { StoreGeneratorMeta } from 'yeoman-environment';
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
 import { requireGeneratorCommand } from './generator-command.ts';
+import { resolveGeneratorNamespace } from './namespace.ts';
 
 export type GeneratorDependency = {
   /** Namespace as requested, `app`, `jhipster:spring-boot:cache` or `jhipster-foo:app` for a blueprint override. */
@@ -36,7 +37,7 @@ export type ResolveGeneratorDependenciesOptions = {
   blueprintNamespaces?: string[];
   /** Namespace prefix of the generators without one; defaults to `jhipster`. */
   namespacePrefix?: string;
-  /** Called for a generator that is not registered. */
+  /** Called for a requested generator that is not registered; an imported one that is not registered throws. */
   onMissing?: (namespace: string) => void;
 };
 
@@ -54,12 +55,22 @@ export const resolveGeneratorDependencies = (
 ): GeneratorDependency[] => {
   const dependencies: GeneratorDependency[] = [];
   // A generator is requested without the prefix (`java`) or by its namespace (`jhipster:java`): the same generator.
-  const toNamespace = (namespace: string) => (namespace.includes(':') ? namespace : `${namespacePrefix}:${namespace}`);
+  const toNamespace = (namespace: string) => resolveGeneratorNamespace(namespace, { namespacePrefix });
   const isRegistered = (namespace: string) => dependencies.some(dependency => toNamespace(dependency.namespace) === toNamespace(namespace));
 
-  const register = ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
+  type LookupOptions = {
+    namespace: string;
+    blueprintNamespace?: string;
+    /** The generator importing it, which requires it to be registered. */
+    importedBy?: string;
+  };
+
+  const register = ({ namespace, blueprintNamespace, importedBy }: LookupOptions) => {
     const meta = getGeneratorMeta(toNamespace(namespace));
     if (!meta) {
+      if (importedBy) {
+        throw new Error(`The generator ${namespace} imported by ${importedBy} is not registered`);
+      }
       if (!blueprintNamespace) onMissing?.(namespace);
       return undefined;
     }
@@ -68,11 +79,17 @@ export const resolveGeneratorDependencies = (
     return command;
   };
 
-  const lookup = ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
-    const lookupGeneratorAndImports = (options: { namespace: string; blueprintNamespace?: string }) => {
+  const lookup = ({ namespace, blueprintNamespace, importedBy }: LookupOptions) => {
+    const lookupGeneratorAndImports = (options: LookupOptions) => {
       const command = register(options);
       for (const imported of command?.import ?? []) {
-        lookup({ namespace: imported, blueprintNamespace: options.blueprintNamespace });
+        // `:<generator>` is a generator of the package of the importing one.
+        const importer = toNamespace(options.namespace);
+        lookup({
+          namespace: imported.startsWith(':') ? resolveGeneratorNamespace(imported, { from: importer }) : imported,
+          blueprintNamespace: options.blueprintNamespace,
+          importedBy: importer,
+        });
       }
       return command?.override;
     };
@@ -93,7 +110,7 @@ export const resolveGeneratorDependencies = (
       }
     }
     if (!overridden && !isRegistered(namespace)) {
-      lookupGeneratorAndImports({ namespace, blueprintNamespace });
+      lookupGeneratorAndImports({ namespace, blueprintNamespace, importedBy });
     }
   };
 

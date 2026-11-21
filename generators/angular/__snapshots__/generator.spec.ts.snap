@@ -1237,13 +1237,10 @@ import {
 import {
   UserManagementService,
   UserManagementsService,
-  RestUserManagement,
 } from "./user-management.service";
 
-const requireRestSample: RestUserManagement = {
+const requireRestSample: IUserManagement = {
   ...sampleWithRequiredData,
-  createdDate: sampleWithRequiredData.createdDate?.toJSON(),
-  lastModifiedDate: sampleWithRequiredData.lastModifiedDate?.toJSON(),
 };
 
 describe("UserManagement Service", () => {
@@ -1314,16 +1311,13 @@ describe("UserManagement Service", () => {
       expect(expectedResult).toMatchObject(expected);
     });
 
-    it("should send null for the dates a partial update does not have", () => {
+    it("should send a partial update as it is, without the dates it does not have", () => {
       service
         .partialUpdate({ login: sampleWithRequiredData.login })
         .subscribe();
 
       const req = httpMock.expectOne({ method: "PATCH" });
-      expect(req.request.body).toMatchObject({
-        createdDate: null,
-        lastModifiedDate: null,
-      });
+      expect(req.request.body).toEqual({ login: sampleWithRequiredData.login });
       req.flush(requireRestSample);
     });
 
@@ -1337,14 +1331,6 @@ describe("UserManagement Service", () => {
       const req = httpMock.expectOne({ method: "GET" });
       req.flush([returnedFromService]);
       expect(expectedResult).toMatchObject([expected]);
-    });
-
-    it("should return an empty list of UserManagement", () => {
-      let body: IUserManagement[] | null | undefined;
-      service.query().subscribe((resp) => (body = resp.body));
-
-      httpMock.expectOne({ method: "GET" }).flush(null);
-      expect(body).toBeNull();
     });
 
     it("should delete a UserManagement", () => {
@@ -1516,8 +1502,7 @@ describe("UserManagement Service", () => {
     "contents": "import { HttpClient, HttpResponse, httpResource } from "@angular/common/http";
 import { Service, computed, inject, signal } from "@angular/core";
 
-import dayjs from "dayjs/esm";
-import { map, Observable } from "rxjs";
+import { Observable } from "rxjs";
 
 import { serverApiUrl } from "app/config";
 import { createRequestOption } from "app/core/request";
@@ -1525,16 +1510,6 @@ import { IUserManagement, NewUserManagement } from "../user-management.model";
 
 export type PartialUpdateUserManagement = Partial<IUserManagement> &
   Pick<IUserManagement, "login">;
-
-type RestOf<T extends IUserManagement | NewUserManagement> = Omit<
-  T,
-  "createdDate" | "lastModifiedDate"
-> & {
-  createdDate?: string | null;
-  lastModifiedDate?: string | null;
-};
-
-export type RestUserManagement = RestOf<IUserManagement>;
 
 @Service()
 export class UserManagementsService {
@@ -1545,7 +1520,7 @@ export class UserManagementsService {
       >
     | undefined
   >(undefined);
-  readonly userManagementsResource = httpResource<RestUserManagement[]>(() => {
+  readonly userManagementsResource = httpResource<IUserManagement[]>(() => {
     const params = this.userManagementsParams();
     if (!params) {
       return undefined;
@@ -1557,26 +1532,11 @@ export class UserManagementsService {
    * In case of error while fetching the userManagements, the signal is set to an empty array.
    */
   readonly userManagements = computed(() =>
-    (this.userManagementsResource.hasValue()
+    this.userManagementsResource.hasValue()
       ? this.userManagementsResource.value()
-      : []
-    ).map((item) => this.convertValueFromServer(item)),
+      : [],
   );
   protected readonly resourceUrl = \`\${serverApiUrl}api/admin/users\`;
-
-  protected convertValueFromServer(
-    restUserManagement: RestUserManagement,
-  ): IUserManagement {
-    return {
-      ...restUserManagement,
-      createdDate: restUserManagement.createdDate
-        ? dayjs(restUserManagement.createdDate)
-        : undefined,
-      lastModifiedDate: restUserManagement.lastModifiedDate
-        ? dayjs(restUserManagement.lastModifiedDate)
-        : undefined,
-    };
-  }
 }
 
 @Service()
@@ -1584,56 +1544,37 @@ export class UserManagementService extends UserManagementsService {
   protected readonly http = inject(HttpClient);
 
   create(userManagement: NewUserManagement): Observable<IUserManagement> {
-    const copy = this.convertValueFromClient(userManagement);
-    return this.http
-      .post<RestUserManagement>(this.resourceUrl, copy)
-      .pipe(map((res) => this.convertResponseFromServer(res)));
+    return this.http.post<IUserManagement>(this.resourceUrl, userManagement);
   }
 
   update(userManagement: IUserManagement): Observable<IUserManagement> {
-    const copy = this.convertValueFromClient(userManagement);
-    return this.http
-      .put<RestUserManagement>(
-        \`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
-        copy,
-      )
-      .pipe(map((res) => this.convertResponseFromServer(res)));
+    return this.http.put<IUserManagement>(
+      \`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
+      userManagement,
+    );
   }
 
   partialUpdate(
     userManagement: PartialUpdateUserManagement,
   ): Observable<IUserManagement> {
-    const copy = this.convertValueFromClient(userManagement);
-    return this.http
-      .patch<RestUserManagement>(
-        \`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
-        copy,
-      )
-      .pipe(map((res) => this.convertResponseFromServer(res)));
+    return this.http.patch<IUserManagement>(
+      \`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
+      userManagement,
+    );
   }
 
   find(login: string): Observable<IUserManagement> {
-    return this.http
-      .get<RestUserManagement>(
-        \`\${this.resourceUrl}/\${encodeURIComponent(login)}\`,
-      )
-      .pipe(map((res) => this.convertResponseFromServer(res)));
+    return this.http.get<IUserManagement>(
+      \`\${this.resourceUrl}/\${encodeURIComponent(login)}\`,
+    );
   }
 
   query(req?: any): Observable<HttpResponse<IUserManagement[]>> {
     const options = createRequestOption(req);
-    return this.http
-      .get<RestUserManagement[]>(this.resourceUrl, {
-        params: options,
-        observe: "response",
-      })
-      .pipe(
-        map((res) =>
-          res.clone({
-            body: res.body && this.convertResponseArrayFromServer(res.body),
-          }),
-        ),
-      );
+    return this.http.get<IUserManagement[]>(this.resourceUrl, {
+      params: options,
+      observe: "response",
+    });
   }
 
   delete(login: string): Observable<undefined> {
@@ -1691,28 +1632,6 @@ export class UserManagementService extends UserManagementsService {
       return [...userManagementsToAdd, ...userManagementCollection];
     }
     return userManagementCollection;
-  }
-
-  protected convertValueFromClient<
-    T extends IUserManagement | NewUserManagement | PartialUpdateUserManagement,
-  >(userManagement: T): RestOf<T> {
-    return {
-      ...userManagement,
-      createdDate: userManagement.createdDate?.toJSON() ?? null,
-      lastModifiedDate: userManagement.lastModifiedDate?.toJSON() ?? null,
-    };
-  }
-
-  protected convertResponseFromServer(
-    res: RestUserManagement,
-  ): IUserManagement {
-    return this.convertValueFromServer(res);
-  }
-
-  protected convertResponseArrayFromServer(
-    res: RestUserManagement[],
-  ): IUserManagement[] {
-    return res.map((item) => this.convertValueFromServer(item));
   }
 }
 ",
@@ -1915,11 +1834,11 @@ export class UserManagementFormService {
       imageUrl: value.imageUrl ?? "",
       createdBy: value.createdBy ?? "",
       createdDate: value.createdDate
-        ? value.createdDate.format(DATE_TIME_FORMAT)
+        ? dayjs(value.createdDate).format(DATE_TIME_FORMAT)
         : "",
       lastModifiedBy: value.lastModifiedBy ?? "",
       lastModifiedDate: value.lastModifiedDate
-        ? value.lastModifiedDate.format(DATE_TIME_FORMAT)
+        ? dayjs(value.lastModifiedDate).format(DATE_TIME_FORMAT)
         : "",
       authorities: value.authorities ?? [],
     };
@@ -1973,18 +1892,18 @@ export class UserManagementFormService {
       imageUrl: model.imageUrl || null,
       createdBy: model.createdBy || null,
       createdDate: model.createdDate
-        ? dayjs(model.createdDate, DATE_TIME_FORMAT)
+        ? dayjs(model.createdDate, DATE_TIME_FORMAT).toJSON()
         : null,
       lastModifiedBy: model.lastModifiedBy || null,
       lastModifiedDate: model.lastModifiedDate
-        ? dayjs(model.lastModifiedDate, DATE_TIME_FORMAT)
+        ? dayjs(model.lastModifiedDate, DATE_TIME_FORMAT).toJSON()
         : null,
       authorities: model.authorities,
     };
   }
 
   private getFormDefaults(): UserManagementFormDefaults {
-    const currentTime = dayjs();
+    const currentTime = dayjs().toJSON();
 
     return {
       login: null,
@@ -2841,9 +2760,7 @@ describe("UserManagement screens", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/user-management.model.ts": {
-    "contents": "import dayjs from "dayjs/esm";
-
-import { IAuthority } from "app/entities/admin/authority/authority.model";
+    "contents": "import { IAuthority } from "app/entities/admin/authority/authority.model";
 
 export interface IUserManagement {
   id?: number | null;
@@ -2854,9 +2771,9 @@ export interface IUserManagement {
   activated?: boolean | null;
   imageUrl?: string | null;
   createdBy?: string | null;
-  createdDate?: dayjs.Dayjs | null;
+  createdDate?: string | null;
   lastModifiedBy?: string | null;
-  lastModifiedDate?: dayjs.Dayjs | null;
+  lastModifiedDate?: string | null;
   authorities?: string[] | null;
 }
 
@@ -2933,9 +2850,7 @@ export default userManagementRoute;
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/user-management.test-samples.ts": {
-    "contents": "import dayjs from "dayjs/esm";
-
-import { IUserManagement, NewUserManagement } from "./user-management.model";
+    "contents": "import { IUserManagement, NewUserManagement } from "./user-management.model";
 
 export const sampleWithRequiredData: IUserManagement = {
   login: "Randall.Sauer",
@@ -2950,7 +2865,7 @@ export const sampleWithPartialData: IUserManagement = {
   email: "Gerson.Franey@gmail.com",
   activated: false,
   imageUrl: "boo suspension",
-  lastModifiedDate: dayjs("2019-12-31T08:49"),
+  lastModifiedDate: "2019-12-31T08:49:00.000Z",
 };
 
 export const sampleWithFullData: IUserManagement = {
@@ -2962,9 +2877,9 @@ export const sampleWithFullData: IUserManagement = {
   activated: false,
   imageUrl: "as vastly than",
   createdBy: "out absentmindedly",
-  createdDate: dayjs("2019-12-31T08:53"),
+  createdDate: "2019-12-31T08:53:00.000Z",
   lastModifiedBy: "but sour sympathetically",
-  lastModifiedDate: dayjs("2019-12-31T04:46"),
+  lastModifiedDate: "2019-12-31T04:46:00.000Z",
 };
 
 export const sampleWithNewData: NewUserManagement = {
@@ -3258,6 +3173,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "reactive": true,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -4391,6 +4307,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "reactive": true,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -5768,6 +5685,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -6901,6 +6819,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -8173,6 +8092,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -9726,6 +9646,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -10839,6 +10760,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,

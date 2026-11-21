@@ -22,7 +22,7 @@ import { getConfigWithDefaults } from '../../../lib/jhipster/default-application
 import BaseGenerator from '../../base/index.ts';
 import { formatDateForChangelog } from '../../base/support/index.ts';
 
-import { generateEntitySamples } from './entity-samples.ts';
+import { formatEntitySample, generateEntitySamples } from './entity-samples.ts';
 import { createFaker } from './faker.ts';
 import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.ts';
 import { prepareCommonFieldForTemplates } from './prepare-field.ts';
@@ -44,8 +44,7 @@ describe('generator - base-application - support - generateEntitySamples', () =>
       fieldIsEnum: true,
       enumValues: ['RED', 'GREEN', 'BLUE'].map(name => ({ name, value: name })),
     });
-  const samples = (fields: any[], count: number, seed = 'seed', format: any = 'json-serializable') =>
-    generateEntitySamples(entity, { seed, batches: [{ fields, format, count }] })[0];
+  const samples = (fields: any[], count: number, seed = 'seed') => generateEntitySamples(entity, { seed, batches: [{ fields, count }] })[0];
 
   before(async () => {
     entity = prepareEntityForTemplates(
@@ -78,7 +77,7 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     });
     const [values] = generateEntitySamples(entity, {
       seed: 'seed',
-      batches: [{ fields: [field], format: 'json-serializable', count: 10, distinct: true }],
+      batches: [{ fields: [field], count: 10, distinct: true }],
     });
     expect(values.map(sample => sample.code).sort()).toEqual(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
   });
@@ -110,10 +109,7 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     const field = enumField(['unique']);
     const [[first], [second]] = generateEntitySamples(entity, {
       seed: 'seed',
-      batches: [
-        { fields: [field], format: 'json-serializable' },
-        { fields: [field], format: 'json-serializable' },
-      ],
+      batches: [{ fields: [field] }, { fields: [field] }],
     });
     expect(first.color).not.toBe(second.color);
   });
@@ -128,7 +124,6 @@ describe('generator - base-application - support - generateEntitySamples', () =>
             expect(faker).toBe(entity.faker);
             return [field];
           },
-          format: 'ts',
         },
       ],
     });
@@ -156,8 +151,81 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     expect(new Set(values).size).toBe(20);
   });
 
-  it('should write a duration as ISO 8601 in json', () => {
+  it('should draw a duration as ISO 8601', () => {
     const [sample] = samples([prepareField({ fieldName: 'time', fieldType: 'Duration' })], 1);
     expect(sample.time).toMatch(/^PT\d+M$/);
+  });
+
+  it('should draw a date and time as a Date at the minute', () => {
+    const [sample] = samples([prepareField({ fieldName: 'at', fieldType: 'Instant' })], 1);
+    expect(sample.at).toBeInstanceOf(Date);
+    expect((sample.at as Date).toISOString()).toMatch(/T\d{2}:\d{2}:00\.000Z$/);
+  });
+
+  describe('formatEntitySample', () => {
+    const at = new Date('2026-01-01T10:15:00.000Z');
+    const file = Buffer.from('../fake-data/blob/hipster.txt').toString('base64');
+    let fields: any[];
+
+    before(() => {
+      fields = [
+        prepareField({ fieldName: 'name', fieldType: 'String' }),
+        prepareField({ fieldName: 'count', fieldType: 'Integer' }),
+        prepareField({ fieldName: 'at', fieldType: 'Instant', fieldTypeTimed: true }),
+        prepareField({
+          fieldName: 'code',
+          fieldType: 'String',
+          fieldValidateRules: ['pattern'],
+          fieldValidateRulesPattern: '^"?[a-z]+$',
+        }),
+        prepareField({ fieldName: 'file', fieldType: 'byte[]', fieldTypeBlobContent: 'text' }),
+        prepareField({ fieldName: 'time', fieldType: 'Duration' }),
+      ];
+    });
+
+    it('should write a sample as TypeScript code', () => {
+      expect(formatEntitySample(fields, { name: "it's", count: 3, at, code: '"ab', file }, 'ts')).toEqual({
+        name: String.raw`'it\'s'`,
+        count: 3,
+        at: "dayjs('2026-01-01T10:15')",
+        code: `'"ab'`,
+        file: "'../fake-data/blob/hipster.txt'",
+      });
+    });
+
+    it('should write a sample as the input of a Cypress test', () => {
+      expect(formatEntitySample(fields, { name: "it's", count: 3, at, code: '"ab', file }, 'cypress')).toEqual({
+        name: "it's",
+        count: 3,
+        at: '2026-01-01T10:15',
+        code: '"ab',
+        file: '../fake-data/blob/hipster.txt',
+      });
+    });
+
+    it('should write a sample as values serializable to JSON', () => {
+      expect(formatEntitySample(fields, { name: "it's", count: 3, at, code: '"ab', file }, 'json-serializable')).toEqual({
+        name: "it's",
+        count: 3,
+        at,
+        code: '"ab',
+        file,
+      });
+    });
+
+    it('should write a sample as the values of a Liquibase CSV', () => {
+      expect(formatEntitySample(fields, { name: "it's", count: 3, at, code: '"a;b', file, time: 'PT1H2M3S' }, 'csv')).toEqual({
+        name: "it's",
+        count: 3,
+        at: '2026-01-01T10:15:00',
+        code: '"""a;b"',
+        file: '../fake-data/blob/hipster.txt',
+        time: 3_723_000_000_000,
+      });
+    });
+
+    it('should write only the fields of the sample', () => {
+      expect(formatEntitySample(fields, { count: 3 }, 'ts')).toEqual({ count: 3 });
+    });
   });
 });

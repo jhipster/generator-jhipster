@@ -27,9 +27,7 @@ const onRequestSuccess = (config: AxiosRequestConfig): AxiosRequestConfig => {
 <%_ if (authenticationTypeJwt) { _%>
   const token = getAuthenticationToken();
   if (token) {
-    if (!config.headers) {
-      config.headers = {};
-    }
+    config.headers ??= {};
     config.headers.Authorization = `Bearer ${token}`;
   }
 <%_ } _%>
@@ -39,7 +37,7 @@ const onRequestSuccess = (config: AxiosRequestConfig): AxiosRequestConfig => {
 };
 const setupAxiosInterceptors = (onUnauthenticated: (error: AxiosError) => unknown, onServerError: (error: AxiosError) => unknown): void => {
   const onResponseError = (err: AxiosError) => {
-    const status = err.status || err.response?.status;
+    const status = err.status ?? err.response?.status;
     if (status === 403 || status === 401) {
       return onUnauthenticated(err);
     }

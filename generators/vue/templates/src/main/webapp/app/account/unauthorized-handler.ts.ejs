@@ -31,7 +31,7 @@ export const createUnauthorizedHandler =
   ({ accountService<%- authenticationTypeOauth2 ? '' : ', router' %> }: { accountService: AccountService<%- authenticationTypeOauth2 ? '' : '; router: Router' %> }) =>
   (error: AxiosError) => {
     const url = error.response?.config?.url;
-    const status = error.status || error.response?.status;
+    const status = error.status ?? error.response?.status;
     if (status === 401) {
       accountService.logout();
       if (!url?.endsWith('api/account') && !url?.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {

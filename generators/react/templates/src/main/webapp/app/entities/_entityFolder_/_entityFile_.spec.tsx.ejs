@@ -26,6 +26,9 @@
     const primaryKeyName = primaryKey.name;
     const [firstKey, secondKey] = primaryKey.tsSampleValues;
     const numericFormFields = readOnly ? [] : fields.filter(field => field.fieldTypeNumeric && field.fieldValidate && !field.id && !field.hidden && !field.readonly);
+    const optionalNumberFields = readOnly ? [] : fields.filter(field => field.fieldTypeNumeric && !field.fieldValidationRequired && !field.id && !field.hidden && !field.readonly);
+    const emptyNumbers = optionalNumberFields.map(field => `${field.fieldName}: ''`).join(', ');
+    const nullNumbers = optionalNumberFields.map(field => `${field.fieldName}: null`).join(', ');
     const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient && !field.hidden);
     const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.transient && !field.hidden);
     const validatedForm = numericFormFields.length > 0 || builtInUserManagement;
@@ -385,6 +388,50 @@ describe('<%- entityReactName %> screens', () => {
       await waitFor(() => expect(heading()).not.toBeNull());
     });
 
+  <%_ if (optionalNumberFields.length > 0) { _%>
+    it('should clear an optional number left empty when updating', async () => {
+      const { container } = renderPage(`/${sample.<%- primaryKeyName %>}/edit`);
+      await waitForForm();
+
+      fillForm(container, { ...formValues, <%- emptyNumbers %> });
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() =>
+        expect(axios.put).toHaveBeenCalledWith(`${apiUrl}/${sample.<%- primaryKeyName %>}`, expect.objectContaining({ <%- nullNumbers %> })),
+      );
+    });
+
+    it('should keep an optional number without value when saving again', async () => {
+      const getEntities = vi.mocked(axios.get).getMockImplementation()!;
+      vi.mocked(axios.get).mockImplementation((url: string, config?: object) =>
+        url === `${apiUrl}/${sample.<%- primaryKeyName %>}`
+          ? Promise.resolve({ data: { ...sample, <%- nullNumbers %> }, headers: {} })
+          : getEntities(url, config),
+      );
+      const { container } = renderPage(`/${sample.<%- primaryKeyName %>}/edit`);
+      await waitForForm();
+      await waitFor(() => expect(container.querySelector<HTMLInputElement>('[name="<%- primaryKeyName %>"]')?.value).toBe(`${sample.<%- primaryKeyName %>}`));
+
+      const untouchedNumbers = [<%- optionalNumberFields.map(field => `'${field.fieldName}'`).join(', ') %>];
+      fillForm(container, Object.fromEntries(Object.entries(formValues).filter(([name]) => !untouchedNumbers.includes(name))));
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() =>
+        expect(axios.put).toHaveBeenCalledWith(`${apiUrl}/${sample.<%- primaryKeyName %>}`, expect.objectContaining({ <%- nullNumbers %> })),
+      );
+    });
+
+    it('should not send a value for an optional number left empty when creating', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      fillForm(container, { ...formValues, <%- emptyNumbers %> });
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(axios.post).toHaveBeenCalledWith(apiUrl, expect.objectContaining({ <%- nullNumbers %> })));
+    });
+
+  <%_ } _%>
   <%_ if (numericFormFields.length > 0) { _%>
     it('should not save a number that is not valid', async () => {
       const { container } = renderPage('/new');
