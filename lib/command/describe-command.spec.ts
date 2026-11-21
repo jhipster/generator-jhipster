@@ -35,8 +35,10 @@ import { createBlueprintFiles, defaultHelpers as helpers } from '#testing';
 const metaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
   const generators = lookupGeneratorCommands();
   return (namespace: string): StoreGeneratorMeta | undefined => {
-    const command = blueprints[namespace] ?? generators.find(generator => `jhipster:${generator.namespace}` === namespace)?.command;
-    return command ?
+    // A generator without a command module is registered too.
+    const generator = generators.find(generator => `jhipster:${generator.namespace}` === namespace);
+    const command = blueprints[namespace] ?? generator?.command;
+    return command || generator ?
         ({
           namespace,
           requireSibling: (name: string) => (name === 'command' ? { default: command } : undefined),

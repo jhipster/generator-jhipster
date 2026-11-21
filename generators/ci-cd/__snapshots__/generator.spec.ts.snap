@@ -449,6 +449,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "reactorBlockOptional": "",
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,

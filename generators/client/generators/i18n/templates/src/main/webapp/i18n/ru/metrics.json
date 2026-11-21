@@ -67,19 +67,19 @@
       }
     },
     "cache": {
-      "title": "статистика",
+      "title": "Статистика кеша",
       "cachename": "Название кеша",
-      "hits": "Попаданий",
-      "misses": "Промахов",
-      "gets": "Cache Gets",
-      "puts": "Cache Puts",
-      "removals": "Cache Removals",
-      "evictions": "Количество очисток",
-      "hitPercent": "Cache Hit %",
-      "missPercent": "Cache Miss %",
-      "averageGetTime": "Average get time (µs)",
-      "averagePutTime": "Average put time (µs)",
-      "averageRemoveTime": "Average remove time (µs)"
+      "hits": "Попадания",
+      "misses": "Промахи",
+      "gets": "Получения",
+      "puts": "Сохранения",
+      "removals": "Удаления",
+      "evictions": "Очистки",
+      "hitPercent": "Попадания %",
+      "missPercent": "Промахи %",
+      "averageGetTime": "Среднее время получения (мкс)",
+      "averagePutTime": "Среднее время сохранения (мкс)",
+      "averageRemoveTime": "Среднее время удаления (мкс)"
     },
     "datasource": {
       "usage": "Использование",

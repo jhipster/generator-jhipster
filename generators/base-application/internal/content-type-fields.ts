@@ -31,8 +31,13 @@ export type ContentTypeField = Field & {
   /** The name of the blob field whose content type it keeps. */
   contentTypeOf: string;
   skipClient: true;
+  /** Stored in no column, like its blob. */
+  transient?: true;
   fakerTemplate: string;
 };
+
+/** Whether a field is stored in no column, as its options not loaded yet declare it too: the ones of an entity file. */
+const isTransient = (field: Field & { transient?: boolean }): boolean => Boolean(field.transient ?? field.options?.transient);
 
 export const isContentTypeField = (field: Field): field is ContentTypeField => 'contentTypeOf' in field;
 
@@ -59,6 +64,7 @@ export const withContentTypeFields = <F extends Field>(fields: F[]): (F | Conten
         fieldType: 'String',
         contentTypeOf: field.fieldName,
         skipClient: true,
+        ...(isTransient(field) ? { transient: true } : {}),
         // The content type of the image the fake data has.
         fakerTemplate: 'image/png',
       };

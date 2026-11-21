@@ -76,10 +76,10 @@ test.describe('/admin', () => {
       await jhi.navbar.clickOnAdminMenuItem('admin/docs');
       await expect(page.locator(swaggerFrameSelector)).toBeVisible({ timeout: SWAGGER_TIMEOUT });
 
-      // Swagger UI renders the definition asynchronously. Cypress retried each of these through `should`;
-      // a count() read is a single sample, so assert on the locators instead.
+      // Swagger UI renders the definition asynchronously: assert on the locators, which retry, rather than on a
+      // count() read, which is a single sample.
       const swagger = page.frameLocator(swaggerFrameSelector);
-      // Cypress waited for the iframe body to stop being empty before looking inside it.
+      // Wait for the iframe document to be rendered before looking inside it.
       await expect(swagger.locator('body')).not.toBeEmpty({ timeout: SWAGGER_TIMEOUT });
       await expect(swagger.locator(swaggerPageSelector)).toBeVisible({ timeout: SWAGGER_TIMEOUT });
       await expect(swagger.locator('[id="select"] > option').first()).toBeAttached({ timeout: SWAGGER_TIMEOUT });

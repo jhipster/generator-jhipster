@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { computed, provide } from 'vue';
+import { type Ref, computed, inject, provide } from 'vue';
 import { type Router } from 'vue-router';
 
 import { storeToRefs } from 'pinia';
@@ -27,13 +27,14 @@ import LoginService, { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
 import { createUnauthorizedHandler } from '@/account/unauthorized-handler';
 import { setupAxiosInterceptors } from '@/config/axios-interceptor';
-import { authenticatedKey, currentUsernameKey } from '@/config/injection-keys';
+import { type CurrentAccount, currentAccountKey } from '@/config/injection-keys';
+import { type IUser } from '@/entities/user/user.model';
 import { createAuthorityGuard } from '@/router/authority-guard';
 import { useStore } from '@/stores';
 
 /**
  * Sets the account of the application up, once, in the setup of its root: the guard of the routes, what a 401 does to
- * the session, and what the components inject (the account service, whether the user is authenticated and its name).
+ * the session, and what the components inject (the account service and the current account).
  */
 export const useAccount = ({ router }: { router: Router }) => {
 <%_ if (authenticationUsesCsrf) { _%>
@@ -46,10 +47,30 @@ export const useAccount = ({ router }: { router: Router }) => {
 
   setupAxiosInterceptors(createUnauthorizedHandler({ accountService<%- authenticationTypeOauth2 ? '' : ', router' %> }), error => Promise.reject(error));
 
-  const { authenticated } = storeToRefs(store);
-  provide(authenticatedKey, authenticated);
-  provide(currentUsernameKey, computed(() => store.account?.login));
+  const currentAccount = createCurrentAccount(storeToRefs(store).account);
+  provide(currentAccountKey, currentAccount);
   provide(accountServiceKey, accountService);
 
-  return { store, accountService, authenticated };
+  return { store, accountService, authenticated: currentAccount.authenticated };
+};
+
+/**
+ * The current account read from the account of the user signed in.
+ */
+const createCurrentAccount = (account: Readonly<Ref<IUser | null>>): CurrentAccount => ({
+  account,
+  authenticated: computed(() => !!account.value),
+  username: computed(() => account.value?.login),
+  hasAnyAuthority: authorities => [authorities].flat().some(authority => account.value?.authorities?.includes(authority) ?? false),
+});
+
+/**
+ * The account of the user, as the root of the application provides it.
+ */
+export const useCurrentAccount = (): CurrentAccount => {
+  const currentAccount = inject(currentAccountKey, null);
+  if (!currentAccount) {
+    throw new Error('The current account is provided by useAccount, in the setup of the root of the application');
+  }
+  return currentAccount;
 };

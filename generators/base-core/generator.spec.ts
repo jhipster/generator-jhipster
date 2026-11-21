@@ -224,6 +224,64 @@ describe('generator - base-core', () => {
     });
   });
 
+  describe('generators of the same package', () => {
+    const app = 'jhipster-foo:app';
+    const other = 'jhipster-foo:other';
+
+    it('should compose with a generator of the package of the composing one', async () => {
+      const composed: string[] = [];
+      await helpers.run(app).withGenerators([
+        [
+          helpers.createDummyGenerator(Base, {
+            async [Base.COMPOSING]() {
+              await this.composeWithJHipster(':other');
+            },
+          }),
+          { namespace: app },
+        ],
+        [
+          helpers.createDummyGenerator(Base, {
+            [Base.WRITING]() {
+              composed.push((this as unknown as Base).options.namespace);
+            },
+          }),
+          { namespace: other },
+        ],
+      ]);
+      expect(composed).toEqual([other]);
+    });
+
+    /** A generator of the package importing the commands given. */
+    const importing = (imports: string[]) =>
+      class extends Base {
+        constructor(args: any, options: any, features: any) {
+          super(args, options, { ...features, skipLoadCommand: false });
+          this.generatorCommand = { configs: {}, import: imports as any };
+        }
+
+        // The context the commands are loaded into, which a jhipster generator has.
+        override get context() {
+          return {};
+        }
+
+        // A generator runs the tasks of its own prototype.
+        [Base.WRITING]() {}
+      };
+
+    it('should load an imported command of the package of the importing one', async () => {
+      await helpers.run(app).withGenerators([
+        [importing([':other']), { namespace: app }],
+        [helpers.createDummyGenerator(Base), { namespace: other }],
+      ]);
+    });
+
+    it('should fail for an imported command that is not registered', async () => {
+      await expect(helpers.run(app).withGenerators([[importing([':missing']), { namespace: app }]])).rejects.toThrow(
+        'The generator jhipster-foo:missing imported by jhipster-foo:app is not registered',
+      );
+    });
+  });
+
   describe('editFile of a missing file', () => {
     /** The messages and the debug messages editing a missing file logs, with the options and the ignore needles error. */
     const editMissingFile = async (options: Record<string, unknown>, ignoreNeedlesError = false) => {

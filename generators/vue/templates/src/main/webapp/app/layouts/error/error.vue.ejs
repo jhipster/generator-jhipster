@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { <%- authenticationTypeOauth2 ? 'inject, ' : '' %>ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -27,7 +27,7 @@ import { <%- authenticationTypeOauth2 ? '' : 'useRouter, ' %>useRoute } from 'vu
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
-import { authenticatedKey } from '@/config/injection-keys';
+import { useCurrentAccount } from '@/composables';
 
 defineOptions({ name: 'Error' });
 
@@ -39,7 +39,7 @@ const { login } = inject(loginServiceKey)!;
 <%_ } else { _%>
 const router = useRouter();
 <%_ } _%>
-const authenticated = inject(authenticatedKey)!;
+const { authenticated } = useCurrentAccount();
 const errorMessage = ref<string | null>(null);
 const error403 = ref<boolean>(false);
 const error404 = ref<boolean>(false);

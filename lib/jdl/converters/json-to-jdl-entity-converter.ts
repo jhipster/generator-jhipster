@@ -220,9 +220,10 @@ function getRelationship(relationship: JSONRelationship, entityName: string) {
     commentInTo: destinationSideAttributes.commentForDestinationEntity,
   };
   if (destinationSideAttributes.optionsForDestinationEntity) {
+    // The options of the destination side are written before the source entity, which the import reads as them.
     relationshipConfiguration.options = {
       ...relationshipConfiguration.options,
-      destination: destinationSideAttributes.optionsForDestinationEntity,
+      source: destinationSideAttributes.optionsForDestinationEntity,
     };
   }
   return new JDLRelationship(relationshipConfiguration);
@@ -268,8 +269,9 @@ function getDestinationEntitySideAttributes(
 function getRelationshipOptions(relationship: JSONRelationship): JDLRelationshipOptions {
   const options: JDLRelationshipOptions = {
     global: {},
-    source: relationship.options ?? {},
-    destination: {},
+    source: {},
+    // The options of the source side are written before the destination entity, which the import reads as them.
+    destination: relationship.options ?? {},
   };
   if (relationship.relationshipWithBuiltInEntity) {
     options.global[BUILT_IN_ENTITY] = true;

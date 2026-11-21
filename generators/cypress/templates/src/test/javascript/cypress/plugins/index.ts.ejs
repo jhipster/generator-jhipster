@@ -84,18 +84,6 @@ export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, 
     return launchOptions;
   });
 
-  // Allows logging with cy.task('log', 'message') or cy.task('table', object)
-  on('task', {
-    log(message) {
-      console.log(message);
-      return null;
-    },
-    table(message) {
-      console.table(message);
-      return null;
-    },
-  });
-
 <%_ if (cypressAudit) { _%>
   on('task', {
     // cypress-audit's built-in lighthouse task connects to Cypress's Chrome tab, which crashes Chrome 147+.

@@ -172,6 +172,7 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "projectDescription": "Description for JHipster",
   "reactive": false,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "searchEngine": "no",
   "serverPort": 8080,
   "serviceDiscoveryType": "no",

@@ -90,7 +90,6 @@ export interface Credentials {
   password: string;
 }
 
-/** Mirrors the Cypress `credentials` command: environment overrides win over the generated defaults. */
 export const credentials = (): Credentials => ({
   adminUsername: process.env.E2E_USERNAME ?? '<%- defaultAdminUsername %>',
   adminPassword: process.env.E2E_PASSWORD ?? '<%- defaultAdminPassword %>',

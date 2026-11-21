@@ -18,9 +18,32 @@
 -%>
 import { type InjectionKey, type Ref } from 'vue';
 
+import { type IUser } from '@/entities/user/user.model';
+
+/**
+ * The account of the user, as the components read it.
+ */
+export interface CurrentAccount {
+  /** The account of the user signed in, null when no user is. */
+  account: Readonly<Ref<IUser | null>>;
+  authenticated: Readonly<Ref<boolean>>;
+  username: Readonly<Ref<string | undefined>>;
+  /** Whether the user signed in has one of the authorities. */
+  hasAnyAuthority: (authorities: string | string[]) => boolean;
+}
+
+/**
+ * The env profiles the server runs with, as the components read them.
+ */
+export interface EnvProfiles {
+  activeProfiles: Readonly<Ref<string[]>>;
+  /** The profile showing the ribbon, empty when no profile does. */
+  ribbonOnProfiles: Readonly<Ref<string>>;
+}
+
 // The keys of what the application provides. Registered symbols, like the keys of the services: a microfrontend, built
 // apart, injects what the gateway provides.
-export const authenticatedKey: InjectionKey<Readonly<Ref<boolean>>> = Symbol.for('jhipster:authenticated');
-export const currentUsernameKey: InjectionKey<Readonly<Ref<string | undefined>>> = Symbol.for('jhipster:currentUsername');
+export const currentAccountKey: InjectionKey<CurrentAccount> = Symbol.for('jhipster:currentAccount');
+export const envProfilesKey: InjectionKey<EnvProfiles> = Symbol.for('jhipster:envProfiles');
 export const currentLanguageKey: InjectionKey<Readonly<Ref<string>>> = Symbol.for('jhipster:currentLanguage');
 export const changeLanguageKey: InjectionKey<(newLanguage?: string | null) => Promise<void>> = Symbol.for('jhipster:changeLanguage');

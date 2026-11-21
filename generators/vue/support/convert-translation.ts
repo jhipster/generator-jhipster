@@ -19,8 +19,14 @@
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
+/**
+ * Converts the translations to the vue-i18n message syntax: the interpolations to `{ name }`, the special characters
+ * escaped as literals. A translation already converted is left as it is.
+ */
 export function convertVueTranslations(body: string) {
-  return body.replace(/\{\{\s*(\w+)\s*\}\}/g, '{ $1 }').replace(/([@|$])/g, "{'$1'}");
+  return body
+    .replace(/\{\{\s*(\w+)\s*\}\}/g, '{ $1 }')
+    .replace(/\{'[@|$]'\}|([@|$])/g, (literal, character?: string) => (character ? `{'${character}'}` : literal));
 }
 
 const convertTranslationsSupport = ({ clientI18nDir }: { clientI18nDir: string }) => {

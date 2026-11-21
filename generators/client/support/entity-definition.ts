@@ -23,6 +23,7 @@ import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/
 import type { DatabaseProperty } from '../../liquibase/types.d.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.d.ts';
 
+import { isClientField } from './filter-entities.ts';
 import { filterRelevantRelationships } from './template-utils.ts';
 import getTypescriptKeyType from './types-utils.ts';
 
@@ -76,9 +77,9 @@ const generateEntityClientFields = (
       variablesWithTypes.push(`${primaryKey.name}?: ${tsKeyType}`);
     }
   }
-  // The blob gives the variable of its content type, its content type field is left out.
+  // The blob gives the variable of its content type, its content type field is left out, like the fields the clients skip.
   fields
-    .filter(field => !isContentTypeField(field))
+    .filter(field => !isContentTypeField(field) && isClientField(field))
     .forEach(field => {
       const { fieldType, fieldName } = field;
       const nullable = !field.id && (field as DatabaseProperty).nullable;

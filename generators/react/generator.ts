@@ -27,6 +27,7 @@ import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
+  isClientField,
 } from '../client/support/index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
@@ -118,6 +119,8 @@ export default class ReactGenerator extends ReactApplicationGenerator {
       async composing() {
         await this.composeWithJHipster('jhipster:javascript-simple-application:eslint');
         await this.composeWithJHipster('jhipster:client:common');
+        // The models of the entities are the types of the REST API.
+        await this.composeWithJHipster('jhipster:client:rest-domain');
         if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
         }
@@ -294,7 +297,8 @@ ${comment}
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       prepareEntityModel({ entity }) {
-        const fieldsWithoutId = entity.fields.filter(field => !field.id);
+        // The fields the clients skip are left out of the model.
+        const fieldsWithoutId = entity.fields.filter(field => !field.id && isClientField(field));
         mutateData(entity, {
           __override__: false,
           entityClientFields: () =>

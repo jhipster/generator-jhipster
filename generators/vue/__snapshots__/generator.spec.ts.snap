@@ -275,6 +275,7 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "reactive": true,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -455,6 +456,12 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "clientRoot/src/app/composables/entity-validation.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/env-profiles.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/env-profiles.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/composables/index.ts": {
@@ -686,6 +693,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "clientRoot/src/app/stores/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/test-setup.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/test-setup.ts": {
@@ -1151,6 +1161,7 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "reactive": true,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -1376,6 +1387,12 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/composables/entity-validation.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/env-profiles.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/env-profiles.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/composables/index.ts": {
@@ -1688,6 +1705,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/stores/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/test-setup.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/test-setup.ts": {
@@ -2172,6 +2192,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -2349,6 +2370,12 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/app/composables/entity-validation.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/env-profiles.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/composables/env-profiles.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/composables/index.ts": {
@@ -2589,6 +2616,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/app/stores/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/test-setup.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/test-setup.ts": {
@@ -3067,6 +3097,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -3289,6 +3320,12 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/entity-validation.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/env-profiles.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/env-profiles.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/index.ts": {
@@ -3577,6 +3614,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/stores/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/test-setup.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/test-setup.ts": {
@@ -4044,6 +4084,7 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -4312,6 +4353,12 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/entity-validation.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/env-profiles.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/env-profiles.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/index.ts": {
@@ -4654,6 +4701,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/stores/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/test-setup.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/test-setup.ts": {
@@ -5127,6 +5177,7 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -5292,6 +5343,12 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/entity-validation.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/env-profiles.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/env-profiles.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/index.ts": {
@@ -5520,6 +5577,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/stores/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/test-setup.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/test-setup.ts": {
@@ -5992,6 +6052,7 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
+  "restDomainPrefix": "Rest",
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -6163,6 +6224,12 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/entity-validation.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/env-profiles.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/composables/env-profiles.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/composables/index.ts": {
@@ -6394,6 +6461,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/stores/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/test-setup.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/test-setup.ts": {

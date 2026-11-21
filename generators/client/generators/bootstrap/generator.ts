@@ -16,14 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
+import { mutateData, overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
+import { type ContentTypeField, isContentTypeField } from '../../../base-application/internal/content-type-fields.ts';
 import { fieldIsEnum } from '../../../base-application/support/field-utils.ts';
 import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
 import { mutateEntity, mutateField } from '../../entity.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
-import { isClientField } from '../../support/filter-entities.ts';
-import { filterEntitiesForClient, filterEntityPropertiesForClient, preparePostEntityClientDerivedProperties } from '../../support/index.ts';
+import {
+  filterEntitiesForClient,
+  filterEntityFieldsForClient,
+  filterEntityPropertiesForClient,
+  getRestDomainNewProperties,
+  isClientField,
+  mutateRestDomainField,
+  mutateRestDomainRelationship,
+  preparePostEntityClientDerivedProperties,
+} from '../../support/index.ts';
 import type { Application as ClientApplication, Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
 
 export default class ClientBootstrap extends ClientApplicationGenerator {
@@ -102,9 +111,13 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
               : entityFileName;
           },
           enumTypeFields: ({ fields }) => {
-            const enumFields = fields.filter(field => fieldIsEnum(field.fieldType) && !field.clientConstantsAsValues);
+            // The enum of a field the clients skip has no file, the forms list no value of it.
+            const enumFields = fields.filter(
+              field => fieldIsEnum(field.fieldType) && !field.clientConstantsAsValues && isClientField(field),
+            );
             return enumFields.filter((field, index) => enumFields.findIndex(({ fieldType }) => fieldType === field.fieldType) === index);
           },
+          restDomainTypeName: ({ entityAngularName }) => `${application.restDomainPrefix}${entityAngularName}`,
         });
       },
     });
@@ -119,11 +132,37 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
       preparing({ fieldDefaults }) {
         fieldDefaults(mutateField);
       },
+      prepareRestDomainField({ application, field }) {
+        // The command of the client gives the prefix its default.
+        mutateData(field, mutateRestDomainField({ restDomainPrefix: application.restDomainPrefix! }));
+      },
     });
   }
 
   get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareRestDomainRelationships({ entity }) {
+        // The types of the REST API, which client:rest-domain writes, read the other entities once they are prepared.
+        for (const relationship of entity.relationships) {
+          mutateData(relationship, mutateRestDomainRelationship);
+        }
+        entity.restDomainNewProperties ??= getRestDomainNewProperties(entity);
+        // The fields of the JSON: the ones of the client, and the content type field the server has next to each blob.
+        entity.restDomainFields ??= entity.fields.filter(field => {
+          if (!isContentTypeField(field)) return isClientField(field);
+          const { contentTypeOf } = field as ContentTypeField;
+          return entity.fields.some(blob => blob.fieldName === contentTypeOf && isClientField(blob));
+        });
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get default() {
@@ -133,7 +172,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
         application.filterEntityPropertiesForClient ??= filterEntityPropertiesForClient;
         application.filterEntitiesAndPropertiesForClient ??= entities =>
           // The fields the clients skip are left out; the relationships are kept as they are.
-          application.filterEntitiesForClient!(entities).map(entity => ({ ...entity, fields: entity.fields.filter(isClientField) }));
+          application.filterEntitiesForClient!(entities).map(filterEntityFieldsForClient);
       },
       postPreparingEntity({ entities }) {
         for (const entity of entities) {

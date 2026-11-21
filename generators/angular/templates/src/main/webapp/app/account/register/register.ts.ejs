@@ -80,7 +80,7 @@ export default class Register implements AfterViewInit {
       );
     },
     // A submit marks the fields as touched and sends nothing while the form is invalid.
-    { submission: { action: async () => this.register() } },
+    { submission: { action: () => this.register() } },
   );
 
 <%_ if (enableTranslation) { _%>
