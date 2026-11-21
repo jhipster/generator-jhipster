@@ -344,7 +344,7 @@ describe('<%- entityAngularName %> screens', () => {
         await fixture.whenStable();
       };
       fields.forEach(field => field().markAsDirty());
-      await showErrors(['required', 'minLength', 'maxLength', 'min', 'max', 'pattern', 'email', 'parse']);
+      await showErrors(['required', 'minLength', 'maxLength', 'minBytes', 'maxBytes', 'min', 'max', 'pattern', 'email', 'parse']);
 
       expect(fixture.nativeElement.querySelector('small.text-danger')).not.toBeNull();
 

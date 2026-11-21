@@ -2672,6 +2672,8 @@ describe("UserManagement screens", () => {
         "required",
         "minLength",
         "maxLength",
+        "minBytes",
+        "maxBytes",
         "min",
         "max",
         "pattern",
