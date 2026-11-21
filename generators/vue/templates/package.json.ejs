@@ -93,6 +93,11 @@
     "vitest-sonar-reporter": "<%- nodeDependencies['vitest-sonar-reporter'] %>",
     "vue-tsc": "<%- nodeDependencies['vue-tsc'] %>"
   },
+  "overrides": {
+    "eslint-plugin-vue": {
+      "@stylistic/eslint-plugin": "$@stylistic/eslint-plugin"
+    }
+  },
   "engines": {
     "node": ">=<%- nodeVersion %>"
   },
