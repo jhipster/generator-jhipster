@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-import { existsSync, readFileSync } from 'node:fs';
-
 import { databaseTypes } from '../../../lib/jhipster/index.ts';
 import { lowerFirst, upperFirst } from '../../../lib/utils/string-utils.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
@@ -34,22 +32,15 @@ import { findEntityInEntities } from './entity.ts';
 
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 
-/** The version from which a back reference without a name is named after its relationship, see `backReferenceName`. */
-export const DERIVED_BACK_REFERENCE_NAME_VERSION = '9.4.1';
-
 /**
- * Whether the application on the disk names the back references after the entity: written by a version older than 9.4.1,
- * and not marked with `derivedBackReferenceNames`, which every generation since writes. The marker tells an application a
- * development build generated, whose version stays the one of the last release.
+ * The version from which a back reference without a name is named after its relationship, see `backReferenceName`.
+ * A build of main records `9.4.1-snapshot`, which sorts below `9.4.1`, so its applications are not taken for older ones.
  */
-export const hasLegacyBackReferenceNames = (
-  control: { isJhipsterVersionLessThan(version: string): boolean },
-  yoRcPath: string,
-): boolean => {
-  if (!control.isJhipsterVersionLessThan(DERIVED_BACK_REFERENCE_NAME_VERSION)) return false;
-  const config = existsSync(yoRcPath) ? JSON.parse(readFileSync(yoRcPath, 'utf-8'))['generator-jhipster'] : undefined;
-  return !config?.derivedBackReferenceNames;
-};
+export const DERIVED_BACK_REFERENCE_NAME_VERSION = '9.4.1-snapshot';
+
+/** Whether the application on the disk names the back references after the entity: written by a version older than 9.4.1. */
+export const hasLegacyBackReferenceNames = (control: { isJhipsterVersionLessThan(version: string): boolean }): boolean =>
+  control.isJhipsterVersionLessThan(DERIVED_BACK_REFERENCE_NAME_VERSION);
 
 /**
  * Whether a relationship without `otherEntityRelationshipName` gets a back reference on the other entity: a many-to-many,

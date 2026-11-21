@@ -135,11 +135,8 @@ describe(`generator - ${generator}`, () => {
           { name: 'Member', annotations: { changelogDate: '20200101000200' }, fields: [] } as any,
         ])
         .doInDir(cwd => {
-          // A development build writes the version of the last release, with the marker.
-          writeFileSync(
-            join(cwd, '.yo-rc.json'),
-            JSON.stringify({ 'generator-jhipster': { jhipsterVersion: '9.4.0', derivedBackReferenceNames: true } }),
-          );
+          // A build of main writes a snapshot of the next version.
+          writeFileSync(join(cwd, '.yo-rc.json'), JSON.stringify({ 'generator-jhipster': { jhipsterVersion: '9.4.1-snapshot' } }));
           mkdirSync(join(cwd, '.jhipster'), { recursive: true });
           writeFileSync(join(cwd, '.jhipster/Order.json'), JSON.stringify({ name: 'Order', relationships: [publisher] }));
         })
@@ -172,10 +169,6 @@ describe(`generator - ${generator}`, () => {
 
     it('should save no back reference name', () => {
       result.assertNoFileContent('.jhipster/Order.json', 'backReferenceName');
-    });
-
-    it('should mark the application as naming its back references after their relationship', () => {
-      result.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { derivedBackReferenceNames: true } });
     });
   });
 

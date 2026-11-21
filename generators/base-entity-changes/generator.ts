@@ -107,7 +107,7 @@ export default abstract class BaseEntityChangesGenerator<
       this.#entityChanges ??= this.generateIncrementalChanges({
         application,
         entities,
-        legacyBackReferenceNames: hasLegacyBackReferenceNames(control, this.config.path),
+        legacyBackReferenceNames: hasLegacyBackReferenceNames(control),
       });
       return { ...firstArg, entityChanges: this.#entityChanges };
     }
