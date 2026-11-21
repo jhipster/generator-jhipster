@@ -10,7 +10,7 @@ application {
     serviceDiscoveryType consul
     cacheProvider ehcache
     authenticationType session
-    testFrameworks [gatling]
+    testFrameworks [gatling, cucumber]
     creationTimestamp 1617901618891
   }
 }
@@ -71,5 +71,52 @@ application {
     serviceDiscoveryType eureka
     authenticationType oauth2
     creationTimestamp 1617901618896
+  }
+}
+
+application {
+  config {
+    baseName app7
+    packageName com.example.app7
+    applicationType microservice
+    prodDatabaseType mysql
+    serviceDiscoveryType consul
+    cacheProvider hazelcast
+    authenticationType jwt
+    creationTimestamp 1617901618897
+  }
+}
+
+application {
+  config {
+    baseName app8
+    packageName com.example.app8
+    applicationType microservice
+    prodDatabaseType postgresql
+    cacheProvider infinispan
+    creationTimestamp 1617901618898
+  }
+}
+
+application {
+  config {
+    baseName app9
+    packageName com.example.app9
+    applicationType microservice
+    databaseType couchbase
+    searchEngine couchbase
+    cacheProvider redis
+    creationTimestamp 1617901618899
+  }
+}
+
+application {
+  config {
+    baseName app10
+    packageName com.example.app10
+    applicationType microservice
+    databaseType neo4j
+    cacheProvider no
+    creationTimestamp 1617901618900
   }
 }
