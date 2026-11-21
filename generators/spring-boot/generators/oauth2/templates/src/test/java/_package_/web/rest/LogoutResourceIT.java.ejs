@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.<%- reactivePrefix %>OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.<%- reactivePrefix %>ClientRegistrationRepository;
@@ -58,6 +59,8 @@ import java.util.Map;
  */
 @IntegrationTest
 class LogoutResourceIT {
+
+    private static final String NO_END_SESSION_ENDPOINT_REGISTRATION_ID = "oidc-no-end-session-endpoint";
 
     @Autowired
     private <%- reactivePrefix %>ClientRegistrationRepository registrations;
@@ -164,4 +167,51 @@ class LogoutResourceIT {
             .isEqualTo(logoutUrl);
     }
 <%_ } _%>
+
+    @Test
+    void getLogoutInformationWithoutEndSessionEndpoint() <%- reactive ? '' : 'throws Exception ' %>{
+        final String ORIGIN_URL = "http://localhost:8080";
+        OAuth2AuthenticationToken authentication = authenticationToken(claims);
+        OAuth2AuthenticationToken authenticationWithoutEndSessionEndpoint = new OAuth2AuthenticationToken(
+            authentication.getPrincipal(),
+            authentication.getAuthorities(),
+            NO_END_SESSION_ENDPOINT_REGISTRATION_ID
+        );
+        ClientRegistration clientRegistrationWithoutEndSessionEndpoint = ClientRegistration.withClientRegistration(clientRegistration)
+            .registrationId(NO_END_SESSION_ENDPOINT_REGISTRATION_ID)
+            .providerConfigurationMetadata(Map.of())
+            .build();
+<%_ if (reactive) { _%>
+        this.webTestClient.mutateWith(csrf())
+            .mutateWith(
+                mockAuthentication(
+                    registerAuthenticationToken(
+                        authorizedClientService,
+                        clientRegistrationWithoutEndSessionEndpoint,
+                        authenticationWithoutEndSessionEndpoint
+                    )
+                )
+            )
+            .post().uri("http://localhost:8080/api/logout").header(HttpHeaders.ORIGIN, ORIGIN_URL).exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+            .expectBody()
+            .jsonPath("$.logoutUrl").isEqualTo("/");
+<%_ } else { _%>
+        SecurityContextHolder
+            .getContext()
+            .setAuthentication(
+                registerAuthenticationToken(
+                    authorizedClientService,
+                    clientRegistrationWithoutEndSessionEndpoint,
+                    authenticationWithoutEndSessionEndpoint
+                )
+            );
+
+        restLogoutMockMvc.perform(post("http://localhost:8080/api/logout").header(HttpHeaders.ORIGIN, ORIGIN_URL))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.logoutUrl").value("/"));
+<%_ } _%>
+    }
 }
