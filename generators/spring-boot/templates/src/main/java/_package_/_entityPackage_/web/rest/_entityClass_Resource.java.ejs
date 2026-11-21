@@ -39,6 +39,9 @@ import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ if (!paginationNo && entityAbsolutePackage !== packageName) { _%>
 import <%- packageName %>.web.rest.SortValidator;
 <%_ } _%>
+<%_ if (primaryKey.composite) { _%>
+import <%- entityAbsolutePackage %>.domain.<%- primaryKey.type %>;
+<%_ } _%>
 import <%- entityAbsolutePackage %>.repository.<%- entityClass %>Repository;
 <%_ if (serviceNo) { _%>
   <%_ if (isUsingMapsId) { _%>
@@ -333,13 +336,22 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         if (idNode == null || idNode.isNull()) {
             throw BadRequestAlertException.idnull(ENTITY_NAME);
         }
+  <%_ if (primaryKey.composite) { _%>
+        if (!idNode.isObject()) {
+            throw BadRequestAlertException.idinvalid(ENTITY_NAME);
+        }
+        if (!Objects.equals(<%- primaryKey.name %>, om.treeToValue(idNode, <%- primaryKey.type %>.class))) {
+            throw BadRequestAlertException.idinvalid(ENTITY_NAME);
+        }
+  <%_ } else { _%>
         if (!idNode.<%- primaryKey.typeLong || primaryKey.typeInteger ? 'isIntegralNumber' : 'isString' %>()) {
             throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }
-  <%_ const idNodeValue = { Long: 'longValue', Integer: 'intValue' }[primaryKey.type] ?? 'stringValue'; _%>
+    <%_ const idNodeValue = { Long: 'longValue', Integer: 'intValue' }[primaryKey.type] ?? 'stringValue'; _%>
         if (!Objects.equals(<%- primaryKey.name %><%- primaryKey.typeUUID ? '.toString()' : '' %>, idNode.<%- idNodeValue %>())) {
             throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }
+  <%_ } _%>
 
   <%_ const mapOrFlatMap = reactive ? 'flatMap' : 'map'; _%>
         return <%- entityInstance %><%- serviceNo ? 'Repository.findById' : 'Service.findOne' %>(<%- primaryKey.name %>)
@@ -509,7 +521,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         );
     <%_ } _%>
   <%_ } else { _%>
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- primaryKey.fields[0].fieldTypeString ? '' : '.toString()' %>)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- primaryKey.composite || !primaryKey.fields[0].fieldTypeString ? '.toString()' : '' %>)).build();
   <%_ } _%>
     }
 <%_ } _%>

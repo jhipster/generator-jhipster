@@ -97,12 +97,13 @@ public class <%- persistClass %>Asserts {
         assertThat(actual)
             .as("Verify <%- persistClass %> relevant properties")
   <%_ for (const field of fields.filter(field => !field.transient && !field.autoGenerate)) { _%>
+    <%_ const accessorPrefix = primaryKey?.composite && primaryKey.fields.includes(field) ? `${primaryKey.propertySupplierName}().` : ''; _%>
     <%_ if (field.fieldTypeZonedDateTime) { _%>
-            .satisfies(a -> assertThat(a.<%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").usingComparator(zonedDateTimeSameInstant).isEqualTo(expected.<%- field.propertySupplierName %>()))
+            .satisfies(a -> assertThat(a.<%- accessorPrefix %><%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").usingComparator(zonedDateTimeSameInstant).isEqualTo(expected.<%- accessorPrefix %><%- field.propertySupplierName %>()))
     <%_ } else if (field.fieldTypeBigDecimal) { _%>
-            .satisfies(a -> assertThat(a.<%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").usingComparator(bigDecimalCompareTo).isEqualTo(expected.<%- field.propertySupplierName %>()))
+            .satisfies(a -> assertThat(a.<%- accessorPrefix %><%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").usingComparator(bigDecimalCompareTo).isEqualTo(expected.<%- accessorPrefix %><%- field.propertySupplierName %>()))
     <%_ } else { _%>
-            .satisfies(a -> assertThat(a.<%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").isEqualTo(expected.<%- field.propertySupplierName %>()))
+            .satisfies(a -> assertThat(a.<%- accessorPrefix %><%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").isEqualTo(expected.<%- accessorPrefix %><%- field.propertySupplierName %>()))
     <%_ } -%>
   <%_ } -%>
         ;

@@ -36,6 +36,7 @@ import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
 import { addJavaImport, createKeyStore, javaBeanCase, javaValue } from '../java/support/index.ts';
 import type { JavaArtifactType } from '../java-simple-application/types.ts';
 import {
+  compositeIdFieldTypes,
   getJavaValueGeneratorForType,
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
@@ -603,14 +604,46 @@ ${classProperties
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      checkCompositePrimaryKey({ application, entity, entityName }) {
+        const { primaryKey } = entity;
+        if (!primaryKey?.composite || entity.embedded) return;
+
+        const unsupported = (reason: string): never => {
+          throw new Error(`Composite primary keys are not supported ${reason} yet (entity ${entityName}).`);
+        };
+        if (application.reactive) unsupported('by reactive applications');
+        if (!application.databaseTypeSql) unsupported(`with the "${entity.databaseType}" database`);
+        if (entity.dtoMapstruct) unsupported('with MapStruct DTOs');
+        if (entity.jpaMetamodelFiltering) unsupported('with JPA metamodel filtering');
+        if (entity.searchEngineAny) unsupported('with a search engine');
+        if (entity.relationships.some(relationship => relationship.id)) unsupported('with @Id relationships');
+        const unsupportedFields = primaryKey.ownFields!.filter(field => !compositeIdFieldTypes.includes(field.javaFieldType));
+        if (unsupportedFields.length > 0) {
+          throw new Error(
+            `Composite primary key field type(s) ${unsupportedFields
+              .map(field => `"${field.fieldType}" (${field.fieldName})`)
+              .join(', ')} of entity ${entityName} are not supported yet. Supported types are: ${compositeIdFieldTypes.join(', ')}.`,
+          );
+        }
+
+        entity.skipClient = true;
+        if (application.clientFrameworkAny) {
+          this.log.warn(
+            `Entity ${entityName} has a composite primary key, the ${application.clientFramework} client is not generated for it.`,
+          );
+        }
+      },
       prepareEntity({ entity }) {
         const { primaryKey } = entity;
         if (primaryKey) {
           primaryKey.javaBuildSpecification = getSpecificationBuildForType(primaryKey.type);
-          primaryKey.javaValueGenerator = getJavaValueGeneratorForType(primaryKey.type);
           for (const field of primaryKey.fields) {
             field.fieldJavaValueGenerator = getJavaValueGeneratorForType(field.fieldType);
           }
+          primaryKey.javaValueGenerator =
+            primaryKey.composite ?
+              `new ${primaryKey.type}(${primaryKey.fields.map(field => field.fieldJavaValueGenerator).join(', ')})`
+            : getJavaValueGeneratorForType(primaryKey.type);
         }
       },
       prepareTestValues({ entity }) {
