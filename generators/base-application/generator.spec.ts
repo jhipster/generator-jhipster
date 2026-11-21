@@ -469,8 +469,8 @@ describe(`generator - ${generator}`, () => {
 
     before(async () => {
       for (const [name, features] of [
-        ['without-feature', {}],
-        ['with-feature', { contentTypeFields: true }],
+        ['default', {}],
+        ['without-feature', { contentTypeFields: false }],
       ] as const) {
         await helpers
           .run(createGenerator(name, features))
@@ -482,11 +482,11 @@ describe(`generator - ${generator}`, () => {
     it('prepares the content type field next to the blob for every generator', () => {
       expect(written['without-feature-preparing']).toEqual(['id', 'pic', 'picContentType']);
     });
-    it('leaves the content type field out of the entities a generator writes without the contentTypeFields feature', () => {
-      expect(written['without-feature']).toEqual(['id', 'pic']);
+    it('gives the content type field to the entities a generator writes by default', () => {
+      expect(written.default).toEqual(['id', 'pic', 'picContentType']);
     });
-    it('gives the content type field to a generator with the contentTypeFields feature', () => {
-      expect(written['with-feature']).toEqual(['id', 'pic', 'picContentType']);
+    it('leaves the content type field out of the entities a generator writes with the contentTypeFields feature turned off', () => {
+      expect(written['without-feature']).toEqual(['id', 'pic']);
     });
   });
 

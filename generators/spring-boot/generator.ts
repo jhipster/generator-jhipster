@@ -78,8 +78,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
   fakeKeytool!: boolean;
 
   constructor(args?: string[], options?: Options, features?: Features) {
-    // Its templates write the content type of a blob through its content type field.
-    super(args, options, { ...features, loadCommand: ['jhipster:client'], contentTypeFields: true });
+    super(args, options, { ...features, loadCommand: ['jhipster:client'] });
   }
 
   async beforeQueue() {

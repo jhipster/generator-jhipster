@@ -86,9 +86,9 @@ export type Features = YeomanFeatures & {
   jhipster7Migration?: boolean | 'verbose' | 'silent';
 
   /**
-   * A generator whose templates write the content type of a blob through the content type field the entity has next to
-   * the blob, like the server templates of JHipster: without it, the entities its writing priorities get leave that
-   * field out, and its templates write the content type from the blob field, like the clients.
+   * Whether the entities the writing priorities of a generator get have the content type field next to each blob of a
+   * file, true by default: the server templates of JHipster write the content type through it, the clients skip it, a
+   * skipClient field. false leaves that field out, for templates that write the content type from the blob field.
    */
   contentTypeFields?: boolean;
 
