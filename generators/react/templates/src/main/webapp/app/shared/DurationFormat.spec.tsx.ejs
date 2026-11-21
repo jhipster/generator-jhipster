@@ -38,14 +38,13 @@ describe('DurationFormat', () => {
     expect(container.textContent).toBe('an hour');
   });
 
-  it('should show a duration in the current locale, or in the native language without one', () => {
+  it('should show a duration in the current locale, or in the default language without one', () => {
     TranslatorContext.context.locale = 'en';
     expect(render(<DurationFormat value="PT1H" />).container.textContent).toBe('an hour');
 
     TranslatorContext.context.locale = null;
-    expect(render(<DurationFormat value="PT1H" />).container.textContent).toBe(
-      render(<DurationFormat value="PT1H" locale="<%- enableTranslation ? nativeLanguage : 'en' %>" />).container.textContent,
-    );
+    const defaultLanguageDuration = render(<DurationFormat value="PT1H" locale="<% if (enableTranslation) { %><%- nativeLanguage %><% } else { %>en<% } %>" />).container.textContent;
+    expect(render(<DurationFormat value="PT1H" />).container.textContent).toBe(defaultLanguageDuration);
   });
 
   it('should show nothing for a blank value when asked to', () => {
