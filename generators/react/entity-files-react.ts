@@ -64,7 +64,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientAppl
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication>(async function ({
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication>(function ({
   application,
   entities,
   source,

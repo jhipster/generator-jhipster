@@ -8,7 +8,7 @@ mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
 neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '4.2.2' }
 
 # Cassandra
-lz4-java = { module = 'at.yawk.lz4:lz4-java', version = '1.14.0' }
+lz4-java = { module = 'at.yawk.lz4:lz4-java', version = '1.14.1' }
 
 # Couchbase
 couchmove = { module = 'com.github.differentway:couchmove', version = '3.4.1' }
@@ -34,7 +34,7 @@ gradle-develocity = { id = 'com.gradle.develocity', version = '4.6.1' }
 
 common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.8.0' }
 
-gatling-gradle = { id = 'io.gatling.gradle', version = '3.16.0' }
+gatling-gradle = { id = 'io.gatling.gradle', version = '3.16.1' }
 
 gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.27.0' }
 
