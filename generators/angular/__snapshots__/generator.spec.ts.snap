@@ -1920,7 +1920,7 @@ export class UserManagementFormService {
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.html": {
     "contents": "<div class="d-flex justify-content-center">
   <div class="col-8">
-    <form name="editForm" novalidate [formRoot]="editForm">
+    <form name="editForm" [formRoot]="editForm">
       <h2
         id="jhi-user-management-heading"
         data-cy="UserManagementCreateUpdateHeading"
