@@ -60,7 +60,7 @@ export default class Login implements OnInit, AfterViewInit {
       required(path.password);
     },
     // A submit marks the fields as touched and sends nothing while the form is invalid.
-    { submission: { action: async () => this.login() } },
+    { submission: { action: () => this.login() } },
   );
 
   private readonly accountService = inject(AccountService);
