@@ -5,6 +5,4 @@
 #   gets the version when the application has it.
 # .blueprint/update-spring-boot empties this file at each Spring Boot update.
 ---
-dependencies:
-  # liquibase-neo4j 5.0.4 and 5.0.4.1 fail to read the current Neo4j user with the Neo4j driver of Spring Boot 4.1.3.
-  liquibase-neo4j: '5.0.0'
+{}
