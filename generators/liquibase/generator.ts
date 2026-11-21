@@ -87,11 +87,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   LiquibaseOptions,
   LiquibaseSource
 > {
-  constructor(...[args, options, features]: ConstructorParameters<typeof BaseEntityChangesGenerator>) {
-    // Its templates write the content type of a blob through its content type field.
-    super(args, options, { ...features, contentTypeFields: true });
-  }
-
   #masterXml?: string;
   numberOfRows!: number;
   databaseChangelogs: BaseChangelog<LiquibaseEntity>[] = [];

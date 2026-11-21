@@ -24,7 +24,7 @@
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%- elasticsearchIndexName %>")
 <&_ } -&>
 
-<%_ for (const field of fields) { -%>
+<%_ for (const field of fields.filter(field => !field.contentTypeOf)) { -%>
   <&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
   <%_ if (field.id && field.fieldName !== 'id') { _%>
     @org.springframework.data.annotation.Id
