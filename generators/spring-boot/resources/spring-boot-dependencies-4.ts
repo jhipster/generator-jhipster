@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 /**
- * import type from JSON file is not supported in TypeScript.
- * This file is a workaround to be able to import JSON type.
+ * The versions Spring Boot manages, from the spring-boot-dependencies POM that update-spring-boot stores in
+ * spring-boot-dependencies-4.json. The JSON holds each managed version once, as a property: `versions` is derived from it.
  */
 import { readFileSync } from 'node:fs';
 
 import { parse } from 'yaml';
+
+import { getPomVersionProperties } from '../../java-simple-application/generators/maven/support/dependabot-maven.ts';
 
 import springBootDependencies4 from './spring-boot-dependencies-4.json' with { type: 'json' };
 
@@ -54,4 +56,11 @@ export const springBootDependenciesOverrides: SpringBootDependenciesOverrides = 
   ),
 };
 
-export default springBootDependencies4;
+const { artifactId, version, properties: managedProperties, modules } = springBootDependencies4;
+
+export default {
+  /** The managed versions, keyed by their property without `.version`, and the Spring Boot version keyed by its artifactId. */
+  versions: getPomVersionProperties({ project: { artifactId, version, properties: managedProperties } }),
+  properties: managedProperties,
+  modules,
+};
