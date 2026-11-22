@@ -224,7 +224,7 @@ const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
   entity.<%- relationship.relationshipFieldNamePlural %> = [];
   <%_ } _%>
 <%_ } _%>
-<%_ for (const field of vueEditedCollectionFields) { _%>
+<%_ for (const field of vueEditableCollectionFields) { _%>
   entity.<%- field.fieldName %> = [];
 <%_ } _%>
   return entity;
@@ -262,14 +262,14 @@ const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
 const previousState = () => router.go(-1);
 
 const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
-<%_ if (vueEditedCollections.length > 0) { _%>
+<%_ if (vueEditableCollections.length > 0) { _%>
   // The server gives null for a collection without values, the select of the collection edits an array.
   async (id, { signal }) => {
     const entity = await <%- entityInstance %>Service().find(id, { signal });
     return {
       ...entity,
-  <%_ for (const editedCollection of vueEditedCollections) { _%>
-      <%- editedCollection %>: entity.<%- editedCollection %> ?? [],
+  <%_ for (const editableCollection of vueEditableCollections) { _%>
+      <%- editableCollection %>: entity.<%- editableCollection %> ?? [],
   <%_ } _%>
     };
   },

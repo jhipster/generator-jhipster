@@ -391,7 +391,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             !field.hidden &&
             !(entity.builtInUserManagement && field.readonly),
         );
-        const editedCollectionFields = formFields.filter(field => field.clientConstantsAsValues && field.collection);
+        const editableCollectionFields = formFields.filter(field => field.clientConstantsAsValues && field.collection);
         // The authorities of the routes, like Angular: ROLE_USER when the entity declares none.
         const asAuthorities = (authorities: string[]): string =>
           (authorities.length > 0 ? authorities : ['ROLE_USER']).map(authority => `'${authority}'`).join(', ');
@@ -414,9 +414,9 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           entityModelEnumImports: () => this.generateEntityClientEnumImports(fieldsWithoutId),
           entityClientEnumImports: () => this.generateEntityClientEnumImports(entity.fields),
           vueFormTimeFields: () => formFields.some(field => field.fieldTypeInstant || field.fieldTypeZonedDateTime),
-          vueEditedCollectionFields: () => editedCollectionFields,
-          vueEditedCollections: () => [
-            ...editedCollectionFields.map(field => field.fieldName),
+          vueEditableCollectionFields: () => editableCollectionFields,
+          vueEditableCollections: () => [
+            ...editableCollectionFields.map(field => field.fieldName),
             ...entity.relationships
               .filter(relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship)
               .map(relationship => relationship.relationshipFieldNamePlural),

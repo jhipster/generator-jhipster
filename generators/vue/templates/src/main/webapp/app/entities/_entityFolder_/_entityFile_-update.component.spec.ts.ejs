@@ -297,7 +297,7 @@ describe('Component Tests', () => {
 <%_ for (const relationship of allRelationshipsThatNeedSelectOptions.flat().filter(relationship => relationship.collection)) { _%>
           <%- relationship.relationshipFieldNamePlural %>: null,
 <%_ } _%>
-<%_ for (const field of vueEditedCollectionFields) { _%>
+<%_ for (const field of vueEditableCollectionFields) { _%>
           <%- field.fieldName %>: null,
 <%_ } _%>
         };
@@ -314,11 +314,11 @@ describe('Component Tests', () => {
         await flushPromises();
 
         // THEN
-<%_ if (vueEditedCollections.length > 0) { _%>
+<%_ if (vueEditableCollections.length > 0) { _%>
         expect(comp.<%- entityInstance %>).toEqual({
           ...entityWithoutValues,
-  <%_ for (const editedCollection of vueEditedCollections) { _%>
-          <%- editedCollection %>: [],
+  <%_ for (const editableCollection of vueEditableCollections) { _%>
+          <%- editableCollection %>: [],
   <%_ } _%>
         });
 <%_ } else { _%>
