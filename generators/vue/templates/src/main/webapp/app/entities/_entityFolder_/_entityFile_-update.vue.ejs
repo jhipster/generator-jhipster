@@ -25,7 +25,7 @@ _%>
             <label class="form-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
   <%_ if (field.clientConstantsAsValues) { _%>
-            <select class="form-select" name="<%- fieldName %>" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ' multiple' : '' %>>
+            <select class="form-select" name="<%- fieldName %>" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ` multiple v-if="${entityInstance}.${fieldName} !== undefined"` : '' %>>
               <option v-for="value of <%- fieldName %>Values" :key="value" :value="value">{{ value }}</option>
             </select>
   <%_ } else if (field.fieldIsEnum) { _%>
@@ -174,6 +174,7 @@ _%>
       .filter(relationships => relationships.length > 0);
     const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
     const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
+    const editedCollectionFields = clientConstantFields.filter(field => field.collection);
     const usesGetSelected = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship && !rel.relationshipSerializePrimaryKeyOnly);
 _%>
 import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', ...enumTypeFields.length > 0 ? ['ref'] : [], 'watch'].join(', ') %> } from 'vue';
@@ -224,6 +225,9 @@ const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
   entity.<%- relationship.relationshipFieldNamePlural %> = [];
   <%_ } _%>
 <%_ } _%>
+<%_ for (const field of editedCollectionFields) { _%>
+  entity.<%- field.fieldName %> = [];
+<%_ } _%>
   return entity;
 };
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
@@ -258,7 +262,11 @@ const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
 
 const previousState = () => router.go(-1);
 
-<%_ const editedCollections = relationships.filter(relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship); _%>
+<%_ const editedCollections = [
+      ...editedCollectionFields.map(field => field.fieldName),
+      ...relationships.filter(relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship).map(relationship => relationship.relationshipFieldNamePlural),
+    ];
+_%>
 const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
 <%_ if (editedCollections.length > 0) { _%>
   // The server gives null for a collection without values, the select of the collection edits an array.
@@ -266,8 +274,8 @@ const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
     const entity = await <%- entityInstance %>Service().find(id, { signal });
     return {
       ...entity,
-  <%_ for (const relationship of editedCollections) { _%>
-      <%- relationship.relationshipFieldNamePlural %>: entity.<%- relationship.relationshipFieldNamePlural %> ?? [],
+  <%_ for (const editedCollection of editedCollections) { _%>
+      <%- editedCollection %>: entity.<%- editedCollection %> ?? [],
   <%_ } _%>
     };
   },
