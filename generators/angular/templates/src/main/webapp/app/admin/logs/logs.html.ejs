@@ -53,53 +53,15 @@
               <small>{{ logger.name | slice: 0 : 140 }}</small>
             </td>
             <td>
-              <button
-                (click)="changeLevel(logger.name, 'TRACE')"
-                [class]="logger.level === 'TRACE' ? 'btn-primary' : 'btn-light'"
-                class="btn btn-sm"
-              >
-                TRACE
-              </button>
-
-              <button
-                (click)="changeLevel(logger.name, 'DEBUG')"
-                [class]="logger.level === 'DEBUG' ? 'btn-success' : 'btn-light'"
-                class="btn btn-sm"
-              >
-                DEBUG
-              </button>
-
-              <button
-                (click)="changeLevel(logger.name, 'INFO')"
-                [class]="logger.level === 'INFO' ? 'btn-info' : 'btn-light'"
-                class="btn btn-sm"
-              >
-                INFO
-              </button>
-
-              <button
-                (click)="changeLevel(logger.name, 'WARN')"
-                [class]="logger.level === 'WARN' ? 'btn-warning' : 'btn-light'"
-                class="btn btn-sm"
-              >
-                WARN
-              </button>
-
-              <button
-                (click)="changeLevel(logger.name, 'ERROR')"
-                [class]="logger.level === 'ERROR' ? 'btn-danger' : 'btn-light'"
-                class="btn btn-sm"
-              >
-                ERROR
-              </button>
-
-              <button
-                (click)="changeLevel(logger.name, 'OFF')"
-                [class]="logger.level === 'OFF' ? 'btn-secondary' : 'btn-light'"
-                class="btn btn-sm"
-              >
-                OFF
-              </button>
+              @for (level of levels; track level.name) {
+                <button
+                  (click)="changeLevel(logger.name, level.name)"
+                  [class]="logger.level === level.name ? level.activeClass : 'btn-light'"
+                  class="btn btn-sm"
+                >
+                  {{ level.name }}
+                </button>
+              }
             </td>
           </tr>
         }
