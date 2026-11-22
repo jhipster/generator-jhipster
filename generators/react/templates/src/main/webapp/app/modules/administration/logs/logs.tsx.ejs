@@ -20,8 +20,18 @@ import { useEffect, useState } from 'react';
 import { Translate, translate } from 'react-jhipster';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { type Level } from 'app/shared/jhipster/logs.model';
 import PageTitle from 'app/shared/layout/page-title';
 import { changeLogLevel, getLoggers } from '../administration.reducer';
+
+const LEVELS: { level: Level; variant: string }[] = [
+  { level: 'TRACE', variant: 'primary' },
+  { level: 'DEBUG', variant: 'success' },
+  { level: 'INFO', variant: 'info' },
+  { level: 'WARN', variant: 'warning' },
+  { level: 'ERROR', variant: 'danger' },
+  { level: 'OFF', variant: 'secondary' },
+];
 
 export const LogsPage = () => {
   const [filter, setFilter] = useState('');
@@ -82,48 +92,16 @@ export const LogsPage = () => {
                 <small>{logger.name}</small>
               </td>
               <td>
-                <button
-                  disabled={isFetching}
-                  onClick={changeLevel(logger.name, 'TRACE')}
-                  className={getClassName(logger.level, 'TRACE', 'primary')}
-                >
-                  TRACE
-                </button>
-                <button
-                  disabled={isFetching}
-                  onClick={changeLevel(logger.name, 'DEBUG')}
-                  className={getClassName(logger.level, 'DEBUG', 'success')}
-                >
-                  DEBUG
-                </button>
-                <button
-                  disabled={isFetching}
-                  onClick={changeLevel(logger.name, 'INFO')}
-                  className={getClassName(logger.level, 'INFO', 'info')}
-                >
-                  INFO
-                </button>
-                <button
-                  disabled={isFetching}
-                  onClick={changeLevel(logger.name, 'WARN')}
-                  className={getClassName(logger.level, 'WARN', 'warning')}
-                >
-                  WARN
-                </button>
-                <button
-                  disabled={isFetching}
-                  onClick={changeLevel(logger.name, 'ERROR')}
-                  className={getClassName(logger.level, 'ERROR', 'danger')}
-                >
-                  ERROR
-                </button>
-                <button
-                  disabled={isFetching}
-                  onClick={changeLevel(logger.name, 'OFF')}
-                  className={getClassName(logger.level, 'OFF', 'secondary')}
-                >
-                  OFF
-                </button>
+                {LEVELS.map(({ level, variant }) => (
+                  <button
+                    key={level}
+                    disabled={isFetching}
+                    onClick={changeLevel(logger.name, level)}
+                    className={getClassName(logger.level, level, variant)}
+                  >
+                    {level}
+                  </button>
+                ))}
               </td>
             </tr>
           ))}
