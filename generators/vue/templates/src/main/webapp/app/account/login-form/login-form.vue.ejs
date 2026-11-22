@@ -137,7 +137,7 @@ const doLogin = async () => {
     const result = await axios.post('api/authenticate', data);
     const bearerToken = result.headers.authorization;
     if (bearerToken?.startsWith('Bearer ')) {
-      storeAuthenticationToken(bearerToken.slice(7, bearerToken.length), rememberMe.value);
+      storeAuthenticationToken(bearerToken.slice(7), rememberMe.value);
     }
 <%_ } else { _%>
   const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}<%- authenticationUsesRememberMe ? '&remember-me=${rememberMe.value}' : '' %>&submit=Login`;
