@@ -174,7 +174,6 @@ _%>
       .filter(relationships => relationships.length > 0);
     const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
     const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
-    const editedCollectionFields = clientConstantFields.filter(field => field.collection);
     const usesGetSelected = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship && !rel.relationshipSerializePrimaryKeyOnly);
 _%>
 import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', ...enumTypeFields.length > 0 ? ['ref'] : [], 'watch'].join(', ') %> } from 'vue';
@@ -225,7 +224,7 @@ const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
   entity.<%- relationship.relationshipFieldNamePlural %> = [];
   <%_ } _%>
 <%_ } _%>
-<%_ for (const field of editedCollectionFields) { _%>
+<%_ for (const field of vueEditedCollectionFields) { _%>
   entity.<%- field.fieldName %> = [];
 <%_ } _%>
   return entity;
@@ -262,19 +261,14 @@ const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
 
 const previousState = () => router.go(-1);
 
-<%_ const editedCollections = [
-      ...editedCollectionFields.map(field => field.fieldName),
-      ...relationships.filter(relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship).map(relationship => relationship.relationshipFieldNamePlural),
-    ];
-_%>
 const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
-<%_ if (editedCollections.length > 0) { _%>
+<%_ if (vueEditedCollections.length > 0) { _%>
   // The server gives null for a collection without values, the select of the collection edits an array.
   async (id, { signal }) => {
     const entity = await <%- entityInstance %>Service().find(id, { signal });
     return {
       ...entity,
-  <%_ for (const editedCollection of editedCollections) { _%>
+  <%_ for (const editedCollection of vueEditedCollections) { _%>
       <%- editedCollection %>: entity.<%- editedCollection %> ?? [],
   <%_ } _%>
     };

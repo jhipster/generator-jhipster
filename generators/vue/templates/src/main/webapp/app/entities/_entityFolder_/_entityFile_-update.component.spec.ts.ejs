@@ -297,8 +297,7 @@ describe('Component Tests', () => {
 <%_ for (const relationship of allRelationshipsThatNeedSelectOptions.flat().filter(relationship => relationship.collection)) { _%>
           <%- relationship.relationshipFieldNamePlural %>: null,
 <%_ } _%>
-<%_ const editedCollectionFields = fields.filter(field => field.clientConstantsAsValues && field.collection && !field.hidden && !(builtInUserManagement && field.readonly)); _%>
-<%_ for (const field of editedCollectionFields) { _%>
+<%_ for (const field of vueEditedCollectionFields) { _%>
           <%- field.fieldName %>: null,
 <%_ } _%>
         };
@@ -315,15 +314,10 @@ describe('Component Tests', () => {
         await flushPromises();
 
         // THEN
-<%_ const editedCollections = [
-      ...editedCollectionFields.map(field => field.fieldName),
-      ...relationships.filter(relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship).map(relationship => relationship.relationshipFieldNamePlural),
-    ];
-_%>
-<%_ if (editedCollections.length > 0) { _%>
+<%_ if (vueEditedCollections.length > 0) { _%>
         expect(comp.<%- entityInstance %>).toEqual({
           ...entityWithoutValues,
-  <%_ for (const editedCollection of editedCollections) { _%>
+  <%_ for (const editedCollection of vueEditedCollections) { _%>
           <%- editedCollection %>: [],
   <%_ } _%>
         });
