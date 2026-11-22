@@ -25,20 +25,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { type HealthCheck } from 'app/shared/jhipster/health.model';
-import { type Label } from 'app/shared/jhipster/label';
 import PageTitle from 'app/shared/layout/page-title';
+import { labelText } from 'app/shared/util/label-utils';
 import { getSystemHealth } from '../administration.reducer';
 
 import HealthModal from './health-modal';
-
-<%_ if (enableTranslation) { _%>
-export const labelText = ({ text, translationKey }: Label): string => {
-  const translated: string | undefined = translationKey && translate(translationKey);
-  return !translated || translated.startsWith('translation-not-found') ? text : translated;
-};
-<%_ } else { _%>
-export const labelText = ({ text }: Label): string => text;
-<%_ } _%>
 
 export const HealthPage = () => {
   const [healthObject, setHealthObject] = useState<HealthCheck>();

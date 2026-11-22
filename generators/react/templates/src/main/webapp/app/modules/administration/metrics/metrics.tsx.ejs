@@ -26,8 +26,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { type MetricDetails, type MetricGauge } from 'app/shared/jhipster/metrics.model';
 import PageTitle from 'app/shared/layout/page-title';
+import { labelText } from 'app/shared/util/label-utils';
 import { getSystemMetrics } from '../administration.reducer';
-import MetricsDetailsModal, { labelText } from './metrics-details-modal';
+import MetricsDetailsModal from './metrics-details-modal';
 
 const Gauge = ({ gauge }: { gauge: MetricGauge }) => (
   <ProgressBar animated={false} striped now={gauge.percent} label={gauge.text} variant={gauge.status} />
