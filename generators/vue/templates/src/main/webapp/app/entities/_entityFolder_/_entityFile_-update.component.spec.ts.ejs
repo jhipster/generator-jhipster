@@ -298,7 +298,7 @@ describe('Component Tests', () => {
           <%- relationship.relationshipFieldNamePlural %>: null,
 <%_ } _%>
 <%_ for (const field of vueEditableCollectionFields) { _%>
-          <%- field.fieldName %>: null,
+          <%- field.propertyName %>: null,
 <%_ } _%>
         };
         <%- entityInstance %>ServiceStub.find.mockResolvedValue(entityWithoutValues);
@@ -318,7 +318,7 @@ describe('Component Tests', () => {
         expect(comp.<%- entityInstance %>).toEqual({
           ...entityWithoutValues,
   <%_ for (const editableCollection of vueEditableCollections) { _%>
-          <%- editableCollection %>: [],
+          <%- editableCollection.propertyName %>: [],
   <%_ } _%>
         });
 <%_ } else { _%>

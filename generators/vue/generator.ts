@@ -416,10 +416,10 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           vueFormTimeFields: () => formFields.some(field => field.fieldTypeInstant || field.fieldTypeZonedDateTime),
           vueEditableCollectionFields: () => editableCollectionFields,
           vueEditableCollections: () => [
-            ...editableCollectionFields.map(field => field.fieldName),
-            ...entity.relationships
-              .filter(relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship)
-              .map(relationship => relationship.relationshipFieldNamePlural),
+            ...editableCollectionFields,
+            ...entity.relationships.filter(
+              relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship,
+            ),
           ],
         });
       },

@@ -225,7 +225,7 @@ const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
   <%_ } _%>
 <%_ } _%>
 <%_ for (const field of vueEditableCollectionFields) { _%>
-  entity.<%- field.fieldName %> = [];
+  entity.<%- field.propertyName %> = [];
 <%_ } _%>
   return entity;
 };
@@ -269,7 +269,7 @@ const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
     return {
       ...entity,
   <%_ for (const editableCollection of vueEditableCollections) { _%>
-      <%- editableCollection %>: entity.<%- editableCollection %> ?? [],
+      <%- editableCollection.propertyName %>: entity.<%- editableCollection.propertyName %> ?? [],
   <%_ } _%>
     };
   },
