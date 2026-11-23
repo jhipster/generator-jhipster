@@ -1456,10 +1456,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * Shallow clone or convert dependencies to placeholder if needed.
    */
-  prepareDependencies(
-    map: Record<string, string>,
+  prepareDependencies<Dependencies extends Record<string, string>>(
+    map: Dependencies,
     valuePlaceholder?: 'java' | 'docker' | ((value: string) => string),
-  ): Record<string, string> {
+  ): { [Dependency in keyof Dependencies]: string } {
     let placeholder: (value: string) => string;
     if (valuePlaceholder === 'java') {
       placeholder = value => `'${kebabCase(value).toUpperCase()}-VERSION'`;
@@ -1469,7 +1469,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       placeholder = valuePlaceholder ?? (value => `${snakeCase(value).toUpperCase()}_VERSION`);
     }
     if (this.useVersionPlaceholders) {
-      return Object.fromEntries(Object.keys(map).map(dep => [dep, placeholder(dep)]));
+      return Object.fromEntries(Object.keys(map).map(dep => [dep, placeholder(dep)])) as { [Dependency in keyof Dependencies]: string };
     }
     return {
       ...map,

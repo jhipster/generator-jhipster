@@ -26,6 +26,7 @@ import type { SpringBootAddedApplicationProperties, SpringBootAddedPropertyPrope
 import type command from './command.ts';
 import type cacheCommand from './generators/cache/command.ts';
 import type springBootDependencies from './resources/spring-boot-dependencies-4.ts';
+import type { SpringBootManagedVersions } from './resources/spring-boot-dependencies-4.ts';
 
 export type { Features } from '../server/types.d.ts';
 
@@ -204,7 +205,13 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
     springBootBaseRepositoryClass?: string;
     /** Import of springBootBaseRepositoryClass */
     springBootBaseRepositoryImport?: string;
-    springBootDependencies: Record<string, string>;
+    /**
+     * The versions of the Spring Boot BOM, keyed by their property without `.version`, with the ones of the overrides.
+     * Only the version of Spring Boot is given with version placeholders.
+     */
+    springBootDependencies: Pick<SpringBootManagedVersions, 'spring-boot-dependencies'> &
+      Partial<SpringBootManagedVersions> &
+      Record<string, string>;
 
     addSpringMilestoneRepository: boolean;
     addSpringSnapshotRepository: boolean;
