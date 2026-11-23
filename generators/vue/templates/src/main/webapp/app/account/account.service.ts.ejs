@@ -95,14 +95,7 @@ export default class AccountService {
   }
 
   private checkAuthorities(authorities: string[]): boolean {
-    if (this.userAuthorities) {
-      for (const authority of authorities) {
-        if (this.userAuthorities.includes(authority)) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return authorities.some(authority => this.userAuthorities?.includes(authority) ?? false);
   }
 }
 
