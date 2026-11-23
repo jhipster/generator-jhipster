@@ -28,6 +28,8 @@ import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdate
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
     // Fields a request may not set to null. Each is patched to null by the same test.
     const requiredFields = fieldsToTest.filter(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired);
+    // Fields the criteria filter by. Each filter is a case of the same parameterized test.
+    const filterFields = jpaMetamodelFiltering ? fieldsToTest.filter(field => field.filterableField) : [];
     // Owner side relationships whose related entity has a field that can be observed after a request carrying a
     // nested related object, to check the request does not write into the related entity.
     const noCascadeRelationships = readOnly || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
@@ -148,8 +150,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 <%_ } _%>
 import org.junit.jupiter.api.Test;
-<%_ if (!readOnly && updatableEntity && requiredFields.length > 0) { _%>
+<%_ if ((!readOnly && updatableEntity && requiredFields.length > 0) || filterFields.length > 0) { _%>
 import org.junit.jupiter.params.ParameterizedTest;
+<%_ } _%>
+<%_ if (filterFields.length > 0) { _%>
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+<%_ } _%>
+<%_ if (!readOnly && updatableEntity && requiredFields.length > 0) { _%>
 import org.junit.jupiter.params.provider.ValueSource;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -218,7 +226,7 @@ import java.time.format.DateTimeFormatter;
 <%_ if (anyFieldIsBlobDerived) { _%>
 import java.util.Base64;
 <%_ } _%>
-<%_ if ((searchEngineElasticsearch && !reactive && paginationNo) || (jpaMetamodelFiltering && !reactive)) { _%>
+<%_ if ((searchEngineElasticsearch && !reactive && paginationNo) || (jpaMetamodelFiltering && !reactive) || filterFields.length > 0) { _%>
 import java.util.stream.Stream;
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
@@ -1126,102 +1134,51 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
     }
 
-  <%_ for (const searchBy of fieldsToTest) { /* we can't filter by all the fields. */ _%>
-    <%_ if (searchBy.filterableField) { _%>
+  <%_ if (filterFields.length > 0) { _%>
 
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> equals to
-        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.equals", <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>, <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>);
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> in
-        default<%- entityClass %>ShouldBeFound("<%- searchBy.fieldName %>.in", <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>, <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>);
-        default<%- entityClass %>ShouldNotBeFound("<%- searchBy.fieldName %>.in", <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>);
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is not null
-        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.specified", true, false);
-    }
-    <%_ } _%>
-    <%_ if (searchBy.filterableField && searchBy.fieldTypeString) { _%>
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>ContainsSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> contains, a longer text than the value being never contained
-        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.contains", <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>, <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %> + "x");
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> does not contain, a longer text than the value being never contained
-        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.doesNotContain", <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %> + "x", <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>);
-    }
-
-    <%_ } _%>
-    <%_ // the range criteria _%>
-    <%_ if (searchBy.filterableField && (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime)) { _%>
+    /**
+     * The filters of the fields: each one with the values that find the default entity, and the ones that do not.
+     */
+    static Stream<Arguments> fieldFilters() {
+        return Stream.<Arguments>builder()
+    <%_ for (const searchBy of filterFields) { _%>
       <%_ const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           // The updated value is the bigger one.
           const biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
+          const { fieldName } = searchBy;
       _%>
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is greater than or equal to
-        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.greaterThanOrEqual", <%- defaultValue %>, <%- biggerValue %>);
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is less than or equal to
-        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.lessThanOrEqual", <%- defaultValue %>, <%- smallerValue %>);
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is less than
-        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.lessThan", <%- biggerValue %>, <%- defaultValue %>);
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is greater than
-        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.greaterThan", <%- smallerValue %>, <%- defaultValue %>);
-    }
-
+            .add(Arguments.of("<%- fieldName %>.equals", values(<%- defaultValue %>), values(<%- biggerValue %>)))
+            .add(Arguments.of("<%- fieldName %>.in", values(<%- defaultValue %>, <%- biggerValue %>), values(<%- biggerValue %>)))
+            .add(Arguments.of("<%- fieldName %>.specified", values(true), values(false)))
+      <%_ if (searchBy.fieldTypeString) { _%>
+            // A longer text than the value is never contained in it.
+            .add(Arguments.of("<%- fieldName %>.contains", values(<%- defaultValue %>), values(<%- defaultValue %> + "x")))
+            .add(Arguments.of("<%- fieldName %>.doesNotContain", values(<%- defaultValue %> + "x"), values(<%- defaultValue %>)))
+      <%_ } _%>
+      <%_ if (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) { _%>
+            .add(Arguments.of("<%- fieldName %>.greaterThanOrEqual", values(<%- defaultValue %>), values(<%- biggerValue %>)))
+            .add(Arguments.of("<%- fieldName %>.lessThanOrEqual", values(<%- defaultValue %>), values(<%- smallerValue %>)))
+            .add(Arguments.of("<%- fieldName %>.lessThan", values(<%- biggerValue %>), values(<%- defaultValue %>)))
+            .add(Arguments.of("<%- fieldName %>.greaterThan", values(<%- smallerValue %>), values(<%- defaultValue %>)))
+      <%_ } _%>
     <%_ } _%>
+            .build();
+    }
+
+    private static Object[] values(Object... values) {
+        return values;
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("fieldFilters")<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>ByFieldFilter(String filter, Object[] shouldBeFound, Object[] shouldNotBeFound) <%- reactive ? '' : 'throws Exception ' %>{
+        // Initialize the database
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        default<%- entityClass %>ShouldBeFound(filter, shouldBeFound);
+        default<%- entityClass %>ShouldNotBeFound(filter, shouldNotBeFound);
+    }
   <%_ } _%>
   <%_ for (const relationship of filterTestableRelationships) { _%>
 
@@ -1279,11 +1236,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
 
   <%_ } _%>
-    private void default<%- entityClass %>Filtering(String filter, Object shouldBeFound, Object shouldNotBeFound) <%- reactive ? '' : 'throws Exception ' %>{
-        default<%- entityClass %>ShouldBeFound(filter, shouldBeFound);
-        default<%- entityClass %>ShouldNotBeFound(filter, shouldNotBeFound);
-    }
-
     /**
      * Executes the search, and checks that the default entity is returned.
      */
