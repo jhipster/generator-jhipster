@@ -18,21 +18,9 @@
 -%>
 import { useState } from 'react';
 import { Badge, Button, Card, FormControl, Modal, Table } from 'react-bootstrap';
-<%_ if (enableTranslation) { _%>
-import { translate } from 'react-jhipster';
-<%_ } _%>
 
-import { type Label } from 'app/shared/jhipster/label';
 import { type MetricDetails } from 'app/shared/jhipster/metrics.model';
-
-<%_ if (enableTranslation) { _%>
-export const labelText = ({ text, translationKey }: Label): string => {
-  const translated: string | undefined = translationKey && translate(translationKey);
-  return !translated || translated.startsWith('translation-not-found') ? text : translated;
-};
-<%_ } else { _%>
-export const labelText = ({ text }: Label): string => text;
-<%_ } _%>
+import { labelText } from 'app/shared/util/label-utils';
 
 export const MetricsDetailsModal = ({ details, handleClose }: { details: MetricDetails; handleClose: () => void }) => {
   const [selectedValue, setSelectedValue] = useState<string>();

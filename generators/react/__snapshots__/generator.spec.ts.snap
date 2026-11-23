@@ -1733,6 +1733,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/shared/util/entity-utils.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/util/label-utils.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/util/pagination.constants.ts": {
     "stateCleared": "modified",
   },
@@ -3929,6 +3932,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/shared/util/entity-utils.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/util/label-utils.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/util/pagination.constants.ts": {
     "stateCleared": "modified",
   },
@@ -5093,6 +5099,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/util/entity-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/label-utils.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/util/pagination.constants.ts": {

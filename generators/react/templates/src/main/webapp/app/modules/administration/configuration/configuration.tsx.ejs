@@ -24,18 +24,9 @@ import { faSort } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { type Label } from 'app/shared/jhipster/label';
 import PageTitle from 'app/shared/layout/page-title';
+import { labelText } from 'app/shared/util/label-utils';
 import { getConfiguration } from '../administration.reducer';
-
-<%_ if (enableTranslation) { _%>
-const labelText = ({ text, translationKey }: Label): string => {
-  const translated: string | undefined = translationKey && translate(translationKey);
-  return !translated || translated.startsWith('translation-not-found') ? text : translated;
-};
-<%_ } else { _%>
-const labelText = ({ text }: Label): string => text;
-<%_ } _%>
 
 export const ConfigurationPage = () => {
   const [filter, setFilter] = useState('');
