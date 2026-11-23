@@ -687,6 +687,9 @@ ${classProperties
           mutateData(field, {
             __override__: false,
             sbTestBlobSize: Math.min(Math.max(1, minBytes), maxBytes),
+            // The byte arrays are validated by their size, a ByteBuffer is not.
+            sbTestRejectedBlobSizes:
+              field.fieldTypeBytes ? [...(minBytes > 0 ? [minBytes - 1] : []), ...(Number.isFinite(maxBytes) ? [maxBytes + 1] : [])] : [],
           });
         }
 

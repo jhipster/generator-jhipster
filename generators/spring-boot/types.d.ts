@@ -88,6 +88,8 @@ export type Field = ServerField &
     sbTestSmallerValue?: string;
     /** The size in bytes of the values of a blob of a file in the resource integration test. */
     sbTestBlobSize?: number;
+    /** The sizes in bytes of a blob of a file the server rejects, one under its minbytes and one over its maxbytes, in the resource integration test. */
+    sbTestRejectedBlobSizes?: number[];
   };
 
 export interface Relationship extends ServerRelationship, SpringBootAddedPropertyProperties, SpringBootProperty, JavaRelationship {

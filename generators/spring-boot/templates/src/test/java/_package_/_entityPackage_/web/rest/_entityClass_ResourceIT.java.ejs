@@ -799,6 +799,47 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%_ } _%>
     }
       <%_ } _%>
+      <%_ if (field.sbTestRejectedBlobSizes?.length > 0) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void check<%- field.fieldInJavaBeanMethod %>Size() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
+        <%_ } _%>
+        <%_ for (const size of field.sbTestRejectedBlobSizes) { _%>
+
+        // Create the <%- entityClass %> with a <%- size %>-byte blob, out of its size, which fails.
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(TestUtil.createByteArray(<%- size %>, "0"));
+          <%_ if (reactive) { _%>
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(<%- dtoMapstruct ? `${entityInstance}Mapper.toDto(${persistInstance})` : persistInstance %>))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+          <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(om.writeValueAsBytes(<%- dtoMapstruct ? `${entityInstance}Mapper.toDto(${persistInstance})` : persistInstance %>)))
+            .andExpect(status().isBadRequest());
+          <%_ } _%>
+        <%_ } _%>
+        <%_ if (databaseTypeCouchbase) { _%>
+
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+        <%_ if (searchEngineElasticsearch) { _%>
+
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
+        <%_ } _%>
+    }
+      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
