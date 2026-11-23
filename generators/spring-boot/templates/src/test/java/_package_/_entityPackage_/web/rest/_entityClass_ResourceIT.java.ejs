@@ -24,7 +24,7 @@ import static <%- packageName %>.test.util.TestUtil.createUpdateProxyForBean;
 <%_ if (!readOnly && updatableEntity) { _%>
 import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdateBody;
 <%_ } _%>
-<%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
+<%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => (rel.persistableRelationship || (databaseTypeSql && rel.relationshipManyToMany)) && !rel.otherEntity.hasCyclicRequiredRelationship);
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
     // Fields a request may not set to null. Each is patched to null by the same test.
     const requiredFields = fieldsToTest.filter(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired);
