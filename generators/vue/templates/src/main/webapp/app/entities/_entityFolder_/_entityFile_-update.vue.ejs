@@ -15,7 +15,7 @@ _%>
           </div>
 <%_ } _%>
 <%_ for (field of entityClientFormFields) { _%>
-  <%_ const { fieldName, fieldType, fieldTypeBlobContent } = field;
+  <%_ const { fieldName, fieldType, fieldTypeBlobContent, contentTypeFieldName } = field;
       const fieldInputClass = field.fieldTypeBoolean ? 'form-check-input' : 'form-control';
       const translationKey = `${i18nKeyPrefix}.${fieldName}`;
   _%>
@@ -37,19 +37,19 @@ _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             <div>
       <%_ if (field.blobContentTypeImage) { _%>
-              <img :src="'data:' + <%- entityInstance %>.<%- fieldName %>ContentType + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-height: 100px;" v-if="<%- entityInstance %>.<%- fieldName %>" alt="<%- entityInstance %>"/>
+              <img :src="'data:' + <%- entityInstance %>.<%- contentTypeFieldName %> + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-height: 100px;" v-if="<%- entityInstance %>.<%- fieldName %>" alt="<%- entityInstance %>"/>
       <%_ } _%>
               <div v-if="<%- entityInstance %>.<%- fieldName %>" class="form-text text-danger clearfix">
       <%_ if (field.blobContentTypeAny) { _%>
-                <a class="pull-start" @click="dataUtils.openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a><br>
-                <span class="pull-start">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
+                <a class="pull-start" @click="dataUtils.openFile(<%- entityInstance %>.<%- contentTypeFieldName %>, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a><br>
+                <span class="pull-start">{{<%- entityInstance %>.<%- contentTypeFieldName %>}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
       <%_ } else { _%>
-                <span class="pull-start">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
+                <span class="pull-start">{{<%- entityInstance %>.<%- contentTypeFieldName %>}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
       <%_ } _%>
       <%_ if (field.blobContentTypeImage) { _%>
-                <button type="button" @click="clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>'); v$.<%- fieldName %>.$touch()" class="btn btn-secondary btn-xs pull-end">
+                <button type="button" @click="clearInputImage('<%- fieldName %>', '<%- contentTypeFieldName %>', 'file_<%- fieldName %>'); v$.<%- fieldName %>.$touch()" class="btn btn-secondary btn-xs pull-end">
       <%_ } else { _%>
-                <button type="button" @click="<%- entityInstance %>.<%- fieldName %>=undefined;<%- entityInstance %>.<%- fieldName %>ContentType=undefined; v$.<%- fieldName %>.$touch()"
+                <button type="button" @click="<%- entityInstance %>.<%- fieldName %>=undefined;<%- entityInstance %>.<%- contentTypeFieldName %>=undefined; v$.<%- fieldName %>.$touch()"
                     class="btn btn-secondary btn-xs pull-end">
       <%_ } _%>
                   <font-awesome-icon icon="times"></font-awesome-icon>
@@ -99,8 +99,8 @@ _%>
             <input type="<%- field.htmlInputType %>" class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
               :class="{ 'is-valid': v$.<%- fieldName %>.$dirty && !v$.<%- fieldName %>.$invalid, 'is-invalid': v$.<%- fieldName %>.$dirty && v$.<%- fieldName %>.$invalid, 'is-touched': v$.<%- fieldName %>.$dirty }" @blur="v$.<%- fieldName %>.$touch()" v-model<%- field.htmlInputType === 'number' ? '.number' : '' %>="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %><%- (field.id && userProvidedPrimaryKey) ? ' :readonly="isUpdate"' : '' %>/>
       <%_ if (field.fieldTypeBinary) { _%>
-            <input type="hidden" class="<%- fieldInputClass %>" name="<%- fieldName %>ContentType" id="<%- entityFileName %>-<%- fieldName %>ContentType"
-              v-model="<%- entityInstance %>.<%- fieldName %>ContentType" />
+            <input type="hidden" class="<%- fieldInputClass %>" name="<%- contentTypeFieldName %>" id="<%- entityFileName %>-<%- contentTypeFieldName %>"
+              v-model="<%- entityInstance %>.<%- contentTypeFieldName %>" />
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
