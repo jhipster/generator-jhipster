@@ -1,4 +1,3 @@
-<%_ const listFields = fields.filter(field => !field.id && !field.hidden && !field.hideListView); _%>
 <template>
   <div>
     <h2 id="page-heading" data-cy="<%- entityNameCapitalized %>Heading">
@@ -46,7 +45,7 @@
         <tr>
 <%_ const columns = [
       { sortField: primaryKey.name, translationKey: primaryKey.name === 'id' ? 'global.field.id' : `${i18nKeyPrefix}.${primaryKey.name}` },
-      ...listFields.map(field => ({ sortField: field.fieldName, translationKey: `${i18nKeyPrefix}.${field.fieldName}` })),
+      ...entityClientListFields.map(field => ({ sortField: field.fieldName, translationKey: `${i18nKeyPrefix}.${field.fieldName}` })),
       ...relationships
         .filter(rel => !rel.otherEntity.embedded && (rel.relationshipSerializePrimaryKeyOnly || (rel.persistableRelationship && (paginationNo || !rel.collection))))
         .map(rel => ({
@@ -71,7 +70,7 @@ _%>
           <td>
             <router-link :to="{name: '<%- entityAngularName %>View', params: {<%- entityInstance %>Id: <%- entityInstance %>.<%- primaryKey.name %>}}">{{<%- entityInstance %>.<%- primaryKey.name %>}}</router-link>
           </td>
-<%_ for (field of listFields) { _%>
+<%_ for (field of entityClientListFields) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
   <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
           <td>

@@ -16,11 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
-    // A primary key the user gives, like the name of an authority, is a field of the form, read only once created.
-    const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
-    const formFieldsNoId = formFields.filter(field => !field.id);
-    const clientConstantImports = [...new Set(formFields.map(field => field.reactFieldClientConstant?.reactConstantImport).filter(Boolean))];
+<%_ // A primary key the user gives, like the name of an authority, is a field of the form, read only once created.
+    const userProvidedPrimaryKey = !builtInUserManagement && entityClientFormFields.some(field => field.id);
+    const formFieldsNoId = entityClientFormFields.filter(field => !field.id);
+    const clientConstantImports = [...new Set(entityClientFormFields.map(field => field.reactFieldClientConstant?.reactConstantImport).filter(Boolean))];
 _%>
 import { useEffect } from 'react';
 import {
@@ -105,7 +104,7 @@ export const <%- entityReactName %>Update = () => {
 <%_ for (const enumField of enumTypeFields) { _%>
   const <%- enumField.enumInstance %>Values = Object.keys(<%- enumField.fieldType %>);
 <%_ } _%>
-<%_ for (const field of formFields.filter(field => field.clientConstantsAsValues)) { _%>
+<%_ for (const field of entityClientFormFields.filter(field => field.clientConstantsAsValues)) { _%>
   const <%- field.fieldName %>Values = <%- field.reactFieldClientConstant.reactConstantValues %>;
 <%_ } _%>
 
@@ -138,7 +137,7 @@ export const <%- entityReactName %>Update = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
-<%_ for (field of formFields) { _%>
+<%_ for (field of entityClientFormFields) { _%>
   <%_ const { fieldName } = field; _%>
   <%_ if (field.fieldTypeTimed) { _%>
     values.<%- fieldName %> = convertDateTimeToServer(values.<%- fieldName %>);
@@ -234,7 +233,7 @@ export const <%- entityReactName %>Update = () => {
             />
           }
 <%_ } _%>
-<%_ for (field of formFields) { _%>
+<%_ for (field of entityClientFormFields) { _%>
   <%_ const { fieldType, fieldName, fieldNameHumanized } = field; _%>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
           <ValidatedBlobField

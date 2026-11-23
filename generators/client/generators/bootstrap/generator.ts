@@ -158,6 +158,19 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
           return entity.fields.some(blob => blob.fieldName === contentTypeOf && isClientField(blob));
         });
       },
+      prepareFormAndListFields({ entity }) {
+        const { builtInUserManagement } = entity;
+        // The fields the clients skip, like the content type the server keeps next to a blob, are left out.
+        const clientFields = entity.fields.filter(field => isClientField(field) && !field.hidden);
+        mutateData(entity, {
+          __override__: false,
+          entityClientFormFields: () =>
+            clientFields.filter(
+              field => (!field.id || builtInUserManagement || !field.autoGenerate) && !(builtInUserManagement && field.readonly),
+            ),
+          entityClientListFields: () => clientFields.filter(field => !field.id && !field.hideListView),
+        });
+      },
     });
   }
 

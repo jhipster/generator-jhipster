@@ -384,13 +384,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
       prepareEntityModel({ entity }) {
         // The fields the clients skip are left out of the model.
         const fieldsWithoutId = entity.fields.filter(field => !field.id && isClientField(field));
-        // The fields of the update form.
-        const formFields = entity.fields.filter(
-          field =>
-            (!field.id || entity.builtInUserManagement || !field.autoGenerate) &&
-            !field.hidden &&
-            !(entity.builtInUserManagement && field.readonly),
-        );
+        const formFields = entity.entityClientFormFields!;
         const editableCollectionFields = formFields.filter(field => field.clientConstantsAsValues && field.collection);
         // The authorities of the routes, like Angular: ROLE_USER when the entity declares none.
         const asAuthorities = (authorities: string[]): string =>

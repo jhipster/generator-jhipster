@@ -102,6 +102,10 @@ type ClientAddedEntityProperties = {
   entityModelEnumImports?: Map<string, string>;
   /** The enums the entity update form imports, by name. */
   entityClientEnumImports?: Map<string, string>;
+  /** The fields of the update form, the primary key the user gives or of the user management included, without the hidden fields and the ones the clients skip. */
+  entityClientFormFields?: Field[];
+  /** The fields of the list, without the primary key, the hidden fields, the ones hidden from the list and the ones the clients skip. */
+  entityClientListFields?: Field[];
   tsSampleWithPartialData?: string;
   tsSampleWithRequiredData?: string;
   tsSampleWithFullData?: string;
