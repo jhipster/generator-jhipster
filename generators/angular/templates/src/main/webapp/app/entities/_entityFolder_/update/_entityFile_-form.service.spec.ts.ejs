@@ -20,6 +20,7 @@
 <%_ const timedFields = fields.filter(field => field.fieldTypeTimed); _%>
 <%_ const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient); _%>
 <%_ const collectionRelationships = relationships.filter(relationship => relationship.persistableRelationship && relationship.collection); _%>
+<%_ const requiredCollectionRelationships = collectionRelationships.filter(relationship => relationship.relationshipRequired); _%>
 import { beforeEach, describe, expect, it } from 'vitest';
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -82,7 +83,7 @@ describe('<%- entityAngularName %> Form Service', () => {
 
         expect(form().value()).toEqual(model());
       });
-<%_ if (!relationships.some(relationship => relationship.persistableRelationship && !relationship.collection && relationship.relationshipRequired)) { _%>
+<%_ if (!relationships.some(relationship => relationship.persistableRelationship && relationship.relationshipRequired)) { _%>
 
       it('should accept the values of an entity with its required data<%- booleanFields.length > 0 ? ', false booleans included' : '' %>', () => {
   <%_ if (booleanFields.length > 0) { _%>
@@ -101,6 +102,30 @@ describe('<%- entityAngularName %> Form Service', () => {
 
         expect(form().errorSummary().map(error => error.kind)).toEqual([]);
         expect(form().valid()).toBe(true);
+      });
+<%_ } _%>
+<%_ if (requiredCollectionRelationships.length > 0) { _%>
+
+      it('should require an item of a required collection', () => {
+        const form = TestBed.runInInjectionContext(() =>
+          service.create<%- entityAngularName %>Form(
+            signal(
+              service.create<%- entityAngularName %>FormModel({
+                ...sampleWithRequiredData,
+  <%_ for (const relationship of requiredCollectionRelationships) { _%>
+                <%- relationship.propertyName %>: [],
+  <%_ } _%>
+              }),
+            ),
+  <%_ if (editableId) { _%>
+            signal(true),
+  <%_ } _%>
+          ),
+        );
+
+  <%_ for (const relationship of requiredCollectionRelationships) { _%>
+        expect(form.<%- relationship.propertyName %>().getError('required')).toBeDefined();
+  <%_ } _%>
       });
 <%_ } _%>
 <%_ if (primaryKey.autoGenerate && !builtInUserManagement) { _%>
