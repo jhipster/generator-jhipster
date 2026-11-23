@@ -648,7 +648,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
     }
 
-  <%_ if (databaseTypeSql && isUsingMapsId) { _%>
+  <%_ if (databaseTypeSql && isUsingMapsId && updatableEntity) { _%>
     @Test<%- transactionalAnnotation %>
     void update<%- entityClass %>MapsIdAssociationWithNewId() throws Exception {
         // Initialize the database
