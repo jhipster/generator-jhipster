@@ -51,11 +51,15 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
     } else {
       await this.dependsOnBootstrap('javascript-simple-application');
       await this.dependsOnBootstrap('common');
-      // Without the client or the server, their generators are not composed.
-      if (!this.jhipsterConfigWithDefaults.skipClient) {
+      // Without the client or the server, their generators are not composed. An option of the first run is not stored
+      // in the configuration yet.
+      const options = this.options as { skipClient?: boolean; skipServer?: boolean };
+      const skipClient = options.skipClient ?? this.jhipsterConfigWithDefaults.skipClient;
+      const skipServer = options.skipServer ?? this.jhipsterConfigWithDefaults.skipServer;
+      if (!skipClient) {
         await this.dependsOnBootstrap('client');
       }
-      if (!this.jhipsterConfigWithDefaults.skipServer) {
+      if (!skipServer) {
         await this.dependsOnBootstrap('server');
       }
     }

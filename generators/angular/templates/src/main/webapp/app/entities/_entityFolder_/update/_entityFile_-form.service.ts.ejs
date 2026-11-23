@@ -49,6 +49,7 @@
     if (fields.some(field => field.fieldValidationMinLength)) signalFormsImports.push('minLength');
     if (fields.some(field => field.fieldValidationPattern)) signalFormsImports.push('pattern');
     if (fields.some(field => (field.fieldValidationRequired && !field.fieldTypeBoolean) || (field.id && !field.autoGenerate)) || formRelationships.some(relationship => !relationship.collection && relationship.relationshipRequired)) signalFormsImports.push('required');
+    if (formRelationships.some(relationship => relationship.collection && relationship.relationshipRequired)) signalFormsImports.push('requiredError', 'validate');
     const anchoredPattern = pattern => `${pattern.startsWith('^') ? '' : '^'}${pattern}${pattern.endsWith('$') ? '' : '$'}`;
 _%>
 import { Service, <%- editableId ? 'Signal, ' : '' %>WritableSignal } from '@angular/core';
@@ -174,7 +175,9 @@ export class <%- entityAngularName %>FormService {
   <%_ } _%>
 <%_ } _%>
 <%_ for (const { propertyName, collection, relationshipRequired } of formRelationships) { _%>
-  <%_ if (!collection && relationshipRequired) { _%>
+  <%_ if (collection && relationshipRequired) { _%>
+        validate(path.<%- propertyName %>, ({ value }) => (value().length === 0 ? requiredError() : undefined));
+  <%_ } else if (relationshipRequired) { _%>
         required(path.<%- propertyName %>);
   <%_ } _%>
 <%_ } _%>

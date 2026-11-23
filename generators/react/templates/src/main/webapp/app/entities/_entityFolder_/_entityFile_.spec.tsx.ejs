@@ -31,7 +31,8 @@
     const nullNumbers = optionalNumberFields.map(field => `${field.fieldName}: null`).join(', ');
     const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient && !field.hidden);
     const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.transient && !field.hidden);
-    const validatedForm = numericFormFields.length > 0 || builtInUserManagement;
+    const requiredCollections = readOnly ? [] : screenRelationships.filter(rel => rel.collection && rel.relationshipRequired);
+    const validatedForm = numericFormFields.length > 0 || builtInUserManagement || requiredCollections.length > 0;
 _%>
 import { afterEach, <%- validatedForm ? 'beforeAll, ' : '' %>beforeEach, describe, expect, it, vi } from 'vitest';
 <%_ if (validatedForm) { _%>
@@ -123,6 +124,18 @@ const formValues = {
   <%_ } _%>
 };
 
+  <%_ if (requiredCollections.length > 0) { _%>
+const selectAllOptions = (container: HTMLElement, name: string) => {
+  const select = container.querySelector<HTMLSelectElement>(`[name="${name}"]`)!;
+  for (const option of select.options) {
+    // The attribute is what tells jsdom that the selected options changed.
+    option.setAttribute('selected', '');
+    option.selected = true;
+  }
+  fireEvent.change(select);
+};
+
+  <%_ } _%>
 const waitForForm = () =>
   waitFor(() => {
     expect(document.querySelector('#save-entity')).not.toBeNull();
@@ -458,11 +471,27 @@ describe('<%- entityReactName %> screens', () => {
     });
 
   <%_ } _%>
+  <%_ if (requiredCollections.length > 0) { _%>
+    it('should not save without an item of a required relationship', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      fillForm(container, formValues);
+      fireEvent.submit(container.querySelector('form')!);
+
+      await waitFor(() => expect(container.querySelector('.invalid-feedback')).not.toBeNull());
+      expect(axios.post).not.toHaveBeenCalled();
+    });
+
+  <%_ } _%>
     it('should create an entity', async () => {
       const { container } = renderPage('/new');
       await waitForForm();
 
       fillForm(container, formValues);
+  <%_ for (const rel of requiredCollections) { _%>
+      selectAllOptions(container, '<%- rel.relationshipFieldNamePlural %>');
+  <%_ } _%>
       fireEvent.click(container.querySelector('#save-entity')!);
 
       await waitFor(() => expect(axios.post).toHaveBeenCalledWith(apiUrl, expect.anything()));

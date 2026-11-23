@@ -55,6 +55,7 @@
         "vue-gradle-h2mem-ws-session",
         "vue-rsbuild-h2disk-ws-theme",
         "vue-oauth2-cassandra-fr",
+        "vue-session-cassandra-fr",
         "vue-default-windows",
         "ms-vue-eureka-jwt-couchbase-hazelcast",
         "ms-mf-vue-consul-oauth2-mysql-memcached",

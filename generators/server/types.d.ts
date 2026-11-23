@@ -40,6 +40,9 @@ export interface Relationship extends JavaRelationship, LanguagesRelationship, C
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
   extends JavaEntity<F, R>, CommonEntity<F, R>, DatabaseEntity<F, R> {
   skipCheckLengthOfIdentifier?: boolean;
+  /** The search engines the server supports, of the search engine of the entity. */
+  searchEngineElasticsearch: boolean;
+  searchEngineCouchbase: boolean;
 }
 
 export type Application<E extends BaseApplicationEntity = Entity> = ExportApplicationPropertiesFromCommand<typeof Command> &

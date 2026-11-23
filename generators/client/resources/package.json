@@ -4,7 +4,7 @@
   },
   "devDependencies": {
     "axios": "1.21.1",
-    "swagger-ui-dist": "5.35.0"
+    "swagger-ui-dist": "5.35.1"
   },
   "packageManager": "npm@12"
 }

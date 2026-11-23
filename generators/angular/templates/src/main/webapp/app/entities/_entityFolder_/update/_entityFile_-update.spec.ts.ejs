@@ -26,9 +26,9 @@
     // A new entity leaves empty a field the form requires.
     const newEntityFormInvalid = !primaryKey.autoGenerate
       || fields.some(field => field.fieldValidationRequired && !field.id && !field.fieldTypeBoolean && !field.fieldTypeTimed && field.fieldTsDefaultValue === undefined)
-      || relationships.some(relationship => relationship.persistableRelationship && !relationship.collection && relationship.relationshipRequired);
+      || relationships.some(relationship => relationship.persistableRelationship && relationship.relationshipRequired);
     // The sample of the required data of the entity fills a valid form, but for a required relationship.
-    const requiredDataFormValid = !relationships.some(relationship => relationship.persistableRelationship && !relationship.collection && relationship.relationshipRequired);
+    const requiredDataFormValid = !relationships.some(relationship => relationship.persistableRelationship && relationship.relationshipRequired);
 _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpResponse } from '@angular/common/http';

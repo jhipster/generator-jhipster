@@ -52,6 +52,14 @@
       }
     },
     {
+      "name": "vue-session-cassandra-fr",
+      "app-sample": "vue-session-cassandra-fr",
+      "entity": "cassandra",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      }
+    },
+    {
       "name": "vue-default-windows",
       "app-sample": "none",
       "environment": "dev",

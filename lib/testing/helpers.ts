@@ -748,7 +748,10 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
         return {};
       }
     }
-    return this.runJHipster(blueprintNS).withGenerators([[BlueprintedGenerator, { namespace: blueprintNS }]]);
+    // Registered in the package of jhipster: its meta tells the version of JHipster, as the one of a jhipster generator.
+    return this.runJHipster(blueprintNS).withGenerators([
+      [BlueprintedGenerator, { namespace: blueprintNS, packagePath: getPackageRoot() }],
+    ]);
   }
 
   override create<GeneratorType extends YeomanGenerator = JHipsterTestGenerator>(

@@ -277,7 +277,7 @@ describe('cli', () => {
             packageNamespace: undefined,
             importGenerator: undefined as any,
             instantiate: <G>() => Promise.resolve(generator as G),
-          } as GeneratorMeta;
+          };
         }
         return originalGetGeneratorMeta(namespace);
       });

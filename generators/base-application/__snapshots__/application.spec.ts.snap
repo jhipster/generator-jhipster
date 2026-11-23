@@ -3,6 +3,7 @@
 exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
 {
   "authenticationTypeUsesRemoteAuthorization": false,
+  "defaultIdType": "pkType",
   "dtoSuffix": "DTO",
   "entitySuffix": "",
   "generateAuthenticationApi": true,

@@ -25,7 +25,7 @@ _%>
             <label class="form-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
   <%_ if (field.clientConstantsAsValues) { _%>
-            <select class="form-select" name="<%- fieldName %>" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ' multiple' : '' %>>
+            <select class="form-select" name="<%- fieldName %>" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ` multiple v-if="${entityInstance}.${fieldName} !== undefined"` : '' %>>
               <option v-for="value of <%- fieldName %>Values" :key="value" :value="value">{{ value }}</option>
             </select>
   <%_ } else if (field.fieldIsEnum) { _%>
@@ -224,6 +224,9 @@ const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
   entity.<%- relationship.relationshipFieldNamePlural %> = [];
   <%_ } _%>
 <%_ } _%>
+<%_ for (const field of vueEditableCollectionFields) { _%>
+  entity.<%- field.propertyName %> = [];
+<%_ } _%>
   return entity;
 };
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
@@ -258,16 +261,15 @@ const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
 
 const previousState = () => router.go(-1);
 
-<%_ const editedCollections = relationships.filter(relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship); _%>
 const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
-<%_ if (editedCollections.length > 0) { _%>
+<%_ if (vueEditableCollections.length > 0) { _%>
   // The server gives null for a collection without values, the select of the collection edits an array.
   async (id, { signal }) => {
     const entity = await <%- entityInstance %>Service().find(id, { signal });
     return {
       ...entity,
-  <%_ for (const relationship of editedCollections) { _%>
-      <%- relationship.relationshipFieldNamePlural %>: entity.<%- relationship.relationshipFieldNamePlural %> ?? [],
+  <%_ for (const editableCollection of vueEditableCollections) { _%>
+      <%- editableCollection.propertyName %>: entity.<%- editableCollection.propertyName %> ?? [],
   <%_ } _%>
     };
   },

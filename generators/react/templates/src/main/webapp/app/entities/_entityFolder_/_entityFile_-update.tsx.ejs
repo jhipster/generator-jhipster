@@ -350,8 +350,12 @@ export const <%- entityReactName %>Update = () => {
             type="select"
             multiple
             name="<%- relationshipFieldNamePlural %>"
+    <%_ if (relationshipRequired) { _%>
+            required
+            validate={{ required: { value: true, message: translate('entity.validation.required') } }}
+    <%_ } _%>
             >
-    <%_ if (!rel.relationshipSerializePrimaryKeyOnly) { _%>
+    <%_ if (!rel.relationshipSerializePrimaryKeyOnly && !relationshipRequired) { _%>
               <option value="" key="0" />
     <%_ } _%>
               {<%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>

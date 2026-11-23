@@ -22,16 +22,13 @@ import { mutateData } from '../../../../lib/utils/index.ts';
 import { upperFirst } from '../../../../lib/utils/string-utils.ts';
 import prepareSqlApplicationProperties from '../../../base-application/generators/database-bootstrap/support/application-properties.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
-import type { Application as BaseApplicationApplication } from '../../../base-application/types.d.ts';
+import { addEntitiesOtherRelationships } from '../../../base-application/support/relationship.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import javaDomainCommand from '../../../java/generators/domain/command.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
 import { mutateApplication } from '../../application.ts';
 import {
-  addEntitiesOtherRelationships,
   getPrimaryKeyValue,
-  loadRequiredConfigDerivedProperties,
   prepareField as prepareServerFieldForTemplates,
   preparePostEntityServerDerivedProperties,
   prepareRelationship,
@@ -121,13 +118,42 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get postLoadingEntities() {
     return this.asPostLoadingEntitiesTaskGroup({
-      loadingEntities({ entitiesToLoad }) {
+      prepareSearchEngine({ application, entitiesToLoad }) {
+        const { searchEngine: applicationSearchEngine = 'no' } = application as { searchEngine?: string };
         for (const { entityBootstrap } of entitiesToLoad) {
-          loadRequiredConfigIntoEntity.call(this, entityBootstrap, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
+          const entity = entityBootstrap as { microserviceName?: string; searchEngine?: string | boolean };
+          // The search engine of the application, for an entity without one.
+          entity.searchEngine ??= applicationSearchEngine;
+          if (entity.searchEngine === true && (!entity.microserviceName || entity.microserviceName === application.baseName)) {
+            // The search engine of the application, for an entity of the application that enables the search.
+            if (applicationSearchEngine !== 'no') {
+              entity.searchEngine = applicationSearchEngine;
+            } else {
+              entity.searchEngine = 'no';
+              this.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
+            }
+          }
         }
       },
-      requiredOtherSideRelationships({ entitiesToLoad }) {
-        this.validateResult(addEntitiesOtherRelationships(entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap)));
+      addOtherRelationshipsOfTheDatabase({ application, entitiesToLoad }) {
+        const entities = entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap);
+        const { databaseType } = application;
+        if (!application.relationshipsHaveBackReference) {
+          // The relationships of these databases have no back reference.
+          for (const relationship of entities.flatMap(entity => entity.relationships ?? [])) {
+            if (!relationship.otherRelationship) {
+              relationship.relationshipIgnoreBackReference ??= true;
+            }
+          }
+          return;
+        }
+        this.validateResult(
+          addEntitiesOtherRelationships(
+            entities,
+            // OneToOne back reference is required due to filtering
+            (_entity, { relationshipType }) => relationshipType === 'one-to-one' && databaseType === 'sql',
+          ),
+        );
       },
     });
   }
@@ -138,7 +164,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ application, entity, entityDefaults }) {
+      prepareEntity({ application, entityDefaults }) {
         entityDefaults(getEntityDerivedPropertyMutations(javaDomainCommand.entity), {
           entitySuffix: application.entitySuffix ?? '',
           dtoSuffix: application.dtoSuffix ?? 'DTO',
@@ -151,8 +177,10 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
           restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass),
           restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance),
+          // The search engines the server supports, of the search engine it resolved once the entities were loaded.
+          searchEngineElasticsearch: ({ searchEngine }) => searchEngine === 'elasticsearch',
+          searchEngineCouchbase: ({ searchEngine }) => searchEngine === 'couchbase',
         });
-        loadRequiredConfigDerivedProperties(entity);
       },
     });
   }
@@ -189,8 +217,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
-      prepareEntityDerivedProperties({ entity }) {
-        preparePostEntityServerDerivedProperties(entity as any);
+      prepareEntityDerivedProperties({ application, entity }) {
+        preparePostEntityServerDerivedProperties(entity as any, application);
       },
     });
   }
