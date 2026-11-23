@@ -54,6 +54,13 @@ export interface Entity<F extends ClientField = Field, R extends ClientRelations
   entityVueReadAuthorities?: string;
   /** Whether a field of the update form is an Instant or a ZonedDateTime. */
   vueFormTimeFields?: boolean;
+  /** The fields of the update form whose constants it edits as a collection, with a multiple select. */
+  vueEditableCollectionFields?: F[];
+  /**
+   * The collections the update form edits, the fields of vueEditableCollectionFields and the persistable collection
+   * relationships, each one read by its propertyName: the server gives null for one without values, the form edits an array.
+   */
+  vueEditableCollections?: (F | R)[];
   /** The sample with the data of every field, its dates written as the strings of the server like the model types them. */
   vueTsSampleWithFullData?: string;
   /** The sample with the data of the required fields, its dates written as the strings of the server. */
