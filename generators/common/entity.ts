@@ -71,6 +71,13 @@ export type { BaseApplicationRelationship as Relationship };
 type CommonAddedEntityProperties = {
   entityApiUrl: string;
   entityApi: string;
+  /** The REST API gives the entity through a DTO, whichever the backend maps it with. */
+  dtoAny: boolean;
+  /** The backend loads the eager relationships of the entity through its own APIs, which the clients ask for. */
+  implementsEagerLoadApis: boolean;
+  /** The entity has a search, from its search engine, which the backend resolves first. */
+  searchEngineAny: boolean;
+  searchEngineNo: boolean;
 };
 
 type CommonCommandEntity = ExportEntityDerivedPropertiesFromCommand<typeof command>;
@@ -79,6 +86,13 @@ export const mutateEntity = {
   __override__: false,
   entityApi: ({ microserviceName }) => (microserviceName ? `services/${microserviceName.toLowerCase()}/` : ''),
   entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
+  dtoAny: ({ dto }) => Boolean(dto) && dto !== 'no',
+  // A backend sets it first.
+  implementsEagerLoadApis: finalizeDefault(() => false),
+  // The search engine of the entity, from its configuration or its JDL: a backend resolves it first, the supported ones too.
+  searchEngine: finalizeDefault(() => 'no'),
+  searchEngineAny: finalizeDefault(({ searchEngine }: Entity) => searchEngine !== 'no'),
+  searchEngineNo: finalizeDefault(({ searchEngineAny }: Entity) => !searchEngineAny),
   ...getEntityDerivedPropertyMutations(command.entity),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, CommonAddedEntityProperties>;
 

@@ -20,23 +20,20 @@ import intersection from 'lodash-es/intersection.js';
 import sortedUniq from 'lodash-es/sortedUniq.js';
 import uniq from 'lodash-es/uniq.js';
 
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
+import { APPLICATION_TYPE_GATEWAY } from '../../../lib/core/application-types.ts';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
-import { databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.ts';
+import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { EntityAll, FieldAll } from '../../../lib/types/application-all.d.ts';
 import { getMicroserviceAppName, mutateData, stringHashCode } from '../../../lib/utils/index.ts';
 import { upperFirst } from '../../../lib/utils/string-utils.ts';
 import { parseChangelog } from '../../base/support/timestamp.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import { getTypescriptKeyType } from '../../client/support/index.ts';
-import type { Application as ClientApplication } from '../../client/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
-import type { Application as SpringDataRelationalApplication } from '../../spring-boot/generators/data-relational/types.ts';
-import type { Application as SpringBootApplication } from '../../spring-boot/types.ts';
 import { mutateEntity } from '../entity.ts';
-import { getDatabaseTypeData, hibernateSnakeCase } from '../generators/database-bootstrap/support/index.ts';
+import { hibernateSnakeCase } from '../generators/database-bootstrap/support/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
@@ -47,12 +44,9 @@ import type {
 import { createFaker } from './faker.ts';
 import { fieldIsEnum } from './field-utils.ts';
 
-const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { CommonDBTypes } = fieldTypes;
 
 const { BOOLEAN, LONG, STRING, UUID, INTEGER } = CommonDBTypes;
-
-const { CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
 
 const { INSTANT, ZONED_DATE_TIME, DURATION, LOCAL_DATE, BIG_DECIMAL, LOCAL_TIME } = fieldTypes.CommonDBTypes;
 
@@ -65,7 +59,6 @@ const BASE_TEMPLATE_DATA = {
   skipUiGrouping: false,
   anyFieldHasDocumentation: false,
   existingEnum: false,
-  searchEngine: NO_SEARCH_ENGINE,
   microserviceName: undefined,
   entityAuthority: undefined,
   entityReadAuthority: undefined,
@@ -329,9 +322,9 @@ export function prepareEntityPrimaryKeyForTemplates(
       primaryKeyType = `${(entityWithConfig as EntityAll).entityClass}Id`;
     } else {
       const idField = idFields[0];
-      // Allow ids type to be empty and fallback to default type for the database.
+      // Allow ids type to be empty and fallback to the default id type of the application.
       if (!idField.fieldType) {
-        idField.fieldType = application?.pkType ?? getDatabaseTypeData(entityWithConfig.databaseType).defaultPrimaryKeyType;
+        idField.fieldType = application?.defaultIdType ?? CommonDBTypes.LONG;
       }
       primaryKeyName = idField.fieldName;
       primaryKeyType = idField.fieldType;
@@ -395,46 +388,14 @@ function fieldToId(field: BaseApplicationField): any {
 }
 
 /**
- * Copy required application config into entity.
- * Some entity features are related to the backend instead of the current app.
- * This allows generating entity files based on the backend features.
+ * @deprecated the entity no longer gets a copy of the configuration of the application: the generators read the
+ * application, the common bootstrap prepares the microservice and the search engine of the entities.
  */
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: CoreGenerator | void,
   entity: E,
-  config: BaseApplicationApplication,
+  _config: BaseApplicationApplication,
 ): E {
-  mutateData(entity as Partial<ServerEntity>, {
-    __override__: false,
-    // applicationType: config.applicationType,
-    // baseName: config.baseName,
-    // authenticationType: config.authenticationType,
-    reactive: (config as SpringBootApplication).reactive,
-    microfrontend: (config as ClientApplication).microfrontend,
-    // Workaround different paths
-    clientFramework: (config as ClientApplication).clientFramework,
-
-    databaseType: (config as SpringBootApplication).databaseType,
-    prodDatabaseType: (config as SpringDataRelationalApplication).prodDatabaseType,
-
-    searchEngine: (config as SpringBootApplication).searchEngine,
-
-    // jhiPrefix: config.jhiPrefix,
-    // entitySuffix: config.entitySuffix,
-    // dtoSuffix: config.dtoSuffix,
-    // packageName: config.packageName,
-    microserviceName: ({ builtIn }) => (!builtIn && config.applicationType === APPLICATION_TYPE_MICROSERVICE ? config.baseName : undefined),
-  });
-  if ((entity as any).searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
-    // If the entity belongs to this application and searchEngine is true.
-    if (config.searchEngine && config.searchEngine !== NO_SEARCH_ENGINE) {
-      // Replace with the searchEngine from the application.
-      entity.searchEngine = config.searchEngine;
-    } else {
-      entity.searchEngine = NO_SEARCH_ENGINE;
-      this?.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
-    }
-  }
   return entity;
 }
 
@@ -541,11 +502,6 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
-  entity.implementsEagerLoadApis = // Cassandra doesn't provide *WithEagerRelationships apis
-    !([CASSANDRA, NEO4J] as string[]).includes(entity.databaseType) &&
-    // Only sql, mongodb and couchbase provide *WithEagerRelationships apis for imperative implementation
-    (entity.reactive || ([SQL, MONGODB, COUCHBASE] as string[]).includes(entity.databaseType)) &&
-    entity.relationshipsContainEagerLoad;
   entity.eagerRelations = entity.relationships.filter(rel => rel.relationshipEagerLoad);
   // Deprecated: kept for blueprints, not used by the generator anymore.
   entity.regularEagerRelations = entity.eagerRelations.filter(rel => rel.id !== true);

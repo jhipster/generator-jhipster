@@ -25,8 +25,6 @@ import { type MutateDataParam, mutateData } from '../../../lib/utils/object.ts';
 import { formatDateForChangelog } from '../../base/support/timestamp.ts';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../../generator-constants.ts';
 import type BaseApplicationGenerator from '../generator.ts';
-import { getDatabaseTypeData } from '../generators/database-bootstrap/support/index.ts';
-import { loadRequiredConfigIntoEntity } from '../support/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Field as BaseApplicationField,
@@ -94,14 +92,11 @@ export function createUserEntity(
     ...customUserData,
   };
 
-  loadRequiredConfigIntoEntity(user, application);
-  // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
-
   const oauth2 = application.authenticationTypeOauth2;
-  // If oauth2 or databaseType is cassandra, force type string, otherwise keep undefined for later processing.
-  const userIdType = oauth2 || user.databaseType === CASSANDRA ? TYPE_STRING : undefined;
-  const fieldValidateRulesMaxlength = userIdType === TYPE_STRING ? 100 : undefined;
+  // If oauth2 or databaseType is cassandra, force type string, otherwise the default id type of the application.
+  const userIdString = oauth2 || (application as { databaseType?: string }).databaseType === CASSANDRA;
+  const userIdType = userIdString ? TYPE_STRING : application.defaultIdType;
+  const fieldValidateRulesMaxlength = userIdString ? 100 : undefined;
 
   addOrExtendFields(user.fields!, [
     {
@@ -250,7 +245,7 @@ export function createUserManagementEntity(
       hidden: true,
       id: false,
       // Set id type fallback since it's not id anymore and will not be calculated.
-      fieldType: ({ fieldType }) => fieldType ?? getDatabaseTypeData(application.databaseType).defaultPrimaryKeyType,
+      fieldType: ({ fieldType }) => fieldType ?? application.defaultIdType,
     },
     { fieldName: 'firstName', hideListView: true },
     { fieldName: 'lastName', hideListView: true },
@@ -358,10 +353,6 @@ export function createAuthorityEntity(
     entityRestLayer: application.backendTypeSpringBoot && !application.applicationTypeMicroservice,
     ...customAuthorityData,
   };
-
-  loadRequiredConfigIntoEntity(authorityEntity, application);
-  // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
 
   addOrExtendFields(authorityEntity.fields!, [
     {
