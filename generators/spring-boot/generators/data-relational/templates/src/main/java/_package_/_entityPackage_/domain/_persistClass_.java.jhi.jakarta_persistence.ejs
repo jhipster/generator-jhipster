@@ -90,7 +90,7 @@ import org.hibernate.type.SqlTypes;
     @ManyToMany(fetch = FetchType.LAZY<% if (!relationship.ownerSide) { %>, mappedBy = "<%- relationship.otherRelationship.propertyName %>"<% } %>)
     <%_ if (relationship.ownerSide) { _%>
       <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
-    @NotNull
+    @NotEmpty
       <%_ } _%>
     @JoinTable(name = "<%- relationship.joinTable.name %>",
                joinColumns = <%- relationship.joinTable.joinColumns.length > 1 ? '{' : '' %>
