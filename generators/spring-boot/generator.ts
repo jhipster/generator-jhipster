@@ -680,13 +680,19 @@ ${classProperties
           });
         }
 
-        // The blob of a file of the test has one byte, or a size within its minbytes and maxbytes.
+        // The blob of a file of the test has one byte, or a size within its minbytes and maxbytes, wrapped in a ByteBuffer
+        // with Cassandra.
         for (const field of entity.fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText)) {
           const minBytes = field.fieldValidationMinBytes ? Number(field.fieldValidateRulesMinbytes) : 0;
           const maxBytes = field.fieldValidationMaxBytes ? Number(field.fieldValidateRulesMaxbytes) : Infinity;
+          const size = Math.min(Math.max(1, minBytes), maxBytes);
+          const [sample, updated] = [`TestUtil.createByteArray(${size}, "0")`, `TestUtil.createByteArray(${size}, "1")`].map(bytes =>
+            field.fieldTypeBytes ? bytes : `ByteBuffer.wrap(${bytes})`,
+          );
           mutateData(field, {
             __override__: false,
-            sbTestBlobSize: Math.min(Math.max(1, minBytes), maxBytes),
+            sbTestDefaultValue: sample,
+            sbTestUpdatedValue: updated,
             // The byte arrays are validated by their size, a ByteBuffer is not.
             sbTestRejectedBlobSizes:
               field.fieldTypeBytes ? [...(minBytes > 0 ? [minBytes - 1] : []), ...(Number.isFinite(maxBytes) ? [maxBytes + 1] : [])] : [],
