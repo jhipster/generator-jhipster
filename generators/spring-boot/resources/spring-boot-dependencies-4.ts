@@ -18,13 +18,12 @@
  */
 /**
  * The versions Spring Boot manages, from the spring-boot-dependencies POM that update-spring-boot stores in
- * spring-boot-dependencies-4.json. The JSON holds each managed version once, as a property: `versions` is derived from it.
+ * spring-boot-dependencies-4.json. The JSON holds each managed version once, as a property: `versions` is derived here,
+ * without the Maven support, whose XML parser would load with this file.
  */
 import { readFileSync } from 'node:fs';
 
 import { parse } from 'yaml';
-
-import { getPomVersionProperties } from '../../java-simple-application/generators/maven/support/dependabot-maven.ts';
 
 import springBootDependencies4 from './spring-boot-dependencies-4.json' with { type: 'json' };
 
@@ -41,6 +40,14 @@ const overrides: Partial<SpringBootDependenciesOverrides> | null = parse(
   readFileSync(new URL('./spring-boot-dependencies-4-overrides.yml', import.meta.url), 'utf8'),
 );
 
+/** The versions of the properties, keyed by the property without `.version`. */
+const versionsOfProperties = (properties: Record<string, string>): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(properties)
+      .filter(([property]) => property.endsWith('.version'))
+      .map(([property, value]) => [property.slice(0, -'.version'.length), value]),
+  );
+
 const properties = overrides?.properties ?? {};
 
 /**
@@ -49,18 +56,14 @@ const properties = overrides?.properties ?? {};
 export const springBootDependenciesOverrides: SpringBootDependenciesOverrides = {
   dependencies: overrides?.dependencies ?? {},
   properties,
-  versions: Object.fromEntries(
-    Object.entries(properties)
-      .filter(([property]) => property.endsWith('.version'))
-      .map(([property, value]) => [property.slice(0, -'.version'.length), value]),
-  ),
+  versions: versionsOfProperties(properties),
 };
 
 const { artifactId, version, properties: managedProperties, modules } = springBootDependencies4;
 
 export default {
   /** The managed versions, keyed by their property without `.version`, and the Spring Boot version keyed by its artifactId. */
-  versions: getPomVersionProperties({ project: { artifactId, version, properties: managedProperties } }),
+  versions: { [artifactId]: version, ...versionsOfProperties(managedProperties) },
   properties: managedProperties,
   modules,
 };
