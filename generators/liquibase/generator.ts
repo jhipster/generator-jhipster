@@ -891,7 +891,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     }
 
     const seed = `${entity.entityClass}-liquibase`;
-    this.resetEntitiesFakeData(seed);
 
     entity.liquibaseFakeData = [];
 
