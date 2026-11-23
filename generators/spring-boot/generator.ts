@@ -749,9 +749,6 @@ ${classProperties
           }
         }
       },
-      resetFakeDataSeed() {
-        this.resetEntitiesFakeData('server');
-      },
       async writeFiles({ application }) {
         return this.writeFiles({
           sections: serverFiles,
