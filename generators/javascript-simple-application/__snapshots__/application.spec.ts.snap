@@ -29,6 +29,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
     "",
     ".blueprint/**/",
   ],
+  "skipJhipsterDependencies": undefined,
   "typescriptEslint": true,
 }
 `;

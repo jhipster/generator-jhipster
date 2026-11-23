@@ -50,7 +50,7 @@ import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language
 export default class Settings implements OnInit {
   readonly success = signal(false);
 <%_ if (enableTranslation) { _%>
-  languages = LANGUAGES;
+  readonly languages = LANGUAGES;
 <%_ } _%>
 
   readonly settingsModel = signal({ firstName: '', lastName: '', email: '', langKey: '' });
@@ -66,7 +66,7 @@ export default class Settings implements OnInit {
       email(path.email);
     },
     // A submit marks the fields as touched and sends nothing while the form is invalid.
-    { submission: { action: async () => this.save() } },
+    { submission: { action: () => this.save() } },
   );
 
   readonly login = signal<string | undefined>(undefined);

@@ -218,8 +218,13 @@ import java.time.format.DateTimeFormatter;
 <%_ if (anyFieldIsBlobDerived) { _%>
 import java.util.Base64;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch && !reactive && paginationNo) { _%>
+<%_ if ((searchEngineElasticsearch && !reactive && paginationNo) || (jpaMetamodelFiltering && !reactive)) { _%>
 import java.util.stream.Stream;
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
+import java.net.URI;
+import java.util.Collections;
+import org.springframework.web.util.UriBuilder;
 <%_ } _%>
 import java.util.List;
 <%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
@@ -898,9 +903,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ for (field of fieldsToTest) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+  if (field.fieldTypeFloat) { %>.toString())<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1080,9 +1085,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ for (field of fieldsToTest) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- field.fieldName %>").value(<%- reactive ? 'is(' : '' %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+  if (field.fieldTypeFloat) { %>.toString())<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1104,12 +1109,15 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
         <%- primaryKey.type %> id = <%- persistInstance %>.<%- primaryKey.propertySupplierName %>();
 
-        default<%- entityClass %>Filtering("<%- primaryKey.name %>.equals=" + id, "<%- primaryKey.name %>.notEquals=" + id);
+        default<%- entityClass %>ShouldBeFound("<%- primaryKey.name %>.equals", id);
+        default<%- entityClass %>ShouldNotBeFound("<%- primaryKey.name %>.notEquals", id);
 
   <%_ if (primaryKey.typeLong || primaryKey.typeInteger) { _%>
-        default<%- entityClass %>Filtering("<%- primaryKey.name %>.greaterThanOrEqual=" + id, "<%- primaryKey.name %>.greaterThan=" + id);
+        default<%- entityClass %>ShouldBeFound("<%- primaryKey.name %>.greaterThanOrEqual", id);
+        default<%- entityClass %>ShouldNotBeFound("<%- primaryKey.name %>.greaterThan", id);
 
-        default<%- entityClass %>Filtering("<%- primaryKey.name %>.lessThanOrEqual=" + id, "<%- primaryKey.name %>.lessThan=" + id);
+        default<%- entityClass %>ShouldBeFound("<%- primaryKey.name %>.lessThanOrEqual", id);
+        default<%- entityClass %>ShouldNotBeFound("<%- primaryKey.name %>.lessThan", id);
   <%_ } _%>
     }
 
@@ -1122,10 +1130,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> equals to
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.equals=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
-            "<%- searchBy.fieldName %>.equals=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
-        );
+        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.equals", <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>, <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>);
     }
 
     @Test<%- transactionalAnnotation %>
@@ -1134,10 +1139,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> in
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.in=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %> + "," + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
-            "<%- searchBy.fieldName %>.in=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
-        );
+        default<%- entityClass %>ShouldBeFound("<%- searchBy.fieldName %>.in", <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>, <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>);
+        default<%- entityClass %>ShouldNotBeFound("<%- searchBy.fieldName %>.in", <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>);
     }
 
     @Test<%- transactionalAnnotation %>
@@ -1146,10 +1149,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is not null
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.specified=true",
-            "<%- searchBy.fieldName %>.specified=false"
-        );
+        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.specified", true, false);
     }
     <%_ } _%>
     <%_ if (searchBy.filterableField && searchBy.fieldTypeString) { _%>
@@ -1158,11 +1158,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> contains
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.contains=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
-            "<%- searchBy.fieldName %>.contains=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
-        );
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> contains, a longer text than the value being never contained
+        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.contains", <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>, <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %> + "x");
     }
 
     @Test<%- transactionalAnnotation %>
@@ -1170,11 +1167,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> does not contain
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.doesNotContain=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
-            "<%- searchBy.fieldName %>.doesNotContain=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
-        );
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> does not contain, a longer text than the value being never contained
+        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.doesNotContain", <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %> + "x", <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>);
     }
 
     <%_ } _%>
@@ -1192,10 +1186,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is greater than or equal to
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.greaterThanOrEqual=" + <%- defaultValue %>,
-            "<%- searchBy.fieldName %>.greaterThanOrEqual=" + <%- biggerValue %>
-        );
+        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.greaterThanOrEqual", <%- defaultValue %>, <%- biggerValue %>);
     }
 
     @Test<%- transactionalAnnotation %>
@@ -1204,10 +1195,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is less than or equal to
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.lessThanOrEqual=" + <%- defaultValue %>,
-            "<%- searchBy.fieldName %>.lessThanOrEqual=" + <%- smallerValue %>
-        );
+        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.lessThanOrEqual", <%- defaultValue %>, <%- smallerValue %>);
     }
 
     @Test<%- transactionalAnnotation %>
@@ -1216,10 +1204,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is less than
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.lessThan=" + <%- biggerValue %>,
-            "<%- searchBy.fieldName %>.lessThan=" + <%- defaultValue %>
-        );
+        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.lessThan", <%- biggerValue %>, <%- defaultValue %>);
     }
 
     @Test<%- transactionalAnnotation %>
@@ -1228,10 +1213,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is greater than
-        default<%- entityClass %>Filtering(
-          "<%- searchBy.fieldName %>.greaterThan=" + <%- smallerValue %>,
-          "<%- searchBy.fieldName %>.greaterThan=" + <%- defaultValue %>
-        );
+        default<%- entityClass %>Filtering("<%- searchBy.fieldName %>.greaterThan", <%- smallerValue %>, <%- defaultValue %>);
     }
 
     <%_ } _%>
@@ -1279,7 +1261,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- relationship.otherEntity.primaryKey.type %> <%- relationship.relationshipFieldName %>Id = <%- relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
     <%_ } _%>
         // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- relationship.relationshipFieldName %>Id
-        default<%- entityClass %>ShouldBeFound("<%- relationship.relationshipFieldName %>Id.equals=" + <%- relationship.relationshipFieldName %>Id);
+        default<%- entityClass %>ShouldBeFound("<%- relationship.relationshipFieldName %>Id.equals", <%- relationship.relationshipFieldName %>Id);
 
     <%_ const initInvalidPrimaryKey = {
           String: '"invalid-id"',
@@ -1288,21 +1270,21 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         }[relationship.otherEntity.primaryKey.type];
     _%>
         // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- initInvalidPrimaryKey %>
-        default<%- entityClass %>ShouldNotBeFound("<%- relationship.relationshipFieldName %>Id.equals=" + <%- initInvalidPrimaryKey %>);
+        default<%- entityClass %>ShouldNotBeFound("<%- relationship.relationshipFieldName %>Id.equals", <%- initInvalidPrimaryKey %>);
     }
 
   <%_ } _%>
-    private void default<%- entityClass %>Filtering (String shouldBeFound, String shouldNotBeFound) <%- reactive ? '' : 'throws Exception ' %>{
-        default<%- entityClass %>ShouldBeFound(shouldBeFound);
-        default<%- entityClass %>ShouldNotBeFound(shouldNotBeFound);
+    private void default<%- entityClass %>Filtering(String filter, Object shouldBeFound, Object shouldNotBeFound) <%- reactive ? '' : 'throws Exception ' %>{
+        default<%- entityClass %>ShouldBeFound(filter, shouldBeFound);
+        default<%- entityClass %>ShouldNotBeFound(filter, shouldNotBeFound);
     }
 
     /**
      * Executes the search, and checks that the default entity is returned.
      */
   <%_ if (reactive) { _%>
-    private void default<%- entityClass %>ShouldBeFound(String filter) {
-        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter)
+    private void default<%- entityClass %>ShouldBeFound(String filter, Object... values) {
+        webTestClient.get().uri(uriBuilder -> filterUri(uriBuilder, ENTITY_API_URL, filter, values))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1312,9 +1294,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if
       (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
       if (field.fieldTypeLong) { %>.intValue()<% } else
-      if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+      if (field.fieldTypeFloat) { %>.toString())<% } else
       if (field.fieldTypeBigDecimal) { %>)<% } else
       if (field.fieldTypeZonedDateTime) { %>)<% } else
       if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1328,7 +1310,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>;
 
         // Check, that the count call also returns 1
-        webTestClient.get().uri(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter)
+        webTestClient.get().uri(uriBuilder -> filterUri(uriBuilder, ENTITY_API_URL + "/count", filter, values))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -1338,8 +1320,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
                 .value(is(1));
     }
   <%_ } else { _%>
-    private void default<%- entityClass %>ShouldBeFound(String filter) throws Exception {
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter))
+    private void default<%- entityClass %>ShouldBeFound(String filter, Object... values) throws Exception {
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc").param(filter, filterValues(values)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
     <%_ const primaryKeyConversion = {
@@ -1350,9 +1332,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% for (const field of fieldsToTest) { %>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
     if (field.fieldTypeLong) { %>.intValue()<% } else
-    if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+    if (field.fieldTypeFloat) { %>.toString())<% } else
     if (field.fieldTypeBigDecimal) { %>)<% } else
     if (field.fieldTypeZonedDateTime) { %>)<% } else
     if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1365,7 +1347,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     ) { %>.toString()<% } %>)))<% } %>;
 
         // Check, that the count call also returns 1
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc").param(filter, filterValues(values)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("1"));
@@ -1376,8 +1358,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
      * Executes the search, and checks that the default entity is not returned.
      */
   <%_ if (reactive) { _%>
-    private void default<%- entityClass %>ShouldNotBeFound(String filter) {
-        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter)
+    private void default<%- entityClass %>ShouldNotBeFound(String filter, Object... values) {
+        webTestClient.get().uri(uriBuilder -> filterUri(uriBuilder, ENTITY_API_URL, filter, values))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1387,7 +1369,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .jsonPath("$").isEmpty();
 
         // Check, that the count call also returns 0
-        webTestClient.get().uri(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter)
+        webTestClient.get().uri(uriBuilder -> filterUri(uriBuilder, ENTITY_API_URL + "/count", filter, values))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1397,18 +1379,39 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .value(is(0));
     }
   <%_ } else { _%>
-    private void default<%- entityClass %>ShouldNotBeFound(String filter) throws Exception {
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter))
+    private void default<%- entityClass %>ShouldNotBeFound(String filter, Object... values) throws Exception {
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc").param(filter, filterValues(values)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc").param(filter, filterValues(values)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
+    }
+  <%_ } _%>
+  <%_ if (reactive) { _%>
+
+    /**
+     * The URI of a search, with the values of the filter as URI variables: they are encoded as a whole, a "+" or a "&" included.
+     */
+    private static URI filterUri(UriBuilder uriBuilder, String path, String filter, Object... values) {
+        return uriBuilder
+            .path(path)
+            .queryParam("sort", "<%- primaryKey.name %>,desc")
+            .queryParam(filter, Collections.nCopies(values.length, "{value}"))
+            .build(values);
+    }
+  <%_ } else { _%>
+
+    /**
+     * The values of a filter as request parameters, a value of the "in" filter in a parameter of its own.
+     */
+    private static String[] filterValues(Object... values) {
+        return Stream.of(values).map(String::valueOf).toArray(String[]::new);
     }
   <%_ } _%>
 
@@ -2006,9 +2009,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ for (field of fieldsToTest) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+  if (field.fieldTypeFloat) { %>.toString())<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else

@@ -40,12 +40,14 @@ import {
   getChangelogDateForBuiltInEntities,
 } from '../../internal/utils.ts';
 import {
+  addEntitiesOtherRelationships,
   addFakerToEntity,
   derivedPrimaryKeyProperties,
   hasCyclicRequiredRelationship,
   isRequiredRelationship,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
+  needsOtherRelationship,
   prepareCommonFieldForTemplates,
   prepareEntity as prepareEntityForTemplates,
   prepareEntityPrimaryKeyForTemplates,
@@ -328,6 +330,20 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
               (relationship.relationshipType !== 'one-to-many' && relationship.relationshipSide === 'left');
           }
         }
+      },
+      addOtherRelationships({ application, entitiesToLoad }) {
+        // The other side every database needs, and the one of a one-to-many but where the database tells it has none
+        // (relationshipsHaveBackReference, which an application without the server has not): the server bootstrap adds
+        // the one of the relationships of its database.
+        const { relationshipsHaveBackReference } = application as { relationshipsHaveBackReference?: boolean };
+        this.validateResult(
+          addEntitiesOtherRelationships(
+            entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap),
+            (entity, relationship) =>
+              needsOtherRelationship(entity, relationship) ||
+              (relationship.relationshipType === 'one-to-many' && relationshipsHaveBackReference !== false),
+          ),
+        );
       },
     });
   }

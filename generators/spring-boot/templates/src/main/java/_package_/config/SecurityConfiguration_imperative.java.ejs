@@ -114,7 +114,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.boot.restclient.RestTemplateBuilder;
+import org.springframework.web.client.RestClient;
 import <%- packageName %>.security.oauth2.CustomClaimConverter;
 <%_ } _%>
 <%_ if (!skipClient) { _%>
@@ -433,7 +433,7 @@ public class SecurityConfiguration {
     JwtDecoder jwtDecoder(
   <%_ if (!applicationTypeMicroservice) { _%>
         ClientRegistrationRepository clientRegistrationRepository,
-        RestTemplateBuilder restTemplateBuilder
+        RestClient.Builder restClientBuilder
   <%_ } _%>) {
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
@@ -444,7 +444,7 @@ public class SecurityConfiguration {
         jwtDecoder.setJwtValidator(withAudience);
   <%_ if (!applicationTypeMicroservice) { _%>
         jwtDecoder.setClaimSetConverter(
-            new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplateBuilder.build())
+            new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restClientBuilder.build())
         );
   <%_ } _%>
 

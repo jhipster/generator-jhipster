@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.ts';
+import { entityOptions, validations } from '../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../lib/utils/index.ts';
 import { lowerFirst } from '../../../lib/utils/string-utils.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
@@ -25,7 +25,6 @@ import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRe
 
 import { stringifyApplicationData } from './debug.ts';
 
-const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;
 const {
   Validations: { REQUIRED },
@@ -47,8 +46,6 @@ export default function prepareRelationship(
     !ignoreMissingRequiredRelationship &&
     !relationship.otherEntity.embedded &&
     !relationship.relationshipIgnoreBackReference &&
-    entityWithConfig.databaseType !== NEO4J &&
-    entityWithConfig.databaseType !== DATABASE_NO &&
     (relationshipOneToMany || !relationship.ownerSide)
   ) {
     if (otherEntity.builtInUser) {

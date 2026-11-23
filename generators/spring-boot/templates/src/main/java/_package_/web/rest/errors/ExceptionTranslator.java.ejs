@@ -147,7 +147,15 @@ _%>
     ) {
         LOG.debug("Converting Exception to Problem Details:", ex);
         ProblemDetailWithCause pdCause = wrapAndCustomizeProblem(ex, request);
-        return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
+        // An Error, like the one of an assertion, is not an Exception: it is wrapped to be handled as one
+        Exception exception = ex instanceof Exception e ? e : new IllegalStateException(ex);
+<%_ if (reactive) { _%>
+        if (exception != ex && request.getResponse().isCommitted()) {
+            // The response cannot become a problem detail anymore: it ends with the Error itself, not its wrapper
+            return Mono.error(ex);
+        }
+<%_ } _%>
+        return handleExceptionInternal(exception, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
     }
 
     @SuppressWarnings("java:S2638")
@@ -404,6 +412,9 @@ _%>
     }
 
     private String getProductionErrorDetails(Throwable err) {
+        // The message of an Error, like a class not found, can tell the internals of the application.
+        // A servlet application gets the Error as the cause of the ServletException of the DispatcherServlet.
+        if (err instanceof Error || err.getCause() instanceof Error) return "Unexpected runtime exception";
         if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
 <%_ if (!databaseTypeNo) { _%>
         if (isInvalidSortProperty(err)) return "Invalid sort property";

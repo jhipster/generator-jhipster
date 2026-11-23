@@ -26,10 +26,11 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
 import { AccountService } from 'app/core/auth';
-import { LoginService } from 'app/login/login.service';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
+
+import { LoginService } from './login.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-login',
@@ -60,7 +61,7 @@ export default class Login implements OnInit, AfterViewInit {
       required(path.password);
     },
     // A submit marks the fields as touched and sends nothing while the form is invalid.
-    { submission: { action: async () => this.login() } },
+    { submission: { action: () => this.login() } },
   );
 
   private readonly accountService = inject(AccountService);
