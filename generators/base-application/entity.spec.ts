@@ -19,6 +19,8 @@
 
 import { describe, expect, it } from 'expect-node';
 
+import { mutateData } from '../../lib/utils/object.ts';
+
 import * as entityData from './entity.ts';
 
 import { mutateMockedCompleteData, mutateMockedData, prepareMutationTest } from '#testing';
@@ -30,6 +32,32 @@ describe('mutation object test', () => {
     });
     it(`expects ${name} not to override existing properties`, () => {
       expect(Object.keys(mutateMockedCompleteData(...data))).toHaveLength(0);
+    });
+  }
+});
+
+describe('mutateField fake data range', () => {
+  const fakeDataRange = (field: Record<string, unknown>) => {
+    const data: Record<string, any> = { fieldName: 'value', ...field };
+    mutateData(data, entityData.mutateField);
+    return [data.fieldFakeDataMin, data.fieldFakeDataMax];
+  };
+
+  for (const [title, field, expected] of [
+    ['an Integer without min nor max', { fieldType: 'Integer' }, [0, 32767]],
+    ['a Long with both', { fieldType: 'Long', fieldValidateRulesMin: 3, fieldValidateRulesMax: 9 }, [3, 9]],
+    ['an Integer with a max alone', { fieldType: 'Integer', fieldValidateRulesMax: -5 }, [-2147483647, -5]],
+    ['an Integer with a min alone', { fieldType: 'Integer', fieldValidateRulesMin: 40000 }, [40000, 2147483647]],
+    ['a Long with a min alone', { fieldType: 'Long', fieldValidateRulesMin: 40000 }, [40000, Number.MAX_SAFE_INTEGER]],
+    ['a Long with a max alone', { fieldType: 'Long', fieldValidateRulesMax: 0 }, [-Number.MAX_SAFE_INTEGER, 0]],
+    ['a Float with a max alone', { fieldType: 'Float', fieldValidateRulesMax: -5 }, [-167772.16, -5]],
+    ['a Double with a min alone', { fieldType: 'Double', fieldValidateRulesMin: 1 }, [1, Number.MAX_SAFE_INTEGER / 100]],
+    ['a BigDecimal with a max alone', { fieldType: 'BigDecimal', fieldValidateRulesMax: 10 }, [-Number.MAX_SAFE_INTEGER / 100, 10]],
+    ['a Long with a min given as a text', { fieldType: 'Long', fieldValidateRulesMin: '40000' }, [40000, Number.MAX_SAFE_INTEGER]],
+    ['a String', { fieldType: 'String', fieldValidateRulesMax: -5 }, [undefined, undefined]],
+  ] as const) {
+    it(`gives the range of ${title}`, () => {
+      expect(fakeDataRange(field)).toEqual(expected);
     });
   }
 });

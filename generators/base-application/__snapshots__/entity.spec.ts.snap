@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`mutation object test expects FAKE_DATA_NUMBER_RANGE to match snapshot 1`] = `{}`;
+
 exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
 {
   "clientRootFolder": "",
@@ -23,6 +25,8 @@ exports[`mutation object test expects mutateField to match snapshot 1`] = `
   "blobContentTypeImage": false,
   "blobContentTypeText": false,
   "fieldApiDescription": "documentation",
+  "fieldFakeDataMax": undefined,
+  "fieldFakeDataMin": undefined,
   "fieldIsEnum": true,
   "fieldNameCapitalized": "FieldName",
   "fieldNameHumanized": "Field Name",
