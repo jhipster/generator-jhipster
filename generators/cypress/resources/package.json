@@ -7,7 +7,7 @@
     "cypress": "16.3.0",
     "cypress-audit": "1.1.0",
     "cypress-terminal-report": "7.4.0",
-    "eslint-plugin-cypress": "7.0.5",
+    "eslint-plugin-cypress": "7.1.0",
     "lighthouse": "13.6.0",
     "monocart-coverage-reports": "3.2.1"
   },
