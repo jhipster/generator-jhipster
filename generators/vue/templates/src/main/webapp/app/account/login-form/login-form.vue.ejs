@@ -58,7 +58,7 @@
             <small class="form-text text-danger" v-if="submitted && !password">{{ t$('entity.validation.required') }}</small>
           </b-form-group>
 <%_ if (authenticationUsesRememberMe) { _%>
-          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked>
+          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe">
             <span>{{ t$('login.form.rememberme') }}</span>
           </b-form-checkbox>
 <%_ } _%>
