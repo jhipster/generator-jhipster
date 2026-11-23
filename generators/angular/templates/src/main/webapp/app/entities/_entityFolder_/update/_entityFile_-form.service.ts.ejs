@@ -35,7 +35,7 @@
     ];
     const formValueKind = field => formValueKinds.find(([, matches]) => matches(field))?.[0] ?? 'text';
     const formFields = fields.flatMap(field => field.fieldTypeBinary && !field.blobContentTypeText
-      ? [{ field, fieldName: field.fieldName, kind: 'text' }, { field, fieldName: `${field.fieldName}ContentType`, kind: 'text', contentType: true }]
+      ? [{ field, fieldName: field.fieldName, kind: 'text' }, { field, fieldName: field.contentTypeFieldName, kind: 'text', contentType: true }]
       : [{ field, fieldName: field.fieldName, kind: formValueKind(field) }]);
     const formRelationships = relationships.filter(relationship => relationship.persistableRelationship);
     const editableId = !primaryKey.autoGenerate && !builtInUserManagement;
