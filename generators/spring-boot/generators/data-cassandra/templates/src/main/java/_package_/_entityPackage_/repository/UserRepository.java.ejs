@@ -75,6 +75,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 <%_ } else { _%>
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 <%_ } _%>
 import java.util.Set;
@@ -272,7 +273,7 @@ public class UserRepository {
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
 <%_ } _%>
     public <%- optionalOrMono %><<%- user.persistClass %>> findOneByEmailIgnoreCase(String email) {
-        BoundStatement stmt = findOneByEmailStmt.bind().setString("email", email.toLowerCase());
+        BoundStatement stmt = findOneByEmailStmt.bind().setString("email", email.toLowerCase(Locale.ENGLISH));
         return findOneFromIndex(stmt);
     }
 
@@ -324,7 +325,7 @@ public class UserRepository {
                 }
                 if (!StringUtils.isEmpty(oldUser.getEmail()) && !oldUser.getEmail().equalsIgnoreCase(user.getEmail())) {
                     deleteOps = deleteOps.mergeWith(
-                        session.execute(deleteByEmailStmt.bind().setString("email", oldUser.getEmail().toLowerCase()))
+                        session.execute(deleteByEmailStmt.bind().setString("email", oldUser.getEmail().toLowerCase(Locale.ENGLISH)))
                     );
                 }
                 return deleteOps;
@@ -348,7 +349,7 @@ public class UserRepository {
                     .setString("login", user.getLogin())
                     .setString("id", user.getId()));
                 batch.addStatement(insertByEmailStmt.bind()
-                    .setString("email", user.getEmail().toLowerCase())
+                    .setString("email", user.getEmail().toLowerCase(Locale.ENGLISH))
                     .setString("id", user.getId()));
                 return session.execute(batch.build());
             }))
@@ -381,7 +382,7 @@ public class UserRepository {
                 session.execute(deleteByLoginStmt.bind().setString("login", oldUser.getLogin()));
             }
             if (!StringUtils.isEmpty(oldUser.getEmail()) && !oldUser.getEmail().equalsIgnoreCase(user.getEmail())) {
-                session.execute(deleteByEmailStmt.bind().setString("email", oldUser.getEmail().toLowerCase()));
+                session.execute(deleteByEmailStmt.bind().setString("email", oldUser.getEmail().toLowerCase(Locale.ENGLISH)));
             }
         }
         BatchStatementBuilder batch = BatchStatement.builder(DefaultBatchType.LOGGED);
@@ -397,7 +398,7 @@ public class UserRepository {
         }
   <%_ } _%>
         batch.addStatement(insertByLoginStmt.bind().setString("login", user.getLogin()).setString("id", user.getId()));
-        batch.addStatement(insertByEmailStmt.bind().setString("email", user.getEmail().toLowerCase()).setString("id", user.getId()));
+        batch.addStatement(insertByEmailStmt.bind().setString("email", user.getEmail().toLowerCase(Locale.ENGLISH)).setString("id", user.getId()));
         session.execute(batch.build());
         return user;
     }
@@ -415,7 +416,7 @@ public class UserRepository {
         }
 <%_ } _%>
         batch.addStatement(deleteByLoginStmt.bind().setString("login", user.getLogin()));
-        batch.addStatement(deleteByEmailStmt.bind().setString("email", user.getEmail().toLowerCase()));
+        batch.addStatement(deleteByEmailStmt.bind().setString("email", user.getEmail().toLowerCase(Locale.ENGLISH)));
 <%_ if (reactive) { _%>
         return session.execute(batch.build()).then();
 <%_ } else { _%>

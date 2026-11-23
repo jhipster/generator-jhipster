@@ -27,6 +27,7 @@ import <%- user.entityAbsoluteClass %>;
 import <%- packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%- packageName %>.repository.UserRepository;
+import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -52,6 +53,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 <%_ } _%>
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 <%_ if (databaseTypeCouchbase) { _%>
@@ -222,5 +224,29 @@ class RegistrationServiceIT {
         // Verify Elasticsearch mock
         verify(spiedUserSearchRepository, never()).delete<%- reactive ? '' : 'FromIndex' %>(user);
 <%_ } _%>
+    }
+
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void assertThatRegisterUserLowercasesLoginAndEmailWhateverTheDefaultLocale() {
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
+        userDTO.setLogin(DEFAULT_LOGIN.toUpperCase(Locale.ENGLISH));
+        userDTO.setEmail(DEFAULT_EMAIL.toUpperCase(Locale.ENGLISH));
+        userDTO.setLangKey("en");
+
+        Locale defaultLocale = Locale.getDefault();
+        // In Turkish, "I".toLowerCase() is a dotless "ı", which the login pattern rejects.
+        Locale.setDefault(Locale.forLanguageTag("tr-TR"));
+        <%- user.persistClass %> registeredUser;
+        try {
+            registeredUser = registrationService.registerUser(userDTO, RandomStringUtils.insecure().nextAlphanumeric(60))<%- reactorBlock %>;
+        } finally {
+            Locale.setDefault(defaultLocale);
+        }
+
+        assertThat(registeredUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(registeredUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
     }
 }

@@ -258,11 +258,11 @@ public class UserService {
     <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
     <%_ } _%>
-        user.setLogin(userDTO.getLogin().toLowerCase());
+        user.setLogin(userDTO.getLogin().toLowerCase(Locale.ENGLISH));
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         if (userDTO.getEmail() != null) {
-            user.setEmail(userDTO.getEmail().toLowerCase());
+            user.setEmail(userDTO.getEmail().toLowerCase(Locale.ENGLISH));
         }
     <%_ if (databaseTypeSql || databaseTypeCouchbase || databaseTypeMongodb || databaseTypeNeo4j) { _%>
         user.setImageUrl(userDTO.getImageUrl());
@@ -364,11 +364,11 @@ public class UserService {
     <%_ if (authenticationTypeSession && generateUserManagement && !reactive) { _%>
                 <%- user.adminUserDto %> previousUser = new <%- user.adminUserDto %>(user);
     <%_ } _%>
-                user.setLogin(userDTO.getLogin().toLowerCase());
+                user.setLogin(userDTO.getLogin().toLowerCase(Locale.ENGLISH));
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
                 if (userDTO.getEmail() != null) {
-                    user.setEmail(userDTO.getEmail().toLowerCase());
+                    user.setEmail(userDTO.getEmail().toLowerCase(Locale.ENGLISH));
                 }
     <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
                 user.setImageUrl(userDTO.getImageUrl());
@@ -510,7 +510,7 @@ public class UserService {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 if (email != null) {
-                    user.setEmail(email.toLowerCase());
+                    user.setEmail(email.toLowerCase(Locale.ENGLISH));
                 }
                 user.setLangKey(langKey);
   <%_ if (user.hasImageField) { _%>
@@ -909,7 +909,7 @@ public class UserService {
         String sub = String.valueOf(details.get("sub"));
         String username = null;
         if (details.get("preferred_username") != null) {
-            username = ((String) details.get("preferred_username")).toLowerCase();
+            username = ((String) details.get("preferred_username")).toLowerCase(Locale.ENGLISH);
         }
         // handle resource server JWT, where sub claim is email and uid is ID
         if (details.get("uid") != null) {
@@ -935,7 +935,7 @@ public class UserService {
             activated = (Boolean) details.get("email_verified");
         }
         if (details.get("email") != null) {
-            user.setEmail(((String) details.get("email")).toLowerCase());
+            user.setEmail(((String) details.get("email")).toLowerCase(Locale.ENGLISH));
         } else if (sub.contains("|") && (username != null && username.contains("@"))) {
             // special handling for Auth0
             user.setEmail(username);
@@ -952,7 +952,7 @@ public class UserService {
             } else if (locale.contains("-")) {
                 locale = locale.substring(0, locale.indexOf('-'));
             }
-            user.setLangKey(locale.toLowerCase());
+            user.setLangKey(locale.toLowerCase(Locale.ENGLISH));
         } else {
             // set langKey to default if not specified by IdP
             user.setLangKey(Constants.DEFAULT_LANGUAGE);
