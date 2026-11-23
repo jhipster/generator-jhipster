@@ -66,7 +66,7 @@ export default class Logs implements OnInit {
   ];
   readonly isLoading = signal(false);
   readonly filter = signal('');
-  sortState = sortStateSignal({ predicate: 'name', order: 'asc' });
+  readonly sortState = sortStateSignal({ predicate: 'name', order: 'asc' });
   readonly filteredAndOrderedLoggers = computed<Log[] | undefined>(() => {
     let data = this.loggers() ?? [];
     const filter = this.filter();

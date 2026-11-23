@@ -39,7 +39,7 @@ import { ConfigurationService } from './configuration.service';
 export default class Configuration implements OnInit {
   readonly allSections = signal<ConfigurationSection[] | undefined>(undefined);
   readonly filter = signal('');
-  sortState = sortStateSignal({ predicate: 'key', order: 'asc' });
+  readonly sortState = sortStateSignal({ predicate: 'key', order: 'asc' });
   readonly sections = computed(() => {
     const filter = this.filter().toLowerCase();
     const { order, predicate } = this.sortState();
