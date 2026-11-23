@@ -30,7 +30,7 @@
 
       <dl class="row-md jh-entity-details">
 <%_ for (const field of fields.filter(field => !field.hidden && !(builtInUserManagement && field.fieldName === 'activated'))) { _%>
-  <%_ const { fieldName, fieldType } = field; _%>
+  <%_ const { fieldName, fieldType, contentTypeFieldName } = field; _%>
         <dt><span<% if (field.documentation && enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else if (field.documentation) { %> ngbTooltip="<%- field.documentation %>"<% } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
         <dd>
   <%_ if (field.collection) { _%>
@@ -50,13 +50,13 @@
         @if (<%- entityInstance %>Ref.<%- fieldName %>) {
           <div>
     <%_ if (field.blobContentTypeImage) { _%>
-            <a (click)="openFile(<%- entityInstance %>Ref.<%- fieldName %>, <%- entityInstance %>Ref.<%- fieldName %>ContentType, 'image')">
-              <img [src]="'data:' + <%- entityInstance %>Ref.<%- fieldName %>ContentType + ';base64,' + <%- entityInstance %>Ref.<%- fieldName %>" style="max-width: 100%;" alt="<%- entityInstance %>"/>
+            <a (click)="openFile(<%- entityInstance %>Ref.<%- fieldName %>, <%- entityInstance %>Ref.<%- contentTypeFieldName %>, 'image')">
+              <img [src]="'data:' + <%- entityInstance %>Ref.<%- contentTypeFieldName %> + ';base64,' + <%- entityInstance %>Ref.<%- fieldName %>" style="max-width: 100%;" alt="<%- entityInstance %>"/>
             </a>
     <%_ } else { _%>
-            <a (click)="openFile(<%- entityInstance %>Ref.<%- fieldName %>, <%- entityInstance %>Ref.<%- fieldName %>ContentType)">__jhiTranslateTag__('entity.action.open')</a>
+            <a (click)="openFile(<%- entityInstance %>Ref.<%- fieldName %>, <%- entityInstance %>Ref.<%- contentTypeFieldName %>)">__jhiTranslateTag__('entity.action.open')</a>
     <%_ } _%>
-            {{ <%- entityInstance %>Ref.<%- fieldName %>ContentType }}, {{ byteSize(<%- entityInstance %>Ref.<%- fieldName %>) }}
+            {{ <%- entityInstance %>Ref.<%- contentTypeFieldName %> }}, {{ byteSize(<%- entityInstance %>Ref.<%- fieldName %>) }}
           </div>
         }
   <%_ } else if (field.fieldTypeDuration) { _%>

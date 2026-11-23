@@ -31,13 +31,13 @@ import { I<%- otherEntity.entityAngularName %> } from 'app/entities/<%- otherEnt
 export interface I<%- entityAngularName %> {
 <%# TODO - handle required fields (and thus non-nullable) - currently all fields are optional and nullable) #-%>
 <%_ for (const field of fields) { _%>
-  <%_ const { fieldName/* , fieldValidationRequired */, id } = field;
+  <%_ const { fieldName/* , fieldValidationRequired */, id, contentTypeFieldName } = field;
       // The dates are the strings the REST API sends, converted by the form and the display.
       const tsType = `${field.fieldIsEnum && !field.clientConstantsAsValues ? 'keyof typeof ' : ''}${field.fieldTypeTemporal ? 'string' : field.tsType}${field.collection ? '[]' : ''}`;
   _%>
   <%- fieldName %><%- id ? '' : '?' %>: <%- tsType %><%- id ? '' : ' | null' %>;
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-  <%- fieldName %>ContentType<%- id ? '' : '?' %>: string<%- id ? '' : ' | null' %>,
+  <%- contentTypeFieldName %><%- id ? '' : '?' %>: string<%- id ? '' : ' | null' %>,
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.relationshipSerializePrimaryKeyOnly || rel.persistableRelationship || rel.relationshipEagerLoad)) { _%>

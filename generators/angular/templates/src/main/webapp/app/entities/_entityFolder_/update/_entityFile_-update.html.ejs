@@ -24,7 +24,7 @@
             <div>
                 <<%- jhiPrefixDashed %>-alert-error />
 <%_ for (const field of fields.filter(field => !field.hidden && !(builtInUserManagement && field.readonly))) { _%>
-  <%_ const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent } = field; _%>
+  <%_ const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent, contentTypeFieldName } = field; _%>
 
             <% if (field.autoGenerate) { %>@if (editForm.<%- field.fieldName %>().value() !== <%- field.fieldTypeNumeric || field.fieldTypeBoolean ? 'null' : "''" %>) {<% } %>
                 <% if (field.fieldTypeBinary && !field.blobContentTypeText || field.fieldValidate) { %>@let <%- fieldName %>Ref = editForm.<%- fieldName %>();<% } %>
@@ -59,19 +59,19 @@
                     <div>
         <%_ if (field.blobContentTypeImage) { _%>
                     @if (<%- fieldName %>Ref.value()) {
-                        <img [src]="'data:' + editForm.<%- fieldName %>ContentType().value() + ';base64,' + <%- fieldName %>Ref.value()" style="max-height: 100px" alt="<%- entityInstance %>"/>
+                        <img [src]="'data:' + editForm.<%- contentTypeFieldName %>().value() + ';base64,' + <%- fieldName %>Ref.value()" style="max-height: 100px" alt="<%- entityInstance %>"/>
                     }
         <%_ } _%>
                     @if (<%- fieldName %>Ref.value()) {
                         <div class="form-text text-danger clearfix">
         <%_ if (field.blobContentTypeAny) { _%>
-                            <a class="pull-start" (click)="openFile(<%- fieldName %>Ref.value(), editForm.<%- fieldName %>ContentType().value())">__jhiTranslateTag__('entity.action.open')</a><br>
+                            <a class="pull-start" (click)="openFile(<%- fieldName %>Ref.value(), editForm.<%- contentTypeFieldName %>().value())">__jhiTranslateTag__('entity.action.open')</a><br>
         <%_ } _%>
-                            <span class="pull-start">{{ editForm.<%- fieldName %>ContentType().value() }}, {{ byteSize(<%- fieldName %>Ref.value()) }}</span>
+                            <span class="pull-start">{{ editForm.<%- contentTypeFieldName %>().value() }}, {{ byteSize(<%- fieldName %>Ref.value()) }}</span>
         <%_ if (field.blobContentTypeImage) { _%>
-                            <button type="button" (click)="clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>')" class="btn btn-secondary btn-xs pull-end">
+                            <button type="button" (click)="clearInputImage('<%- fieldName %>', '<%- contentTypeFieldName %>', 'file_<%- fieldName %>')" class="btn btn-secondary btn-xs pull-end">
         <%_ } else { _%>
-                            <button type="button" (click)="editForm.<%- fieldName %>().value.set(''); editForm.<%- fieldName %>ContentType().value.set('')"
+                            <button type="button" (click)="editForm.<%- fieldName %>().value.set(''); editForm.<%- contentTypeFieldName %>().value.set('')"
                                     class="btn btn-secondary btn-xs pull-end">
         <%_ } _%>
                                   <fa-icon icon="times" />
