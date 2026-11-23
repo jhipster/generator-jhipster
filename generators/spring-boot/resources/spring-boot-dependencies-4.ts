@@ -61,9 +61,14 @@ export const springBootDependenciesOverrides: SpringBootDependenciesOverrides = 
 
 const { artifactId, version, properties: managedProperties, modules } = springBootDependencies4;
 
+/** The keys of the managed versions: each version property without `.version`, and the artifactId of Spring Boot. */
+type ManagedVersions = { 'spring-boot-dependencies': string } & {
+  [Property in keyof typeof managedProperties as Property extends `${infer Name}.version` ? Name : never]: string;
+};
+
 export default {
   /** The managed versions, keyed by their property without `.version`, and the Spring Boot version keyed by its artifactId. */
-  versions: { [artifactId]: version, ...versionsOfProperties(managedProperties) },
+  versions: { [artifactId]: version, ...versionsOfProperties(managedProperties) } as ManagedVersions,
   properties: managedProperties,
   modules,
 };
