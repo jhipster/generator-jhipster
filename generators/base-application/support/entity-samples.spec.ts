@@ -21,6 +21,7 @@ import { before, describe, expect, it } from 'expect-node';
 import { getConfigWithDefaults } from '../../../lib/jhipster/default-application-options.ts';
 import BaseGenerator from '../../base/index.ts';
 import { formatDateForChangelog } from '../../base/support/index.ts';
+import { getFieldFakeDataDomain } from '../internal/fake-data.ts';
 
 import { formatEntitySample, generateEntitySamples } from './entity-samples.ts';
 import { createFaker } from './faker.ts';
@@ -103,6 +104,26 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     const values = samples([enumField()], 6).map(sample => sample.color);
     expect([...values.slice(0, 3)].sort()).toEqual(['BLUE', 'GREEN', 'RED']);
     expect([...values.slice(3)].sort()).toEqual(['BLUE', 'GREEN', 'RED']);
+  });
+
+  it('should list the hundredths of a decimal of a small range as its domain', () => {
+    const field = prepareField({ fieldName: 'rate', fieldType: 'BigDecimal' });
+    Object.assign(field, { fieldFakeDataMin: 0.07, fieldFakeDataMax: 0.29 });
+    const domain = getFieldFakeDataDomain(field)!;
+    expect(domain).toHaveLength(23);
+    expect([domain[0], domain[1], domain.at(-1)]).toEqual([0.07, 0.08, 0.29]);
+  });
+
+  it('should list the single value of a decimal with its min equal to its max as its domain', () => {
+    const field = prepareField({ fieldName: 'rate', fieldType: 'Float' });
+    Object.assign(field, { fieldFakeDataMin: 3, fieldFakeDataMax: 3 });
+    expect(getFieldFakeDataDomain(field)).toEqual([3]);
+  });
+
+  it('should not list a decimal of a large range', () => {
+    const field = prepareField({ fieldName: 'rate', fieldType: 'Double' });
+    Object.assign(field, { fieldFakeDataMin: 0, fieldFakeDataMax: 10.01 });
+    expect(getFieldFakeDataDomain(field)).toBeUndefined();
   });
 
   it('should keep the unique values among the batches of a call', () => {
