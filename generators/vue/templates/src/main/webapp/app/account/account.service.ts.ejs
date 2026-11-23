@@ -78,7 +78,7 @@ export default class AccountService {
     await promise;
   }
 
-  async hasAnyAuthorityAndCheckAuth(authorities: string | string[]): Promise<boolean> {
+  hasAnyAuthorityAndCheckAuth(authorities: string | string[]): boolean {
     if (typeof authorities === 'string') {
       authorities = [authorities];
     }
