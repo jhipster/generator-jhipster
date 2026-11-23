@@ -28,8 +28,6 @@ import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdate
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
     // Fields a request may not set to null. Each is patched to null by the same test.
     const requiredFields = fieldsToTest.filter(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired);
-    // Fields the criteria filter by. Each filter is a case of the same parameterized test.
-    const filterFields = jpaMetamodelFiltering ? fieldsToTest.filter(field => field.filterableField) : [];
     // Owner side relationships whose related entity has a field that can be observed after a request carrying a
     // nested related object, to check the request does not write into the related entity.
     const noCascadeRelationships = readOnly || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
@@ -57,6 +55,8 @@ import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdate
     const hasUserRepository
       = filterTestableRelationships.some(rel => rel.otherEntity.builtInUser)
       || (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
+    // Fields the criteria filter by. Each filter is a case of the same parameterized test.
+    const filterFields = jpaMetamodelFiltering ? fieldsToTest.filter(field => field.filterableField) : [];
 
     const callBlock = reactive ? '.block()' : '';
     const callListBlock = reactive ? '.collectList().block()' : '';
