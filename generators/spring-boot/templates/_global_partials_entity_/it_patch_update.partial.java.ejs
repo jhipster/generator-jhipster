@@ -25,7 +25,7 @@ partialUpdated<%- persistClass %>.<%- primaryKey.propertyConsumerName %>(<%- per
 
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
     partialUpdated<%- persistClass %><% for (field of fieldsToUpdate) { %>
-        .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% } %>;
+        .<%- field.fieldName %>(<%- field.updateWithValue %>)<% } %>;
 <%_ } else { _%>
   <%_ for (field of fieldsToUpdate) { _%>
     <%_ if (field.includeField) { _%>

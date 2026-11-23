@@ -80,6 +80,11 @@ export type Field = ServerField &
 
     requiresPersistableImplementation?: boolean;
     fieldNameAsDatabaseColumn?: string;
+    /**
+     * The field has a single valid value, like a number with its min equal to its max: the entities of the resource integration test
+     * take its default value, the updated one is above the limits and only filters.
+     */
+    sbTestSingleValue?: boolean;
     /** The default value of the field in the resource integration test, written as Java code. */
     sbTestDefaultValue?: string;
     /** The updated value of the field in the resource integration test, written as Java code. */

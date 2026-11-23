@@ -403,7 +403,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .<%- primaryKey.name %>(UUID.randomUUID().toString())
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
-            .<%- field.fieldName %>(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)
+            .<%- field.fieldName %>(<%- (field.sbTestSingleValue ? 'DEFAULT_' : fieldStatus) + field.fieldNameUnderscored.toUpperCase() %>)
     <%_ } _%>;
     <%_ if (!anyRelationshipIsRequired) { _%>
     }
@@ -418,7 +418,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- createInstance %>.<%- primaryKey.fields[0].propertySupplierName %>(UUID.randomUUID().toString());
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
-        <%- createInstance %>.<%- field.propertyConsumerName %>(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
+        <%- createInstance %>.<%- field.propertyConsumerName %>(<%- (field.sbTestSingleValue ? 'DEFAULT_' : fieldStatus) + field.fieldNameUnderscored.toUpperCase() %>);
     <%_ } _%>
   <%_ } _%>
   <%_ const alreadyGeneratedEntities = []; _%>
@@ -1461,10 +1461,10 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
   <%_ if (fluentMethods && fieldsToTest.length > 0) { _%>
         updated<%- persistClass %><% for (field of fieldsToTest) { %>
-            .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% } %>;
+            .<%- field.fieldName %>(<%- `${field.sbTestSingleValue ? 'DEFAULT' : 'UPDATED'}_${field.fieldNameUnderscored.toUpperCase()}` %>)<% } %>;
   <%_ } else { _%>
     <%_ for (field of fieldsToTest) { _%>
-        updated<%- persistClass %>.<%- field.propertyConsumerName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>);
+        updated<%- persistClass %>.<%- field.propertyConsumerName %>(<%- `${field.sbTestSingleValue ? 'DEFAULT' : 'UPDATED'}_${field.fieldNameUnderscored.toUpperCase()}` %>);
     <%_ } _%>
   <%_ } _%>
   <%_ if (dtoMapstruct) { _%>
@@ -1639,8 +1639,10 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ const prepareFieldForPatchTest = (field, random) => {
         const includeField = random ? faker.datatype.boolean() : true;
         const fieldNameUnderscoreUppercased = field.fieldNameUnderscored.toUpperCase();
-        const updateWithValue = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : 'null';
-        const testWithConstant = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : `DEFAULT_${fieldNameUnderscoreUppercased}`;
+        // A field with a single valid value is updated with its default value.
+        const updatedConstant = `${field.sbTestSingleValue ? 'DEFAULT' : 'UPDATED'}_${fieldNameUnderscoreUppercased}`;
+        const updateWithValue = includeField ? updatedConstant : 'null';
+        const testWithConstant = includeField ? updatedConstant : `DEFAULT_${fieldNameUnderscoreUppercased}`;
         return { includeField, updateWithValue, testWithConstant, ...field };
       };
   _%>
