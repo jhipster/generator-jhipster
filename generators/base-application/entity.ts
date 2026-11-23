@@ -156,14 +156,15 @@ type NumberField = Pick<Field, 'fieldTypeInteger' | 'fieldTypeLong' | 'fieldType
 
 /**
  * The largest value of a number type that a REST client reads as it is, the smallest one being its opposite: a JSON
- * number is a double in JavaScript, which holds an Integer, a Long up to Number.MAX_SAFE_INTEGER, and the cents of the
- * fake data of a Double or a BigDecimal up to a hundredth of it, of a Float up to a hundredth of 2^24.
+ * number is a double in JavaScript, which holds an Integer, a Long up to Number.MAX_SAFE_INTEGER, and the fake data of
+ * a Double or a BigDecimal, which has cents, up to 10^13, its 15 significant digits that a double always gives back as
+ * they are written; of a Float up to a hundredth of 2^24.
  */
 const restNumberLimit = (field: NumberField): number | undefined => {
   if (field.fieldTypeInteger) return 2147483647;
   if (field.fieldTypeLong) return Number.MAX_SAFE_INTEGER;
   if (field.fieldTypeFloat) return 2 ** 24 / 100;
-  if (field.fieldTypeDouble || field.fieldTypeBigDecimal) return Number.MAX_SAFE_INTEGER / 100;
+  if (field.fieldTypeDouble || field.fieldTypeBigDecimal) return 10 ** 13;
   return undefined;
 };
 

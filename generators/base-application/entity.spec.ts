@@ -51,8 +51,8 @@ describe('mutateField fake data range', () => {
     ['a Long with a min alone', { fieldType: 'Long', fieldValidateRulesMin: 40000 }, [40000, Number.MAX_SAFE_INTEGER]],
     ['a Long with a max alone', { fieldType: 'Long', fieldValidateRulesMax: 0 }, [-Number.MAX_SAFE_INTEGER, 0]],
     ['a Float with a max alone', { fieldType: 'Float', fieldValidateRulesMax: -5 }, [-167772.16, -5]],
-    ['a Double with a min alone', { fieldType: 'Double', fieldValidateRulesMin: 1 }, [1, Number.MAX_SAFE_INTEGER / 100]],
-    ['a BigDecimal with a max alone', { fieldType: 'BigDecimal', fieldValidateRulesMax: 10 }, [-Number.MAX_SAFE_INTEGER / 100, 10]],
+    ['a Double with a min alone', { fieldType: 'Double', fieldValidateRulesMin: 1 }, [1, 10 ** 13]],
+    ['a BigDecimal with a max alone', { fieldType: 'BigDecimal', fieldValidateRulesMax: 10 }, [-(10 ** 13), 10]],
     ['a Long with a min given as a text', { fieldType: 'Long', fieldValidateRulesMin: '40000' }, [40000, Number.MAX_SAFE_INTEGER]],
     ['a String', { fieldType: 'String', fieldValidateRulesMax: -5 }, [undefined, undefined]],
   ] as const) {
