@@ -196,6 +196,13 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent(resourceIT, 'UPDATED_KIND = Kind.ONLY;');
     });
 
+    it('should filter an enum of a single value only by being specified', () => {
+      runResult.assertNoFileContent(resourceIT, '"kind.equals"');
+      runResult.assertNoFileContent(resourceIT, '"kind.in"');
+      runResult.assertFileContent(resourceIT, '.add(Arguments.of("kind.specified", values(true), values(false)))');
+      runResult.assertFileContent(resourceIT, '.add(Arguments.of("unit.equals", values(DEFAULT_UNIT), values(UPDATED_UNIT)))');
+    });
+
     it('should test the dates, times and durations with two values from the entity samples, the default one the earlier', () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_DAY = LocalDate.parse("2022-01-28");');
       runResult.assertFileContent(resourceIT, 'UPDATED_DAY = LocalDate.parse("2022-01-29");');

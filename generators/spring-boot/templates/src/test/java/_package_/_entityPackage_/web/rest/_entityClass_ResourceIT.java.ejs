@@ -1147,9 +1147,13 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
           const biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const { fieldName } = searchBy;
+          // A field with a single value, like an enum of one value, has no other value to tell its entity apart.
+          const singleValue = searchBy.sbTestDefaultValue === searchBy.sbTestUpdatedValue;
       _%>
+      <%_ if (!singleValue) { _%>
             .add(Arguments.of("<%- fieldName %>.equals", values(<%- defaultValue %>), values(<%- biggerValue %>)))
             .add(Arguments.of("<%- fieldName %>.in", values(<%- defaultValue %>, <%- biggerValue %>), values(<%- biggerValue %>)))
+      <%_ } _%>
             .add(Arguments.of("<%- fieldName %>.specified", values(true), values(false)))
       <%_ if (searchBy.fieldTypeString) { _%>
             // A longer text than the value is never contained in it.
