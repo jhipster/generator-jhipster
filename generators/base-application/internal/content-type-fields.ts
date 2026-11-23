@@ -30,7 +30,8 @@ const {
 export type ContentTypeField = Field & {
   /** The name of the blob field whose content type it keeps. */
   contentTypeOf: string;
-  skipClient: true;
+  /** The clients show it with its blob, not as a field of its own. */
+  hidden: true;
   /** Stored in no column, like its blob. */
   transient?: true;
   fakerTemplate: string;
@@ -38,6 +39,9 @@ export type ContentTypeField = Field & {
 
 /** Whether a field is stored in no column, as its options not loaded yet declare it too: the ones of an entity file. */
 const isTransient = (field: Field & { transient?: boolean }): boolean => Boolean(field.transient ?? field.options?.transient);
+
+/** Whether the clients skip a field, as its options not loaded yet declare it too. */
+const isSkipClient = (field: Field & { skipClient?: boolean }): boolean => Boolean(field.skipClient ?? field.options?.skipClient);
 
 export const isContentTypeField = (field: Field): field is ContentTypeField => 'contentTypeOf' in field;
 
@@ -52,7 +56,7 @@ const hasContentType = (field: Field): boolean => {
 /**
  * The fields of an entity with the content type field of each blob of a file right after the blob, as the entity files
  * declare them, the content type fields being never written to them: the database columns, the domain classes and the
- * DTOs take the content type field like any String field. The clients skip it, the blob field reads it.
+ * DTOs take the content type field like any String field. The clients have it as a hidden field, which the blob shows.
  */
 export const withContentTypeFields = <F extends Field>(fields: F[]): (F | ContentTypeField)[] =>
   fields
@@ -63,8 +67,10 @@ export const withContentTypeFields = <F extends Field>(fields: F[]): (F | Conten
         fieldName: `${field.fieldName}ContentType`,
         fieldType: 'String',
         contentTypeOf: field.fieldName,
-        skipClient: true,
+        hidden: true,
         ...(isTransient(field) ? { transient: true } : {}),
+        // The clients have it with its blob.
+        ...(isSkipClient(field) ? { skipClient: true } : {}),
         // The content type of the image the fake data has.
         fakerTemplate: 'image/png',
       };

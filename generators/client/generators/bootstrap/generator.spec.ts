@@ -118,10 +118,15 @@ describe(`generator - ${generator}`, () => {
           anyFieldIsTimeDerived: true,
         });
       });
-      it('should keep the anyField properties of a blob that only its content type field is skipped', () => {
+      it('should keep the content type field of a blob as a hidden field, and the anyField properties', () => {
         const { application, entities } = runResult;
         const [bar] = application!.filterEntitiesAndPropertiesForClient!([entities!.Bar as ClientEntity]);
-        expect(bar.fields.map(field => field.fieldName)).toEqual(['id', 'picture', 'day']);
+        expect(bar.fields.map(field => [field.fieldName, Boolean(field.hidden)])).toEqual([
+          ['id', false],
+          ['picture', false],
+          ['pictureContentType', true],
+          ['day', false],
+        ]);
         expect(anyFieldProperties(bar)).toEqual(anyFieldProperties(entities!.Bar as ClientEntity));
         expect(bar.anyFieldHasImageContentType).toBe(true);
       });

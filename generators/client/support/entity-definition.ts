@@ -18,7 +18,6 @@
  */
 
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
-import { isContentTypeField } from '../../base-application/internal/content-type-fields.ts';
 import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.d.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.d.ts';
@@ -77,9 +76,8 @@ const generateEntityClientFields = (
       variablesWithTypes.push(`${primaryKey.name}?: ${tsKeyType}`);
     }
   }
-  // The blob gives the variable of its content type, its content type field is left out, like the fields the clients skip.
   fields
-    .filter(field => !isContentTypeField(field) && isClientField(field))
+    .filter(field => isClientField(field))
     .forEach(field => {
       const { fieldType, fieldName } = field;
       const nullable = !field.id && (field as DatabaseProperty).nullable;
@@ -95,9 +93,6 @@ const generateEntityClientFields = (
         tsType = 'number';
       } else if (([TYPE_STRING, TYPE_UUID, TYPE_DURATION, TYPE_BYTES, TYPE_BYTE_BUFFER, TYPE_TIME] as string[]).includes(fieldType)) {
         tsType = 'string';
-        if (([TYPE_BYTES, TYPE_BYTE_BUFFER] as string[]).includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
-          variablesWithTypes.push(`${fieldName}ContentType?: ${nullable ? 'string | null' : 'string'}`);
-        }
       } else if (([TYPE_LOCAL_DATE, TYPE_INSTANT, TYPE_ZONED_DATE_TIME] as string[]).includes(fieldType)) {
         tsType = customDateType;
       }
