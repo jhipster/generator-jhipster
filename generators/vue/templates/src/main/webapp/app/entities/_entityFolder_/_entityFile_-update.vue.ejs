@@ -1,6 +1,5 @@
-<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
-    // A primary key the user gives, like the name of an authority, is a field of the form, read only once created.
-    const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
+<%_ // A primary key the user gives, like the name of an authority, is a field of the form, read only once created.
+    const userProvidedPrimaryKey = !builtInUserManagement && entityClientFormFields.some(field => field.id);
 _%>
 <template>
   <div class="d-flex justify-content-center">
@@ -15,7 +14,7 @@ _%>
                 v-model="<%- entityInstance %>.<%- primaryKey.name %>" readonly />
           </div>
 <%_ } _%>
-<%_ for (field of formFields) { _%>
+<%_ for (field of entityClientFormFields) { _%>
   <%_ const { fieldName, fieldType, fieldTypeBlobContent } = field;
       const fieldInputClass = field.fieldTypeBoolean ? 'form-check-input' : 'form-control';
       const translationKey = `${i18nKeyPrefix}.${fieldName}`;
@@ -173,7 +172,7 @@ _%>
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
     const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
-    const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
+    const clientConstantFields = entityClientFormFields.filter(field => field.clientConstantsAsValues);
     const usesGetSelected = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship && !rel.relationshipSerializePrimaryKeyOnly);
 _%>
 import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', ...enumTypeFields.length > 0 ? ['ref'] : [], 'watch'].join(', ') %> } from 'vue';
@@ -294,7 +293,7 @@ const dataUtils = useDataUtils();
 const { t: t$ } = useI18n();
 <%_ } _%>
 const v$ = useEntityValidation(<%- entityInstance %>, {
-<%_ for (field of formFields) { _%>
+<%_ for (field of entityClientFormFields) { _%>
   <%- field.fieldName %>: <%- field.vueValidationRules %>,
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>

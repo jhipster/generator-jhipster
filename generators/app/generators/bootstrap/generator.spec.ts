@@ -61,6 +61,8 @@ const expectedEntity = (entity: any) => ({
 
   restProperties: expect.any(Array),
   restDomainFields: expect.any(Array),
+  entityClientFormFields: expect.any(Array),
+  entityClientListFields: expect.any(Array),
 
   fields: entity?.fields?.map(expectedField),
   // The fields of the user by their name, which the fields above print.
