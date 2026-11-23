@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'node:assert';
 
 import { mutateData } from '../../../../lib/utils/object.ts';
 import databaseData from '../../../base-application/generators/database-bootstrap/support/database-data.ts';
@@ -194,24 +193,5 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
   get [SpringBootApplicationGenerator.POST_PREPARING]() {
     return this.postPreparing;
-  }
-  get preparingEachEntityField() {
-    return this.asPreparingEachEntityFieldTaskGroup({
-      prepareField({ entity, field }) {
-        if (field.mapstructExpression) {
-          assert.equal(
-            entity.dto,
-            'mapstruct',
-            `@MapstructExpression requires an Entity with mapstruct dto [${entity.name}.${field.fieldName}].`,
-          );
-          // Disable update form.
-          field.readonly = true;
-        }
-      },
-    });
-  }
-
-  get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.preparingEachEntityField;
   }
 }

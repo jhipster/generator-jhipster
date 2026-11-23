@@ -145,6 +145,7 @@ describe(`generator - ${generator}`, () => {
           fields: [
             { fieldName: 'name', fieldType: 'String' },
             { fieldName: 'note', fieldType: 'String', options: { transient: true } },
+            { fieldName: 'attachment', fieldType: 'AnyBlob', options: { transient: true } },
           ],
         },
       ]);
@@ -154,6 +155,11 @@ describe(`generator - ${generator}`, () => {
       result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/Memo.java', 'note');
       result.assertFileContent('src/test/java/com/mycompany/myapp/domain/MemoTestSamples.java', '.name(');
       result.assertNoFileContent('src/test/java/com/mycompany/myapp/domain/MemoTestSamples.java', '.note(');
+    });
+
+    it('should leave the content type of a transient blob out of the domain class and of its test samples', () => {
+      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/Memo.java', 'attachment');
+      result.assertNoFileContent('src/test/java/com/mycompany/myapp/domain/MemoTestSamples.java', 'attachmentContentType');
     });
   });
 
