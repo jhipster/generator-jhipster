@@ -1147,7 +1147,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
           const biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const { fieldName } = searchBy;
-          // A field with a single value, like an enum of one value, has no other value to tell its entity apart.
+          // A field with a single value, like an enum of one value or a number with its min equal to its max, has no other
+          // value to tell its entity apart: the filters by the updated value are left out.
           const singleValue = searchBy.sbTestDefaultValue === searchBy.sbTestUpdatedValue;
       _%>
       <%_ if (!singleValue) { _%>
@@ -1161,9 +1162,13 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .add(Arguments.of("<%- fieldName %>.doesNotContain", values(<%- defaultValue %> + "x"), values(<%- defaultValue %>)))
       <%_ } _%>
       <%_ if (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) { _%>
+        <%_ if (!singleValue) { _%>
             .add(Arguments.of("<%- fieldName %>.greaterThanOrEqual", values(<%- defaultValue %>), values(<%- biggerValue %>)))
+        <%_ } _%>
             .add(Arguments.of("<%- fieldName %>.lessThanOrEqual", values(<%- defaultValue %>), values(<%- smallerValue %>)))
+        <%_ if (!singleValue) { _%>
             .add(Arguments.of("<%- fieldName %>.lessThan", values(<%- biggerValue %>), values(<%- defaultValue %>)))
+        <%_ } _%>
             .add(Arguments.of("<%- fieldName %>.greaterThan", values(<%- smallerValue %>), values(<%- defaultValue %>)))
       <%_ } _%>
     <%_ } _%>

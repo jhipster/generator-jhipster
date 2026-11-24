@@ -168,10 +168,18 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent(resourceIT, 'SMALLER_PRICE = new BigDecimal("16714.89");');
     });
 
-    it('should repeat the samples of a number field without three values within its limits', () => {
-      runResult.assertFileContent(resourceIT, 'SMALLER_LEVEL = 5;');
+    it('should repeat the single valid value of a number field, its smaller value below it', () => {
+      runResult.assertFileContent(resourceIT, 'SMALLER_LEVEL = 4;');
       runResult.assertFileContent(resourceIT, 'DEFAULT_LEVEL = 5;');
       runResult.assertFileContent(resourceIT, 'UPDATED_LEVEL = 5;');
+    });
+
+    it('should filter a number field of a single valid value only by the filters that leave its entity out below it', () => {
+      runResult.assertNoFileContent(resourceIT, '"level.equals"');
+      runResult.assertNoFileContent(resourceIT, '"level.greaterThanOrEqual"');
+      runResult.assertNoFileContent(resourceIT, '"level.lessThan"');
+      runResult.assertFileContent(resourceIT, '.add(Arguments.of("level.lessThanOrEqual", values(DEFAULT_LEVEL), values(SMALLER_LEVEL)))');
+      runResult.assertFileContent(resourceIT, '.add(Arguments.of("level.greaterThan", values(SMALLER_LEVEL), values(DEFAULT_LEVEL)))');
     });
 
     it('should test a pattern without two texts the filters tell apart with its samples', () => {
