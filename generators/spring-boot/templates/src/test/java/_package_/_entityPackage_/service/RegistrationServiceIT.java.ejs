@@ -27,7 +27,9 @@ import <%- user.entityAbsoluteClass %>;
 import <%- packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%- packageName %>.repository.UserRepository;
+<%_ if (!reactive) { _%>
 import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
+<%_ } _%>
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -53,7 +55,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 <%_ } _%>
 import java.util.List;
+<%_ if (!reactive) { _%>
 import java.util.Locale;
+<%_ } _%>
 import java.util.Optional;
 
 <%_ if (databaseTypeCouchbase) { _%>
@@ -225,9 +229,11 @@ class RegistrationServiceIT {
         verify(spiedUserSearchRepository, never()).delete<%- reactive ? '' : 'FromIndex' %>(user);
 <%_ } _%>
     }
+<%_ if (!reactive) { _%>
 
+    // Not generated for reactive apps: the default locale is global, so it would also reach the R2DBC driver.
     @Test
-<%_ if (databaseTypeSql && !reactive) { _%>
+<%_ if (databaseTypeSql) { _%>
     @Transactional
 <%_ } _%>
     void assertThatRegisterUserLowercasesLoginAndEmailWhateverTheDefaultLocale() {
@@ -241,7 +247,7 @@ class RegistrationServiceIT {
         Locale.setDefault(Locale.forLanguageTag("tr-TR"));
         <%- user.persistClass %> registeredUser;
         try {
-            registeredUser = registrationService.registerUser(userDTO, RandomStringUtils.insecure().nextAlphanumeric(60))<%- reactorBlock %>;
+            registeredUser = registrationService.registerUser(userDTO, RandomStringUtils.insecure().nextAlphanumeric(60));
         } finally {
             Locale.setDefault(defaultLocale);
         }
@@ -249,4 +255,5 @@ class RegistrationServiceIT {
         assertThat(registeredUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(registeredUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
     }
+<%_ } _%>
 }
