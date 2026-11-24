@@ -23,9 +23,12 @@ import { WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 <%_ if (enableTranslation) { _%>
-import { provideTranslateService } from '@ngx-translate/core';
+import { MissingTranslationHandler, TranslateService, provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
+<%_ if (enableTranslation) { _%>
+import { missingTranslationHandler } from 'app/config';
+<%_ } _%>
 import { AlertModel, AlertService, EventManager } from 'app/core/util';
 import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
 import { ConstraintViolationType, ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
@@ -42,7 +45,7 @@ describe('Alert Error Component', () => {
     TestBed.configureTestingModule({
       providers: [
 <%_ if (enableTranslation) { _%>
-        provideTranslateService(),
+        provideTranslateService({ missingTranslationHandler: { provide: MissingTranslationHandler, useFactory: missingTranslationHandler } }),
 <%_ } _%>
         EventManager,
         AlertService,
@@ -140,6 +143,9 @@ describe('Alert Error Component', () => {
 <%_ if (enableTranslation) { _%>
 
     it('should name the field of a user by the key of the user management', () => {
+      const translateService = TestBed.inject(TranslateService);
+      translateService.setTranslation('en', { userManagement: { login: 'Login' } });
+      translateService.use('en');
       const response = new HttpErrorResponse({
         url: 'http://localhost:8080/api/admin/users',
         headers: new HttpHeaders(),
@@ -151,11 +157,11 @@ describe('Alert Error Component', () => {
         },
       });
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
-      expect(comp.alerts()[0].translationParams).toEqual({ fieldName: 'userManagement.login' });
+      expect(comp.alerts()[0].translationParams).toEqual({ fieldName: 'Login' });
     });
 <%_ } _%>
 
-    it('should fall back to the field and the message of the server for a code without translation', () => {
+    it('should fall back to the field and the message of the server for a field and a code without translation', () => {
       const addAlert = vi.spyOn(alertService, 'addAlert');
       const response = new HttpErrorResponse({
         url: 'http://localhost:8080/api/foos',
@@ -169,7 +175,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       expect(addAlert).toHaveBeenCalledWith(
-        expect.objectContaining({ message: expect.stringMatching(/: must match "\^\[A-Z\]\.\*\$"$/) }),
+        expect.objectContaining({ message: '<%- enableTranslation ? 'name' : 'Name' %>: must match "^[A-Z].*$"' }),
         expect.anything(),
       );
     });
