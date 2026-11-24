@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ if (enableTranslation) { _%>
-import { translate } from 'react-jhipster';
+import { TranslatorContext, translate } from 'react-jhipster';
 <%_ } _%>
 
 import { AxiosError, isAxiosError } from 'axios';
@@ -35,10 +35,17 @@ type ToastMessage = {
 <%_ } _%>
 };
 
+<%_ if (enableTranslation) { _%>
+/** The translation of the key, else the message, else the key itself. */
+const translateMessage = ({ key, data, message }: ToastMessage) => {
+  const text = key ? translate(key, data) : undefined;
+  return !text || text === `${TranslatorContext.context.missingTranslationMsg}[${key}]` ? (message ?? key) : text;
+};
+
+<%_ } _%>
 const addErrorAlert = (message: ToastMessage) => {
 <%_ if (enableTranslation) { _%>
-  // The message is the text of a key without translation.
-  toast.error(message.key ? translate(message.key, message.data, message.message) : message.message);
+  toast.error(translateMessage(message));
 <%_ } else { _%>
   toast.error(message.message);
 <%_ } _%>
@@ -55,7 +62,7 @@ const getFieldErrorToast = (fieldError: FieldErrorVM): Required<ToastMessage> =>
 <%_ if (enableTranslation) { _%>
   // The keys of the users are not prefixed by the application.
   const keyPrefix = fieldError.objectName === 'userManagement' ? 'userManagement' : `<%- frontendAppName %>.${fieldError.objectName}`;
-  const fieldName = translate(`${keyPrefix}.${convertedField}`);
+  const fieldName = translateMessage({ key: `${keyPrefix}.${convertedField}`, message: convertedField });
   // Without the translation of its code, the error shows the field and the message of the server.
   return { message: `${fieldName}: ${fieldError.message}`, key: `error.${errorKey}`, data: { fieldName } };
 <%_ } else { _%>
@@ -68,7 +75,7 @@ const getFieldErrorToast = (fieldError: FieldErrorVM): Required<ToastMessage> =>
 export const getFieldErrorMessage = (fieldError: FieldErrorVM): string => {
   const message = getFieldErrorToast(fieldError);
 <%_ if (enableTranslation) { _%>
-  return translate(message.key, message.data, message.message);
+  return translateMessage(message);
 <%_ } else { _%>
   return message.message;
 <%_ } _%>

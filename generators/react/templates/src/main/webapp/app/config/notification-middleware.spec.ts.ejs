@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
@@ -29,7 +29,7 @@ import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEA
 import { CONSTRAINT_VIOLATION_TYPE, INVALID_PASSWORD_TYPE } from 'app/shared/jhipster/error.constants';
 import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 
-import notificationMiddleware from './notification-middleware';
+import notificationMiddleware, { getFieldErrorMessage } from './notification-middleware';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -191,6 +191,12 @@ describe('Notification Middleware', () => {
 <%_ if (enableTranslation) { _%>
   beforeAll(() => {
     TranslatorContext.registerTranslations('<%- nativeLanguage %>', {});
+    // As the application does, a missing key is not rendered as the given text.
+    TranslatorContext.setRenderInnerTextForMissingKeys(false);
+  });
+
+  afterAll(() => {
+    TranslatorContext.setRenderInnerTextForMissingKeys(true);
   });
 
 <%_ } _%>
@@ -227,7 +233,7 @@ describe('Notification Middleware', () => {
 
   it('should trigger an error toast message and return error for 400 response code', () => {
     expect(store.dispatch(VALIDATION_ERROR).error.response.data.message).toEqual('error.validation');
-    expect(toast.error).toHaveBeenCalledWith(<%- enableTranslation ? 'expect.stringMatching(/: must be greater than or equal to 1$/)' : '\'MinField: must be greater than or equal to 1\'' %>);
+    expect(toast.error).toHaveBeenCalledWith('<%- enableTranslation ? 'minField' : 'MinField' %>: must be greater than or equal to 1');
   });
 
   it('should trigger an error toast message and return error for 404 response code', () => {
@@ -306,7 +312,7 @@ describe('Notification Middleware', () => {
         },
       },
     });
-    expect(toast.error).toHaveBeenCalledWith(<%- enableTranslation ? 'expect.stringMatching(/: NotNull$/)' : '\'Name: NotNull\'' %>);
+    expect(toast.error).toHaveBeenCalledWith('<%- enableTranslation ? 'name' : 'Name' %>: NotNull');
   });
 
 <%_ if (enableTranslation) { _%>
@@ -354,8 +360,14 @@ describe('Notification Middleware', () => {
       },
     });
     expect(toast.error).toHaveBeenCalledTimes(2);
-    expect(toast.error).toHaveBeenCalledWith(<%- enableTranslation ? 'expect.stringMatching(/: must not be null$/)' : '\'Name: must not be null\'' %>);
-    expect(toast.error).toHaveBeenCalledWith(<%- enableTranslation ? 'expect.stringContaining(\': must match "^[A-Z].*$"\')' : '\'Name: must match "^[A-Z].*$"\'' %>);
+    expect(toast.error).toHaveBeenCalledWith('<%- enableTranslation ? 'name' : 'Name' %>: must not be null');
+    expect(toast.error).toHaveBeenCalledWith('<%- enableTranslation ? 'name' : 'Name' %>: must match "^[A-Z].*$"');
+  });
+
+  it('should give the field and the message of the server for a field error without translation', () => {
+    expect(getFieldErrorMessage({ objectName: 'foos', field: 'name', message: 'must match "^[A-Z].*$"', code: 'Pattern' })).toBe(
+      '<%- enableTranslation ? 'name' : 'Name' %>: must match "^[A-Z].*$"',
+    );
   });
 
   it('should trigger a success toast message for header messages', () => {
@@ -393,7 +405,7 @@ describe('Notification Middleware', () => {
         },
       },
     });
-    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- enableTranslation ? '\'error.validation\'' : '\'Validation failed\'' %>));
+    expect(toast.error).toHaveBeenCalledWith('Validation failed');
   });
 
   it('should trigger an error toast message with the detail of a wrong password, whose message is the one of its status', () => {
