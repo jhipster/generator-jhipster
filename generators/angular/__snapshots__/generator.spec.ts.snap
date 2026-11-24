@@ -2385,6 +2385,12 @@ describe("UserManagement Management Update Component", () => {
               },
               {
                 objectName: "userManagement",
+                field: "createdDate",
+                message: "is refused",
+                code: "Refused",
+              },
+              {
+                objectName: "userManagement",
                 field: "notAField",
                 message: "is refused",
                 code: "Refused",
@@ -2428,10 +2434,9 @@ describe("UserManagement Management Update Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import { HttpErrorResponse, HttpResponse } from "@angular/common/http";
+    "contents": "import { HttpResponse } from "@angular/common/http";
 import { Component, OnInit, computed, inject, signal } from "@angular/core";
 import {
-  FieldTree,
   FormField,
   FormRoot,
   TreeValidationResult,
@@ -2439,15 +2444,15 @@ import {
 import { ActivatedRoute } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { Observable, finalize, map } from "rxjs";
+import { Observable, catchError, finalize, lastValueFrom, map, of } from "rxjs";
 
 import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
 import { AlertError } from "app/shared/alert";
-import { SelectOptionsDirective, ServerError } from "app/shared/form";
 import {
-  getServerProblem,
-  isConstraintViolation,
-} from "app/shared/jhipster/problem-details";
+  SelectOptionsDirective,
+  ServerError,
+  getServerFieldErrors,
+} from "app/shared/form";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
 
@@ -2536,36 +2541,33 @@ export class UserManagementUpdate implements OnInit {
   private subscribeToSaveResponse(
     result: Observable<IUserManagement | null>,
   ): Promise<TreeValidationResult> {
-    return new Promise((resolve) => {
-      result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-        next: () => {
+    return lastValueFrom(
+      result.pipe(
+        map(() => {
           this.onSaveSuccess();
-          resolve(undefined);
-        },
-        error: (error: unknown) => {
+          return undefined;
+        }),
+        // The fields the server refused, among the ones showing its errors, are marked invalid.
+        catchError((error: unknown) => {
           this.onSaveError();
-          resolve(this.getServerErrors(error));
-        },
-      });
-    });
-  }
-
-  // The fields the server refused are marked invalid, with the message of their errors.
-  private getServerErrors(error: unknown): TreeValidationResult {
-    const problem = getServerProblem(
-      error instanceof HttpErrorResponse ? error.error : undefined,
+          return of(
+            getServerFieldErrors(
+              this.editForm,
+              [
+                "login",
+                "firstName",
+                "lastName",
+                "email",
+                "activated",
+                "authorities",
+              ],
+              error,
+            ),
+          );
+        }),
+        finalize(() => this.onSaveFinalize()),
+      ),
     );
-    if (!isConstraintViolation(problem)) {
-      return undefined;
-    }
-    const fields = this.editForm as unknown as Record<
-      string,
-      FieldTree<unknown> | undefined
-    >;
-    return problem.fieldErrors.flatMap(({ field, message }) => {
-      const fieldTree = fields[field];
-      return fieldTree ? [{ kind: "server", message, fieldTree }] : [];
-    });
   }
 
   private onSaveSuccess(): void {
@@ -4021,6 +4023,12 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/shared/form/server-error.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/form/server-field-errors.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/server-field-errors.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
@@ -5330,6 +5338,12 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/form/server-error.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/form/server-field-errors.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/server-field-errors.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
@@ -6557,6 +6571,12 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/form/server-error.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/server-field-errors.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/server-field-errors.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
@@ -7791,6 +7811,12 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/form/server-error.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-field-errors.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-field-errors.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
@@ -9365,6 +9391,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/form/server-error.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/form/server-field-errors.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-field-errors.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
@@ -10568,6 +10600,12 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/shared/form/server-error.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/form/server-field-errors.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-field-errors.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
@@ -11708,6 +11746,12 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/form/server-error.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-field-errors.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-field-errors.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/constants.ts": {

@@ -27,12 +27,18 @@ _%>
 <%_ const constantLabelPipes = [...new Map(fields.filter(field => field.angularFieldClientConstant?.angularConstantLabelPipe).map(field => [field.angularFieldClientConstant.angularConstantLabelPipe.importName, field.angularFieldClientConstant.angularConstantLabelPipe])).values()]; _%>
 <%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
-<%_ const usesServerError = fields.some(field => !field.hidden && !(builtInUserManagement && field.readonly)) || relationships.some(rel => rel.otherEntity.primaryKey && rel.persistableRelationship); _%>
+<%# The properties showing the error of the server, the only ones a server error may mark invalid -%>
+<%_ const serverErrorProperties = [
+      ...fields.filter(field => !field.hidden && !(builtInUserManagement && field.readonly)).map(field => field.fieldName),
+      ...relationships.filter(rel => rel.otherEntity.primaryKey && rel.persistableRelationship).map(rel => rel.propertyName),
+    ];
+    const usesServerError = serverErrorProperties.length > 0;
+_%>
 <%_ const usesSelectOptions = fields.some(field => field.clientConstantsAsValues && field.collection) || relationships.some(rel => rel.relationshipSerializePrimaryKeyOnly || rel.persistableRelationship); _%>
 <%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %>, <%- builtInUserManagement ? 'computed, ' : '' %>inject, signal } from '@angular/core';
-import { FieldTree, FormField, FormRoot, TreeValidationResult } from '@angular/forms/signals';
+import { FormField, FormRoot, TreeValidationResult } from '@angular/forms/signals';
 import { ActivatedRoute } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -45,7 +51,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 <%_ if (angularEntityUpdateRequiresTranslationPipe) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
-import { Observable, finalize<%- relationships.some(rel => rel.persistableRelationship) ? ', map' : '' %> } from 'rxjs';
+import { Observable, catchError, finalize, lastValueFrom, map, of } from 'rxjs';
 
 <%_ for (const pipe of constantLabelPipes.filter(pipe => pipe.importPath !== 'app/shared/language')) { _%>
 import { <%- pipe.importName %> } from '<%- pipe.importPath %>';
@@ -70,14 +76,11 @@ import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entit
 import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- otherEntity.entityFolderName %>/service/<%- otherEntity.entityFileName %>.service';
 <%_ } _%>
 import { AlertError<%- anyFieldIsBlobDerived ? ', AlertErrorModel' : '' %> } from 'app/shared/alert';
-<%_ const formImports = [usesSelectOptions && 'SelectOptionsDirective', usesServerError && 'ServerError'].filter(Boolean); _%>
-<%_ if (formImports.length > 0) { _%>
+<%_ const formImports = [usesSelectOptions && 'SelectOptionsDirective', usesServerError && 'ServerError', 'getServerFieldErrors'].filter(Boolean); _%>
 import { <%- formImports.join(', ') %> } from 'app/shared/form';
-<%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { type BlobType } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
-import { getServerProblem, isConstraintViolation } from 'app/shared/jhipster/problem-details';
 <%_ if (enableTranslation) { _%>
 import { <%- constantLabelPipes.filter(pipe => pipe.importPath === 'app/shared/language').map(pipe => `${pipe.importName}, `).join('') %>TranslateDirective } from 'app/shared/language';
 <%_ } _%>
@@ -255,31 +258,20 @@ export class <%- entityAngularName %>Update implements OnInit {
     }
 
     private subscribeToSaveResponse(result: Observable<I<%- entityAngularName %> | null>): Promise<TreeValidationResult> {
-        return new Promise(resolve => {
-            result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-                next: () => {
+        return lastValueFrom(
+            result.pipe(
+                map(() => {
                     this.onSaveSuccess();
-                    resolve(undefined);
-                },
-                error: (error: unknown) => {
+                    return undefined;
+                }),
+                // The fields the server refused, among the ones showing its errors, are marked invalid.
+                catchError((error: unknown) => {
                     this.onSaveError();
-                    resolve(this.getServerErrors(error));
-                },
-            });
-        });
-    }
-
-    // The fields the server refused are marked invalid, with the message of their errors.
-    private getServerErrors(error: unknown): TreeValidationResult {
-        const problem = getServerProblem(error instanceof HttpErrorResponse ? error.error : undefined);
-        if (!isConstraintViolation(problem)) {
-            return undefined;
-        }
-        const fields = this.editForm as unknown as Record<string, FieldTree<unknown> | undefined>;
-        return problem.fieldErrors.flatMap(({ field, message }) => {
-            const fieldTree = fields[field];
-            return fieldTree ? [{ kind: 'server', message, fieldTree }] : [];
-        });
+                    return of(getServerFieldErrors(this.editForm, [<%- serverErrorProperties.map(property => `'${property}'`).join(', ') %>], error));
+                }),
+                finalize(() => this.onSaveFinalize()),
+            ),
+        );
     }
 
     private onSaveSuccess(): void {

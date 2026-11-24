@@ -31,7 +31,8 @@ import { missingTranslationHandler } from 'app/config';
 <%_ } _%>
 import { AlertModel, AlertService, EventManager } from 'app/core/util';
 import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
-import { ConstraintViolationType, ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
+import { CONSTRAINT_VIOLATION_TYPE } from 'app/shared/jhipster/error.constants';
+import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 
 import { AlertError } from './alert-error';
 
@@ -106,7 +107,7 @@ describe('Alert Error Component', () => {
         headers: new HttpHeaders(),
         status: 400,
         error: {
-          type: ConstraintViolationType,
+          type: CONSTRAINT_VIOLATION_TYPE,
           message: 'error.validation',
           fieldErrors: [{ objectName: 'foo', field: 'items[3].name', message: 'NotNull' }],
         },
@@ -151,7 +152,7 @@ describe('Alert Error Component', () => {
         headers: new HttpHeaders(),
         status: 400,
         error: {
-          type: ConstraintViolationType,
+          type: CONSTRAINT_VIOLATION_TYPE,
           message: 'error.validation',
           fieldErrors: [{ objectName: 'userManagement', field: 'login', message: 'must not be null', code: 'NotNull' }],
         },
@@ -168,14 +169,14 @@ describe('Alert Error Component', () => {
         headers: new HttpHeaders(),
         status: 400,
         error: {
-          type: ConstraintViolationType,
+          type: CONSTRAINT_VIOLATION_TYPE,
           message: 'error.validation',
           fieldErrors: [{ objectName: 'foo', field: 'name', message: 'must match "^[A-Z].*$"', code: 'Pattern' }],
         },
       });
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       expect(addAlert).toHaveBeenCalledWith(
-        expect.objectContaining({ message: '<%- enableTranslation ? 'name' : 'Name' %>: must match "^[A-Z].*$"' }),
+        expect.objectContaining({ message: '<%- enableTranslation ? 'name' : 'Name' %>: must match "^[A-Z].*$"'<%- enableTranslation ? ", translationKey: 'error.Pattern'" : '' %> }),
         expect.anything(),
       );
     });
@@ -241,7 +242,7 @@ describe('Alert Error Component', () => {
         status: 400,
         statusText: 'Bad Request',
         error: {
-          type: ConstraintViolationType,
+          type: CONSTRAINT_VIOLATION_TYPE,
           title: 'Method argument not valid',
           status: 400,
           path: '/api/foos',

@@ -30,7 +30,11 @@
     // The sample of the required data of the entity fills a valid form, but for a required relationship.
     const requiredDataFormValid = !relationships.some(relationship => relationship.persistableRelationship && relationship.relationshipRequired);
     // The required blobs of a file with a size to validate, which the sample may not have.
-    const refusedField = fields.find(field => !field.id && !field.hidden && !field.readonly && !field.transient && !field.autoGenerate);
+    // A property the server refuses, a relationship when the entity has no field to edit.
+    const refusedProperty = fields.find(field => !field.id && !field.hidden && !field.readonly && !field.transient && !field.autoGenerate)?.fieldName
+      ?? relationships.find(rel => rel.otherEntity.primaryKey && rel.persistableRelationship)?.propertyName;
+    // A property of the form that shows no error of the server, which a server error must not mark.
+    const unshownProperty = builtInUserManagement ? fields.find(field => field.readonly && !field.hidden)?.fieldName : undefined;
     const requiredSizedFileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && field.fieldValidationRequired && (field.fieldValidationMinBytes || field.fieldValidationMaxBytes));
 _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -341,7 +345,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             expect(<%- entityInstance %>Service.update).toHaveBeenCalledWith(expect.objectContaining({ <%- editedBooleans.map(field => `${field.fieldName}: null`).join(', ') %> }));
         });
 <%_ } _%>
-<%_ if (refusedField) { _%>
+<%_ if (refusedProperty) { _%>
   <%_ const newEntity = primaryKey.autoGenerate || !updatableEntity || builtInUserManagement ? `{ ${builtInUserManagement ? 'id: null, ' : ''}${primaryKey.name}: null }` : testEntityPrimaryKey0; _%>
 
         it('should mark the fields the server refused', async () => {
@@ -361,7 +365,10 @@ describe('<%- entityAngularName %> Management Update Component', () => {
                         type: 'https://www.jhipster.tech/problem/constraint-violation',
                         message: 'error.validation',
                         fieldErrors: [
-                            { objectName: '<%- entityInstance %>', field: '<%- refusedField.fieldName %>', message: 'is refused', code: 'Refused' },
+                            { objectName: '<%- entityInstance %>', field: '<%- refusedProperty %>', message: 'is refused', code: 'Refused' },
+  <%_ if (unshownProperty) { _%>
+                            { objectName: '<%- entityInstance %>', field: '<%- unshownProperty %>', message: 'is refused', code: 'Refused' },
+  <%_ } _%>
                             { objectName: '<%- entityInstance %>', field: 'notAField', message: 'is refused', code: 'Refused' },
                         ],
                     },
@@ -369,7 +376,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             );
 
             // THEN
-            expect(await result).toEqual([expect.objectContaining({ kind: 'server', message: 'is refused', fieldTree: comp.editForm.<%- refusedField.fieldName %> })]);
+            expect(await result).toEqual([expect.objectContaining({ kind: 'server', message: 'is refused', fieldTree: comp.editForm.<%- refusedProperty %> })]);
         });
 
         it('should mark no field for an error without field errors', async () => {
