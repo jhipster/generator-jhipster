@@ -50,10 +50,9 @@ export type JHipsterProblem = ProblemDetails & {
 };
 
 export const ProblemWithMessageType = PROBLEM_WITH_MESSAGE_TYPE;
-export const ConstraintViolationType = CONSTRAINT_VIOLATION_TYPE;
 
 /** The types of the problems with a message, the ones of the account included. */
-export const problemWithMessageTypes = [PROBLEM_WITH_MESSAGE_TYPE, LOGIN_ALREADY_USED_TYPE, EMAIL_ALREADY_USED_TYPE, INVALID_PASSWORD_TYPE] as const;
+const problemWithMessageTypes = [PROBLEM_WITH_MESSAGE_TYPE, LOGIN_ALREADY_USED_TYPE, EMAIL_ALREADY_USED_TYPE, INVALID_PASSWORD_TYPE] as const;
 
 export type ProblemWithMessage = JHipsterProblem & {
   type: (typeof problemWithMessageTypes)[number];
