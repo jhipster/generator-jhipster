@@ -57,7 +57,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ if (authenticationTypeOauth2) { _%>
 import static org.springframework.security.oauth2.core.oidc.StandardClaimNames.PREFERRED_USERNAME;
 
-  <%_ if (communicationSpringWebsocket && !applicationTypeMicroservice) { _%>
+  <%_ if (communicationSpringWebsocket && !applicationTypeMicroservice && !clientFrameworkAngular) { _%>
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
@@ -339,7 +339,7 @@ public class SecurityConfiguration {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
   <%_ } else { _%>
             .oauth2Login(oauth2 -> oauth2.loginPage("/").userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
-    <%_ if (communicationSpringWebsocket) { _%>
+    <%_ if (communicationSpringWebsocket && !clientFrameworkAngular) { _%>
             // Prevent the SockJS info polling request from being saved and replayed as the
             // post-login redirect target (see https://github.com/jhipster/generator-jhipster/issues/28685)
             .requestCache(cache -> {
