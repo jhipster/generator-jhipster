@@ -17,8 +17,10 @@
  limitations under the License.
 -%>
 import { describe, expect, it, vi } from 'vitest';
+import { ref } from 'vue';
 
 import AlertService from '@/shared/alert/alert.service';
+import { CONSTRAINT_VIOLATION_TYPE } from '@/shared/jhipster/error.constants';
 
 import { useEntitySave } from './entity-save';
 
@@ -75,5 +77,42 @@ describe('useEntitySave', () => {
     expect(alertService.showHttpError).toHaveBeenCalledWith({ status: 500 });
     expect(onSaved).not.toHaveBeenCalled();
     expect(isSaving.value).toBe(false);
+  });
+
+  it('should keep the messages of the fields the server refused, until the next save', async () => {
+    const alertService = new AlertService({ <%- enableTranslation ? 'i18n: { t: vi.fn() }, ' : '' %>toast: { create: vi.fn() } });
+    vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+    vi.spyOn(alertService, 'getFieldErrorMessage').mockImplementation(({ field, message }) => `${field}: ${message}`);
+    const serverErrors = ref<Record<string, string[]>>({ other: ['old'] });
+    const response = {
+      status: 400,
+      data: {
+        type: CONSTRAINT_VIOLATION_TYPE,
+        fieldErrors: [
+          { objectName: 'foo', field: 'name', message: 'must not be null', code: 'NotNull' },
+          { objectName: 'foo', field: 'name', message: 'must match', code: 'Pattern' },
+        ],
+      },
+    };
+    const create = vi.fn().mockRejectedValueOnce({ response }).mockResolvedValueOnce({ id: 1 });
+    const { save } = useEntitySave({
+      alertService,
+      isUpdate: () => false,
+      create,
+      update: vi.fn(),
+      getId: (entity: { id: number }) => entity.id,
+      createdMessage: id => `created ${id}`,
+      updatedMessage: id => `updated ${id}`,
+      onSaved: vi.fn(),
+      serverErrors,
+    });
+
+    await save();
+    expect(serverErrors.value).toEqual({ name: ['name: must not be null', 'name: must match'] });
+    expect(alertService.showHttpError).toHaveBeenCalledWith(response);
+
+    vi.spyOn(alertService, 'showSuccess').mockImplementation(() => {});
+    await save();
+    expect(serverErrors.value).toEqual({});
   });
 });

@@ -50,6 +50,7 @@ const axiosStub = {
 describe('LoginForm Component', () => {
   let wrapper: VueWrapper<LoginFormComponentType>;
   let loginForm: LoginFormComponentType;
+  let globalOptions: MountingOptions<LoginFormComponentType>['global'];
 
   beforeEach(() => {
     route = { query: {} };
@@ -60,7 +61,7 @@ describe('LoginForm Component', () => {
     const pinia = createTestingPinia();
     const store = useStore();
 
-    const globalOptions: MountingOptions<LoginFormComponentType>['global'] = {
+    globalOptions = {
       stubs: {
         'b-alert': slotsStub,
         'b-button': slotsStub,
@@ -78,6 +79,20 @@ describe('LoginForm Component', () => {
     wrapper = shallowMount(LoginForm, { global: globalOptions });
 
     loginForm = wrapper.vm;
+  });
+
+  it('should not tell that a session expired by default', () => {
+    expect(loginForm.sessionExpired).toBe(false);
+  });
+
+  it('should tell that the session expired when the navigation says it', () => {
+    window.history.replaceState({ ...window.history.state, sessionExpired: true }, '');
+    try {
+      const expired = shallowMount(LoginForm, { global: globalOptions });
+      expect(expired.vm.sessionExpired).toBe(true);
+    } finally {
+      window.history.replaceState({ ...window.history.state, sessionExpired: undefined }, '');
+    }
   });
 
   it('should not authenticate without a login or a password', async () => {

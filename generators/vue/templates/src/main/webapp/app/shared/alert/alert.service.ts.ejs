@@ -24,9 +24,7 @@ import { type Composer, useI18n } from 'vue-i18n';
 import { type BToastProps, useToast } from 'bootstrap-vue-next';
 
 import { getMessageFromHeaders } from '@/shared/jhipster/headers';
-
-/** An error of a field of the body, as the server gives it in a problem detail. */
-type FieldError = { field: string; message: string<%- enableTranslation ? '; code?: string' : '' %> };
+import { type FieldErrorVM, getServerProblem, isConstraintViolation } from '@/shared/jhipster/problem-details';
 
 export const useAlertService = () => {
   // Throws without the plugin of BootstrapVue.
@@ -94,8 +92,8 @@ export default class AlertService {
   showHttpError(response?: { data?: unknown; status?: number; headers?: Record<string, unknown> }) {
     // Without a response, the server was not reached.
     const { data: body, status = 0, headers } = response ?? {};
-    // The body of an error of the server, a problem detail.
-    const data = body as { message?: string; fieldErrors?: unknown } | undefined;
+    // The body of an error of the server, a problem detail, else nothing to read.
+    const problem = getServerProblem(body);
     let errorMessage: string | null = null;
     switch (status) {
       case 401:
@@ -103,12 +101,26 @@ export default class AlertService {
         return;
 
       case 0:
-        errorMessage = this.i18n.t('error.server.not.reachable').toString();
+<%_ if (enableTranslation) { _%>
+        // The key has dots of its own.
+        errorMessage = this.i18n.t("error['server.not.reachable']").toString();
+<%_ } else { _%>
+        errorMessage = 'Server not reachable';
+<%_ } _%>
+        break;
+
+      // The server denies the access without a body.
+      case 403:
+<%_ if (enableTranslation) { _%>
+        errorMessage = this.i18n.t('error.http.403').toString();
+<%_ } else { _%>
+        errorMessage = 'You are not authorized to access this page.';
+<%_ } _%>
         break;
 
       case 400: {
-        if (Array.isArray(data?.fieldErrors) && data.fieldErrors.length > 0) {
-          for (const fieldError of data.fieldErrors as FieldError[]) {
+        if (isConstraintViolation(problem) && problem.fieldErrors.length > 0) {
+          for (const fieldError of problem.fieldErrors) {
             this.showError(this.getFieldErrorMessage(fieldError));
           }
           return;
@@ -123,11 +135,11 @@ export default class AlertService {
 <%_ } _%>
         if (message.errorMessage) {
           errorMessage = message.errorMessage;
-        } else if (data?.message) {
+        } else if (problem?.message) {
 <%_ if (enableTranslation) { _%>
-          errorMessage = this.i18n.t(data.message).toString();
+          errorMessage = this.i18n.t(problem.message).toString();
 <%_ } else { _%>
-          errorMessage = data.message;
+          errorMessage = problem.message;
 <%_ } _%>
         }
         break;
@@ -139,26 +151,33 @@ export default class AlertService {
 
       default:
 <%_ if (enableTranslation) { _%>
-        errorMessage = this.i18n.t(data?.message ?? 'error.http.500').toString();
+        errorMessage = this.i18n.t(problem?.message ?? 'error.http.500').toString();
 <%_ } else { _%>
-        errorMessage = data?.message ?? 'Internal server error.';
+        errorMessage = problem?.message ?? 'Internal server error.';
 <%_ } _%>
     }
     this.showError(errorMessage!);
   }
 
   /**
-   * What is wrong with a field<%- enableTranslation ? ': the translation of the code of its constraint when there is one, else' : ':' %> the message of the
-   * server.
+   * What is wrong with a field, named by its label<%- enableTranslation ? ': the translation of the code of its constraint when there is one, else' : ':' %> the
+   * message of the server.
    */
-  private getFieldErrorMessage({ field, message<%- enableTranslation ? ', code' : '' %> }: FieldError): string {
+  getFieldErrorMessage({ objectName, field, message<%- enableTranslation ? ', code' : '' %> }: FieldErrorVM): string {
+    // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
+    const convertedField = field.replaceAll(/\[\d*\]/g, '[]');
 <%_ if (enableTranslation) { _%>
+    // The keys of the users are not prefixed by the application.
+    const labelKey = `${objectName === 'userManagement' ? 'userManagement' : `<%- frontendAppName %>.${objectName}`}.${convertedField}`;
+    const fieldName = this.i18n.te?.(labelKey) ? this.i18n.t(labelKey).toString() : field;
     const key = `error.${code}`;
     if (code && this.i18n.te?.(key)) {
-      return this.i18n.t(key, { fieldName: field }).toString();
+      return this.i18n.t(key, { fieldName }).toString();
     }
+<%_ } else { _%>
+    const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
 <%_ } _%>
-    return `${field}: ${message}`;
+    return `${fieldName}: ${message}`;
   }
 }
 

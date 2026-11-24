@@ -41,12 +41,19 @@ export type PropertyRules = {
 /**
  * The Vuelidate validation of the form of an entity, from the rules of each of its properties, validated at once.
  */
-export const useEntityValidation = <T extends object>(entity: Ref<T>, rules: Record<string, PropertyRules>) => {
+export const useEntityValidation = <T extends object>(
+  entity: Ref<T>,
+  rules: Record<string, PropertyRules>,
+  /** The messages of the fields the server refused, which make them invalid. */
+  serverErrors?: Ref<Record<string, string[]>>,
+) => {
 <%_ if (enableTranslation) { _%>
   const { t: t$ } = useI18n();
 <%_ } _%>
   const validations = useValidation();
   const vuelidateRules = ({ required, email, minLength, maxLength, integer, min, max, pattern }: PropertyRules) => ({
+    // Vuelidate keeps the errors of the server only for a property with a rule.
+    ...(serverErrors ? { server: () => true } : {}),
     ...(required ? { required: validations.required(t$('entity.validation.required').toString()) } : {}),
     ...(email ? { email: validations.email(t$('global.messages.validate.email.invalid').toString()) } : {}),
     ...(minLength === undefined
@@ -72,6 +79,7 @@ export const useEntityValidation = <T extends object>(entity: Ref<T>, rules: Rec
   const v$ = useVuelidate(
     Object.fromEntries(Object.entries(rules).map(([property, propertyRules]) => [property, vuelidateRules(propertyRules)])),
     entity,
+    serverErrors ? { $externalResults: serverErrors } : {},
   );
   return v$;
 };

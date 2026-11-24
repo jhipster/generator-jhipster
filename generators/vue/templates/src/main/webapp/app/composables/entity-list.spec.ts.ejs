@@ -72,7 +72,8 @@ describe('useEntityList', () => {
       const { list } = mountList({ retrieve });
       await flushPromises();
 
-      expect(retrieve).toHaveBeenCalledExactlyOnceWith({ signal: expect.any(AbortSignal) });
+      // The default sort, the order of the server being undefined otherwise.
+      expect(retrieve).toHaveBeenCalledExactlyOnceWith({ sort: ['id,asc'], signal: expect.any(AbortSignal) });
       expect(list.items.value).toEqual([{ id: 1 }]);
     });
 
@@ -88,7 +89,7 @@ describe('useEntityList', () => {
       await flushPromises();
 
       expect(search).toHaveBeenCalledTimes(2);
-      expect(search).toHaveBeenLastCalledWith('text', { signal: expect.any(AbortSignal) });
+      expect(search).toHaveBeenLastCalledWith('text', { sort: ['id,asc'], signal: expect.any(AbortSignal) });
       expect({ items: list.items.value, currentSearch: list.currentSearch.value }).toEqual({ items: [{ id: 2 }], currentSearch: 'text' });
 
       list.search('');

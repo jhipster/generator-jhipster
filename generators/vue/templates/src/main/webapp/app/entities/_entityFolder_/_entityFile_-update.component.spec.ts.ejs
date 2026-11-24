@@ -56,10 +56,11 @@ type <%- entityAngularName %>UpdateComponentType = InstanceType<typeof <%- entit
 
 let route: Partial<RouteLocation>;
 const routerGoMock = vi.fn();
+const routerReplaceMock = vi.fn();
 
 vi.mock('vue-router', () => ({
   useRoute: () => route,
-  useRouter: () => ({ go: routerGoMock }),
+  useRouter: () => ({ go: routerGoMock, replace: routerReplaceMock }),
 }));
 
 const <%- entityInstance %>Sample: I<%- entityAngularName %> = { ...<%- vueTsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
@@ -602,9 +603,24 @@ describe('Component Tests', () => {
     });
 
     describe('Errors and defaults', () => {
-      it('Should show the error of a failed load', async () => {
+      it('Should leave for the page not found when the entity to update does not exist', async () => {
         // GIVEN
         <%- entityInstance %>ServiceStub.find.mockRejectedValue({ response: { status: 404 } });
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        route = { params: { <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %> } };
+
+        // WHEN
+        shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        await flushPromises();
+
+        // THEN
+        expect(routerReplaceMock).toHaveBeenCalledWith({ name: 'NotFound' });
+        expect(showHttpError).not.toHaveBeenCalledWith({ status: 404 });
+      });
+
+      it('Should show the error of a failed load', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockRejectedValue({ response: { status: 500 } });
         const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
         route = {
           params: {
@@ -617,7 +633,7 @@ describe('Component Tests', () => {
         await flushPromises();
 
         // THEN
-        expect(showHttpError).toHaveBeenCalledWith({ status: 404 });
+        expect(showHttpError).toHaveBeenCalledWith({ status: 500 });
       });
 
       it('Should show the error of a failed save', async () => {

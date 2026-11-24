@@ -78,7 +78,7 @@ export const useEntityList = <T>({ retrieve, search, pagination, onError }: UseE
     execute: retrieveItems,
   } = useControlledRequest(
     async (params, { signal }): Promise<T[]> => {
-      const query: ListQuery = paged ? { page: params.page - 1, size: itemsPerPage.value, sort: params.sort, signal } : { signal };
+      const query: ListQuery = paged ? { page: params.page - 1, size: itemsPerPage.value, sort: params.sort, signal } : { sort: params.sort, signal };
       const res = search && params.search ? await search(params.search, query) : await retrieve(query);
       if (paged) {
         totalItems.value = Number(res.headers['x-total-count']);
@@ -95,7 +95,8 @@ export const useEntityList = <T>({ retrieve, search, pagination, onError }: UseE
       params: () => ({
         search: searchQuery.value,
         page: page.value,
-        sort: paged ? buildSortParam({ predicate: propOrder.value, order: reverse.value ? DESC : ASC }, 'id') : [],
+        // Without pagination, the list is sorted by its default sort, the order of the server being undefined otherwise.
+        sort: buildSortParam({ predicate: propOrder.value, order: reverse.value ? DESC : ASC }, 'id'),
       }),
       initialData: (): T[] => [],
       onError,

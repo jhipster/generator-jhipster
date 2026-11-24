@@ -33,6 +33,8 @@ export const createUnauthorizedHandler =
     const url = error.response?.config?.url;
     const status = error.status ?? error.response?.status;
     if (status === 401) {
+      // Only a session that was authenticated has expired.
+      const sessionExpired = accountService.authenticated;
       accountService.logout();
       if (!url?.endsWith('api/account') && !url?.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {
         // Ask for a new authentication
@@ -41,7 +43,7 @@ export const createUnauthorizedHandler =
 <%_ } else { _%>
         const { fullPath, path } = router.currentRoute.value;
         if (path !== '/login') {
-          router.push({ path: '/login', query: { redirect: fullPath } });
+          router.push({ path: '/login', query: { redirect: fullPath }, state: { sessionExpired } });
         }
 <%_ } _%>
       }

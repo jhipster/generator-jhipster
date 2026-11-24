@@ -160,7 +160,9 @@ const { data: <%- entityInstance %> } = useControlledRequest((id, { signal }) =>
   // The router reuses the component when the id of the route changes.
   params: () => route.params?.<%- entityInstance %>Id as string | undefined,
   initialData: (): I<%- entityAngularName %> => ({}),
-  onError: error => alertService.showHttpError((error as AxiosError).response),
+  // A record that does not exist anymore leaves for the page not found.
+  onError: error =>
+    (error as AxiosError).response?.status === 404 ? router.replace({ name: 'NotFound' }) : alertService.showHttpError((error as AxiosError).response),
 });
 <%_ if (!readOnly) { _%>
 const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remove<%- entityAngularName %> } = useEntityRemove({

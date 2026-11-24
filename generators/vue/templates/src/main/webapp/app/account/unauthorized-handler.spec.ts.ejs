@@ -29,7 +29,7 @@ import { createUnauthorizedHandler } from './unauthorized-handler';
 const error = (status: number, url = 'api/foos') => ({ status, response: { status, config: { url } } }) as unknown as AxiosError;
 
 describe('unauthorized handler', () => {
-  let accountService: { logout: ReturnType<typeof vi.fn> };
+  let accountService: { logout: ReturnType<typeof vi.fn>; authenticated: boolean };
 <%_ if (authenticationTypeOauth2) { _%>
   let reload: ReturnType<typeof vi.fn>;
 <%_ } else { _%>
@@ -44,7 +44,7 @@ describe('unauthorized handler', () => {
     })(axiosError);
 
   beforeEach(() => {
-    accountService = { logout: vi.fn() };
+    accountService = { logout: vi.fn(), authenticated: false };
 <%_ if (authenticationTypeOauth2) { _%>
     reload = vi.fn();
     vi.stubGlobal('location', { ...window.location, reload });
@@ -60,9 +60,19 @@ describe('unauthorized handler', () => {
 <%_ if (authenticationTypeOauth2) { _%>
     expect(reload).toHaveBeenCalledOnce();
 <%_ } else { _%>
-    expect(router.push).toHaveBeenCalledWith({ path: '/login', query: { redirect: '/foo?page=2' } });
+    expect(router.push).toHaveBeenCalledWith({ path: '/login', query: { redirect: '/foo?page=2' }, state: { sessionExpired: false } });
 <%_ } _%>
   });
+<%_ if (!authenticationTypeOauth2) { _%>
+
+  it('should tell the login that the session of an authenticated user expired', async () => {
+    accountService.authenticated = true;
+
+    await expect(handler(error(401))).rejects.toMatchObject({ status: 401 });
+
+    expect(router.push).toHaveBeenCalledWith({ path: '/login', query: { redirect: '/foo?page=2' }, state: { sessionExpired: true } });
+  });
+<%_ } _%>
 
   it('should sign the user out without asking for an authentication when the account is the request', async () => {
     await expect(handler(error(401, 'api/account'))).rejects.toMatchObject({ status: 401 });

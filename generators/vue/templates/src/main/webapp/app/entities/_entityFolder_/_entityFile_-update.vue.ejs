@@ -107,7 +107,6 @@ _%>
   <%_ if (field.fieldTypeBoolean) { _%>
             <label class="form-check-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
-  <%_ if (field.vueClientValidation) { _%>
             <div v-if="v$.<%- fieldName %>.$anyDirty && v$.<%- fieldName %>.$invalid">
               <small
                 class="form-text text-danger"
@@ -115,7 +114,6 @@ _%>
                 :key="error.$uid"
               >{{ error.$message }}</small>
             </div>
-  <%_ } _%>
           </div>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
@@ -175,7 +173,7 @@ _%>
     const clientConstantFields = entityClientFormFields.filter(field => field.clientConstantsAsValues);
     const usesGetSelected = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship && !rel.relationshipSerializePrimaryKeyOnly);
 _%>
-import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', ...enumTypeFields.length > 0 ? ['ref'] : [], 'watch'].join(', ') %> } from 'vue';
+import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', 'ref', 'watch'].join(', ') %> } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -279,7 +277,8 @@ const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
     // The router reuses the component when the id of the route changes, and an update without id is a new entity.
     params: () => route.params?.<%- entityInstance %>Id as string | undefined,
     initialData: new<%- entityAngularName %>,
-    onError: showLoadError,
+    // A record that does not exist anymore leaves for the page not found.
+    onError: error => ((error as AxiosError).response?.status === 404 ? router.replace({ name: 'NotFound' }) : showLoadError(error)),
   },
 );
 <%_ if (vueFormTimeFields) { _%>
@@ -292,6 +291,8 @@ const dataUtils = useDataUtils();
 <%_ if (enableTranslation) { _%>
 const { t: t$ } = useI18n();
 <%_ } _%>
+// The messages of the fields the server refused.
+const serverErrors = ref<Record<string, string[]>>({});
 const v$ = useEntityValidation(<%- entityInstance %>, {
 <%_ for (field of entityClientFormFields) { _%>
   <%- field.fieldName %>: <%- field.vueValidationRules %>,
@@ -321,6 +322,7 @@ const { isSaving, save: saveEntity } = useEntitySave({
   updatedMessage: id => `A <%- entityAngularName %> is updated with identifier ${id}`,
 <%_ } _%>
   onSaved: () => previousState(),
+  serverErrors,
 });
 
 const save = async () => {
@@ -330,6 +332,10 @@ const save = async () => {
     return;
   }
   await saveEntity();
+  if (Object.keys(serverErrors.value).length > 0) {
+    // The fields the server refused are marked with its messages.
+    v$.value.$touch();
+  }
 };
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
 

@@ -22,9 +22,7 @@ import axios, { type AxiosResponse } from 'axios';
 
 import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 import { type RequestOptions } from '@/composables';
-<%_ if (!paginationNo) { _%>
 import buildPaginationQueryOpts, { type PaginationQuery } from '@/utils/sorts';
-<%_ } _%>
 
 const baseApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>';
 <%_ if (searchEngineAny) { _%>
@@ -49,8 +47,9 @@ export default class <%- entityAngularName %>Service {
     return res.data;
   }
 
-  retrieve({ signal<%- paginationNo ? '' : ', ...paginationQuery' %> }: <%- paginationNo ? '' : 'PaginationQuery & ' %>RequestOptions = {}) : Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
-    return axios.get(baseApiUrl<%- paginationNo ? '' : ' + `?${buildPaginationQueryOpts(paginationQuery)}` ' %>, { signal });
+  retrieve({ signal, ...paginationQuery }: PaginationQuery & RequestOptions = {}) : Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
+    const query = buildPaginationQueryOpts(paginationQuery);
+    return axios.get(query ? `${baseApiUrl}?${query}` : baseApiUrl, { signal });
   }
 <%_ if (!readOnly) { _%>
 
