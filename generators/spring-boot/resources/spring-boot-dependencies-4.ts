@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 /**
- * import type from JSON file is not supported in TypeScript.
- * This file is a workaround to be able to import JSON type.
+ * The versions Spring Boot manages, from the spring-boot-dependencies POM that update-spring-boot stores in
+ * spring-boot-dependencies-4.json. The JSON holds each managed version once, as a property: `versions` is derived here,
+ * without the Maven support, whose XML parser would load with this file.
  */
 import { readFileSync } from 'node:fs';
 
@@ -39,6 +40,14 @@ const overrides: Partial<SpringBootDependenciesOverrides> | null = parse(
   readFileSync(new URL('./spring-boot-dependencies-4-overrides.yml', import.meta.url), 'utf8'),
 );
 
+/** The versions of the properties, keyed by the property without `.version`. */
+const versionsOfProperties = (properties: Record<string, string>): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(properties)
+      .filter(([property]) => property.endsWith('.version'))
+      .map(([property, value]) => [property.slice(0, -'.version'.length), value]),
+  );
+
 const properties = overrides?.properties ?? {};
 
 /**
@@ -47,11 +56,19 @@ const properties = overrides?.properties ?? {};
 export const springBootDependenciesOverrides: SpringBootDependenciesOverrides = {
   dependencies: overrides?.dependencies ?? {},
   properties,
-  versions: Object.fromEntries(
-    Object.entries(properties)
-      .filter(([property]) => property.endsWith('.version'))
-      .map(([property, value]) => [property.slice(0, -'.version'.length), value]),
-  ),
+  versions: versionsOfProperties(properties),
 };
 
-export default springBootDependencies4;
+const { artifactId, version, properties: managedProperties, modules } = springBootDependencies4;
+
+/** The keys of the managed versions: each version property without `.version`, and the artifactId of Spring Boot. */
+export type SpringBootManagedVersions = { 'spring-boot-dependencies': string } & {
+  [Property in keyof typeof managedProperties as Property extends `${infer Name}.version` ? Name : never]: string;
+};
+
+export default {
+  /** The managed versions, keyed by their property without `.version`, and the Spring Boot version keyed by its artifactId. */
+  versions: { [artifactId]: version, ...versionsOfProperties(managedProperties) } as SpringBootManagedVersions,
+  properties: managedProperties,
+  modules,
+};
