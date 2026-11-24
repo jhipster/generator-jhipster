@@ -19,9 +19,9 @@
 import type { ComposeOptions } from 'yeoman-generator';
 
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
-import { mutateDefaults } from '../../lib/utils/index.ts';
+import { finalizeMutations, mutateDefaults } from '../../lib/utils/index.ts';
 import BaseGenerator from '../base/index.ts';
-import { POST_WRITING_OBJECTS, PRIORITY_NAMES, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
+import { POST_WRITING_OBJECTS, PRIORITY_NAMES, QUEUES, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask, TaskGroup } from '../base-core/types.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
@@ -98,6 +98,29 @@ export default class BaseSimpleApplicationGenerator<
       },
       ...features,
     } as Features);
+
+    if (this.options.help) {
+      return;
+    }
+
+    // The delayed defaults of the application are applied once every generator prepared it: queued by each generator
+    // before its own tasks, the first one of an application runs before every post preparing task of it, the others find
+    // it finalized. Not queued once: a workspace has an application context for each of its applications.
+    this.on('before:queueOwnTasks', () => {
+      this.queueTask({
+        queueName: QUEUES.POST_PREPARING_QUEUE,
+        taskName: 'finalizeApplicationMutations',
+        // The arguments of the priority would read the application, creating it in a folder without one.
+        args: [],
+        method: () => {
+          // Read without creating it: a generator composed in the folder of an application of a blueprint has none.
+          const application = this.env.getContextMap(this.destinationRoot()).get(CONTEXT_DATA_APPLICATION_KEY);
+          if (application) {
+            finalizeMutations(application);
+          }
+        },
+      });
+    });
   }
 
   override get context(): Application {
