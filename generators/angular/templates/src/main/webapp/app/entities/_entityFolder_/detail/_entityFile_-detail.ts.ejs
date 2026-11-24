@@ -16,9 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ // The edit button and the links to the related entities use the router link.
+    const usesRouterLink = (entityFileName !== 'authority' && updatableEntity)
+      || relationships.some(rel => !rel.otherEntity.embedded && !rel.relationshipSerializePrimaryKeyOnly && rel.persistableRelationship && !rel.otherEntityUser);
+_%>
 import { Component, <%- anyFieldIsBlobDerived || !readOnly || builtInUserManagement ? 'inject, ' : '' %>input } from '@angular/core';
-<%_ if (!readOnly || (entityFileName !== 'authority' && updatableEntity)) { _%>
-import { <%- [readOnly ? undefined : 'Router', entityFileName !== 'authority' && updatableEntity ? 'RouterLink' : undefined].filter(Boolean).join(', ') %> } from '@angular/router';
+<%_ if (!readOnly || usesRouterLink) { _%>
+import { <%- [readOnly ? undefined : 'Router', usesRouterLink ? 'RouterLink' : undefined].filter(Boolean).join(', ') %> } from '@angular/router';
 <%_ } _%>
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -73,7 +77,7 @@ import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileNa
 <%_ if (angularEntityDetailsRequiresTranslationPipe) { _%>
       TranslatePipe,
 <%_ } _%>
-<%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
+<%_ if (usesRouterLink) { _%>
       RouterLink,
 <%_ } _%>
 <%_ if (anyFieldIsDuration) { _%>

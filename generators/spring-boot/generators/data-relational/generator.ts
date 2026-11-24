@@ -105,12 +105,6 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ application, entity }) {
-        entity.relationships.forEach(relationship => {
-          if (relationship.persistableRelationship === undefined && relationship.relationshipType === 'many-to-many') {
-            relationship.persistableRelationship = true;
-          }
-        });
-
         const entityAny = entity as any;
         if (isReservedTableName(entity.entityInstance, application.prodDatabaseType ?? application.databaseType) && entityAny.jhiPrefix) {
           entity.entityJpqlInstance = `${entityAny.jhiPrefix}${entity.entityClass}`;
