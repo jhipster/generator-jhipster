@@ -29,9 +29,9 @@ _%>
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
 <%_ const usesSelectOptions = fields.some(field => field.clientConstantsAsValues && field.collection) || relationships.some(rel => rel.relationshipSerializePrimaryKeyOnly || rel.persistableRelationship); _%>
 <%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %>, <%- builtInUserManagement ? 'computed, ' : '' %>inject, signal } from '@angular/core';
-import { FormField, FormRoot } from '@angular/forms/signals';
+import { FieldTree, FormField, FormRoot, TreeValidationResult } from '@angular/forms/signals';
 import { ActivatedRoute } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -75,6 +75,7 @@ import { SelectOptionsDirective } from 'app/shared/form';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { type BlobType } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
+import { getServerProblem, isConstraintViolation } from 'app/shared/jhipster/problem-details';
 <%_ if (enableTranslation) { _%>
 import { <%- constantLabelPipes.filter(pipe => pipe.importPath === 'app/shared/language').map(pipe => `${pipe.importName}, `).join('') %>TranslateDirective } from 'app/shared/language';
 <%_ } _%>
@@ -162,7 +163,7 @@ export class <%- entityAngularName %>Update implements OnInit {
     // A submit marks the fields as touched and sends nothing while the form is invalid.
     // eslint-disable-next-line @typescript-eslint/member-ordering
     readonly editForm = this.<%- entityInstance %>FormService.create<%- entityAngularName %>Form(this.<%- entityInstance %>Model, <%- editableId ? 'this.editing, ' : '' %>{
-        submission: { action: () => Promise.resolve(this.save()) },
+        submission: { action: () => this.save() },
     });
 
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
@@ -223,35 +224,56 @@ export class <%- entityAngularName %>Update implements OnInit {
         globalThis.history.back();
     }
 
-    save(): void {
+    save(): Promise<TreeValidationResult> {
         this.isSaving.set(true);
         const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.<%- entityInstance %>Model()<%- angularFormKeepsEmptyValues ? `, this.${entityInstance}` : '' %>);
 <%_ if (primaryKey.autoGenerate || builtInUserManagement) { _%>
   <%_ if (updatableEntity) { _%>
         if (<%- entityInstance %>.<%- builtInUserManagement ? 'id' : primaryKey.name %> === null) {
-            this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %><%- builtInUserManagement ? ` as New${entityAngularName}` : '' %>));
+            return this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %><%- builtInUserManagement ? ` as New${entityAngularName}` : '' %>));
         } else {
-            this.subscribeToSaveResponse(this.<%- entityInstance %>Service.update(<%- entityInstance %><%- builtInUserManagement ? ` as I${entityAngularName}` : '' %>));
+            return this.subscribeToSaveResponse(this.<%- entityInstance %>Service.update(<%- entityInstance %><%- builtInUserManagement ? ` as I${entityAngularName}` : '' %>));
         }
   <%_ } else { _%>
-        this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
+        return this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
   <%_ } _%>
 <%_ } else if (updatableEntity) { _%>
         // The id is provided by the user, so a filled id does not mean the entity exists: the route decides.
         if (this.<%- entityInstance %> === null) {
-            this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %> as New<%- entityAngularName %>));
+            return this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %> as New<%- entityAngularName %>));
         } else {
-            this.subscribeToSaveResponse(this.<%- entityInstance %>Service.update(<%- entityInstance %> as I<%- entityAngularName %>));
+            return this.subscribeToSaveResponse(this.<%- entityInstance %>Service.update(<%- entityInstance %> as I<%- entityAngularName %>));
         }
 <%_ } else { _%>
-        this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
+        return this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
 <%_ } _%>
     }
 
-    private subscribeToSaveResponse(result: Observable<I<%- entityAngularName %> | null>): void {
-        result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-            next: () => this.onSaveSuccess(),
-            error: () => this.onSaveError()
+    private subscribeToSaveResponse(result: Observable<I<%- entityAngularName %> | null>): Promise<TreeValidationResult> {
+        return new Promise(resolve => {
+            result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+                next: () => {
+                    this.onSaveSuccess();
+                    resolve(undefined);
+                },
+                error: (error: unknown) => {
+                    this.onSaveError();
+                    resolve(this.getServerErrors(error));
+                },
+            });
+        });
+    }
+
+    // The fields the server refused are marked invalid, with the message of their errors.
+    private getServerErrors(error: unknown): TreeValidationResult {
+        const problem = getServerProblem(error instanceof HttpErrorResponse ? error.error : undefined);
+        if (!isConstraintViolation(problem)) {
+            return undefined;
+        }
+        const fields = this.editForm as unknown as Record<string, FieldTree<unknown> | undefined>;
+        return problem.fieldErrors.flatMap(({ field, message }) => {
+            const fieldTree = fields[field];
+            return fieldTree ? [{ kind: 'server', message, fieldTree }] : [];
         });
     }
 

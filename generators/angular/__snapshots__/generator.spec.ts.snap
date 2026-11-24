@@ -1998,7 +1998,12 @@ export class UserManagementFormService {
             data-cy="login"
             [formField]="editForm.login"
           />
-          @if (loginRef.invalid() && (loginRef.dirty() || loginRef.touched())) {
+          @if (editForm.login().getError('server'); as serverError) {
+          <small class="form-text text-danger" data-cy="serverError"
+            >{{ serverError.message }}</small
+          >
+          } @if (loginRef.invalid() && (loginRef.dirty() || loginRef.touched()))
+          {
           <div>
             @if (loginRef.getError('required')) {
             <small class="form-text text-danger">This field is required.</small>
@@ -2026,7 +2031,11 @@ export class UserManagementFormService {
             data-cy="firstName"
             [formField]="editForm.firstName"
           />
-          @if (firstNameRef.invalid() && (firstNameRef.dirty() ||
+          @if (editForm.firstName().getError('server'); as serverError) {
+          <small class="form-text text-danger" data-cy="serverError"
+            >{{ serverError.message }}</small
+          >
+          } @if (firstNameRef.invalid() && (firstNameRef.dirty() ||
           firstNameRef.touched())) {
           <div>
             @if (firstNameRef.getError('maxLength')) {
@@ -2048,7 +2057,11 @@ export class UserManagementFormService {
             data-cy="lastName"
             [formField]="editForm.lastName"
           />
-          @if (lastNameRef.invalid() && (lastNameRef.dirty() ||
+          @if (editForm.lastName().getError('server'); as serverError) {
+          <small class="form-text text-danger" data-cy="serverError"
+            >{{ serverError.message }}</small
+          >
+          } @if (lastNameRef.invalid() && (lastNameRef.dirty() ||
           lastNameRef.touched())) {
           <div>
             @if (lastNameRef.getError('maxLength')) {
@@ -2070,7 +2083,12 @@ export class UserManagementFormService {
             data-cy="email"
             [formField]="editForm.email"
           />
-          @if (emailRef.invalid() && (emailRef.dirty() || emailRef.touched())) {
+          @if (editForm.email().getError('server'); as serverError) {
+          <small class="form-text text-danger" data-cy="serverError"
+            >{{ serverError.message }}</small
+          >
+          } @if (emailRef.invalid() && (emailRef.dirty() || emailRef.touched()))
+          {
           <div>
             @if (emailRef.getError('required')) {
             <small class="form-text text-danger">This field is required.</small>
@@ -2102,6 +2120,11 @@ export class UserManagementFormService {
           <label class="form-check-label" for="field_activated"
             >Activated</label
           >
+          @if (editForm.activated().getError('server'); as serverError) {
+          <small class="form-text text-danger" data-cy="serverError"
+            >{{ serverError.message }}</small
+          >
+          }
         </div>
         }
 
@@ -2119,6 +2142,11 @@ export class UserManagementFormService {
             }
           </select>
         </div>
+        @if (editForm.authorities().getError('server'); as serverError) {
+        <small class="form-text text-danger" data-cy="serverError"
+          >{{ serverError.message }}</small
+        >
+        }
       </div>
 
       <div>
@@ -2150,7 +2178,7 @@ export class UserManagementFormService {
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.spec.ts": {
     "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
-import { HttpResponse } from "@angular/common/http";
+import { HttpErrorResponse, HttpResponse } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { submit } from "@angular/forms/signals";
@@ -2221,7 +2249,7 @@ describe("UserManagement Management Update Component", () => {
 
     it("should save a valid submitted form", async () => {
       // GIVEN
-      vi.spyOn(comp, "save").mockImplementation(() => undefined);
+      vi.spyOn(comp, "save").mockResolvedValue(undefined);
       activatedRoute.data = of({ userManagement: sampleWithRequiredData });
       comp.ngOnInit();
 
@@ -2307,15 +2335,58 @@ describe("UserManagement Management Update Component", () => {
       expect(comp.isSaving()).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
+
+    it("should mark the fields the server refused", async () => {
+      // GIVEN
+      const saveSubject = new Subject<IUserManagement>();
+      const userManagement = { id: 123, login: "Ozella.Kertzmann" };
+      vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
+      activatedRoute.data = of({ userManagement });
+      comp.ngOnInit();
+
+      // WHEN
+      const result = comp.save();
+      saveSubject.error(
+        new HttpErrorResponse({
+          status: 400,
+          error: {
+            type: "https://www.jhipster.tech/problem/constraint-violation",
+            message: "error.validation",
+            fieldErrors: [
+              {
+                objectName: "userManagement",
+                field: "firstName",
+                message: "is refused",
+                code: "Refused",
+              },
+            ],
+          },
+        }),
+      );
+
+      // THEN
+      expect(await result).toEqual([
+        expect.objectContaining({
+          kind: "server",
+          message: "is refused",
+          fieldTree: comp.editForm.firstName,
+        }),
+      ]);
+    });
   });
 });
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import { HttpResponse } from "@angular/common/http";
+    "contents": "import { HttpErrorResponse, HttpResponse } from "@angular/common/http";
 import { Component, OnInit, computed, inject, signal } from "@angular/core";
-import { FormField, FormRoot } from "@angular/forms/signals";
+import {
+  FieldTree,
+  FormField,
+  FormRoot,
+  TreeValidationResult,
+} from "@angular/forms/signals";
 import { ActivatedRoute } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -2324,6 +2395,10 @@ import { Observable, finalize, map } from "rxjs";
 import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
 import { AlertError } from "app/shared/alert";
 import { SelectOptionsDirective } from "app/shared/form";
+import {
+  getServerProblem,
+  isConstraintViolation,
+} from "app/shared/jhipster/problem-details";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
 
@@ -2364,7 +2439,7 @@ export class UserManagementUpdate implements OnInit {
   readonly editForm = this.userManagementFormService.createUserManagementForm(
     this.userManagementModel,
     {
-      submission: { action: () => Promise.resolve(this.save()) },
+      submission: { action: () => this.save() },
     },
   );
 
@@ -2383,18 +2458,18 @@ export class UserManagementUpdate implements OnInit {
     globalThis.history.back();
   }
 
-  save(): void {
+  save(): Promise<TreeValidationResult> {
     this.isSaving.set(true);
     const userManagement = this.userManagementFormService.getUserManagement(
       this.userManagementModel(),
       this.userManagement,
     );
     if (userManagement.id === null) {
-      this.subscribeToSaveResponse(
+      return this.subscribeToSaveResponse(
         this.userManagementService.create(userManagement as NewUserManagement),
       );
     } else {
-      this.subscribeToSaveResponse(
+      return this.subscribeToSaveResponse(
         this.userManagementService.update(userManagement as IUserManagement),
       );
     }
@@ -2402,10 +2477,36 @@ export class UserManagementUpdate implements OnInit {
 
   private subscribeToSaveResponse(
     result: Observable<IUserManagement | null>,
-  ): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-      next: () => this.onSaveSuccess(),
-      error: () => this.onSaveError(),
+  ): Promise<TreeValidationResult> {
+    return new Promise((resolve) => {
+      result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+        next: () => {
+          this.onSaveSuccess();
+          resolve(undefined);
+        },
+        error: (error: unknown) => {
+          this.onSaveError();
+          resolve(this.getServerErrors(error));
+        },
+      });
+    });
+  }
+
+  // The fields the server refused are marked invalid, with the message of their errors.
+  private getServerErrors(error: unknown): TreeValidationResult {
+    const problem = getServerProblem(
+      error instanceof HttpErrorResponse ? error.error : undefined,
+    );
+    if (!isConstraintViolation(problem)) {
+      return undefined;
+    }
+    const fields = this.editForm as unknown as Record<
+      string,
+      FieldTree<unknown> | undefined
+    >;
+    return problem.fieldErrors.flatMap(({ field, message }) => {
+      const fieldTree = fields[field];
+      return fieldTree ? [{ kind: "server", message, fieldTree }] : [];
     });
   }
 
@@ -3424,13 +3525,25 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/core/auth/user-route-access.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/interceptor/auth-expired.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/auth.interceptor.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/interceptor/error-handler.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/interceptor/error-handler.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/interceptor/language.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/interceptor/language.interceptor.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/notification.interceptor.ts": {
@@ -4649,7 +4762,16 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/interceptor/error-handler.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/interceptor/error-handler.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/interceptor/language.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/interceptor/language.interceptor.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/notification.interceptor.ts": {
@@ -5923,13 +6045,25 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/core/auth/user-route-access.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/interceptor/auth-expired.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/auth.interceptor.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/interceptor/error-handler.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/interceptor/error-handler.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/interceptor/language.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/interceptor/language.interceptor.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/notification.interceptor.ts": {
@@ -7148,7 +7282,16 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/interceptor/error-handler.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/interceptor/error-handler.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/language.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/language.interceptor.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
@@ -8555,13 +8698,25 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/core/auth/user-route-access.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/interceptor/auth-expired.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/auth.interceptor.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/interceptor/error-handler.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/interceptor/error-handler.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/language.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/language.interceptor.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
@@ -9902,7 +10057,16 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/interceptor/error-handler.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/interceptor/error-handler.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/language.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/language.interceptor.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
@@ -11017,10 +11181,22 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/core/auth/user-route-access.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/interceptor/auth-expired.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/interceptor/error-handler.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/interceptor/error-handler.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/language.interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/language.interceptor.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/notification.interceptor.ts": {

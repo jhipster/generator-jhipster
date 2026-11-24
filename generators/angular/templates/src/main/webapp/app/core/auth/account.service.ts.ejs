@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Service, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { Observable, catchError, of, shareReplay, tap } from 'rxjs';
+import { Observable, catchError, of, shareReplay, tap, throwError } from 'rxjs';
 
 import { serverApiUrl } from 'app/config';
 
@@ -35,7 +35,7 @@ export class AccountService {
   private readonly userIdentity = signal<Account | null>(null);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly account = this.userIdentity.asReadonly();
-  private accountCache$?: Observable<Account> | null;
+  private accountCache$?: Observable<Account | null> | null;
 
 <%_ if (enableTranslation) { _%>
   private readonly translateService = inject(TranslateService);
@@ -53,7 +53,8 @@ export class AccountService {
   authenticate(identity: Account | null): void {
     this.userIdentity.set(identity);
     if (!identity) {
-      this.accountCache$ = null;
+      // Signed out, there is no account until a sign in fetches it.
+      this.accountCache$ = of(null);
     }
   }
 
@@ -71,7 +72,12 @@ export class AccountService {
   identity(force?: boolean): Observable<Account | null> {
     if (!this.accountCache$ || force) {
       this.accountCache$ = this.fetch().pipe(
-        tap((account: Account) => {
+        // Without a session there is no account, and no reason to fetch it again.
+        catchError((error: unknown) => (error instanceof HttpErrorResponse && error.status === 401 ? of(null) : throwError(() => error))),
+        tap((account: Account | null) => {
+          if (!account) {
+            return;
+          }
           this.authenticate(account);
 <%_ if (enableTranslation) { _%>
 

@@ -51,6 +51,8 @@ export default class Login implements OnInit, AfterViewInit {
   readonly username = viewChild.required<ElementRef>('username');
 
   readonly authenticationError = signal(false);
+  // A session that expired leaves for the login, which tells it.
+  readonly sessionExpired = signal(inject(Router).currentNavigation()?.extras.state?.['sessionExpired'] === true);
 
   readonly loginModel = signal({ username: '', password: ''<%- authenticationUsesRememberMe ? ', rememberMe: false' : '' %> });
 

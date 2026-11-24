@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const mainAlertField = enableTranslation ? 'translationKey' : 'message'; _%>
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -28,7 +28,7 @@ import { provideTranslateService } from '@ngx-translate/core';
 
 import { AlertModel, AlertService, EventManager } from 'app/core/util';
 import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
-import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
+import { ConstraintViolationType, ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 
 import { AlertError } from './alert-error';
 
@@ -103,7 +103,7 @@ describe('Alert Error Component', () => {
         headers: new HttpHeaders(),
         status: 400,
         error: {
-          type: ProblemWithMessageType,
+          type: ConstraintViolationType,
           message: 'error.validation',
           fieldErrors: [{ objectName: 'foo', field: 'items[3].name', message: 'NotNull' }],
         },
@@ -111,7 +111,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
 
       expect(comp.alerts()).toHaveLength(1);
-      expect(comp.alerts()[0].<%- enableTranslation ? 'translationKey' : 'message' %>).toBe(<%- enableTranslation ? '\'error.NotNull\'' : '\'Error on field "Items[].name"\'' %>);
+      expect(comp.alerts()[0].<%- enableTranslation ? 'translationKey' : 'message' %>).toBe(<%- enableTranslation ? '\'error.NotNull\'' : '\'Items[].name: NotNull\'' %>);
     });
 
     it('should display an alert on status 0', () => {
@@ -120,6 +120,58 @@ describe('Alert Error Component', () => {
       // THEN
       expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- enableTranslation ? '\'error.server.not.reachable\'' : '\'Server not reachable\'' %>);
+    });
+
+    it('should display an access denied alert on status 403 without body', () => {
+      eventManager.broadcast({
+        name: '<%- frontendAppName %>.httpError',
+        content: new HttpErrorResponse({ url: 'http://localhost:8080/api/foos', status: 403, error: null }),
+      });
+      expect(comp.alerts()).toHaveLength(1);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- enableTranslation ? '\'error.http.403\'' : '\'You are not authorized to access this page.\'' %>);
+    });
+
+    it('should display an alert for an error without body', () => {
+      const response = new HttpErrorResponse({ url: 'http://localhost:8080/api/foos', status: 500, statusText: 'Server Error', error: null });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
+      expect(comp.alerts()).toHaveLength(1);
+      expect(comp.alerts()[0].message).toBe(response.message);
+    });
+<%_ if (enableTranslation) { _%>
+
+    it('should name the field of a user by the key of the user management', () => {
+      const response = new HttpErrorResponse({
+        url: 'http://localhost:8080/api/admin/users',
+        headers: new HttpHeaders(),
+        status: 400,
+        error: {
+          type: ConstraintViolationType,
+          message: 'error.validation',
+          fieldErrors: [{ objectName: 'userManagement', field: 'login', message: 'must not be null', code: 'NotNull' }],
+        },
+      });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
+      expect(comp.alerts()[0].translationParams).toEqual({ fieldName: 'userManagement.login' });
+    });
+<%_ } _%>
+
+    it('should fall back to the field and the message of the server for a code without translation', () => {
+      const addAlert = vi.spyOn(alertService, 'addAlert');
+      const response = new HttpErrorResponse({
+        url: 'http://localhost:8080/api/foos',
+        headers: new HttpHeaders(),
+        status: 400,
+        error: {
+          type: ConstraintViolationType,
+          message: 'error.validation',
+          fieldErrors: [{ objectName: 'foo', field: 'name', message: 'must match "^[A-Z].*$"', code: 'Pattern' }],
+        },
+      });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
+      expect(addAlert).toHaveBeenCalledWith(
+        expect.objectContaining({ message: expect.stringMatching(/: must match "\^\[A-Z\]\.\*\$"$/) }),
+        expect.anything(),
+      );
     });
 
     it('should display an alert on status 404', () => {
@@ -183,7 +235,7 @@ describe('Alert Error Component', () => {
         status: 400,
         statusText: 'Bad Request',
         error: {
-          type: ProblemWithMessageType,
+          type: ConstraintViolationType,
           title: 'Method argument not valid',
           status: 400,
           path: '/api/foos',
@@ -194,7 +246,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
       expect(comp.alerts()).toHaveLength(1);
-      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- enableTranslation ? '\'error.Size\'' : '\'Error on field "MinField"\'' %>);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- enableTranslation ? '\'error.Size\'' : '\'MinField: must be greater than or equal to 1\'' %>);
     });
 
     it('should display an alert on status 400 for error headers', () => {

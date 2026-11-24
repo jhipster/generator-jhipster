@@ -31,6 +31,7 @@ import { authExpiredInterceptor } from 'app/core/interceptor/auth-expired.interc
 import { authInterceptor } from 'app/core/interceptor/auth.interceptor';
 <%_ } _%>
 import { errorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
+import { languageInterceptor } from 'app/core/interceptor/language.interceptor';
 import { notificationInterceptor } from 'app/core/interceptor/notification.interceptor';
 
 import './config/dayjs';
@@ -85,6 +86,7 @@ export const appConfig: ApplicationConfig = {
     provideServiceWorker('ngsw-worker.js', { enabled: false }),
     provideHttpClient(
       withInterceptors([
+        languageInterceptor,
 <%_ if (authenticationTypeJwt) { _%>
         authInterceptor,
 <%_ } _%>

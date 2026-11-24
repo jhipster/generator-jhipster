@@ -27,6 +27,7 @@ import { Subscription } from 'rxjs';
 
 import { AlertModel, AlertService, EventManager, EventWithContent } from 'app/core/util';
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
+import { FieldErrorVM, JHipsterProblem, getServerProblem, isConstraintViolation<%- enableTranslation ? ', isProblemWithMessage' : '' %> } from 'app/shared/jhipster/problem-details';
 
 import { AlertErrorModel } from './alert-error.model';
 
@@ -91,6 +92,11 @@ export class AlertError implements OnDestroy {
         break;
       }
 
+      // The server denies the access without a body.
+      case 403:
+        this.addErrorAlert('You are not authorized to access this page.'<%- enableTranslation ? ', \'error.http.403\'' : '' %>);
+        break;
+
       case 404:
         this.addErrorAlert('Not found'<%- enableTranslation ? ', \'error.url.not.found\'' : '' %>);
         break;
@@ -103,6 +109,7 @@ export class AlertError implements OnDestroy {
   private handleBadRequest(httpErrorResponse: HttpErrorResponse): void {
     const headers = Object.fromEntries(httpErrorResponse.headers.keys().map(key => [key, httpErrorResponse.headers.getAll(key)]));
     const message = getMessageFromHeaders(headers);
+    const problem = getServerProblem(httpErrorResponse.error);
 <%_ if (enableTranslation) { _%>
     if (message.errorKey) {
       const alertData = message.param ? { entityName: this.translateService.instant(`global.menu.entities.${message.param}`) } : undefined;
@@ -111,25 +118,31 @@ export class AlertError implements OnDestroy {
 <%_ } _%>
     if (message.errorMessage) {
       this.addErrorAlert(message.errorMessage);
-    } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
-      this.handleFieldsError(httpErrorResponse);
-    } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-      this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message<%- enableTranslation ? ', httpErrorResponse.error.message, httpErrorResponse.error.params' : '' %>);
+    } else if (isConstraintViolation(problem)) {
+      this.handleFieldsError(problem.fieldErrors);
     } else {
-      this.addErrorAlert(httpErrorResponse.error<%- enableTranslation ? ', httpErrorResponse.error' : '' %>);
+      this.handleDefaultError(httpErrorResponse);
     }
   }
 
   private handleDefaultError(httpErrorResponse: HttpErrorResponse): void {
-    if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-      this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message<%- enableTranslation ? ', httpErrorResponse.error.message, httpErrorResponse.error.params' : '' %>);
+    // The body of an error may be a problem of the server, another object, a text or nothing.
+    const { error } = httpErrorResponse;
+    const problem: JHipsterProblem | undefined =
+      getServerProblem(error) ?? (typeof error === 'object' && error !== null ? (error as JHipsterProblem) : undefined);
+<%_ if (enableTranslation) { _%>
+    const params = isProblemWithMessage(problem) ? problem.params : undefined;
+<%_ } _%>
+    if (problem?.message) {
+      this.addErrorAlert(problem.detail ?? problem.message<%- enableTranslation ? ', problem.message, params ? { entityName: this.translateService.instant(`global.menu.entities.${params}`) } : undefined' : '' %>);
+    } else if (typeof error === 'string' && error !== '') {
+      this.addErrorAlert(error<%- enableTranslation ? ', error' : '' %>);
     } else {
-      this.addErrorAlert(httpErrorResponse.error<%- enableTranslation ? ', httpErrorResponse.error' : '' %>);
+      this.addErrorAlert(httpErrorResponse.message);
     }
   }
 
-  private handleFieldsError(httpErrorResponse: HttpErrorResponse): void {
-    const { fieldErrors } = httpErrorResponse.error;
+  private handleFieldsError(fieldErrors: FieldErrorVM[]): void {
     for (const fieldError of fieldErrors) {
 <%_ if (enableTranslation) { _%>
       // The code of the constraint is the key of its translation, older servers send it as the message.
@@ -139,12 +152,14 @@ export class AlertError implements OnDestroy {
       // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
       const convertedField: string = fieldError.field.replaceAll(/\[\d*\]/g, '[]');
 <%_ if (enableTranslation) { _%>
-      const fieldName: string =
-        this.translateService.instant(`<%- frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
+      // The keys of the users are not prefixed by the application.
+      const keyPrefix = fieldError.objectName === 'userManagement' ? 'userManagement' : `<%- frontendAppName %>.${fieldError.objectName}`;
+      const fieldName: string = this.translateService.instant(`${keyPrefix}.${convertedField}`);
 <%_ } else { _%>
       const fieldName: string = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
 <%_ } _%>
-      this.addErrorAlert(`Error on field "${fieldName}"`<%- enableTranslation ? ', `error.${errorKey}`, { fieldName }' : '' %>);
+      // Without the translation of its code, the error shows the field and the message of the server.
+      this.addErrorAlert(`${fieldName}: ${fieldError.message}`<%- enableTranslation ? ', `error.${errorKey}`, { fieldName }' : '' %>);
     }
   }
 }

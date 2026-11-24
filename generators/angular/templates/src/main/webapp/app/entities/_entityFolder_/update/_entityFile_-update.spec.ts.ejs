@@ -30,10 +30,11 @@
     // The sample of the required data of the entity fills a valid form, but for a required relationship.
     const requiredDataFormValid = !relationships.some(relationship => relationship.persistableRelationship && relationship.relationshipRequired);
     // The required blobs of a file with a size to validate, which the sample may not have.
+    const refusedField = fields.find(field => !field.id && !field.hidden && !field.readonly && !field.transient && !field.autoGenerate);
     const requiredSizedFileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && field.fieldValidationRequired && (field.fieldValidationMinBytes || field.fieldValidationMaxBytes));
 _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { HttpResponse } from '@angular/common/http';
+import { <%- updatableEntity ? 'HttpErrorResponse, ' : '' %>HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (newEntityFormInvalid || requiredDataFormValid) { _%>
@@ -204,7 +205,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
 <%_ if (requiredDataFormValid) { _%>
         it('should save a valid submitted form', async () => {
             // GIVEN
-            vi.spyOn(comp, 'save').mockImplementation(() => undefined);
+            vi.spyOn(comp, 'save').mockResolvedValue(undefined);
   <%_ if (requiredSizedFileFields.length > 0) { _%>
             activatedRoute.data = of({
                 <%- entityInstance %>: {
@@ -320,6 +321,33 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             expect(comp.isSaving()).toEqual(false);
             expect(comp.previousState).not.toHaveBeenCalled();
         });
+  <%_ if (refusedField) { _%>
+
+        it('should mark the fields the server refused', async () => {
+            // GIVEN
+            const saveSubject = new Subject<I<%- entityAngularName %>>();
+            const <%- entityInstance %> = <%- builtInUserManagement ? testEntityPrimaryKey0.replace('{', '{ id: 123,') : testEntityPrimaryKey0 %>;
+            vi.spyOn(<%- entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+            activatedRoute.data = of({ <%- entityInstance %> });
+            comp.ngOnInit();
+
+            // WHEN
+            const result = comp.save();
+            saveSubject.error(
+                new HttpErrorResponse({
+                    status: 400,
+                    error: {
+                        type: 'https://www.jhipster.tech/problem/constraint-violation',
+                        message: 'error.validation',
+                        fieldErrors: [{ objectName: '<%- entityInstance %>', field: '<%- refusedField.fieldName %>', message: 'is refused', code: 'Refused' }],
+                    },
+                }),
+            );
+
+            // THEN
+            expect(await result).toEqual([expect.objectContaining({ kind: 'server', message: 'is refused', fieldTree: comp.editForm.<%- refusedField.fieldName %> })]);
+        });
+  <%_ } _%>
 <%_ } _%>
     });
 
