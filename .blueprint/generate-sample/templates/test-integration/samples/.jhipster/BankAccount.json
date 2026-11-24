@@ -8,6 +8,7 @@
     { "fieldName": "guid", "fieldType": "UUID" },
     { "fieldName": "bankNumber", "fieldType": "Integer" },
     { "fieldName": "agencyNumber", "fieldType": "Long" },
+    { "fieldName": "kValue", "fieldType": "Integer" },
     { "fieldName": "lastOperationDuration", "fieldType": "Float" },
     { "fieldName": "meanOperationDuration", "fieldType": "Double" },
     { "fieldName": "meanQueueDuration", "fieldType": "Duration" },
