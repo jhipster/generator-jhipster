@@ -54,7 +54,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 <%_ for (const clientConstantImport of clientConstantImports) { _%>
 <%- clientConstantImport %>
 <%_ } _%>
+<%_ const formServerErrors = entityClientFormFields.length > 0 || persistableRelationships.some(rel => !rel.otherEntity.embedded); _%>
+<%_ if (formServerErrors) { _%>
 import { getFieldErrorMessage } from 'app/config/notification-middleware';
+<%_ } _%>
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 <%_ if (relationships.filter(e => e.relationshipManyToMany) !== undefined) { _%>
@@ -102,12 +105,14 @@ export const <%- entityReactName %>Update = () => {
   const loading = useAppSelector(state => state.<%- entityReactState %>.loading);
   const updating = useAppSelector(state => state.<%- entityReactState %>.updating);
   const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
+<%_ if (formServerErrors) { _%>
   const fieldErrors = useAppSelector(state => state.<%- entityReactState %>.fieldErrors);
   // A field the server refused is marked invalid, with the message of its error.
   const serverError = (name: string) => {
     const fieldError = fieldErrors?.find(({ field }) => field === name);
     return fieldError ? { type: 'server', message: getFieldErrorMessage(fieldError) } : undefined;
   };
+<%_ } _%>
 <%_ for (const enumField of enumTypeFields) { _%>
   const <%- enumField.enumInstance %>Values = Object.keys(<%- enumField.fieldType %>);
 <%_ } _%>
