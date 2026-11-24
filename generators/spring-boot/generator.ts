@@ -614,7 +614,7 @@ ${classProperties
           }
         }
       },
-      prepareTestValues({ entity, entityName }) {
+      prepareTestValues({ entity }) {
         type TestField = (typeof entity.fields)[number];
         type TestValue = string | number | boolean;
         const isNumber = (field: TestField) =>
@@ -667,34 +667,16 @@ ${classProperties
         for (const [index, field] of sampleFields.entries()) {
           const values = samples[index].map(sample => testValue(sample[field.fieldName])!);
           const compare = compareTestValues(field);
-          let [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
+          const [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
             TestValue | undefined,
             TestValue,
             TestValue,
           ];
-          let singleValue = false;
-          if (isNumber(field)) {
-            // A number of a small range repeats its values: the default and the updated ones are distinct when the range has two,
-            // the smaller one, which only filters, is below the range.
-            const step = field.fieldTypeInteger || field.fieldTypeLong ? 1 : 0.01;
-            const distinctValues = [...new Set(values as number[])].toSorted((a, b) => a - b);
-            if (distinctValues.length < values.length) {
-              singleValue = distinctValues.length === 1;
-              [sample, updated] = singleValue ? [distinctValues[0], testValue(distinctValues[0] + step)!] : distinctValues;
-              smaller = testValue((sample as number) - step);
-            }
-          }
-          if (singleValue) {
-            this.log.warn(
-              `The field ${field.fieldName} of the entity ${entityName} has a single valid value: its resource integration test does not update it.`,
-            );
-          }
           mutateData(field, {
             __override__: false,
             sbTestDefaultValue: javaValue(field, sample),
             sbTestUpdatedValue: javaValue(field, updated),
             sbTestSmallerValue: smaller === undefined ? undefined : javaValue(field, smaller),
-            sbTestSingleValue: singleValue,
           });
         }
 

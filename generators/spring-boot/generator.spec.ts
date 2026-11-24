@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, exnode, expect, it } from 'expect-node';
+import { before, describe, expect, it } from 'expect-node';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import { createSecureContext } from 'node:tls';
@@ -105,52 +105,46 @@ describe(`generator - ${generator}`, () => {
 
   describe('with text and number fields', () => {
     const resourceIT = `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/MeasureResourceIT.java`;
-    let warn: ReturnType<typeof exnode.spyOn>;
     before(async () => {
-      await helpers
-        .runJHipster(generator)
-        .onGenerator(generator => {
-          warn = exnode.spyOn(generator.log, 'warn');
-        })
-        .withJHipsterConfig({ skipClient: true }, [
-          {
-            name: 'Measure',
-            changelogDate: '20220129025419',
-            service: 'serviceClass',
-            jpaMetamodelFiltering: true,
-            fields: [
-              { fieldName: 'label', fieldType: 'String', fieldValidateRules: ['maxlength'], fieldValidateRulesMaxlength: 8 },
-              {
-                fieldName: 'count',
-                fieldType: 'Integer',
-                fieldValidateRules: ['min', 'max'],
-                fieldValidateRulesMin: 10,
-                fieldValidateRulesMax: 20,
-              },
-              { fieldName: 'total', fieldType: 'Long' },
-              { fieldName: 'ratio', fieldType: 'Float' },
-              { fieldName: 'weight', fieldType: 'Double' },
-              { fieldName: 'price', fieldType: 'BigDecimal' },
-              {
-                fieldName: 'level',
-                fieldType: 'Integer',
-                fieldValidateRules: ['min', 'max'],
-                fieldValidateRulesMin: 5,
-                fieldValidateRulesMax: 5,
-              },
-              { fieldName: 'code', fieldType: 'String', fieldValidateRules: ['pattern'], fieldValidateRulesPattern: '^a{1,2}$' },
-              { fieldName: 'reference', fieldType: 'UUID' },
-              { fieldName: 'active', fieldType: 'Boolean' },
-              { fieldName: 'unit', fieldType: 'Unit', fieldValues: 'GRAM,KILO,TON' },
-              { fieldName: 'kind', fieldType: 'Kind', fieldValues: 'ONLY' },
-              { fieldName: 'day', fieldType: 'LocalDate' },
-              { fieldName: 'moment', fieldType: 'Instant' },
-              { fieldName: 'zoned', fieldType: 'ZonedDateTime' },
-              { fieldName: 'hour', fieldType: 'LocalTime' },
-              { fieldName: 'lasting', fieldType: 'Duration' },
-            ],
-          },
-        ]);
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'Measure',
+          changelogDate: '20220129025419',
+          service: 'serviceClass',
+          jpaMetamodelFiltering: true,
+          fields: [
+            { fieldName: 'label', fieldType: 'String', fieldValidateRules: ['maxlength'], fieldValidateRulesMaxlength: 8 },
+            {
+              fieldName: 'count',
+              fieldType: 'Integer',
+              fieldValidateRules: ['min', 'max'],
+              fieldValidateRulesMin: 10,
+              fieldValidateRulesMax: 20,
+            },
+            { fieldName: 'total', fieldType: 'Long' },
+            { fieldName: 'ratio', fieldType: 'Float' },
+            { fieldName: 'weight', fieldType: 'Double' },
+            { fieldName: 'price', fieldType: 'BigDecimal' },
+            {
+              fieldName: 'level',
+              fieldType: 'Integer',
+              fieldValidateRules: ['min', 'max'],
+              fieldValidateRulesMin: 5,
+              fieldValidateRulesMax: 5,
+            },
+            { fieldName: 'code', fieldType: 'String', fieldValidateRules: ['pattern'], fieldValidateRulesPattern: '^a{1,2}$' },
+            { fieldName: 'reference', fieldType: 'UUID' },
+            { fieldName: 'active', fieldType: 'Boolean' },
+            { fieldName: 'unit', fieldType: 'Unit', fieldValues: 'GRAM,KILO,TON' },
+            { fieldName: 'kind', fieldType: 'Kind', fieldValues: 'ONLY' },
+            { fieldName: 'day', fieldType: 'LocalDate' },
+            { fieldName: 'moment', fieldType: 'Instant' },
+            { fieldName: 'zoned', fieldType: 'ZonedDateTime' },
+            { fieldName: 'hour', fieldType: 'LocalTime' },
+            { fieldName: 'lasting', fieldType: 'Duration' },
+          ],
+        },
+      ]);
     });
 
     it('should test the resource with two values of each field from the entity samples', () => {
@@ -174,25 +168,10 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent(resourceIT, 'SMALLER_PRICE = new BigDecimal("16714.89");');
     });
 
-    it('should filter a number field of a single valid value by the values around it', () => {
-      runResult.assertFileContent(resourceIT, 'SMALLER_LEVEL = 4;');
+    it('should repeat the samples of a number field without three values within its limits', () => {
+      runResult.assertFileContent(resourceIT, 'SMALLER_LEVEL = 5;');
       runResult.assertFileContent(resourceIT, 'DEFAULT_LEVEL = 5;');
-      runResult.assertFileContent(resourceIT, 'UPDATED_LEVEL = 6;');
-    });
-
-    it('should keep the default value of a number field of a single valid value in the updated entities', () => {
-      runResult.assertNoFileContent(resourceIT, '.level(UPDATED_LEVEL)');
-      runResult.assertNoFileContent(resourceIT, 'setLevel(UPDATED_LEVEL)');
-      runResult.assertFileContent(resourceIT, '.count(UPDATED_COUNT)');
-    });
-
-    it('should warn about a number field of a single valid value', () => {
-      expect(warn).toHaveBeenCalledWith(
-        'The field level of the entity Measure has a single valid value: its resource integration test does not update it.',
-      );
-      expect(warn).not.toHaveBeenCalledWith(
-        'The field count of the entity Measure has a single valid value: its resource integration test does not update it.',
-      );
+      runResult.assertFileContent(resourceIT, 'UPDATED_LEVEL = 5;');
     });
 
     it('should test a pattern without two texts the filters tell apart with its samples', () => {
