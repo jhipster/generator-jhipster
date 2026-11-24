@@ -52,10 +52,7 @@
 
       for (relationship of relationships.filter(relationship => relationship.liquibaseGenerateFakeData)) {
         const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
-        let relationshipRow = lineNb;
-        if (relationship.otherEntity.fakeDataCount > 0 && relationshipRow >= relationship.otherEntity.fakeDataCount && !relationship.unique) {
-          relationshipRow = entity.faker.number.int({ min: 0, max: relationship.otherEntity.fakeDataCount - 1 });
-        }
+        const relationshipRow = relationship.liquibaseFakeDataRows[lineNb];
         if (relationshipRow < relationship.otherEntity.fakeDataCount) {
           line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);
         }

@@ -1625,7 +1625,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
 
   <%_ const prepareFieldForPatchTest = (field, random) => {
-        const includeField = random ? faker.datatype.boolean() : true;
+        const includeField = random ? field.sbTestPartialPatchIncluded : true;
         const fieldNameUnderscoreUppercased = field.fieldNameUnderscored.toUpperCase();
         const updateWithValue = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : 'null';
         const testWithConstant = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : `DEFAULT_${fieldNameUnderscoreUppercased}`;

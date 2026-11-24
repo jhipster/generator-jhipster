@@ -178,6 +178,20 @@ describe(`generator - ${generator}`, () => {
       ]);
     });
 
+    it('should send in the partial update test the fields drawn for it', () => {
+      const content = runResult.getSnapshot()[resourceIT].contents as string;
+      const partialUpdate = content.slice(
+        content.indexOf('void partialUpdateMeasureWithPatch'),
+        content.indexOf('void fullUpdateMeasureWithPatch'),
+      );
+      const sentFields = [...partialUpdate.matchAll(/\.(\w+)\(UPDATED_/g)].map(([, fieldName]) => fieldName);
+      const drawnFields = runResult
+        .entities!.Measure.fields!.filter(field => (field as { sbTestPartialPatchIncluded?: boolean }).sbTestPartialPatchIncluded)
+        .map(({ fieldName }) => fieldName);
+      expect(sentFields).toEqual(drawnFields);
+      expect(drawnFields).toEqual(['ratio', 'code', 'active', 'unit', 'kind', 'zoned', 'lasting']);
+    });
+
     it('should test the resource with two values of each field from the entity samples', () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_LABEL = "conseque";');
       runResult.assertFileContent(resourceIT, 'UPDATED_LABEL = "glaring ";');

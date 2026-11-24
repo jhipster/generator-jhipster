@@ -87,6 +87,8 @@ export type Field = ServerField &
     sbTestUpdatedValue?: string;
     /** A value smaller than the default one, for the range filters of the resource integration test, written as Java code. */
     sbTestSmallerValue?: string;
+    /** Whether the partial update test of the resource integration test sends the field. */
+    sbTestPartialPatchIncluded?: boolean;
     /** The sizes in bytes of a blob of a file the server rejects, one under its minbytes and one over its maxbytes, in the resource integration test. */
     sbTestRejectedBlobSizes?: number[];
   };

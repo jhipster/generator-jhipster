@@ -73,6 +73,74 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a required relationship to an entity of fewer fake data rows', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'Tag',
+          changelogDate: '20200101000000',
+          fields: [{ fieldName: 'flag', fieldType: 'Boolean', fieldValidateRules: ['required', 'unique'] }],
+          relationships: [],
+        },
+        {
+          name: 'Post',
+          changelogDate: '20200101000100',
+          fields: [{ fieldName: 'title', fieldType: 'String' }],
+          relationships: [
+            { relationshipName: 'tag', otherEntityName: 'tag', relationshipType: 'many-to-one', relationshipValidateRules: 'required' },
+          ],
+        },
+      ] as any);
+    });
+
+    it('should reference the rows of the related entity drawn for the relationship', () => {
+      const csv = runResult.fs.read(`${runResult.cwd}/src/main/resources/config/liquibase/fake-data/post.csv`);
+      const [header, ...rows] = csv
+        .trim()
+        .split('\n')
+        .map(line => line.split(';'));
+      const tagIds = rows.map(row => row[header.indexOf('tag_id')]);
+      const { liquibaseFakeDataRows } = runResult.entities!.Post.relationships!.find(
+        ({ relationshipName }) => relationshipName === 'tag',
+      ) as {
+        liquibaseFakeDataRows?: number[];
+      };
+      expect(tagIds).toEqual(liquibaseFakeDataRows!.map(row => String(row + 1)));
+      expect(tagIds).toEqual([
+        '1',
+        '2',
+        '2',
+        '1',
+        '2',
+        '2',
+        '2',
+        '2',
+        '2',
+        '1',
+        '1',
+        '2',
+        '1',
+        '2',
+        '1',
+        '1',
+        '2',
+        '2',
+        '1',
+        '2',
+        '1',
+        '2',
+        '2',
+        '2',
+        '1',
+        '1',
+        '1',
+        '1',
+        '2',
+        '2',
+      ]);
+    });
+  });
+
   describe('with maven', () => {
     before(async () => {
       await helpers.runJHipster('app').withJHipsterConfig({ buildTool: 'maven', skipClient: true });

@@ -63,6 +63,8 @@ export interface Relationship extends BaseEntityChangesRelationship, DatabaseRel
 
   unique?: boolean;
 
+  /** The row of the related entity each fake data row of the entity references. */
+  liquibaseFakeDataRows?: number[];
   /** The name of the foreign key constraint of a relationship written in the table of the entity. */
   liquibaseForeignKeyName?: string;
   /** The names of the unique constraints of a one-to-one relationship, by the column name of the id field it references. */
