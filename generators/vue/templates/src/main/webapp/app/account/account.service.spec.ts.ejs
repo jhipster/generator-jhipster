@@ -104,9 +104,7 @@ describe('Account Service test suite', () => {
     accountService = new AccountService(store);
     await accountService.update();
 
-    return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
-      expect(value).toBe(false);
-    });
+    expect(accountService.hasAnyAuthorityAndCheckAuth('USER')).toBe(false);
   });
 
   it('should init service and check for authority after retrieving account', async () => {
@@ -114,9 +112,7 @@ describe('Account Service test suite', () => {
     accountService = new AccountService(store);
     await accountService.update();
 
-    return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
-      expect(value).toBe(true);
-    });
+    expect(accountService.hasAnyAuthorityAndCheckAuth('USER')).toBe(true);
   });
 
   it('should init service as not authenticated and not return any authorities admin and not retrieve account', async () => {
@@ -124,9 +120,7 @@ describe('Account Service test suite', () => {
     accountService = new AccountService(store);
     await accountService.update();
 
-    return accountService.hasAnyAuthorityAndCheckAuth('ADMIN').then((value: boolean) => {
-      expect(value).toBe(false);
-    });
+    expect(accountService.hasAnyAuthorityAndCheckAuth('ADMIN')).toBe(false);
   });
 
   it('should init service as not authenticated and not return authority user', async () => {
@@ -134,9 +128,7 @@ describe('Account Service test suite', () => {
     accountService = new AccountService(store);
     await accountService.update();
 
-    return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
-      expect(value).toBe(false);
-    });
+    expect(accountService.hasAnyAuthorityAndCheckAuth('USER')).toBe(false);
   });
 
   it('should not load the account twice', async () => {
@@ -170,7 +162,7 @@ describe('Account Service test suite', () => {
     accountService = new AccountService(store);
     await accountService.update();
 
-    expect(await accountService.hasAnyAuthorityAndCheckAuth(['ADMIN', 'USER'])).toBe(true);
-    expect(await accountService.hasAnyAuthorityAndCheckAuth(['ADMIN'])).toBe(false);
+    expect(accountService.hasAnyAuthorityAndCheckAuth(['ADMIN', 'USER'])).toBe(true);
+    expect(accountService.hasAnyAuthorityAndCheckAuth(['ADMIN'])).toBe(false);
   });
 });
