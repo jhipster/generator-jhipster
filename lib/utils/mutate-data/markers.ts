@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-export const MUTATION_CONTEXT_SYMBOL = '__MutationContext__';
+/** The key of the mutation context of an object: a symbol, so it is never taken for a property of the data. */
+export const MUTATION_CONTEXT_SYMBOL: unique symbol = Symbol('MutationContext');
 
 export const DelayedMutation = '__DelayedMutation__';
 export const UndefinedMutation = '__UndefinedMutation__';

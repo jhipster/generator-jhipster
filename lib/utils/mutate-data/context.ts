@@ -20,21 +20,13 @@
 import { MUTATION_CONTEXT_SYMBOL } from './markers.ts';
 import type { ContextWithMutationOptions, MutationContextOptions } from './types.ts';
 
-export const createDelayedMutationContext = <T extends object>(
-  options: Omit<MutationContextOptions, 'delayContext' | 'waitingFor'> = {},
-): T => {
-  const context: T = {} as T;
-  (context as ContextWithMutationOptions<typeof context>)[MUTATION_CONTEXT_SYMBOL] = { ...options, delayContext: {} };
-  return context;
-};
-
 export const isMutationContext = <T extends object>(context: T): context is ContextWithMutationOptions<T> =>
   context && typeof context === 'object' && MUTATION_CONTEXT_SYMBOL in context && context[MUTATION_CONTEXT_SYMBOL] !== undefined;
 
 /**
- * Makes an existing object a mutation context, as `createDelayedMutationContext` creates one: a mutation may then return
- * the delay marker, and `finalizeMutations` applies the delayed ones. The context is not enumerable, so copies of the
- * object do not share it. An object already a mutation context is kept as it is.
+ * Makes an object a mutation context: a mutation may then return the delay marker, and `finalizeMutations` applies the
+ * delayed ones. The context is not enumerable, so copies of the object do not share it. An object already a mutation
+ * context is kept as it is.
  */
 export const enableDelayedMutations = <T extends object>(
   data: T,
@@ -50,3 +42,10 @@ export const enableDelayedMutations = <T extends object>(
   }
   return data;
 };
+
+/**
+ * Creates an empty mutation context, as `enableDelayedMutations` makes one of an existing object.
+ */
+export const createDelayedMutationContext = <T extends object>(
+  options: Omit<MutationContextOptions, 'delayContext' | 'waitingFor'> = {},
+): T => enableDelayedMutations({} as T, options);

@@ -307,6 +307,15 @@ describe('utils - mutate data', () => {
         expect(copy.prop).toBe('no context');
       });
     });
+    describe('with delayed mutations on a created context', () => {
+      it('should not copy the mutation context with the object', () => {
+        const mutatedData: { prop?: string } = createDelayedMutationContext();
+        const copy: Record<string | symbol, any> = { ...mutatedData };
+        expect(Reflect.ownKeys(copy)).toEqual([]);
+        mutateData(copy, { prop: (_ctx: any, { delayMarker }: any) => (delayMarker ? 'context' : 'no context') } as any);
+        expect(copy.prop).toBe('no context');
+      });
+    });
     describe('with auto-delayed mutations', () => {
       const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({ autoDelay: true });
 
