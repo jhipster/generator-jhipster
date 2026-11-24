@@ -117,6 +117,8 @@ export default () => next => action => {
           key: 'error.server.not.reachable',
 <%_ } _%>
         });
+      } else if (response.status === 404 && action.type.endsWith('/fetch_entity/rejected')) {
+        // Ignore, the screen of the entity leaves for the page not found, which tells it.
       } else if (response.status === 404) {
         addErrorAlert({
           message: 'Not found',

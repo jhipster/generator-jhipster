@@ -120,6 +120,13 @@ export const <%- entityReactName %>Update = () => {
   const <%- field.fieldName %>Values = <%- field.reactFieldClientConstant.reactConstantValues %>;
 <%_ } _%>
 
+  // A record that does not exist anymore leaves for the page not found.
+  const leaveWhenNotFound = error => {
+    if (error?.response?.status === 404) {
+      navigate('/404', { replace: true });
+    }
+  };
+
   const handleClose = () => {
     navigate('/<%- entityPage %>'<%- paginationPagination ? ' + location.search' : '' %>);
   };
@@ -127,13 +134,13 @@ export const <%- entityReactName %>Update = () => {
   useEffect(() => {
 <%_ if (paginationInfiniteScroll) { _%>
     if (!isNew) {
-      dispatch(getEntity(id));
+      dispatch(getEntity(id)).unwrap().catch(leaveWhenNotFound);
     }
 <%_ } else { _%>
     if (isNew) {
       dispatch(reset());
     } else {
-      dispatch(getEntity(id));
+      dispatch(getEntity(id)).unwrap().catch(leaveWhenNotFound);
     }
 <%_ } _%>
 

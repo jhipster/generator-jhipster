@@ -401,6 +401,17 @@ describe('<%- entityReactName %> screens', () => {
 <%_ if (!readOnly) { _%>
 
   describe('update', () => {
+    it('should leave for the page not found when the entity to update does not exist', async () => {
+      vi.mocked(axios.get).mockImplementation((url: string) =>
+        url === `${apiUrl}/${sample.<%- primaryKeyName %>}`
+          ? Promise.reject(Object.assign(new Error('Not Found'), { isAxiosError: true, response: { status: 404, data: {} } }))
+          : Promise.resolve({ data: <%- screenRelationships.length > 0 ? '[related]' : '[]' %>, headers: {} }),
+      );
+      renderPage(`/${sample.<%- primaryKeyName %>}/edit`);
+
+      await waitFor(() => expect(document.querySelector('[data-cy="notFound"]')).not.toBeNull());
+    });
+
     it('should update an entity', async () => {
       const { container } = renderPage(`/${sample.<%- primaryKeyName %>}/edit`);
       await waitForForm();

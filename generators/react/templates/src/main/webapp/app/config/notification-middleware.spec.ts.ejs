@@ -240,6 +240,11 @@ describe('Notification Middleware', () => {
     expect(toast.error).toHaveBeenCalledWith('Server not reachable');
   });
 
+  it('should not trigger a toast message for an entity not found, whose screen leaves for the page not found', () => {
+    store.dispatch({ type: 'foo/fetch_entity/rejected', error: { isAxiosError: true, config: { url: 'api/foos/1' }, response: { status: 404, data: {} } } });
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
   it('should trigger an access denied toast message for 403 response code', () => {
     store.dispatch({ type: ERROR_TYPE, error: { isAxiosError: true, config: { url: 'api/foos' }, response: { status: 403, data: '' } } });
     expect(toast.error).toHaveBeenCalledWith('You are not authorized to access this page.');
