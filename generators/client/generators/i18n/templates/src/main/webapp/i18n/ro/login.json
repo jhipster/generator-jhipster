@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Autentificarea nu a reușit!</strong>. Va rugăm să vă verificați credențialele și să încercați din nou."
+        "authentication": "<strong>Autentificarea nu a reușit!</strong>. Va rugăm să vă verificați credențialele și să încercați din nou.",
+        "sessionExpired": "Sesiunea dumneavoastră a expirat. Vă rugăm să vă autentificați din nou."
       }
     },
     "password": {

@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Gagal masuk!</strong> Silakan cek data anda dan coba lagi."
+        "authentication": "<strong>Gagal masuk!</strong> Silakan cek data anda dan coba lagi.",
+        "sessionExpired": "Sesi Anda telah berakhir. Silakan masuk kembali."
       }
     },
     "password": {

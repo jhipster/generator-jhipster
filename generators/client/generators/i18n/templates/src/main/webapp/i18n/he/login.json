@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>ההתחברות נכשלה!</strong> אנא בדוק את הפרטים ונסה שוב."
+        "authentication": "<strong>ההתחברות נכשלה!</strong> אנא בדוק את הפרטים ונסה שוב.",
+        "sessionExpired": "פג תוקף ההתחברות שלך. אנא התחבר שוב."
       }
     },
     "password": {

@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Aanmelden mislukt!</strong> Gelieve uw gegevens te controleren en vervolgens opnieuw te proberen."
+        "authentication": "<strong>Aanmelden mislukt!</strong> Gelieve uw gegevens te controleren en vervolgens opnieuw te proberen.",
+        "sessionExpired": "Uw sessie is verlopen. Meld u opnieuw aan."
       }
     },
     "password": {

@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Failed to sign in!</strong> Please check your credentials and try again."
+        "authentication": "<strong>Failed to sign in!</strong> Please check your credentials and try again.",
+        "sessionExpired": "Your session has expired. Please sign in again."
       }
     },
     "password": {

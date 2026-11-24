@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>登录失败!</strong> 请检查您的登录信息, 并重试一次."
+        "authentication": "<strong>登录失败!</strong> 请检查您的登录信息, 并重试一次.",
+        "sessionExpired": "您的会话已过期，请重新登录。"
       }
     },
     "password": {
