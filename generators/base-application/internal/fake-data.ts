@@ -23,6 +23,7 @@ import { stringHashCode } from '../../../lib/utils/string.ts';
 import type { Field as BaseApplicationField } from '../types.ts';
 
 import { isContentTypeField } from './content-type-fields.ts';
+import { getFieldNumberLimits } from './number-limits.ts';
 
 const {
   CommonDBTypes: { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, FLOAT, INTEGER, LONG, UUID },
@@ -33,6 +34,12 @@ const UUID_PATTERN = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/
 // The integers and the numbers of JSON (RFC 8259, section 6), the format of the samples.
 const INTEGER_PATTERN = /^-?(?:0|[1-9]\d*)$/;
 const NUMBER_PATTERN = /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
+
+/** Whether a number is within the min and the max of its field, else within the limits of its type. */
+const isWithinNumberLimits = (field: BaseApplicationField, value: number): boolean => {
+  const limits = getFieldNumberLimits(field);
+  return Number.isFinite(value) && (!limits || (value >= limits.min && value <= limits.max));
+};
 
 /**
  * Whether a text a faker template gives is a value of the type of the field: the one of a UUID, a number, a boolean or an
@@ -47,11 +54,11 @@ export function isFakeDataOfFieldType(field: BaseApplicationField, value: string
       return UUID_PATTERN.test(value);
     case INTEGER:
     case LONG:
-      return INTEGER_PATTERN.test(value);
+      return INTEGER_PATTERN.test(value) && isWithinNumberLimits(field, Number(value));
     case FLOAT:
     case DOUBLE:
     case BIG_DECIMAL:
-      return NUMBER_PATTERN.test(value) && Number.isFinite(Number(value));
+      return NUMBER_PATTERN.test(value) && isWithinNumberLimits(field, Number(value));
     case BOOLEAN:
       return value === 'true' || value === 'false';
     default:

@@ -184,6 +184,10 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     ['Double', ' 12 '],
     ['BigDecimal', '.5'],
     ['Boolean', 'yes'],
+    ['Integer', '2147483648'],
+    ['Long', '9007199254740992'],
+    ['Float', '167773'],
+    ['Double', '-1e14'],
   ]) {
     it(`should not take the text '${fakerTemplate}' of a faker template as a ${fieldType}`, () => {
       const field = prepareField({ fieldName: 'value', fieldType, fakerTemplate });
@@ -194,6 +198,27 @@ describe('generator - base-application - support - generateEntitySamples', () =>
       }
     });
   }
+
+  it('should take the value of a faker template at the limits of the type of a number field', () => {
+    const level = prepareField({ fieldName: 'level', fieldType: 'Integer', fakerTemplate: '2147483647' });
+    const total = prepareField({ fieldName: 'total', fieldType: 'Long', fakerTemplate: '-9007199254740991' });
+    expect(samples([level, total], 1).map(sample => [sample.level, sample.total])).toEqual([[2147483647, -9007199254740991]]);
+  });
+
+  it('should not take the value of a faker template out of the min and the max of a field', () => {
+    const field = prepareField({
+      fieldName: 'level',
+      fieldType: 'Integer',
+      fieldValidateRules: ['min', 'max'],
+      fieldValidateRulesMin: 1,
+      fieldValidateRulesMax: 10,
+      fakerTemplate: '42',
+    });
+    for (const { level } of samples([field], 3)) {
+      expect(level).toBeGreaterThanOrEqual(1);
+      expect(level).toBeLessThanOrEqual(10);
+    }
+  });
 
   it('should take the domain of an enum and of a boolean whose faker template gives a text of another type', () => {
     const color = prepareField({ ...enumField(), fakerTemplate: '{{person.firstName}}' });
