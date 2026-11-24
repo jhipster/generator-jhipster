@@ -145,10 +145,19 @@ describe('Service Tests', () => {
       it('should search the <%- entityAngularName %>', async () => {
         axiosStub.get.mockResolvedValue({ data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
 
-        const res = await service.search('query'<%- paginationNo ? '' : ', { sort: {}, page: 0, size: 10 }' %>);
+        const res = await service.search('query', { sort: 'id,asc'<%- paginationNo ? '' : ', page: 0, size: 10' %> });
 
         expect(res.data).toEqual([{ <%- primaryKey.name %>: <%- tsKeyId %> }]);
-        expect(axiosStub.get).toHaveBeenCalledWith(expect.stringContaining('_search?query=query'), { signal: undefined });
+        // The order of the list is sent with the search.
+        expect(axiosStub.get).toHaveBeenCalledWith(expect.stringMatching(/_search\?query=query&sort=id,asc<%- paginationNo ? '' : '&page=0&size=10' %>$/), { signal: undefined });
+      });
+
+      it('should search the <%- entityAngularName %> without an order', async () => {
+        axiosStub.get.mockResolvedValue({ data: [] });
+
+        await service.search('query');
+
+        expect(axiosStub.get).toHaveBeenCalledWith(expect.stringMatching(/_search\?query=query$/), { signal: undefined });
       });
 
 <%_ } _%>

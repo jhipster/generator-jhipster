@@ -73,7 +73,7 @@ const <%- entityInstance %>SampleWithRelationships = {
   ...<%- entityInstance %>Sample,
   <%_ for (const relationship of allRelationshipsThatNeedSelectOptions.flat()) { _%>
     <%_ if (relationship.collection) { _%>
-  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option],
+  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option<%- relationship.relationshipSerializePrimaryKeyOnly ? `.${relationship.otherEntity.primaryKey.name}` : '' %>],
     <%_ } else { _%>
   <%- relationship.relationshipFieldName %>: <%- relationship.otherEntity.entityInstance %>Option,
     <%_ } _%>
@@ -229,21 +229,31 @@ describe('Component Tests', () => {
         expect(<%- entityInstance %>ServiceStub.update).not.toHaveBeenCalled();
       });
 
+<%_ // The properties of the form, each one validated, the server can refuse.
+    const validatedProperties = [
+      ...entityClientFormFields.map(field => field.fieldName),
+      ...relationships.filter(relationship => !relationship.otherEntity.embedded).map(relationship => relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName),
+    ];
+_%>
+<%_ if (validatedProperties.length > 0) { _%>
       it('Should show under each field the message of the server that refused it', async () => {
         // GIVEN
-        const fields = [<%- entityClientFormFields.map(field => `'${field.fieldName}'`).join(', ') %>];
+        const properties = [<%- validatedProperties.map(property => `'${property}'`).join(', ') %>];
         vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
         vi.spyOn(alertService, 'getFieldErrorMessage').mockImplementation(({ field }) => `${field} is refused`);
-        <%- entityInstance %>ServiceStub.create.mockRejectedValue({
+        const refused = {
           response: {
             status: 400,
-            data: { type: CONSTRAINT_VIOLATION_TYPE, fieldErrors: fields.map(field => ({ objectName: '<%- entityInstance %>', field, message: 'is refused' })) },
+            data: { type: CONSTRAINT_VIOLATION_TYPE, fieldErrors: properties.map(field => ({ objectName: '<%- entityInstance %>', field, message: 'is refused' })) },
           },
-        });
+        };
+        <%- entityInstance %>ServiceStub.create.mockRejectedValue(refused);
+        <%- entityInstance %>ServiceStub.update.mockRejectedValue(refused);
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
-        comp.<%- entityInstance %> = {};
-        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
+        comp.<%- entityInstance %> = { ...<%- entityInstance %><%- allRelationshipsThatNeedSelectOptions.length > 0 ? 'SampleWithRelationships' : 'Sample' %> };
+        await comp.$nextTick();
+        expect(comp.v$.$invalid).toBe(false);
 
         // WHEN
         await comp.save();
@@ -251,9 +261,38 @@ describe('Component Tests', () => {
 
         // THEN
         const messages = wrapper.findAll('small.text-danger').map(error => error.text());
-        expect(fields.filter(field => !messages.includes(`${field} is refused`))).toEqual([]);
+        expect(properties.filter(property => !messages.includes(`${property} is refused`))).toEqual([]);
       });
 
+      it('Should send again a form the server refused, its messages left to the rules of the client', async () => {
+        // GIVEN
+        vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        const refused = {
+          response: {
+            status: 400,
+            data: { type: CONSTRAINT_VIOLATION_TYPE, fieldErrors: [{ objectName: '<%- entityInstance %>', field: '<%- validatedProperties[0] %>', message: 'is refused' }] },
+          },
+        };
+        <%- entityInstance %>ServiceStub.create.mockRejectedValueOnce(refused).mockResolvedValue(<%- entityInstance %>Sample);
+        <%- entityInstance %>ServiceStub.update.mockRejectedValueOnce(refused).mockResolvedValue(<%- entityInstance %>Sample);
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.<%- entityInstance %> = { ...<%- entityInstance %><%- allRelationshipsThatNeedSelectOptions.length > 0 ? 'SampleWithRelationships' : 'Sample' %> };
+        await comp.save();
+        await flushPromises();
+        // The message of the server stays until the next save.
+        expect(comp.v$.<%- validatedProperties[0] %>.$invalid).toBe(true);
+
+        // WHEN
+        await comp.save();
+        await flushPromises();
+
+        // THEN
+        expect(<%- entityInstance %>ServiceStub.create.mock.calls.length + <%- entityInstance %>ServiceStub.update.mock.calls.length).toBe(2);
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
+      });
+
+<%_ } _%>
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};

@@ -49,7 +49,7 @@ describe('unauthorized handler', () => {
     reload = vi.fn();
     vi.stubGlobal('location', { ...window.location, reload });
 <%_ } else { _%>
-    router = { currentRoute: { value: { fullPath: '/foo?page=2', path: '/foo' } }, push: vi.fn() };
+    router = { currentRoute: { value: { fullPath: '/foo?page=2', path: '/foo' } }, push: vi.fn().mockResolvedValue(undefined) };
 <%_ } _%>
   });
 
@@ -71,6 +71,27 @@ describe('unauthorized handler', () => {
     await expect(handler(error(401))).rejects.toMatchObject({ status: 401 });
 
     expect(router.push).toHaveBeenCalledWith({ path: '/login', query: { redirect: '/foo?page=2' }, state: { sessionExpired: true } });
+  });
+
+  it('should keep the expired session of a first 401 for the 401s of the requests in parallel', async () => {
+    const { promise, resolve } = Promise.withResolvers<void>();
+    router.push.mockReturnValueOnce(promise);
+    accountService.authenticated = true;
+    accountService.logout.mockImplementation(() => {
+      accountService.authenticated = false;
+    });
+    const parallelHandler = createUnauthorizedHandler({ accountService: accountService as unknown as AccountService, router: router as unknown as Router });
+
+    await expect(parallelHandler(error(401))).rejects.toMatchObject({ status: 401 });
+    await expect(parallelHandler(error(401))).rejects.toMatchObject({ status: 401 });
+
+    expect(router.push).toHaveBeenCalledExactlyOnceWith({ path: '/login', query: { redirect: '/foo?page=2' }, state: { sessionExpired: true } });
+
+    // Once at the login, a new 401 leaves for it again.
+    resolve();
+    await promise;
+    await expect(parallelHandler(error(401))).rejects.toMatchObject({ status: 401 });
+    expect(router.push).toHaveBeenCalledTimes(2);
   });
 <%_ } _%>
 

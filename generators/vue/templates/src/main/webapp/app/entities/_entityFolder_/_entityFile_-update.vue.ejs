@@ -140,7 +140,6 @@ _%>
             </select>
           </div>
   <%_ } _%>
-  <%_ if (relationship.relationshipValidate) { _%>
           <div v-if="v$.<%- relationship.collection ? relationshipFieldNamePlural : relationshipFieldName %>.$anyDirty && v$.<%- relationship.collection ? relationshipFieldNamePlural : relationshipFieldName %>.$invalid">
             <small
               class="form-text text-danger"
@@ -148,7 +147,6 @@ _%>
               :key="error.$uid"
             >{{ error.$message }}</small>
           </div>
-  <%_ } _%>
 <%_ } _%>
         </div>
         <div>
@@ -179,10 +177,12 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router';
 
+<%_ if (allRelationshipsThatNeedSelectOptions.length > 0) { _%>
 import { type AxiosError } from 'axios';
 
+<%_ } _%>
 import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
-<%_ const composables = ['useControlledRequest', ...vueFormTimeFields ? ['useDateFormat'] : [], ...allRelationshipsThatNeedSelectOptions.length > 0 ? ['useEntityOptions'] : [], 'useEntitySave', 'useEntityValidation']; _%>
+<%_ const composables = ['useControlledRequest', ...vueFormTimeFields ? ['useDateFormat'] : [], ...allRelationshipsThatNeedSelectOptions.length > 0 ? ['useEntityOptions'] : [], 'useEntityLoadError', 'useEntitySave', 'useEntityValidation']; _%>
 import { <%- composables.join(', ') %> } from '@/composables';
 <%_ if (anyFieldIsLocalDate) { _%>
 import { currentLanguageKey } from '@/config/injection-keys';
@@ -212,7 +212,9 @@ defineOptions({ name: '<%- entityAngularName %>Update' });
 
 const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
 const alertService = inject(alertServiceKey, () => useAlertService(), true);
+<%_ if (allRelationshipsThatNeedSelectOptions.length > 0) { _%>
 const showLoadError = (error: unknown) => alertService.showHttpError((error as AxiosError).response);
+<%_ } _%>
 
 const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
   const entity = new <%- entityAngularName %>();
@@ -277,8 +279,7 @@ const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
     // The router reuses the component when the id of the route changes, and an update without id is a new entity.
     params: () => route.params?.<%- entityInstance %>Id as string | undefined,
     initialData: new<%- entityAngularName %>,
-    // A record that does not exist anymore leaves for the page not found.
-    onError: error => ((error as AxiosError).response?.status === 404 ? router.replace({ name: 'NotFound' }) : showLoadError(error)),
+    onError: useEntityLoadError(alertService),
   },
 );
 <%_ if (vueFormTimeFields) { _%>
@@ -326,6 +327,8 @@ const { isSaving, save: saveEntity } = useEntitySave({
 });
 
 const save = async () => {
+  // The messages of the server are of the values it was sent: the rules of the client decide of the new ones.
+  serverErrors.value = {};
   if (v$.value.$invalid) {
     // The fields are marked and their errors shown, nothing is sent.
     v$.value.$touch();

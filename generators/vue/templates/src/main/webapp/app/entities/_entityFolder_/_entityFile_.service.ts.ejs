@@ -31,15 +31,10 @@ const baseSearchApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>/_search?query=
 
 export default class <%- entityAngularName %>Service {
 <%_ if (searchEngineAny) { _%>
-  <%_ if (paginationNo) { _%>
-  search(query: string, { signal }: RequestOptions = {}): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
-    return axios.get(`${baseSearchApiUrl}${query}`, { signal });
+  search(text: string, { signal, ...paginationQuery }: PaginationQuery & RequestOptions = {}): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
+    const query = buildPaginationQueryOpts(paginationQuery);
+    return axios.get(query ? `${baseSearchApiUrl}${text}&${query}` : `${baseSearchApiUrl}${text}`, { signal });
   }
-  <%_ } else { _%>
-  search(query: string, { signal, ...paginationQuery }: PaginationQuery & RequestOptions = {}): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
-    return axios.get(`${baseSearchApiUrl}${query}&${buildPaginationQueryOpts(paginationQuery)}`, { signal });
-  }
-  <%_ } _%>
 <%_ } _%>
 
   async find(<%- primaryKey.name %>: string | number, { signal }: RequestOptions = {}) : Promise<I<%- entityAngularName %>> {

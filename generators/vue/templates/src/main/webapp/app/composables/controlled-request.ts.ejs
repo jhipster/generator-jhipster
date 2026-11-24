@@ -17,8 +17,11 @@
  limitations under the License.
 -%>
 import { type Ref, onScopeDispose, ref, shallowRef, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
-import axios from 'axios';
+import axios, { type AxiosError } from 'axios';
+
+import type AlertService from '@/shared/alert/alert.service';
 
 /** The options of a request: its signal aborts it. */
 export type RequestOptions = { signal?: AbortSignal };
@@ -79,4 +82,15 @@ export const useControlledRequest = <T, P = null>(
   watch(getParams, executeParams => execute(executeParams), { immediate: true });
 
   return { data, isLoading, error, execute, abort };
+};
+
+/**
+ * The error of the load of an entity: one that does not exist anymore leaves for the page not found, another one is alerted.
+ */
+export const useEntityLoadError = (alertService: AlertService) => {
+  const router = useRouter();
+  return (error: unknown) => {
+    const { response } = error as AxiosError;
+    return response?.status === 404 ? router.replace({ name: 'NotFound' }) : alertService.showHttpError(response);
+  };
 };
