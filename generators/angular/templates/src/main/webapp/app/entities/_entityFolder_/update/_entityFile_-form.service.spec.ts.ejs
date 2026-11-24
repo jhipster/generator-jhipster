@@ -20,6 +20,16 @@
 <%_ const timedFields = fields.filter(field => field.fieldTypeTimed); _%>
 <%_ const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient); _%>
 <%_ const collectionRelationships = relationships.filter(relationship => relationship.persistableRelationship && relationship.collection); _%>
+<%_ // The blobs of a file with a size to validate, and the sizes in bytes the form accepts and rejects for each one.
+    const sizedFileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && (field.fieldValidationMinBytes || field.fieldValidationMaxBytes));
+    const minBytes = field => field.fieldValidationMinBytes ? Math.trunc(field.fieldValidateRulesMinbytes) : 0;
+    const acceptedSize = field => Math.max(1, minBytes(field));
+    const rejectedSizes = sizedFileFields.flatMap(field => [
+      ...minBytes(field) > 1 ? [{ field, kind: 'minBytes', size: minBytes(field) - 1 }] : [],
+      ...field.fieldValidationMaxBytes ? [{ field, kind: 'maxBytes', size: Math.trunc(field.fieldValidateRulesMaxbytes) + 1 }] : [],
+    ]);
+    const requiredSizedFileFields = sizedFileFields.filter(field => field.fieldValidationRequired);
+_%>
 <%_ const requiredCollectionRelationships = collectionRelationships.filter(relationship => relationship.relationshipRequired); _%>
 import { beforeEach, describe, expect, it } from 'vitest';
 import { signal } from '@angular/core';
@@ -27,7 +37,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { sampleWithNewData, sampleWithRequiredData } from '../<%- entityFileName %>.test-samples';
 
-import { <%- entityAngularName %>FormService } from './<%- entityFileName %>-form.service';
+import { <%- rejectedSizes.length > 0 ? `${entityAngularName}Form, ${entityAngularName}FormModel, ` : '' %><%- entityAngularName %>FormService } from './<%- entityFileName %>-form.service';
 
 describe('<%- entityAngularName %> Form Service', () => {
   let service: <%- entityAngularName %>FormService;
@@ -86,11 +96,14 @@ describe('<%- entityAngularName %> Form Service', () => {
 <%_ if (!relationships.some(relationship => relationship.persistableRelationship && relationship.relationshipRequired)) { _%>
 
       it('should accept the values of an entity with its required data<%- booleanFields.length > 0 ? ', false booleans included' : '' %>', () => {
-  <%_ if (booleanFields.length > 0) { _%>
+  <%_ if (booleanFields.length > 0 || requiredSizedFileFields.length > 0) { _%>
         const entity = {
           ...sampleWithRequiredData,
     <%_ for (const field of booleanFields) { _%>
           <%- field.fieldName %>: false,
+    <%_ } _%>
+    <%_ for (const field of requiredSizedFileFields) { _%>
+          <%- field.fieldName %>: btoa('x'.repeat(<%- acceptedSize(field) %>)),
     <%_ } _%>
         };
   <%_ } else { _%>
@@ -102,6 +115,22 @@ describe('<%- entityAngularName %> Form Service', () => {
 
         expect(form().errorSummary().map(error => error.kind)).toEqual([]);
         expect(form().valid()).toBe(true);
+      });
+<%_ } _%>
+<%_ if (rejectedSizes.length > 0) { _%>
+
+      it('should reject a file out of its size limits', () => {
+        const formOf = (value: Partial<<%- entityAngularName %>FormModel>): <%- entityAngularName %>Form =>
+          TestBed.runInInjectionContext(() =>
+            service.create<%- entityAngularName %>Form(signal({ ...service.create<%- entityAngularName %>FormModel(sampleWithRequiredData), ...value })<%- editableId ? ', signal(true)' : '' %>),
+          );
+
+  <%_ for (const { field, kind, size } of rejectedSizes) { _%>
+        expect(formOf({ <%- field.fieldName %>: btoa('x'.repeat(<%- size %>)) }).<%- field.fieldName %>().getError('<%- kind %>')).toBeDefined();
+  <%_ } _%>
+  <%_ for (const field of sizedFileFields) { _%>
+        expect(formOf({ <%- field.fieldName %>: btoa('x'.repeat(<%- acceptedSize(field) %>)) }).<%- field.fieldName %>().valid()).toBe(true);
+  <%_ } _%>
       });
 <%_ } _%>
 <%_ if (requiredCollectionRelationships.length > 0) { _%>

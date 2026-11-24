@@ -56,6 +56,7 @@
                     </select>
     <%_ } else { _%>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+        <%_ const markAsDirty = field.fieldValidate ? `; ${fieldName}Ref.markAsDirty()` : ''; _%>
                     <div>
         <%_ if (field.blobContentTypeImage) { _%>
                     @if (<%- fieldName %>Ref.value()) {
@@ -78,7 +79,7 @@
                             </button>
                         </div>
                     }
-                        <input type="file" id="file_<%- fieldName %>" data-cy="<%- fieldName %>" (change)="setFileData($event, '<%- fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*"<% if (enableTranslation) { %> <%- jhiPrefix %>Translate="entity.action.addimage"<% } %><% } else { %>false)"<% if (enableTranslation) { %> <%- jhiPrefix %>Translate="entity.action.addblob"<% } %><% } %> aria-label="<%- fieldNameHumanized %>"/>
+                        <input type="file" id="file_<%- fieldName %>" data-cy="<%- fieldName %>" (change)="setFileData($event, '<%- fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)<%- markAsDirty %>" accept="image/*"<% if (enableTranslation) { %> <%- jhiPrefix %>Translate="entity.action.addimage"<% } %><% } else { %>false)<%- markAsDirty %>"<% if (enableTranslation) { %> <%- jhiPrefix %>Translate="entity.action.addblob"<% } %><% } %> aria-label="<%- fieldNameHumanized %>"/>
                     </div>
       <%_ } _%>
       <%_ if (field.fieldTypeLocalDate) { _%>
@@ -118,6 +119,16 @@
     <%_ if (field.fieldValidationMaxLength) { _%>
                     @if (<%- fieldName %>Ref.getError('maxLength')) {
                         <small class="form-text text-danger">__jhiTranslateValidationTag__('entity.validation.maxlength', { "max": <%- field.fieldValidateRulesMaxlength %> })</small>
+                    }
+    <%_ } _%>
+    <%_ if (field.fieldTypeBinary && !field.blobContentTypeText && field.fieldValidationMinBytes) { _%>
+                    @if (<%- fieldName %>Ref.getError('minBytes')) {
+                        <small class="form-text text-danger">__jhiTranslateValidationTag__('entity.validation.minbytes', { "min": <%- field.fieldValidateRulesMinbytes %> })</small>
+                    }
+    <%_ } _%>
+    <%_ if (field.fieldTypeBinary && !field.blobContentTypeText && field.fieldValidationMaxBytes) { _%>
+                    @if (<%- fieldName %>Ref.getError('maxBytes')) {
+                        <small class="form-text text-danger">__jhiTranslateValidationTag__('entity.validation.maxbytes', { "max": <%- field.fieldValidateRulesMaxbytes %> })</small>
                     }
     <%_ } _%>
     <%_ if (field.fieldValidationMin) { _%>
