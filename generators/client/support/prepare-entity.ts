@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { mutateData } from '../../../lib/utils/object.ts';
+import { isContentTypeField } from '../../base-application/internal/content-type-fields.ts';
 import { type EntitySamplesBatch, formatEntitySample, generateEntitySamples } from '../../base-application/support/entity-samples.ts';
 import type { Entity as ClientEntity, Field as ClientField } from '../types.ts';
 
@@ -27,7 +28,8 @@ import getTypescriptKeyType from './types-utils.ts';
 const SEED = 'post-prepare-client';
 
 export function preparePostEntityClientDerivedProperties(entity: ClientEntity) {
-  let clientFields = entity.fields.filter(field => isClientField(field));
+  // The blob gives the content type of its sample, its content type field is not drawn.
+  let clientFields = entity.fields.filter(field => isClientField(field) && !isContentTypeField(field));
   if (entity.builtInUser) {
     clientFields = clientFields.filter(field => ['id', 'login'].includes(field.fieldName));
   }

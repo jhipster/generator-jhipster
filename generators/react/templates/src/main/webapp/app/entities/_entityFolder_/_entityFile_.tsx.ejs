@@ -413,7 +413,7 @@ export const <%- entityReactName %> = () => {
                       </Link>
                     </td>
 <%_ for (field of entityClientListFields) { _%>
-  <%_ const { fieldType, fieldName, fieldIsEnum } = field; _%>
+  <%_ const { fieldType, fieldName, fieldIsEnum, contentTypeFieldName } = field; _%>
   <%_ if (fieldName !== primaryKey.name) { _%>
                     <td>
     <%_ if (builtInUserManagement && fieldName === 'activated') { _%>
@@ -445,18 +445,18 @@ export const <%- entityReactName %> = () => {
       <%_ } else { _%>
                         {<%- entityInstance %>.<%- fieldName %> ? (
                           <div>
-                            {<%- entityInstance %>.<%- fieldName %>ContentType ? (
+                            {<%- entityInstance %>.<%- contentTypeFieldName %> ? (
         <%_ if (field.blobContentTypeImage) { _%>
-                              <a onClick={() => openFile(<%- entityInstance %>.<%- fieldName %>, <%- entityInstance %>.<%- fieldName %>ContentType, 'image')}>
-                                  <img src={`data:${<%- entityInstance %>.<%- fieldName %>ContentType};base64,${<%- entityInstance %>.<%- fieldName %>}`} style={{ maxHeight: '30px' }} />
+                              <a onClick={() => openFile(<%- entityInstance %>.<%- fieldName %>, <%- entityInstance %>.<%- contentTypeFieldName %>, 'image')}>
+                                  <img src={`data:${<%- entityInstance %>.<%- contentTypeFieldName %>};base64,${<%- entityInstance %>.<%- fieldName %>}`} style={{ maxHeight: '30px' }} />
         <%_ } else { _%>
-                              <a onClick={() => openFile(<%- entityInstance %>.<%- fieldName %>, <%- entityInstance %>.<%- fieldName %>ContentType)}>
+                              <a onClick={() => openFile(<%- entityInstance %>.<%- fieldName %>, <%- entityInstance %>.<%- contentTypeFieldName %>)}>
                                   <Translate contentKey="entity.action.open">Open</Translate>
         <%_ } _%>
                                 &nbsp;
                               </a>
                             ) : null}
-                            <span>{<%- entityInstance %>.<%- fieldName %>ContentType}, {byteSize(<%- entityInstance %>.<%- fieldName %>)}</span>
+                            <span>{<%- entityInstance %>.<%- contentTypeFieldName %>}, {byteSize(<%- entityInstance %>.<%- fieldName %>)}</span>
                           </div>
                         ) : null}
       <%_ } _%>

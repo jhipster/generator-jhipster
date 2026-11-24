@@ -6,7 +6,7 @@
         <hr />
         <dl class="row-md jh-entity-details">
 <%_ for (field of fields.filter(field => !field.hidden)) { _%>
-  <%_ const { fieldName, fieldType } = field; _%>
+  <%_ const { fieldName, fieldType, contentTypeFieldName } = field; _%>
           <dt>
             <span>{{ t$('<%- field.propertyTranslationKey %>') }}</span>
           </dt>
@@ -17,15 +17,15 @@
             <span><% if (enableTranslation) { %>{{ t$('<%- frontendAppName %>.<%- fieldType %>.' + <%- entityInstance %>.<%- fieldName %>) }}<% } else { %>{{ <%- entityInstance %>.<%- fieldName %> }}<% } %></span>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
             <div v-if="<%- entityInstance %>.<%- fieldName %>">
-              <a @click="dataUtils.openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>, 'image')">
-                <img :src="'data:' + <%- entityInstance %>.<%- fieldName %>ContentType + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-width: 100%;" alt="<%- entityInstance %>"/>
+              <a @click="dataUtils.openFile(<%- entityInstance %>.<%- contentTypeFieldName %>, <%- entityInstance %>.<%- fieldName %>, 'image')">
+                <img :src="'data:' + <%- entityInstance %>.<%- contentTypeFieldName %> + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-width: 100%;" alt="<%- entityInstance %>"/>
               </a>
-              {{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}
+              {{<%- entityInstance %>.<%- contentTypeFieldName %>}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}
             </div>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
             <div v-if="<%- entityInstance %>.<%- fieldName %>">
-              <a @click="dataUtils.openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a>
-              {{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}
+              <a @click="dataUtils.openFile(<%- entityInstance %>.<%- contentTypeFieldName %>, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a>
+              {{<%- entityInstance %>.<%- contentTypeFieldName %>}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}
             </div>
   <%_ } else if (field.fieldTypeDuration) { _%>
             <span>{{dateFormat.formatDuration(<%- entityInstance %>.<%- fieldName %>)}} ({{<%- entityInstance %>.<%- fieldName %>}})</span>
