@@ -33,9 +33,13 @@
     const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.transient && !field.hidden);
     const requiredCollections = readOnly ? [] : screenRelationships.filter(rel => rel.collection && rel.relationshipRequired);
     const validatedForm = numericFormFields.length > 0 || builtInUserManagement || requiredCollections.length > 0;
-    const formInputFields = readOnly ? [] : fields.filter(field => !field.id && !field.hidden && !field.readonly && !field.transient && !field.autoGenerate && !field.fieldTypeBinary && !field.fieldTypeBoolean && !field.fieldIsEnum);
+    const formInputFields = readOnly ? [] : fields.filter(field => !field.id && !field.hidden && !field.readonly && !field.transient && !field.autoGenerate && (!field.fieldTypeBinary || field.blobContentTypeText) && !field.fieldTypeBoolean && !field.fieldIsEnum);
     // The optional fields whose empty text is not one of their values.
-    const blankFields = formInputFields.filter(field => !field.fieldValidationRequired && !field.fieldTypeString && !field.blobContentTypeText && !field.fieldTypeNumeric && !field.fieldTypeTimed);
+    const blankFields = formInputFields.filter(field => !field.fieldValidationRequired && !field.fieldTypeString && !field.fieldTypeNumeric && !field.fieldTypeTimed);
+    // The fields nobody fills in a new form: an optional enum, a date and time.
+    const untouchedEnums = readOnly ? [] : fields.filter(field => field.fieldIsEnum && !field.clientConstantsAsValues && field.defaultValue === undefined && !field.fieldValidationRequired && !field.id && !field.hidden && !field.readonly && !field.transient);
+    const timedFormFields = readOnly ? [] : fields.filter(field => field.fieldTypeTimed && !field.id && !field.hidden && !field.readonly && !field.transient);
+    const numericIdCollections = requiredCollections.filter(rel => !rel.relationshipSerializePrimaryKeyOnly && rel.otherEntity.primaryKey?.typeNumeric);
 _%>
 import { afterEach, <%- validatedForm ? 'beforeAll, ' : '' %>beforeEach, describe, expect, it, vi } from 'vitest';
 <%_ if (validatedForm) { _%>
@@ -218,6 +222,21 @@ describe('<%- entityReactName %> screens', () => {
       expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('sort='));
     }, 30_000);
 
+<%_ if (entityClientListFields.length > 0) { _%>
+    it('should sort a new column ascending first, then the other way', async () => {
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+      const column = () => [...container.querySelectorAll('th.hand')].at(-1)!;
+      const lastSort = () => /sort=([^&]+)/.exec(vi.mocked(axios.get).mock.calls.at(-1)![0] as string)?.[1];
+
+      fireEvent.click(column());
+      await waitFor(() => expect(lastSort()).toMatch(/,asc$/));
+      expect(lastSort()).not.toMatch(/^id,/);
+      fireEvent.click(column());
+      await waitFor(() => expect(lastSort()).toMatch(/,desc$/));
+    });
+
+<%_ } _%>
     it('should accept the sort of the location', async () => {
       const { container } = renderPage('?page=1&sort=other,asc');
 
@@ -318,6 +337,15 @@ describe('<%- entityReactName %> screens', () => {
       fireEvent.click(screen.getByText('2'));
 
       await waitFor(() => expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('page=1')));
+    });
+
+    it('should show the first page of a new sort', async () => {
+      const { container } = renderPage('?page=2&sort=id,asc');
+      await waitFor(() => expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('page=1')));
+
+      fireEvent.click([...container.querySelectorAll('th.hand')].at(-1)!);
+
+      await waitFor(() => expect(vi.mocked(axios.get).mock.calls.at(-1)![0]).toContain('page=0'));
     });
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
@@ -461,6 +489,9 @@ describe('<%- entityReactName %> screens', () => {
       await waitForForm();
 
       fillForm(container, { ...formValues, <%- emptyNumbers %> });
+    <%_ for (const rel of requiredCollections) { _%>
+      selectAllOptions(container, '<%- rel.relationshipFieldNamePlural %>');
+    <%_ } _%>
       fireEvent.click(container.querySelector('#save-entity')!);
 
       await waitFor(() => expect(axios.post).toHaveBeenCalledWith(apiUrl, expect.objectContaining({ <%- nullNumbers %> })));
@@ -521,6 +552,74 @@ describe('<%- entityReactName %> screens', () => {
       const body = vi.mocked(axios.post).mock.calls[0][1];
     <%_ for (const field of blankFields) { _%>
       expect(JSON.parse(JSON.stringify(body))).not.toHaveProperty('<%- field.fieldName %>');
+    <%_ } _%>
+    });
+
+  <%_ } _%>
+  <%_ if (untouchedEnums.length > 0 || timedFormFields.length > 0) { _%>
+    it('should not fill the fields of a new form that nobody filled', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+    <%_ for (const field of [...untouchedEnums, ...timedFormFields]) { _%>
+      expect(container.querySelector<HTMLInputElement>('[name="<%- field.fieldName %>"]')!.value).toBe('');
+    <%_ } _%>
+    });
+
+  <%_ } _%>
+  <%_ if (untouchedEnums.length > 0) { _%>
+    it('should keep an enum without value when editing', async () => {
+      // A server may leave out a property without value.
+      const untouched = [<%- untouchedEnums.map(field => `'${field.fieldName}'`).join(', ') %>];
+      const withoutEnums = Object.fromEntries(Object.entries(sample).filter(([name]) => !untouched.includes(name)));
+      const getEntities = vi.mocked(axios.get).getMockImplementation()!;
+      vi.mocked(axios.get).mockImplementation((url: string, config?: object) =>
+        url === `${apiUrl}/${sample.<%- primaryKeyName %>}` ? Promise.resolve({ data: withoutEnums, headers: {} }) : getEntities(url, config),
+      );
+      const { container } = renderPage(`/${sample.<%- primaryKeyName %>}/edit`);
+      await waitForForm();
+      await waitFor(() => expect(container.querySelector<HTMLInputElement>('[name="<%- primaryKeyName %>"]')?.value).toBe(`${sample.<%- primaryKeyName %>}`));
+
+    <%_ for (const field of untouchedEnums) { _%>
+      expect(container.querySelector<HTMLSelectElement>('[name="<%- field.fieldName %>"]')!.value).toBe('');
+    <%_ } _%>
+    });
+
+    it('should not send a value for an enum nobody chose', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      const untouched = [<%- untouchedEnums.map(field => `'${field.fieldName}'`).join(', ') %>];
+      fillForm(container, Object.fromEntries(Object.entries(formValues).filter(([name]) => !untouched.includes(name))));
+    <%_ for (const rel of requiredCollections) { _%>
+      selectAllOptions(container, '<%- rel.relationshipFieldNamePlural %>');
+    <%_ } _%>
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(axios.post).toHaveBeenCalled());
+      const body = JSON.parse(JSON.stringify(vi.mocked(axios.post).mock.calls[0][1]));
+    <%_ for (const field of untouchedEnums) { _%>
+      expect(body).not.toHaveProperty('<%- field.fieldName %>');
+    <%_ } _%>
+    });
+
+  <%_ } _%>
+  <%_ if (numericIdCollections.length > 0) { _%>
+    it('should send the ids of the related entities as numbers', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      fillForm(container, formValues);
+    <%_ for (const rel of requiredCollections) { _%>
+      selectAllOptions(container, '<%- rel.relationshipFieldNamePlural %>');
+    <%_ } _%>
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(axios.post).toHaveBeenCalled());
+      const body = vi.mocked(axios.post).mock.calls[0][1] as any;
+    <%_ for (const rel of numericIdCollections) { _%>
+      expect(body.<%- rel.propertyName %>.map(({ id }) => typeof id)).toEqual(body.<%- rel.propertyName %>.map(() => 'number'));
+      expect(body.<%- rel.propertyName %>).not.toHaveLength(0);
     <%_ } _%>
     });
 

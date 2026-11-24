@@ -287,20 +287,25 @@ export const <%- entityReactName %> = () => {
     setPaginationState({
       ...paginationState,
       activePage: 1,
-      order: paginationState.order === ASC ? DESC : ASC,
+      // A new column sorts ascending first, the sorted one sorts the other way.
+      order: paginationState.sort === p && paginationState.order === ASC ? DESC : ASC,
       sort: p,
     });
     setSorting(true);
 <%_ } else if (paginationPagination) { _%>
     setPaginationState({
       ...paginationState,
-      order: paginationState.order === ASC ? DESC : ASC,
+      // A new sort shows its first page.
+      activePage: 1,
+      // A new column sorts ascending first, the sorted one sorts the other way.
+      order: paginationState.sort === p && paginationState.order === ASC ? DESC : ASC,
       sort: p,
     });
 <%_ } else { _%>
     setSortState({
       ...sortState,
-      order: sortState.order === ASC ? DESC : ASC,
+      // A new column sorts ascending first, the sorted one sorts the other way.
+      order: sortState.sort === p && sortState.order === ASC ? DESC : ASC,
       sort: p,
     });
 <%_ } _%>
