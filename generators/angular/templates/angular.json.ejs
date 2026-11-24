@@ -99,6 +99,11 @@
               "<%- relativeDir(clientRootDir, clientSrcDir) %>content/scss/vendor.scss",
               "<%- relativeDir(clientRootDir, clientSrcDir) %>content/scss/global.scss"
             ],
+            "stylePreprocessorOptions": {
+              "sass": {
+                "silenceDeprecations": ["import"]
+              }
+            },
             "scripts": [],
             "define": {
               "SERVER_API_URL": "''"
