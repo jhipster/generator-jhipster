@@ -318,7 +318,8 @@ export class <%- componentName %> {
   }
 
     navigateToWithComponentValues(event: SortState): void {
-      this.handleNavigation(<%- paginationPagination ? 'this.page(), ' : '' %>event<%- jpaMetamodelFiltering && paginationPagination ? ', this.filters.filterOptions' : '' %><%- searchEngineAny ? ', this.currentSearch()' : '' %>);
+      // A new sort shows its first page.
+      this.handleNavigation(<%- paginationPagination ? '1, ' : '' %>event<%- jpaMetamodelFiltering && paginationPagination ? ', this.filters.filterOptions' : '' %><%- searchEngineAny ? ', this.currentSearch()' : '' %>);
     }
 
 <%_ if (paginationPagination) { _%>

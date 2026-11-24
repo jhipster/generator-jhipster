@@ -323,6 +323,24 @@ describe('<%- entityAngularName %> Management Update Component', () => {
         });
 <%_ } _%>
 
+<%_ const editedBooleans = updatableEntity ? fields.filter(field => field.fieldTypeBoolean && field.angularFormKeepsEmptyValue && !field.hidden && !(builtInUserManagement && field.readonly)) : []; _%>
+<%_ if (editedBooleans.length > 0) { _%>
+
+        it('should keep a boolean without value that nobody changed', () => {
+            // GIVEN
+            const saveSubject = new Subject<I<%- entityAngularName %>>();
+            const <%- entityInstance %> = { ...<%- builtInUserManagement ? testEntityPrimaryKey0.replace('{', '{ id: 123,') : testEntityPrimaryKey0 %>, <%- editedBooleans.map(field => `${field.fieldName}: null`).join(', ') %> };
+            vi.spyOn(<%- entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+            activatedRoute.data = of({ <%- entityInstance %> });
+            comp.ngOnInit();
+
+            // WHEN
+            void comp.save();
+
+            // THEN
+            expect(<%- entityInstance %>Service.update).toHaveBeenCalledWith(expect.objectContaining({ <%- editedBooleans.map(field => `${field.fieldName}: null`).join(', ') %> }));
+        });
+<%_ } _%>
 <%_ if (refusedField) { _%>
   <%_ const newEntity = primaryKey.autoGenerate || !updatableEntity || builtInUserManagement ? `{ ${builtInUserManagement ? 'id: null, ' : ''}${primaryKey.name}: null }` : testEntityPrimaryKey0; _%>
 

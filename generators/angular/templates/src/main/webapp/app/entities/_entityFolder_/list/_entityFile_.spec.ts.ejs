@@ -205,6 +205,17 @@ describe('<%- entityAngularName %> Management Component', () => {
         // THEN
         expect(routerNavigateSpy).toHaveBeenCalled();
     });
+
+    it('should show the first page of a new sort', () => {
+        // GIVEN
+        comp.page.set(3);
+
+        // WHEN
+        comp.navigateToWithComponentValues({ predicate: 'non-existing-column', order: 'asc' });
+
+        // THEN
+        expect(routerNavigateSpy).toHaveBeenLastCalledWith(expect.anything(), expect.objectContaining({ queryParams: expect.objectContaining({ page: 1 }) }));
+    });
 <%_ } _%>
 
   it('should calculate the sort attribute for an id', () => {

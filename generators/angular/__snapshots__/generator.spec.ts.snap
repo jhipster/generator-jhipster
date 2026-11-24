@@ -791,6 +791,25 @@ describe("UserManagement Management Component", () => {
     expect(routerNavigateSpy).toHaveBeenCalled();
   });
 
+  it("should show the first page of a new sort", () => {
+    // GIVEN
+    comp.page.set(3);
+
+    // WHEN
+    comp.navigateToWithComponentValues({
+      predicate: "non-existing-column",
+      order: "asc",
+    });
+
+    // THEN
+    expect(routerNavigateSpy).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        queryParams: expect.objectContaining({ page: 1 }),
+      }),
+    );
+  });
+
   it("should calculate the sort attribute for an id", () => {
     // WHEN
     TestBed.tick();
@@ -998,7 +1017,8 @@ export class UserManagement {
   }
 
   navigateToWithComponentValues(event: SortState): void {
-    this.handleNavigation(this.page(), event);
+    // A new sort shows its first page.
+    this.handleNavigation(1, event);
   }
 
   navigateToPage(page: number): void {
@@ -1679,6 +1699,13 @@ describe("UserManagement Form Service", () => {
         );
       });
 
+      it("should leave the dates and times of a new entity empty", () => {
+        const model = service.createUserManagementFormModel();
+
+        expect(model.createdDate).toBe("");
+        expect(model.lastModifiedDate).toBe("");
+      });
+
       it("passing IUserManagement without dates nor relationships should create a model with empty values", () => {
         const model = service.createUserManagementFormModel({
           ...sampleWithRequiredData,
@@ -1839,7 +1866,7 @@ type UserManagementFormInput =
 
 type UserManagementFormDefaults = Pick<
   NewUserManagement,
-  "login" | "activated" | "createdDate" | "lastModifiedDate" | "authorities"
+  "login" | "activated" | "authorities"
 >;
 
 /**
@@ -1960,13 +1987,9 @@ export class UserManagementFormService {
   }
 
   private getFormDefaults(): UserManagementFormDefaults {
-    const currentTime = dayjs().toJSON();
-
     return {
       login: null,
       activated: true,
-      createdDate: currentTime,
-      lastModifiedDate: currentTime,
       authorities: [],
     };
   }
@@ -2314,6 +2337,26 @@ describe("UserManagement Management Update Component", () => {
       expect(comp.previousState).not.toHaveBeenCalled();
     });
 
+    it("should keep a boolean without value that nobody changed", () => {
+      // GIVEN
+      const saveSubject = new Subject<IUserManagement>();
+      const userManagement = {
+        ...{ id: 123, login: "Ozella.Kertzmann" },
+        activated: null,
+      };
+      vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
+      activatedRoute.data = of({ userManagement });
+      comp.ngOnInit();
+
+      // WHEN
+      void comp.save();
+
+      // THEN
+      expect(userManagementService.update).toHaveBeenCalledWith(
+        expect.objectContaining({ activated: null }),
+      );
+    });
+
     it("should mark the fields the server refused", async () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
@@ -2471,6 +2514,14 @@ export class UserManagementUpdate implements OnInit {
       this.userManagementModel(),
       this.userManagement,
     );
+    // A boolean without value that nobody changed keeps no value, the checkbox showing it unchecked.
+    if (
+      this.userManagement &&
+      this.userManagement.activated == null &&
+      !this.editForm.activated().dirty()
+    ) {
+      userManagement.activated = null;
+    }
     if (userManagement.id === null) {
       return this.subscribeToSaveResponse(
         this.userManagementService.create(userManagement as NewUserManagement),
