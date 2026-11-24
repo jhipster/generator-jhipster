@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "22.2.6",
+    "@angular/common": "22.3.0",
     "@fortawesome/angular-fontawesome": "5.1.0",
     "@fortawesome/free-solid-svg-icons": "7.3.1",
     "@ng-bootstrap/ng-bootstrap": "21.0.0",
@@ -18,9 +18,9 @@
   "devDependencies": {
     "@angular-architects/native-federation": "22.2.5",
     "@angular-builders/custom-esbuild": "22.0.2-beta.4",
-    "@angular-devkit/architect": "0.2202.7",
-    "@angular/build": "22.2.7",
-    "@angular/cli": "22.2.7",
+    "@angular-devkit/architect": "0.2203.0",
+    "@angular/build": "22.3.0",
+    "@angular/cli": "22.3.0",
     "@eslint/js": "10.0.1",
     "@softarc/native-federation-orchestrator": "4.10.2",
     "@stylistic/eslint-plugin": "6.0.1",
@@ -28,7 +28,7 @@
     "@types/node": "22.20.5",
     "@types/sockjs-client": "1.5.4",
     "@vitest/eslint-plugin": "1.6.28",
-    "angular-eslint": "22.7.0",
+    "angular-eslint": "22.8.0",
     "deepmerge": "4.3.1",
     "eslint": "10.15.0",
     "folder-hash": "4.1.4",
