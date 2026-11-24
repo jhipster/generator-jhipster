@@ -18,7 +18,7 @@
 -%>
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { byteSize, openFile, paddingSize, toBase64, toOpenableContentType } from './data-utils';
+import { byteLength, byteSize, openFile, paddingSize, toBase64, toOpenableContentType } from './data-utils';
 
 describe('data utils', () => {
   afterEach(() => {
@@ -30,6 +30,7 @@ describe('data utils', () => {
     expect(paddingSize('AA==')).toBe(2);
     expect(paddingSize('AAA=')).toBe(1);
     expect(paddingSize('AAAA')).toBe(0);
+    expect(byteLength('AAAAAA==')).toBe(4);
     expect(byteSize('AAAAAAAA')).toBe('6 bytes');
   });
 

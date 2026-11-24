@@ -16,16 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import fs from 'node:fs';
-import path from 'node:path';
-
 import chalk from 'chalk';
 import union from 'lodash-es/union.js';
 import semver from 'semver';
 import type { PackageJson } from 'type-fest';
 import type { Store } from 'yeoman-environment';
+import type { StorePackageMeta } from 'yeoman-environment/store';
 
-import { packageJson } from '../../../lib/index.ts';
 import { registerBlueprintAliases } from '../../../lib/resolver/blueprint-aliases.ts';
 import { packageNameToNamespace } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/index.ts';
@@ -47,6 +44,7 @@ type Generator = CoreGenerator<BaseConfig, BaseOptions>;
 export class BlueprintsResolver {
   readonly #generator: Generator;
   readonly #env: Generator['env'];
+  readonly #store: Store;
   readonly #log: Generator['log'];
   #blueprints: Promise<string[]>;
   #resolvedNames: string[] = [];
@@ -55,6 +53,7 @@ export class BlueprintsResolver {
   constructor(generator: Generator) {
     this.#generator = generator;
     this.#env = generator.env;
+    this.#store = (generator.env as unknown as { store: Store }).store;
     this.#log = generator.log;
     this.#blueprints = this.#resolveBlueprints();
     this.#listenToConfigChanges();
@@ -128,9 +127,8 @@ export class BlueprintsResolver {
       });
     }
     // The generators of the packages the blueprints take, under their namespace, for the blueprints looked up here.
-    const { store } = this.#env as unknown as { store: Store };
     for (const blueprint of blueprints) {
-      registerBlueprintAliases(store, packageNameToNamespace(blueprint.name));
+      registerBlueprintAliases(this.#store, packageNameToNamespace(blueprint.name));
     }
     const blueprintNames = blueprints.map(blueprint => blueprint.name);
     // Kept for the blueprints reading it.
@@ -139,41 +137,34 @@ export class BlueprintsResolver {
   }
 
   /**
-   * Try to retrieve the package.json of the blueprint used, as an object.
+   * The meta of the package of the blueprint used, at the path its lookup registered.
    */
-  #findBlueprintPackageJson(blueprintPkgName: string): PackageJson | undefined {
-    const blueprintGeneratorName = packageNameToNamespace(blueprintPkgName);
-    const blueprintPackagePath = this.#env.getPackagePath(blueprintGeneratorName);
-    if (!blueprintPackagePath) {
-      this.#log.warn(`Could not retrieve packagePath of blueprint '${blueprintPkgName}'`);
-      return undefined;
-    }
-    const packageJsonFile = path.join(blueprintPackagePath, 'package.json');
-    if (!fs.existsSync(packageJsonFile)) {
-      return undefined;
-    }
-    return JSON.parse(fs.readFileSync(packageJsonFile).toString());
+  #getBlueprintPackageMeta(blueprintPkgName: string): StorePackageMeta | undefined {
+    return this.#store.getPackageMeta(packageNameToNamespace(blueprintPkgName));
   }
 
   /**
    * Try to retrieve the version of the blueprint used.
    */
   #findBlueprintVersion(blueprintPkgName: string): string | undefined {
-    const blueprintPackageJson = this.#findBlueprintPackageJson(blueprintPkgName);
-    if (!blueprintPackageJson?.version) {
+    const version = this.#getBlueprintPackageMeta(blueprintPkgName)?.getPackageVersion();
+    if (!version) {
       this.#log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
-      return undefined;
     }
-    return blueprintPackageJson.version;
+    return version;
   }
 
   #checkJHipsterBlueprintVersion(blueprintPkgName: string) {
-    const blueprintPackageJson = this.#findBlueprintPackageJson(blueprintPkgName);
+    const blueprintPackageJson = this.#getBlueprintPackageMeta(blueprintPkgName)?.getPackageJson<PackageJson>();
     if (!blueprintPackageJson) {
       this.#log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
       return;
     }
-    const mainGeneratorJhipsterVersion = packageJson.version;
+    const mainGeneratorJhipsterVersion = this.#generator._meta.getPackageVersion?.();
+    if (!mainGeneratorJhipsterVersion) {
+      this.#log.warn(`Could not retrieve version of JHipster to check blueprint '${blueprintPkgName}'`);
+      return;
+    }
     const compatibleJhipsterRange =
       blueprintPackageJson.engines?.['generator-jhipster'] ??
       blueprintPackageJson.dependencies?.['generator-jhipster'] ??

@@ -50,11 +50,6 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   SpringDataRelationalOptions,
   SpringDataRelationalSource
 > {
-  constructor(...[args, options, features]: ConstructorParameters<typeof BaseApplicationGenerator>) {
-    // Its templates write the content type of a blob through its content type field.
-    super(args, options, { ...features, contentTypeFields: true });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -109,15 +104,9 @@ export default class SqlGenerator extends BaseApplicationGenerator<
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ entity }) {
-        entity.relationships.forEach(relationship => {
-          if (relationship.persistableRelationship === undefined && relationship.relationshipType === 'many-to-many') {
-            relationship.persistableRelationship = true;
-          }
-        });
-
+      prepareEntity({ application, entity }) {
         const entityAny = entity as any;
-        if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType ?? entity.databaseType) && entityAny.jhiPrefix) {
+        if (isReservedTableName(entity.entityInstance, application.prodDatabaseType ?? application.databaseType) && entityAny.jhiPrefix) {
           entity.entityJpqlInstance = `${entityAny.jhiPrefix}${entity.entityClass}`;
         } else {
           entity.entityJpqlInstance = entity.entityInstance;

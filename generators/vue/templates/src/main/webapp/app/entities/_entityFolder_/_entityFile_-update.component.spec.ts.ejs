@@ -297,6 +297,9 @@ describe('Component Tests', () => {
 <%_ for (const relationship of allRelationshipsThatNeedSelectOptions.flat().filter(relationship => relationship.collection)) { _%>
           <%- relationship.relationshipFieldNamePlural %>: null,
 <%_ } _%>
+<%_ for (const field of vueEditableCollectionFields) { _%>
+          <%- field.propertyName %>: null,
+<%_ } _%>
         };
         <%- entityInstance %>ServiceStub.find.mockResolvedValue(entityWithoutValues);
 
@@ -311,12 +314,11 @@ describe('Component Tests', () => {
         await flushPromises();
 
         // THEN
-<%_ const editedCollections = relationships.filter(relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship); _%>
-<%_ if (editedCollections.length > 0) { _%>
+<%_ if (vueEditableCollections.length > 0) { _%>
         expect(comp.<%- entityInstance %>).toEqual({
           ...entityWithoutValues,
-  <%_ for (const relationship of editedCollections) { _%>
-          <%- relationship.relationshipFieldNamePlural %>: [],
+  <%_ for (const editableCollection of vueEditableCollections) { _%>
+          <%- editableCollection.propertyName %>: [],
   <%_ } _%>
         });
 <%_ } else { _%>
@@ -326,13 +328,13 @@ describe('Component Tests', () => {
     });
 
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
-  <%_ const { fieldName } = fields.find(field => field.blobContentTypeImage); _%>
+  <%_ const { fieldName, contentTypeFieldName } = fields.find(field => field.blobContentTypeImage); _%>
     describe('clearInputImage', () => {
       it('Should clear the image and its content type', async () => {
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%- entityInstance %>.<%- fieldName %> = 'AAAA';
-        comp.<%- entityInstance %>.<%- fieldName %>ContentType = 'image/png';
+        comp.<%- entityInstance %>.<%- contentTypeFieldName %> = 'image/png';
         await comp.$nextTick();
 
         const input = document.createElement('input');
@@ -340,10 +342,10 @@ describe('Component Tests', () => {
         input.value = 'image.png';
         document.body.append(input);
 
-        comp.clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>');
+        comp.clearInputImage('<%- fieldName %>', '<%- contentTypeFieldName %>', 'file_<%- fieldName %>');
 
         expect(comp.<%- entityInstance %>.<%- fieldName %>).toBeNull();
-        expect(comp.<%- entityInstance %>.<%- fieldName %>ContentType).toBeNull();
+        expect(comp.<%- entityInstance %>.<%- contentTypeFieldName %>).toBeNull();
         expect(input.value).toBe('');
         input.remove();
       });

@@ -3,7 +3,7 @@
     "@fortawesome/fontawesome-svg-core": "7.3.1",
     "@fortawesome/free-solid-svg-icons": "7.3.1",
     "@fortawesome/react-fontawesome": "3.5.0",
-    "@reduxjs/toolkit": "2.14.0",
+    "@reduxjs/toolkit": "2.15.0",
     "axios": "1.21.1",
     "bootstrap": "5.3.9",
     "bootswatch": "5.3.8",
@@ -15,7 +15,7 @@
     "react-infinite-scroll-component": "7.2.1",
     "react-jhipster": "1.1.0",
     "react-redux": "9.3.1",
-    "react-router": "8.5.1",
+    "react-router": "8.5.2",
     "react-toastify": "11.2.0",
     "react-top-loading-bar": "3.0.2",
     "rxjs": "7.8.2",
@@ -25,7 +25,7 @@
     "webstomp-client": "1.2.6"
   },
   "devDependencies": {
-    "@eslint-react/eslint-plugin": "5.30.3",
+    "@eslint-react/eslint-plugin": "5.30.5",
     "@eslint/js": "10.0.1",
     "@module-federation/runtime": "2.9.3",
     "@module-federation/vite": "1.24.1",
@@ -36,7 +36,7 @@
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.3.0",
     "@vitest/eslint-plugin": "1.6.28",
-    "autoprefixer": "10.6.2",
+    "autoprefixer": "10.7.0",
     "eslint": "10.15.0",
     "globals": "17.14.0",
     "happy-dom": "21.0.4",
@@ -48,7 +48,7 @@
     "typescript-eslint": "8.73.0",
     "vite": "8.3.8",
     "vite-plugin-static-copy": "4.1.1",
-    "vitest": "5.1.0",
+    "vitest": "5.1.1",
     "vitest-sonar-reporter": "3.0.0"
   },
   "packageManager": "npm@12"

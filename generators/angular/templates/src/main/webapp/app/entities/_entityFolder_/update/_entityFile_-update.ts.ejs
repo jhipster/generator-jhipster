@@ -118,7 +118,7 @@ export class <%- entityAngularName %>Update implements OnInit {
     <%- enumField.enumInstance %>Values = Object.keys(<%- enumField.fieldType %>);
 <%_ } _%>
 <%_ for (const field of fields.filter(field => field.angularFieldClientConstant)) { _%>
-    <%- field.fieldName %>Values = <%- field.angularFieldClientConstant.angularConstantValues %>;
+    readonly <%- field.fieldName %>Values = <%- field.angularFieldClientConstant.angularConstantValues %>;
 <%_ } _%>
 
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>

@@ -28,7 +28,10 @@ export const paddingSize = (value: string): number => {
   return 0;
 };
 
-const size = (value: string): number => (value.length / 4) * 3 - paddingSize(value);
+/**
+ * The size in bytes of a base64 value.
+ */
+export const byteLength = (value: string): number => (value.length / 4) * 3 - paddingSize(value);
 
 export const toBase64 = (file: File, callback: (base64Data: string) => void): void => {
   const fileReader: FileReader = new FileReader();
@@ -82,4 +85,4 @@ export const openFile = (data: string, contentType: string | null | undefined, b
   }
 };
 
-export const byteSize = (base64String: string): string => formatAsBytes(size(base64String));
+export const byteSize = (base64String: string): string => formatAsBytes(byteLength(base64String));

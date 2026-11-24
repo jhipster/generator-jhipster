@@ -16,15 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export class Account {
-  constructor(
-    public activated: boolean,
-    public authorities: string[],
-    public email: string,
-    public firstName: string | null,
-    public langKey: string,
-    public lastName: string | null,
-    public login: string,
-    public imageUrl: string | null,
-  ) {}
+export interface Account {
+  activated: boolean;
+  authorities: string[];
+  email: string;
+  firstName: string | null;
+  langKey: string;
+  lastName: string | null;
+  login: string;
+  imageUrl: string | null;
 }

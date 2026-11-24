@@ -58,7 +58,7 @@
             <small class="form-text text-danger" v-if="submitted && !password">{{ t$('entity.validation.required') }}</small>
           </b-form-group>
 <%_ if (authenticationUsesRememberMe) { _%>
-          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked>
+          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe">
             <span>{{ t$('login.form.rememberme') }}</span>
           </b-form-checkbox>
 <%_ } _%>
@@ -137,7 +137,7 @@ const doLogin = async () => {
     const result = await axios.post('api/authenticate', data);
     const bearerToken = result.headers.authorization;
     if (bearerToken?.startsWith('Bearer ')) {
-      storeAuthenticationToken(bearerToken.slice(7, bearerToken.length), rememberMe.value);
+      storeAuthenticationToken(bearerToken.slice(7), rememberMe.value);
     }
 <%_ } else { _%>
   const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}<%- authenticationUsesRememberMe ? '&remember-me=${rememberMe.value}' : '' %>&submit=Login`;

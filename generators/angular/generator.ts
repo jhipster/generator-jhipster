@@ -330,7 +330,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             !relationshipSerializePrimaryKeyOnly &&
             !entity.builtInUserManagement &&
             !otherEntity.embedded &&
-            ((entity as any).dtoMapstruct || otherEntity.builtInUser),
+            (entity.dtoAny || otherEntity.builtInUser),
         });
       },
     });
@@ -357,7 +357,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             (enableTranslation && fields.some(field => !field.hidden && field.fieldIsEnum && !field.clientConstantsAsValues)),
           angularEntityListRequiresTranslationPipe: ({ searchEngineAny, relationships }) =>
             enableTranslation &&
-            (Boolean(searchEngineAny) ||
+            (searchEngineAny ||
               relationships.some(
                 relationship =>
                   !relationship.otherEntity.embedded &&

@@ -17,28 +17,26 @@
  * limitations under the License.
  */
 
-import { addOtherRelationship, relationshipAddsBackReference } from '../../base-application/support/relationship.ts';
+import { databaseTypes } from '../../../lib/jhipster/index.ts';
+import {
+  addEntitiesOtherRelationships as addBaseEntitiesOtherRelationships,
+  needsOtherRelationship,
+} from '../../base-application/support/relationship.ts';
 import type { Entity as BaseApplicationEntity } from '../../base-application/types.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
 
-export const addEntitiesOtherRelationships = (entities: BaseApplicationEntity[]): ValidationResult => {
-  const result: { warning: string[] } = { warning: [] };
-  for (const entity of entities.filter(entity => !entity.builtIn)) {
-    for (const relationship of entity.relationships ?? []) {
-      if (
-        !relationship.otherRelationship &&
-        !relationship.otherEntity.embedded &&
-        (relationship.otherEntityRelationshipName || relationshipAddsBackReference(relationship.relationshipType, entity.databaseType))
-      ) {
-        if (relationship.otherEntity.builtIn) {
-          result.warning.push(
-            `Ignoring '${entity.name}' definitions as it is using a built-in Entity '${relationship.otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`,
-          );
-        } else {
-          relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);
-        }
-      }
-    }
-  }
-  return result;
-};
+const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
+
+/**
+ * @deprecated the base application adds the other side every database needs, the database bootstrap the one of the
+ * relationships of its database: `addEntitiesOtherRelationships` of `generators/base-application/support`.
+ */
+export const addEntitiesOtherRelationships = (entities: BaseApplicationEntity[]): ValidationResult =>
+  addBaseEntitiesOtherRelationships(
+    entities,
+    (entity, relationship) =>
+      needsOtherRelationship(entity, relationship) ||
+      // OneToOne back reference is required due to filtering
+      (relationship.relationshipType === 'one-to-one' && entity.databaseType === SQL) ||
+      (relationship.relationshipType === 'one-to-many' && entity.databaseType !== NEO4J && entity.databaseType !== NO_DATABASE),
+  );

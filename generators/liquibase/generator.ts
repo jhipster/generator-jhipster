@@ -34,13 +34,12 @@ import { getJdbcUrl } from '../base-application/generators/database-bootstrap/su
 import {
   formatEntitySample,
   generateEntitySamples,
-  loadRequiredConfigIntoEntity,
   prepareCommonFieldForTemplates,
   prepareEntity,
   prepareEntityPrimaryKeyForTemplates,
   prepareRelationship,
 } from '../base-application/support/index.ts';
-import type { Application as BaseApplicationApplication, DerivedField } from '../base-application/types.ts';
+import type { DerivedField } from '../base-application/types.ts';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
 import type { BaseChangelog, BaseChangelogData } from '../base-entity-changes/types.ts';
 import { mutateField as commonMutateField } from '../common/entity.ts';
@@ -88,11 +87,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   LiquibaseOptions,
   LiquibaseSource
 > {
-  constructor(...[args, options, features]: ConstructorParameters<typeof BaseEntityChangesGenerator>) {
-    // Its templates write the content type of a blob through its content type field.
-    super(args, options, { ...features, contentTypeFields: true });
-  }
-
   #masterXml?: string;
   numberOfRows!: number;
   databaseChangelogs: BaseChangelog<LiquibaseEntity>[] = [];
@@ -219,7 +213,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareEntityRelationship({ application, entity, relationship }) {
         prepareRelationshipForLiquibase({ application, entity, relationship });
-        this.#prepareConstraintNames(entity, relationship);
+        this.#prepareConstraintNames(application, entity, relationship);
         relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.onDelete, this);
         relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.onUpdate, this);
       },
@@ -252,7 +246,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             // Previous entities are not prepared using default jhipster priorities.
             // Prepare them.
             const entity = databaseChangelog.previousEntity!;
-            loadRequiredConfigIntoEntity(entity as unknown as ServerEntity, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
             // TODO fix types
             prepareEntity(entity, this);
             // TODO fix types
@@ -279,7 +272,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
               prepareRelationship.call(this, entity, relationship, true);
               prepareRelationshipForLiquibase({ application, entity, relationship });
               // The constraints of a removed relationship are dropped from the table of the entity as it is now.
-              this.#prepareConstraintNames(databaseChangelog.entity, relationship);
+              this.#prepareConstraintNames(application, databaseChangelog.entity, relationship);
             }
             postPrepareEntity.call(this, { application, entity } as any);
           }
@@ -813,11 +806,13 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
    * long told. The unique constraint of a relationship that is the id is named only when it is added to an existing table.
    */
   #prepareConstraintNames(
+    application: object,
     entity: LiquibaseEntity,
     relationship: LiquibaseRelationship & { otherEntity?: LiquibaseEntity },
     { idRelationship = false }: { idRelationship?: boolean } = {},
   ) {
-    const { entityTableName, prodDatabaseType } = entity as LiquibaseEntity & { prodDatabaseType: string };
+    const { entityTableName } = entity;
+    const { prodDatabaseType } = application as { prodDatabaseType: string };
     if (relationship.shouldWriteRelationship) {
       mutateData(relationship, {
         __override__: false,
@@ -891,7 +886,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     }
 
     const seed = `${entity.entityClass}-liquibase`;
-    this.resetEntitiesFakeData(seed);
 
     entity.liquibaseFakeData = [];
 
@@ -943,7 +937,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     } else {
       entityChanges.addedRelationships = databaseChangelog.addedRelationships;
       for (const relationship of entityChanges.addedRelationships) {
-        this.#prepareConstraintNames(entity, relationship, { idRelationship: true });
+        this.#prepareConstraintNames(application, entity, relationship, { idRelationship: true });
       }
       entityChanges.removedRelationships = databaseChangelog.removedRelationships;
       entityChanges.relationshipsToRecreateForeignKeysOnly = databaseChangelog.relationshipsToRecreateForeignKeysOnly;
@@ -951,7 +945,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       entityChanges.addedDefaultValueFields = databaseChangelog.addedDefaultValueFields;
     }
 
-    const { prodDatabaseType, databaseType, authenticationType, jhiPrefix } = entity as any;
+    const { authenticationType, jhiPrefix } = entity as any;
+    const { prodDatabaseType, databaseType } = application as unknown as { prodDatabaseType: string; databaseType: string };
     /* Required by the templates */
     databaseChangelog.writeContext = {
       entity,

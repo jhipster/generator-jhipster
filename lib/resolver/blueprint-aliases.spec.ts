@@ -161,6 +161,43 @@ describe('resolver - blueprint aliases', () => {
     });
   });
 
+  describe('with packages published under another version', () => {
+    before(async () => {
+      const takerPublished = createBlueprintFiles('generator-jhipster-taker', {
+        packageJson: { version: '0.0.1', yeoman: { meta: { packageVersion: '1.5.0' } }, jhipster: { aliases: [taken] } },
+        generator: 'info',
+      });
+      await helpers
+        .runJHipster('git')
+        .withFiles({
+          ...takenFiles,
+          [`node_modules/${taken}/package.json`]: {
+            name: taken,
+            version: '0.0.3',
+            type: 'module',
+            yeoman: { meta: { packageVersion: '2.0.0' } },
+          },
+          ...takerPublished,
+        })
+        .withLookups({ localOnly: true })
+        .commitFiles()
+        .withOptions({ blueprints: 'taker,taken', skipGit: true, reproducibleTests: false });
+    });
+
+    it('should store the yeoman.meta.packageVersion of the package.json of each one', () => {
+      runResult.assertJsonFileContent('.yo-rc.json', {
+        'generator-jhipster': {
+          blueprints: [
+            { name: 'generator-jhipster-taker', version: '1.5.0' },
+            { name: taken, version: '2.0.0' },
+          ],
+        },
+        'generator-jhipster-taker': { aliasVersions: { [taken]: '2.0.0' } },
+        [taken]: { blueprintVersion: '2.0.0' },
+      });
+    });
+  });
+
   describe('the JDL definitions', () => {
     it('should have the configs of the generators taken', async () => {
       await helpers

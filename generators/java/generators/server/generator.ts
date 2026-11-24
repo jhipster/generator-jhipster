@@ -59,7 +59,8 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
-            'backend:build-cache': './mvnw dependency:go-offline -ntp',
+            // The plugins of the prod profile, the one of the tests and of the e2e package, are downloaded running them.
+            'backend:build-cache': `./mvnw dependency:go-offline -ntp -Pprod && npm run backend:doc:test && npm run backend:nohttp:test && npm run ci:e2e:package${excludeWebapp ? ` --${excludeWebapp}` : ''}`,
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
         } else if (buildTool === 'gradle') {

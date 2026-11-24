@@ -26,9 +26,11 @@
     // A new entity leaves empty a field the form requires.
     const newEntityFormInvalid = !primaryKey.autoGenerate
       || fields.some(field => field.fieldValidationRequired && !field.id && !field.fieldTypeBoolean && !field.fieldTypeTimed && field.fieldTsDefaultValue === undefined)
-      || relationships.some(relationship => relationship.persistableRelationship && !relationship.collection && relationship.relationshipRequired);
+      || relationships.some(relationship => relationship.persistableRelationship && relationship.relationshipRequired);
     // The sample of the required data of the entity fills a valid form, but for a required relationship.
-    const requiredDataFormValid = !relationships.some(relationship => relationship.persistableRelationship && !relationship.collection && relationship.relationshipRequired);
+    const requiredDataFormValid = !relationships.some(relationship => relationship.persistableRelationship && relationship.relationshipRequired);
+    // The required blobs of a file with a size to validate, which the sample may not have.
+    const requiredSizedFileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && field.fieldValidationRequired && (field.fieldValidationMinBytes || field.fieldValidationMaxBytes));
 _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpResponse } from '@angular/common/http';
@@ -203,7 +205,18 @@ describe('<%- entityAngularName %> Management Update Component', () => {
         it('should save a valid submitted form', async () => {
             // GIVEN
             vi.spyOn(comp, 'save').mockImplementation(() => undefined);
+  <%_ if (requiredSizedFileFields.length > 0) { _%>
+            activatedRoute.data = of({
+                <%- entityInstance %>: {
+                    ...sampleWithRequiredData,
+    <%_ for (const field of requiredSizedFileFields) { _%>
+                    <%- field.fieldName %>: btoa('x'.repeat(<%- field.fieldValidationMinBytes ? Math.max(1, Math.trunc(field.fieldValidateRulesMinbytes)) : 1 %>)),
+    <%_ } _%>
+                },
+            });
+  <%_ } else { _%>
             activatedRoute.data = of({ <%- entityInstance %>: sampleWithRequiredData });
+  <%_ } _%>
             comp.ngOnInit();
 
             // WHEN

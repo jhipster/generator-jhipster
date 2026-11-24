@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, finalizeDefault } from '../../lib/utils/object.ts';
+import { getDatabaseTypeData } from '../base-application/generators/database-bootstrap/support/index.ts';
 
 import type { Application as ServerApplication } from './types.ts';
 
@@ -33,6 +34,11 @@ export type ServerAddedApplicationProperties = {
    * The patterns of the origins the backend allows in development.
    */
   corsAllowedOriginPatterns: string[];
+  /**
+   * Whether a one-to-many has a back reference in the database, which the base application adds once the entities are
+   * loaded: not in Neo4j nor without a database. An application without the server has no backend to tell it.
+   */
+  relationshipsHaveBackReference: boolean;
 };
 
 export const mutateApplication = {
@@ -57,4 +63,7 @@ export const mutateApplication = {
   }),
   // GitHub Codespaces
   corsAllowedOriginPatterns: () => ['https://*.githubpreview.dev'],
+  relationshipsHaveBackReference: ({ databaseType }) => databaseType !== 'neo4j' && databaseType !== 'no',
+  // The type of the ids of the database, unless configured.
+  defaultIdType: data => (data as { pkType?: string }).pkType ?? getDatabaseTypeData(data.databaseType!).defaultPrimaryKeyType,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<ServerApplication>, ServerAddedApplicationProperties>;

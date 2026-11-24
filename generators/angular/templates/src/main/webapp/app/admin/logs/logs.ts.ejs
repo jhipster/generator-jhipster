@@ -56,9 +56,17 @@ import { LogsService } from './logs.service';
 })
 export default class Logs implements OnInit {
   readonly loggers = signal<Log[] | undefined>(undefined);
+  readonly levels: readonly { name: Level; activeClass: string }[] = [
+    { name: 'TRACE', activeClass: 'btn-primary' },
+    { name: 'DEBUG', activeClass: 'btn-success' },
+    { name: 'INFO', activeClass: 'btn-info' },
+    { name: 'WARN', activeClass: 'btn-warning' },
+    { name: 'ERROR', activeClass: 'btn-danger' },
+    { name: 'OFF', activeClass: 'btn-secondary' },
+  ];
   readonly isLoading = signal(false);
   readonly filter = signal('');
-  sortState = sortStateSignal({ predicate: 'name', order: 'asc' });
+  readonly sortState = sortStateSignal({ predicate: 'name', order: 'asc' });
   readonly filteredAndOrderedLoggers = computed<Log[] | undefined>(() => {
     let data = this.loggers() ?? [];
     const filter = this.filter();

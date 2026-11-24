@@ -41,7 +41,16 @@ export function loadRequiredConfigDerivedProperties(entity: any) {
 
 export function preparePostEntityServerDerivedProperties(
   entity: SpringBootEntity<SpringBootField, RelationshipWithEntity<SpringBootRelationship, SpringBootEntity>>,
+  application?: { databaseType?: string; reactive?: boolean },
 ) {
+  const { databaseType, reactive } = application ?? {};
+  const { relationshipsContainEagerLoad } = entity as typeof entity & { relationshipsContainEagerLoad?: boolean };
+  entity.implementsEagerLoadApis = // Cassandra doesn't provide *WithEagerRelationships apis
+    databaseType !== 'cassandra' &&
+    databaseType !== 'neo4j' &&
+    // Only sql, mongodb and couchbase provide *WithEagerRelationships apis for imperative implementation
+    (reactive || databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') &&
+    Boolean(relationshipsContainEagerLoad);
   mutateData(entity, {
     uniqueEnums: ({ fields }) => [...new Set(fields.filter(field => field.fieldIsEnum))],
   });
@@ -57,7 +66,7 @@ export function preparePostEntityServerDerivedProperties(
   entity.reactiveOtherEntities = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity));
   entity.reactiveUniqueEntityTypes = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity.entityNameCapitalized));
   entity.reactiveUniqueEntityTypes.add(entity.entityClass);
-  if (entity.databaseType === 'sql') {
+  if (databaseType === 'sql') {
     for (const relationship of entity.relationships) {
       if (!relationship.otherEntity.embedded) {
         (relationship as DatabaseRelationship).joinColumnNames = relationship.otherEntity.primaryKey!.fields.map(

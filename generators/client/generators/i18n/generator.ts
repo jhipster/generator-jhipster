@@ -21,6 +21,7 @@ import { join } from 'node:path';
 
 import { startCase } from '../../../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../../../base-application/generator.ts';
+import { isContentTypeField } from '../../../base-application/internal/content-type-fields.ts';
 import { QUEUES } from '../../../base-application/priorities.ts';
 import { getEnumInfo } from '../../../base-application/support/enum.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
@@ -283,7 +284,16 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                     },
                   ],
                 },
-                context: { ...entity, baseName, clientSrcDir, clientI18nDir, frontendAppName, lang: languageTag },
+                // The content type field of a blob is shown with its blob, under the translation of the blob.
+                context: {
+                  ...entity,
+                  fields: entity.fields.filter(field => !isContentTypeField(field)),
+                  baseName,
+                  clientSrcDir,
+                  clientI18nDir,
+                  frontendAppName,
+                  lang: languageTag,
+                },
               });
             }
           }

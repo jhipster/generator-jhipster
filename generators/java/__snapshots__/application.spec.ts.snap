@@ -39,7 +39,8 @@ exports[`application mutation test expects mutateRelationship to match snapshot 
 
 exports[`application mutation test expects mutateValidatedField to match snapshot 1`] = `
 {
-  "javaFieldValidatorsPartial": "@Size(min = fieldValidateRulesMinlength, max = fieldValidateRulesMaxlength)
+  "javaFieldValidatorsPartial": "@NotNull
+    @Size(min = fieldValidateRulesMinlength, max = fieldValidateRulesMaxlength)
     @DecimalMin(value = "fieldValidateRulesMin")
     @DecimalMax(value = "fieldValidateRulesMax")
     @Pattern(regexp = "fieldValidateRulesPatternJava")

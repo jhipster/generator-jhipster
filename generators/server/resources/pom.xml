@@ -9,7 +9,7 @@
     <properties>
         <!-- Dependency versions -->
         <archunit-junit5.version>1.5.1</archunit-junit5.version>
-        <blockhound-junit-platform.version>1.0.18.RELEASE</blockhound-junit-platform.version>
+        <blockhound-junit-platform.version>1.0.19.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.11.0</commons-beanutils.version>
         <gatling.version>3.16.1</gatling.version>
         <jackson-databind-nullable.version>0.2.13</jackson-databind-nullable.version>
@@ -31,7 +31,7 @@
         <openapi-generator-maven-plugin.version>7.27.0</openapi-generator-maven-plugin.version>
         <properties-maven-plugin.version>1.4.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>5.9.0.7382</sonar-maven-plugin.version>
-        <spotless-maven-plugin.version>3.11.0</spotless-maven-plugin.version>
+        <spotless-maven-plugin.version>3.12.0</spotless-maven-plugin.version>
     </properties>
 
     <dependencyManagement>

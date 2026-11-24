@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import { mutateData, overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
-import { type ContentTypeField, isContentTypeField } from '../../../base-application/internal/content-type-fields.ts';
 import { fieldIsEnum } from '../../../base-application/support/field-utils.ts';
 import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
@@ -151,11 +150,20 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
           mutateData(relationship, mutateRestDomainRelationship);
         }
         entity.restDomainNewProperties ??= getRestDomainNewProperties(entity);
-        // The fields of the JSON: the ones of the client, and the content type field the server has next to each blob.
-        entity.restDomainFields ??= entity.fields.filter(field => {
-          if (!isContentTypeField(field)) return isClientField(field);
-          const { contentTypeOf } = field as ContentTypeField;
-          return entity.fields.some(blob => blob.fieldName === contentTypeOf && isClientField(blob));
+        // The fields of the JSON: the ones of the client, the content type field of each blob included.
+        entity.restDomainFields ??= entity.fields.filter(field => isClientField(field));
+      },
+      prepareFormAndListFields({ entity }) {
+        const { builtInUserManagement } = entity;
+        // The fields the clients skip, like the content type the server keeps next to a blob, are left out.
+        const clientFields = entity.fields.filter(field => isClientField(field) && !field.hidden);
+        mutateData(entity, {
+          __override__: false,
+          entityClientFormFields: () =>
+            clientFields.filter(
+              field => (!field.id || builtInUserManagement || !field.autoGenerate) && !(builtInUserManagement && field.readonly),
+            ),
+          entityClientListFields: () => clientFields.filter(field => !field.id && !field.hideListView),
         });
       },
     });

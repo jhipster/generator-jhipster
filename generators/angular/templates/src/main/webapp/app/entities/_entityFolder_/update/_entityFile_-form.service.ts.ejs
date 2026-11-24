@@ -34,9 +34,7 @@
       ['option', field => field.fieldIsEnum || field.clientConstantsAsValues],
     ];
     const formValueKind = field => formValueKinds.find(([, matches]) => matches(field))?.[0] ?? 'text';
-    const formFields = fields.flatMap(field => field.fieldTypeBinary && !field.blobContentTypeText
-      ? [{ field, fieldName: field.fieldName, kind: 'text' }, { field, fieldName: `${field.fieldName}ContentType`, kind: 'text', contentType: true }]
-      : [{ field, fieldName: field.fieldName, kind: formValueKind(field) }]);
+    const formFields = fields.map(field => ({ field, fieldName: field.fieldName, kind: formValueKind(field) }));
     const formRelationships = relationships.filter(relationship => relationship.persistableRelationship);
     const editableId = !primaryKey.autoGenerate && !builtInUserManagement;
     const signalFormsImports = ['FieldTree', 'FormOptions', 'form'];
@@ -49,6 +47,10 @@
     if (fields.some(field => field.fieldValidationMinLength)) signalFormsImports.push('minLength');
     if (fields.some(field => field.fieldValidationPattern)) signalFormsImports.push('pattern');
     if (fields.some(field => (field.fieldValidationRequired && !field.fieldTypeBoolean) || (field.id && !field.autoGenerate)) || formRelationships.some(relationship => !relationship.collection && relationship.relationshipRequired)) signalFormsImports.push('required');
+    // The blobs of a file with a size to validate, the one of its bytes.
+    const sizedFileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && (field.fieldValidationMinBytes || field.fieldValidationMaxBytes));
+    if (sizedFileFields.length > 0) signalFormsImports.push('validate');
+    if (formRelationships.some(relationship => relationship.collection && relationship.relationshipRequired)) signalFormsImports.push('requiredError', 'validate');
     const anchoredPattern = pattern => `${pattern.startsWith('^') ? '' : '^'}${pattern}${pattern.endsWith('$') ? '' : '$'}`;
 _%>
 import { Service, <%- editableId ? 'Signal, ' : '' %>WritableSignal } from '@angular/core';
@@ -58,6 +60,10 @@ import { <%- [...new Set(signalFormsImports)].sort().join(', ') %> } from '@angu
 import dayjs from 'dayjs/esm';
 
 import { <%- [anyFieldDate && 'DATE_FORMAT', anyFieldTimed && 'DATE_TIME_FORMAT'].filter(Boolean).join(', ') %> } from 'app/config';
+<%_ } _%>
+<%_ if (sizedFileFields.length > 0) { _%>
+import { byteLength } from 'app/shared/jhipster/data-utils';
+
 <%_ } _%>
 import { I<%- entityAngularName %>, New<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 
@@ -163,6 +169,12 @@ export class <%- entityAngularName %>FormService {
   <%_ if (field.fieldValidationMaxLength) { _%>
         maxLength(path.<%- fieldName %>, <%- field.fieldValidateRulesMaxlength %>);
   <%_ } _%>
+  <%_ if (sizedFileFields.includes(field) && field.fieldValidationMinBytes) { _%>
+        validate(path.<%- fieldName %>, ({ value }) => (value() && byteLength(value()) < <%- field.fieldValidateRulesMinbytes %> ? { kind: 'minBytes' } : undefined));
+  <%_ } _%>
+  <%_ if (sizedFileFields.includes(field) && field.fieldValidationMaxBytes) { _%>
+        validate(path.<%- fieldName %>, ({ value }) => (byteLength(value()) > <%- field.fieldValidateRulesMaxbytes %> ? { kind: 'maxBytes' } : undefined));
+  <%_ } _%>
   <%_ if (field.fieldValidationMin) { _%>
         min(path.<%- fieldName %>, <%- field.fieldValidateRulesMin %>);
   <%_ } _%>
@@ -174,7 +186,9 @@ export class <%- entityAngularName %>FormService {
   <%_ } _%>
 <%_ } _%>
 <%_ for (const { propertyName, collection, relationshipRequired } of formRelationships) { _%>
-  <%_ if (!collection && relationshipRequired) { _%>
+  <%_ if (collection && relationshipRequired) { _%>
+        validate(path.<%- propertyName %>, ({ value }) => (value().length === 0 ? requiredError() : undefined));
+  <%_ } else if (relationshipRequired) { _%>
         required(path.<%- propertyName %>);
   <%_ } _%>
 <%_ } _%>

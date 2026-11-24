@@ -177,6 +177,7 @@ export const files = asWriteFilesSection({
         'modules/administration/logs/logs.tsx',
         'modules/administration/metrics/metrics-details-modal.tsx',
         'modules/administration/metrics/metrics.tsx',
+        'shared/util/label-utils.ts',
       ],
     },
     {

@@ -197,12 +197,12 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('tells the relationships to recreate from the ones changed only in their options', () => {
-      const update = Object.values(changelogObjects()).find(object => object.operation === 'update');
+      const update = Object.values(changelogObjects()).find(object => object.operation === 'update' && object.entityName === 'Order');
       expect(update).toMatchObject({ recreatedRelationships: ['buyer', 'owner'], optionsChangedRelationships: ['seller'] });
     });
 
     it('tells the properties of the entity that changed its table, the other ones aside', () => {
-      const update = Object.values(changelogObjects()).find(object => object.operation === 'update');
+      const update = Object.values(changelogObjects()).find(object => object.operation === 'update' && object.entityName === 'Order');
       expect(update).toMatchObject({ changedProperties: ['entityTableName'] });
     });
   });

@@ -162,26 +162,29 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent(resourceIT, 'SMALLER_COUNT = 15;');
     });
 
-    it('should test a float with multiples of a quarter', () => {
-      runResult.assertFileContent(resourceIT, 'DEFAULT_RATIO = 16995.25F;');
-      runResult.assertFileContent(resourceIT, 'UPDATED_RATIO = 29620.25F;');
-    });
-
     it('should write a big decimal from its decimal text', () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_PRICE = new BigDecimal("21452.59");');
       runResult.assertFileContent(resourceIT, 'UPDATED_PRICE = new BigDecimal("25746.85");');
       runResult.assertFileContent(resourceIT, 'SMALLER_PRICE = new BigDecimal("16714.89");');
     });
 
-    it('should test a number field without three values with the values next to its minimum', () => {
-      runResult.assertFileContent(resourceIT, 'DEFAULT_LEVEL = 5;');
-      runResult.assertFileContent(resourceIT, 'UPDATED_LEVEL = 6;');
+    it('should repeat the single valid value of a number field, its smaller value below it', () => {
       runResult.assertFileContent(resourceIT, 'SMALLER_LEVEL = 4;');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_LEVEL = 5;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_LEVEL = 5;');
     });
 
-    it('should test a text field whose values contain one another with the default values', () => {
-      runResult.assertFileContent(resourceIT, 'DEFAULT_CODE = "AAAAAAAAAA";');
-      runResult.assertFileContent(resourceIT, 'UPDATED_CODE = "BBBBBBBBBB";');
+    it('should filter a number field of a single valid value only by the filters that leave its entity out below it', () => {
+      runResult.assertNoFileContent(resourceIT, '"level.equals"');
+      runResult.assertNoFileContent(resourceIT, '"level.greaterThanOrEqual"');
+      runResult.assertNoFileContent(resourceIT, '"level.lessThan"');
+      runResult.assertFileContent(resourceIT, '.add(Arguments.of("level.lessThanOrEqual", values(DEFAULT_LEVEL), values(SMALLER_LEVEL)))');
+      runResult.assertFileContent(resourceIT, '.add(Arguments.of("level.greaterThan", values(SMALLER_LEVEL), values(DEFAULT_LEVEL)))');
+    });
+
+    it('should test a pattern without two texts the filters tell apart with its samples', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_CODE = "a";');
+      runResult.assertFileContent(resourceIT, 'UPDATED_CODE = "aa";');
     });
 
     it('should test a UUID with two fixed values from the entity samples', () => {
@@ -196,9 +199,16 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent(resourceIT, 'UPDATED_UNIT = Unit.GRAM;');
     });
 
-    it('should test an enum of a single value with it twice', () => {
+    it('should test an enum of a single value with its repeated samples', () => {
       runResult.assertFileContent(resourceIT, 'DEFAULT_KIND = Kind.ONLY;');
       runResult.assertFileContent(resourceIT, 'UPDATED_KIND = Kind.ONLY;');
+    });
+
+    it('should filter an enum of a single value only by being specified', () => {
+      runResult.assertNoFileContent(resourceIT, '"kind.equals"');
+      runResult.assertNoFileContent(resourceIT, '"kind.in"');
+      runResult.assertFileContent(resourceIT, '.add(Arguments.of("kind.specified", values(true), values(false)))');
+      runResult.assertFileContent(resourceIT, '.add(Arguments.of("unit.equals", values(DEFAULT_UNIT), values(UPDATED_UNIT)))');
     });
 
     it('should test the dates, times and durations with two values from the entity samples, the default one the earlier', () => {
@@ -227,11 +237,14 @@ describe(`generator - ${generator}`, () => {
         'SMALLER_ZONED = ZonedDateTime.ofInstant(Instant.parse("2022-01-28T20:55:00.000Z"), ZoneOffset.UTC);',
       );
       runResult.assertFileContent(resourceIT, 'SMALLER_LASTING = Duration.parse("PT17M");');
-      runResult.assertFileContent(resourceIT, '"day.greaterThanOrEqual=" + UPDATED_DAY');
+      runResult.assertFileContent(resourceIT, '.add(Arguments.of("day.greaterThanOrEqual", values(DEFAULT_DAY), values(UPDATED_DAY)))');
     });
 
     it('should compare a number field above its default value with its updated value', () => {
-      runResult.assertFileContent(resourceIT, '"count.greaterThanOrEqual=" + UPDATED_COUNT');
+      runResult.assertFileContent(
+        resourceIT,
+        '.add(Arguments.of("count.greaterThanOrEqual", values(DEFAULT_COUNT), values(UPDATED_COUNT)))',
+      );
     });
   });
 

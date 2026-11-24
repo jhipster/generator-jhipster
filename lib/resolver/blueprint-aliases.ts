@@ -28,8 +28,8 @@ import { getJHipsterStore } from './lookups.ts';
 export type GeneratorAlias = {
   /** The name of the package taken, like `generator-jhipster-nodejs`. */
   aliasOf: string;
-  /** The folder of the package taken, its `package.json` gives its version. */
-  packagePath: string;
+  /** The version of the package taken, the `getPackageVersion` of the meta of its generator. */
+  getPackageVersion?: () => string | undefined;
 };
 
 type AliasGeneratorMeta = StoreGeneratorMeta & { alias?: GeneratorAlias };
@@ -50,17 +50,14 @@ const resolvePackagePath = (packageName: string, from: string): string | undefin
 
 const readPackageJson = (packagePath: string): Record<string, any> => JSON.parse(readFileSync(join(packagePath, 'package.json'), 'utf8'));
 
-/** The version of the package an alias is of. */
-export const getGeneratorAliasVersion = ({ packagePath }: GeneratorAlias): string | undefined => readPackageJson(packagePath).version;
-
 /** The blueprints whose aliases a store has, by their folder. */
 const registeredAliases = new WeakMap<Store, Set<string>>();
 
 /**
  * Register in the store the generators of the packages the blueprint takes, the ones of its `package.json` `"jhipster": {
  * "aliases": [...] }`, under the namespace of the blueprint, the nested ones too: only the generators the blueprint does
- * not have. A copy has no package path, the one of the blueprint stays its own, and keeps the package it is of
- * (`getGeneratorAlias`). A package taken is resolved as the blueprint requires it.
+ * not have. A copy has no package path, the one of the blueprint stays its own, and keeps the package it is of and its
+ * version (`getGeneratorAlias`). A package taken is resolved as the blueprint requires it.
  */
 export const registerBlueprintAliases = (store: Store, blueprintNamespace: string): void => {
   const blueprintPath = store.getPackagesPaths()[blueprintNamespace]?.[0];
@@ -86,7 +83,7 @@ export const registerBlueprintAliases = (store: Store, blueprintNamespace: strin
       if (!packageNamespace || !resolved) continue;
       const namespace = `${blueprintNamespace}${meta.namespace.slice(packageNamespace.length)}`;
       if (store.getMeta(namespace)) continue;
-      const alias: GeneratorAlias = { aliasOf, packagePath };
+      const alias: GeneratorAlias = { aliasOf, getPackageVersion: meta.getPackageVersion };
       store.add({ namespace, resolved, alias } as AliasGeneratorMeta);
     }
   }

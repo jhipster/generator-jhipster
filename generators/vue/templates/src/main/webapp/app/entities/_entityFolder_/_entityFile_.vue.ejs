@@ -1,4 +1,3 @@
-<%_ const listFields = fields.filter(field => !field.id && !field.hidden && !field.hideListView); _%>
 <template>
   <div>
     <h2 id="page-heading" data-cy="<%- entityNameCapitalized %>Heading">
@@ -46,7 +45,7 @@
         <tr>
 <%_ const columns = [
       { sortField: primaryKey.name, translationKey: primaryKey.name === 'id' ? 'global.field.id' : `${i18nKeyPrefix}.${primaryKey.name}` },
-      ...listFields.map(field => ({ sortField: field.fieldName, translationKey: `${i18nKeyPrefix}.${field.fieldName}` })),
+      ...entityClientListFields.map(field => ({ sortField: field.fieldName, translationKey: `${i18nKeyPrefix}.${field.fieldName}` })),
       ...relationships
         .filter(rel => !rel.otherEntity.embedded && (rel.relationshipSerializePrimaryKeyOnly || (rel.persistableRelationship && (paginationNo || !rel.collection))))
         .map(rel => ({
@@ -71,19 +70,19 @@ _%>
           <td>
             <router-link :to="{name: '<%- entityAngularName %>View', params: {<%- entityInstance %>Id: <%- entityInstance %>.<%- primaryKey.name %>}}">{{<%- entityInstance %>.<%- primaryKey.name %>}}</router-link>
           </td>
-<%_ for (field of listFields) { _%>
-  <%_ const { fieldName, fieldType } = field; _%>
+<%_ for (field of entityClientListFields) { _%>
+  <%_ const { fieldName, fieldType, contentTypeFieldName } = field; _%>
   <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
           <td>
-            <a v-if="<%- entityInstance %>.<%- fieldName %>" @click="dataUtils.openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>, 'image')">
-              <img :src="'data:' + <%- entityInstance %>.<%- fieldName %>ContentType + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-height: 30px;" alt="<%- entityInstance %>"/>
+            <a v-if="<%- entityInstance %>.<%- fieldName %>" @click="dataUtils.openFile(<%- entityInstance %>.<%- contentTypeFieldName %>, <%- entityInstance %>.<%- fieldName %>, 'image')">
+              <img :src="'data:' + <%- entityInstance %>.<%- contentTypeFieldName %> + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-height: 30px;" alt="<%- entityInstance %>"/>
             </a>
-            <span v-if="<%- entityInstance %>.<%- fieldName %>">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
+            <span v-if="<%- entityInstance %>.<%- fieldName %>">{{<%- entityInstance %>.<%- contentTypeFieldName %>}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
           </td>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
           <td>
-            <a v-if="<%- entityInstance %>.<%- fieldName %>" @click="dataUtils.openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a>
-            <span v-if="<%- entityInstance %>.<%- fieldName %>">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
+            <a v-if="<%- entityInstance %>.<%- fieldName %>" @click="dataUtils.openFile(<%- entityInstance %>.<%- contentTypeFieldName %>, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a>
+            <span v-if="<%- entityInstance %>.<%- fieldName %>">{{<%- entityInstance %>.<%- contentTypeFieldName %>}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
           </td>
   <%_ } else if (builtInUserManagement && fieldName === 'activated') { _%>
           <td>

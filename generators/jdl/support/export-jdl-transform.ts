@@ -76,8 +76,8 @@ export const exportJDLTransform = ({
     if (yoRcContents) {
       const contents = JSON.parse(yoRcContents.toString());
       if (contents[GENERATOR_JHIPSTER]?.jdlStore) {
-        const { jdlStore, jwtSecretKey, rememberMeKey, jhipsterVersion, creationTimestamp, incrementalChangelog, ...rest } =
-          contents[GENERATOR_JHIPSTER];
+        const { [GENERATOR_JHIPSTER]: jhipsterConfig, ...namespaces } = contents;
+        const { jdlStore, jwtSecretKey, rememberMeKey, jhipsterVersion, creationTimestamp, incrementalChangelog, ...rest } = jhipsterConfig;
 
         const jdlObject = getJDLObjectFromSingleApplication(
           { ...contents, [GENERATOR_JHIPSTER]: { ...rest, incrementalChangelog } },
@@ -93,8 +93,13 @@ export const exportJDLTransform = ({
         jdlStoreFile.conflicter = 'force';
         yield jdlStoreFile;
 
+        // The jdl has the config of generator-jhipster, the configs of the other namespaces, like the ones of the blueprints, stay.
         yoRcFile.contents = Buffer.from(
-          JSON.stringify({ [GENERATOR_JHIPSTER]: { jdlStore, jwtSecretKey, rememberMeKey, jhipsterVersion, creationTimestamp } }, null, 2),
+          JSON.stringify(
+            { ...namespaces, [GENERATOR_JHIPSTER]: { jdlStore, jwtSecretKey, rememberMeKey, jhipsterVersion, creationTimestamp } },
+            null,
+            2,
+          ),
         );
         setModifiedFileState(yoRcFile);
         yoRcFile.conflicter = 'force';

@@ -384,6 +384,8 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
       prepareEntityModel({ entity }) {
         // The fields the clients skip are left out of the model.
         const fieldsWithoutId = entity.fields.filter(field => !field.id && isClientField(field));
+        const formFields = entity.entityClientFormFields!;
+        const editableCollectionFields = formFields.filter(field => field.clientConstantsAsValues && field.collection);
         // The authorities of the routes, like Angular: ROLE_USER when the entity declares none.
         const asAuthorities = (authorities: string[]): string =>
           (authorities.length > 0 ? authorities : ['ROLE_USER']).map(authority => `'${authority}'`).join(', ');
@@ -405,14 +407,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           entityClientFieldDefaultValues: () => this.generateEntityClientFieldDefaultValues(fieldsWithoutId),
           entityModelEnumImports: () => this.generateEntityClientEnumImports(fieldsWithoutId),
           entityClientEnumImports: () => this.generateEntityClientEnumImports(entity.fields),
-          vueFormTimeFields: () =>
-            entity.fields.some(
-              field =>
-                (field.fieldTypeInstant || field.fieldTypeZonedDateTime) &&
-                (!field.id || entity.builtInUserManagement || !field.autoGenerate) &&
-                !field.hidden &&
-                !(entity.builtInUserManagement && field.readonly),
+          vueFormTimeFields: () => formFields.some(field => field.fieldTypeInstant || field.fieldTypeZonedDateTime),
+          vueEditableCollectionFields: () => editableCollectionFields,
+          vueEditableCollections: () => [
+            ...editableCollectionFields,
+            ...entity.relationships.filter(
+              relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship,
             ),
+          ],
         });
       },
     });

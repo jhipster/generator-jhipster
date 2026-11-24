@@ -24,10 +24,10 @@ import static <%- packageName %>.test.util.TestUtil.createUpdateProxyForBean;
 <%_ if (!readOnly && updatableEntity) { _%>
 import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdateBody;
 <%_ } _%>
-<%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
+<%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => (rel.persistableRelationship || (databaseTypeSql && rel.relationshipManyToMany)) && !rel.otherEntity.hasCyclicRequiredRelationship);
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
     // Fields a request may not set to null. Each is patched to null by the same test.
-    const requiredFields = fieldsToTest.filter(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired);
+    const requiredFields = fieldsToTest.filter(field => field.fieldValidate && field.fieldValidationRequired);
     // Owner side relationships whose related entity has a field that can be observed after a request carrying a
     // nested related object, to check the request does not write into the related entity.
     const noCascadeRelationships = readOnly || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
@@ -55,6 +55,8 @@ import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdate
     const hasUserRepository
       = filterTestableRelationships.some(rel => rel.otherEntity.builtInUser)
       || (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
+    // Fields the criteria filter by. Each filter is a case of the same parameterized test.
+    const filterFields = jpaMetamodelFiltering ? fieldsToTest.filter(field => field.filterableField) : [];
 
     const callBlock = reactive ? '.block()' : '';
     const callListBlock = reactive ? '.collectList().block()' : '';
@@ -130,7 +132,7 @@ import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
 import <%- entityAbsolutePackage %>.service.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
 import tools.jackson.databind.ObjectMapper;
-<%_ if ((updatableEntity && fields.some(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired)) || noCascadeRelationships.length > 0) { _%>
+<%_ if ((updatableEntity && fields.some(field => field.fieldValidate && field.fieldValidationRequired)) || noCascadeRelationships.length > 0) { _%>
 import tools.jackson.databind.node.ObjectNode;
 <%_ } _%>
 <%_ if (noCascadeRelationships.some(({ relationship }) => relationship.collection)) { _%>
@@ -148,8 +150,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 <%_ } _%>
 import org.junit.jupiter.api.Test;
-<%_ if (!readOnly && updatableEntity && requiredFields.length > 0) { _%>
+<%_ if ((!readOnly && updatableEntity && requiredFields.length > 0) || filterFields.length > 0) { _%>
 import org.junit.jupiter.params.ParameterizedTest;
+<%_ } _%>
+<%_ if (filterFields.length > 0) { _%>
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+<%_ } _%>
+<%_ if (!readOnly && updatableEntity && requiredFields.length > 0) { _%>
 import org.junit.jupiter.params.provider.ValueSource;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,7 +198,7 @@ import reactor.core.publisher.Flux;
 <%_ if (databaseTypeSql && !reactive) { _%>
 import jakarta.persistence.EntityManager;
 <%_ } _%>
-<%_ if (anyFieldIsBigDecimal) { _%>
+<%_ if (anyFieldIsBigDecimal || fieldsToTest.some(field => field.fieldTypeLong || field.fieldTypeDouble)) { _%>
 import java.math.BigDecimal;
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived && databaseTypeCassandra) { _%>
@@ -218,8 +226,13 @@ import java.time.format.DateTimeFormatter;
 <%_ if (anyFieldIsBlobDerived) { _%>
 import java.util.Base64;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch && !reactive && paginationNo) { _%>
+<%_ if ((searchEngineElasticsearch && !reactive && paginationNo) || (jpaMetamodelFiltering && !reactive) || filterFields.length > 0) { _%>
 import java.util.stream.Stream;
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
+import java.net.URI;
+import java.util.Collections;
+import org.springframework.web.util.UriBuilder;
 <%_ } _%>
 import java.util.List;
 <%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
@@ -234,7 +247,7 @@ import java.util.concurrent.atomic.AtomicInteger;
   <%_ } _%>
 <%_ } _%>
 
-<%_ if (anyFieldIsBigDecimal) { _%>
+<%_ if (anyFieldIsBigDecimal || fieldsToTest.some(field => field.fieldTypeLong || field.fieldTypeDouble)) { _%>
 import static <%- packageName %>.test.util.TestUtil.sameNumber;
 <%_ } _%>
 <%_ if (anyFieldIsZonedDateTime) { _%>
@@ -290,16 +303,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
       const needsSmallerValueName = jpaMetamodelFiltering && field.filterableField
         && (field.fieldTypeNumeric || field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime);
   _%>
-  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-
-    <%_ if (databaseTypeCassandra) { _%>
-    private static final ByteBuffer <%- defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "0"));
-    private static final ByteBuffer <%- updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "1"));
-    <%_ } else { _%>
-    private static final byte[] <%- defaultValueName %> = TestUtil.createByteArray(1, "0");
-    private static final byte[] <%- updatedValueName %> = TestUtil.createByteArray(1, "1");
-    <%_ } _%>
-  <%_ } else if (field.sbTestDefaultValue !== undefined) { _%>
+  <%_ if (field.sbTestDefaultValue !== undefined) { _%>
 
     private static final <%- field.javaFieldType %> <%- defaultValueName %> = <%- field.sbTestDefaultValue %>;
     private static final <%- field.javaFieldType %> <%- updatedValueName %> = <%- field.sbTestUpdatedValue %>;
@@ -643,7 +647,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
     }
 
-  <%_ if (databaseTypeSql && isUsingMapsId) { _%>
+  <%_ if (databaseTypeSql && isUsingMapsId && updatableEntity) { _%>
     @Test<%- transactionalAnnotation %>
     void update<%- entityClass %>MapsIdAssociationWithNewId() throws Exception {
         // Initialize the database
@@ -752,12 +756,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
   <%_ for (field of fieldsToTest) { _%>
     <%_ if (field.fieldValidate) { _%>
-      <%_ let required = false;
-          if (!field.fieldTypeBytes && field.fieldValidationRequired) {
-            required = true;
-          }
-      _%>
-      <%_ if (required) { _%>
+      <%_ if (field.fieldValidationRequired) { _%>
 
     @Test<%- transactionalAnnotation %>
     void check<%- field.fieldInJavaBeanMethod %>IsRequired() throws Exception {
@@ -785,6 +784,47 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
+        <%_ } _%>
+        <%_ if (databaseTypeCouchbase) { _%>
+
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+        <%_ if (searchEngineElasticsearch) { _%>
+
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
+        <%_ } _%>
+    }
+      <%_ } _%>
+      <%_ if (field.sbTestRejectedBlobSizes?.length > 0) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void check<%- field.fieldInJavaBeanMethod %>Size() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
+        <%_ } _%>
+        <%_ for (const size of field.sbTestRejectedBlobSizes) { _%>
+
+        // Create the <%- entityClass %> with a <%- size %>-byte blob, out of its size, which fails.
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(TestUtil.createByteArray(<%- size %>, "0"));
+          <%_ if (reactive) { _%>
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(<%- dtoMapstruct ? `${entityInstance}Mapper.toDto(${persistInstance})` : persistInstance %>))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+          <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(om.writeValueAsBytes(<%- dtoMapstruct ? `${entityInstance}Mapper.toDto(${persistInstance})` : persistInstance %>)))
+            .andExpect(status().isBadRequest());
+          <%_ } _%>
         <%_ } _%>
         <%_ if (databaseTypeCouchbase) { _%>
 
@@ -903,9 +943,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ for (field of fieldsToTest) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
-  if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeLong || field.fieldTypeDouble) { %>sameNumber(BigDecimal.valueOf(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+  if (field.fieldTypeLong || field.fieldTypeDouble) { %>))<% } else
+  if (field.fieldTypeFloat) { %>.toString())<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1085,9 +1125,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ for (field of fieldsToTest) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- field.fieldName %>").value(<%- reactive ? 'is(' : '' %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
-  if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeLong || field.fieldTypeDouble) { %>sameNumber(BigDecimal.valueOf(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+  if (field.fieldTypeLong || field.fieldTypeDouble) { %>))<% } else
+  if (field.fieldTypeFloat) { %>.toString())<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1109,137 +1149,72 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
         <%- primaryKey.type %> id = <%- persistInstance %>.<%- primaryKey.propertySupplierName %>();
 
-        default<%- entityClass %>Filtering("<%- primaryKey.name %>.equals=" + id, "<%- primaryKey.name %>.notEquals=" + id);
+        default<%- entityClass %>ShouldBeFound("<%- primaryKey.name %>.equals", id);
+        default<%- entityClass %>ShouldNotBeFound("<%- primaryKey.name %>.notEquals", id);
 
   <%_ if (primaryKey.typeLong || primaryKey.typeInteger) { _%>
-        default<%- entityClass %>Filtering("<%- primaryKey.name %>.greaterThanOrEqual=" + id, "<%- primaryKey.name %>.greaterThan=" + id);
+        default<%- entityClass %>ShouldBeFound("<%- primaryKey.name %>.greaterThanOrEqual", id);
+        default<%- entityClass %>ShouldNotBeFound("<%- primaryKey.name %>.greaterThan", id);
 
-        default<%- entityClass %>Filtering("<%- primaryKey.name %>.lessThanOrEqual=" + id, "<%- primaryKey.name %>.lessThan=" + id);
+        default<%- entityClass %>ShouldBeFound("<%- primaryKey.name %>.lessThanOrEqual", id);
+        default<%- entityClass %>ShouldNotBeFound("<%- primaryKey.name %>.lessThan", id);
   <%_ } _%>
     }
 
-  <%_ for (const searchBy of fieldsToTest) { /* we can't filter by all the fields. */ _%>
-    <%_ if (searchBy.filterableField) { _%>
+  <%_ if (filterFields.length > 0) { _%>
 
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> equals to
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.equals=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
-            "<%- searchBy.fieldName %>.equals=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
-        );
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> in
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.in=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %> + "," + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
-            "<%- searchBy.fieldName %>.in=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
-        );
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is not null
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.specified=true",
-            "<%- searchBy.fieldName %>.specified=false"
-        );
-    }
-    <%_ } _%>
-    <%_ if (searchBy.filterableField && searchBy.fieldTypeString) { _%>
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>ContainsSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> contains
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.contains=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
-            "<%- searchBy.fieldName %>.contains=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
-        );
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> does not contain
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.doesNotContain=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
-            "<%- searchBy.fieldName %>.doesNotContain=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
-        );
-    }
-
-    <%_ } _%>
-    <%_ // the range criteria _%>
-    <%_ if (searchBy.filterableField && (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime)) { _%>
+    /**
+     * The filters of the fields: each one with the values that find the default entity, and the ones that do not.
+     */
+    static Stream<Arguments> fieldFilters() {
+        return Stream.<Arguments>builder()
+    <%_ for (const searchBy of filterFields) { _%>
       <%_ const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           // The updated value is the bigger one.
           const biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
+          const { fieldName } = searchBy;
+          // A field with a single value, like an enum of one value or a number with its min equal to its max, has no other
+          // value to tell its entity apart: the filters by the updated value are left out.
+          const singleValue = searchBy.sbTestDefaultValue === searchBy.sbTestUpdatedValue;
       _%>
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is greater than or equal to
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.greaterThanOrEqual=" + <%- defaultValue %>,
-            "<%- searchBy.fieldName %>.greaterThanOrEqual=" + <%- biggerValue %>
-        );
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is less than or equal to
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.lessThanOrEqual=" + <%- defaultValue %>,
-            "<%- searchBy.fieldName %>.lessThanOrEqual=" + <%- smallerValue %>
-        );
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is less than
-        default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.lessThan=" + <%- biggerValue %>,
-            "<%- searchBy.fieldName %>.lessThan=" + <%- defaultValue %>
-        );
-    }
-
-    @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <%- reactive ? '' : 'throws Exception ' %>{
-        // Initialize the database
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
-
-        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is greater than
-        default<%- entityClass %>Filtering(
-          "<%- searchBy.fieldName %>.greaterThan=" + <%- smallerValue %>,
-          "<%- searchBy.fieldName %>.greaterThan=" + <%- defaultValue %>
-        );
-    }
-
+      <%_ if (!singleValue) { _%>
+            .add(Arguments.of("<%- fieldName %>.equals", values(<%- defaultValue %>), values(<%- biggerValue %>)))
+            .add(Arguments.of("<%- fieldName %>.in", values(<%- defaultValue %>, <%- biggerValue %>), values(<%- biggerValue %>)))
+      <%_ } _%>
+            .add(Arguments.of("<%- fieldName %>.specified", values(true), values(false)))
+      <%_ if (searchBy.fieldTypeString) { _%>
+            // A longer text than the value is never contained in it.
+            .add(Arguments.of("<%- fieldName %>.contains", values(<%- defaultValue %>), values(<%- defaultValue %> + "x")))
+            .add(Arguments.of("<%- fieldName %>.doesNotContain", values(<%- defaultValue %> + "x"), values(<%- defaultValue %>)))
+      <%_ } _%>
+      <%_ if (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) { _%>
+        <%_ if (!singleValue) { _%>
+            .add(Arguments.of("<%- fieldName %>.greaterThanOrEqual", values(<%- defaultValue %>), values(<%- biggerValue %>)))
+        <%_ } _%>
+            .add(Arguments.of("<%- fieldName %>.lessThanOrEqual", values(<%- defaultValue %>), values(<%- smallerValue %>)))
+        <%_ if (!singleValue) { _%>
+            .add(Arguments.of("<%- fieldName %>.lessThan", values(<%- biggerValue %>), values(<%- defaultValue %>)))
+        <%_ } _%>
+            .add(Arguments.of("<%- fieldName %>.greaterThan", values(<%- smallerValue %>), values(<%- defaultValue %>)))
+      <%_ } _%>
     <%_ } _%>
+            .build();
+    }
+
+    private static Object[] values(Object... values) {
+        return values;
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("fieldFilters")<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>ByFieldFilter(String filter, Object[] shouldBeFound, Object[] shouldNotBeFound) <%- reactive ? '' : 'throws Exception ' %>{
+        // Initialize the database
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        default<%- entityClass %>ShouldBeFound(filter, shouldBeFound);
+        default<%- entityClass %>ShouldNotBeFound(filter, shouldNotBeFound);
+    }
   <%_ } _%>
   <%_ for (const relationship of filterTestableRelationships) { _%>
 
@@ -1284,7 +1259,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- relationship.otherEntity.primaryKey.type %> <%- relationship.relationshipFieldName %>Id = <%- relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
     <%_ } _%>
         // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- relationship.relationshipFieldName %>Id
-        default<%- entityClass %>ShouldBeFound("<%- relationship.relationshipFieldName %>Id.equals=" + <%- relationship.relationshipFieldName %>Id);
+        default<%- entityClass %>ShouldBeFound("<%- relationship.relationshipFieldName %>Id.equals", <%- relationship.relationshipFieldName %>Id);
 
     <%_ const initInvalidPrimaryKey = {
           String: '"invalid-id"',
@@ -1293,21 +1268,16 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         }[relationship.otherEntity.primaryKey.type];
     _%>
         // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- initInvalidPrimaryKey %>
-        default<%- entityClass %>ShouldNotBeFound("<%- relationship.relationshipFieldName %>Id.equals=" + <%- initInvalidPrimaryKey %>);
+        default<%- entityClass %>ShouldNotBeFound("<%- relationship.relationshipFieldName %>Id.equals", <%- initInvalidPrimaryKey %>);
     }
 
   <%_ } _%>
-    private void default<%- entityClass %>Filtering (String shouldBeFound, String shouldNotBeFound) <%- reactive ? '' : 'throws Exception ' %>{
-        default<%- entityClass %>ShouldBeFound(shouldBeFound);
-        default<%- entityClass %>ShouldNotBeFound(shouldNotBeFound);
-    }
-
     /**
      * Executes the search, and checks that the default entity is returned.
      */
   <%_ if (reactive) { _%>
-    private void default<%- entityClass %>ShouldBeFound(String filter) {
-        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter)
+    private void default<%- entityClass %>ShouldBeFound(String filter, Object... values) {
+        webTestClient.get().uri(uriBuilder -> filterUri(uriBuilder, ENTITY_API_URL, filter, values))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1317,9 +1287,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if
       (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
-      if (field.fieldTypeLong) { %>.intValue()<% } else
-      if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeLong || field.fieldTypeDouble) { %>sameNumber(BigDecimal.valueOf(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+      if (field.fieldTypeLong || field.fieldTypeDouble) { %>))<% } else
+      if (field.fieldTypeFloat) { %>.toString())<% } else
       if (field.fieldTypeBigDecimal) { %>)<% } else
       if (field.fieldTypeZonedDateTime) { %>)<% } else
       if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1333,7 +1303,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>;
 
         // Check, that the count call also returns 1
-        webTestClient.get().uri(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter)
+        webTestClient.get().uri(uriBuilder -> filterUri(uriBuilder, ENTITY_API_URL + "/count", filter, values))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -1343,8 +1313,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
                 .value(is(1));
     }
   <%_ } else { _%>
-    private void default<%- entityClass %>ShouldBeFound(String filter) throws Exception {
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter))
+    private void default<%- entityClass %>ShouldBeFound(String filter, Object... values) throws Exception {
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc").param(filter, filterValues(values)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
     <%_ const primaryKeyConversion = {
@@ -1355,9 +1325,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% for (const field of fieldsToTest) { %>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
-    if (field.fieldTypeLong) { %>.intValue()<% } else
-    if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeLong || field.fieldTypeDouble) { %>sameNumber(BigDecimal.valueOf(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+    if (field.fieldTypeLong || field.fieldTypeDouble) { %>))<% } else
+    if (field.fieldTypeFloat) { %>.toString())<% } else
     if (field.fieldTypeBigDecimal) { %>)<% } else
     if (field.fieldTypeZonedDateTime) { %>)<% } else
     if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
@@ -1370,7 +1340,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     ) { %>.toString()<% } %>)))<% } %>;
 
         // Check, that the count call also returns 1
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc").param(filter, filterValues(values)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("1"));
@@ -1381,8 +1351,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
      * Executes the search, and checks that the default entity is not returned.
      */
   <%_ if (reactive) { _%>
-    private void default<%- entityClass %>ShouldNotBeFound(String filter) {
-        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter)
+    private void default<%- entityClass %>ShouldNotBeFound(String filter, Object... values) {
+        webTestClient.get().uri(uriBuilder -> filterUri(uriBuilder, ENTITY_API_URL, filter, values))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1392,7 +1362,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .jsonPath("$").isEmpty();
 
         // Check, that the count call also returns 0
-        webTestClient.get().uri(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter)
+        webTestClient.get().uri(uriBuilder -> filterUri(uriBuilder, ENTITY_API_URL + "/count", filter, values))
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1402,18 +1372,39 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .value(is(0));
     }
   <%_ } else { _%>
-    private void default<%- entityClass %>ShouldNotBeFound(String filter) throws Exception {
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter))
+    private void default<%- entityClass %>ShouldNotBeFound(String filter, Object... values) throws Exception {
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc").param(filter, filterValues(values)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc").param(filter, filterValues(values)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
+    }
+  <%_ } _%>
+  <%_ if (reactive) { _%>
+
+    /**
+     * The URI of a search, with the values of the filter as URI variables: they are encoded as a whole, a "+" or a "&" included.
+     */
+    private static URI filterUri(UriBuilder uriBuilder, String path, String filter, Object... values) {
+        return uriBuilder
+            .path(path)
+            .queryParam("sort", "<%- primaryKey.name %>,desc")
+            .queryParam(filter, Collections.nCopies(values.length, "{value}"))
+            .build(values);
+    }
+  <%_ } else { _%>
+
+    /**
+     * The values of a filter as request parameters, a value of the "in" filter in a parameter of its own.
+     */
+    private static String[] filterValues(Object... values) {
+        return Stream.of(values).map(String::valueOf).toArray(String[]::new);
     }
   <%_ } _%>
 
@@ -2011,9 +2002,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ for (field of fieldsToTest) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
-  if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeLong || field.fieldTypeDouble) { %>sameNumber(BigDecimal.valueOf(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+  if (field.fieldTypeLong || field.fieldTypeDouble) { %>))<% } else
+  if (field.fieldTypeFloat) { %>.toString())<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else

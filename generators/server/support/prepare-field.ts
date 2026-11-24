@@ -55,7 +55,7 @@ export default function prepareField(
   field: ServerField & LiquibaseField & SpringBootField & SpringDataRelationalField,
   generator: CoreGenerator,
 ) {
-  const { reactive: entityReactive, prodDatabaseType: entityProdDatabaseType } = entityWithConfig;
+  const { prodDatabaseType, databaseType, reactive } = application;
   if (field.id && entityWithConfig.primaryKey) {
     field.autoGenerate ??= !entityWithConfig.primaryKey.composite && ([INTEGER, LONG, UUID] as string[]).includes(field.fieldType);
 
@@ -65,14 +65,14 @@ export default function prepareField(
       field.autoGenerateByService = false;
       field.autoGenerateByRepository = false;
       field.requiresPersistableImplementation = true;
-    } else if (entityWithConfig.databaseType !== SQL) {
+    } else if (databaseType !== SQL) {
       field.liquibaseAutoIncrement = false;
       field.jpaGeneratedValue = false;
       field.autoGenerateByService = field.fieldType === UUID;
       field.autoGenerateByRepository = !field.autoGenerateByService;
       field.requiresPersistableImplementation = false;
       field.readonly = true;
-    } else if (entityReactive) {
+    } else if (reactive) {
       field.liquibaseAutoIncrement = field.fieldType === LONG;
       field.jpaGeneratedValue = false;
       field.autoGenerateByService = !field.liquibaseAutoIncrement;
@@ -80,7 +80,7 @@ export default function prepareField(
       field.requiresPersistableImplementation = !field.liquibaseAutoIncrement;
       field.readonly = true;
     } else {
-      const defaultGenerationType = entityProdDatabaseType === MYSQL ? 'identity' : 'sequence';
+      const defaultGenerationType = prodDatabaseType === MYSQL ? 'identity' : 'sequence';
       field.jpaGeneratedValue =
         field.jpaGeneratedValue || ([INTEGER, LONG] as string[]).includes(field.fieldType) ? defaultGenerationType : true;
       field.jpaGeneratedValueSequence = field.jpaGeneratedValue === 'sequence';

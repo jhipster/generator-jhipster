@@ -33,7 +33,7 @@ export const createAuthorityGuard =
       await accountService.update();
     }
     if (to.meta?.authorities && to.meta.authorities.length > 0) {
-      const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
+      const value = accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
       if (!value && from.path !== '/forbidden') {
 <%_ if (!authenticationTypeOauth2) { _%>
         if (!store.authenticated) {

@@ -46,6 +46,33 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
+  describe('with names of constraints longer than the database allows', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true, prodDatabaseType: 'postgresql' }, [
+        { name: 'OtherEntityWithAVeryLongNameIndeed', changelogDate: '20200101000000', fields: [], relationships: [] },
+        {
+          name: 'EntityWithAVeryLongNameIndeed',
+          changelogDate: '20200101000100',
+          fields: [],
+          relationships: [
+            {
+              relationshipName: 'otherEntityWithAVeryLongNameIndeed',
+              otherEntityName: 'otherEntityWithAVeryLongNameIndeed',
+              relationshipType: 'many-to-one',
+            },
+          ],
+        },
+      ] as any);
+    });
+
+    it('should shorten the name of the foreign key to the 63 characters of PostgreSQL', () => {
+      const changelog =
+        'src/main/resources/config/liquibase/changelog/20200101000100_added_entity_constraints_EntityWithAVeryLongNameIndeed.xml';
+      runResult.assertFileContent(changelog, /constraintName="fk_[^"]+"/);
+      runResult.assertNoFileContent(changelog, /constraintName="[^"]{64,}"/);
+    });
+  });
+
   describe('with maven', () => {
     before(async () => {
       await helpers.runJHipster('app').withJHipsterConfig({ buildTool: 'maven', skipClient: true });

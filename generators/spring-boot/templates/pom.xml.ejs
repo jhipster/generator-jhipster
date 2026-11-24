@@ -286,6 +286,8 @@
                         <!-- Due to spring-boot repackage, without adding this property test classes are not found
                              See https://github.com/spring-projects/spring-boot/issues/6254 -->
                         <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                        <!-- Skip integration tests with -DskipTests, which maven-failsafe-plugin 3.6+ no longer binds -->
+                        <skipTests>${skipTests}</skipTests>
                         <!-- Force alphabetical order to have a reproducible build -->
                         <runOrder>alphabetical</runOrder>
                         <includes>

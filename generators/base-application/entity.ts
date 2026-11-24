@@ -102,6 +102,10 @@ type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType
     blobContentTypeAny?: boolean;
 
     fieldTypeBytes?: boolean;
+    /** The smallest value of the fake data of a number field: its min, else 0 without a max, else the smallest of its type. */
+    fieldFakeDataMin?: number;
+    /** The largest value of the fake data of a number field: its max, else 32767 without a min, else the largest of its type. */
+    fieldFakeDataMax?: number;
     // Derived properties
     fieldTypeBinary?: boolean;
 
@@ -144,11 +148,49 @@ export type FakeDataOptions = {
   unique?: boolean;
 };
 
+/** The range of the fake data of a number field without a min nor a max. */
+const FAKE_DATA_MIN = 0;
+const FAKE_DATA_MAX = 32767;
+
+type NumberField = Pick<Field, 'fieldTypeInteger' | 'fieldTypeLong' | 'fieldTypeFloat' | 'fieldTypeDouble' | 'fieldTypeBigDecimal'>;
+
+/**
+ * The largest value of a number type that a REST client reads as it is, the smallest one being its opposite: a JSON
+ * number is a double in JavaScript, which holds an Integer, a Long up to Number.MAX_SAFE_INTEGER, and the fake data of
+ * a Double or a BigDecimal, which has cents, up to 10^13, its 15 significant digits that a double always gives back as
+ * they are written; of a Float up to a hundredth of 2^24.
+ */
+const restNumberLimit = (field: NumberField): number | undefined => {
+  if (field.fieldTypeInteger) return 2147483647;
+  if (field.fieldTypeLong) return Number.MAX_SAFE_INTEGER;
+  if (field.fieldTypeFloat) return 2 ** 24 / 100;
+  if (field.fieldTypeDouble || field.fieldTypeBigDecimal) return 10 ** 13;
+  return undefined;
+};
+
+/** A min or a max, given as a number or as its text, like a JDL does. */
+const ruleNumber = (value: number | string | undefined) => (value === undefined ? undefined : Number.parseFloat(`${value}`));
+
 export const mutateField = {
   __override__: false,
   fieldIsEnum: data => isFieldEnumType(data),
   ...buildMutateDataForProperty('fieldType', Object.values(fieldTypesValues), { anyData: true }),
   fieldTypeBytes: ({ fieldTypeByte }) => fieldTypeByte,
+  // A number field without a min nor a max takes a small range; with one of them, the other is the limit of its type.
+  fieldFakeDataMin: field => {
+    const limit = restNumberLimit(field);
+    if (limit === undefined) return undefined;
+    const min = ruleNumber(field.fieldValidateRulesMin);
+    if (min !== undefined) return min;
+    return field.fieldValidateRulesMax === undefined ? FAKE_DATA_MIN : -limit;
+  },
+  fieldFakeDataMax: field => {
+    const limit = restNumberLimit(field);
+    if (limit === undefined) return undefined;
+    const max = ruleNumber(field.fieldValidateRulesMax);
+    if (max !== undefined) return max;
+    return field.fieldValidateRulesMin === undefined ? FAKE_DATA_MAX : limit;
+  },
   ...buildMutateDataForProperty('fieldTypeBlobContent', Object.values(BlobTypes), { prefix: 'blobContentType' }),
 
   path: ({ fieldName }) => [fieldName],

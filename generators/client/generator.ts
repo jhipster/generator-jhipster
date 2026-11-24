@@ -240,9 +240,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           '8.7.4': [`${application.clientSrcDir}swagger-ui/dist/images/throbber.gif`],
         });
       },
-      webappFakeDataSeed({ application: { clientFramework } }) {
-        this.resetEntitiesFakeData(clientFramework);
-      },
       writeCommonFiles,
     });
   }

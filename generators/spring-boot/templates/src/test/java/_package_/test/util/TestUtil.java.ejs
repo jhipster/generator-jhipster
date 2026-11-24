@@ -215,7 +215,8 @@ public final class TestUtil {
     private TestUtil() {}
 
     /**
-     * Serializes the non-null properties of an object, as the body of a partial update.
+     * Serializes the properties of an object that have a value, as the body of a partial update:
+     * a null or an empty collection is not sent.
      *
      * @param om the application object mapper.
      * @param object the object to serialize.
@@ -224,7 +225,7 @@ public final class TestUtil {
     public static byte[] convertObjectToPartialUpdateBody(ObjectMapper om, Object object) {
         return om
             .rebuild()
-            .changeDefaultPropertyInclusion(inclusion -> inclusion.withValueInclusion(JsonInclude.Include.NON_NULL))
+            .changeDefaultPropertyInclusion(inclusion -> inclusion.withValueInclusion(JsonInclude.Include.NON_EMPTY))
             .build()
             .writeValueAsBytes(object);
     }

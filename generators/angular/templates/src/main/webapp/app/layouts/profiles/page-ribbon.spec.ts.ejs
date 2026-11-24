@@ -21,7 +21,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
-import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 
 import PageRibbon from './page-ribbon';
@@ -34,7 +33,7 @@ describe('Page Ribbon Component', () => {
   };
 
   beforeEach(() => {
-    profileServiceMock.getProfileInfo.mockReturnValue(of(new ProfileInfo([], 'testEnv')));
+    profileServiceMock.getProfileInfo.mockReturnValue(of({ activeProfiles: [], ribbonEnv: 'testEnv' }));
 
     TestBed.configureTestingModule({
       providers: [{ provide: ProfileService, useValue: profileServiceMock }],

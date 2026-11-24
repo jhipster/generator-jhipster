@@ -1,6 +1,5 @@
-<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
-    // A primary key the user gives, like the name of an authority, is a field of the form, read only once created.
-    const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
+<%_ // A primary key the user gives, like the name of an authority, is a field of the form, read only once created.
+    const userProvidedPrimaryKey = !builtInUserManagement && entityClientFormFields.some(field => field.id);
 _%>
 <template>
   <div class="d-flex justify-content-center">
@@ -15,8 +14,8 @@ _%>
                 v-model="<%- entityInstance %>.<%- primaryKey.name %>" readonly />
           </div>
 <%_ } _%>
-<%_ for (field of formFields) { _%>
-  <%_ const { fieldName, fieldType, fieldTypeBlobContent } = field;
+<%_ for (field of entityClientFormFields) { _%>
+  <%_ const { fieldName, fieldType, fieldTypeBlobContent, contentTypeFieldName } = field;
       const fieldInputClass = field.fieldTypeBoolean ? 'form-check-input' : 'form-control';
       const translationKey = `${i18nKeyPrefix}.${fieldName}`;
   _%>
@@ -25,7 +24,7 @@ _%>
             <label class="form-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
   <%_ if (field.clientConstantsAsValues) { _%>
-            <select class="form-select" name="<%- fieldName %>" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ' multiple' : '' %>>
+            <select class="form-select" name="<%- fieldName %>" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ` multiple v-if="${entityInstance}.${fieldName} !== undefined"` : '' %>>
               <option v-for="value of <%- fieldName %>Values" :key="value" :value="value">{{ value }}</option>
             </select>
   <%_ } else if (field.fieldIsEnum) { _%>
@@ -38,19 +37,19 @@ _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             <div>
       <%_ if (field.blobContentTypeImage) { _%>
-              <img :src="'data:' + <%- entityInstance %>.<%- fieldName %>ContentType + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-height: 100px;" v-if="<%- entityInstance %>.<%- fieldName %>" alt="<%- entityInstance %>"/>
+              <img :src="'data:' + <%- entityInstance %>.<%- contentTypeFieldName %> + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-height: 100px;" v-if="<%- entityInstance %>.<%- fieldName %>" alt="<%- entityInstance %>"/>
       <%_ } _%>
               <div v-if="<%- entityInstance %>.<%- fieldName %>" class="form-text text-danger clearfix">
       <%_ if (field.blobContentTypeAny) { _%>
-                <a class="pull-start" @click="dataUtils.openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a><br>
-                <span class="pull-start">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
+                <a class="pull-start" @click="dataUtils.openFile(<%- entityInstance %>.<%- contentTypeFieldName %>, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a><br>
+                <span class="pull-start">{{<%- entityInstance %>.<%- contentTypeFieldName %>}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
       <%_ } else { _%>
-                <span class="pull-start">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
+                <span class="pull-start">{{<%- entityInstance %>.<%- contentTypeFieldName %>}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
       <%_ } _%>
       <%_ if (field.blobContentTypeImage) { _%>
-                <button type="button" @click="clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>'); v$.<%- fieldName %>.$touch()" class="btn btn-secondary btn-xs pull-end">
+                <button type="button" @click="clearInputImage('<%- fieldName %>', '<%- contentTypeFieldName %>', 'file_<%- fieldName %>'); v$.<%- fieldName %>.$touch()" class="btn btn-secondary btn-xs pull-end">
       <%_ } else { _%>
-                <button type="button" @click="<%- entityInstance %>.<%- fieldName %>=undefined;<%- entityInstance %>.<%- fieldName %>ContentType=undefined; v$.<%- fieldName %>.$touch()"
+                <button type="button" @click="<%- entityInstance %>.<%- fieldName %>=undefined;<%- entityInstance %>.<%- contentTypeFieldName %>=undefined; v$.<%- fieldName %>.$touch()"
                     class="btn btn-secondary btn-xs pull-end">
       <%_ } _%>
                   <font-awesome-icon icon="times"></font-awesome-icon>
@@ -100,8 +99,8 @@ _%>
             <input type="<%- field.htmlInputType %>" class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
               :class="{ 'is-valid': v$.<%- fieldName %>.$dirty && !v$.<%- fieldName %>.$invalid, 'is-invalid': v$.<%- fieldName %>.$dirty && v$.<%- fieldName %>.$invalid, 'is-touched': v$.<%- fieldName %>.$dirty }" @blur="v$.<%- fieldName %>.$touch()" v-model<%- field.htmlInputType === 'number' ? '.number' : '' %>="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %><%- (field.id && userProvidedPrimaryKey) ? ' :readonly="isUpdate"' : '' %>/>
       <%_ if (field.fieldTypeBinary) { _%>
-            <input type="hidden" class="<%- fieldInputClass %>" name="<%- fieldName %>ContentType" id="<%- entityFileName %>-<%- fieldName %>ContentType"
-              v-model="<%- entityInstance %>.<%- fieldName %>ContentType" />
+            <input type="hidden" class="<%- fieldInputClass %>" name="<%- contentTypeFieldName %>" id="<%- entityFileName %>-<%- contentTypeFieldName %>"
+              v-model="<%- entityInstance %>.<%- contentTypeFieldName %>" />
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
@@ -173,7 +172,7 @@ _%>
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
     const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
-    const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
+    const clientConstantFields = entityClientFormFields.filter(field => field.clientConstantsAsValues);
     const usesGetSelected = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship && !rel.relationshipSerializePrimaryKeyOnly);
 _%>
 import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', ...enumTypeFields.length > 0 ? ['ref'] : [], 'watch'].join(', ') %> } from 'vue';
@@ -224,6 +223,9 @@ const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
   entity.<%- relationship.relationshipFieldNamePlural %> = [];
   <%_ } _%>
 <%_ } _%>
+<%_ for (const field of vueEditableCollectionFields) { _%>
+  entity.<%- field.propertyName %> = [];
+<%_ } _%>
   return entity;
 };
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
@@ -258,16 +260,15 @@ const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
 
 const previousState = () => router.go(-1);
 
-<%_ const editedCollections = relationships.filter(relationship => !relationship.otherEntity.embedded && relationship.collection && relationship.persistableRelationship); _%>
 const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
-<%_ if (editedCollections.length > 0) { _%>
+<%_ if (vueEditableCollections.length > 0) { _%>
   // The server gives null for a collection without values, the select of the collection edits an array.
   async (id, { signal }) => {
     const entity = await <%- entityInstance %>Service().find(id, { signal });
     return {
       ...entity,
-  <%_ for (const relationship of editedCollections) { _%>
-      <%- relationship.relationshipFieldNamePlural %>: entity.<%- relationship.relationshipFieldNamePlural %> ?? [],
+  <%_ for (const editableCollection of vueEditableCollections) { _%>
+      <%- editableCollection.propertyName %>: entity.<%- editableCollection.propertyName %> ?? [],
   <%_ } _%>
     };
   },
@@ -292,7 +293,7 @@ const dataUtils = useDataUtils();
 const { t: t$ } = useI18n();
 <%_ } _%>
 const v$ = useEntityValidation(<%- entityInstance %>, {
-<%_ for (field of formFields) { _%>
+<%_ for (field of entityClientFormFields) { _%>
   <%- field.fieldName %>: <%- field.vueValidationRules %>,
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>

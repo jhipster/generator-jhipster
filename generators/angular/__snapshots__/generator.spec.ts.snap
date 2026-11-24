@@ -1920,7 +1920,7 @@ export class UserManagementFormService {
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.html": {
     "contents": "<div class="d-flex justify-content-center">
   <div class="col-8">
-    <form name="editForm" novalidate [formRoot]="editForm">
+    <form name="editForm" [formRoot]="editForm">
       <h2
         id="jhi-user-management-heading"
         data-cy="UserManagementCreateUpdateHeading"
@@ -2672,6 +2672,8 @@ describe("UserManagement screens", () => {
         "required",
         "minLength",
         "maxLength",
+        "minBytes",
+        "maxBytes",
         "min",
         "max",
         "pattern",
@@ -3001,6 +3003,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultPackaging": "jar",
   "defaultPackagingAny": true,
   "defaultPackagingJar": true,
@@ -4146,6 +4149,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultPackaging": "jar",
   "defaultPackagingAny": true,
   "defaultPackagingJar": true,
@@ -5505,6 +5509,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultPackaging": "jar",
   "defaultPackagingAny": true,
   "defaultPackagingJar": true,
@@ -6649,6 +6654,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultPackaging": "jar",
   "defaultPackagingAny": true,
   "defaultPackagingJar": true,
@@ -7931,6 +7937,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultPackaging": "jar",
   "defaultPackagingAny": true,
   "defaultPackagingJar": true,
@@ -9475,6 +9482,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultPackaging": "jar",
   "defaultPackagingAny": true,
   "defaultPackagingJar": true,
@@ -10588,6 +10596,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
   "defaultEnvironmentProd": true,
+  "defaultIdType": "Long",
   "defaultPackaging": "jar",
   "defaultPackagingAny": true,
   "defaultPackagingJar": true,
