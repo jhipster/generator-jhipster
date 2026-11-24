@@ -430,10 +430,11 @@ describe('<%- entityReactName %> screens', () => {
 
   describe('update', () => {
     it('should leave for the page not found when the entity to update does not exist', async () => {
-      vi.mocked(axios.get).mockImplementation((url: string) =>
+      const getEntities = vi.mocked(axios.get).getMockImplementation()!;
+      vi.mocked(axios.get).mockImplementation((url: string, config?: object) =>
         url === `${apiUrl}/${sample.<%- primaryKeyName %>}`
           ? Promise.reject(Object.assign(new Error('Not Found'), { isAxiosError: true, response: { status: 404, data: {} } }))
-          : Promise.resolve({ data: <%- screenRelationships.length > 0 ? '[related]' : '[]' %>, headers: {} }),
+          : getEntities(url, config),
       );
       renderPage(`/${sample.<%- primaryKeyName %>}/edit`);
 
