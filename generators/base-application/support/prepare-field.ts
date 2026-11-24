@@ -188,14 +188,14 @@ function generateFakeDataForField(
     // eslint-disable-next-line no-template-curly-in-string
   } else if ([FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
     data = faker.number.float({
-      max: field.fieldValidateRulesMax ?? 32767,
-      min: field.fieldValidateRulesMin ?? 0,
+      max: field.fieldFakeDataMax,
+      min: field.fieldFakeDataMin,
       multipleOf: 0.01,
     });
   } else if (([INTEGER, LONG] as string[]).includes(field.fieldType)) {
     data = faker.number.int({
-      max: field.fieldValidateRulesMax ?? 32767,
-      min: field.fieldValidateRulesMin ?? 0,
+      max: field.fieldFakeDataMax,
+      min: field.fieldFakeDataMin,
     });
   } else if (([INSTANT, ZONED_DATE_TIME, LOCAL_DATE, LOCAL_TIME] as string[]).includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
