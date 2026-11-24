@@ -27,6 +27,7 @@ _%>
 <%_ const constantLabelPipes = [...new Map(fields.filter(field => field.angularFieldClientConstant?.angularConstantLabelPipe).map(field => [field.angularFieldClientConstant.angularConstantLabelPipe.importName, field.angularFieldClientConstant.angularConstantLabelPipe])).values()]; _%>
 <%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
+<%_ const usesServerError = fields.some(field => !field.hidden && !(builtInUserManagement && field.readonly)) || relationships.some(rel => rel.otherEntity.primaryKey && rel.persistableRelationship); _%>
 <%_ const usesSelectOptions = fields.some(field => field.clientConstantsAsValues && field.collection) || relationships.some(rel => rel.relationshipSerializePrimaryKeyOnly || rel.persistableRelationship); _%>
 <%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
@@ -69,8 +70,9 @@ import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entit
 import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- otherEntity.entityFolderName %>/service/<%- otherEntity.entityFileName %>.service';
 <%_ } _%>
 import { AlertError<%- anyFieldIsBlobDerived ? ', AlertErrorModel' : '' %> } from 'app/shared/alert';
-<%_ if (usesSelectOptions) { _%>
-import { SelectOptionsDirective } from 'app/shared/form';
+<%_ const formImports = [...(usesSelectOptions ? ['SelectOptionsDirective'] : []), ...(usesServerError ? ['ServerError'] : [])]; _%>
+<%_ if (formImports.length > 0) { _%>
+import { <%- formImports.join(', ') %> } from 'app/shared/form';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { type BlobType } from 'app/shared/jhipster/data-utils';
@@ -103,6 +105,9 @@ import { <%- entityAngularName %>FormService } from './<%- entityFileName %>-for
       FormRoot,
 <%_ if (usesSelectOptions) { _%>
       SelectOptionsDirective,
+<%_ } _%>
+<%_ if (usesServerError) { _%>
+      ServerError,
 <%_ } _%>
 <%_ if (anyFieldHasTypeLocalDate) { _%>
       NgbInputDatepicker,

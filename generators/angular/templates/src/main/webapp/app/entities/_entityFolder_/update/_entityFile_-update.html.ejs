@@ -103,9 +103,7 @@
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
-                @if (editForm.<%- fieldName %>().getError('server'); as serverError) {
-                    <small class="form-text text-danger" data-cy="serverError">{{ serverError.message }}</small>
-                }
+                <<%- jhiPrefixDashed %>-server-error [field]="editForm.<%- fieldName %>" />
   <%_ if (field.fieldValidate) { _%>
                 @if (<%- fieldName %>Ref.invalid() && (<%- fieldName %>Ref.dirty() || <%- fieldName %>Ref.touched())) {
                     <div>
@@ -220,9 +218,7 @@
                 </div>
   <%_ } _%>
   <%_ if (relationship.persistableRelationship) { _%>
-            @if (editForm.<%- propertyName %>().getError('server'); as serverError) {
-                <small class="form-text text-danger" data-cy="serverError">{{ serverError.message }}</small>
-            }
+            <<%- jhiPrefixDashed %>-server-error [field]="editForm.<%- propertyName %>" />
   <%_ } _%>
   <%_ if (relationship.relationshipValidate && relationship.persistableRelationship) { _%>
             @let <%- propertyName %>Ref = editForm.<%- propertyName %>();

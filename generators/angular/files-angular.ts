@@ -329,6 +329,8 @@ export const files = asWriteFilesSection({
         'shared/form/index.ts',
         'shared/form/select-options.directive.ts',
         'shared/form/select-options.directive.spec.ts',
+        'shared/form/server-error.ts',
+        'shared/form/server-error.spec.ts',
         'shared/sort/index.ts',
         'shared/sort/sort-by.directive.ts',
         'shared/sort/sort-by.directive.spec.ts',

@@ -1998,12 +1998,8 @@ export class UserManagementFormService {
             data-cy="login"
             [formField]="editForm.login"
           />
-          @if (editForm.login().getError('server'); as serverError) {
-          <small class="form-text text-danger" data-cy="serverError"
-            >{{ serverError.message }}</small
-          >
-          } @if (loginRef.invalid() && (loginRef.dirty() || loginRef.touched()))
-          {
+          <jhi-server-error [field]="editForm.login" />
+          @if (loginRef.invalid() && (loginRef.dirty() || loginRef.touched())) {
           <div>
             @if (loginRef.getError('required')) {
             <small class="form-text text-danger">This field is required.</small>
@@ -2031,11 +2027,8 @@ export class UserManagementFormService {
             data-cy="firstName"
             [formField]="editForm.firstName"
           />
-          @if (editForm.firstName().getError('server'); as serverError) {
-          <small class="form-text text-danger" data-cy="serverError"
-            >{{ serverError.message }}</small
-          >
-          } @if (firstNameRef.invalid() && (firstNameRef.dirty() ||
+          <jhi-server-error [field]="editForm.firstName" />
+          @if (firstNameRef.invalid() && (firstNameRef.dirty() ||
           firstNameRef.touched())) {
           <div>
             @if (firstNameRef.getError('maxLength')) {
@@ -2057,11 +2050,8 @@ export class UserManagementFormService {
             data-cy="lastName"
             [formField]="editForm.lastName"
           />
-          @if (editForm.lastName().getError('server'); as serverError) {
-          <small class="form-text text-danger" data-cy="serverError"
-            >{{ serverError.message }}</small
-          >
-          } @if (lastNameRef.invalid() && (lastNameRef.dirty() ||
+          <jhi-server-error [field]="editForm.lastName" />
+          @if (lastNameRef.invalid() && (lastNameRef.dirty() ||
           lastNameRef.touched())) {
           <div>
             @if (lastNameRef.getError('maxLength')) {
@@ -2083,12 +2073,8 @@ export class UserManagementFormService {
             data-cy="email"
             [formField]="editForm.email"
           />
-          @if (editForm.email().getError('server'); as serverError) {
-          <small class="form-text text-danger" data-cy="serverError"
-            >{{ serverError.message }}</small
-          >
-          } @if (emailRef.invalid() && (emailRef.dirty() || emailRef.touched()))
-          {
+          <jhi-server-error [field]="editForm.email" />
+          @if (emailRef.invalid() && (emailRef.dirty() || emailRef.touched())) {
           <div>
             @if (emailRef.getError('required')) {
             <small class="form-text text-danger">This field is required.</small>
@@ -2120,11 +2106,7 @@ export class UserManagementFormService {
           <label class="form-check-label" for="field_activated"
             >Activated</label
           >
-          @if (editForm.activated().getError('server'); as serverError) {
-          <small class="form-text text-danger" data-cy="serverError"
-            >{{ serverError.message }}</small
-          >
-          }
+          <jhi-server-error [field]="editForm.activated" />
         </div>
         }
 
@@ -2142,11 +2124,7 @@ export class UserManagementFormService {
             }
           </select>
         </div>
-        @if (editForm.authorities().getError('server'); as serverError) {
-        <small class="form-text text-danger" data-cy="serverError"
-          >{{ serverError.message }}</small
-        >
-        }
+        <jhi-server-error [field]="editForm.authorities" />
       </div>
 
       <div>
@@ -2339,9 +2317,12 @@ describe("UserManagement Management Update Component", () => {
     it("should mark the fields the server refused", async () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { id: 123, login: "Ozella.Kertzmann" };
-      vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
-      activatedRoute.data = of({ userManagement });
+      vi.spyOn(userManagementFormService, "getUserManagement").mockReturnValue({
+        id: null,
+        login: null,
+      });
+      vi.spyOn(userManagementService, "create").mockReturnValue(saveSubject);
+      activatedRoute.data = of({ userManagement: null });
       comp.ngOnInit();
 
       // WHEN
@@ -2359,6 +2340,12 @@ describe("UserManagement Management Update Component", () => {
                 message: "is refused",
                 code: "Refused",
               },
+              {
+                objectName: "userManagement",
+                field: "notAField",
+                message: "is refused",
+                code: "Refused",
+              },
             ],
           },
         }),
@@ -2372,6 +2359,25 @@ describe("UserManagement Management Update Component", () => {
           fieldTree: comp.editForm.firstName,
         }),
       ]);
+    });
+
+    it("should mark no field for an error without field errors", async () => {
+      // GIVEN
+      const saveSubject = new Subject<IUserManagement>();
+      vi.spyOn(userManagementFormService, "getUserManagement").mockReturnValue({
+        id: null,
+        login: null,
+      });
+      vi.spyOn(userManagementService, "create").mockReturnValue(saveSubject);
+      activatedRoute.data = of({ userManagement: null });
+      comp.ngOnInit();
+
+      // WHEN
+      const result = comp.save();
+      saveSubject.error(new HttpErrorResponse({ status: 500, error: null }));
+
+      // THEN
+      expect(await result).toBeUndefined();
     });
   });
 });
@@ -2394,7 +2400,7 @@ import { Observable, finalize, map } from "rxjs";
 
 import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
 import { AlertError } from "app/shared/alert";
-import { SelectOptionsDirective } from "app/shared/form";
+import { SelectOptionsDirective, ServerError } from "app/shared/form";
 import {
   getServerProblem,
   isConstraintViolation,
@@ -2413,6 +2419,7 @@ import { UserManagementFormService } from "./user-management-form.service";
     FormField,
     FormRoot,
     SelectOptionsDirective,
+    ServerError,
   ],
 })
 export class UserManagementUpdate implements OnInit {
@@ -3957,6 +3964,12 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/shared/form/select-options.directive.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/form/server-error.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/server-error.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
@@ -5260,6 +5273,12 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/form/select-options.directive.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/form/server-error.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/server-error.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
@@ -6481,6 +6500,12 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/form/select-options.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/server-error.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/server-error.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
@@ -7709,6 +7734,12 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/form/select-options.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-error.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-error.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
@@ -9277,6 +9308,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/form/select-options.directive.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/form/server-error.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-error.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
@@ -10474,6 +10511,12 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/shared/form/select-options.directive.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/form/server-error.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-error.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
@@ -11608,6 +11651,12 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/form/select-options.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-error.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/server-error.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/constants.ts": {

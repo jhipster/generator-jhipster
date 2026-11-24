@@ -24,6 +24,8 @@ import { TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 
+import { StateStorageService } from 'app/core/auth';
+
 <%_ } _%>
 import { languageInterceptor } from './language.interceptor';
 
@@ -50,6 +52,13 @@ describe('languageInterceptor', () => {
     expect(httpMock.expectOne('api/foos').request.headers.get('Accept-Language')).toBe('<%- nativeLanguage %>');
   });
 <%_ if (enableTranslation) { _%>
+
+  it('should send the language stored by the application before it is in use', () => {
+    TestBed.inject(StateStorageService).storeLocale('yy');
+    http.get('api/foos').subscribe();
+    expect(httpMock.expectOne('api/foos').request.headers.get('Accept-Language')).toBe('yy');
+    TestBed.inject(StateStorageService).clearLocale();
+  });
 
   it('should send the language chosen in the application', () => {
     TestBed.inject(TranslateService).use('xx');

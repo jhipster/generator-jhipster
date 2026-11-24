@@ -34,7 +34,7 @@
     const requiredSizedFileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && field.fieldValidationRequired && (field.fieldValidationMinBytes || field.fieldValidationMaxBytes));
 _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { <%- updatableEntity ? 'HttpErrorResponse, ' : '' %>HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (newEntityFormInvalid || requiredDataFormValid) { _%>
@@ -321,14 +321,17 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             expect(comp.isSaving()).toEqual(false);
             expect(comp.previousState).not.toHaveBeenCalled();
         });
-  <%_ if (refusedField) { _%>
+<%_ } _%>
+
+<%_ if (refusedField) { _%>
+  <%_ const newEntity = primaryKey.autoGenerate || !updatableEntity || builtInUserManagement ? `{ ${builtInUserManagement ? 'id: null, ' : ''}${primaryKey.name}: null }` : testEntityPrimaryKey0; _%>
 
         it('should mark the fields the server refused', async () => {
             // GIVEN
             const saveSubject = new Subject<I<%- entityAngularName %>>();
-            const <%- entityInstance %> = <%- builtInUserManagement ? testEntityPrimaryKey0.replace('{', '{ id: 123,') : testEntityPrimaryKey0 %>;
-            vi.spyOn(<%- entityInstance %>Service, 'update').mockReturnValue(saveSubject);
-            activatedRoute.data = of({ <%- entityInstance %> });
+            vi.spyOn(<%- entityInstance %>FormService, 'get<%- entityAngularName %>').mockReturnValue(<%- newEntity %>);
+            vi.spyOn(<%- entityInstance %>Service, 'create').mockReturnValue(saveSubject);
+            activatedRoute.data = of({ <%- entityInstance %>: null });
             comp.ngOnInit();
 
             // WHEN
@@ -339,7 +342,10 @@ describe('<%- entityAngularName %> Management Update Component', () => {
                     error: {
                         type: 'https://www.jhipster.tech/problem/constraint-violation',
                         message: 'error.validation',
-                        fieldErrors: [{ objectName: '<%- entityInstance %>', field: '<%- refusedField.fieldName %>', message: 'is refused', code: 'Refused' }],
+                        fieldErrors: [
+                            { objectName: '<%- entityInstance %>', field: '<%- refusedField.fieldName %>', message: 'is refused', code: 'Refused' },
+                            { objectName: '<%- entityInstance %>', field: 'notAField', message: 'is refused', code: 'Refused' },
+                        ],
                     },
                 }),
             );
@@ -347,7 +353,22 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             // THEN
             expect(await result).toEqual([expect.objectContaining({ kind: 'server', message: 'is refused', fieldTree: comp.editForm.<%- refusedField.fieldName %> })]);
         });
-  <%_ } _%>
+
+        it('should mark no field for an error without field errors', async () => {
+            // GIVEN
+            const saveSubject = new Subject<I<%- entityAngularName %>>();
+            vi.spyOn(<%- entityInstance %>FormService, 'get<%- entityAngularName %>').mockReturnValue(<%- newEntity %>);
+            vi.spyOn(<%- entityInstance %>Service, 'create').mockReturnValue(saveSubject);
+            activatedRoute.data = of({ <%- entityInstance %>: null });
+            comp.ngOnInit();
+
+            // WHEN
+            const result = comp.save();
+            saveSubject.error(new HttpErrorResponse({ status: 500, error: null }));
+
+            // THEN
+            expect(await result).toBeUndefined();
+        });
 <%_ } _%>
     });
 
