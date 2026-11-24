@@ -307,6 +307,13 @@ describe('utils - mutate data', () => {
         expect(copy.prop).toBe('no context');
       });
     });
+    describe('with a delayed mutation computing undefined', () => {
+      it('should tell the property it waited for', () => {
+        const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({ autoDelay: true });
+        mutateData(mutatedData, { prop2: ctx => ctx.prop });
+        expect(() => finalizeMutations(mutatedData)).toThrow('The delayed mutation of prop2 returned undefined (it waited for prop)');
+      });
+    });
     describe('with delayed mutations on a created context', () => {
       it('should not copy the mutation context with the object', () => {
         const mutatedData: { prop?: string } = createDelayedMutationContext();

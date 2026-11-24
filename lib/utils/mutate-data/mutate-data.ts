@@ -43,13 +43,20 @@ const createNotYetDefinedProxy = (target: Record<string | number, any>): any =>
     },
   });
 
-const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaults, key }: { defaults?: boolean; key: string }): any => {
+/**
+ * Calls a mutation. While finalizing, the mutation gets no delay marker: it computes its value.
+ */
+const handleMutateDataCallback = (
+  fn: MutateDataFunction,
+  context: any,
+  { finalizing, key }: { finalizing?: boolean; key: string },
+): any => {
   const mutationContext = isMutationContext(context);
   const { autoDelay = false } = mutationContext ? (context[MUTATION_CONTEXT_SYMBOL] ?? {}) : {};
   try {
     return fn(
       autoDelay ? createNotYetDefinedProxy(context) : context,
-      mutationContext && !defaults ?
+      mutationContext && !finalizing ?
         { delayMarker: DelayedMutation, undefinedMarker: UndefinedMutation, data: context }
       : { undefinedMarker: UndefinedMutation, data: context },
     );
@@ -64,14 +71,20 @@ const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaul
   }
 };
 
+/** The property a delayed mutation waited for, to tell in an error. */
+const waitedFor = (context: ContextWithMutationOptions, key: string): string => {
+  const property = context[MUTATION_CONTEXT_SYMBOL].waitingFor?.[key];
+  return property ? ` (it waited for ${property})` : '';
+};
+
 const applyDelayedMutations = (
   context: ContextWithMutationOptions,
-  opts?: { defaults?: boolean; throwOnDelay?: boolean; waitForDelayed?: boolean },
+  opts?: { finalizing?: boolean; throwOnDelay?: boolean; waitForDelayed?: boolean },
 ): boolean => {
   let mutationApplied = false;
   const delayedContext = context[MUTATION_CONTEXT_SYMBOL].delayContext;
   if (delayedContext) {
-    const { defaults = true, throwOnDelay = false, waitForDelayed = false } = opts ?? {};
+    const { finalizing = true, throwOnDelay = false, waitForDelayed = false } = opts ?? {};
     for (const [key, value] of Object.entries(delayedContext)) {
       // A mutation overriding the property waits for what it reads, the value set meanwhile does not take its place.
       if (key in context && (context as any)[key] !== undefined && !value.some(fn => fn[OverrideMutation] === true)) {
@@ -82,7 +95,7 @@ const applyDelayedMutations = (
       } else {
         let result = undefined;
         for (const fn of value) {
-          result = handleMutateDataCallback(fn, context, { defaults, key });
+          result = handleMutateDataCallback(fn, context, { finalizing, key });
           if (
             (result !== DelayedMutation && result !== undefined) ||
             // A mutation waiting for a pending property does not give way to one of the same key registered before it.
@@ -94,13 +107,15 @@ const applyDelayedMutations = (
         if (result === DelayedMutation) {
           if (throwOnDelay) {
             throw new Error(
-              `Mutation for key ${key} is still delayed, passing defaults should return a valid value instead of Delay Symbol`,
+              `The delayed mutation of ${key} is still delayed${waitedFor(context, key)}: once finalizing, it must return a value instead of the delay marker`,
             );
           }
           continue;
         } else if (result === undefined) {
           if (throwOnDelay) {
-            throw new Error(`Mutation for key ${key} is undefined, passing defaults should return a valid value`);
+            throw new Error(
+              `The delayed mutation of ${key} returned undefined${waitedFor(context, key)}: once finalizing, it must return a value, or the undefined marker to leave it undefined`,
+            );
           }
         } else if (result === UndefinedMutation) {
           result = undefined;
@@ -121,13 +136,13 @@ export const finalizeMutations = (context: any): void => {
     // property still pending waits for it, whichever was declared first.
     const waitForDelayed = !options.autoDelay;
     options.autoDelay = true;
-    while (applyDelayedMutations(context, { defaults: true, waitForDelayed })) {
+    while (applyDelayedMutations(context, { finalizing: true, waitForDelayed })) {
       // Apply mutations until there is no more mutation to apply, this is to handle mutations that depend on other mutations.
     }
     // The ones still delayed wait for each other, or for a property not set: computed with it undefined.
     options.autoDelay = false;
     // In case there is still delayed mutations, it means that some required properties are missing, we throw an error to avoid silent issues.
-    applyDelayedMutations(context, { defaults: true, throwOnDelay: true });
+    applyDelayedMutations(context, { finalizing: true, throwOnDelay: true });
     delete context[MUTATION_CONTEXT_SYMBOL];
   }
 };
@@ -176,7 +191,7 @@ export function mutateData<T extends Record<string | number, any>>(
           context[key] === undefined ||
           value[OverrideMutation] === true
         ) {
-          const result = handleMutateDataCallback(value, context, { defaults: false, key });
+          const result = handleMutateDataCallback(value, context, { finalizing: false, key });
           if (result === DelayedMutation) {
             if (isMutationContext(context)) {
               const delayed = (context[MUTATION_CONTEXT_SYMBOL].delayContext[key] ??= []);
@@ -195,7 +210,7 @@ export function mutateData<T extends Record<string | number, any>>(
     }
 
     if (isMutationContext(context)) {
-      applyDelayedMutations(context, { defaults: false });
+      applyDelayedMutations(context, { finalizing: false });
     }
   }
 }
