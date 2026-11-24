@@ -216,7 +216,7 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     samples([field], 3);
     expect(warnings).toHaveLength(1);
     expect(warnings[0]).toMatch(
-      /^The faker template \{\{person\.firstName\}\} of the field reference gives '[^']+', not a UUID: its fake data takes a UUID instead\.$/,
+      /^The faker template \{\{person\.firstName\}\} of the field reference gives '[^']+', which is not a value of the type UUID: its fake data takes values of that type instead\.$/,
     );
   });
 

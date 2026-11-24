@@ -175,7 +175,7 @@ function generateFakeDataForField(
   if (templateCheck && !templateCheck.ofFieldType && !fieldsWithInvalidFakerTemplate.has(field)) {
     fieldsWithInvalidFakerTemplate.add(field);
     this.log.warn(
-      `The faker template ${field.fakerTemplate} of the field ${field.fieldName} gives '${templateCheck.value}', not a ${field.fieldType}: its fake data takes a ${field.fieldType} instead.`,
+      `The faker template ${field.fakerTemplate} of the field ${field.fieldName} gives '${templateCheck.value}', which is not a value of the type ${field.fieldType}: its fake data takes values of that type instead.`,
     );
   }
   const templateData = templateCheck?.ofFieldType ? faker.helpers.fake(field.fakerTemplate!) : undefined;
