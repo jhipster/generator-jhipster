@@ -25,7 +25,7 @@ import { kebabCase, lowerFirst } from '../../../lib/utils/string-utils.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { type FakeDataOptions, mutateField } from '../entity.ts';
-import { type FieldDomainValue, formatFakeData, getFieldFakeDataDomain } from '../internal/fake-data.ts';
+import { type FieldDomainValue, formatFakeData, getFieldFakeDataDomain, isFakeDataOfFieldType } from '../internal/fake-data.ts';
 import type { Entity as BaseApplicationEntity, Field as BaseApplicationField } from '../types.ts';
 
 import type { FakerWithRandexp } from './faker.ts';
@@ -129,6 +129,9 @@ const fakeStringTemplateForFieldName = (columnName: string) => {
   return `{{${fakeTemplate}}}`;
 };
 
+/** The fields whose faker template was told to give a value not of their type, warned once. */
+const fieldsWithInvalidFakerTemplate = new WeakSet<BaseApplicationField>();
+
 /**
  * @returns fake value
  */
@@ -159,8 +162,18 @@ function generateFakeDataForField(
     }
   }
 
-  if (field.fakerTemplate) {
-    originalData = faker.helpers.fake(field.fakerTemplate);
+  // The text of a faker template is a value of the field when it is of its type, like a UUID for a UUID field: else the field
+  // takes a value of its type.
+  const templateData = field.fakerTemplate ? faker.helpers.fake(field.fakerTemplate) : undefined;
+  const templateDataOfFieldType = templateData !== undefined && isFakeDataOfFieldType(field, templateData);
+  if (templateData !== undefined && !templateDataOfFieldType && !fieldsWithInvalidFakerTemplate.has(field)) {
+    fieldsWithInvalidFakerTemplate.add(field);
+    this.log.warn(
+      `The faker template ${field.fakerTemplate} of the field ${field.fieldName} gives '${templateData}', not a ${field.fieldType}: its fake data takes a ${field.fieldType} instead.`,
+    );
+  }
+  if (templateDataOfFieldType) {
+    originalData = templateData;
     data = originalData;
   } else if (field.fieldValidate && field.fieldValidateRules?.includes('pattern')) {
     originalData = field.generateFakeDataFromPattern!();

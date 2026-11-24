@@ -151,6 +151,18 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     expect(new Set(values).size).toBe(20);
   });
 
+  it('should take a value of the type of a field whose faker template gives a text of another type', () => {
+    const field = prepareField({ fieldName: 'reference', fieldType: 'UUID', fakerTemplate: '{{person.firstName}}' });
+    for (const { reference } of samples([field], 5)) {
+      expect(reference).toMatch(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i);
+    }
+  });
+
+  it('should take the value of a faker template of the type of the field', () => {
+    const field = prepareField({ fieldName: 'level', fieldType: 'Integer', fakerTemplate: '42' });
+    expect(samples([field], 2).map(({ level }) => String(level))).toEqual(['42', '42']);
+  });
+
   it('should draw a duration as ISO 8601', () => {
     const [sample] = samples([prepareField({ fieldName: 'time', fieldType: 'Duration' })], 1);
     expect(sample.time).toMatch(/^PT\d+M$/);

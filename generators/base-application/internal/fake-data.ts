@@ -22,9 +22,37 @@ import type { Field as BaseApplicationField } from '../types.ts';
 import { isContentTypeField } from './content-type-fields.ts';
 
 const {
-  CommonDBTypes: { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, FLOAT, INTEGER, LONG },
+  CommonDBTypes: { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, FLOAT, INTEGER, LONG, UUID },
   RelationalOnlyDBTypes: { BYTES },
 } = fieldTypes;
+
+const UUID_PATTERN = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
+const INTEGER_PATTERN = /^-?\d+$/;
+
+/**
+ * Whether a text a faker template gives is a value of the type of the field: the one of a UUID, a number, a boolean or an
+ * enum field is checked, any text is a value of the other types.
+ */
+export function isFakeDataOfFieldType(field: BaseApplicationField, value: string): boolean {
+  if (field.fieldIsEnum) {
+    return field.enumValues?.some(({ name }) => name === value) ?? false;
+  }
+  switch (field.fieldType) {
+    case UUID:
+      return UUID_PATTERN.test(value);
+    case INTEGER:
+    case LONG:
+      return INTEGER_PATTERN.test(value);
+    case FLOAT:
+    case DOUBLE:
+    case BIG_DECIMAL:
+      return value.trim() !== '' && Number.isFinite(Number(value));
+    case BOOLEAN:
+      return value === 'true' || value === 'false';
+    default:
+      return true;
+  }
+}
 
 /** A fake data value serializable to JSON: a date and time is a Date, a blob of bytes its base64 text. */
 export type FakeDataValue = string | number | boolean | Date;
