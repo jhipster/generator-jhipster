@@ -666,11 +666,21 @@ ${classProperties
         for (const [index, field] of sampleFields.entries()) {
           const values = samples[index].map(sample => testValue(sample[field.fieldName])!);
           const compare = compareTestValues(field);
-          const [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
+          let [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
             TestValue | undefined,
             TestValue,
             TestValue,
           ];
+          if (isNumber(field)) {
+            // A number of a small range repeats its values: the default and the updated ones are distinct when the range has two,
+            // and the smaller one, which only filters, is below the default one.
+            const distinctValues = [...new Set(values as number[])].toSorted((a, b) => a - b);
+            if (distinctValues.length < values.length) {
+              const step = field.fieldTypeInteger || field.fieldTypeLong ? 1 : 0.01;
+              [sample, updated = sample] = distinctValues;
+              smaller = testValue(sample - step);
+            }
+          }
           mutateData(field, {
             __override__: false,
             sbTestDefaultValue: javaValue(field, sample),
