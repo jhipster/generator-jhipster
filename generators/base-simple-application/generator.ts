@@ -104,12 +104,13 @@ export default class BaseSimpleApplicationGenerator<
     }
 
     // The delayed defaults of the application are applied once every generator prepared it: queued by each generator
-    // before its own tasks, the first one of an application runs before every post preparing task of it, the others find
-    // it finalized. Not queued once: a workspace has an application context for each of its applications.
+    // before its own tasks, once by the folder of the application (a workspace has one for each of its applications), it
+    // runs before every post preparing task of the application.
     this.on('before:queueOwnTasks', () => {
       this.queueTask({
         queueName: QUEUES.POST_PREPARING_QUEUE,
-        taskName: 'finalizeApplicationMutations',
+        taskName: `${this.destinationRoot()}#finalizeApplicationMutations`,
+        once: true,
         // The arguments of the priority would read the application, creating it in a folder without one.
         args: [],
         method: () => {

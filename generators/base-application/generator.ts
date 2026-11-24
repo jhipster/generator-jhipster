@@ -896,11 +896,11 @@ export default class BaseApplicationGenerator<
     });
 
     // The delayed defaults of the entities, their fields and their relationships are applied once every generator prepared
-    // them: the first one queued for an application runs before every post preparing task of its entities, the others find
-    // them finalized.
+    // them: queued once by the folder of the application, it runs before every post preparing task of its entities.
     this.queueTask({
       queueName: POST_PREPARING_EACH_ENTITY_QUEUE,
-      taskName: 'finalizeEntitiesMutations',
+      taskName: `${this.destinationRoot()}#finalizeEntitiesMutations`,
+      once: true,
       // The arguments of the priority would read the application, creating it in a folder without one.
       args: [],
       method: () => {
