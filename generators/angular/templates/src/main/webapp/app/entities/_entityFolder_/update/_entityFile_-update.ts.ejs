@@ -70,7 +70,7 @@ import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entit
 import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- otherEntity.entityFolderName %>/service/<%- otherEntity.entityFileName %>.service';
 <%_ } _%>
 import { AlertError<%- anyFieldIsBlobDerived ? ', AlertErrorModel' : '' %> } from 'app/shared/alert';
-<%_ const formImports = [...(usesSelectOptions ? ['SelectOptionsDirective'] : []), ...(usesServerError ? ['ServerError'] : [])]; _%>
+<%_ const formImports = [usesSelectOptions && 'SelectOptionsDirective', usesServerError && 'ServerError'].filter(Boolean); _%>
 <%_ if (formImports.length > 0) { _%>
 import { <%- formImports.join(', ') %> } from 'app/shared/form';
 <%_ } _%>
