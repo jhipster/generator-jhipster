@@ -24,7 +24,7 @@ import { isAxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
-import { FieldErrorVM, isProblemWithMessage } from 'app/shared/jhipster/problem-details';
+import { FieldErrorVM, getServerProblem, isConstraintViolation } from 'app/shared/jhipster/problem-details';
 import { isFulfilledAction, isRejectedAction } from 'app/shared/reducers/reducer.utils';
 
 type ToastMessage = {
@@ -107,8 +107,8 @@ export default () => next => action => {
         });
       } else {
         const { data } = response;
-        const problem = isProblemWithMessage(data) ? data : null;
-        if (problem?.fieldErrors) {
+        const problem = getServerProblem(data);
+        if (isConstraintViolation(problem)) {
           getFieldErrorsToasts(problem.fieldErrors).forEach(message => addErrorAlert(message));
         } else {
           const { errorMessage<%- enableTranslation ? ', errorKey, param' : '' %> } = getMessageFromHeaders(response.headers ?? {});

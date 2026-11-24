@@ -53,6 +53,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
                 'shared/jhipster/headers.spec.ts',
                 'shared/jhipster/link-header.spec.ts',
                 'shared/jhipster/pagination.spec.ts',
+                'shared/jhipster/problem-details.spec.ts',
               ],
             }),
             clientApplicationTemplatesBlock({

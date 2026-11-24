@@ -16,39 +16,83 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import {
+  CONSTRAINT_VIOLATION_TYPE,
+  EMAIL_ALREADY_USED_TYPE,
+  INVALID_PASSWORD_TYPE,
+  LOGIN_ALREADY_USED_TYPE,
+  PROBLEM_WITH_MESSAGE_TYPE,
+} from './error.constants';
+
 /**
- * Problem details defined in RFC 7807.
- * @see https://datatracker.ietf.org/doc/html/rfc7807#section-3.1
+ * Problem details defined in RFC 9457.
+ * @see https://www.rfc-editor.org/rfc/rfc9457#section-3.1
  */
 export type ProblemDetails = {
   /** A URI reference that identifies the problem type */
   type: string;
   /** A short, human-readable summary of the problem type */
-  title: string;
+  title?: string;
   /** The HTTP status code */
-  status: number;
+  status?: number;
   /** A human-readable explanation specific to this occurrence of the problem */
-  detail: string;
+  detail?: string;
   /** A URI reference that identifies the specific occurrence of the problem */
-  instance: string;
+  instance?: string;
 };
 
-export const ProblemWithMessageType = 'https://www.jhipster.tech/problem/problem-with-message';
+/** The extension of every problem of the server. */
+export type JHipsterProblem = ProblemDetails & {
+  /** Translation message key */
+  message?: string;
+  /** Request path */
+  path?: string;
+};
+
+export const ProblemWithMessageType = PROBLEM_WITH_MESSAGE_TYPE;
+export const ConstraintViolationType = CONSTRAINT_VIOLATION_TYPE;
+
+/** The types of the problems with a message, the ones of the account included. */
+export const problemWithMessageTypes = [PROBLEM_WITH_MESSAGE_TYPE, LOGIN_ALREADY_USED_TYPE, EMAIL_ALREADY_USED_TYPE, INVALID_PASSWORD_TYPE] as const;
+
+export type ProblemWithMessage = JHipsterProblem & {
+  type: (typeof problemWithMessageTypes)[number];
+  /** Translation message parameter */
+  params?: string;
+};
 
 /** A field error: `code` is the constraint, the key of its translation, and `message` its text. */
 export type FieldErrorVM = { message: string; code?: string; objectName: string; field: string };
 
-export type ProblemWithMessage = ProblemDetails & {
-  type: typeof ProblemWithMessageType;
-
-  /** Translation message key */
-  message?: string;
-  /** Translation message parameter */
-  params?: string;
-  /** Request path */
-  path?: string;
+/** A validation failure, with the errors of its fields. */
+export type ConstraintViolation = JHipsterProblem & {
+  type: typeof CONSTRAINT_VIOLATION_TYPE;
   /** Field errors */
-  fieldErrors?: FieldErrorVM[];
+  fieldErrors: FieldErrorVM[];
 };
 
-export const isProblemWithMessage = (data: any): data is ProblemWithMessage => data?.type === ProblemWithMessageType;
+/** A problem of the server, told apart by its type. */
+export type ServerProblem = ProblemWithMessage | ConstraintViolation;
+
+const isFieldError = (value: any): value is FieldErrorVM =>
+  typeof value?.objectName === 'string' && typeof value?.field === 'string' && typeof value?.message === 'string';
+
+export const isProblemWithMessage = (data: any): data is ProblemWithMessage =>
+  (problemWithMessageTypes as readonly string[]).includes(data?.type);
+
+export const isConstraintViolation = (data: any): data is ConstraintViolation =>
+  data?.type === CONSTRAINT_VIOLATION_TYPE && Array.isArray(data.fieldErrors);
+
+/**
+ * Reads the body of an error response as a problem of the server.
+ * A body that is not one, like an empty body or a text, gives undefined; the field errors that are not ones are left out.
+ */
+export const getServerProblem = (data: unknown): ServerProblem | undefined => {
+  if (isConstraintViolation(data)) {
+    return { ...data, fieldErrors: data.fieldErrors.filter(isFieldError) };
+  }
+  if (isProblemWithMessage(data)) {
+    return data;
+  }
+  return undefined;
+};

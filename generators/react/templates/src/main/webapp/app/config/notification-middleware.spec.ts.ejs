@@ -27,7 +27,7 @@ import { toast } from 'react-toastify';
 
 import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
 import { INVALID_PASSWORD_TYPE } from 'app/shared/jhipster/error.constants';
-import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
+import { ConstraintViolationType, ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 
 import notificationMiddleware from './notification-middleware';
 
@@ -68,7 +68,7 @@ describe('Notification Middleware', () => {
       isAxiosError: true,
       response: {
         data: {
-          type: ProblemWithMessageType,
+          type: ConstraintViolationType,
           title: 'Method argument not valid',
           status: 400,
           path: '/api/foos',
@@ -283,7 +283,7 @@ describe('Notification Middleware', () => {
         isAxiosError: true,
         response: {
           status: 400,
-          data: { type: ProblemWithMessageType, message: 'error.validation', fieldErrors: [{ objectName: 'foos', field: 'name', message: 'NotNull' }] },
+          data: { type: ConstraintViolationType, message: 'error.validation', fieldErrors: [{ objectName: 'foos', field: 'name', message: 'NotNull' }] },
         },
       },
     });
