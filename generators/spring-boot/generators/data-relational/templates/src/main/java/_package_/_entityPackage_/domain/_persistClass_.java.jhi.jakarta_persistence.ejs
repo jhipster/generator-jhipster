@@ -73,6 +73,7 @@ import org.hibernate.type.SqlTypes;
       , unique = true
     <%_ } _%>
     <%_ if (field.readonly && !field.id && !field.transient) { _%>
+      <%# Readonly fields are kept as they are in the database: they are neither inserted nor updated. -%>
       , updatable = false, insertable = false
     <%_ } _%>
   )
