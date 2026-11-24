@@ -300,7 +300,7 @@ const v$ = useEntityValidation(<%- entityInstance %>, {
 <%_ for (relationship of relationships) { _%>
   <%- relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: <%- relationship.relationshipValidate ? '{ required: true }' : '{}' %>,
 <%_ } _%>
-});
+}, serverErrors);
 
 // The router reuses the component when the id of the route changes: the fields of the other entity are not touched yet.
 watch(

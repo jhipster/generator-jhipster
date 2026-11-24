@@ -42,6 +42,7 @@ import { <%- relationship.otherEntity.entityInstance %>ServiceKey } from '@/enti
   <%_ } _%>
 <%_ } _%>
 import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
+import { CONSTRAINT_VIOLATION_TYPE } from '@/shared/jhipster/error.constants';
 import { contentStub, modelInputStub, triggerAll } from '@/testing/stubs';
 <%_ if (vueFormTimeFields) { _%>
 import { DATE_TIME_LONG_FORMAT } from '@/composables/date-format';
@@ -226,6 +227,31 @@ describe('Component Tests', () => {
         expect(touch).toHaveBeenCalled();
         expect(<%- entityInstance %>ServiceStub.create).not.toHaveBeenCalled();
         expect(<%- entityInstance %>ServiceStub.update).not.toHaveBeenCalled();
+      });
+
+      it('Should show under each field the message of the server that refused it', async () => {
+        // GIVEN
+        const fields = [<%- entityClientFormFields.map(field => `'${field.fieldName}'`).join(', ') %>];
+        vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        vi.spyOn(alertService, 'getFieldErrorMessage').mockImplementation(({ field }) => `${field} is refused`);
+        <%- entityInstance %>ServiceStub.create.mockRejectedValue({
+          response: {
+            status: 400,
+            data: { type: CONSTRAINT_VIOLATION_TYPE, fieldErrors: fields.map(field => ({ objectName: '<%- entityInstance %>', field, message: 'is refused' })) },
+          },
+        });
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.<%- entityInstance %> = {};
+        vi.spyOn(comp.v$, '$invalid', 'get').mockReturnValue(false);
+
+        // WHEN
+        await comp.save();
+        await flushPromises();
+
+        // THEN
+        const messages = wrapper.findAll('small.text-danger').map(error => error.text());
+        expect(fields.filter(field => !messages.includes(`${field} is refused`))).toEqual([]);
       });
 
       it('Should call create service on save for new entity', async () => {
