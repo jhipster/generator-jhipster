@@ -124,7 +124,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should add the other side of the relationships', () => {
-      expect(runResult.entities!.Book.relationships!.map(({ relationshipName }) => relationshipName)).toEqual(['author']);
+      expect(runResult.entities!.Book.relationships!.map(({ relationshipName }) => relationshipName)).toEqual(['authorAsBook']);
     });
 
     it('should prepare the search of the entities', () => {

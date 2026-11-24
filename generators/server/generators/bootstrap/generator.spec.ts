@@ -65,8 +65,8 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should add the other side of a one-to-many and of a one-to-one', () => {
-        expect(otherSides('Author')).toEqual(['book']);
-        expect(otherSides('Editor')).toEqual(['book']);
+        expect(otherSides('Author')).toEqual(['bookAsAuthors']);
+        expect(otherSides('Editor')).toEqual(['bookAsEditor']);
       });
     });
 
@@ -79,7 +79,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should add the other side of a one-to-many only', () => {
-        expect(otherSides('Author')).toEqual(['book']);
+        expect(otherSides('Author')).toEqual(['bookAsAuthors']);
         expect(otherSides('Editor')).toEqual([]);
       });
 
