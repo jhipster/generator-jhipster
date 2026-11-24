@@ -227,17 +227,27 @@ describe('Notification Middleware', () => {
 
   it('should trigger an error toast message and return error for 400 response code', () => {
     expect(store.dispatch(VALIDATION_ERROR).error.response.data.message).toEqual('error.validation');
-    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- enableTranslation ? '\'error.Size\'' : '\'Error on field "MinField"\'' %>));
+    expect(toast.error).toHaveBeenCalledWith(<%- enableTranslation ? 'expect.stringMatching(/: must be greater than or equal to 1$/)' : '\'MinField: must be greater than or equal to 1\'' %>);
   });
 
   it('should trigger an error toast message and return error for 404 response code', () => {
     expect(store.dispatch(NOT_FOUND_ERROR).error.response.data.message).toEqual('Not found');
-    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- enableTranslation ? '\'error.url.not.found\'' : '\'Not found\'' %>));
+    expect(toast.error).toHaveBeenCalledWith('Not found');
   });
 
   it('should trigger an error toast message and return error for 0 response code', () => {
     expect(store.dispatch(NO_SERVER_ERROR).error.response.status).toEqual(0);
-    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- enableTranslation ? '\'error.server.not.reachable\'' : '\'Server not reachable\'' %>));
+    expect(toast.error).toHaveBeenCalledWith('Server not reachable');
+  });
+
+  it('should trigger an access denied toast message for 403 response code', () => {
+    store.dispatch({ type: ERROR_TYPE, error: { isAxiosError: true, config: { url: 'api/foos' }, response: { status: 403, data: '' } } });
+    expect(toast.error).toHaveBeenCalledWith('You are not authorized to access this page.');
+  });
+
+  it('should trigger an error toast message for a network error without response', () => {
+    store.dispatch({ type: ERROR_TYPE, error: { isAxiosError: true, code: 'ERR_NETWORK', message: 'Network Error', config: { url: 'api/foos' } } });
+    expect(toast.error).toHaveBeenCalledWith('Server not reachable');
   });
 
   it('should trigger an error toast message and return error for headers containing errors', () => {
@@ -291,7 +301,56 @@ describe('Notification Middleware', () => {
         },
       },
     });
-    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- enableTranslation ? '\'error.NotNull\'' : '\'Error on field "Name"\'' %>));
+    expect(toast.error).toHaveBeenCalledWith(<%- enableTranslation ? 'expect.stringMatching(/: NotNull$/)' : '\'Name: NotNull\'' %>);
+  });
+
+<%_ if (enableTranslation) { _%>
+  it('should name the field of a user by the key of the user management', () => {
+    const { locale } = TranslatorContext.context;
+    TranslatorContext.registerTranslations('<%- nativeLanguage %>', { userManagement: { login: 'Login' }, error: { NotNull: 'Field {{ fieldName }} cannot be empty!' } });
+    TranslatorContext.setLocale('<%- nativeLanguage %>');
+    store.dispatch({
+      type: ERROR_TYPE,
+      error: {
+        isAxiosError: true,
+        response: {
+          status: 400,
+          data: {
+            type: ConstraintViolationType,
+            message: 'error.validation',
+            fieldErrors: [{ objectName: 'userManagement', field: 'login', message: 'must not be null', code: 'NotNull' }],
+          },
+        },
+      },
+    });
+    TranslatorContext.setLocale(locale as string);
+    expect(toast.error).toHaveBeenCalledWith('Field Login cannot be empty!');
+  });
+
+<%_ } _%>
+  it('should trigger an error toast message for each invalid field of a constraint violation', () => {
+    store.dispatch({
+      type: ERROR_TYPE,
+      error: {
+        isAxiosError: true,
+        response: {
+          status: 400,
+          data: {
+            type: ConstraintViolationType,
+            status: 400,
+            message: 'error.validation',
+            detail: 'Unexpected runtime exception',
+            fieldErrors: [
+              { objectName: 'foos', field: 'name', message: 'must not be null', code: 'NotNull' },
+              { objectName: 'foos', field: 'name', message: 'must match "^[A-Z].*$"', code: 'Pattern' },
+            ],
+          },
+        },
+      },
+    });
+    expect(toast.error).toHaveBeenCalledTimes(2);
+    expect(toast.error).toHaveBeenCalledWith(<%- enableTranslation ? 'expect.stringMatching(/: must not be null$/)' : '\'Name: must not be null\'' %>);
+    expect(toast.error).toHaveBeenCalledWith(<%- enableTranslation ? 'expect.stringContaining(\': must match "^[A-Z].*$"\')' : '\'Name: must match "^[A-Z].*$"\'' %>);
   });
 
   it('should trigger a success toast message for header messages', () => {
@@ -315,7 +374,7 @@ describe('Notification Middleware', () => {
         response: { status: 400, data: { type: ProblemWithMessageType, status: 400, message: 'error.http.400', detail: 'Bad foo' } },
       },
     });
-    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- enableTranslation ? '\'error.http.400\'' : '\'Bad foo\'' %>));
+    expect(toast.error).toHaveBeenCalledWith('Bad foo');
   });
 
   it('should trigger an error toast message for a validation failure without field errors', () => {

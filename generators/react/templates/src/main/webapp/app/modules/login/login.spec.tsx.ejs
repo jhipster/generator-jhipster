@@ -47,6 +47,7 @@ describe('Login', () => {
 
     expect(document.querySelector('[data-cy="loginTitle"]')).not.toBeNull();
     expect(document.querySelector('[data-cy="loginError"]')).toBeNull();
+    expect(document.querySelector('[data-cy="sessionExpired"]')).toBeNull();
     expect(document.querySelector('.modal')).toBeNull();
   });
 
@@ -75,6 +76,12 @@ describe('Login', () => {
     renderLogin({ loginError: true });
 
     expect(document.querySelector('[data-cy="loginError"]')).not.toBeNull();
+  });
+
+  it('should tell when the session expired', () => {
+    renderLogin({ redirectMessage: 'login.messages.error.sessionExpired' });
+
+    expect(document.querySelector('[data-cy="sessionExpired"]')).not.toBeNull();
   });
 
   it('should leave the page once authenticated', () => {

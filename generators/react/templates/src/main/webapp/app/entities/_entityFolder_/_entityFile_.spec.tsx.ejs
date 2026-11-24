@@ -33,6 +33,9 @@
     const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.transient && !field.hidden);
     const requiredCollections = readOnly ? [] : screenRelationships.filter(rel => rel.collection && rel.relationshipRequired);
     const validatedForm = numericFormFields.length > 0 || builtInUserManagement || requiredCollections.length > 0;
+    const formInputFields = readOnly ? [] : fields.filter(field => !field.id && !field.hidden && !field.readonly && !field.transient && !field.autoGenerate && !field.fieldTypeBinary && !field.fieldTypeBoolean && !field.fieldIsEnum);
+    // The optional fields whose empty text is not one of their values.
+    const blankFields = formInputFields.filter(field => !field.fieldValidationRequired && !field.fieldTypeString && !field.blobContentTypeText && !field.fieldTypeNumeric && !field.fieldTypeTimed);
 _%>
 import { afterEach, <%- validatedForm ? 'beforeAll, ' : '' %>beforeEach, describe, expect, it, vi } from 'vitest';
 <%_ if (validatedForm) { _%>
@@ -89,6 +92,7 @@ const renderPage = (path = '') =>
   renderWithStore(
     <Routes>
       <Route path={`${page}/*`} element={<<%- entityReactName %>Routes />} />
+      <Route path="/404" element={<div data-cy="notFound" />} />
     </Routes>,
     `${page}${path}`,
 <%_ if (builtInUserManagement) { _%>
@@ -150,7 +154,7 @@ describe('<%- entityReactName %> screens', () => {
   beforeEach(() => {
     entities = [sample, sampleWithoutData];
     vi.spyOn(axios, 'get').mockImplementation((url: string) => {
-      const list = url.startsWith(`${apiUrl}?`) || url.startsWith(`${apiUrl}/_search`);
+      const list = url === apiUrl || url.startsWith(`${apiUrl}?`) || url.startsWith(`${apiUrl}/_search`);
       const data = list ? [...entities] : url.startsWith(`${apiUrl}/`) ? sample : <%- screenRelationships.length > 0 ? '[related]' : '[]' %>;
       return Promise.resolve({ data, headers: { 'x-total-count': '40', link: `<${apiUrl}?page=1>; rel="next"` } });
     });
@@ -354,6 +358,13 @@ describe('<%- entityReactName %> screens', () => {
 
       await waitFor(() => expect(container.querySelector('dd')?.textContent).toContain(`${sampleWithoutData.<%- primaryKeyName %>}`));
     });
+
+    it('should leave for the page not found when the entity does not exist', async () => {
+      vi.mocked(axios.get).mockRejectedValue(Object.assign(new Error('Not Found'), { isAxiosError: true, response: { status: 404, data: {} } }));
+      renderPage(`/${sample.<%- primaryKeyName %>}`);
+
+      await waitFor(() => expect(document.querySelector('[data-cy="notFound"]')).not.toBeNull());
+    });
 <%_ if (fileFields.length > 0) { _%>
 
     it('should show the files without a content type', async () => {
@@ -481,6 +492,54 @@ describe('<%- entityReactName %> screens', () => {
 
       await waitFor(() => expect(container.querySelector('.invalid-feedback')).not.toBeNull());
       expect(axios.post).not.toHaveBeenCalled();
+    });
+
+  <%_ } _%>
+  <%_ if (blankFields.length > 0) { _%>
+    it('should not send a value for an optional field left blank', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      fillForm(container, { ...formValues, <%- blankFields.map(field => `${field.fieldName}: ''`).join(', ') %> });
+    <%_ for (const rel of requiredCollections) { _%>
+      selectAllOptions(container, '<%- rel.relationshipFieldNamePlural %>');
+    <%_ } _%>
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(axios.post).toHaveBeenCalled());
+      const body = vi.mocked(axios.post).mock.calls[0][1];
+    <%_ for (const field of blankFields) { _%>
+      expect(JSON.parse(JSON.stringify(body))).not.toHaveProperty('<%- field.fieldName %>');
+    <%_ } _%>
+    });
+
+  <%_ } _%>
+  <%_ if (formInputFields.length > 0) { _%>
+    it('should mark the field the server refused', async () => {
+      vi.mocked(axios.post).mockRejectedValue(
+        Object.assign(new Error('Bad Request'), {
+          isAxiosError: true,
+          response: {
+            status: 400,
+            data: {
+              type: 'https://www.jhipster.tech/problem/constraint-violation',
+              message: 'error.validation',
+              fieldErrors: [{ objectName: '<%- entityInstance %>', field: '<%- formInputFields[0].fieldName %>', message: 'is refused', code: 'Refused' }],
+            },
+          },
+        }),
+      );
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      fillForm(container, formValues);
+    <%_ for (const rel of requiredCollections) { _%>
+      selectAllOptions(container, '<%- rel.relationshipFieldNamePlural %>');
+    <%_ } _%>
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(container.querySelector('[name="<%- formInputFields[0].fieldName %>"].is-invalid')).not.toBeNull());
+      expect(container.querySelectorAll('.is-invalid')).toHaveLength(1);
     });
 
   <%_ } _%>

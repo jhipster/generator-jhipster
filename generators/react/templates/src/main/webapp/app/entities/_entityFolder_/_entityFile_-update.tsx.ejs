@@ -54,6 +54,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 <%_ for (const clientConstantImport of clientConstantImports) { _%>
 <%- clientConstantImport %>
 <%_ } _%>
+import { getFieldErrorMessage } from 'app/config/notification-middleware';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 <%_ if (relationships.filter(e => e.relationshipManyToMany) !== undefined) { _%>
@@ -101,6 +102,12 @@ export const <%- entityReactName %>Update = () => {
   const loading = useAppSelector(state => state.<%- entityReactState %>.loading);
   const updating = useAppSelector(state => state.<%- entityReactState %>.updating);
   const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
+  const fieldErrors = useAppSelector(state => state.<%- entityReactState %>.fieldErrors);
+  // A field the server refused is marked invalid, with the message of its error.
+  const serverError = (name: string) => {
+    const fieldError = fieldErrors?.find(({ field }) => field === name);
+    return fieldError ? { type: 'server', message: getFieldErrorMessage(fieldError) } : undefined;
+  };
 <%_ for (const enumField of enumTypeFields) { _%>
   const <%- enumField.enumInstance %>Values = Object.keys(<%- enumField.fieldType %>);
 <%_ } _%>
@@ -144,6 +151,11 @@ export const <%- entityReactName %>Update = () => {
   <%_ } else if (field.fieldTypeNumeric) { _%>
     if (typeof values.<%- fieldName %> === 'string') {
       values.<%- fieldName %> = values.<%- fieldName %> === '' ? null : Number(values.<%- fieldName %>);
+    }
+  <%_ } else if (!field.fieldTypeString && !field.blobContentTypeText && !field.fieldTypeBoolean && !field.fieldTypeBinary) { _%>
+    // A field left blank is sent without a value: an empty text is not one of its values.
+    if (values.<%- fieldName %> === '') {
+      values.<%- fieldName %> = undefined;
     }
   <%_ } _%>
 <%_ } _%>
@@ -248,6 +260,7 @@ export const <%- entityReactName %>Update = () => {
             id="<%- entityFileName %>-<%- fieldName %>"
             name="<%- fieldName %>"
             data-cy="<%- fieldName %>"
+            error={serverError('<%- fieldName %>')}
   <%_ if (field.clientConstantsAsValues) { _%>
     <%_ if (userProvidedPrimaryKey && field.id) { _%>
             disabled={!isNew}
@@ -349,6 +362,7 @@ export const <%- entityReactName %>Update = () => {
             type="select"
             multiple
             name="<%- relationshipFieldNamePlural %>"
+            error={serverError('<%- relationshipName %>')}
     <%_ if (relationshipRequired) { _%>
             required
             validate={{ required: { value: true, message: translate('entity.validation.required') } }}
@@ -370,6 +384,7 @@ export const <%- entityReactName %>Update = () => {
             id="<%- entityFileName %>-<%- relationshipName %>"
             name="<%- relationshipFieldName %>"
             data-cy="<%- relationshipFieldName %>"
+            error={serverError('<%- relationshipName %>')}
     <%_ if (enableTranslation) { _%>
             label={translate('<%- translationKey %>')}
     <%_ } else { _%>

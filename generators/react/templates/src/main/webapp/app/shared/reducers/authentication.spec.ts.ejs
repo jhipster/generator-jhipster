@@ -265,7 +265,13 @@ describe('Authentication reducer tests', () => {
 <%_ } _%>
     it('dispatches CLEAR_AUTH actions', async () => {
       await store.dispatch(clearAuthentication('message'));
-      expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(authError('message')), clearAuth()]);
+      expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(authError(null)), clearAuth()]);
+    });
+
+    it('tells that an authenticated session expired', () => {
+      const dispatchSpy = vi.fn();
+      clearAuthentication('message')(dispatchSpy, () => ({ authentication: { isAuthenticated: true } }));
+      expect(dispatchSpy).toHaveBeenCalledWith(authError('message'));
     });
 
 <%_ if (!authenticationTypeOauth2) { _%>

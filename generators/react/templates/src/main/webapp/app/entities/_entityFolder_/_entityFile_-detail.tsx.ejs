@@ -27,7 +27,7 @@ import {
   TextFormat
 <%_ } _%>
 } from 'react-jhipster';
-import { Link, <%- readOnly ? '' : 'useNavigate, ' %>useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -51,13 +51,20 @@ export const <%- entityReactName %>Detail = () => {
   const dispatch = useAppDispatch();
 
   const { id } = useParams<'id'>();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getEntity(id!));
+    dispatch(getEntity(id!))
+      .unwrap()
+      .catch(error => {
+        // A record that does not exist anymore leaves for the page not found.
+        if (error?.response?.status === 404) {
+          navigate('/404', { replace: true });
+        }
+      });
   }, []);
 
 <%_ if (!readOnly) { _%>
-  const navigate = useNavigate();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
 <%_ } _%>
