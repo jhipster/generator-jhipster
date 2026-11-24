@@ -154,12 +154,8 @@ function generateFakeDataForField(
 ) {
   let originalData: string | number | boolean | Date | undefined;
   let data: string | number | boolean | Date | undefined;
-  for (const prop of [
-    'fieldValidateRulesMax',
-    'fieldValidateRulesMin',
-    'fieldValidateRulesMaxlength',
-    'fieldValidateRulesMinlength',
-  ] as const) {
+  // A min and a max may be decimals, read where they are used: only the lengths are whole numbers.
+  for (const prop of ['fieldValidateRulesMaxlength', 'fieldValidateRulesMinlength'] as const) {
     if (prop in field && typeof field[prop] === 'string') {
       try {
         field[prop] = Number.parseInt(field[prop], 10);

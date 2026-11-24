@@ -220,6 +220,26 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     }
   });
 
+  it('should take the value of a faker template within the decimal min and max of a field', () => {
+    // The min and the max of a decimal field are texts, as a JDL gives them.
+    const decimalField = (fieldName: string, fieldValidateRulesMin: string, fieldValidateRulesMax: string, fakerTemplate: string) =>
+      prepareField({
+        fieldName,
+        fieldType: 'BigDecimal',
+        fieldValidateRules: ['min', 'max'],
+        fieldValidateRulesMin,
+        fieldValidateRulesMax,
+        fakerTemplate,
+      });
+    const ratio = decimalField('ratio', '0.5', '0.99', '0.644');
+    const tiny = decimalField('tiny', '0.0001', '0.001', '0.000253');
+    expect(samples([ratio, tiny], 2).map(sample => [sample.ratio, sample.tiny])).toEqual([
+      [0.644, 0.000253],
+      [0.644, 0.000253],
+    ]);
+    expect([ratio.fieldValidateRulesMin, ratio.fieldValidateRulesMax]).toEqual(['0.5', '0.99']);
+  });
+
   it('should take the domain of an enum and of a boolean whose faker template gives a text of another type', () => {
     const color = prepareField({ ...enumField(), fakerTemplate: '{{person.firstName}}' });
     const active = prepareField({ fieldName: 'active', fieldType: 'Boolean', fakerTemplate: 'yes' });
