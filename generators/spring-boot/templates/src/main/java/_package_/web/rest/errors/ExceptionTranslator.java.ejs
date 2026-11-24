@@ -95,6 +95,9 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+<%_ if (generateBuiltInUserEntity) { _%>
+import java.util.Set;
+<%_ } _%>
 import java.util.regex.Pattern;
 
 /**
@@ -125,6 +128,11 @@ _%>
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
+<%_ if (generateBuiltInUserEntity) { _%>
+    private static final String USER_OBJECT_NAME = "userManagement";
+    /** The objects of a user: the DTO of the administration and of the account, the one of the registration and the resource of the users. */
+    private static final Set<String> USER_OBJECT_NAMES = Set.of("adminUser", "managedUserVM", "userResource");
+<%_ } _%>
     private static final boolean CAUSAL_CHAIN_ENABLED = false;
     private static final Pattern QUALIFIED_CLASS_NAME = Pattern.compile("\\b[a-z_][a-z0-9_]*+(?:\\.[a-z_][a-z0-9_]*+)*+\\.[A-Z]");
 
@@ -284,7 +292,7 @@ _%>
                         .stream()
                         .map(error ->
                             new FieldErrorVM(
-                                StringUtils.uncapitalize(result.getMethodParameter().getContainingClass().getSimpleName()),
+                                objectName(result.getMethodParameter().getContainingClass().getSimpleName()),
                                 result.getMethodParameter().getParameterName(),
                                 error.getDefaultMessage(),
                                 getCode(error)
@@ -294,9 +302,22 @@ _%>
             .toList();
     }
 
+    /**
+     * The name of the object of a field error, the prefix of the translation keys of its fields: an entity without the
+     * suffix of its DTO<%- generateBuiltInUserEntity ? ', and userManagement for a user' : '' %>.
+     */
+    static String objectName(String name) {
+        String objectName = StringUtils.uncapitalize(name).replaceFirst("<%- dtoSuffix %>$", "");
+<%_ if (generateBuiltInUserEntity) { _%>
+        return USER_OBJECT_NAMES.contains(objectName) ? USER_OBJECT_NAME : objectName;
+<%_ } else { _%>
+        return objectName;
+<%_ } _%>
+    }
+
     private FieldErrorVM toFieldError(FieldError f) {
         return new FieldErrorVM(
-            f.getObjectName().replaceFirst("<%- dtoSuffix %>$", ""),
+            objectName(f.getObjectName()),
             f.getField(),
             f.isBindingFailure() || StringUtils.isBlank(f.getDefaultMessage()) ? f.getCode() : f.getDefaultMessage(),
             f.getCode()
@@ -314,7 +335,7 @@ _%>
             .stream()
             .map(violation ->
                 new FieldErrorVM(
-                    StringUtils.uncapitalize(violation.getRootBeanClass().getSimpleName()).replaceFirst("<%- dtoSuffix %>$", ""),
+                    objectName(violation.getRootBeanClass().getSimpleName()),
                     violation.getPropertyPath().toString(),
                     violation.getMessage(),
                     violation.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName()
