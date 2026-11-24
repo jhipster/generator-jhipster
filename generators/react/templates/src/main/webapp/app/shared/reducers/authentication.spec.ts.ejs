@@ -265,7 +265,22 @@ describe('Authentication reducer tests', () => {
 <%_ } _%>
     it('dispatches CLEAR_AUTH actions', async () => {
       await store.dispatch(clearAuthentication('message'));
-      expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(authError(null)), clearAuth()]);
+      expect(store.getState()).toEqual([expect.any(Object), clearAuth()]);
+    });
+
+    it('keeps the expired session message on consecutive 401', () => {
+      const sessionStore = configureStore({
+        reducer: { authentication },
+        preloadedState: { authentication: { ...initialState, isAuthenticated: true } },
+      });
+
+      sessionStore.dispatch(clearAuthentication('login.messages.error.sessionExpired'));
+      sessionStore.dispatch(clearAuthentication('login.messages.error.sessionExpired'));
+
+      expect(sessionStore.getState().authentication).toMatchObject({
+        isAuthenticated: false,
+        redirectMessage: 'login.messages.error.sessionExpired',
+      });
     });
 
     it('tells that an authenticated session expired', () => {

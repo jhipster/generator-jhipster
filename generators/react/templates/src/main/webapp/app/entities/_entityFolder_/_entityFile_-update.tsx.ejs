@@ -368,7 +368,7 @@ export const <%- entityReactName %>Update = () => {
             type="select"
             multiple
             name="<%- relationshipFieldNamePlural %>"
-            error={serverError('<%- relationshipName %>')}
+            error={serverError('<%- rel.propertyName %>')}
     <%_ if (relationshipRequired) { _%>
             required
             validate={{ required: { value: true, message: translate('entity.validation.required') } }}
@@ -390,7 +390,7 @@ export const <%- entityReactName %>Update = () => {
             id="<%- entityFileName %>-<%- relationshipName %>"
             name="<%- relationshipFieldName %>"
             data-cy="<%- relationshipFieldName %>"
-            error={serverError('<%- relationshipName %>')}
+            error={serverError('<%- rel.propertyName %>')}
     <%_ if (enableTranslation) { _%>
             label={translate('<%- translationKey %>')}
     <%_ } else { _%>

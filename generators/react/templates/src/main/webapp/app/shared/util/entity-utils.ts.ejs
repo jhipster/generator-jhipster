@@ -34,14 +34,12 @@ export const cleanEntity = entity => {
 };
 
 /**
- * Simply map a list of elements to a list of objects with the element as id.
+ * Maps the ids of the options chosen in a multiple select to the related entities that hold them,
+ * leaving out the empty option.
  *
- * @param idList Elements to map.
+ * @param idList The values of the chosen options.
+ * @param toId Converts the value of an option, always a text, to the id: `Number` for an id of a number type.
  * @returns The list of objects with mapped ids.
- */
-/**
- * The ids of the options chosen in a multiple select, as the related entities that hold them: the id of a number type is
- * a number, the value of an option being its text.
  */
 export const mapIdList = (idList: readonly any[], toId: (id: any) => any = id => id) =>
   idList?.filter(id => id !== '').map(id => ({ id: toId(id) }));

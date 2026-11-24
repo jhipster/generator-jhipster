@@ -199,6 +199,29 @@ describe('Notification Middleware', () => {
     TranslatorContext.setRenderInnerTextForMissingKeys(true);
   });
 
+  // Translations unlike the default messages, so that a toast tells which key it used.
+  const translations = {
+    error: {
+      Size: 'Translated size of {{ fieldName }}',
+      http: { 403: 'Translated access denied' },
+      server: { not: { reachable: 'Translated server not reachable' } },
+      url: { not: { found: 'Translated not found' } },
+    },
+  };
+
+  /** Dispatches the action with the translations in the locale. */
+  const dispatchTranslated = action => {
+    const { locale } = TranslatorContext.context;
+    TranslatorContext.registerTranslations('<%- nativeLanguage %>', translations);
+    TranslatorContext.setLocale('<%- nativeLanguage %>');
+    try {
+      return store.dispatch(action);
+    } finally {
+      TranslatorContext.setLocale(locale as string);
+    }
+  };
+<%_ } else { _%>
+  const dispatchTranslated = action => store.dispatch(action);
 <%_ } _%>
   beforeEach(() => {
     store = makeStore();
@@ -232,18 +255,18 @@ describe('Notification Middleware', () => {
   });
 
   it('should trigger an error toast message and return error for 400 response code', () => {
-    expect(store.dispatch(VALIDATION_ERROR).error.response.data.message).toEqual('error.validation');
-    expect(toast.error).toHaveBeenCalledWith('<%- enableTranslation ? 'minField' : 'MinField' %>: must be greater than or equal to 1');
+    expect(dispatchTranslated(VALIDATION_ERROR).error.response.data.message).toEqual('error.validation');
+    expect(toast.error).toHaveBeenCalledWith('<%- enableTranslation ? 'Translated size of minField' : 'MinField: must be greater than or equal to 1' %>');
   });
 
   it('should trigger an error toast message and return error for 404 response code', () => {
-    expect(store.dispatch(NOT_FOUND_ERROR).error.response.data.message).toEqual('Not found');
-    expect(toast.error).toHaveBeenCalledWith('Not found');
+    expect(dispatchTranslated(NOT_FOUND_ERROR).error.response.data.message).toEqual('Not found');
+    expect(toast.error).toHaveBeenCalledWith('<%- enableTranslation ? 'Translated not found' : 'Not found' %>');
   });
 
   it('should trigger an error toast message and return error for 0 response code', () => {
-    expect(store.dispatch(NO_SERVER_ERROR).error.response.status).toEqual(0);
-    expect(toast.error).toHaveBeenCalledWith('Server not reachable');
+    expect(dispatchTranslated(NO_SERVER_ERROR).error.response.status).toEqual(0);
+    expect(toast.error).toHaveBeenCalledWith('<%- enableTranslation ? 'Translated server not reachable' : 'Server not reachable' %>');
   });
 
   it('should not trigger a toast message for an entity not found, whose screen leaves for the page not found', () => {
@@ -252,13 +275,13 @@ describe('Notification Middleware', () => {
   });
 
   it('should trigger an access denied toast message for 403 response code', () => {
-    store.dispatch({ type: ERROR_TYPE, error: { isAxiosError: true, config: { url: 'api/foos' }, response: { status: 403, data: '' } } });
-    expect(toast.error).toHaveBeenCalledWith('You are not authorized to access this page.');
+    dispatchTranslated({ type: ERROR_TYPE, error: { isAxiosError: true, config: { url: 'api/foos' }, response: { status: 403, data: '' } } });
+    expect(toast.error).toHaveBeenCalledWith('<%- enableTranslation ? 'Translated access denied' : 'You are not authorized to access this page.' %>');
   });
 
   it('should trigger an error toast message for a network error without response', () => {
-    store.dispatch({ type: ERROR_TYPE, error: { isAxiosError: true, code: 'ERR_NETWORK', message: 'Network Error', config: { url: 'api/foos' } } });
-    expect(toast.error).toHaveBeenCalledWith('Server not reachable');
+    dispatchTranslated({ type: ERROR_TYPE, error: { isAxiosError: true, code: 'ERR_NETWORK', message: 'Network Error', config: { url: 'api/foos' } } });
+    expect(toast.error).toHaveBeenCalledWith('<%- enableTranslation ? 'Translated server not reachable' : 'Server not reachable' %>');
   });
 
   it('should trigger an error toast message and return error for headers containing errors', () => {
@@ -327,7 +350,7 @@ describe('Notification Middleware', () => {
         response: {
           status: 400,
           data: {
-            type: ConstraintViolationType,
+            type: CONSTRAINT_VIOLATION_TYPE,
             message: 'error.validation',
             fieldErrors: [{ objectName: 'userManagement', field: 'login', message: 'must not be null', code: 'NotNull' }],
           },
@@ -347,7 +370,7 @@ describe('Notification Middleware', () => {
         response: {
           status: 400,
           data: {
-            type: ConstraintViolationType,
+            type: CONSTRAINT_VIOLATION_TYPE,
             status: 400,
             message: 'error.validation',
             detail: 'Unexpected runtime exception',

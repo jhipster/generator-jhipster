@@ -121,9 +121,14 @@ export const createEntitySlice = <T, Reducers extends SliceCaseReducers<EntitySt
     },
     extraReducers(builder) {
       extraReducers?.(builder);
-      builder.addMatcher(isPendingAction, state => {
-        state.fieldErrors = undefined;
-      });
+      // The field errors belong to the requests of this slice only.
+      const isOwnAction = (action: UnknownAction) => action.type.startsWith(`${name}/`);
+      builder.addMatcher(
+        action => isPendingAction(action) && isOwnAction(action),
+        state => {
+          state.fieldErrors = undefined;
+        },
+      );
       /*
        * Common rejection logic is handled here.
        * If you want to add your own rejection logic, pass `skipRejectionHandling: true`
@@ -135,8 +140,10 @@ export const createEntitySlice = <T, Reducers extends SliceCaseReducers<EntitySt
           state.updating = false;
           state.updateSuccess = false;
           state.errorMessage = null;
-          const problem = getServerProblem(action.error?.response?.data);
-          state.fieldErrors = isConstraintViolation(problem) ? problem.fieldErrors : undefined;
+          if (isOwnAction(action)) {
+            const problem = getServerProblem(action.error?.response?.data);
+            state.fieldErrors = isConstraintViolation(problem) ? problem.fieldErrors : undefined;
+          }
         });
       }
     },

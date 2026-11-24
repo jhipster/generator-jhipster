@@ -144,8 +144,10 @@ export const clearAuthentication = messageKey => (dispatch, getState) => {
 <%_ if (authenticationTypeJwt) { _%>
   clearAuthToken();
 <%_ } _%>
-  // Only a session that was authenticated has expired.
-  dispatch(authError(getState().authentication?.isAuthenticated ? messageKey : null));
+  // Only a session that was authenticated has expired: a later 401 keeps the message of the first one.
+  if (getState().authentication?.isAuthenticated) {
+    dispatch(authError(messageKey));
+  }
   dispatch(clearAuth());
 };
 

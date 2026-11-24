@@ -39,6 +39,8 @@
     // The fields nobody fills in a new form: an optional enum, a date and time.
     const untouchedEnums = readOnly ? [] : fields.filter(field => field.fieldIsEnum && !field.clientConstantsAsValues && field.defaultValue === undefined && !field.fieldValidationRequired && !field.id && !field.hidden && !field.readonly && !field.transient);
     const timedFormFields = readOnly ? [] : fields.filter(field => field.fieldTypeTimed && !field.id && !field.hidden && !field.readonly && !field.transient);
+    // The relationships of the form, that the server refuses by the name of their property.
+    const formRelationships = readOnly ? [] : persistableRelationships.filter(rel => !rel.otherEntity.embedded);
     const numericIdCollections = requiredCollections.filter(rel => !rel.relationshipSerializePrimaryKeyOnly && rel.otherEntity.primaryKey?.typeNumeric);
 _%>
 import { afterEach, <%- validatedForm ? 'beforeAll, ' : '' %>beforeEach, describe, expect, it, vi } from 'vitest';
@@ -651,6 +653,44 @@ describe('<%- entityReactName %> screens', () => {
 
       await waitFor(() => expect(container.querySelector('[name="<%- formInputFields[0].fieldName %>"].is-invalid')).not.toBeNull());
       expect(container.querySelectorAll('.is-invalid')).toHaveLength(1);
+      expect(container.querySelector('[name="<%- formInputFields[0].fieldName %>"] ~ .invalid-feedback')?.textContent).toBe(
+        '<%- enableTranslation ? formInputFields[0].fieldName : formInputFields[0].fieldNameCapitalized %>: is refused',
+      );
+    });
+
+  <%_ } _%>
+  <%_ if (formRelationships.length > 0) { _%>
+    it('should mark the relationships the server refused', async () => {
+      vi.mocked(axios.post).mockRejectedValue(
+        Object.assign(new Error('Bad Request'), {
+          isAxiosError: true,
+          response: {
+            status: 400,
+            data: {
+              type: 'https://www.jhipster.tech/problem/constraint-violation',
+              message: 'error.validation',
+              fieldErrors: [
+    <%_ for (const rel of formRelationships) { _%>
+                { objectName: '<%- entityInstance %>', field: '<%- rel.propertyName %>', message: 'is refused', code: 'Refused' },
+    <%_ } _%>
+              ],
+            },
+          },
+        }),
+      );
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      fillForm(container, formValues);
+    <%_ for (const rel of requiredCollections) { _%>
+      selectAllOptions(container, '<%- rel.relationshipFieldNamePlural %>');
+    <%_ } _%>
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(container.querySelectorAll('.is-invalid')).toHaveLength(<%- formRelationships.length %>));
+    <%_ for (const rel of formRelationships) { _%>
+      expect(container.querySelector('[name="<%- rel.collection ? rel.relationshipFieldNamePlural : rel.relationshipFieldName %>"].is-invalid')).not.toBeNull();
+    <%_ } _%>
     });
 
   <%_ } _%>
