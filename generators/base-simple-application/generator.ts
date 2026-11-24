@@ -19,7 +19,7 @@
 import type { ComposeOptions } from 'yeoman-generator';
 
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
-import { createDelayedMutationContext, droppedMutationMessage, mutateData } from '../../lib/utils/index.ts';
+import { mutateDefaults } from '../../lib/utils/index.ts';
 import BaseGenerator from '../base/index.ts';
 import { POST_WRITING_OBJECTS, PRIORITY_NAMES, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask, TaskGroup } from '../base-core/types.ts';
@@ -110,11 +110,7 @@ export default class BaseSimpleApplicationGenerator<
 
   get #application(): Application {
     return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () =>
-        createDelayedMutationContext<Application>({
-          autoDelay: true,
-          onDroppedMutation: dropped => this.log.debug(droppedMutationMessage(dropped)),
-        }),
+      factory: () => this.enableDelayedMutations({} as Application, { autoDelay: true }),
     });
   }
 
@@ -164,8 +160,7 @@ export default class BaseSimpleApplicationGenerator<
       taskArg.application = this.#application;
     }
     if (applicationDefaults) {
-      taskArg.applicationDefaults = (...args: any[]): void =>
-        mutateData(this.#application, ...args.map(data => ({ __override__: false, ...data })));
+      taskArg.applicationDefaults = (...args: any[]): void => mutateDefaults(this.#application, ...args);
     }
     if (source) {
       taskArg.source = this.#source;

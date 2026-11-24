@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
-import { mutateData } from '../../../../lib/utils/index.ts';
+import { mutateDefaults } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.d.ts';
 
@@ -76,8 +76,7 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
     return this.asPreparingEachEntityTaskGroup({
       prepareEntityForDatabase({ entity }) {
         // The table of the entity, which every generator writing its database reads.
-        mutateData(entity as DatabaseEntity, {
-          __override__: false,
+        mutateDefaults(entity as DatabaseEntity, {
           entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
         });
       },

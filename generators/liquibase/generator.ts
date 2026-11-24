@@ -22,7 +22,7 @@ import min from 'lodash-es/min.js';
 
 import { fieldTypes } from '../../lib/jhipster/index.ts';
 import type { EntityAll } from '../../lib/types/application-all.d.ts';
-import { mutateData } from '../../lib/utils/object.ts';
+import { mutateData, mutateDefaults } from '../../lib/utils/object.ts';
 import { escape } from '../../lib/utils/string-utils.ts';
 import {
   mutateField as mutateBaseApplicationField,
@@ -814,8 +814,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     const { entityTableName } = entity;
     const { prodDatabaseType } = application as { prodDatabaseType: string };
     if (relationship.shouldWriteRelationship) {
-      mutateData(relationship, {
-        __override__: false,
+      mutateDefaults(relationship, {
         liquibaseForeignKeyName: () => this.getFKConstraintName(entityTableName, relationship.relationshipName, prodDatabaseType, false),
       });
     }
@@ -826,8 +825,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       relationship.otherEntity?.primaryKey
     ) {
       const { fields, ownFields } = relationship.otherEntity.primaryKey;
-      mutateData(relationship, {
-        __override__: false,
+      mutateDefaults(relationship, {
         liquibaseUniqueConstraintNames: () =>
           Object.fromEntries(
             [...new Set([...fields, ...(ownFields ?? [])])].map(idField => [

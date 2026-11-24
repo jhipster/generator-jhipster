@@ -19,7 +19,7 @@
 
 import path from 'node:path';
 
-import { mutateData, normalizePathEnd } from '../../../lib/utils/index.ts';
+import { mutateDefaults, normalizePathEnd } from '../../../lib/utils/index.ts';
 import type { Application as JavaApplication, Entity as JavaEntity } from '../types.ts';
 
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.ts';
@@ -27,8 +27,7 @@ import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.ts';
 export function prepareEntity(entity: JavaEntity, application: JavaApplication) {
   const { packageFolder, packageName } = application;
 
-  mutateData(entity, {
-    __override__: false,
+  mutateDefaults(entity, {
     entityJavaPackageFolder: ({ entityPackage }) => (entityPackage ? `${entityPackage.replace(/\./g, '/')}/` : ''),
     entityAbsoluteFolder: ({ entityJavaPackageFolder }) => normalizePathEnd(path.join(packageFolder, entityJavaPackageFolder!)),
     entityAbsolutePackage: ({ entityPackage }) => (entityPackage ? [packageName, entityPackage].join('.') : packageName),

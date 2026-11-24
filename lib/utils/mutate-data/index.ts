@@ -20,7 +20,7 @@
 export { createDelayedMutationContext, enableDelayedMutations } from './context.ts';
 export * from './helpers.ts';
 export { DelayedMutation, UndefinedMutation } from './markers.ts';
-export { finalizeMutations, mutateData } from './mutate-data.ts';
+export { finalizeMutations, mutateData, mutateDefaults } from './mutate-data.ts';
 export type {
   DroppedMutation,
   MutateDataCallbackOptions,

@@ -214,3 +214,11 @@ export function mutateData<T extends Record<string | number, any>>(
     }
   }
 }
+
+/**
+ * Applies the mutations as defaults: like `mutateData` with `__override__: false`, a property already set is kept, unless
+ * a mutation sets `__override__` itself or its function is marked by `overrideMutateDataProperty`.
+ */
+export function mutateDefaults<T extends Record<string | number, any>>(context: T, ...mutations: MutateDataParam<T>[]): void {
+  mutateData(context, ...mutations.map(mutation => ({ __override__: false, ...mutation })));
+}

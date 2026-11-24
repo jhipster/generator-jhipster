@@ -20,7 +20,7 @@ import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
-import { mutateData } from '../../lib/utils/index.ts';
+import { mutateDefaults } from '../../lib/utils/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { ClientApplicationGenerator } from '../client/generator.ts';
 import {
@@ -299,8 +299,7 @@ ${comment}
       prepareEntityModel({ entity }) {
         // The fields the clients skip are left out of the model.
         const fieldsWithoutId = entity.fields.filter(field => !field.id && isClientField(field));
-        mutateData(entity, {
-          __override__: false,
+        mutateDefaults(entity, {
           entityClientFields: () =>
             this.generateEntityClientFields(
               entity.primaryKey,
