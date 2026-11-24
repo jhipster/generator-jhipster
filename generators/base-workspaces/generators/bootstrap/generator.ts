@@ -18,7 +18,7 @@
  */
 import defaults from 'lodash-es/defaults.js';
 
-import { finalizeMutations, removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
+import { removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
 import { normalizePathEnd } from '../../../../lib/utils/path.ts';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../../../base/support/constants.ts';
 import BaseWorkspacesGenerator from '../../index.ts';
@@ -80,10 +80,6 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
       derivedProperties({ deployment }) {
         // elk is not offered any more, kept for existing configurations. TODO drop for v10
         deployment.monitoringElk = deployment.monitoring === 'elk';
-      },
-      finalizeDeploymentMutations({ deployment }) {
-        // Applies the delayed command defaults and derived properties (monitoringPrometheus, serviceDiscoveryConsul, ...).
-        finalizeMutations(deployment);
       },
     });
   }
