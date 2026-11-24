@@ -29,6 +29,7 @@ public class JacksonConfiguration {
     /*
      * Accept a lowercase letter after the get/set/is prefix, as Jackson 2 did.
      * A field like kValue has the accessors getkValue()/setkValue(), which Jackson 3 ignores by default.
+     * See https://github.com/jhipster/generator-jhipster/issues/36391
      */
     @Bean
     public JsonMapperBuilderCustomizer accessorNamingCustomizer() {
