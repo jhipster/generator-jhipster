@@ -209,7 +209,7 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     Object.setPrototypeOf(warningGenerator, BaseGenerator.prototype);
     const field = prepareCommonFieldForTemplates(
       entity,
-      { fieldName: 'reference', fieldType: 'UUID', fakerTemplate: '{{person.firstName}}' },
+      { fieldName: 'reference', fieldType: 'UUID', fakerTemplate: '{{person.firstName}}' } as any,
       warningGenerator as any,
     );
     samples([field], 3);
