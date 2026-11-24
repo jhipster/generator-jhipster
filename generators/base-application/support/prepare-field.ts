@@ -25,7 +25,14 @@ import { kebabCase, lowerFirst } from '../../../lib/utils/string-utils.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { type FakeDataOptions, mutateField } from '../entity.ts';
-import { type FieldDomainValue, formatFakeData, getFieldFakeDataDomain, isFakeDataOfFieldType } from '../internal/fake-data.ts';
+import {
+  type FieldDomainValue,
+  checkFakerTemplate,
+  formatFakeData,
+  getFieldFakeDataDomain,
+  isFakeDataOfFieldType,
+  toFakeDataOfFieldType,
+} from '../internal/fake-data.ts';
 import type { Entity as BaseApplicationEntity, Field as BaseApplicationField } from '../types.ts';
 
 import type { FakerWithRandexp } from './faker.ts';
@@ -162,18 +169,20 @@ function generateFakeDataForField(
     }
   }
 
-  // The text of a faker template is a value of the field when it is of its type, like a UUID for a UUID field: else the field
-  // takes a value of its type.
-  const templateData = field.fakerTemplate ? faker.helpers.fake(field.fakerTemplate) : undefined;
-  const templateDataOfFieldType = templateData !== undefined && isFakeDataOfFieldType(field, templateData);
-  if (templateData !== undefined && !templateDataOfFieldType && !fieldsWithInvalidFakerTemplate.has(field)) {
+  // The text of a faker template is a value of the field when the template gives values of its type, like UUIDs for a UUID
+  // field: else the field takes the values of its type.
+  const templateCheck = checkFakerTemplate(field);
+  if (templateCheck && !templateCheck.ofFieldType && !fieldsWithInvalidFakerTemplate.has(field)) {
     fieldsWithInvalidFakerTemplate.add(field);
     this.log.warn(
-      `The faker template ${field.fakerTemplate} of the field ${field.fieldName} gives '${templateData}', not a ${field.fieldType}: its fake data takes a ${field.fieldType} instead.`,
+      `The faker template ${field.fakerTemplate} of the field ${field.fieldName} gives '${templateCheck.value}', not a ${field.fieldType}: its fake data takes a ${field.fieldType} instead.`,
     );
   }
+  const templateData = templateCheck?.ofFieldType ? faker.helpers.fake(field.fakerTemplate!) : undefined;
+  // A template of the type may still give a text of another type, like a number out of a pattern.
+  const templateDataOfFieldType = templateData !== undefined && isFakeDataOfFieldType(field, templateData);
   if (templateDataOfFieldType) {
-    originalData = templateData;
+    originalData = toFakeDataOfFieldType(field, templateData);
     data = originalData;
   } else if (field.fieldValidate && field.fieldValidateRules?.includes('pattern')) {
     originalData = field.generateFakeDataFromPattern!();

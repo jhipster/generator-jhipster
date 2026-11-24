@@ -16,7 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Faker, base, en } from '@faker-js/faker';
+
 import { fieldTypes } from '../../../lib/jhipster/index.ts';
+import { stringHashCode } from '../../../lib/utils/string.ts';
 import type { Field as BaseApplicationField } from '../types.ts';
 
 import { isContentTypeField } from './content-type-fields.ts';
@@ -27,7 +30,9 @@ const {
 } = fieldTypes;
 
 const UUID_PATTERN = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
-const INTEGER_PATTERN = /^-?\d+$/;
+// The integers and the numbers of JSON (RFC 8259, section 6), the format of the samples.
+const INTEGER_PATTERN = /^-?(?:0|[1-9]\d*)$/;
+const NUMBER_PATTERN = /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
 
 /**
  * Whether a text a faker template gives is a value of the type of the field: the one of a UUID, a number, a boolean or an
@@ -46,12 +51,53 @@ export function isFakeDataOfFieldType(field: BaseApplicationField, value: string
     case FLOAT:
     case DOUBLE:
     case BIG_DECIMAL:
-      return value.trim() !== '' && Number.isFinite(Number(value));
+      return NUMBER_PATTERN.test(value) && Number.isFinite(Number(value));
     case BOOLEAN:
       return value === 'true' || value === 'false';
     default:
       return true;
   }
+}
+
+/** The value of a field from a text of its type: a boolean or a number, else the text. */
+export function toFakeDataOfFieldType(field: BaseApplicationField, value: string): string | number | boolean {
+  if (field.fieldIsEnum) {
+    return value;
+  }
+  switch (field.fieldType) {
+    case BOOLEAN:
+      return value === 'true';
+    case INTEGER:
+    case LONG:
+    case FLOAT:
+    case DOUBLE:
+    case BIG_DECIMAL:
+      return Number(value);
+    default:
+      return value;
+  }
+}
+
+/** The faker of the check of the templates, apart from the fakers of the entities, whose draws it does not change. */
+const templateCheckFaker = new Faker({ locale: [en, base] });
+const templateChecks = new WeakMap<BaseApplicationField, { ofFieldType: boolean; value: string }>();
+
+/**
+ * Whether the faker template of a field gives values of its type, checked once for the field by a draw of its own: a field
+ * whose template does not takes the fake data of its type, and its domain.
+ */
+export function checkFakerTemplate(field: BaseApplicationField): { ofFieldType: boolean; value: string } | undefined {
+  if (!field.fakerTemplate) {
+    return undefined;
+  }
+  let check = templateChecks.get(field);
+  if (!check) {
+    templateCheckFaker.seed(stringHashCode(`${field.fieldName}-${field.fakerTemplate}`));
+    const value = templateCheckFaker.helpers.fake(field.fakerTemplate);
+    check = { ofFieldType: isFakeDataOfFieldType(field, value), value };
+    templateChecks.set(field, check);
+  }
+  return check;
 }
 
 /** A fake data value serializable to JSON: a date and time is a Date, a blob of bytes its base64 text. */
@@ -115,7 +161,7 @@ export type FieldDomainValue = string | number | boolean;
  * A field with a template or a pattern has its values given by them.
  */
 export function getFieldFakeDataDomain(field: BaseApplicationField): FieldDomainValue[] | undefined {
-  if (field.fakerTemplate || (field.fieldValidate && field.fieldValidateRules?.includes('pattern'))) {
+  if (checkFakerTemplate(field)?.ofFieldType || (field.fieldValidate && field.fieldValidateRules?.includes('pattern'))) {
     return undefined;
   }
   if (field.fieldIsEnum) {

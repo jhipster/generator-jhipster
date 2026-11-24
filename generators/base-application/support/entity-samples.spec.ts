@@ -160,7 +160,64 @@ describe('generator - base-application - support - generateEntitySamples', () =>
 
   it('should take the value of a faker template of the type of the field', () => {
     const field = prepareField({ fieldName: 'level', fieldType: 'Integer', fakerTemplate: '42' });
-    expect(samples([field], 2).map(({ level }) => String(level))).toEqual(['42', '42']);
+    expect(samples([field], 2).map(({ level }) => level)).toEqual([42, 42]);
+  });
+
+  it('should take the value of a faker template of an enum, a boolean and a decimal field', () => {
+    const color = prepareField({ ...enumField(), fakerTemplate: 'GREEN' });
+    const active = prepareField({ fieldName: 'active', fieldType: 'Boolean', fakerTemplate: 'true' });
+    const ratio = prepareField({ fieldName: 'ratio', fieldType: 'Float', fakerTemplate: '12.5' });
+    const price = prepareField({ fieldName: 'price', fieldType: 'BigDecimal', fakerTemplate: '-0.25e2' });
+    expect(
+      samples([color, active, ratio, price], 2).map(sample => [sample.color, sample.active, String(sample.ratio), String(sample.price)]),
+    ).toEqual([
+      ['GREEN', true, '12.5', '-25'],
+      ['GREEN', true, '12.5', '-25'],
+    ]);
+  });
+
+  for (const [fieldType, fakerTemplate] of [
+    ['Integer', '08'],
+    ['Long', '1.5'],
+    ['Integer', ' 12 '],
+    ['Float', '0x1A'],
+    ['Double', ' 12 '],
+    ['BigDecimal', '.5'],
+    ['Boolean', 'yes'],
+  ]) {
+    it(`should not take the text '${fakerTemplate}' of a faker template as a ${fieldType}`, () => {
+      const field = prepareField({ fieldName: 'value', fieldType, fakerTemplate });
+      for (const { value } of samples([field], 3)) {
+        // The text of the template would be taken as its value, the number it reads as for a number field.
+        expect(value).not.toBe(fieldType === 'Boolean' ? fakerTemplate : Number(fakerTemplate));
+        expect(typeof value).toBe(fieldType === 'Boolean' ? 'boolean' : 'number');
+      }
+    });
+  }
+
+  it('should take the domain of an enum and of a boolean whose faker template gives a text of another type', () => {
+    const color = prepareField({ ...enumField(), fakerTemplate: '{{person.firstName}}' });
+    const active = prepareField({ fieldName: 'active', fieldType: 'Boolean', fakerTemplate: 'yes' });
+    const drawn = samples([color, active], 3);
+    expect(drawn.map(sample => sample.color).toSorted()).toEqual(['BLUE', 'GREEN', 'RED']);
+    expect([...new Set(drawn.map(sample => sample.active))].toSorted()).toEqual([false, true]);
+  });
+
+  it('should warn once of a faker template that gives a text of another type', () => {
+    const warnings: string[] = [];
+    const warningGenerator = { jhipsterConfig: config, log: { warn: (message: string) => warnings.push(message), debug() {} } };
+    Object.setPrototypeOf(warningGenerator, BaseGenerator.prototype);
+    const field = prepareCommonFieldForTemplates(
+      entity,
+      { fieldName: 'reference', fieldType: 'UUID', fakerTemplate: '{{person.firstName}}' },
+      warningGenerator as any,
+    );
+    samples([field], 3);
+    samples([field], 3);
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatch(
+      /^The faker template \{\{person\.firstName\}\} of the field reference gives '[^']+', not a UUID: its fake data takes a UUID instead\.$/,
+    );
   });
 
   it('should draw a duration as ISO 8601', () => {
