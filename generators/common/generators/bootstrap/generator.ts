@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { mutateData, mutateDefaults } from '../../../../lib/utils/object.ts';
+import { mutateDefaults } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { mutateApplication } from '../../application.ts';
 import { mutateEntity as commonMutateEntity, mutateField as commonMutateField } from '../../entity.ts';
@@ -121,8 +121,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
       primaryKeyJsonType({ entity }) {
         const { primaryKey } = entity;
         if (primaryKey) {
-          mutateData(primaryKey, {
-            __override__: false,
+          mutateDefaults(primaryKey, {
             jsonType: ({ composite, type }) => (composite ? undefined : getJsonType(type)),
             ...jsonTypeDerivedProperties,
           });
