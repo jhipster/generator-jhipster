@@ -54,7 +54,12 @@ export const Login = () => {
         </h1>
         {redirectMessage && !loginError && (
           <Alert variant="warning" data-cy="sessionExpired">
-            <Translate contentKey="login.messages.error.sessionExpired">Your session has expired. Please sign in again.</Translate>
+<%_ if (enableTranslation) { _%>
+            {/* The message is the key of its translation. */}
+            <Translate contentKey={redirectMessage} />
+<%_ } else { _%>
+            Your session has expired. Please sign in again.
+<%_ } _%>
           </Alert>
         )}
         {loginError && (

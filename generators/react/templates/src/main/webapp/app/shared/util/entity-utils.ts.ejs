@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { IPaginationBaseState, ISortBaseState } from 'react-jhipster';
+import { type NavigateFunction } from 'react-router';
 
 import { SORT } from 'app/shared/util/pagination.constants';
 
@@ -43,6 +44,18 @@ export const cleanEntity = entity => {
  */
 export const mapIdList = (idList: readonly any[], toId: (id: any) => any = id => id) =>
   idList?.filter(id => id !== '').map(id => ({ id: toId(id) }));
+
+/**
+ * A record that does not exist anymore leaves for the page not found.
+ *
+ * @param navigate The navigation of the page that loads the record.
+ * @returns The handler of the error of the request of the record.
+ */
+export const leaveWhenNotFound = (navigate: NavigateFunction) => (error: any) => {
+  if (error?.response?.status === 404) {
+    navigate('/404', { replace: true });
+  }
+};
 
 export const overrideSortStateWithQueryParams = (paginationBaseState: ISortBaseState, locationSearch: string) => {
   const params = new URLSearchParams(locationSearch);

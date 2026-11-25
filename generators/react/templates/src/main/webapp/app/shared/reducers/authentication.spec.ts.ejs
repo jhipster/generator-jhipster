@@ -275,7 +275,8 @@ describe('Authentication reducer tests', () => {
       });
 
       sessionStore.dispatch(clearAuthentication('login.messages.error.sessionExpired'));
-      sessionStore.dispatch(clearAuthentication('login.messages.error.sessionExpired'));
+      // A later 401 of a session already cleared does not tell its own message.
+      sessionStore.dispatch(clearAuthentication('login.messages.error.later'));
 
       expect(sessionStore.getState().authentication).toMatchObject({
         isAuthenticated: false,

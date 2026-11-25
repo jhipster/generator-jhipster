@@ -41,6 +41,7 @@ import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ if (anyFieldHasFileBasedContentType) { _%>
 import { byteSize, openFile } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
+import { leaveWhenNotFound } from 'app/shared/util/entity-utils';
 
 <%_ if (!readOnly) { _%>
 import <%- entityReactName %>DeleteDialog from './<%- entityFileName %>-delete-dialog';
@@ -54,14 +55,7 @@ export const <%- entityReactName %>Detail = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getEntity(id!))
-      .unwrap()
-      .catch(error => {
-        // A record that does not exist anymore leaves for the page not found.
-        if (error?.response?.status === 404) {
-          navigate('/404', { replace: true });
-        }
-      });
+    dispatch(getEntity(id!)).unwrap().catch(leaveWhenNotFound(navigate));
   }, []);
 
 <%_ if (!readOnly) { _%>

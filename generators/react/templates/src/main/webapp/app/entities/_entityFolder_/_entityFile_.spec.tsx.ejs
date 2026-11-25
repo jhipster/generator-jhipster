@@ -42,10 +42,12 @@
     // The relationships of the form, that the server refuses by the name of their property.
     const formRelationships = readOnly ? [] : persistableRelationships.filter(rel => !rel.otherEntity.embedded);
     const numericIdCollections = requiredCollections.filter(rel => !rel.relationshipSerializePrimaryKeyOnly && rel.otherEntity.primaryKey?.typeNumeric);
+    const refusedField = formInputFields[0];
+    const translatorContext = validatedForm || (enableTranslation && refusedField);
 _%>
 import { afterEach, <%- validatedForm ? 'beforeAll, ' : '' %>beforeEach, describe, expect, it, vi } from 'vitest';
-<%_ if (validatedForm) { _%>
-import { TranslatorContext } from 'react-jhipster';
+<%_ if (translatorContext) { _%>
+import { TranslatorContext<%- enableTranslation && refusedField?.fieldValidationRequired ? ', translate' : '' %> } from 'react-jhipster';
 <%_ } _%>
 import { Route, Routes } from 'react-router';
 
@@ -627,8 +629,9 @@ describe('<%- entityReactName %> screens', () => {
     });
 
   <%_ } _%>
-  <%_ if (formInputFields.length > 0) { _%>
-    it('should mark the field the server refused', async () => {
+  <%_ if (refusedField) { _%>
+    <%_ const refusedLabel = enableTranslation ? refusedField.fieldName : refusedField.fieldNameCapitalized; _%>
+    const refuseField = () =>
       vi.mocked(axios.post).mockRejectedValue(
         Object.assign(new Error('Bad Request'), {
           isAxiosError: true,
@@ -637,11 +640,12 @@ describe('<%- entityReactName %> screens', () => {
             data: {
               type: 'https://www.jhipster.tech/problem/constraint-violation',
               message: 'error.validation',
-              fieldErrors: [{ objectName: '<%- entityInstance %>', field: '<%- formInputFields[0].fieldName %>', message: 'is refused', code: 'Refused' }],
+              fieldErrors: [{ objectName: '<%- entityInstance %>', field: '<%- refusedField.fieldName %>', message: 'is refused', code: 'Refused' }],
             },
           },
         }),
       );
+    const saveRefusedField = async () => {
       const { container } = renderPage('/new');
       await waitForForm();
 
@@ -651,11 +655,48 @@ describe('<%- entityReactName %> screens', () => {
     <%_ } _%>
       fireEvent.click(container.querySelector('#save-entity')!);
 
-      await waitFor(() => expect(container.querySelector('[name="<%- formInputFields[0].fieldName %>"].is-invalid')).not.toBeNull());
+      await waitFor(() => expect(container.querySelector('[name="<%- refusedField.fieldName %>"].is-invalid')).not.toBeNull());
+      return container;
+    };
+    const refusedMessage = (container: HTMLElement) => container.querySelector('[name="<%- refusedField.fieldName %>"] ~ .invalid-feedback')?.textContent;
+
+    it('should mark the field the server refused', async () => {
+      refuseField();
+      const container = await saveRefusedField();
+
       expect(container.querySelectorAll('.is-invalid')).toHaveLength(1);
-      expect(container.querySelector('[name="<%- formInputFields[0].fieldName %>"] ~ .invalid-feedback')?.textContent).toBe(
-        '<%- enableTranslation ? formInputFields[0].fieldName : formInputFields[0].fieldNameCapitalized %>: is refused',
-      );
+      expect(refusedMessage(container)).toBe('<%- refusedLabel %>: is refused');
+    });
+
+    <%_ if (enableTranslation) { _%>
+    it('should name the field the server refused by its translation', async () => {
+      const locale = TranslatorContext.context.locale ?? 'en';
+      TranslatorContext.registerTranslations('refused', { '<%- builtInUserManagement ? 'userManagement' : `${frontendAppName}.${entityInstance}` %>.<%- refusedField.fieldName %>': 'Translated' });
+      TranslatorContext.setLocale('refused');
+      try {
+        refuseField();
+        const container = await saveRefusedField();
+
+        expect(refusedMessage(container)).toBe('Translated: is refused');
+      } finally {
+        TranslatorContext.setLocale(locale);
+      }
+    });
+
+    <%_ } _%>
+    it('should forget the error of the server once the field changes', async () => {
+      refuseField();
+      const container = await saveRefusedField();
+
+      fireEvent.change(container.querySelector('[name="<%- refusedField.fieldName %>"]')!, { target: { value: '' } });
+
+    <%_ if (refusedField.fieldValidationRequired) { _%>
+      // The rules of the field show again.
+      await waitFor(() => expect(refusedMessage(container)).toBe(<%- enableTranslation ? "translate('entity.validation.required')" : "'This field is required.'" %>));
+    <%_ } else { _%>
+      await waitFor(() => expect(container.querySelector('[name="<%- refusedField.fieldName %>"].is-invalid')).toBeNull());
+      expect(refusedMessage(container)).toBeUndefined();
+    <%_ } _%>
     });
 
   <%_ } _%>
