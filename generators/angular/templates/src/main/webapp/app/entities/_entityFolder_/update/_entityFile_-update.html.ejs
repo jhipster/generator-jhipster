@@ -103,7 +103,9 @@
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
+  <%_ if (!field.readonly && !(field.id && field.autoGenerate)) { _%>
                 <<%- jhiPrefixDashed %>-server-error [field]="editForm.<%- fieldName %>" />
+  <%_ } _%>
   <%_ if (field.fieldValidate) { _%>
                 @if (<%- fieldName %>Ref.invalid() && (<%- fieldName %>Ref.dirty() || <%- fieldName %>Ref.touched())) {
                     <div>

@@ -2317,6 +2317,26 @@ describe("UserManagement Management Update Component", () => {
       expect(comp.previousState).toHaveBeenCalled();
     });
 
+    it("should resolve the submission when the service completes without a value", async () => {
+      // GIVEN
+      const saveSubject = new Subject<IUserManagement>();
+      vi.spyOn(userManagementFormService, "getUserManagement").mockReturnValue({
+        id: null,
+        login: null,
+      });
+      vi.spyOn(userManagementService, "create").mockReturnValue(saveSubject);
+      activatedRoute.data = of({ userManagement: null });
+      comp.ngOnInit();
+
+      // WHEN
+      const result = comp.save();
+      saveSubject.complete();
+
+      // THEN
+      expect(await result).toBeUndefined();
+      expect(comp.isSaving()).toEqual(false);
+    });
+
     it("should set isSaving to false on error", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
@@ -2567,6 +2587,8 @@ export class UserManagementUpdate implements OnInit {
         }),
         finalize(() => this.onSaveFinalize()),
       ),
+      // A service completing without a value submits nothing to mark.
+      { defaultValue: undefined },
     );
   }
 

@@ -27,9 +27,9 @@ _%>
 <%_ const constantLabelPipes = [...new Map(fields.filter(field => field.angularFieldClientConstant?.angularConstantLabelPipe).map(field => [field.angularFieldClientConstant.angularConstantLabelPipe.importName, field.angularFieldClientConstant.angularConstantLabelPipe])).values()]; _%>
 <%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
-<%# The properties showing the error of the server, the only ones a server error may mark invalid -%>
+<%# The properties showing the error of the server, the only ones a server error may mark invalid: Angular skips the errors of a read-only field, so a read-only field and an auto-generated id show none -%>
 <%_ const serverErrorProperties = [
-      ...fields.filter(field => !field.hidden && !(builtInUserManagement && field.readonly)).map(field => field.fieldName),
+      ...fields.filter(field => !field.hidden && !field.readonly && !(field.id && field.autoGenerate)).map(field => field.fieldName),
       ...relationships.filter(rel => rel.otherEntity.primaryKey && rel.persistableRelationship).map(rel => rel.propertyName),
     ];
     const usesServerError = serverErrorProperties.length > 0;
@@ -271,6 +271,8 @@ export class <%- entityAngularName %>Update implements OnInit {
                 }),
                 finalize(() => this.onSaveFinalize()),
             ),
+            // A service completing without a value submits nothing to mark.
+            { defaultValue: undefined },
         );
     }
 

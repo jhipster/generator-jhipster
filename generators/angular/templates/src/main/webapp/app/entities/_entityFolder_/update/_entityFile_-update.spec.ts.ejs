@@ -33,8 +33,8 @@
     // A property the server refuses, a relationship when the entity has no field to edit.
     const refusedProperty = fields.find(field => !field.id && !field.hidden && !field.readonly && !field.transient && !field.autoGenerate)?.fieldName
       ?? relationships.find(rel => rel.otherEntity.primaryKey && rel.persistableRelationship)?.propertyName;
-    // A property of the form that shows no error of the server, which a server error must not mark.
-    const unshownProperty = builtInUserManagement ? fields.find(field => field.readonly && !field.hidden)?.fieldName : undefined;
+    // A property of the form that shows no error of the server, a read-only field or an auto-generated id, which a server error must not mark.
+    const unshownProperty = fields.find(field => !field.hidden && (field.readonly || (field.id && field.autoGenerate)))?.fieldName;
     const requiredSizedFileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && field.fieldValidationRequired && (field.fieldValidationMinBytes || field.fieldValidationMaxBytes));
 _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -304,6 +304,24 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             expect(comp.previousState).toHaveBeenCalled();
         });
 <%_ } _%>
+<%_ const newEntityToCreate = primaryKey.autoGenerate || !updatableEntity || builtInUserManagement ? `{ ${builtInUserManagement ? 'id: null, ' : ''}${primaryKey.name}: null }` : testEntityPrimaryKey0; _%>
+
+        it('should resolve the submission when the service completes without a value', async () => {
+            // GIVEN
+            const saveSubject = new Subject<I<%- entityAngularName %>>();
+            vi.spyOn(<%- entityInstance %>FormService, 'get<%- entityAngularName %>').mockReturnValue(<%- newEntityToCreate %>);
+            vi.spyOn(<%- entityInstance %>Service, 'create').mockReturnValue(saveSubject);
+            activatedRoute.data = of({ <%- entityInstance %>: null });
+            comp.ngOnInit();
+
+            // WHEN
+            const result = comp.save();
+            saveSubject.complete();
+
+            // THEN
+            expect(await result).toBeUndefined();
+            expect(comp.isSaving()).toEqual(false);
+        });
 <%_ if (updatableEntity) { _%>
 
         it('should set isSaving to false on error', () => {
