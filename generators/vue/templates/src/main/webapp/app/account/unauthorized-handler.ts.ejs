@@ -36,8 +36,10 @@ export const createUnauthorizedHandler = ({ accountService<%- authenticationType
     const url = error.response?.config?.url;
     const status = error.status ?? error.response?.status;
     if (status === 401) {
+<%_ if (!authenticationTypeOauth2) { _%>
       // Only a session that was authenticated has expired.
       const sessionExpired = accountService.authenticated;
+<%_ } _%>
       accountService.logout();
       if (!url?.endsWith('api/account') && !url?.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {
         // Ask for a new authentication

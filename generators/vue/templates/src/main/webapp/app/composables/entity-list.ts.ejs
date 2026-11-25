@@ -95,7 +95,8 @@ export const useEntityList = <T>({ retrieve, search, pagination, onError }: UseE
       params: () => ({
         search: searchQuery.value,
         page: page.value,
-        // Without pagination, the list is sorted by its default sort, the order of the server being undefined otherwise.
+        // The order is sent as the other clients send it, but only a list in pages is sorted by the server: a list without
+        // pagination, loaded or searched, comes in the order of the server.
         sort: buildSortParam({ predicate: propOrder.value, order: reverse.value ? DESC : ASC }, 'id'),
       }),
       initialData: (): T[] => [],

@@ -303,10 +303,14 @@ const v$ = useEntityValidation(<%- entityInstance %>, {
 <%_ } _%>
 }, serverErrors);
 
-// The router reuses the component when the id of the route changes: the fields of the other entity are not touched yet.
+// The router reuses the component when the id of the route changes: the fields of the other entity are not touched yet,
+// nor refused by the server.
 watch(
   () => route.params?.<%- entityInstance %>Id,
-  () => v$.value.$reset(),
+  () => {
+    serverErrors.value = {};
+    v$.value.$reset();
+  },
 );
 
 const { isSaving, save: saveEntity } = useEntitySave({

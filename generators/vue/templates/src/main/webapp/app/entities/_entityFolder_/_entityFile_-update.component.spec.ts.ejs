@@ -651,6 +651,35 @@ _%>
         // THEN
         expect(wrapper.vm.v$.$anyDirty).toBe(false);
       });
+<%_ if (validatedProperties.length > 0) { _%>
+
+      it('Should leave out the messages of the server of the other entity when the id of the route changes', async () => {
+        // GIVEN
+        vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        const refused = {
+          response: {
+            status: 400,
+            data: { type: CONSTRAINT_VIOLATION_TYPE, fieldErrors: [{ objectName: '<%- entityInstance %>', field: '<%- validatedProperties[0] %>', message: 'is refused' }] },
+          },
+        };
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %><%- allRelationshipsThatNeedSelectOptions.length > 0 ? 'SampleWithRelationships' : 'Sample' %>);
+        <%- entityInstance %>ServiceStub.create.mockRejectedValue(refused);
+        <%- entityInstance %>ServiceStub.update.mockRejectedValue(refused);
+        route = reactive({ params: { <%- entityInstance %>Id: '123' } });
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        await flushPromises();
+        await wrapper.vm.save();
+        await flushPromises();
+        expect(wrapper.vm.v$.<%- validatedProperties[0] %>.$externalResults).not.toEqual([]);
+
+        // WHEN
+        route.params = { <%- entityInstance %>Id: '456' };
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.v$.<%- validatedProperties[0] %>.$externalResults).toEqual([]);
+      });
+<%_ } _%>
 
       it('Should not show the error of an aborted load', async () => {
         // GIVEN

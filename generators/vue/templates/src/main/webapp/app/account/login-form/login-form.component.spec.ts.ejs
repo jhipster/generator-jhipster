@@ -27,7 +27,7 @@ import axios from 'axios';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-import { bFormStub, slotsStub } from '@/testing/stubs';
+import { bAlertStub, bFormStub, slotsStub } from '@/testing/stubs';
 import { useStore } from '@/stores';
 import AccountService, { accountServiceKey } from '../account.service';
 
@@ -63,7 +63,7 @@ describe('LoginForm Component', () => {
 
     globalOptions = {
       stubs: {
-        'b-alert': slotsStub,
+        'b-alert': bAlertStub,
         'b-button': slotsStub,
         'b-form': bFormStub,
         'b-form-input': slotsStub,
@@ -83,6 +83,7 @@ describe('LoginForm Component', () => {
 
   it('should not tell that a session expired by default', () => {
     expect(loginForm.sessionExpired).toBe(false);
+    expect(wrapper.find('[data-cy="sessionExpired"]').exists()).toBe(false);
   });
 
   it('should tell that the session expired when the navigation says it', () => {
@@ -90,6 +91,7 @@ describe('LoginForm Component', () => {
     try {
       const expired = shallowMount(LoginForm, { global: globalOptions });
       expect(expired.vm.sessionExpired).toBe(true);
+      expect(expired.find('[data-cy="sessionExpired"]').exists()).toBe(true);
     } finally {
       window.history.replaceState({ ...window.history.state, sessionExpired: undefined }, '');
     }

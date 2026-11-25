@@ -71,6 +71,14 @@ export const slotsStub = defineComponent({
   },
 });
 
+/** A b-alert rendering its content only while it is shown. */
+export const bAlertStub = defineComponent({
+  props: { modelValue: { type: null, default: false } },
+  setup(props, { slots }) {
+    return () => (props.modelValue ? h('div', slots.default?.()) : null);
+  },
+});
+
 /** A b-form rendering a form with its content. */
 export const bFormStub = defineComponent({
   setup(_props, { slots }) {

@@ -87,7 +87,7 @@ describe('unauthorized handler', () => {
 
     expect(router.push).toHaveBeenCalledExactlyOnceWith({ path: '/login', query: { redirect: '/foo?page=2' }, state: { sessionExpired: true } });
 
-    // Once at the login, a new 401 leaves for it again.
+    // Once the navigation to the login settles, the guard is released: a new 401 leaves for the login again.
     resolve();
     await promise;
     await expect(parallelHandler(error(401))).rejects.toMatchObject({ status: 401 });

@@ -53,6 +53,8 @@ export const useEntitySave = <T, K>({
 
   const save = async () => {
     isSaving.value = true;
+    // The messages written by a previous save are not of this one. A form clears them before its own validation too, which
+    // they make invalid, but the save keeps them right for a caller that does not.
     if (serverErrors) {
       serverErrors.value = {};
     }
