@@ -327,7 +327,9 @@ describe(`generator - ${generator}`, () => {
               {
                 fieldName: 'name',
                 fieldType: 'String',
-                readonly: true,
+                options: {
+                  readonly: true,
+                },
                 fieldValidateRules: ['required'],
               } as any,
             ],

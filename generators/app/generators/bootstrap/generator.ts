@@ -90,7 +90,8 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
           assert(fieldType, `fieldType is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
 
-          if (field.readonly && field.fieldValidateRules?.includes(REQUIRED)) {
+          const readonlyField = field.readonly || Boolean((field as { options?: { readonly?: boolean } }).options?.readonly);
+          if (readonlyField && field.fieldValidateRules?.includes(REQUIRED)) {
             throw new Error(`A readonly field can't be required in .jhipster/${entityName}.json for field ${fieldName}`);
           }
 
