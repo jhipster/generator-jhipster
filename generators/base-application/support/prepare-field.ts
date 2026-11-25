@@ -338,15 +338,15 @@ export function prepareCommonFieldForTemplates(
       generator.log.warn(`Error creating generator for pattern ${field.fieldValidateRulesPattern}`);
       return undefined;
     }
-    // A value shorter than the minlength is drawn again: completing it would break the pattern. A repetition without a bound
-    // (`+`, `*`) is drawn up to its max more times, so it reaches the minlength.
-    const minlength =
-      field.fieldValidateRules?.includes(MINLENGTH) ? Number.parseInt(String(field.fieldValidateRulesMinlength ?? 0), 10) || 0 : 0;
-    re.max += minlength;
+    // The value is generated within the minlength and the maxlength, or 255, the length of its column, without one:
+    // completing or cutting it would break the pattern.
+    const rules = field.fieldValidateRules ?? [];
+    const min = rules.includes(MINLENGTH) ? Number.parseInt(String(field.fieldValidateRulesMinlength), 10) || 0 : 0;
+    const max = rules.includes(MAXLENGTH) ? Number.parseInt(String(field.fieldValidateRulesMaxlength), 10) || 255 : 255;
     // Patterns accepting an empty value (`*`, `?`, ...) may generate one, retry a few times to get a usable value.
-    let value = re.gen();
-    for (let attempt = 0; (value.length === 0 || value.length < minlength) && attempt < 10; attempt++) {
-      value = re.gen();
+    let value = re.gen({ min, max });
+    for (let attempt = 0; value.length === 0 && attempt < 10; attempt++) {
+      value = re.gen({ min, max });
     }
     return value;
   };

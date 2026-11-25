@@ -312,6 +312,33 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     expect(values.filter(value => typeof value !== 'string' || !/^[a-z]{12,}$/.test(value))).toStrictEqual([]);
   });
 
+  it('should draw a value of nested repetitions with a minlength within the 255 characters of its column', () => {
+    const field = prepareField({
+      fieldName: 'name',
+      fieldType: 'String',
+      fieldValidateRules: ['minlength', 'pattern'],
+      fieldValidateRulesMinlength: 80,
+      fieldValidateRulesPattern: '^[a-z]+( [a-z]+)*$',
+    });
+    const values = samples([field], 30).map(sample => sample.name);
+    expect(
+      values.filter(value => typeof value !== 'string' || value.length < 80 || value.length > 255 || !/^[a-z]+( [a-z]+)*$/.test(value)),
+    ).toStrictEqual([]);
+  });
+
+  it('should draw a value of a pattern within its maxlength instead of cutting it', () => {
+    const field = prepareField({
+      fieldName: 'site',
+      fieldType: 'String',
+      fieldValidateRules: ['minlength', 'maxlength', 'pattern'],
+      fieldValidateRulesMinlength: 6,
+      fieldValidateRulesMaxlength: 12,
+      fieldValidateRulesPattern: String.raw`^[a-z]+\.com$`,
+    });
+    const values = samples([field], 30).map(sample => sample.site);
+    expect(values.filter(value => typeof value !== 'string' || !/^[a-z]{2,8}\.com$/.test(value))).toStrictEqual([]);
+  });
+
   it('should draw a duration as ISO 8601', () => {
     const [sample] = samples([prepareField({ fieldName: 'time', fieldType: 'Duration' })], 1);
     expect(sample.time).toMatch(/^PT\d+M$/);

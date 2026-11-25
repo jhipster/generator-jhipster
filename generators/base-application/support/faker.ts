@@ -21,8 +21,32 @@ import Randexp from 'randexp';
 
 import { languageToFakerLanguage } from '../../languages/support/languages.ts';
 
+/** Types of the tokens of `ret`, the parser of randexp. */
+const TokenType = { ROOT: 0, GROUP: 1, POSITION: 2, SET: 3, REPETITION: 5, REFERENCE: 6, CHAR: 7 } as const;
+
+/** The tokens of `ret` used to draw a value within a length. */
+type Token = {
+  type: number;
+  stack?: Token[];
+  options?: Token[][];
+  remember?: boolean;
+  groupNumber?: number;
+  followedBy?: boolean;
+  notFollowedBy?: boolean;
+  min?: number;
+  max?: number;
+  value?: Token | number;
+};
+
+type LengthRange = [min: number, max: number];
+
 class RandexpWithFaker extends Randexp {
   faker: Faker;
+  declare tokens: Token;
+  declare _gen: (token: Token, groups: (string | null)[]) => string;
+  declare _randSelect: <T>(array: T[]) => T;
+  /** Range of lengths each token can generate. */
+  private readonly ranges = new WeakMap<Token, LengthRange>();
 
   constructor(regexp: string | RegExp, flags: string | undefined, faker: Faker) {
     super(regexp, flags);
@@ -33,6 +57,147 @@ class RandexpWithFaker extends Randexp {
     }
     // In order to have consistent results with RandExp, the RNG is seeded.
     this.randInt = (from: number, to?: number): number => faker.number.int({ min: from, max: to });
+  }
+
+  /**
+   * Generates a value, of a length within `min` and `max` when given.
+   * Each choice (an option, a repetition count, the length of each part of a sequence) is drawn among those that keep the
+   * value within them. Without a choice limited by them, the value is the one of randexp.
+   * Lookaheads are ignored and a back reference is not measured, as in randexp: the value may not match them.
+   */
+  override gen(length?: { min?: number; max?: number }): string {
+    if (!length) {
+      return super.gen();
+    }
+    const [tokensMin, tokensMax] = this.lengthRange(this.tokens);
+    const lo = Math.max(length.min ?? 0, tokensMin);
+    const hi = Math.min(length.max ?? Infinity, tokensMax);
+    return lo > hi ? super.gen() : this.genWithin(this.tokens, [], lo, hi);
+  }
+
+  private lengthRange(token: Token): LengthRange {
+    let range = this.ranges.get(token);
+    if (!range) {
+      range = this.computeLengthRange(token);
+      this.ranges.set(token, range);
+    }
+    return range;
+  }
+
+  private computeLengthRange(token: Token): LengthRange {
+    switch (token.type) {
+      case TokenType.ROOT:
+      case TokenType.GROUP: {
+        if (token.followedBy || token.notFollowedBy) {
+          return [0, 0];
+        }
+        const ranges = (token.options ?? [token.stack!]).map(stack => this.stackLengthRange(stack));
+        return [Math.min(...ranges.map(([min]) => min)), Math.max(...ranges.map(([, max]) => max))];
+      }
+      case TokenType.POSITION:
+        return [0, 0];
+      case TokenType.SET:
+      case TokenType.CHAR:
+        return [1, 1];
+      case TokenType.REPETITION: {
+        const [min, max] = this.lengthRange(token.value as Token);
+        return [token.min! * min, token.max === 0 ? 0 : token.max! * max];
+      }
+      default:
+        // A back reference has the length of its group, not known before it is generated.
+        return [0, Infinity];
+    }
+  }
+
+  private stackLengthRange(stack: Token[]): LengthRange {
+    let min = 0;
+    let max = 0;
+    for (const token of stack) {
+      const [tokenMin, tokenMax] = this.lengthRange(token);
+      min += tokenMin;
+      max += tokenMax;
+    }
+    return [min, max];
+  }
+
+  /** Average length of a token generated without a length, a repetition without a bound having up to `max` more items. */
+  private averageLength(token: Token): number {
+    if (token.type === TokenType.REPETITION) {
+      const maxCount = token.max === Infinity ? token.min! + this.max : token.max!;
+      return ((token.min! + maxCount) / 2) * this.averageLength(token.value as Token);
+    }
+    if (token.type === TokenType.ROOT || token.type === TokenType.GROUP) {
+      if (token.followedBy || token.notFollowedBy) {
+        return 0;
+      }
+      const stacks = token.options ?? [token.stack!];
+      const total = stacks.reduce((sum, stack) => sum + stack.reduce((length, item) => length + this.averageLength(item), 0), 0);
+      return total / stacks.length;
+    }
+    const [min, max] = this.lengthRange(token);
+    return max === Infinity ? min + this.max / 2 : (min + max) / 2;
+  }
+
+  private genWithin(token: Token, groups: (string | null)[], lo: number, hi: number): string {
+    if (token.type === TokenType.ROOT || token.type === TokenType.GROUP) {
+      if (token.followedBy || token.notFollowedBy) {
+        return '';
+      }
+      if (token.remember && token.groupNumber === undefined) {
+        token.groupNumber = groups.push(null) - 1;
+      }
+      let stack = token.stack!;
+      if (token.options) {
+        const fitting = token.options.filter(option => {
+          const [min, max] = this.stackLengthRange(option);
+          return min <= hi && max >= lo;
+        });
+        stack = this._randSelect(fitting.length > 0 ? fitting : token.options);
+      }
+      const str = this.genStackWithin(stack, groups, lo, hi);
+      if (token.remember) {
+        groups[token.groupNumber!] = str;
+      }
+      return str;
+    }
+    if (token.type === TokenType.REPETITION) {
+      const item = token.value as Token;
+      const [itemMin, itemMax] = this.lengthRange(item);
+      // Counts whose items can fit within the length.
+      const from = Math.max(token.min!, itemMax === Infinity ? 0 : Math.ceil(lo / itemMax));
+      let to = Math.min(token.max!, itemMin === 0 ? Infinity : Math.floor(hi / itemMin));
+      // Without a bound, up to `max` items more than the items of an average length reaching the minimum.
+      const needed = Math.max(from, Math.ceil(lo / Math.max(1, this.averageLength(item))));
+      if (token.max === Infinity) {
+        to = Math.min(to, needed + this.max);
+      }
+      const count = this.randInt(Math.min(needed, to), Math.max(from, to));
+      return this.genStackWithin(
+        Array.from({ length: count }, () => item),
+        groups,
+        lo,
+        hi,
+      );
+    }
+    return this._gen(token, groups);
+  }
+
+  /** Generates a sequence, each part within a length leaving the minimum and the maximum of the parts after it. */
+  private genStackWithin(stack: Token[], groups: (string | null)[], lo: number, hi: number): string {
+    const ranges = stack.map(token => this.lengthRange(token));
+    const after: LengthRange[] = [[0, 0]];
+    for (let i = ranges.length - 1; i > 0; i--) {
+      after.unshift([after[0][0] + ranges[i][0], after[0][1] + ranges[i][1]]);
+    }
+    let str = '';
+    for (const [i, token] of stack.entries()) {
+      const [min, max] = ranges[i];
+      const [afterMin, afterMax] = after[i];
+      const partLo = Math.max(min, lo - str.length - afterMax, 0);
+      const partHi = Math.max(partLo, Math.min(max, hi - str.length - afterMin));
+      str += this.genWithin(token, groups, partLo, partHi);
+    }
+    return str;
   }
 }
 
