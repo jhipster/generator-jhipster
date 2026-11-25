@@ -73,6 +73,13 @@ class ExceptionTranslatorTest {
         assertThat(ExceptionTranslator.objectName("managedUserVM")).isEqualTo("userManagement");
         assertThat(ExceptionTranslator.objectName("UserResource")).isEqualTo("userManagement");
     }
+  <%_ if (dtoSuffix) { _%>
+
+    @Test
+    void shouldNameAnEntityNamedAdminUserByItsName() {
+        assertThat(ExceptionTranslator.objectName("adminUser")).isEqualTo("adminUser");
+    }
+  <%_ } _%>
 <%_ } _%>
 
     @Test

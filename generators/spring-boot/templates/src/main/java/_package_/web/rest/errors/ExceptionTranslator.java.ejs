@@ -130,8 +130,8 @@ _%>
     private static final String PATH_KEY = "path";
 <%_ if (generateBuiltInUserEntity) { _%>
     private static final String USER_OBJECT_NAME = "userManagement";
-    /** The objects of a user: the DTO of the administration and of the account, the one of the registration and the resource of the users. */
-    private static final Set<String> USER_OBJECT_NAMES = Set.of("adminUser", "managedUserVM", "userResource");
+    /** The objects of a user, with the suffix of their DTO: the DTO of the administration and of the account, the one of the registration and the resource of the users. */
+    private static final Set<String> USER_OBJECT_NAMES = Set.of("adminUser<%- dtoSuffix %>", "managedUserVM", "userResource");
 <%_ } _%>
     private static final boolean CAUSAL_CHAIN_ENABLED = false;
     private static final Pattern QUALIFIED_CLASS_NAME = Pattern.compile("\\b[a-z_][a-z0-9_]*+(?:\\.[a-z_][a-z0-9_]*+)*+\\.[A-Z]");
@@ -307,12 +307,14 @@ _%>
      * suffix of its DTO<%- generateBuiltInUserEntity ? ', and userManagement for a user' : '' %>.
      */
     static String objectName(String name) {
-        String objectName = StringUtils.uncapitalize(name).replaceFirst("<%- dtoSuffix %>$", "");
+        String objectName = StringUtils.uncapitalize(name);
 <%_ if (generateBuiltInUserEntity) { _%>
-        return USER_OBJECT_NAMES.contains(objectName) ? USER_OBJECT_NAME : objectName;
-<%_ } else { _%>
-        return objectName;
+        // A user is looked up before the suffix is removed: an entity named AdminUser is not one.
+        if (USER_OBJECT_NAMES.contains(objectName)) {
+            return USER_OBJECT_NAME;
+        }
 <%_ } _%>
+        return objectName.replaceFirst("<%- dtoSuffix %>$", "");
     }
 
     private FieldErrorVM toFieldError(FieldError f) {
