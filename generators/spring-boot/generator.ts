@@ -934,9 +934,22 @@ ${classProperties
             source.addSpringBootModule?.('spring-boot-properties-migrator');
           }
         } else if (application.buildToolGradle) {
+          // The libraries of JHipster built locally are resolved from the local maven repository alone: a repository before it
+          // that fails, like Maven Central answering 429, fails their resolution instead of falling back to the next one.
+          const mavenLocalRepository =
+            application.jhipsterDependenciesVersion?.includes('-CICD') ?
+              `exclusiveContent {
+    forRepository {
+        mavenLocal()
+    }
+    filter {
+        includeGroup "tech.jhipster"
+    }
+}`
+            : '// mavenLocal()';
           source.addGradleRepository?.({
             repository: `// Local maven repository is required for libraries built locally with maven like development jhipster-bom.
-${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenLocal()`,
+${mavenLocalRepository}`,
           });
           if (application.addSpringMilestoneRepository) {
             source.addGradlePluginManagementRepository?.({ repository: 'mavenCentral()' });
