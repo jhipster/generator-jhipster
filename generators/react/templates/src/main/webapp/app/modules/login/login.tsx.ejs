@@ -30,6 +30,7 @@ export const Login = () => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const loginError = useAppSelector(state => state.authentication.loginError);
+  const redirectMessage = useAppSelector(state => state.authentication.redirectMessage);
   const pageLocation = useLocation();
 
   const {
@@ -51,6 +52,16 @@ export const Login = () => {
         <h1 id="login-title" data-cy="loginTitle">
           <Translate contentKey="login.title">Sign in</Translate>
         </h1>
+        {redirectMessage && !loginError && (
+          <Alert variant="warning" data-cy="sessionExpired">
+<%_ if (enableTranslation) { _%>
+            {/* The message is the key of its translation. */}
+            <Translate contentKey={redirectMessage} />
+<%_ } else { _%>
+            Your session has expired. Please sign in again.
+<%_ } _%>
+          </Alert>
+        )}
         {loginError && (
           <Alert variant="danger" data-cy="loginError">
             <Translate contentKey="login.messages.error.authentication">

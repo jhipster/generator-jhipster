@@ -27,7 +27,7 @@ import {
   TextFormat
 <%_ } _%>
 } from 'react-jhipster';
-import { Link, <%- readOnly ? '' : 'useNavigate, ' %>useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -41,6 +41,7 @@ import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ if (anyFieldHasFileBasedContentType) { _%>
 import { byteSize, openFile } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
+import { leaveWhenNotFound } from 'app/shared/util/entity-utils';
 
 <%_ if (!readOnly) { _%>
 import <%- entityReactName %>DeleteDialog from './<%- entityFileName %>-delete-dialog';
@@ -51,13 +52,13 @@ export const <%- entityReactName %>Detail = () => {
   const dispatch = useAppDispatch();
 
   const { id } = useParams<'id'>();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getEntity(id!));
+    dispatch(getEntity(id!)).unwrap().catch(leaveWhenNotFound(navigate));
   }, []);
 
 <%_ if (!readOnly) { _%>
-  const navigate = useNavigate();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
 <%_ } _%>

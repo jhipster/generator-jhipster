@@ -49,7 +49,7 @@ const store = getStore();
 await registerLocale(store);
 <%_ } _%>
 
-setupAxiosInterceptors(() => store.dispatch(clearAuthentication('login.error.unauthorized')));
+setupAxiosInterceptors(() => store.dispatch(clearAuthentication('login.messages.error.sessionExpired')));
 
 loadIcons();
 

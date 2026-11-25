@@ -17,6 +17,9 @@
  limitations under the License.
 -%>
 import axios, { type AxiosError } from 'axios';
+<%_ if (enableTranslation) { _%>
+import { Storage, TranslatorContext } from 'react-jhipster';
+<%_ } _%>
 
 <%_ if (authenticationTypeJwt) { _%>
 import { getAuthenticationToken } from 'app/shared/auth/authentication-token';
@@ -28,6 +31,10 @@ axios.defaults.baseURL = SERVER_API_URL;
 
 const setupAxiosInterceptors = onUnauthenticated => {
   const onRequestSuccess = config => {
+    if (config.headers) {
+      // The server answers in the language of the application.
+      config.headers['Accept-Language'] = <%- enableTranslation ? `TranslatorContext.context.locale || Storage.session.get('locale', '${nativeLanguage}')` : `'${nativeLanguage}'` %>;
+    }
 <%_ if (authenticationTypeJwt) { _%>
     const token = getAuthenticationToken();
     if (token) {

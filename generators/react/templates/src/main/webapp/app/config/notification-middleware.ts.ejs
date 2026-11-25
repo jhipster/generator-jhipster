@@ -17,10 +17,10 @@
  limitations under the License.
 -%>
 <%_ if (enableTranslation) { _%>
-import { translate } from 'react-jhipster';
+import { TranslatorContext, translate } from 'react-jhipster';
 <%_ } _%>
 
-import { isAxiosError } from 'axios';
+import { AxiosError, isAxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
@@ -35,35 +35,53 @@ type ToastMessage = {
 <%_ } _%>
 };
 
+<%_ if (enableTranslation) { _%>
+/** The translation of the key, else the message, else the key itself. */
+const translateMessage = ({ key, data, message }: ToastMessage) => {
+  const text = key ? translate(key, data) : undefined;
+  return !text || text === `${TranslatorContext.context.missingTranslationMsg}[${key}]` ? (message ?? key) : text;
+};
+
+<%_ } _%>
 const addErrorAlert = (message: ToastMessage) => {
 <%_ if (enableTranslation) { _%>
-  toast.error(message.key ? (translate(message.key, message.data) ?? message.message) : message.message);
+  toast.error(translateMessage(message));
 <%_ } else { _%>
   toast.error(message.message);
 <%_ } _%>
 };
 
-const getFieldErrorsToasts = (fieldErrors: FieldErrorVM[]): ToastMessage[] =>
-  fieldErrors.map(fieldError => {
+const getFieldErrorToast = (fieldError: FieldErrorVM): Required<ToastMessage> => {
 <%_ if (enableTranslation) { _%>
-    // The code of the constraint is the key of its translation, older servers send it as the message.
-    const code = fieldError.code ?? fieldError.message;
-    const errorKey = ['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(code) ? 'Size' : code;
+  // The code of the constraint is the key of its translation, older servers send it as the message.
+  const code = fieldError.code ?? fieldError.message;
+  const errorKey = ['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(code) ? 'Size' : code;
 <%_ } _%>
-    // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
-    const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
+  // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
+  const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
 <%_ if (enableTranslation) { _%>
-    const fieldName = translate(`<%- frontendAppName %>.${fieldError.objectName}.${convertedField}`);
-    return { message: `Error on field "${fieldName}"`, key: `error.${errorKey}`, data: { fieldName } };
+  // The keys of the users are not prefixed by the application.
+  const keyPrefix = fieldError.objectName === 'userManagement' ? 'userManagement' : `<%- frontendAppName %>.${fieldError.objectName}`;
+  const fieldName = translateMessage({ key: `${keyPrefix}.${convertedField}`, message: convertedField });
+  // Without the translation of its code, the error shows the field and the message of the server.
+  return { message: `${fieldName}: ${fieldError.message}`, key: `error.${errorKey}`, data: { fieldName } };
 <%_ } else { _%>
-    const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
-    return { message: `Error on field "${fieldName}"` };
+  const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
+  return { message: `${fieldName}: ${fieldError.message}` };
 <%_ } _%>
-  });
+};
 
+/** The text of a field error, as its notification shows it. */
+export const getFieldErrorMessage = (fieldError: FieldErrorVM): string => {
+  const message = getFieldErrorToast(fieldError);
 <%_ if (enableTranslation) { _%>
-// eslint-disable-next-line complexity
+  return translateMessage(message);
+<%_ } else { _%>
+  return message.message;
 <%_ } _%>
+};
+
+// eslint-disable-next-line complexity
 export default () => next => action => {
   const { error, payload } = action;
 
@@ -90,6 +108,14 @@ export default () => next => action => {
         // Ignore, page will be redirected to login.
       } else if (error.config?.url?.endsWith('api/account') || error.config?.url?.endsWith('api/authenticate')) {
         // Ignore, authentication status check and authentication are treated differently.
+      } else if (response.status === 403) {
+        // The server denies the access without a body.
+        addErrorAlert({
+          message: 'You are not authorized to access this page.',
+<%_ if (enableTranslation) { _%>
+          key: 'error.http.403',
+<%_ } _%>
+        });
       } else if (response.status === 0) {
         // connection refused, server not reachable
         addErrorAlert({
@@ -98,6 +124,8 @@ export default () => next => action => {
           key: 'error.server.not.reachable',
 <%_ } _%>
         });
+      } else if (response.status === 404 && action.type.endsWith('/fetch_entity/rejected')) {
+        // Ignore, the screen of the entity leaves for the page not found, which tells it.
       } else if (response.status === 404) {
         addErrorAlert({
           message: 'Not found',
@@ -109,7 +137,7 @@ export default () => next => action => {
         const { data } = response;
         const problem = getServerProblem(data);
         if (isConstraintViolation(problem) && problem.fieldErrors.length > 0) {
-          getFieldErrorsToasts(problem.fieldErrors).forEach(message => addErrorAlert(message));
+          problem.fieldErrors.forEach(fieldError => addErrorAlert(getFieldErrorToast(fieldError)));
         } else {
           const { errorMessage<%- enableTranslation ? ', errorKey, param' : '' %> } = getMessageFromHeaders(response.headers ?? {});
 <%_ if (enableTranslation) { _%>
@@ -135,6 +163,14 @@ export default () => next => action => {
     } else if (error.config?.url?.endsWith('api/account') && error.config.method === 'get') {
       // eslint-disable-next-line no-console
       console.log('Authentication Error: Trying to access url api/account with GET.');
+    } else if (error.code === AxiosError.ERR_NETWORK) {
+      // no response: the server is not reachable
+      addErrorAlert({
+        message: 'Server not reachable',
+<%_ if (enableTranslation) { _%>
+        key: 'error.server.not.reachable',
+<%_ } _%>
+      });
     } else {
       addErrorAlert({ message: error.message ?? 'Unknown error!' });
     }

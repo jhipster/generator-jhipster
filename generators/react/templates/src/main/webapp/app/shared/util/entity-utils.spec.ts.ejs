@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { cleanEntity, mapIdList, overridePaginationStateWithQueryParams } from './entity-utils';
+import { cleanEntity, leaveWhenNotFound, mapIdList, overridePaginationStateWithQueryParams } from './entity-utils';
 
 describe('Entity utils', () => {
   describe('cleanEntity', () => {
@@ -71,6 +71,21 @@ describe('Entity utils', () => {
       const ids = [];
 
       expect(mapIdList(ids)).toEqual([]);
+    });
+  });
+
+  describe('leaveWhenNotFound', () => {
+    it('should leave for the page not found when the record does not exist', () => {
+      const navigate = vi.fn();
+      leaveWhenNotFound(navigate)({ response: { status: 404 } });
+      expect(navigate).toHaveBeenCalledWith('/404', { replace: true });
+    });
+
+    it('should stay for the other errors', () => {
+      const navigate = vi.fn();
+      leaveWhenNotFound(navigate)({ response: { status: 500 } });
+      leaveWhenNotFound(navigate)(new Error('Network Error'));
+      expect(navigate).not.toHaveBeenCalled();
     });
   });
 

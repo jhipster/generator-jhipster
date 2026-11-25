@@ -26,6 +26,8 @@ import {
 } from '@reduxjs/toolkit';
 import { AxiosError, isAxiosError } from 'axios';
 
+import { FieldErrorVM, getServerProblem, isConstraintViolation } from 'app/shared/jhipster/problem-details';
+
 /**
  * Model for redux actions with pagination
  */
@@ -43,6 +45,13 @@ export function isRejectedAction(action: UnknownAction) {
  */
 export function isFulfilledAction(action: UnknownAction) {
   return action.type.endsWith('/fulfilled');
+}
+
+/**
+ * Check if the async action type is pending
+ */
+export function isPendingAction(action: UnknownAction) {
+  return action.type.endsWith('/pending');
 }
 
 const commonErrorProperties: (keyof SerializedError)[] = ['name', 'message', 'stack', 'code'];
@@ -77,6 +86,8 @@ export interface EntityState<T> {
   updating: boolean;
   totalItems?: number;
   updateSuccess: boolean;
+  /** The field errors of the last request the server refused */
+  fieldErrors?: FieldErrorVM[];
 }
 
 /**
@@ -110,17 +121,29 @@ export const createEntitySlice = <T, Reducers extends SliceCaseReducers<EntitySt
     },
     extraReducers(builder) {
       extraReducers?.(builder);
+      // The field errors belong to the requests of this slice only.
+      const isOwnAction = (action: UnknownAction) => action.type.startsWith(`${name}/`);
+      builder.addMatcher(
+        action => isPendingAction(action) && isOwnAction(action),
+        state => {
+          state.fieldErrors = undefined;
+        },
+      );
       /*
        * Common rejection logic is handled here.
        * If you want to add your own rejection logic, pass `skipRejectionHandling: true`
        * while calling `createEntitySlice`
        * */
       if (!skipRejectionHandling) {
-        builder.addMatcher(isRejectedAction, state => {
+        builder.addMatcher(isRejectedAction, (state, action: UnknownAction & { error?: any }) => {
           state.loading = false;
           state.updating = false;
           state.updateSuccess = false;
           state.errorMessage = null;
+          if (isOwnAction(action)) {
+            const problem = getServerProblem(action.error?.response?.data);
+            state.fieldErrors = isConstraintViolation(problem) ? problem.fieldErrors : undefined;
+          }
         });
       }
     },

@@ -288,6 +288,7 @@ describe('Entities reducer tests', () => {
         }),
       );
       expect(getEntities.fulfilled.match(result)).toBe(true);
+      expect(axios.get).toHaveBeenCalledWith(expect.not.stringContaining('cacheBuster'));
     });
 <%_ if (searchEngineAny) { _%>
     it('dispatches SEARCH_<%- entityActionNamePlural %> actions', async () => {
@@ -374,6 +375,19 @@ describe('Entities reducer tests', () => {
         }),
       );
       expect(deleteEntity.fulfilled.match(result)).toBe(true);
+    });
+
+    it('does not fetch the list again after saving', async () => {
+      dispatch.mockClear();
+
+      await createEntity(<%- tsPrimaryKeySamples[1] %>)(dispatch, getState, extra);
+      await updateEntity(<%- tsPrimaryKeySamples[1] %>)(dispatch, getState, extra);
+      await partialUpdateEntity({ <%- primaryKey.name %>: <%- primaryKey.tsSampleValues[0] %> })(dispatch, getState, extra);
+      await deleteEntity(42666)(dispatch, getState, extra);
+
+      // The list is fetched by its page, a thunk dispatched here would fetch it again.
+      expect(dispatch).not.toHaveBeenCalledWith(expect.any(Function));
+      expect(axios.get).not.toHaveBeenCalled();
     });
 <%_ } _%>
 
