@@ -4005,7 +4005,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -5366,7 +5366,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -6513,7 +6513,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -7795,7 +7795,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -9348,7 +9348,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -10468,7 +10468,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -11592,7 +11592,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
