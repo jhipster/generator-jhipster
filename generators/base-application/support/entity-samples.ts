@@ -97,7 +97,8 @@ export function generateEntitySamples<F extends BaseApplicationField>(
 /**
  * A sample of an entity written for a format, by the fields it has among the ones given: the values of a Liquibase CSV,
  * TypeScript code, the input of a Cypress test, or values serializable to JSON. The TypeScript and JSON samples give each blob the content type of its
- * file, the content type fields are left out.
+ * file, the content type fields are left out, and a blob of a file a content within its minbytes and maxbytes: the CSV
+ * keeps the file of the fake data.
  *
  * @example
  * const [[sample]] = generateEntitySamples(entity, { seed: 'my-seed', batches: [{ fields: entity.fields }] });
@@ -109,7 +110,7 @@ export function formatEntitySample<F extends BaseApplicationField>(
   format: EntitySampleFormat,
 ): Record<string, any> {
   const sampleFields = fields.filter(field => field.fieldName in sample);
-  const formatValue = (field: F) => formatFakeData(field, sample[field.fieldName], format);
+  const formatValue = (field: F) => formatFakeData(field, sample[field.fieldName], format, { blobWithinSize: true });
   if (format === 'ts') {
     return generateTsSample(sampleFields, formatValue);
   }
