@@ -332,6 +332,17 @@ describe('<%- entityReactName %> screens', () => {
 
       expect(axios.get).not.toHaveBeenCalledWith(expect.stringContaining('page=1'));
     });
+
+    it('should load the list once, by its first page', async () => {
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+
+      const listUrls = vi
+        .mocked(axios.get)
+        .mock.calls.map(([url]) => url)
+        .filter(url => url === apiUrl || url.startsWith(`${apiUrl}?`));
+      expect(listUrls).toEqual([expect.stringContaining('page=0')]);
+    });
 <%_ } _%>
 <%_ if (paginationPagination) { _%>
 

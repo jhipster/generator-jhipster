@@ -158,17 +158,22 @@ export const <%- entityReactName %> = () => {
   };
 
 <%_ if (paginationInfiniteScroll) { _%>
+  // The list starts again from its first page, which the effect of the page loads when it changes.
   const resetAll = () => {
     dispatch(reset());
-    setPaginationState({
-      ...paginationState,
-      activePage: 1,
-    });
-    dispatch(getEntities({}));
+    if (paginationState.activePage === 1) {
+      getAllEntities();
+    } else {
+      setPaginationState({
+        ...paginationState,
+        activePage: 1,
+      });
+    }
   };
 
+  // The effect of the page loads the first one.
   useEffect(() => {
-    resetAll();
+    dispatch(reset());
   }, []);
 <%_ } _%>
 
