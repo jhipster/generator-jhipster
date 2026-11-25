@@ -39,6 +39,7 @@
     // The fields nobody fills in a new form: an optional enum, a date and time.
     const untouchedEnums = readOnly ? [] : fields.filter(field => field.fieldIsEnum && !field.clientConstantsAsValues && field.defaultValue === undefined && !field.fieldValidationRequired && !field.id && !field.hidden && !field.readonly && !field.transient);
     const timedFormFields = readOnly ? [] : fields.filter(field => field.fieldTypeTimed && !field.id && !field.hidden && !field.readonly && !field.transient);
+    const optionalTimedFields = timedFormFields.filter(field => !field.fieldValidationRequired);
     // The relationships of the form, that the server refuses by the name of their property.
     const formRelationships = readOnly ? [] : persistableRelationships.filter(rel => !rel.otherEntity.embedded);
     const numericIdCollections = requiredCollections.filter(rel => !rel.relationshipSerializePrimaryKeyOnly && rel.otherEntity.primaryKey?.typeNumeric);
@@ -464,9 +465,12 @@ describe('<%- entityReactName %> screens', () => {
       fillForm(container, { ...formValues, <%- emptyNumbers %> });
       fireEvent.click(container.querySelector('#save-entity')!);
 
-      await waitFor(() =>
-        expect(axios.put).toHaveBeenCalledWith(`${apiUrl}/${sample.<%- primaryKeyName %>}`, expect.objectContaining({ <%- nullNumbers %> })),
-      );
+      // Sent without a value, the number of the record is cleared by the update.
+      await waitFor(() => expect(axios.put).toHaveBeenCalled());
+      const body = JSON.parse(JSON.stringify(vi.mocked(axios.put).mock.calls[0][1]));
+    <%_ for (const field of optionalNumberFields) { _%>
+      expect(body).not.toHaveProperty('<%- field.fieldName %>');
+    <%_ } _%>
     });
 
     it('should keep an optional number without value when saving again', async () => {
@@ -499,7 +503,11 @@ describe('<%- entityReactName %> screens', () => {
     <%_ } _%>
       fireEvent.click(container.querySelector('#save-entity')!);
 
-      await waitFor(() => expect(axios.post).toHaveBeenCalledWith(apiUrl, expect.objectContaining({ <%- nullNumbers %> })));
+      await waitFor(() => expect(axios.post).toHaveBeenCalled());
+      const body = JSON.parse(JSON.stringify(vi.mocked(axios.post).mock.calls[0][1]));
+    <%_ for (const field of optionalNumberFields) { _%>
+      expect(body).not.toHaveProperty('<%- field.fieldName %>');
+    <%_ } _%>
     });
 
   <%_ } _%>
@@ -557,6 +565,25 @@ describe('<%- entityReactName %> screens', () => {
       const body = vi.mocked(axios.post).mock.calls[0][1];
     <%_ for (const field of blankFields) { _%>
       expect(JSON.parse(JSON.stringify(body))).not.toHaveProperty('<%- field.fieldName %>');
+    <%_ } _%>
+    });
+
+  <%_ } _%>
+  <%_ if (optionalTimedFields.length > 0) { _%>
+    it('should not send a value for an optional date and time left empty when creating', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      fillForm(container, { ...formValues, <%- optionalTimedFields.map(field => `${field.fieldName}: ''`).join(', ') %> });
+    <%_ for (const rel of requiredCollections) { _%>
+      selectAllOptions(container, '<%- rel.relationshipFieldNamePlural %>');
+    <%_ } _%>
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(axios.post).toHaveBeenCalled());
+      const body = JSON.parse(JSON.stringify(vi.mocked(axios.post).mock.calls[0][1]));
+    <%_ for (const field of optionalTimedFields) { _%>
+      expect(body).not.toHaveProperty('<%- field.fieldName %>');
     <%_ } _%>
     });
 
