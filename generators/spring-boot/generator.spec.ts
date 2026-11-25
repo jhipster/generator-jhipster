@@ -47,6 +47,33 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({}, generator);
 
+  describe('with gradle and the libraries of JHipster built locally', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipClient: true, buildTool: 'gradle' })
+        .withOptions({ jhipsterDependenciesVersion: '0.0.0-CICD' });
+    });
+
+    it('should resolve the libraries of JHipster from the local maven repository alone', () => {
+      runResult.assertFileContent(
+        'build.gradle',
+        /exclusiveContent \{\s+forRepository \{\s+mavenLocal\(\)\s+\}\s+filter \{\s+includeGroup "tech\.jhipster"\s+\}\s+\}/,
+      );
+    });
+  });
+
+  describe('with gradle and the published libraries of JHipster', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true, buildTool: 'gradle' });
+    });
+
+    it('should leave the local maven repository commented out', () => {
+      runResult.assertFileContent('build.gradle', '// mavenLocal()');
+      runResult.assertNoFileContent('build.gradle', 'exclusiveContent');
+    });
+  });
+
   describe('with a field and a relationship annotated @NotSortable', () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
