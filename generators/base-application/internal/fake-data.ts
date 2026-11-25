@@ -26,6 +26,7 @@ import { isContentTypeField } from './content-type-fields.ts';
 import { getFieldNumberLimits } from './number-limits.ts';
 
 const {
+  BlobTypes: { TEXT },
   CommonDBTypes: { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, FLOAT, INTEGER, LONG, UUID },
   RelationalOnlyDBTypes: { BYTES },
 } = fieldTypes;
@@ -116,6 +117,26 @@ export type FakeDataValue = string | number | boolean | Date;
  */
 export type FakeDataFormat = 'csv' | 'cypress' | 'json-serializable' | 'ts';
 
+/** The file of the Liquibase fake data of a blob of a file, its fake data: the CSV gives Liquibase the path to load. */
+export const FAKE_DATA_BLOB_FILE = '../fake-data/blob/hipster.png';
+
+/**
+ * The fake data of a blob of a file: the path of the file of the Liquibase fake data, cut to its maxbytes and completed
+ * to its minbytes. A client measures the text as base64, 3 bytes by 4 characters, and the server by its bytes: no text
+ * fits both when 4/3 of its minbytes is over its maxbytes, an error.
+ */
+export const fileBlobFakeData = (field: BaseApplicationField): string => {
+  const minBytes = field.fieldValidationMinBytes ? Number(field.fieldValidateRulesMinbytes) : 0;
+  const maxBytes = field.fieldValidationMaxBytes ? Number(field.fieldValidateRulesMaxbytes) : Infinity;
+  const minLength = Math.ceil((minBytes * 4) / 3);
+  if (minLength > maxBytes) {
+    throw new Error(
+      `No fake data of the field ${field.fieldName} fits its minbytes ${minBytes} and maxbytes ${maxBytes}: a client measures ${minBytes} bytes in ${minLength} characters, over the maxbytes the server measures.`,
+    );
+  }
+  return FAKE_DATA_BLOB_FILE.slice(0, maxBytes).padEnd(minLength, 'X');
+};
+
 const NANOSECONDS = { H: 3_600_000_000_000, M: 60_000_000_000, S: 1_000_000_000 };
 
 /** The nanoseconds of an ISO 8601 duration of hours, minutes and seconds, as Hibernate keeps a duration in a bigint column. */
@@ -128,7 +149,8 @@ const durationNanoseconds = (duration: string): number =>
 /**
  * A fake data value of a field, serializable to JSON, converted for a format without changing it: a date and time is
  * written as YYYY-MM-DDTHH:mm (YYYY-MM-DDTHH:mm:ss in a CSV), as it is drawn at the minute, a blob of bytes is the file
- * its base64 text tells, a duration in a CSV its nanoseconds.
+ * its base64 text tells, a duration in a CSV its nanoseconds. A blob whose text is not a file any longer, cut to its
+ * maxbytes, is its base64 text in a CSV: Liquibase loads a base64 value as the content of the blob, not as a file.
  */
 export const formatFakeData = (field: BaseApplicationField, value: FakeDataValue | undefined, format: FakeDataFormat): any => {
   if (value === undefined || format === 'json-serializable') {
@@ -144,6 +166,9 @@ export const formatFakeData = (field: BaseApplicationField, value: FakeDataValue
   }
   if (format === 'cypress') {
     return data;
+  }
+  if (format === 'csv' && field.fieldType === BYTES && field.fieldTypeBlobContent !== TEXT && data !== FAKE_DATA_BLOB_FILE) {
+    return value;
   }
   if (format === 'csv') {
     // A text of a pattern can have the separator: it is quoted, a quote written twice as RFC 4180 tells.
