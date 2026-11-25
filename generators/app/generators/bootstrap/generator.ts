@@ -30,7 +30,7 @@ import type {
 } from '../../../common/types.ts';
 
 const {
-  Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
+  Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN, REQUIRED },
   SUPPORTED_VALIDATION_RULES,
 } = validations;
 
@@ -89,6 +89,10 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
 
           assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
           assert(fieldType, `fieldType is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
+
+          if (field.readonly && field.fieldValidateRules?.includes(REQUIRED)) {
+            throw new Error(`A readonly field can't be required in .jhipster/${entityName}.json for field ${fieldName}`);
+          }
 
           if (fieldValidateRules !== undefined) {
             assert(

@@ -93,10 +93,10 @@ public class <%- persistClass %>Asserts {
      * @param actual the actual entity
      */
     public static void assert<%- persistClass %>UpdatableFieldsEquals(<%- persistClass %> expected, <%- persistClass %> actual) {
-<%_ if (fields.some(field => !field.transient && !field.autoGenerate && !field.readonly)) { _%>
+<%_ if (fields.some(field => !field.transient && !field.autoGenerate && !(field.readonly && databaseTypeSql && !reactive))) { _%>
         assertThat(actual)
             .as("Verify <%- persistClass %> relevant properties")
-  <%_ for (const field of fields.filter(field => !field.transient && !field.autoGenerate && !field.readonly)) { _%>
+  <%_ for (const field of fields.filter(field => !field.transient && !field.autoGenerate && !(field.readonly && databaseTypeSql && !reactive))) { _%>
     <%_ if (field.fieldTypeZonedDateTime) { _%>
             .satisfies(a -> assertThat(a.<%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").usingComparator(zonedDateTimeSameInstant).isEqualTo(expected.<%- field.propertySupplierName %>()))
     <%_ } else if (field.fieldTypeBigDecimal) { _%>

@@ -310,4 +310,33 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+
+  describe('with an entity that has a readonly field that is required', () => {
+    it('should reject the entity', async () => {
+      const run = helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({}, [
+          {
+            name: 'EntityA',
+            changelogDate: '20220129025419',
+            fields: [
+              {
+                fieldName: 'id',
+                fieldType: UUID,
+              },
+              {
+                fieldName: 'name',
+                fieldType: 'String',
+                readonly: true,
+                fieldValidateRules: ['required'],
+              } as any,
+            ],
+          },
+        ])
+        .withSkipWritingPriorities()
+        .withMockedJHipsterGenerators()
+        .withOptions({ skipChecks: false });
+      await expect(run).rejects.toThrow(/A readonly field can't be required/);
+    });
+  });
 });
