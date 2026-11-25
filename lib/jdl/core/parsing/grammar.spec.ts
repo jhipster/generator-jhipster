@@ -532,7 +532,7 @@ entity A`);
     },
     {
       "optionName": "customAnnotation5",
-      "optionValue": "java(\\"a\\" + b)",
+      "optionValue": "java("a" + b)",
       "type": "BINARY",
     },
   ],

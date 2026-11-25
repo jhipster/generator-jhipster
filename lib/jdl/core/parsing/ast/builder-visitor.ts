@@ -74,10 +74,10 @@ type ApplicationStatementContext = Partial<
 >;
 
 /**
- * Drop the quotes of a STRING token. The content is kept as written, an escaped quote stays `\"`: a
- * `@MapstructExpression` is copied into a java string literal.
+ * The value of a STRING token: its quotes dropped, `\"` a quote and `\\` a backslash, as in JSON, JS and Java. A
+ * backslash before any other character stays, like the `\d` of a regex in a `@FakerTemplate`.
  */
-const parseStringLiteral = (image: string): string => image.slice(1, -1);
+const parseStringLiteral = (image: string): string => image.slice(1, -1).replace(/\\(["\\])/g, '$1');
 
 const deduplicate = <T>(array: T[]): T[] => [...new Set(array)];
 
