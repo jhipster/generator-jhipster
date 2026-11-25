@@ -121,8 +121,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
       primaryKeyJsonType({ entity }) {
         const { primaryKey } = entity;
         if (primaryKey) {
-          mutateData(primaryKey, {
-            __override__: false,
+          mutateDefaults(primaryKey, {
             jsonType: ({ composite, type }) => (composite ? undefined : getJsonType(type)),
             ...jsonTypeDerivedProperties,
           });
