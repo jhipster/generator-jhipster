@@ -691,8 +691,8 @@ describe('<%- entityReactName %> screens', () => {
       fireEvent.change(container.querySelector('[name="<%- refusedField.fieldName %>"]')!, { target: { value: '' } });
 
     <%_ if (refusedField.fieldValidationRequired) { _%>
-      // The rules of the field show again.
-      await waitFor(() => expect(refusedMessage(container)).toBe(<%- enableTranslation ? "translate('entity.validation.required')" : "'This field is required.'" %>));
+      // The rules of the field show again, in the native language without translations.
+      await waitFor(() => expect(refusedMessage(container)).toBe(translate('entity.validation.required')));
     <%_ } else { _%>
       await waitFor(() => expect(container.querySelector('[name="<%- refusedField.fieldName %>"].is-invalid')).toBeNull());
       expect(refusedMessage(container)).toBeUndefined();
