@@ -283,7 +283,11 @@ describe('Notification Middleware', () => {
         isAxiosError: true,
         response: {
           status: 400,
-          data: { type: CONSTRAINT_VIOLATION_TYPE, message: 'error.validation', fieldErrors: [{ objectName: 'foos', field: 'name', message: 'NotNull' }] },
+          data: {
+            type: CONSTRAINT_VIOLATION_TYPE,
+            message: 'error.validation',
+            fieldErrors: [{ objectName: 'foos', field: 'name', message: 'NotNull' }],
+          },
         },
       },
     });
@@ -314,6 +318,34 @@ describe('Notification Middleware', () => {
     expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- enableTranslation ? '\'error.http.400\'' : '\'Bad foo\'' %>));
   });
 
+  it('should trigger an error toast message for a validation failure without field errors', () => {
+    store.dispatch({
+      type: ERROR_TYPE,
+      error: {
+        isAxiosError: true,
+        response: {
+          status: 400,
+          data: { type: CONSTRAINT_VIOLATION_TYPE, status: 400, message: 'error.validation', detail: 'Validation failed', fieldErrors: [] },
+        },
+      },
+    });
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- enableTranslation ? '\'error.validation\'' : '\'Validation failed\'' %>));
+  });
+
+  it('should trigger an error toast message with the detail of a wrong password, whose message is the one of its status', () => {
+    store.dispatch({
+      type: ERROR_TYPE,
+      error: {
+        isAxiosError: true,
+        response: {
+          status: 400,
+          data: { type: INVALID_PASSWORD_TYPE, status: 400, message: 'error.http.400', detail: 'Incorrect password' },
+        },
+      },
+    });
+    expect(toast.error).toHaveBeenCalledWith('Incorrect password');
+  });
+
   it('should not trigger an error toast message for the failures of the account', () => {
     store.dispatch({ type: ERROR_TYPE, error: { isAxiosError: true, config: { url: 'api/account' }, response: { status: 500 } } });
     expect(toast.error).not.toHaveBeenCalled();
@@ -326,7 +358,10 @@ describe('Notification Middleware', () => {
 
   it('should only log the failure of the account without a response', () => {
     const log = vi.spyOn(globalThis.console, 'log').mockImplementation(() => undefined);
-    store.dispatch({ type: ERROR_TYPE, error: { isAxiosError: true, message: 'Network Error', config: { url: 'api/account', method: 'get' } } });
+    store.dispatch({
+      type: ERROR_TYPE,
+      error: { isAxiosError: true, message: 'Network Error', config: { url: 'api/account', method: 'get' } },
+    });
     expect(log).toHaveBeenCalled();
     expect(toast.error).not.toHaveBeenCalled();
   });
