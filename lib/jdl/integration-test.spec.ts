@@ -62,6 +62,25 @@ describe('jdl - integration tests', () => {
     });
   });
 
+  describe('when parsing and exporting a quoted config value with a quote and a backslash', () => {
+    const parse = (jdl: string) =>
+      parseFromConfigurationObject({ parsedContent: parseFromContent(jdl), applicationType: APPLICATION_TYPE_MONOLITH });
+    const jwtSecretKey = (jdlObject: ReturnType<typeof parse>) =>
+      jdlObject.getApplication('jhipster')!.getConfigurationOptionValue('jwtSecretKey');
+
+    it('should give the same value once exported and parsed again', () => {
+      const original = parse(String.raw`application {
+  config {
+    baseName jhipster
+    jwtSecretKey "a\"b\\c\\"
+  }
+}
+`);
+      expect(jwtSecretKey(original)).toBe('a"b\\c\\');
+      expect(jwtSecretKey(parse(original.toString()))).toBe('a"b\\c\\');
+    });
+  });
+
   describe('when parsing entities JDL', () => {
     const applicationName = 'jhipster';
     /** The json entities of a jdl without application, by the name of the application they are imported into. */
