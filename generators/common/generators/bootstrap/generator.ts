@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { mutateData } from '../../../../lib/utils/object.ts';
+import { mutateDefaults } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { mutateApplication } from '../../application.ts';
 import { mutateEntity as commonMutateEntity, mutateField as commonMutateField } from '../../entity.ts';
@@ -77,8 +77,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     return this.asPostLoadingEntitiesTaskGroup({
       loadEntities({ application, entitiesToLoad }) {
         for (const { entityBootstrap } of entitiesToLoad) {
-          mutateData(entityBootstrap, {
-            __override__: false,
+          mutateDefaults(entityBootstrap, {
             // The entities of a microservice belong to it, but the built-in ones.
             microserviceName: ({ builtIn }, { undefinedMarker }) =>
               !builtIn && application.applicationTypeMicroservice ? application.baseName : undefinedMarker,
@@ -120,8 +119,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     return this.asDefaultTaskGroup({
       postPreparingEntities({ entities }) {
         for (const entity of entities) {
-          mutateData(entity, {
-            __override__: false,
+          mutateDefaults(entity, {
             restProperties: () => [
               ...entity.fields,
               ...entity.relationships.filter(

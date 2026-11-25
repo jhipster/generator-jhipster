@@ -23,7 +23,7 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import pluralize from 'pluralize';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { mutateData } from '../../lib/utils/index.ts';
+import { mutateData, mutateDefaults } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
@@ -343,8 +343,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       prepareEnumImports({ entity }) {
-        mutateData(entity, {
-          __override__: false,
+        mutateDefaults(entity, {
           entityClientEnumImports: ({ fields }) => getClientEnumImportsFormat(fields, ANGULAR),
         });
       },

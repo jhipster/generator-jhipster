@@ -24,7 +24,7 @@ import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import type { Entity as BaseEntity } from '../../../../lib/jhipster/types/entity.ts';
-import { finalizeMutations, isWin32, mutateData } from '../../../../lib/utils/index.ts';
+import { finalizeDefault, finalizeMutations, isWin32, mutateData } from '../../../../lib/utils/index.ts';
 import { lowerFirst } from '../../../../lib/utils/string-utils.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
@@ -361,9 +361,13 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
       requiredRelationships({ entityDefaults }) {
         // Delayed: the relationships are prepared after the entity, these are set once the entities are prepared.
         entityDefaults({
-          requiredRelationships: ({ relationships }, { delayMarker }) => delayMarker ?? relationships.filter(isRequiredRelationship),
-          anyRelationshipIsRequired: ({ requiredRelationships }, { delayMarker }) => delayMarker ?? requiredRelationships!.length > 0,
-          hasCyclicRequiredRelationship: (entity, { delayMarker }) => delayMarker ?? hasCyclicRequiredRelationship(entity),
+          requiredRelationships: finalizeDefault(({ relationships }: BaseApplicationEntity) =>
+            relationships.filter(isRequiredRelationship),
+          ),
+          anyRelationshipIsRequired: finalizeDefault(
+            ({ requiredRelationships }: BaseApplicationEntity) => requiredRelationships!.length > 0,
+          ),
+          hasCyclicRequiredRelationship: finalizeDefault((entity: BaseApplicationEntity) => hasCyclicRequiredRelationship(entity)),
         });
       },
       preparePrimaryKey({ entity, application }) {

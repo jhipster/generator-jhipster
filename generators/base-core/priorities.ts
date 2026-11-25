@@ -18,7 +18,7 @@
  */
 import type { Priority } from 'yeoman-generator';
 
-import { droppedMutationMessage, enableDelayedMutations, finalizeMutations } from '../../lib/utils/object.ts';
+import { finalizeMutations } from '../../lib/utils/object.ts';
 
 import type CoreGenerator from './generator.ts';
 
@@ -306,10 +306,7 @@ export const customObjectPriorities = (name: string, before: string = POST_PREPA
         for (const object of objects) {
           if (phase === 'preparing') {
             // The object loaded, a default reading a property not yet set waits for it, like the application ones.
-            enableDelayedMutations(object, {
-              autoDelay: true,
-              onDroppedMutation: dropped => coreGenerator.log.debug(droppedMutationMessage(dropped)),
-            });
+            coreGenerator.enableDelayedMutations(object, { autoDelay: true });
           } else if (phase === 'postPreparing') {
             // The object prepared, the delayed defaults are applied before it is used.
             finalizeMutations(object);

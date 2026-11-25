@@ -22,7 +22,7 @@ import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
-import { mutateData } from '../../lib/utils/index.ts';
+import { mutateData, mutateDefaults } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/generator.ts';
 import type { Field } from '../base-application/types.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
@@ -373,8 +373,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     return this.asPostPreparingEachEntityTaskGroup({
       prepareFieldValidation({ entity }) {
         for (const field of entity.fields) {
-          mutateData(field, {
-            __override__: false,
+          mutateDefaults(field, {
             vueClientValidation: () => hasClientValidation(field),
             vueInvalidValue: () => (field.fieldValidate ? invalidValue(field) : undefined),
             vueValidationRules: () => validationRules(field, Boolean(entity.builtInUserManagement && field.fieldName === 'login')),
@@ -389,8 +388,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         // The authorities of the routes, like Angular: ROLE_USER when the entity declares none.
         const asAuthorities = (authorities: string[]): string =>
           (authorities.length > 0 ? authorities : ['ROLE_USER']).map(authority => `'${authority}'`).join(', ');
-        mutateData(entity, {
-          __override__: false,
+        mutateDefaults(entity, {
           entityVueAuthorities: () => asAuthorities(entity.entityAuthority?.split(',') ?? []),
           entityVueReadAuthorities: () =>
             asAuthorities([...(entity.entityAuthority?.split(',') ?? []), ...(entity.entityReadAuthority?.split(',') ?? [])]),

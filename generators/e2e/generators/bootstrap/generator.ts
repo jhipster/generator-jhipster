@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../../lib/utils/index.ts';
+import { mutateDefaults } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { isContentTypeField } from '../../../base-application/internal/content-type-fields.ts';
 import { type EntitySample, formatEntitySample, generateEntitySamples } from '../../../base-application/support/index.ts';
@@ -62,8 +62,7 @@ export default class E2eBootstrapGenerator extends BaseApplicationGenerator<E2eE
           ],
         });
         const e2eFakeData = fakeData && formatEntitySample(fields, fakeData, 'cypress');
-        mutateData(entity, {
-          __override__: false,
+        mutateDefaults(entity, {
           e2eTestEntitySample: testEntitySample && formatEntitySample(fields, testEntitySample, 'json-serializable'),
           e2eTestEntity: testEntity && formatEntitySample(fields, testEntity, 'json-serializable'),
           e2eFakeData,

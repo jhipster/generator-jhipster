@@ -21,7 +21,7 @@ import { before, beforeEach, describe, expect, it } from 'expect-node';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { createJHipsterLogger } from '../../lib/utils/index.ts';
+import { createJHipsterLogger, finalizeMutations, mutateData } from '../../lib/utils/index.ts';
 
 import Base from './index.ts';
 import { editPropertiesFileCallback } from './support/properties-file.ts';
@@ -279,6 +279,35 @@ describe('generator - base-core', () => {
       await expect(helpers.run(app).withGenerators([[importing([':missing']), { namespace: app }]])).rejects.toThrow(
         'The generator jhipster-foo:missing imported by jhipster-foo:app is not registered',
       );
+    });
+  });
+
+  describe('enableDelayedMutations', () => {
+    it('tells a dropped delayed mutation in the debug log', async () => {
+      const logged: { messages: string[]; debug: string[] } = { messages: [], debug: [] };
+      await helpers.run('dummy').withGenerators([
+        [
+          helpers.createDummyGenerator(Base, {
+            [Base.POST_WRITING]() {
+              const log = Object.assign((message: string) => logged.messages.push(message), {
+                debug: (message: string) => logged.debug.push(message),
+              });
+              Object.defineProperty(this, 'log', { value: log });
+              const data: { prop?: string; prop2?: string } = {};
+              this.enableDelayedMutations(data, { autoDelay: true });
+              mutateData(data, { prop2: ctx => (ctx.prop ? 'delayed' : 'not-delayed') });
+              mutateData(data, { prop2: 'first' });
+              mutateData(data, { prop: 'bar' });
+              finalizeMutations(data);
+            },
+          }),
+          { namespace: 'dummy' },
+        ],
+      ]);
+      expect(logged).toEqual({
+        messages: [],
+        debug: ['The delayed default of prop2 was dropped: it waited for prop, and another mutation set prop2 ("first") first.'],
+      });
     });
   });
 

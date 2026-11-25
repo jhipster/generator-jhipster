@@ -23,7 +23,7 @@ import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.t
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFrameworkTypes, websocketTypes } from '../../lib/jhipster/index.ts';
-import { mutateData } from '../../lib/utils/index.ts';
+import { mutateData, mutateDefaults } from '../../lib/utils/index.ts';
 import { lowerFirst } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { isContentTypeField } from '../base-application/internal/content-type-fields.ts';
@@ -477,8 +477,7 @@ ${classProperties
         // Tries the application, in a demonstration: builds the jar of the production profile, then runs it with the sample secrets.
         // Cleans first, so the only jar is the one to run: e2e builds and older versions would match the wildcard too.
         // A script already set, by a blueprint or the user, is kept.
-        mutateData(application.packageJsonScripts, {
-          __override__: false,
+        mutateDefaults(application.packageJsonScripts, {
           'pretry-it': `./${application.buildToolGradle ? 'gradlew' : 'mvnw'} clean && npm run java:jar:prod`,
           'try-it': `java -jar ${application.javaPackagingDestDir}*.jar --spring.profiles.include=secret-samples`,
         });
@@ -683,8 +682,7 @@ ${classProperties
               smaller = testValue(field, sample - step);
             }
           }
-          mutateData(field, {
-            __override__: false,
+          mutateDefaults(field, {
             sbTestDefaultValue: javaValue(field, sample),
             sbTestUpdatedValue: javaValue(field, updated),
             sbTestSmallerValue: smaller === undefined ? undefined : javaValue(field, smaller),
@@ -700,8 +698,7 @@ ${classProperties
           const [sample, updated] = [`TestUtil.createByteArray(${size}, "0")`, `TestUtil.createByteArray(${size}, "1")`].map(bytes =>
             field.fieldTypeBytes ? bytes : `ByteBuffer.wrap(${bytes})`,
           );
-          mutateData(field, {
-            __override__: false,
+          mutateDefaults(field, {
             sbTestDefaultValue: sample,
             sbTestUpdatedValue: updated,
             // The byte arrays are validated by their size, a ByteBuffer is not.
@@ -713,8 +710,7 @@ ${classProperties
         // The blobs give no value as a sample: the fake data of a blob is a file.
         for (const field of entity.fields.filter(field => isContentTypeField(field) || field.blobContentTypeText)) {
           const [sample, updated] = isContentTypeField(field) ? ['image/jpg', 'image/png'] : ['AAAAAAAAAA', 'BBBBBBBBBB'];
-          mutateData(field, {
-            __override__: false,
+          mutateDefaults(field, {
             sbTestDefaultValue: javaValue(field, sample),
             sbTestUpdatedValue: javaValue(field, updated),
           });

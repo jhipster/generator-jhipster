@@ -1,0 +1,454 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { before, describe, expect, it } from 'expect-node';
+
+import {
+  DelayedMutation,
+  type DroppedMutation,
+  type MutateDataParam,
+  type UndefinedMutation,
+  createDelayedMutationContext,
+  droppedMutationMessage,
+  enableDelayedMutations,
+  finalizeDefault,
+  finalizeDefaultOrUndefined,
+  finalizeMutations,
+  mutateData,
+  mutateDefaults,
+  overrideMutateDataProperty,
+} from './index.ts';
+
+// __override__ field should be accepted.
+({
+  __override__: true,
+}) satisfies MutateDataParam<{ str: string }>;
+
+({
+  // @ts-expect-error unknown properties should not be allowed
+  str2: 'baz',
+}) satisfies MutateDataParam<{ str: string }>;
+
+const _shouldAcceptStringProperties: MutateDataParam<{ str: string }> = {
+  str: 'baz',
+};
+
+_shouldAcceptStringProperties.str satisfies
+  | string
+  // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+  | typeof DelayedMutation
+  // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+  | typeof UndefinedMutation
+  | ((
+      ctx: { str: string },
+      opts: { delayMarker: typeof DelayedMutation; undefinedMarker: typeof UndefinedMutation; data: { str: string } },
+      // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+    ) => string | typeof DelayedMutation | typeof UndefinedMutation)
+  | undefined;
+
+const _shouldAcceptNumberProperties: MutateDataParam<{ nr: number }> = {
+  nr: 1,
+};
+
+_shouldAcceptNumberProperties.nr satisfies
+  | number
+  | ((
+      ctx: { nr: number },
+      opts: { delayMarker: typeof DelayedMutation; undefinedMarker: typeof UndefinedMutation; data: { nr: number } },
+    ) => number | typeof DelayedMutation | typeof UndefinedMutation)
+  | undefined;
+
+({
+  // @ts-expect-error function properties should always use callbacks
+  fn: () => '',
+}) satisfies MutateDataParam<{ fn: () => string }>;
+
+// MutateDataParam accepts function properties that use callbacks
+({
+  fn: () => () => '',
+}) satisfies MutateDataParam<{ fn: () => string }>;
+
+({
+  // @ts-expect-error readonly properties should be removed
+  readonly: 'baz',
+}) satisfies MutateDataParam<{ readonly readonly: string }>;
+
+// Readonly properties should be accessible in the callback context
+({
+  str: ctx => ctx.readonly,
+}) satisfies MutateDataParam<{ readonly readonly: string; str: string }>;
+
+({
+  // @ts-expect-error index signatures of a type with named properties should be removed
+  other: 'baz',
+}) satisfies MutateDataParam<{ str: string; [key: string]: string }>;
+
+// A record accepts any key with the type of its values
+({
+  __override__: false,
+  'try-it': 'java -jar app.jar',
+}) satisfies MutateDataParam<Record<string, string>>;
+
+// A record accepts callbacks, with the record as context
+({
+  'pretry-it': ctx => `${ctx['try-it']} --build`,
+}) satisfies MutateDataParam<Record<string, string>>;
+
+({
+  // @ts-expect-error a record should not accept values of another type
+  'try-it': 1,
+}) satisfies MutateDataParam<Record<string, string>>;
+
+({
+  // @ts-expect-error callbacks of a record should return the type of its values
+  'try-it': () => 1,
+}) satisfies MutateDataParam<Record<string, string>>;
+
+// A record of literal keys accepts its keys
+({
+  foo: ctx => `${ctx.foo} --build`,
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+({
+  // @ts-expect-error a record of literal keys should not accept other keys
+  bar: 'baz',
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+({
+  // @ts-expect-error a record of literal keys should not accept values of another type
+  foo: 1,
+}) satisfies MutateDataParam<Record<'foo', string>>;
+
+// mutateData accepts the keys of a record
+const _scripts: Record<string, string> = {};
+mutateData(_scripts, { __override__: false, 'try-it': 'java -jar app.jar' });
+// @ts-expect-error mutateData should not accept values of another type for a record
+mutateData(_scripts, { 'try-it': 1 });
+
+// A record of functions takes a callback that returns the function, like a named property
+const _fns: Record<string, () => string> = {};
+mutateData(_fns, { a: () => () => 'x' });
+// @ts-expect-error mutateData should not accept a bare function for a record of functions
+mutateData(_fns, { a: () => 'x' });
+
+// A readonly record is not mutated
+const _readonlyScripts: Readonly<Record<string, string>> = {};
+// @ts-expect-error mutateData should not accept the keys of a readonly record
+mutateData(_readonlyScripts, { 'try-it': 'java -jar app.jar' });
+
+describe('utils - mutate data', () => {
+  describe('finalizeDefault', () => {
+    type Data = { prop?: string; prop2?: string };
+    const defaults: MutateDataParam<Data> = { prop2: finalizeDefault(({ prop }: Data) => `${prop}2`) };
+
+    it('is delayed in a mutation context, then computed by finalizeMutations with the properties set after it', () => {
+      const data: Data = createDelayedMutationContext();
+      mutateData(data, defaults);
+      expect(data.prop2).toBeUndefined();
+      data.prop = 'bar';
+      finalizeMutations(data);
+      expect(data.prop2).toBe('bar2');
+    });
+
+    describe('reading another finalizeDefault of the context', () => {
+      const finalized = (...mutations: Record<string, any>[]) => {
+        const data: Record<string, any> = { name: 'Foo' };
+        enableDelayedMutations(data);
+        mutateData(data, ...mutations.map(mutation => ({ __override__: false, ...mutation })));
+        finalizeMutations(data);
+        return data;
+      };
+      const tableName = { tableName: finalizeDefault(({ name }: any) => name.toLowerCase()) };
+      const label = { label: finalizeDefault(({ tableName }: any) => `label of ${tableName}`) };
+
+      it('waits for it when declared first', () => {
+        expect(finalized(label, tableName)).toMatchObject({ tableName: 'foo', label: 'label of foo' });
+      });
+
+      it('reads it when declared after it', () => {
+        expect(finalized(tableName, label)).toMatchObject({ tableName: 'foo', label: 'label of foo' });
+      });
+
+      it('waits through a chain of them', () => {
+        const title = { title: finalizeDefault(({ label }: any) => `title of ${label}`) };
+        expect(finalized(title, label, tableName)).toMatchObject({ title: 'title of label of foo' });
+      });
+
+      it('does not give way to a mutation of the same key registered before it while it waits', () => {
+        const before = { label: finalizeDefault(() => 'before') };
+        const last = { label: finalizeDefault(({ tableName }: any) => `last of ${tableName}`) };
+        expect(finalized(before, last, tableName)).toMatchObject({ label: 'last of foo' });
+      });
+
+      it('computes a cycle with the value of the one not computed yet undefined', () => {
+        const left = { left: finalizeDefault(({ right }: any) => `left of ${right}`) };
+        const right = { right: finalizeDefault(({ left }: any) => `right of ${left}`) };
+        expect(finalized(left, right)).toMatchObject({ left: 'left of undefined', right: 'right of left of undefined' });
+      });
+
+      it('computes one reading its own key', () => {
+        const own = { own: finalizeDefault(({ own }: any) => `own of ${own}`) };
+        expect(finalized(own)).toMatchObject({ own: 'own of undefined' });
+      });
+
+      it('reads a property nothing sets as undefined', () => {
+        const unset = { unset: finalizeDefault(({ missing }: any) => `unset of ${missing}`) };
+        expect(finalized(unset)).toMatchObject({ unset: 'unset of undefined' });
+      });
+    });
+
+    it('is computed at once without a mutation context', () => {
+      const data: Data = { prop: 'foo' };
+      mutateData(data, defaults);
+      expect(data.prop2).toBe('foo2');
+    });
+  });
+
+  describe('finalizeDefaultOrUndefined', () => {
+    type Data = { prop?: string; prop2?: string };
+    const earlier: MutateDataParam<Data> = { prop2: finalizeDefault(() => 'earlier') };
+
+    it('leaves an undefined value undefined, the mutation registered before it not applied', () => {
+      const data: Data = createDelayedMutationContext();
+      mutateData(data, earlier, { prop2: finalizeDefaultOrUndefined(() => undefined) });
+      finalizeMutations(data);
+      expect(data).toHaveProperty('prop2', undefined);
+    });
+
+    it('gives way to the mutation registered before it with finalizeDefault', () => {
+      const data: Data = createDelayedMutationContext();
+      mutateData(data, earlier, { prop2: finalizeDefault(() => undefined) });
+      finalizeMutations(data);
+      expect(data.prop2).toBe('earlier');
+    });
+
+    it('applies a defined value', () => {
+      const data: Data = createDelayedMutationContext();
+      mutateData(data, earlier, { prop2: finalizeDefaultOrUndefined(() => 'later') });
+      finalizeMutations(data);
+      expect(data.prop2).toBe('later');
+    });
+  });
+
+  describe('mutateData', () => {
+    describe('with a simple mutation', () => {
+      const mutatedData: { prop?: string } = {};
+
+      before(() => {
+        mutateData(mutatedData, { prop: 'foo' });
+      });
+
+      it('should mutate the data', () => {
+        expect(mutatedData).toEqual({ prop: 'foo' });
+      });
+    });
+
+    describe('with multiple mutations', () => {
+      const mutatedData: { prop: string; prop2: string } = { prop: 'foo', prop2: 'foo2' };
+
+      before(() => {
+        mutateData(mutatedData, { prop: ctx => `${ctx.prop}-bar` }, { prop2: ctx => ctx.prop + 2 });
+      });
+
+      it('should mutate the data', () => {
+        expect(mutatedData).toEqual({ prop: 'foo-bar', prop2: 'foo-bar2' });
+      });
+    });
+    describe('with delayed mutations', () => {
+      const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext();
+
+      before(() => {
+        mutateData(
+          mutatedData,
+          { prop2: (ctx, { delayMarker }) => (ctx.prop === undefined ? delayMarker : ctx.prop + 2) },
+          { prop: 'bar' },
+        );
+        finalizeMutations(mutatedData);
+      });
+
+      it('should mutate the data', () => {
+        expect(mutatedData).toEqual({ prop: 'bar', prop2: 'bar2' });
+      });
+    });
+    describe('with delayed mutations on an existing object', () => {
+      const original: { name: string; prop?: string; prop2?: string } = { name: 'existing' };
+      let copy: Record<string, any>;
+
+      before(() => {
+        const mutatedData = enableDelayedMutations(original);
+        mutateData(mutatedData, { prop2: (ctx, { delayMarker }) => (ctx.prop === undefined ? delayMarker : ctx.prop + 2) });
+        copy = { ...mutatedData };
+        mutatedData.prop = 'bar';
+        finalizeMutations(mutatedData);
+      });
+
+      it('should apply the delayed mutations to the same object', () => {
+        expect(original).toEqual({ name: 'existing', prop: 'bar', prop2: 'bar2' });
+      });
+
+      it('should not copy the mutation context with the object', () => {
+        expect(Object.keys(copy)).toEqual(['name']);
+        mutateData(copy, { prop: (_ctx: any, { delayMarker }: any) => (delayMarker ? 'context' : 'no context') } as any);
+        expect(copy.prop).toBe('no context');
+      });
+    });
+    describe('with a delayed mutation computing undefined', () => {
+      it('should tell the property it waited for', () => {
+        const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({ autoDelay: true });
+        mutateData(mutatedData, { prop2: ctx => ctx.prop });
+        expect(() => finalizeMutations(mutatedData)).toThrow('The delayed mutation of prop2 returned undefined (it waited for prop)');
+      });
+    });
+    describe('with delayed mutations on a created context', () => {
+      it('should not copy the mutation context with the object', () => {
+        const mutatedData: { prop?: string } = createDelayedMutationContext();
+        const copy: Record<string | symbol, any> = { ...mutatedData };
+        expect(Reflect.ownKeys(copy)).toEqual([]);
+        mutateData(copy, { prop: (_ctx: any, { delayMarker }: any) => (delayMarker ? 'context' : 'no context') } as any);
+        expect(copy.prop).toBe('no context');
+      });
+    });
+    describe('with auto-delayed mutations', () => {
+      const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({ autoDelay: true });
+
+      it('should mutate the data', () => {
+        mutateData(mutatedData, { prop2: ctx => (ctx.prop ? 'delayed' : 'not-delayed') });
+        expect(mutatedData.prop2).toBeUndefined();
+        mutateData(mutatedData, { prop: 'bar' });
+        finalizeMutations(mutatedData);
+        expect(mutatedData).toEqual({ prop: 'bar', prop2: 'delayed' });
+      });
+    });
+    describe('with an auto-delayed mutation whose key another mutation sets first', () => {
+      const dropped: DroppedMutation[] = [];
+      const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({
+        autoDelay: true,
+        onDroppedMutation: mutation => dropped.push(mutation),
+      });
+
+      it('should keep the other value and tell what the dropped mutation waited for', () => {
+        mutateData(mutatedData, { prop2: ctx => (ctx.prop ? 'delayed' : 'not-delayed') });
+        mutateData(mutatedData, { prop2: 'first' });
+        mutateData(mutatedData, { prop: 'bar' });
+        finalizeMutations(mutatedData);
+        expect(mutatedData).toEqual({ prop: 'bar', prop2: 'first' });
+        expect(dropped).toEqual([{ key: 'prop2', waitingFor: 'prop', value: 'first' }]);
+        expect(droppedMutationMessage(dropped[0])).toBe(
+          'The delayed default of prop2 was dropped: it waited for prop, and another mutation set prop2 ("first") first.',
+        );
+      });
+    });
+
+    describe('with a delayed mutation of a key whose former delayed mutation was applied', () => {
+      const mutatedData: { a?: string; b?: string } = createDelayedMutationContext({ autoDelay: true });
+
+      it('should not tell the property the former one waited for', () => {
+        mutateData(mutatedData, { b: ({ a }) => `${a}-b` });
+        mutateData(mutatedData, { a: 'a' });
+        expect(mutatedData.b).toBe('a-b');
+        mutateData(mutatedData, { b: overrideMutateDataProperty(() => DelayedMutation) });
+        expect(() => finalizeMutations(mutatedData)).toThrow(
+          'The delayed mutation of b is still delayed: once finalizing, it must return a value instead of the delay marker',
+        );
+      });
+    });
+
+    describe('with an auto-delayed override of a property already set', () => {
+      const mutatedData: { list: string[]; prop?: string } = createDelayedMutationContext({ autoDelay: true });
+
+      before(() => {
+        mutatedData.list = ['first'];
+        mutateData(mutatedData, {
+          __override__: false,
+          list: overrideMutateDataProperty(({ list, prop }: { list: string[]; prop?: string }) => [...list, prop!]),
+        });
+        mutatedData.list.push('second');
+        mutateData(mutatedData, { prop: 'resolved' });
+        finalizeMutations(mutatedData);
+      });
+
+      it('should apply it once the property it reads is set', () => {
+        expect(mutatedData).toEqual({ list: ['first', 'second', 'resolved'], prop: 'resolved' });
+      });
+    });
+
+    describe('with auto-delayed mutations disabled', () => {
+      const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({ autoDelay: false });
+
+      it('should mutate the data', () => {
+        mutateData(mutatedData, { prop2: ctx => (ctx.prop ? 'delayed' : 'not-delayed') });
+        finalizeMutations(mutatedData);
+        expect(mutatedData).toEqual({ prop2: 'not-delayed' });
+      });
+    });
+    describe('delayed mutations can return undefined', () => {
+      const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext();
+
+      before(() => {
+        mutateData(mutatedData, { prop2: (ctx, { delayMarker }) => (ctx.prop === undefined ? delayMarker : undefined) }, { prop: 'bar' });
+        finalizeMutations(mutatedData);
+      });
+
+      it('should mutate the data', () => {
+        expect(mutatedData).toEqual({ prop: 'bar', prop2: undefined });
+      });
+    });
+    describe('with overridden delayed mutations', () => {
+      const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext();
+
+      before(() => {
+        mutateData(
+          mutatedData,
+          { prop2: (ctx, { delayMarker }) => (ctx.prop === undefined ? delayMarker : ctx.prop + 1) },
+          { prop2: (ctx, { delayMarker }) => (ctx.prop === undefined ? delayMarker : ctx.prop + 2) },
+          { prop: 'bar' },
+        );
+        finalizeMutations(mutatedData);
+      });
+
+      it('should mutate the data', () => {
+        expect(mutatedData).toEqual({ prop: 'bar', prop2: 'bar2' });
+      });
+    });
+  });
+
+  describe('mutateDefaults', () => {
+    it('should keep the properties already set', () => {
+      const data: { name: string; upper?: string } = { name: 'foo' };
+      mutateDefaults(data, { name: 'bar', upper: ({ name }) => name.toUpperCase() });
+      expect(data).toEqual({ name: 'foo', upper: 'FOO' });
+    });
+
+    it('should apply a mutation given as a function as defaults, with the data when it is reached', () => {
+      const data: { name: string; upper?: string; lower?: string } = { name: 'Foo', upper: 'kept' };
+      mutateDefaults(data, { name: 'Bar' }, ({ name }) => ({ upper: name.toUpperCase(), lower: name.toLowerCase() }));
+      expect(data).toEqual({ name: 'Foo', upper: 'kept', lower: 'foo' });
+    });
+  });
+
+  describe('markers', () => {
+    it('should key the mutation context by a registered symbol, which another loaded copy reads', () => {
+      expect(Object.getOwnPropertySymbols(enableDelayedMutations({}))).toEqual([Symbol.for('jhipster.MutationContext')]);
+    });
+
+    it('should mark an overriding function by a registered symbol, which another loaded copy reads', () => {
+      expect((overrideMutateDataProperty(() => 'value') as any)[Symbol.for('jhipster.OverrideMutation')]).toBe(true);
+    });
+  });
+});
