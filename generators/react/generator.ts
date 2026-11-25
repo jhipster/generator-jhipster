@@ -424,7 +424,7 @@ ${comment}
         const { clientI18nDir, clientDistDir, clientSrcDir, temporaryDir } = application;
         source.addSonarProperties?.([
           { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts, ${clientSrcDir}app/**/*.spec.tsx`, valueSep: ', ' },
-          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}test-results/jest/TESTS-results-vitest.xml` },
+          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}test-results/TESTS-results-vitest.xml` },
           { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}test-results/lcov-report/lcov.info` },
           {
             key: 'sonar.exclusions',

@@ -18,6 +18,8 @@
 -%>
 // Learn more about Vitest configuration options at https://vitest.dev/config/
 
+import { fileURLToPath } from 'node:url';
+
 import { defineConfig } from 'vitest/config';
 <%_ if (enableTranslation) { _%>
 
@@ -47,7 +49,7 @@ export default defineConfig({
 <%_ } _%>
   test: {
     coverage: {
-      reportsDirectory: '<%- relativeDir(clientRootDir, temporaryDir) %>test-results/lcov-report',
+      reportsDirectory: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>test-results/lcov-report', import.meta.url)),
     },
   },
 });

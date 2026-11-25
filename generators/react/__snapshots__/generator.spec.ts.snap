@@ -867,7 +867,7 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-vitest.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
@@ -1883,7 +1883,7 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-vitest.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
@@ -3038,7 +3038,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-vitest.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
@@ -4086,7 +4086,7 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-vitest.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
@@ -5258,7 +5258,7 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-vitest.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
@@ -6129,7 +6129,7 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-vitest.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
@@ -7001,7 +7001,7 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-vitest.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",

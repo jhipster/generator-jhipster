@@ -36,6 +36,8 @@ export default mergeConfig(
       },
       coverage: {
         provider: 'v8',
+        // lcov writes the lcov.info that Sonar reads, with its HTML report.
+        reporter: ['text', 'lcov'],
         // The helpers of the tests.
         exclude: ['**/app/testing/**'],
         thresholds: {
@@ -44,7 +46,7 @@ export default mergeConfig(
           functions: 95,
           lines: 95,
         },
-        reportsDirectory: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>vite-coverage', import.meta.url)),
+        reportsDirectory: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>test-results/lcov-report', import.meta.url)),
       },
     },
   }),

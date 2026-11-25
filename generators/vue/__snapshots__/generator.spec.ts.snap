@@ -864,11 +864,11 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-sonar.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -1881,11 +1881,11 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-sonar.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -2789,11 +2789,11 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-sonar.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -3788,11 +3788,11 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-sonar.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -4887,11 +4887,11 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-sonar.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -5765,11 +5765,11 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-sonar.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -6653,11 +6653,11 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "temp/test-results/jest/TESTS-results-sonar.xml",
+        "value": "temp/test-results/TESTS-results-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "temp/test-results/lcov.info",
+        "value": "temp/test-results/lcov-report/lcov.info",
       },
       {
         "key": "sonar.exclusions",
