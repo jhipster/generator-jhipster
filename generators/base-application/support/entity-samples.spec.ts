@@ -297,6 +297,49 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     expect((sample.at as Date).toISOString()).toMatch(/T\d{2}:\d{2}:00\.000Z$/);
   });
 
+  describe('with a blob of a file', () => {
+    const file = '../fake-data/blob/hipster.png';
+    const base64 = (text: string) => Buffer.from(text).toString('base64');
+    // fieldTypeBinary is prepared by the common generator.
+    const blobField = (rules: Record<string, number> = {}) =>
+      prepareField({
+        fieldName: 'image',
+        fieldType: 'byte[]',
+        fieldTypeBinary: true,
+        fieldTypeBlobContent: 'image',
+        fieldValidateRules: Object.keys(rules),
+        ...Object.fromEntries(
+          Object.entries(rules).map(([rule, value]) => [`fieldValidateRules${rule[0].toUpperCase()}${rule.slice(1)}`, value]),
+        ),
+      });
+    const formats = (field: any) => {
+      const [sample] = samples([field], 1);
+      return {
+        ts: formatEntitySample([field], sample, 'ts').image,
+        json: formatEntitySample([field], sample, 'json-serializable').image,
+        csv: formatEntitySample([field], sample, 'csv').image,
+      };
+    };
+
+    it('should give the file of the fake data within its minbytes and maxbytes', () => {
+      expect(formats(blobField({ minbytes: 2, maxbytes: 10000 }))).toEqual({ ts: `'${file}'`, json: base64(file), csv: file });
+    });
+
+    it('should cut the file over its maxbytes, written as base64 in a CSV instead of the file', () => {
+      expect(formats(blobField({ maxbytes: 8 }))).toEqual({ ts: "'../fake-'", json: base64('../fake-'), csv: base64('../fake-') });
+    });
+
+    it('should complete the file under its minbytes to the characters a client measures it by', () => {
+      // A client measures 3 bytes by 4 characters of base64: 30 bytes take 40 characters.
+      const text = `${file}${'X'.repeat(11)}`;
+      expect(formats(blobField({ minbytes: 30 }))).toEqual({ ts: `'${text}'`, json: base64(text), csv: base64(text) });
+    });
+
+    it('should fail when no text fits both its minbytes and its maxbytes', () => {
+      expect(() => samples([blobField({ minbytes: 7, maxbytes: 8 })], 1)).toThrow(/minbytes 7 and maxbytes 8/);
+    });
+  });
+
   describe('formatEntitySample', () => {
     const at = new Date('2026-01-01T10:15:00.000Z');
     const file = Buffer.from('../fake-data/blob/hipster.txt').toString('base64');

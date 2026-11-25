@@ -28,6 +28,7 @@ import { type FakeDataOptions, mutateField } from '../entity.ts';
 import {
   type FieldDomainValue,
   checkFakerTemplate,
+  fileBlobFakeData,
   formatFakeData,
   getFieldFakeDataDomain,
   isFakeDataOfFieldType,
@@ -232,7 +233,7 @@ function generateFakeDataForField(
       data = date;
     }
   } else if (field.fieldTypeBinary && field.fieldTypeBlobContent !== TEXT) {
-    data = '../fake-data/blob/hipster.png';
+    data = fileBlobFakeData(field);
   } else if (field.fieldTypeBinary && field.fieldTypeBlobContent === TEXT) {
     data = '../fake-data/blob/hipster.txt';
   } else if (field.fieldType === STRING) {
