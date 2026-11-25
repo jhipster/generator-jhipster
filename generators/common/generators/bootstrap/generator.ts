@@ -21,6 +21,7 @@ import { mutateData } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { mutateApplication } from '../../application.ts';
 import { mutateEntity as commonMutateEntity, mutateField as commonMutateField } from '../../entity.ts';
+import { getJsonType, jsonTypeDerivedProperties } from '../../internal/json-type.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
@@ -114,6 +115,25 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      primaryKeyJsonType({ entity }) {
+        const { primaryKey } = entity;
+        if (primaryKey) {
+          mutateData(primaryKey, {
+            __override__: false,
+            jsonType: ({ composite, type }) => (composite ? undefined : getJsonType(type)),
+            ...jsonTypeDerivedProperties,
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.postPreparingEachEntity;
   }
 
   get default() {

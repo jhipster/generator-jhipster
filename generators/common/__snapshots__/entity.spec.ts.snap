@@ -24,5 +24,11 @@ exports[`mutation object test expects mutateField to match snapshot 1`] = `
   "fieldTypeNumeric": false,
   "fieldTypeTemporal": false,
   "fieldTypeTimed": false,
+  "jsonType": "text",
+  "jsonTypeBoolean": false,
+  "jsonTypeNumber": false,
+  "jsonTypeNumberOrText": false,
+  "jsonTypeText": true,
+  "jsonTypeUuid": false,
 }
 `;
