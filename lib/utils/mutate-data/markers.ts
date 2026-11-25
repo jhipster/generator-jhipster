@@ -17,10 +17,14 @@
  * limitations under the License.
  */
 
-/** The key of the mutation context of an object: a symbol, so it is never taken for a property of the data. */
-export const MUTATION_CONTEXT_SYMBOL: unique symbol = Symbol('MutationContext');
+/**
+ * The key of the mutation context of an object: a symbol, so it is never taken for a property of the data, and a
+ * registered one, so two loaded copies of generator-jhipster (npm link) share the contexts they create.
+ */
+export const MUTATION_CONTEXT_SYMBOL: unique symbol = Symbol.for('jhipster.MutationContext');
 
 export const DelayedMutation = '__DelayedMutation__';
 export const UndefinedMutation = '__UndefinedMutation__';
 
-export const OverrideMutation = Symbol('OverrideMutation');
+/** The mark of a function of overrideMutateDataProperty, a registered symbol as the key of the mutation context. */
+export const OverrideMutation = Symbol.for('jhipster.OverrideMutation');

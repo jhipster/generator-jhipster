@@ -121,6 +121,7 @@ const applyDelayedMutations = (
           result = undefined;
         }
         delete delayedContext[key];
+        delete context[MUTATION_CONTEXT_SYMBOL].waitingFor?.[key];
         (context as any)[key] = result;
         mutationApplied = true;
       }
@@ -217,8 +218,17 @@ export function mutateData<T extends Record<string | number, any>>(
 
 /**
  * Applies the mutations as defaults: like `mutateData` with `__override__: false`, a property already set is kept, unless
- * a mutation sets `__override__` itself or its function is marked by `overrideMutateDataProperty`.
+ * a mutation sets `__override__` itself or its function is marked by `overrideMutateDataProperty`. A mutation given as a
+ * function, as `mutateData` takes, is called with the data when it is reached.
  */
-export function mutateDefaults<T extends Record<string | number, any>>(context: T, ...mutations: MutateDataParam<T>[]): void {
-  mutateData(context, ...mutations.map(mutation => ({ __override__: false, ...mutation })));
+export function mutateDefaults<T extends Record<string | number, any>>(
+  context: T,
+  ...mutations: (MutateDataParam<T> | ((data: T) => MutateDataParam<T>))[]
+): void {
+  mutateData(
+    context,
+    ...mutations.map(mutation =>
+      typeof mutation === 'function' ? (data: T) => ({ __override__: false, ...mutation(data) }) : { __override__: false, ...mutation },
+    ),
+  );
 }

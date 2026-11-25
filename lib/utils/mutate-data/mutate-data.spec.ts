@@ -20,7 +20,7 @@
 import { before, describe, expect, it } from 'expect-node';
 
 import {
-  type DelayedMutation,
+  DelayedMutation,
   type DroppedMutation,
   type MutateDataParam,
   type UndefinedMutation,
@@ -31,6 +31,7 @@ import {
   finalizeDefaultOrUndefined,
   finalizeMutations,
   mutateData,
+  mutateDefaults,
   overrideMutateDataProperty,
 } from './index.ts';
 
@@ -354,6 +355,20 @@ describe('utils - mutate data', () => {
       });
     });
 
+    describe('with a delayed mutation of a key whose former delayed mutation was applied', () => {
+      const mutatedData: { a?: string; b?: string } = createDelayedMutationContext({ autoDelay: true });
+
+      it('should not tell the property the former one waited for', () => {
+        mutateData(mutatedData, { b: ({ a }) => `${a}-b` });
+        mutateData(mutatedData, { a: 'a' });
+        expect(mutatedData.b).toBe('a-b');
+        mutateData(mutatedData, { b: overrideMutateDataProperty(() => DelayedMutation) });
+        expect(() => finalizeMutations(mutatedData)).toThrow(
+          'The delayed mutation of b is still delayed: once finalizing, it must return a value instead of the delay marker',
+        );
+      });
+    });
+
     describe('with an auto-delayed override of a property already set', () => {
       const mutatedData: { list: string[]; prop?: string } = createDelayedMutationContext({ autoDelay: true });
 
@@ -410,6 +425,30 @@ describe('utils - mutate data', () => {
       it('should mutate the data', () => {
         expect(mutatedData).toEqual({ prop: 'bar', prop2: 'bar2' });
       });
+    });
+  });
+
+  describe('mutateDefaults', () => {
+    it('should keep the properties already set', () => {
+      const data: { name: string; upper?: string } = { name: 'foo' };
+      mutateDefaults(data, { name: 'bar', upper: ({ name }) => name.toUpperCase() });
+      expect(data).toEqual({ name: 'foo', upper: 'FOO' });
+    });
+
+    it('should apply a mutation given as a function as defaults, with the data when it is reached', () => {
+      const data: { name: string; upper?: string; lower?: string } = { name: 'Foo', upper: 'kept' };
+      mutateDefaults(data, { name: 'Bar' }, ({ name }) => ({ upper: name.toUpperCase(), lower: name.toLowerCase() }));
+      expect(data).toEqual({ name: 'Foo', upper: 'kept', lower: 'foo' });
+    });
+  });
+
+  describe('markers', () => {
+    it('should key the mutation context by a registered symbol, which another loaded copy reads', () => {
+      expect(Object.getOwnPropertySymbols(enableDelayedMutations({}))).toEqual([Symbol.for('jhipster.MutationContext')]);
+    });
+
+    it('should mark an overriding function by a registered symbol, which another loaded copy reads', () => {
+      expect((overrideMutateDataProperty(() => 'value') as any)[Symbol.for('jhipster.OverrideMutation')]).toBe(true);
     });
   });
 });
