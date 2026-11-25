@@ -61,6 +61,28 @@ class ExceptionTranslatorTest {
     }
 
     @Test
+    void shouldNameTheObjectOfAFieldErrorWithoutTheSuffixOfItsDto() {
+        assertThat(ExceptionTranslator.objectName("Author<%- dtoSuffix %>")).isEqualTo("author");
+        assertThat(ExceptionTranslator.objectName("author")).isEqualTo("author");
+    }
+<%_ if (generateBuiltInUserEntity) { _%>
+
+    @Test
+    void shouldNameTheObjectsOfAUserByTheTranslationKeysOfItsFields() {
+        assertThat(ExceptionTranslator.objectName("<%- user.adminUserDto %>")).isEqualTo("userManagement");
+        assertThat(ExceptionTranslator.objectName("managedUserVM")).isEqualTo("userManagement");
+        assertThat(ExceptionTranslator.objectName("UserResource")).isEqualTo("userManagement");
+    }
+  <%_ if (dtoSuffix) { _%>
+
+    @Test
+    void shouldNameAnEntityNamedAdminUserByItsName() {
+        assertThat(ExceptionTranslator.objectName("adminUser")).isEqualTo("adminUser");
+    }
+  <%_ } _%>
+<%_ } _%>
+
+    @Test
     void shouldReplaceInProductionADetailOfTheCauseWithAClassName() {
         assertThat(detailWithProfile(JHipsterConstants.SPRING_PROFILE_PRODUCTION)).isEqualTo("Unexpected runtime exception");
     }
