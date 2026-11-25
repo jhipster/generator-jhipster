@@ -18,10 +18,9 @@
  */
 import { before, describe, expect, it } from 'expect-node';
 
-import { type FakerWithRandexp, createFaker } from './faker.ts';
+import { LOGIN_REGEX_JS } from '../../generator-constants.ts';
 
-// The login pattern of the built-in User.
-const LOGIN_PATTERN = '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$';
+import { type FakerWithRandexp, createFaker } from './faker.ts';
 
 describe('generator - base-application - support - faker - createRandexp', () => {
   let faker: FakerWithRandexp;
@@ -43,12 +42,29 @@ describe('generator - base-application - support - faker - createRandexp', () =>
     [String.raw`^[a-z]+\.com$`, 6, 12],
     ['^[a-z]+$', 100, 255],
     ['^(foo|barbaz)+$', 20, 25],
-    [LOGIN_PATTERN, 40, 50],
+    // The login pattern of the built-in User.
+    [LOGIN_REGEX_JS, 40, 50],
+    // Back references, after their group in its sequence.
+    [String.raw`^(a+)\1$`, 20, 30],
+    [String.raw`^(a+)(b+)\2\1$`, 20, 40],
+    [String.raw`^(ab|c)\1x$`, 5, 5],
+    [String.raw`^(a+)[a-z]+\1$`, 30, 40],
+    // A back reference in a repetition, measured by its group.
+    [String.raw`^(a{2})(-\1)+$`, 5, 11],
+    // A back reference numbered by the opening parenthesis of its group, the first group never generated.
+    [String.raw`^(a){0}(b)\2$`, 2, 2],
+    // Items always empty, repeated.
+    ['^a+(?:)*$', 5, 20],
+    ['^(?:)*a+$', 5, 20],
   ] as const) {
     it(`should generate ${pattern} within ${min} and ${max} characters`, () => {
       expect(outside(draw(pattern, { min, max }), pattern, min, max)).toStrictEqual([]);
     });
   }
+
+  it('should generate a back reference inside its own group, not measured', () => {
+    expect(draw(String.raw`^(a\1)+$`, { min: 5, max: 9 }, 1)).toHaveLength(1);
+  });
 
   it('should generate repetitions without a bound past the minimum', () => {
     const lengths = new Set(draw('^[a-z]+$', { min: 30, max: 255 }).map(value => value.length));
@@ -57,7 +73,13 @@ describe('generator - base-application - support - faker - createRandexp', () =>
   });
 
   it('should generate the values of randexp when the length limits no choice', () => {
-    for (const pattern of ['^[a-z]+( [a-z]+)*$', '^[a-zA-Z0-9]*$', LOGIN_PATTERN, String.raw`^[A-Z]{2}-\d{3,5}(-[a-z]+)?$`]) {
+    for (const pattern of [
+      '^[a-z]+( [a-z]+)*$',
+      '^[a-zA-Z0-9]*$',
+      LOGIN_REGEX_JS,
+      String.raw`^[A-Z]{2}-\d{3,5}(-[a-z]+)?$`,
+      String.raw`^([a-z]+)-\1$`,
+    ]) {
       expect(draw(pattern, { min: 0, max: 255 })).toStrictEqual(draw(pattern));
     }
   });

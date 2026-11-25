@@ -339,6 +339,34 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     expect(values.filter(value => typeof value !== 'string' || !/^[a-z]{2,8}\.com$/.test(value))).toStrictEqual([]);
   });
 
+  it('should draw a value of a pattern with a back reference within the minlength of its field', () => {
+    const field = prepareField({
+      fieldName: 'code',
+      fieldType: 'String',
+      fieldValidateRules: ['minlength', 'pattern'],
+      fieldValidateRulesMinlength: 20,
+      fieldValidateRulesPattern: String.raw`^(a+)\1$`,
+    });
+    const values = samples([field], 30).map(sample => sample.code);
+    expect(values.filter(value => typeof value !== 'string' || value.length < 20 || !/^(a+)\1$/.test(value))).toStrictEqual([]);
+  });
+
+  it('should warn once of a pattern giving no value within the length of its field', () => {
+    const warnings: string[] = [];
+    const warningGenerator = { jhipsterConfig: config, log: { warn: (message: string) => warnings.push(message), debug() {} } };
+    Object.setPrototypeOf(warningGenerator, BaseGenerator.prototype);
+    const field = prepareCommonFieldForTemplates(
+      entity,
+      { fieldName: 'code', fieldType: 'String', fieldValidateRules: ['pattern'], fieldValidateRulesPattern: '^[a-z]{300}$' } as any,
+      warningGenerator as any,
+    );
+    samples([field], 3);
+    samples([field], 3);
+    expect(warnings).toStrictEqual([
+      'The pattern ^[a-z]{300}$ of the field code gives no value of 0 to 255 characters (its minlength, and its maxlength or the 255 characters of its column): its fake data may be dropped or longer than its column.',
+    ]);
+  });
+
   it('should draw a duration as ISO 8601', () => {
     const [sample] = samples([prepareField({ fieldName: 'time', fieldType: 'Duration' })], 1);
     expect(sample.time).toMatch(/^PT\d+M$/);

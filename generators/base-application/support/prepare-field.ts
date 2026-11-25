@@ -139,6 +139,9 @@ const fakeStringTemplateForFieldName = (columnName: string) => {
 /** The fields whose faker template was told to give a value not of their type, warned once. */
 const fieldsWithInvalidFakerTemplate = new WeakSet<BaseApplicationField>();
 
+/** The fields whose pattern was told to give no value within their length, warned once. */
+const fieldsWithPatternOutOfLength = new WeakSet<BaseApplicationField>();
+
 /**
  * @returns fake value
  */
@@ -343,10 +346,18 @@ export function prepareCommonFieldForTemplates(
     const rules = field.fieldValidateRules ?? [];
     const min = rules.includes(MINLENGTH) ? Number.parseInt(String(field.fieldValidateRulesMinlength), 10) || 0 : 0;
     const max = rules.includes(MAXLENGTH) ? Number.parseInt(String(field.fieldValidateRulesMaxlength), 10) || 255 : 255;
-    // Patterns accepting an empty value (`*`, `?`, ...) may generate one, retry a few times to get a usable value.
+    // Patterns accepting an empty value (`*`, `?`, ...) may generate one, and a back reference out of the sequence of its
+    // group is not measured: retry a few times to get a usable value.
+    const outOfLength = (value: string) => value.length === 0 || value.length < min || value.length > max;
     let value = re.gen({ min, max });
-    for (let attempt = 0; value.length === 0 && attempt < 10; attempt++) {
+    for (let attempt = 0; outOfLength(value) && attempt < 20; attempt++) {
       value = re.gen({ min, max });
+    }
+    if (value.length > 0 && outOfLength(value) && !fieldsWithPatternOutOfLength.has(field)) {
+      fieldsWithPatternOutOfLength.add(field);
+      generator.log.warn(
+        `The pattern ${field.fieldValidateRulesPattern} of the field ${field.fieldName} gives no value of ${min} to ${max} characters (its minlength, and its maxlength or the 255 characters of its column): its fake data may be dropped or longer than its column.`,
+      );
     }
     return value;
   };

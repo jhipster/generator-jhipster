@@ -171,6 +171,7 @@
     "prettier-plugin-packagejson": "3.1.0",
     "prettier-plugin-properties": "0.4.0",
     "randexp": "0.6.0",
+    "ret": "0.3.2",
     "semver": "7.8.6",
     "simple-git": "4.1.0",
     "smol-toml": "1.9.1",

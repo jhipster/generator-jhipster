@@ -18,13 +18,11 @@
  */
 import { Faker, type LocaleDefinition, type Randomizer, base, en, generateMersenne53Randomizer } from '@faker-js/faker';
 import Randexp from 'randexp';
+import { types as TokenType } from 'ret';
 
 import { languageToFakerLanguage } from '../../languages/support/languages.ts';
 
-/** Types of the tokens of `ret`, the parser of randexp. */
-const TokenType = { ROOT: 0, GROUP: 1, POSITION: 2, SET: 3, REPETITION: 5, REFERENCE: 6, CHAR: 7 } as const;
-
-/** The tokens of `ret` used to draw a value within a length. */
+/** The tokens of `ret`, the parser of randexp, used to draw a value within a length. */
 type Token = {
   type: number;
   stack?: Token[];
@@ -47,6 +45,10 @@ class RandexpWithFaker extends Randexp {
   declare _randSelect: <T>(array: T[]) => T;
   /** Range of lengths each token can generate. */
   private readonly ranges = new WeakMap<Token, LengthRange>();
+  /** The groups being measured, a back reference inside its own group not measured. */
+  private readonly measuring = new Set<Token>();
+  /** The groups a back reference refers to, by their number less one: in the order of their opening parenthesis. */
+  private groupsByNumber?: Token[];
 
   constructor(regexp: string | RegExp, flags: string | undefined, faker: Faker) {
     super(regexp, flags);
@@ -63,7 +65,10 @@ class RandexpWithFaker extends Randexp {
    * Generates a value, of a length within `min` and `max` when given.
    * Each choice (an option, a repetition count, the length of each part of a sequence) is drawn among those that keep the
    * value within them. Without a choice limited by them, the value is the one of randexp.
-   * Lookaheads are ignored and a back reference is not measured, as in randexp: the value may not match them.
+   * A group takes the length of its back references after it in the same sequence, which then have the length it got. A
+   * back reference elsewhere (in a repetition, or to a group inside another one) is only known to be of a length of its
+   * group, and one inside its own group is not measured; lookaheads are ignored, as in randexp: the value may not be within
+   * the length, or not match them.
    */
   override gen(length?: { min?: number; max?: number }): string {
     if (!length) {
@@ -78,10 +83,32 @@ class RandexpWithFaker extends Randexp {
   private lengthRange(token: Token): LengthRange {
     let range = this.ranges.get(token);
     if (!range) {
+      this.measuring.add(token);
       range = this.computeLengthRange(token);
+      this.measuring.delete(token);
       this.ranges.set(token, range);
     }
     return range;
+  }
+
+  private rememberedGroups(): Token[] {
+    if (!this.groupsByNumber) {
+      const groups: Token[] = [];
+      const visit = (token: Token) => {
+        if (token.type === TokenType.GROUP && token.remember) {
+          groups.push(token);
+        }
+        for (const stack of token.options ?? (token.stack ? [token.stack] : [])) {
+          stack.forEach(visit);
+        }
+        if (token.type === TokenType.REPETITION) {
+          visit(token.value as Token);
+        }
+      };
+      visit(this.tokens);
+      this.groupsByNumber = groups;
+    }
+    return this.groupsByNumber;
   }
 
   private computeLengthRange(token: Token): LengthRange {
@@ -101,10 +128,14 @@ class RandexpWithFaker extends Randexp {
         return [1, 1];
       case TokenType.REPETITION: {
         const [min, max] = this.lengthRange(token.value as Token);
-        return [token.min! * min, token.max === 0 ? 0 : token.max! * max];
+        // An item that is always empty, like `(?:)*`, has no length however many times it is repeated.
+        return [token.min! * min, token.max === 0 || max === 0 ? 0 : token.max! * max];
+      }
+      case TokenType.REFERENCE: {
+        const group = this.rememberedGroups()[(token.value as number) - 1];
+        return group && !this.measuring.has(group) ? this.lengthRange(group) : [0, Infinity];
       }
       default:
-        // A back reference has the length of its group, not known before it is generated.
         return [0, Infinity];
     }
   }
@@ -144,7 +175,7 @@ class RandexpWithFaker extends Randexp {
         return '';
       }
       if (token.remember && token.groupNumber === undefined) {
-        token.groupNumber = groups.push(null) - 1;
+        token.groupNumber = this.rememberedGroups().indexOf(token);
       }
       let stack = token.stack!;
       if (token.options) {
@@ -182,20 +213,56 @@ class RandexpWithFaker extends Randexp {
     return this._gen(token, groups);
   }
 
-  /** Generates a sequence, each part within a length leaving the minimum and the maximum of the parts after it. */
+  /**
+   * Generates a sequence, each part within a length leaving the minimum and the maximum of the parts after it. A group
+   * takes the length of its back references after it in the sequence too, which then have the length it got.
+   */
   private genStackWithin(stack: Token[], groups: (string | null)[], lo: number, hi: number): string {
+    const groupNumbers = this.rememberedGroups();
+    // A back reference has the length of the value its group has when it is generated: the one of a previous repetition
+    // until the group is generated again.
+    const partRange = (token: Token): LengthRange => {
+      const length = token.type === TokenType.REFERENCE ? groups[(token.value as number) - 1]?.length : undefined;
+      return length === undefined ? this.lengthRange(token) : [length, length];
+    };
+    /** Minimum and maximum lengths of the parts after each part. */
+    const afterRanges = (): LengthRange[] => {
+      const after: LengthRange[] = [[0, 0]];
+      for (let i = stack.length - 1; i > 0; i--) {
+        const [min, max] = partRange(stack[i]);
+        after.unshift([after[0][0] + min, after[0][1] + max]);
+      }
+      return after;
+    };
+    /** Minimum and maximum lengths of the parts after a group, but its back references. */
+    const afterGroupRange = (index: number, copies: Token[]): LengthRange => {
+      let min = 0;
+      let max = 0;
+      for (const token of stack.slice(index + 1)) {
+        if (!copies.includes(token)) {
+          const [tokenMin, tokenMax] = partRange(token);
+          min += tokenMin;
+          max += tokenMax;
+        }
+      }
+      return [min, max];
+    };
     const ranges = stack.map(token => this.lengthRange(token));
-    const after: LengthRange[] = [[0, 0]];
-    for (let i = ranges.length - 1; i > 0; i--) {
-      after.unshift([after[0][0] + ranges[i][0], after[0][1] + ranges[i][1]]);
-    }
+    let after = afterRanges();
     let str = '';
     for (const [i, token] of stack.entries()) {
+      const number = token.type === TokenType.GROUP && token.remember ? groupNumbers.indexOf(token) + 1 : 0;
+      const copies = number ? stack.slice(i + 1).filter(next => next.type === TokenType.REFERENCE && next.value === number) : [];
       const [min, max] = ranges[i];
-      const [afterMin, afterMax] = after[i];
-      const partLo = Math.max(min, lo - str.length - afterMax, 0);
-      const partHi = Math.max(partLo, Math.min(max, hi - str.length - afterMin));
-      str += this.genWithin(token, groups, partLo, partHi);
+      const [afterMin, afterMax] = copies.length > 0 ? afterGroupRange(i, copies) : after[i];
+      const parts = copies.length + 1;
+      const partLo = Math.max(min, Math.ceil((lo - str.length - afterMax) / parts), 0);
+      const partHi = Math.max(partLo, Math.min(max, Math.floor((hi - str.length - afterMin) / parts)));
+      const part = this.genWithin(token, groups, partLo, partHi);
+      str += part;
+      if (copies.length > 0) {
+        after = afterRanges();
+      }
     }
     return str;
   }
