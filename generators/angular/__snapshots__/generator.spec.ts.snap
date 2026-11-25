@@ -2539,14 +2539,6 @@ export class UserManagementUpdate implements OnInit {
       this.userManagementModel(),
       this.userManagement,
     );
-    // A boolean without value that nobody changed keeps no value, the checkbox showing it unchecked.
-    if (
-      this.userManagement &&
-      this.userManagement.activated == null &&
-      !this.editForm.activated().dirty()
-    ) {
-      userManagement.activated = null;
-    }
     if (userManagement.id === null) {
       return this.subscribeToSaveResponse(
         this.userManagementService.create(userManagement as NewUserManagement),
