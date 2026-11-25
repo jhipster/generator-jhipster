@@ -90,7 +90,7 @@ describe(`generator - ${generator}`, () => {
   });
 
   for (const [clientFramework, testResult, coverage] of [
-    ['angular', 'TESTS-results-sonar-vitest.xml', 'outputs.file("build/test-results/lcov.info")'],
+    ['angular', 'TESTS-results-sonar-vitest.xml', 'outputs.dir("build/test-results/lcov-report/")'],
     ['react', 'TESTS-results-vitest.xml', 'outputs.dir("build/test-results/lcov-report/")'],
     ['vue', 'TESTS-results-vitest.xml', 'outputs.dir("build/vite-coverage/")'],
   ] as const) {
