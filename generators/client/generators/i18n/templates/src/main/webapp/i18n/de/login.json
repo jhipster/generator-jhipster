@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Anmeldung fehlgeschlagen!</strong> Überprüfen Sie bitte Ihre Angaben und versuchen Sie es erneut."
+        "authentication": "<strong>Anmeldung fehlgeschlagen!</strong> Überprüfen Sie bitte Ihre Angaben und versuchen Sie es erneut.",
+        "sessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
       }
     },
     "password": {

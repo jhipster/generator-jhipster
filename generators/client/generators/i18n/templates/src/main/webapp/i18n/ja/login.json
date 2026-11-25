@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>ログイン失敗!</strong> パスワードをチェックして再度入力してください。"
+        "authentication": "<strong>ログイン失敗!</strong> パスワードをチェックして再度入力してください。",
+        "sessionExpired": "セッションの有効期限が切れました。もう一度サインインしてください。"
       }
     },
     "password": {

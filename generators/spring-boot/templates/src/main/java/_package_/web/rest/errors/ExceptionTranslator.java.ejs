@@ -391,10 +391,6 @@ _%>
         } else if (isDataIntegrityViolation(err)) {
             return ErrorConstants.ERR_DATA_INTEGRITY_VIOLATION;
 <%_ } _%>
-<%_ if (reactive) { _%>
-        } else if (err instanceof WebExchangeBindException) {
-            return ErrorConstants.ERR_VALIDATION;
-<%_ } _%>
         }
         return null;
     }
@@ -406,6 +402,9 @@ _%>
 
     private boolean isValidationFailure(Throwable err) {
         return (
+<%_ if (reactive) { _%>
+            err instanceof WebExchangeBindException ||
+<%_ } _%>
             err instanceof MethodArgumentNotValidException ||
             err instanceof HandlerMethodValidationException ||
             err instanceof ConstraintViolationException

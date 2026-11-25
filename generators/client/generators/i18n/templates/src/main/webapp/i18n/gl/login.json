@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>O inicio de sesión fallou!</strong> Por favor revise as credenciais e tente de novo."
+        "authentication": "<strong>O inicio de sesión fallou!</strong> Por favor revise as credenciais e tente de novo.",
+        "sessionExpired": "A súa sesión caducou. Inicie sesión de novo."
       }
     },
     "password": {

@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Prihlásenie zlyhalo!</strong> Prosím skontrolujte vaše prihlasovacie údaje a skúste to znovu."
+        "authentication": "<strong>Prihlásenie zlyhalo!</strong> Prosím skontrolujte vaše prihlasovacie údaje a skúste to znovu.",
+        "sessionExpired": "Vaša relácia vypršala. Prihláste sa znova."
       }
     },
     "password": {

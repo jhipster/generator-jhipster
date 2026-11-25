@@ -1,0 +1,53 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it } from 'vitest';
+
+import { CONSTRAINT_VIOLATION_TYPE, INVALID_PASSWORD_TYPE, PROBLEM_WITH_MESSAGE_TYPE } from './error.constants';
+import { getServerProblem } from './problem-details';
+
+describe('getServerProblem', () => {
+  it('should read a body that is not a problem as none', () => {
+    expect(getServerProblem(null)).toBeUndefined();
+    expect(getServerProblem(undefined)).toBeUndefined();
+    expect(getServerProblem('')).toBeUndefined();
+    expect(getServerProblem('Bad request')).toBeUndefined();
+    expect(getServerProblem({})).toBeUndefined();
+    expect(getServerProblem({ type: 'about:blank', title: 'Not Found' })).toBeUndefined();
+  });
+
+  it('should read a problem with a message', () => {
+    const data = { type: PROBLEM_WITH_MESSAGE_TYPE, status: 400, message: 'error.idexists', params: 'author' };
+    expect(getServerProblem(data)).toEqual(data);
+  });
+
+  it('should read a problem of the account as one with a message', () => {
+    const data = { type: INVALID_PASSWORD_TYPE, status: 400, title: 'Incorrect password', message: 'error.http.400' };
+    expect(getServerProblem(data)).toEqual(data);
+  });
+
+  it('should read the field errors of a constraint violation', () => {
+    const fieldError = { objectName: 'author', field: 'name', message: 'must not be null', code: 'NotNull' };
+    const data = { type: CONSTRAINT_VIOLATION_TYPE, status: 400, message: 'error.validation', fieldErrors: [fieldError, null, { field: 'name' }] };
+    expect(getServerProblem(data)).toEqual({ ...data, fieldErrors: [fieldError] });
+  });
+
+  it('should not read a constraint violation without field errors', () => {
+    expect(getServerProblem({ type: CONSTRAINT_VIOLATION_TYPE, status: 400, message: 'error.validation' })).toBeUndefined();
+  });
+});

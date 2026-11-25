@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Kirjautuminen epäonnistui!</strong> Tarkista tunnuksesi ja yritä uudelleen."
+        "authentication": "<strong>Kirjautuminen epäonnistui!</strong> Tarkista tunnuksesi ja yritä uudelleen.",
+        "sessionExpired": "Istuntosi on vanhentunut. Kirjaudu sisään uudelleen."
       }
     },
     "password": {

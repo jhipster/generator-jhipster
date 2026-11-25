@@ -3813,6 +3813,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/shared/jhipster/pagination.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/problem-details.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
@@ -5146,6 +5149,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/jhipster/pagination.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/problem-details.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
@@ -6310,6 +6316,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/pagination.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/problem-details.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
@@ -7568,6 +7577,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/pagination.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/problem-details.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
@@ -9121,6 +9133,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/jhipster/pagination.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/problem-details.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
@@ -10264,6 +10279,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/shared/jhipster/pagination.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/problem-details.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
@@ -11383,6 +11401,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/pagination.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/problem-details.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
