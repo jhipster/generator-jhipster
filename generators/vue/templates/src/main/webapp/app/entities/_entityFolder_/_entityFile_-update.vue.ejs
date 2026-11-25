@@ -248,7 +248,7 @@ const <%- enumField.enumInstance %>Values = ref<string[]>(Object.keys(<%- enumFi
 const <%- field.fieldName %>Values: string[] = <%- field.vueFieldClientConstant.vueConstantValues %>;
 <%_ } _%>
 <%_ if (anyFieldIsLocalDate) { _%>
-const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
+const currentLanguage = inject(currentLanguageKey, () => computed(() => globalThis.navigator.language ?? '<%- nativeLanguage %>'), true);
 <%_ } _%>
 
 const route = useRoute();
@@ -336,7 +336,7 @@ const save = async () => {
 const clearInputImage = (field: string, fieldContentType: string, idInput: string) => {
   (<%- entityInstance %>.value as Record<string, unknown>)[field] = null;
   (<%- entityInstance %>.value as Record<string, unknown>)[fieldContentType] = null;
-  const input = document.getElementById(idInput) as HTMLInputElement | null;
+  const input = globalThis.document.getElementById(idInput) as HTMLInputElement | null;
   if (input) {
     input.value = '';
   }
