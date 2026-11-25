@@ -111,6 +111,27 @@ describe(`generator - ${generator}`, () => {
           { name: 'UuidId', changelogDate: '20200101000200', fields: [{ fieldName: 'id', fieldType: 'UUID' }] },
           { name: 'StringId', changelogDate: '20200101000300', fields: [{ fieldName: 'id', fieldType: 'String' }] },
           {
+            name: 'CompositeId',
+            changelogDate: '20200101000500',
+            fields: [
+              { fieldName: 'orderId', fieldType: 'Long', id: true },
+              { fieldName: 'line', fieldType: 'Integer', id: true },
+            ],
+          },
+          {
+            name: 'MapsIdUuid',
+            changelogDate: '20200101000600',
+            relationships: [
+              {
+                relationshipName: 'uuidId',
+                otherEntityName: 'uuidId',
+                relationshipType: 'one-to-one',
+                relationshipSide: 'left',
+                options: { id: true },
+              },
+            ],
+          },
+          {
             name: 'Typed',
             changelogDate: '20200101000400',
             fields: fieldTypes.map(fieldType =>
@@ -151,6 +172,18 @@ describe(`generator - ${generator}`, () => {
       expect(jsonType('IntegerId')).toBe('number');
       expect(jsonType('UuidId')).toBe('uuid');
       expect(jsonType('StringId')).toBe('text');
+    });
+
+    it('should give no JSON type to a composite primary key, whose JSON is an object', () => {
+      const { primaryKey } = result.entities!.CompositeId as Record<string, any>;
+      expect(primaryKey.composite).toBe(true);
+      expect(primaryKey.jsonType).toBeUndefined();
+    });
+
+    it('should give a derived primary key the JSON type of the key it is derived from', () => {
+      const { primaryKey } = result.entities!.MapsIdUuid as Record<string, any>;
+      expect(primaryKey.derived).toBe(true);
+      expect(primaryKey.jsonType).toBe('uuid');
     });
 
     it('should derive a flag for each JSON type of a field and of a primary key', () => {
