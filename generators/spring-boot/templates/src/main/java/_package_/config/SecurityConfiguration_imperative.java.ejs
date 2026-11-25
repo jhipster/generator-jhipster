@@ -58,9 +58,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.springframework.security.oauth2.core.oidc.StandardClaimNames.PREFERRED_USERNAME;
 
   <%_ if (communicationSpringWebsocket && !applicationTypeMicroservice) { _%>
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
   <%_ } _%>
 import <%- packageName %>.security.oauth2.AudienceValidator;
 import org.springframework.core.convert.converter.Converter;
@@ -340,12 +345,19 @@ public class SecurityConfiguration {
   <%_ } else { _%>
             .oauth2Login(oauth2 -> oauth2.loginPage("/").userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
     <%_ if (communicationSpringWebsocket) { _%>
-            // Prevent the SockJS info polling request from being saved and replayed as the
-            // post-login redirect target (see https://github.com/jhipster/generator-jhipster/issues/28685)
+            // Like the default request cache, save only page requests as the post-login redirect target, not the API
+            // calls of the client, and neither the SockJS requests (see https://github.com/jhipster/generator-jhipster/issues/28685)
             .requestCache(cache -> {
+                MediaTypeRequestMatcher jsonRequest = new MediaTypeRequestMatcher(MediaType.APPLICATION_JSON);
+                jsonRequest.setIgnoredMediaTypes(Set.of(MediaType.ALL));
                 HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
                 requestCache.setRequestMatcher(
-                    new NegatedRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/websocket/**"))
+                    new AndRequestMatcher(
+                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/**"),
+                        new NegatedRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/websocket/**")),
+                        new NegatedRequestMatcher(jsonRequest),
+                        new NegatedRequestMatcher(new RequestHeaderRequestMatcher("X-Requested-With", "XMLHttpRequest"))
+                    )
                 );
                 cache.requestCache(requestCache);
             })
