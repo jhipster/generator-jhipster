@@ -24,7 +24,7 @@ import vitest from '@vitest/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
-  { ignores: ['<%- relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>', '<%- relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', 'dist/'] },
+  { ignores: ['<%- relativeDir(clientRootDir, clientDistDir) %>', '<%- relativeDir(clientRootDir, temporaryDir) %>', '<%- relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', 'dist/'] },
   eslint.configs.recommended,
   {
     files: ['**/*.{js,cjs,mjs}'],

@@ -65,7 +65,8 @@ export default {
   filename: 'remoteEntry.js',
   shareScope: 'default',
   shared: {
-    ...shareDependencies(),
+    // bootstrap-vue-next imports its own @vueuse/core version, a shared singleton would replace it with the application one.
+    ...shareDependencies({ skipList: ['@vueuse/core'] }),
     ...shareMappings(
       '@/shared/jhipster/constants',
       '@/shared/alert/alert.service',

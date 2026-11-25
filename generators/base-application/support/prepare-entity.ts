@@ -25,7 +25,7 @@ import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { EntityAll, FieldAll } from '../../../lib/types/application-all.d.ts';
-import { getMicroserviceAppName, mutateData, stringHashCode } from '../../../lib/utils/index.ts';
+import { getMicroserviceAppName, mutateData, mutateDefaults, stringHashCode } from '../../../lib/utils/index.ts';
 import { upperFirst } from '../../../lib/utils/string-utils.ts';
 import { parseChangelog } from '../../base/support/timestamp.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
@@ -152,8 +152,7 @@ export default function prepareEntity(entityWithConfig: BaseApplicationEntity, g
 
   mutateData(entityWithConfig, mutateEntity);
 
-  mutateData(entityWithConfig, {
-    __override__: false,
+  mutateDefaults(entityWithConfig, {
     hasRelationshipWithBuiltInUser: ({ relationships }) => relationships.some(relationship => relationship.otherEntity.builtInUser),
   });
 

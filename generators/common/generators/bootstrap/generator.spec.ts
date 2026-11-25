@@ -96,5 +96,83 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with the field types of a request body', () => {
+    const fieldTypes = ['Long', 'BigDecimal', 'Integer', 'Float', 'Double', 'Boolean', 'UUID', 'String', 'Instant', 'TextBlob', 'Level'];
+
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({})
+        .withJHipsterConfig({}, [
+          { name: 'LongId', changelogDate: '20200101000000' },
+          { name: 'IntegerId', changelogDate: '20200101000100', fields: [{ fieldName: 'id', fieldType: 'Integer' }] },
+          { name: 'UuidId', changelogDate: '20200101000200', fields: [{ fieldName: 'id', fieldType: 'UUID' }] },
+          { name: 'StringId', changelogDate: '20200101000300', fields: [{ fieldName: 'id', fieldType: 'String' }] },
+          {
+            name: 'Typed',
+            changelogDate: '20200101000400',
+            fields: fieldTypes.map(fieldType =>
+              fieldType === 'Level' ?
+                { fieldName: 'fieldLevel', fieldType, fieldValues: 'LOW,HIGH' }
+              : { fieldName: `field${fieldType}`, fieldType },
+            ),
+          },
+        ]);
+    });
+
+    it('should give each field the JSON values it takes', () => {
+      const entity = result.entities!.Typed as Record<string, any>;
+      expect(
+        Object.fromEntries(
+          entity.fields
+            .filter((field: Record<string, any>) => !field.id)
+            .map((field: Record<string, any>) => [field.fieldName.slice('field'.length), field.jsonType]),
+        ),
+      ).toEqual({
+        Long: 'number-or-text',
+        BigDecimal: 'number-or-text',
+        Integer: 'number',
+        Float: 'number',
+        Double: 'number',
+        Boolean: 'boolean',
+        UUID: 'uuid',
+        String: 'text',
+        Instant: 'text',
+        TextBlob: 'text',
+        Level: 'text',
+      });
+    });
+
+    it('should give each primary key the JSON values of its id', () => {
+      const jsonType = (name: string) => (result.entities![name] as Record<string, any>).primaryKey.jsonType;
+      expect(jsonType('LongId')).toBe('number-or-text');
+      expect(jsonType('IntegerId')).toBe('number');
+      expect(jsonType('UuidId')).toBe('uuid');
+      expect(jsonType('StringId')).toBe('text');
+    });
+
+    it('should derive a flag for each JSON type of a field and of a primary key', () => {
+      const jsonTypeFlags = (data: Record<string, any>) =>
+        Object.fromEntries(Object.entries(data).filter(([key]) => key.startsWith('jsonType') && key !== 'jsonType'));
+      const entity = result.entities!.Typed as Record<string, any>;
+      expect(jsonTypeFlags(entity.fields.find((field: Record<string, any>) => field.fieldName === 'fieldLong'))).toEqual({
+        jsonTypeNumber: false,
+        jsonTypeNumberOrText: true,
+        jsonTypeBoolean: false,
+        jsonTypeUuid: false,
+        jsonTypeText: false,
+      });
+      expect(jsonTypeFlags((result.entities!.UuidId as Record<string, any>).primaryKey)).toEqual({
+        jsonTypeNumber: false,
+        jsonTypeNumberOrText: false,
+        jsonTypeBoolean: false,
+        jsonTypeUuid: true,
+        jsonTypeText: false,
+      });
+    });
+  });
+
   testBootstrapEntities(generator);
 });

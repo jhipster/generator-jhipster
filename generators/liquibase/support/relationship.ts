@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../lib/utils/index.ts';
+import { mutateData, mutateDefaults } from '../../../lib/utils/index.ts';
 import { getFKConstraintName, prepareRelationshipForDatabase } from '../../base-application/generators/database-bootstrap/support/index.ts';
 import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Relationship as LiquibaseRelationship } from '../types.ts';
 
@@ -83,8 +83,7 @@ export function prepareRelationshipForLiquibase({
     });
   }
 
-  mutateData(relationship, {
-    __override__: false,
+  mutateDefaults(relationship, {
     columnDataType: (data: any) => data.otherEntity.columnType,
     liquibaseGenerateFakeData: data => data.columnRequired && data.persistableRelationship && !data.collection,
   });

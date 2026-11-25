@@ -16,15 +16,96 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Faker, base, en } from '@faker-js/faker';
+
 import { fieldTypes } from '../../../lib/jhipster/index.ts';
+import { stringHashCode } from '../../../lib/utils/string.ts';
 import type { Field as BaseApplicationField } from '../types.ts';
 
 import { isContentTypeField } from './content-type-fields.ts';
+import { getFieldNumberLimits } from './number-limits.ts';
 
 const {
-  CommonDBTypes: { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, FLOAT, INTEGER, LONG },
+  CommonDBTypes: { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, FLOAT, INTEGER, LONG, UUID },
   RelationalOnlyDBTypes: { BYTES },
 } = fieldTypes;
+
+const UUID_PATTERN = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
+// The integers and the numbers of JSON (RFC 8259, section 6), the format of the samples.
+const INTEGER_PATTERN = /^-?(?:0|[1-9]\d*)$/;
+const NUMBER_PATTERN = /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
+
+/** Whether a number is within the min and the max of its field, else within the limits of its type. */
+const isWithinNumberLimits = (field: BaseApplicationField, value: number): boolean => {
+  const limits = getFieldNumberLimits(field);
+  return Number.isFinite(value) && (!limits || (value >= limits.min && value <= limits.max));
+};
+
+/**
+ * Whether a text a faker template gives is a value of the type of the field: the one of a UUID, a number, a boolean or an
+ * enum field is checked, any text is a value of the other types.
+ */
+export function isFakeDataOfFieldType(field: BaseApplicationField, value: string): boolean {
+  if (field.fieldIsEnum) {
+    return field.enumValues?.some(({ name }) => name === value) ?? false;
+  }
+  switch (field.fieldType) {
+    case UUID:
+      return UUID_PATTERN.test(value);
+    case INTEGER:
+    case LONG:
+      return INTEGER_PATTERN.test(value) && isWithinNumberLimits(field, Number(value));
+    case FLOAT:
+    case DOUBLE:
+    case BIG_DECIMAL:
+      return NUMBER_PATTERN.test(value) && isWithinNumberLimits(field, Number(value));
+    case BOOLEAN:
+      return value === 'true' || value === 'false';
+    default:
+      return true;
+  }
+}
+
+/** The value of a field from a text of its type: a boolean or a number, else the text. */
+export function toFakeDataOfFieldType(field: BaseApplicationField, value: string): string | number | boolean {
+  if (field.fieldIsEnum) {
+    return value;
+  }
+  switch (field.fieldType) {
+    case BOOLEAN:
+      return value === 'true';
+    case INTEGER:
+    case LONG:
+    case FLOAT:
+    case DOUBLE:
+    case BIG_DECIMAL:
+      return Number(value);
+    default:
+      return value;
+  }
+}
+
+/** The faker of the check of the templates, apart from the fakers of the entities, whose draws it does not change. */
+const templateCheckFaker = new Faker({ locale: [en, base] });
+const templateChecks = new WeakMap<BaseApplicationField, { ofFieldType: boolean; value: string }>();
+
+/**
+ * Whether the faker template of a field gives values of its type, checked once for the field by a draw of its own: a field
+ * whose template does not takes the fake data of its type, and its domain.
+ */
+export function checkFakerTemplate(field: BaseApplicationField): { ofFieldType: boolean; value: string } | undefined {
+  if (!field.fakerTemplate) {
+    return undefined;
+  }
+  let check = templateChecks.get(field);
+  if (!check) {
+    templateCheckFaker.seed(stringHashCode(`${field.fieldName}-${field.fakerTemplate}`));
+    const value = templateCheckFaker.helpers.fake(field.fakerTemplate);
+    check = { ofFieldType: isFakeDataOfFieldType(field, value), value };
+    templateChecks.set(field, check);
+  }
+  return check;
+}
 
 /** A fake data value serializable to JSON: a date and time is a Date, a blob of bytes its base64 text. */
 export type FakeDataValue = string | number | boolean | Date;
@@ -83,11 +164,11 @@ const MAX_DOMAIN_RANGE = 1000;
 export type FieldDomainValue = string | number | boolean;
 
 /**
- * The values a field can take when they can be listed: an enum, a boolean or integers with a small range.
- * A field with a template or a pattern has its values given by them.
+ * The values a field can take when they can be listed: an enum, a boolean, or numbers with a small range, the decimals
+ * drawn with two decimals. A field with a template or a pattern has its values given by them.
  */
 export function getFieldFakeDataDomain(field: BaseApplicationField): FieldDomainValue[] | undefined {
-  if (field.fakerTemplate || (field.fieldValidate && field.fieldValidateRules?.includes('pattern'))) {
+  if (checkFakerTemplate(field)?.ofFieldType || (field.fieldValidate && field.fieldValidateRules?.includes('pattern'))) {
     return undefined;
   }
   if (field.fieldIsEnum) {
@@ -101,6 +182,16 @@ export function getFieldFakeDataDomain(field: BaseApplicationField): FieldDomain
     const max = Math.trunc(field.fieldFakeDataMax!);
     if (max - min <= MAX_DOMAIN_RANGE) {
       return Array.from({ length: max - min + 1 }, (_, index) => min + index);
+    }
+  }
+  // eslint-disable-next-line no-template-curly-in-string
+  if (([FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL] as string[]).includes(field.fieldType)) {
+    // The hundredths in the range, as the fake data draws a decimal: 0.07 * 100 is 7.000000000000001, rounded first.
+    const hundredths = (value: number) => Number((value * 100).toFixed(6));
+    const min = Math.ceil(hundredths(field.fieldFakeDataMin!));
+    const max = Math.floor(hundredths(field.fieldFakeDataMax!));
+    if (max - min <= MAX_DOMAIN_RANGE) {
+      return Array.from({ length: max - min + 1 }, (_, index) => (min + index) / 100);
     }
   }
   return undefined;

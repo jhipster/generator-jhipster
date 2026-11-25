@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>登入失敗!</strong> 請檢查您的憑證再重試一次。"
+        "authentication": "<strong>登入失敗!</strong> 請檢查您的憑證再重試一次。",
+        "sessionExpired": "您的工作階段已過期，請重新登入。"
       }
     },
     "password": {

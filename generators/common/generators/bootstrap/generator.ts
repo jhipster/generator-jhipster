@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 
-import { mutateData } from '../../../../lib/utils/object.ts';
+import { mutateDefaults } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { mutateApplication } from '../../application.ts';
 import { mutateEntity as commonMutateEntity, mutateField as commonMutateField } from '../../entity.ts';
+import { getJsonType, jsonTypeDerivedProperties } from '../../internal/json-type.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
@@ -77,8 +78,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     return this.asPostLoadingEntitiesTaskGroup({
       loadEntities({ application, entitiesToLoad }) {
         for (const { entityBootstrap } of entitiesToLoad) {
-          mutateData(entityBootstrap, {
-            __override__: false,
+          mutateDefaults(entityBootstrap, {
             // The entities of a microservice belong to it, but the built-in ones.
             microserviceName: ({ builtIn }, { undefinedMarker }) =>
               !builtIn && application.applicationTypeMicroservice ? application.baseName : undefinedMarker,
@@ -116,12 +116,29 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      primaryKeyJsonType({ entity }) {
+        const { primaryKey } = entity;
+        if (primaryKey) {
+          mutateDefaults(primaryKey, {
+            jsonType: ({ composite, type }) => (composite ? undefined : getJsonType(type)),
+            ...jsonTypeDerivedProperties,
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.postPreparingEachEntity;
+  }
+
   get default() {
     return this.asDefaultTaskGroup({
       postPreparingEntities({ entities }) {
         for (const entity of entities) {
-          mutateData(entity, {
-            __override__: false,
+          mutateDefaults(entity, {
             restProperties: () => [
               ...entity.fields,
               ...entity.relationships.filter(

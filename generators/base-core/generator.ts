@@ -55,6 +55,8 @@ import {
   CRLF,
   LF,
   type Logger,
+  droppedMutationMessage,
+  enableDelayedMutations,
   hasCrlf,
   isWin32,
   mutateData,
@@ -1559,6 +1561,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         this.log.warn(result.error);
       }
     }
+  }
+
+  /**
+   * Makes the data a mutation context, as `enableDelayedMutations` does, a delayed mutation dropped told in the debug log.
+   */
+  enableDelayedMutations<const T extends object>(data: T, options: { autoDelay?: boolean } = {}): T {
+    return enableDelayedMutations(data, {
+      ...options,
+      onDroppedMutation: dropped => this.log.debug(droppedMutationMessage(dropped)),
+    });
   }
 
   /**

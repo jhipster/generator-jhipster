@@ -89,7 +89,7 @@ def webapp_test = tasks.register('webapp_test', <%- nodePackageManagerPnpm ? 'Pn
   <%_ if (clientFramework === 'angular') { _%>
     outputs.file("build/test-results/TESTS-results-sonar-vitest.xml")
         .withPropertyName("vitest-result")
-    outputs.file("build/test-results/lcov.info")
+    outputs.dir("build/test-results/lcov-report/")
         .withPropertyName("coverage-result")
   <%_ } else { _%>
     outputs.file("build/test-results/TESTS-results-vitest.xml")

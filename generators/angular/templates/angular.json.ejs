@@ -99,6 +99,11 @@
               "<%- relativeDir(clientRootDir, clientSrcDir) %>content/scss/vendor.scss",
               "<%- relativeDir(clientRootDir, clientSrcDir) %>content/scss/global.scss"
             ],
+            "stylePreprocessorOptions": {
+              "sass": {
+                "silenceDeprecations": ["import"]
+              }
+            },
             "scripts": [],
             "define": {
               "SERVER_API_URL": "''"
@@ -218,7 +223,7 @@
               "lines": 95
             },
 <%_ if (enableTranslation) { _%>
-            "coverageExclude": ["<%- clientSrcDir %>i18n/**"],
+            "coverageExclude": ["<%- relativeDir(clientRootDir, clientSrcDir) %>i18n/**"],
 <%_ } _%>
             "reporters": [
               "default",

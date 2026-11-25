@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Inloggningen misslyckades!</strong> Kontrollera ditt användarnamn och lösenord och prova igen."
+        "authentication": "<strong>Inloggningen misslyckades!</strong> Kontrollera ditt användarnamn och lösenord och prova igen.",
+        "sessionExpired": "Din session har gått ut. Logga in igen."
       }
     },
     "password": {

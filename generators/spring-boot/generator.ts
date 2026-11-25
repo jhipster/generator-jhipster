@@ -23,7 +23,7 @@ import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.t
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFrameworkTypes, websocketTypes } from '../../lib/jhipster/index.ts';
-import { mutateData } from '../../lib/utils/index.ts';
+import { mutateData, mutateDefaults } from '../../lib/utils/index.ts';
 import { lowerFirst } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { isContentTypeField } from '../base-application/internal/content-type-fields.ts';
@@ -477,8 +477,7 @@ ${classProperties
         // Tries the application, in a demonstration: builds the jar of the production profile, then runs it with the sample secrets.
         // Cleans first, so the only jar is the one to run: e2e builds and older versions would match the wildcard too.
         // A script already set, by a blueprint or the user, is kept.
-        mutateData(application.packageJsonScripts, {
-          __override__: false,
+        mutateDefaults(application.packageJsonScripts, {
           'pretry-it': `./${application.buildToolGradle ? 'gradlew' : 'mvnw'} clean && npm run java:jar:prod`,
           'try-it': `java -jar ${application.javaPackagingDestDir}*.jar --spring.profiles.include=secret-samples`,
         });
@@ -646,10 +645,12 @@ ${classProperties
         const sampleFields = entity.fields
           .filter(field => !field.id && !isContentTypeField(field) && sampleGroup(field) !== -1)
           .toSorted((a, b) => sampleGroup(a) - sampleGroup(b));
-        // A date is written as its ISO 8601 text, a decimal number with its two decimals.
-        const testValue = (value: unknown): TestValue | undefined => {
+        // A date is written as its ISO 8601 text, a BigDecimal with the two decimals of its column, a Float or a Double without
+        // the error of the binary floating point.
+        const testValue = (field: TestField, value: unknown): TestValue | undefined => {
           if (value instanceof Date) return value.toISOString();
-          return typeof value === 'number' && !Number.isInteger(value) ? Number(value.toFixed(2)) : (value as TestValue | undefined);
+          if (typeof value !== 'number' || Number.isInteger(value)) return value as TestValue | undefined;
+          return Number(field.fieldTypeBigDecimal ? value.toFixed(2) : value.toPrecision(15));
         };
         // The values of a field do not repeat, but for a field with fewer values than the test needs, like an enum of a
         // single value, whose samples repeat.
@@ -664,7 +665,7 @@ ${classProperties
         });
 
         for (const [index, field] of sampleFields.entries()) {
-          const values = samples[index].map(sample => testValue(sample[field.fieldName])!);
+          const values = samples[index].map(sample => testValue(field, sample[field.fieldName])!);
           const compare = compareTestValues(field);
           let [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
             TestValue | undefined,
@@ -678,11 +679,10 @@ ${classProperties
             if (distinctValues.length < values.length) {
               const step = field.fieldTypeInteger || field.fieldTypeLong ? 1 : 0.01;
               [sample, updated = sample] = distinctValues;
-              smaller = testValue(sample - step);
+              smaller = testValue(field, sample - step);
             }
           }
-          mutateData(field, {
-            __override__: false,
+          mutateDefaults(field, {
             sbTestDefaultValue: javaValue(field, sample),
             sbTestUpdatedValue: javaValue(field, updated),
             sbTestSmallerValue: smaller === undefined ? undefined : javaValue(field, smaller),
@@ -698,8 +698,7 @@ ${classProperties
           const [sample, updated] = [`TestUtil.createByteArray(${size}, "0")`, `TestUtil.createByteArray(${size}, "1")`].map(bytes =>
             field.fieldTypeBytes ? bytes : `ByteBuffer.wrap(${bytes})`,
           );
-          mutateData(field, {
-            __override__: false,
+          mutateDefaults(field, {
             sbTestDefaultValue: sample,
             sbTestUpdatedValue: updated,
             // The byte arrays are validated by their size, a ByteBuffer is not.
@@ -711,8 +710,7 @@ ${classProperties
         // The blobs give no value as a sample: the fake data of a blob is a file.
         for (const field of entity.fields.filter(field => isContentTypeField(field) || field.blobContentTypeText)) {
           const [sample, updated] = isContentTypeField(field) ? ['image/jpg', 'image/png'] : ['AAAAAAAAAA', 'BBBBBBBBBB'];
-          mutateData(field, {
-            __override__: false,
+          mutateDefaults(field, {
             sbTestDefaultValue: javaValue(field, sample),
             sbTestUpdatedValue: javaValue(field, updated),
           });
@@ -936,9 +934,22 @@ ${classProperties
             source.addSpringBootModule?.('spring-boot-properties-migrator');
           }
         } else if (application.buildToolGradle) {
+          // The libraries of JHipster built locally are resolved from the local maven repository alone: a repository before it
+          // that fails, like Maven Central answering 429, fails their resolution instead of falling back to the next one.
+          const mavenLocalRepository =
+            application.jhipsterDependenciesVersion?.includes('-CICD') ?
+              `exclusiveContent {
+    forRepository {
+        mavenLocal()
+    }
+    filter {
+        includeGroup "tech.jhipster"
+    }
+}`
+            : '// mavenLocal()';
           source.addGradleRepository?.({
             repository: `// Local maven repository is required for libraries built locally with maven like development jhipster-bom.
-${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenLocal()`,
+${mavenLocalRepository}`,
           });
           if (application.addSpringMilestoneRepository) {
             source.addGradlePluginManagementRepository?.({ repository: 'mavenCentral()' });

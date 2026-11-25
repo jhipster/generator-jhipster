@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Accesso non riuscito!</strong> Si prega di controllare le credenziali e riprovare."
+        "authentication": "<strong>Accesso non riuscito!</strong> Si prega di controllare le credenziali e riprovare.",
+        "sessionExpired": "La sessione è scaduta. Effettua di nuovo l'accesso."
       }
     },
     "password": {

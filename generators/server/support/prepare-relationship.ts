@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { mutateData } from '../../../lib/utils/index.ts';
+import { mutateDefaults } from '../../../lib/utils/index.ts';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.ts';
 import type { Relationship as ServerRelationship } from '../types.ts';
 
@@ -29,8 +29,7 @@ export { prepareRelationshipForDatabase } from '../../base-application/generator
 
 export function prepareRelationship({ relationship }: { relationship: ServerRelationship }) {
   if (relationship.documentation) {
-    mutateData(relationship, {
-      __override__: false,
+    mutateDefaults(relationship, {
       relationshipJavadoc: formatDocAsJavaDoc(relationship.documentation, 4),
       relationshipApiDescription: formatDocAsApiDescription(relationship.documentation),
       propertyApiDescription: ({ relationshipApiDescription }) => relationshipApiDescription,

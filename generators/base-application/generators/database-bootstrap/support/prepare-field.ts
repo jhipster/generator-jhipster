@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { reservedKeywords } from '../../../../../lib/jhipster/index.ts';
-import { mutateData } from '../../../../../lib/utils/index.ts';
+import { mutateDefaults } from '../../../../../lib/utils/index.ts';
 import { snakeCase } from '../../../../../lib/utils/string-utils.ts';
 import { isContentTypeField } from '../../../internal/content-type-fields.ts';
 import type { DatabaseEntity, DatabaseField } from '../types.d.ts';
@@ -78,8 +78,7 @@ export function prepareFieldColumnForDatabase({
  * so they are prepared once here rather than by the generator of the changelog alone.
  */
 export function prepareFieldForDatabase({ field }: { field: DatabaseField }) {
-  mutateData(field, {
-    __override__: false,
+  mutateDefaults(field, {
     // Set before nullable, which reads it.
     columnRequired: data => data.nullable === false || (data.fieldValidate && data.fieldValidateRules?.includes('required')),
     nullable: data => !data.columnRequired,

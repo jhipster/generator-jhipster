@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { DerivedBooleanPropertiesOf } from '../../lib/command/types.ts';
+import type { DerivedBooleanPropertiesOf, DerivedProperty } from '../../lib/command/types.ts';
 import { BlobTypes, type FieldType, fieldTypesValues } from '../../lib/jhipster/field-types.ts';
 import { type ValidationType, validationTypes } from '../../lib/jhipster/index.ts';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
@@ -28,6 +28,7 @@ import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from
 import { camelCase, kebabCase, lowerFirst, pluralize, snakeCase, startCase, upperFirst } from '../../lib/utils/string-utils.ts';
 import { formatDocAsApiDescription } from '../java/support/doc.ts';
 
+import { restNumberLimit, ruleNumber } from './internal/number-limits.ts';
 import { isFieldEnumType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 
@@ -151,25 +152,6 @@ export type FakeDataOptions = {
 /** The range of the fake data of a number field without a min nor a max. */
 const FAKE_DATA_MIN = 0;
 const FAKE_DATA_MAX = 32767;
-
-type NumberField = Pick<Field, 'fieldTypeInteger' | 'fieldTypeLong' | 'fieldTypeFloat' | 'fieldTypeDouble' | 'fieldTypeBigDecimal'>;
-
-/**
- * The largest value of a number type that a REST client reads as it is, the smallest one being its opposite: a JSON
- * number is a double in JavaScript, which holds an Integer, a Long up to Number.MAX_SAFE_INTEGER, and the fake data of
- * a Double or a BigDecimal, which has cents, up to 10^13, its 15 significant digits that a double always gives back as
- * they are written; of a Float up to a hundredth of 2^24.
- */
-const restNumberLimit = (field: NumberField): number | undefined => {
-  if (field.fieldTypeInteger) return 2147483647;
-  if (field.fieldTypeLong) return Number.MAX_SAFE_INTEGER;
-  if (field.fieldTypeFloat) return 2 ** 24 / 100;
-  if (field.fieldTypeDouble || field.fieldTypeBigDecimal) return 10 ** 13;
-  return undefined;
-};
-
-/** A min or a max, given as a number or as its text, like a JDL does. */
-const ruleNumber = (value: number | string | undefined) => (value === undefined ? undefined : Number.parseFloat(`${value}`));
 
 export const mutateField = {
   __override__: false,
@@ -308,6 +290,15 @@ export const mutateRelationshipWithEntity = {
   otherEntityUser: ({ otherEntityName }) => otherEntityName.toLowerCase() === 'user',
 } satisfies MutateDataParam<RelationshipWithEntity<Relationship, Entity>>;
 
+/**
+ * The JSON values a request body takes for a field type: a number, a number or its text (Long and BigDecimal, which a
+ * double cannot always hold, as RFC 7493 tells), a boolean, a UUID text or any other text. A value of another JSON type is refused.
+ */
+export type JsonType = 'number' | 'number-or-text' | 'boolean' | 'uuid' | 'text';
+
+/** A flag for each JSON type, `jsonTypeNumberOrText`. */
+export type JsonTypeProperties = { [K in JsonType as DerivedProperty<'jsonType', K>]: boolean };
+
 export type PrimaryKey<F extends Field = Field> = {
   name: string;
   nameCapitalized: string;
@@ -341,18 +332,20 @@ export type PrimaryKey<F extends Field = Field> = {
   typeInteger?: boolean;
   /** @deprecated replace with technology-specific implementation */
   typeNumeric?: boolean;
+  /** The JSON values a request body takes for the id, of the entity and of a relationship to it, set by the common generator; none for a composite id. */
+  jsonType?: JsonType;
+} & Partial<JsonTypeProperties> & {
+    derivedFields?: (F & {
+      originalField: F;
+      derived: boolean;
+    })[];
+    ownFields?: F[];
 
-  derivedFields?: (F & {
-    originalField: F;
-    derived: boolean;
-  })[];
-  ownFields?: F[];
-
-  tsType?: string;
-  autoGenerate?: boolean;
-  /** @deprecated */
-  ids: any[];
-};
+    tsType?: string;
+    autoGenerate?: boolean;
+    /** @deprecated */
+    ids: any[];
+  };
 
 type BaseApplicationAddedEntityProperties = {
   clientRootFolder: string;

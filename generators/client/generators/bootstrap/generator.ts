@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData, overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
+import { mutateData, mutateDefaults, overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
 import { fieldIsEnum } from '../../../base-application/support/field-utils.ts';
 import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
@@ -157,8 +157,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
         const { builtInUserManagement } = entity;
         // The fields the clients skip, like the content type the server keeps next to a blob, are left out.
         const clientFields = entity.fields.filter(field => isClientField(field) && !field.hidden);
-        mutateData(entity, {
-          __override__: false,
+        mutateDefaults(entity, {
           entityClientFormFields: () =>
             clientFields.filter(
               field => (!field.id || builtInUserManagement || !field.autoGenerate) && !(builtInUserManagement && field.readonly),

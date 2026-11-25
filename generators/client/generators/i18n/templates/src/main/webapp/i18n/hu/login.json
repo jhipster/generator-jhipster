@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Hitelesítés nem sikerült!</strong> Kérjük ellenörizze, hogy helyesen adta meg nevét és jelszavát, és próbálja újra."
+        "authentication": "<strong>Hitelesítés nem sikerült!</strong> Kérjük ellenörizze, hogy helyesen adta meg nevét és jelszavát, és próbálja újra.",
+        "sessionExpired": "A munkamenete lejárt. Kérjük, jelentkezzen be újra."
       }
     },
     "password": {

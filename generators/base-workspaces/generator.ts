@@ -24,7 +24,7 @@ import defaults from 'lodash-es/defaults.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { isOfficialApplicationType } from '../../lib/core/application-types.ts';
 import { getDefaultJDLDeploymentDefaults } from '../../lib/jdl-config/jhipster-jdl-config.ts';
-import { createDelayedMutationContext, droppedMutationMessage, removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
+import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import BaseGenerator from '../base/index.ts';
 import { POST_WRITING_OBJECTS, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask, TaskGroup } from '../base-core/types.ts';
@@ -103,11 +103,7 @@ export default abstract class BaseWorkspacesGenerator<
     // Delayed mutation context so command defaults and derived properties are applied only after the configuration is
     // loaded, like the application context.
     return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, {
-      factory: () =>
-        createDelayedMutationContext({
-          autoDelay: true,
-          onDroppedMutation: dropped => this.log.debug(droppedMutationMessage(dropped)),
-        }),
+      factory: () => this.enableDelayedMutations({}, { autoDelay: true }),
     });
   }
 

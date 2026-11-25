@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Kira olmadiz!</strong> Iltimoz, ma`lumotlaringizni tekshirib qayta urunib ko`ring."
+        "authentication": "<strong>Kira olmadiz!</strong> Iltimoz, ma`lumotlaringizni tekshirib qayta urunib ko`ring.",
+        "sessionExpired": "Seansingiz muddati tugadi. Iltimos, qaytadan kiring."
       }
     },
     "password": {
