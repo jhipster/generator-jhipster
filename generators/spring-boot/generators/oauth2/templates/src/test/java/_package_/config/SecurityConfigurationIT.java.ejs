@@ -63,6 +63,16 @@ class SecurityConfigurationIT {
     }
 
     @Test
+    void shouldNotSaveAnEventStreamRequest() throws Exception {
+        MvcResult result = mockMvc
+            .perform(get("/api/account").accept(MediaType.TEXT_EVENT_STREAM))
+            .andExpect(status().isUnauthorized())
+            .andReturn();
+
+        assertThat(savedRequest(result)).isNull();
+    }
+
+    @Test
     void shouldNotSaveAnXhrRequest() throws Exception {
         MvcResult result = mockMvc
             .perform(get("/api/account").header("X-Requested-With", "XMLHttpRequest"))
@@ -86,6 +96,7 @@ class SecurityConfigurationIT {
 
     @Test
     void shouldSaveAPageRequest() throws Exception {
+        // The path only has to require the authentication: the Accept header makes it a page request, which is saved.
         MvcResult result = mockMvc.perform(get("/api/account").accept(MediaType.TEXT_HTML)).andExpect(status().isUnauthorized()).andReturn();
 
         assertThat(savedRequest(result)).isNotNull();

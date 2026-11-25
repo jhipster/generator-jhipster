@@ -346,16 +346,20 @@ public class SecurityConfiguration {
             .oauth2Login(oauth2 -> oauth2.loginPage("/").userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
     <%_ if (communicationSpringWebsocket) { _%>
             // Like the default request cache, save only page requests as the post-login redirect target, not the API
-            // calls of the client, and neither the SockJS requests (see https://github.com/jhipster/generator-jhipster/issues/28685)
+            // calls of the client, nor the SockJS requests (see https://github.com/jhipster/generator-jhipster/issues/28685)
             .requestCache(cache -> {
-                MediaTypeRequestMatcher jsonRequest = new MediaTypeRequestMatcher(MediaType.APPLICATION_JSON);
-                jsonRequest.setIgnoredMediaTypes(Set.of(MediaType.ALL));
+                MediaTypeRequestMatcher apiRequest = new MediaTypeRequestMatcher(
+                    MediaType.APPLICATION_JSON,
+                    MediaType.MULTIPART_FORM_DATA,
+                    MediaType.TEXT_EVENT_STREAM
+                );
+                apiRequest.setIgnoredMediaTypes(Set.of(MediaType.ALL));
                 HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
                 requestCache.setRequestMatcher(
                     new AndRequestMatcher(
                         PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/**"),
                         new NegatedRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/websocket/**")),
-                        new NegatedRequestMatcher(jsonRequest),
+                        new NegatedRequestMatcher(apiRequest),
                         new NegatedRequestMatcher(new RequestHeaderRequestMatcher("X-Requested-With", "XMLHttpRequest"))
                     )
                 );
