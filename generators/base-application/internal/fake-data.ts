@@ -26,9 +26,8 @@ import { isContentTypeField } from './content-type-fields.ts';
 import { getFieldNumberLimits } from './number-limits.ts';
 
 const {
-  BlobTypes: { TEXT },
   CommonDBTypes: { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, FLOAT, INTEGER, LONG, UUID },
-  RelationalOnlyDBTypes: { BYTES, BYTE_BUFFER },
+  RelationalOnlyDBTypes: { BYTES },
 } = fieldTypes;
 
 const UUID_PATTERN = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
@@ -126,47 +125,14 @@ const durationNanoseconds = (duration: string): number =>
     0,
   );
 
-/** The size of a blob from its base64 text, as the clients measure it. */
-const base64ByteLength = (value: string): number => (value.length / 4) * 3 - (value.match(/=*$/)?.[0].length ?? 0);
-
-/** Whether a field is a blob of a file: its fake data is the path of a file of the Liquibase fake data. */
-const isFileBlob = (field: BaseApplicationField): boolean =>
-  (field.fieldType === BYTES || field.fieldType === BYTE_BUFFER) && field.fieldTypeBlobContent !== TEXT;
-
-/**
- * The text of a blob of a file within its minbytes and maxbytes: the value when its size is, else the base64 text of zero
- * bytes, one or its minbytes within its maxbytes, as the tests of the server take. A client measures a blob by its base64
- * text and the server by the bytes the JSON tells, the same size for that text.
- */
-const withinBlobSize = (field: BaseApplicationField, value: string): string => {
-  const minBytes = field.fieldValidationMinBytes ? Number(field.fieldValidateRulesMinbytes) : 0;
-  const maxBytes = field.fieldValidationMaxBytes ? Number(field.fieldValidateRulesMaxbytes) : Infinity;
-  const size = base64ByteLength(value);
-  return size >= minBytes && size <= maxBytes ? value : Buffer.alloc(Math.min(Math.max(1, minBytes), maxBytes)).toString('base64');
-};
-
-export type FormatFakeDataOptions = {
-  /** A blob of a file out of its minbytes and maxbytes takes a content within them, in TypeScript and in JSON. */
-  blobWithinSize?: boolean;
-};
-
 /**
  * A fake data value of a field, serializable to JSON, converted for a format without changing it: a date and time is
  * written as YYYY-MM-DDTHH:mm (YYYY-MM-DDTHH:mm:ss in a CSV), as it is drawn at the minute, a blob of bytes is the file
  * its base64 text tells, a duration in a CSV its nanoseconds.
  */
-export const formatFakeData = (
-  field: BaseApplicationField,
-  value: FakeDataValue | undefined,
-  format: FakeDataFormat,
-  { blobWithinSize = false }: FormatFakeDataOptions = {},
-): any => {
-  if (value === undefined) {
+export const formatFakeData = (field: BaseApplicationField, value: FakeDataValue | undefined, format: FakeDataFormat): any => {
+  if (value === undefined || format === 'json-serializable') {
     return value;
-  }
-  const sizedBlob = blobWithinSize && isFileBlob(field);
-  if (format === 'json-serializable') {
-    return sizedBlob ? withinBlobSize(field, value as string) : value;
   }
   let data = value;
   if (data instanceof Date) {
@@ -182,9 +148,6 @@ export const formatFakeData = (
   if (format === 'csv') {
     // A text of a pattern can have the separator: it is quoted, a quote written twice as RFC 4180 tells.
     return field.fieldValidate && field.fieldValidateRules?.includes('pattern') ? `"${String(data).replace(/"/g, '""')}"` : data;
-  }
-  if (sizedBlob) {
-    data = withinBlobSize(field, data as string);
   }
   // eslint-disable-next-line no-template-curly-in-string
   if (![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {

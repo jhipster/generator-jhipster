@@ -388,39 +388,5 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     it('should write only the fields of the sample', () => {
       expect(formatEntitySample(fields, { count: 3 }, 'ts')).toEqual({ count: 3 });
     });
-
-    describe('with a blob of a file', () => {
-      const image = Buffer.from('../fake-data/blob/hipster.png').toString('base64');
-      const blobField = (rules: Record<string, number>) =>
-        prepareField({
-          fieldName: 'image',
-          fieldType: 'byte[]',
-          fieldTypeBlobContent: 'image',
-          fieldValidateRules: Object.keys(rules),
-          ...Object.fromEntries(
-            Object.entries(rules).map(([rule, value]) => [`fieldValidateRules${rule[0].toUpperCase()}${rule.slice(1)}`, value]),
-          ),
-        });
-
-      it('should write a blob over its maxbytes as a byte, in TypeScript and in JSON, and keep its file in a CSV', () => {
-        const blobFields = [blobField({ maxbytes: 8 })];
-        expect(formatEntitySample(blobFields, { image }, 'ts')).toMatchObject({ image: "'AA=='" });
-        expect(formatEntitySample(blobFields, { image }, 'json-serializable')).toMatchObject({ image: 'AA==' });
-        expect(formatEntitySample(blobFields, { image }, 'csv')).toEqual({ image: '../fake-data/blob/hipster.png' });
-      });
-
-      it('should write a blob under its minbytes as its minbytes of zero bytes', () => {
-        const blobFields = [blobField({ minbytes: 100 })];
-        const zeros = Buffer.alloc(100).toString('base64');
-        expect(formatEntitySample(blobFields, { image }, 'ts')).toMatchObject({ image: `'${zeros}'` });
-        expect(formatEntitySample(blobFields, { image }, 'json-serializable')).toMatchObject({ image: zeros });
-      });
-
-      it('should keep a blob within its minbytes and maxbytes', () => {
-        const blobFields = [blobField({ minbytes: 2, maxbytes: 10000 })];
-        expect(formatEntitySample(blobFields, { image }, 'ts')).toMatchObject({ image: "'../fake-data/blob/hipster.png'" });
-        expect(formatEntitySample(blobFields, { image }, 'json-serializable')).toMatchObject({ image });
-      });
-    });
   });
 });
