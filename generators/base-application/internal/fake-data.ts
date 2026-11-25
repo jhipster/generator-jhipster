@@ -83,8 +83,8 @@ const MAX_DOMAIN_RANGE = 1000;
 export type FieldDomainValue = string | number | boolean;
 
 /**
- * The values a field can take when they can be listed: an enum, a boolean or integers with a small range.
- * A field with a template or a pattern has its values given by them.
+ * The values a field can take when they can be listed: an enum, a boolean, or numbers with a small range, the decimals
+ * drawn with two decimals. A field with a template or a pattern has its values given by them.
  */
 export function getFieldFakeDataDomain(field: BaseApplicationField): FieldDomainValue[] | undefined {
   if (field.fakerTemplate || (field.fieldValidate && field.fieldValidateRules?.includes('pattern'))) {
@@ -101,6 +101,16 @@ export function getFieldFakeDataDomain(field: BaseApplicationField): FieldDomain
     const max = Math.trunc(field.fieldFakeDataMax!);
     if (max - min <= MAX_DOMAIN_RANGE) {
       return Array.from({ length: max - min + 1 }, (_, index) => min + index);
+    }
+  }
+  // eslint-disable-next-line no-template-curly-in-string
+  if (([FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL] as string[]).includes(field.fieldType)) {
+    // The hundredths in the range, as the fake data draws a decimal: 0.07 * 100 is 7.000000000000001, rounded first.
+    const hundredths = (value: number) => Number((value * 100).toFixed(6));
+    const min = Math.ceil(hundredths(field.fieldFakeDataMin!));
+    const max = Math.floor(hundredths(field.fieldFakeDataMax!));
+    if (max - min <= MAX_DOMAIN_RANGE) {
+      return Array.from({ length: max - min + 1 }, (_, index) => (min + index) / 100);
     }
   }
   return undefined;
