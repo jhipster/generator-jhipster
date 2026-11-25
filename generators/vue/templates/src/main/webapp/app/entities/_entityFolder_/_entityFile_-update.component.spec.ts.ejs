@@ -544,7 +544,8 @@ _%>
 <%_ } _%>
       it('Should edit and save the entity from the form', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %><%- allRelationshipsThatNeedSelectOptions.length > 0 ? 'SampleWithRelationships' : 'Sample' %>);
+        // A copy: the inputs change the entity, the sample of the other tests stays as it is.
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue({ ...<%- entityInstance %><%- allRelationshipsThatNeedSelectOptions.length > 0 ? 'SampleWithRelationships' : 'Sample' %> });
         <%- entityInstance %>ServiceStub.update.mockResolvedValue(<%- entityInstance %>Sample);
         route = {
           params: {
