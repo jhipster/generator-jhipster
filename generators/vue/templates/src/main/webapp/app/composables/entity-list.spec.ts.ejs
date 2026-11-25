@@ -137,7 +137,12 @@ describe('useEntityList', () => {
       const { list } = mountList({ retrieve, pagination: 'pagination' });
       await flushPromises();
 
-      expect(retrieve).toHaveBeenCalledExactlyOnceWith({ page: 2, size: 20, sort: ['name,desc', 'id,asc'], signal: expect.any(AbortSignal) });
+      expect(retrieve).toHaveBeenCalledExactlyOnceWith({
+        page: 2,
+        size: 20,
+        sort: ['name,desc', 'id,asc'],
+        signal: expect.any(AbortSignal),
+      });
       expect({
         page: list.page.value,
         totalItems: list.totalItems.value,
@@ -207,7 +212,10 @@ describe('useEntityList', () => {
     const nextLink = { link: '<http://localhost/api?page=1&size=20>; rel="next"' };
 
     it('should load the next page when the end of the list is visible', async () => {
-      const retrieve = vi.fn().mockResolvedValueOnce(response([{ id: 1 }], nextLink)).mockResolvedValue(response([{ id: 2 }]));
+      const retrieve = vi
+        .fn()
+        .mockResolvedValueOnce(response([{ id: 1 }], nextLink))
+        .mockResolvedValue(response([{ id: 2 }]));
       const { list } = mountList({ retrieve, pagination: 'infinite-scroll' });
       await flushPromises();
       expect(intersection.observer.resume).toHaveBeenCalled();
@@ -229,7 +237,11 @@ describe('useEntityList', () => {
       intersection.callback([{ isIntersecting: false }]);
       await flushPromises();
 
-      expect({ page: list.page.value, items: list.items.value, calls: retrieve.mock.calls.length }).toEqual({ page: 1, items: [], calls: 1 });
+      expect({ page: list.page.value, items: list.items.value, calls: retrieve.mock.calls.length }).toEqual({
+        page: 1,
+        items: [],
+        calls: 1,
+      });
       expect(intersection.observer.pause).not.toHaveBeenCalled();
     });
 
@@ -245,11 +257,18 @@ describe('useEntityList', () => {
       list.reload();
       await flushPromises();
 
-      expect({ page: list.page.value, items: list.items.value, calls: retrieve.mock.calls.length }).toEqual({ page: 1, items: [{ id: 1 }], calls: 4 });
+      expect({ page: list.page.value, items: list.items.value, calls: retrieve.mock.calls.length }).toEqual({
+        page: 1,
+        items: [{ id: 1 }],
+        calls: 4,
+      });
     });
 
     it('should change the order from the first page', async () => {
-      const retrieve = vi.fn().mockResolvedValueOnce(response([{ id: 1 }], nextLink)).mockResolvedValue(response());
+      const retrieve = vi
+        .fn()
+        .mockResolvedValueOnce(response([{ id: 1 }], nextLink))
+        .mockResolvedValue(response());
       const { list } = mountList({ retrieve, pagination: 'infinite-scroll' });
       await flushPromises();
       list.page.value = 2;

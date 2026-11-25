@@ -78,7 +78,9 @@ export const useEntityList = <T>({ retrieve, search, pagination, onError }: UseE
     execute: retrieveItems,
   } = useControlledRequest(
     async (params, { signal }): Promise<T[]> => {
-      const query: ListQuery = paged ? { page: params.page - 1, size: itemsPerPage.value, sort: params.sort, signal } : { sort: params.sort, signal };
+      const query: ListQuery = paged
+        ? { page: params.page - 1, size: itemsPerPage.value, sort: params.sort, signal }
+        : { sort: params.sort, signal };
       const res = search && params.search ? await search(params.search, query) : await retrieve(query);
       if (paged) {
         totalItems.value = Number(res.headers['x-total-count']);

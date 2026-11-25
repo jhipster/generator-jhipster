@@ -24,7 +24,11 @@ import { flushPromises, mount } from '@vue/test-utils';
 import { type PropertyRules, useEntityValidation } from './entity-validation';
 
 // The validation of a form, mounted for the translations.
-const mountValidation = (entity: Record<string, unknown>, rules: Record<string, PropertyRules>, serverErrors?: Ref<Record<string, string[]>>) => {
+const mountValidation = (
+  entity: Record<string, unknown>,
+  rules: Record<string, PropertyRules>,
+  serverErrors?: Ref<Record<string, string[]>>,
+) => {
   let v$!: ReturnType<typeof useEntityValidation>;
   const entityRef = ref(entity);
   mount(

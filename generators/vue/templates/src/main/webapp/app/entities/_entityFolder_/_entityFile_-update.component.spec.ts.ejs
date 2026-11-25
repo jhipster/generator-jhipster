@@ -232,7 +232,7 @@ describe('Component Tests', () => {
 <%_ // The properties of the form, each one validated, the server can refuse.
     const validatedProperties = [
       ...entityClientFormFields.map(field => field.fieldName),
-      ...relationships.filter(relationship => !relationship.otherEntity.embedded).map(relationship => relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName),
+      ...relationships.filter(relationship => relationship.persistableRelationship && !relationship.otherEntity.embedded).map(relationship => relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName),
     ];
 _%>
 <%_ if (validatedProperties.length > 0) { _%>

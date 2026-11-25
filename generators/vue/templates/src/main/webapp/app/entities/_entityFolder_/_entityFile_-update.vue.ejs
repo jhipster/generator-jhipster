@@ -116,11 +116,18 @@ _%>
             </div>
           </div>
 <%_ } _%>
-<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+<%_ for (relationship of relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded)) { _%>
   <%_ const { otherEntityName, relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = relationship;
       const translationKey = relationship.propertyTranslationKey;
   _%>
-  <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
+  <%_ if (relationship.collection) { _%>
+          <div class="mb-3">
+            <label class="form-label" for="<%- entityFileName %>-<%- relationshipFieldNamePlural %>">{{ t$('<%- translationKey %>') }}</label>
+            <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" @blur="v$.<%- relationshipFieldNamePlural %>.$touch()" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
+              <option :value="<% if (relationship.relationshipSerializePrimaryKeyOnly) { %><%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %><% } else { %>getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')<% } %>" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
+            </select>
+          </div>
+  <%_ } else { _%>
           <div class="mb-3">
             <label class="form-label" for="<%- entityFileName %>-<%- relationshipName %>">{{ t$('<%- translationKey %>') }}</label>
             <select class="form-select" id="<%- entityFileName %>-<%- relationshipName %>" data-cy="<%- relationshipFieldName %>" name="<%- relationshipName %>" @blur="v$.<%- relationshipFieldName %>.$touch()" v-model="<%- entityInstance %>.<%- relationshipFieldName %>"<%- relationshipRequired ? ' required' : '' %>>
@@ -130,13 +137,6 @@ _%>
               <option :value="null"></option>
     <%_ } _%>
               <option :value="<%- entityInstance %>.<%- relationshipFieldName %> && <%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %> === <%- entityInstance %>.<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %> ? <%- entityInstance %>.<%- relationshipFieldName %> : <%- otherEntityName %>Option" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
-            </select>
-          </div>
-  <%_ } else if (relationship.persistableRelationship) { _%>
-          <div class="mb-3">
-            <label class="form-label" for="<%- entityFileName %>-<%- relationshipFieldNamePlural %>">{{ t$('<%- translationKey %>') }}</label>
-            <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" @blur="v$.<%- relationshipFieldNamePlural %>.$touch()" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
-              <option :value="<% if (relationship.relationshipSerializePrimaryKeyOnly) { %><%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %><% } else { %>getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')<% } %>" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
             </select>
           </div>
   <%_ } _%>
@@ -298,7 +298,8 @@ const v$ = useEntityValidation(<%- entityInstance %>, {
 <%_ for (field of entityClientFormFields) { _%>
   <%- field.fieldName %>: <%- field.vueValidationRules %>,
 <%_ } _%>
-<%_ for (relationship of relationships) { _%>
+<%# The relationships of the form only: the other side of a relationship is not one of its fields. -%>
+<%_ for (relationship of relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded)) { _%>
   <%- relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: <%- relationship.relationshipValidate ? '{ required: true }' : '{}' %>,
 <%_ } _%>
 }, serverErrors);

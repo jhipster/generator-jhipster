@@ -80,12 +80,19 @@ describe('unauthorized handler', () => {
     accountService.logout.mockImplementation(() => {
       accountService.authenticated = false;
     });
-    const parallelHandler = createUnauthorizedHandler({ accountService: accountService as unknown as AccountService, router: router as unknown as Router });
+    const parallelHandler = createUnauthorizedHandler({
+      accountService: accountService as unknown as AccountService,
+      router: router as unknown as Router,
+    });
 
     await expect(parallelHandler(error(401))).rejects.toMatchObject({ status: 401 });
     await expect(parallelHandler(error(401))).rejects.toMatchObject({ status: 401 });
 
-    expect(router.push).toHaveBeenCalledExactlyOnceWith({ path: '/login', query: { redirect: '/foo?page=2' }, state: { sessionExpired: true } });
+    expect(router.push).toHaveBeenCalledExactlyOnceWith({
+      path: '/login',
+      query: { redirect: '/foo?page=2' },
+      state: { sessionExpired: true },
+    });
 
     // Once the navigation to the login settles, the guard is released: a new 401 leaves for the login again.
     resolve();
