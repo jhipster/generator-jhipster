@@ -103,6 +103,37 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with decimal fields of a faker template', () => {
+    const resourceIT = `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/DoseResourceIT.java`;
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'Dose',
+          changelogDate: '20220129025419',
+          fields: [
+            {
+              fieldName: 'amount',
+              fieldType: 'Double',
+              options: { fakerTemplate: '{{number.float({"min":0.0001,"max":0.001,"fractionDigits":6})}}' },
+            },
+            {
+              fieldName: 'fee',
+              fieldType: 'BigDecimal',
+              options: { fakerTemplate: '{{number.float({"min":0.5,"max":0.99,"fractionDigits":3})}}' },
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should keep the decimals of a Double and the two of the column of a BigDecimal', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_AMOUNT = 0.000679D;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_AMOUNT = 0.000831D;');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_FEE = new BigDecimal("0.75");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_FEE = new BigDecimal("0.76");');
+    });
+  });
+
   describe('with text and number fields', () => {
     const resourceIT = `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/MeasureResourceIT.java`;
     before(async () => {

@@ -172,6 +172,120 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     expect(new Set(values).size).toBe(20);
   });
 
+  it('should take a value of the type of a field whose faker template gives a text of another type', () => {
+    const field = prepareField({ fieldName: 'reference', fieldType: 'UUID', fakerTemplate: '{{person.firstName}}' });
+    for (const { reference } of samples([field], 5)) {
+      expect(reference).toMatch(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i);
+    }
+  });
+
+  it('should take the value of a faker template of the type of the field', () => {
+    const field = prepareField({ fieldName: 'level', fieldType: 'Integer', fakerTemplate: '42' });
+    expect(samples([field], 2).map(({ level }) => level)).toEqual([42, 42]);
+  });
+
+  it('should take the value of a faker template of an enum, a boolean and a decimal field', () => {
+    const color = prepareField({ ...enumField(), fakerTemplate: 'GREEN' });
+    const active = prepareField({ fieldName: 'active', fieldType: 'Boolean', fakerTemplate: 'true' });
+    const ratio = prepareField({ fieldName: 'ratio', fieldType: 'Float', fakerTemplate: '12.5' });
+    const price = prepareField({ fieldName: 'price', fieldType: 'BigDecimal', fakerTemplate: '-0.25e2' });
+    expect(
+      samples([color, active, ratio, price], 2).map(sample => [sample.color, sample.active, String(sample.ratio), String(sample.price)]),
+    ).toEqual([
+      ['GREEN', true, '12.5', '-25'],
+      ['GREEN', true, '12.5', '-25'],
+    ]);
+  });
+
+  for (const [fieldType, fakerTemplate] of [
+    ['Integer', '08'],
+    ['Long', '1.5'],
+    ['Integer', ' 12 '],
+    ['Float', '0x1A'],
+    ['Double', ' 12 '],
+    ['BigDecimal', '.5'],
+    ['Boolean', 'yes'],
+    ['Integer', '2147483648'],
+    ['Long', '9007199254740992'],
+    ['Float', '167773'],
+    ['Double', '-1e14'],
+  ]) {
+    it(`should not take the text '${fakerTemplate}' of a faker template as a ${fieldType}`, () => {
+      const field = prepareField({ fieldName: 'value', fieldType, fakerTemplate });
+      for (const { value } of samples([field], 3)) {
+        // The text of the template would be taken as its value, the number it reads as for a number field.
+        expect(value).not.toBe(fieldType === 'Boolean' ? fakerTemplate : Number(fakerTemplate));
+        expect(typeof value).toBe(fieldType === 'Boolean' ? 'boolean' : 'number');
+      }
+    });
+  }
+
+  it('should take the value of a faker template at the limits of the type of a number field', () => {
+    const level = prepareField({ fieldName: 'level', fieldType: 'Integer', fakerTemplate: '2147483647' });
+    const total = prepareField({ fieldName: 'total', fieldType: 'Long', fakerTemplate: '-9007199254740991' });
+    expect(samples([level, total], 1).map(sample => [sample.level, sample.total])).toEqual([[2147483647, -9007199254740991]]);
+  });
+
+  it('should not take the value of a faker template out of the min and the max of a field', () => {
+    const field = prepareField({
+      fieldName: 'level',
+      fieldType: 'Integer',
+      fieldValidateRules: ['min', 'max'],
+      fieldValidateRulesMin: 1,
+      fieldValidateRulesMax: 10,
+      fakerTemplate: '42',
+    });
+    for (const { level } of samples([field], 3)) {
+      expect(level).toBeGreaterThanOrEqual(1);
+      expect(level).toBeLessThanOrEqual(10);
+    }
+  });
+
+  it('should take the value of a faker template within the decimal min and max of a field', () => {
+    // The min and the max of a decimal field are texts, as a JDL gives them.
+    const decimalField = (fieldName: string, fieldValidateRulesMin: string, fieldValidateRulesMax: string, fakerTemplate: string) =>
+      prepareField({
+        fieldName,
+        fieldType: 'BigDecimal',
+        fieldValidateRules: ['min', 'max'],
+        fieldValidateRulesMin,
+        fieldValidateRulesMax,
+        fakerTemplate,
+      });
+    const ratio = decimalField('ratio', '0.5', '0.99', '0.644');
+    const tiny = decimalField('tiny', '0.0001', '0.001', '0.000253');
+    expect(samples([ratio, tiny], 2).map(sample => [sample.ratio, sample.tiny])).toEqual([
+      [0.644, 0.000253],
+      [0.644, 0.000253],
+    ]);
+    expect([ratio.fieldValidateRulesMin, ratio.fieldValidateRulesMax]).toEqual(['0.5', '0.99']);
+  });
+
+  it('should take the domain of an enum and of a boolean whose faker template gives a text of another type', () => {
+    const color = prepareField({ ...enumField(), fakerTemplate: '{{person.firstName}}' });
+    const active = prepareField({ fieldName: 'active', fieldType: 'Boolean', fakerTemplate: 'yes' });
+    const drawn = samples([color, active], 3);
+    expect(drawn.map(sample => sample.color).toSorted()).toEqual(['BLUE', 'GREEN', 'RED']);
+    expect([...new Set(drawn.map(sample => sample.active))].toSorted()).toEqual([false, true]);
+  });
+
+  it('should warn once of a faker template that gives a text of another type', () => {
+    const warnings: string[] = [];
+    const warningGenerator = { jhipsterConfig: config, log: { warn: (message: string) => warnings.push(message), debug() {} } };
+    Object.setPrototypeOf(warningGenerator, BaseGenerator.prototype);
+    const field = prepareCommonFieldForTemplates(
+      entity,
+      { fieldName: 'reference', fieldType: 'UUID', fakerTemplate: '{{person.firstName}}' } as any,
+      warningGenerator as any,
+    );
+    samples([field], 3);
+    samples([field], 3);
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatch(
+      /^The faker template \{\{person\.firstName\}\} of the field reference gives '[^']+', which is not a value of the type UUID: its fake data takes values of that type instead\.$/,
+    );
+  });
+
   it('should draw a duration as ISO 8601', () => {
     const [sample] = samples([prepareField({ fieldName: 'time', fieldType: 'Duration' })], 1);
     expect(sample.time).toMatch(/^PT\d+M$/);

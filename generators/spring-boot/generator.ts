@@ -646,10 +646,12 @@ ${classProperties
         const sampleFields = entity.fields
           .filter(field => !field.id && !isContentTypeField(field) && sampleGroup(field) !== -1)
           .toSorted((a, b) => sampleGroup(a) - sampleGroup(b));
-        // A date is written as its ISO 8601 text, a decimal number with its two decimals.
-        const testValue = (value: unknown): TestValue | undefined => {
+        // A date is written as its ISO 8601 text, a BigDecimal with the two decimals of its column, a Float or a Double without
+        // the error of the binary floating point.
+        const testValue = (field: TestField, value: unknown): TestValue | undefined => {
           if (value instanceof Date) return value.toISOString();
-          return typeof value === 'number' && !Number.isInteger(value) ? Number(value.toFixed(2)) : (value as TestValue | undefined);
+          if (typeof value !== 'number' || Number.isInteger(value)) return value as TestValue | undefined;
+          return Number(field.fieldTypeBigDecimal ? value.toFixed(2) : value.toPrecision(15));
         };
         // The values of a field do not repeat, but for a field with fewer values than the test needs, like an enum of a
         // single value, whose samples repeat.
@@ -664,7 +666,7 @@ ${classProperties
         });
 
         for (const [index, field] of sampleFields.entries()) {
-          const values = samples[index].map(sample => testValue(sample[field.fieldName])!);
+          const values = samples[index].map(sample => testValue(field, sample[field.fieldName])!);
           const compare = compareTestValues(field);
           let [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
             TestValue | undefined,
@@ -678,7 +680,7 @@ ${classProperties
             if (distinctValues.length < values.length) {
               const step = field.fieldTypeInteger || field.fieldTypeLong ? 1 : 0.01;
               [sample, updated = sample] = distinctValues;
-              smaller = testValue(sample - step);
+              smaller = testValue(field, sample - step);
             }
           }
           mutateData(field, {

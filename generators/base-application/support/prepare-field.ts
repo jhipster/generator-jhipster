@@ -25,7 +25,14 @@ import { kebabCase, lowerFirst } from '../../../lib/utils/string-utils.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { type FakeDataOptions, mutateField } from '../entity.ts';
-import { type FieldDomainValue, formatFakeData, getFieldFakeDataDomain } from '../internal/fake-data.ts';
+import {
+  type FieldDomainValue,
+  checkFakerTemplate,
+  formatFakeData,
+  getFieldFakeDataDomain,
+  isFakeDataOfFieldType,
+  toFakeDataOfFieldType,
+} from '../internal/fake-data.ts';
 import type { Entity as BaseApplicationEntity, Field as BaseApplicationField } from '../types.ts';
 
 import type { FakerWithRandexp } from './faker.ts';
@@ -129,6 +136,9 @@ const fakeStringTemplateForFieldName = (columnName: string) => {
   return `{{${fakeTemplate}}}`;
 };
 
+/** The fields whose faker template was told to give a value not of their type, warned once. */
+const fieldsWithInvalidFakerTemplate = new WeakSet<BaseApplicationField>();
+
 /**
  * @returns fake value
  */
@@ -144,12 +154,8 @@ function generateFakeDataForField(
 ) {
   let originalData: string | number | boolean | Date | undefined;
   let data: string | number | boolean | Date | undefined;
-  for (const prop of [
-    'fieldValidateRulesMax',
-    'fieldValidateRulesMin',
-    'fieldValidateRulesMaxlength',
-    'fieldValidateRulesMinlength',
-  ] as const) {
+  // A min and a max may be decimals, read where they are used: only the lengths are whole numbers.
+  for (const prop of ['fieldValidateRulesMaxlength', 'fieldValidateRulesMinlength'] as const) {
     if (prop in field && typeof field[prop] === 'string') {
       try {
         field[prop] = Number.parseInt(field[prop], 10);
@@ -159,8 +165,20 @@ function generateFakeDataForField(
     }
   }
 
-  if (field.fakerTemplate) {
-    originalData = faker.helpers.fake(field.fakerTemplate);
+  // The text of a faker template is a value of the field when the template gives values of its type, like UUIDs for a UUID
+  // field: else the field takes the values of its type.
+  const templateCheck = checkFakerTemplate(field);
+  if (templateCheck && !templateCheck.ofFieldType && !fieldsWithInvalidFakerTemplate.has(field)) {
+    fieldsWithInvalidFakerTemplate.add(field);
+    this.log.warn(
+      `The faker template ${field.fakerTemplate} of the field ${field.fieldName} gives '${templateCheck.value}', which is not a value of the type ${field.fieldType}: its fake data takes values of that type instead.`,
+    );
+  }
+  const templateData = templateCheck?.ofFieldType ? faker.helpers.fake(field.fakerTemplate!) : undefined;
+  // A template of the type may still give a text of another type, like a number out of a pattern.
+  const templateDataOfFieldType = templateData !== undefined && isFakeDataOfFieldType(field, templateData);
+  if (templateDataOfFieldType) {
+    originalData = toFakeDataOfFieldType(field, templateData);
     data = originalData;
   } else if (field.fieldValidate && field.fieldValidateRules?.includes('pattern')) {
     originalData = field.generateFakeDataFromPattern!();
