@@ -223,7 +223,7 @@
               "lines": 95
             },
 <%_ if (enableTranslation) { _%>
-            "coverageExclude": ["<%- clientSrcDir %>i18n/**"],
+            "coverageExclude": ["<%- relativeDir(clientRootDir, clientSrcDir) %>i18n/**"],
 <%_ } _%>
             "reporters": [
               "default",
