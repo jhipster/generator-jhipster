@@ -233,9 +233,9 @@ class RegistrationServiceIT {
 
     // Not generated for reactive apps: the default locale is global, so it would also reach the R2DBC driver.
     @Test
-<%_ if (databaseTypeSql) { _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional
-<%_ } _%>
+  <%_ } _%>
     void assertThatRegisterUserLowercasesLoginAndEmailWhateverTheDefaultLocale() {
         <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setLogin(DEFAULT_LOGIN.toUpperCase(Locale.ENGLISH));
