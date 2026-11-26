@@ -51,7 +51,7 @@ package <%- entityAbsolutePackage %>.domain;
 <%_ if (relationshipsContainOtherSideIgnore) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <%_ } _%>
-<%_ if (!embedded && primaryKey?.composite) { _%>
+<%_ if (!embedded && primaryKey.composite) { _%>
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 <%_ } _%>
 <%_ if (!dtoMapstruct && (entityApiDescription || importApiModelProperty)) { _%>
@@ -114,7 +114,7 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
     @Serial
     private static final long serialVersionUID = 1L;
 
-<%_ if (!embedded && primaryKey?.composite) { _%>
+<%_ if (!embedded && primaryKey.composite) { _%>
     @EmbeddedId
     @JsonUnwrapped
     private <%- primaryKey.type %> <%- primaryKey.name %>;

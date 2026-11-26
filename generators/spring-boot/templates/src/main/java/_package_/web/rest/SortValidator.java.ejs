@@ -93,7 +93,9 @@ public final class SortValidator {
         if (path.length == 1) {
 <%_ if (databaseTypeSql && !reactive) { _%>
             // A composite primary key is sorted by its columns.
-            return field.filter(column -> isColumn(column) || column.isAnnotationPresent(jakarta.persistence.EmbeddedId.class)).isPresent();
+            return field
+                .filter(sortable -> isColumn(sortable) || sortable.isAnnotationPresent(jakarta.persistence.EmbeddedId.class))
+                .isPresent();
 <%_ } else { _%>
             return field.filter(SortValidator::isColumn).isPresent();
 <%_ } _%>

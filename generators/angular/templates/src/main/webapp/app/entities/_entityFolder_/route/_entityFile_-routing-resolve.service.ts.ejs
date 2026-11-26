@@ -36,7 +36,7 @@ const <%- entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable
     const router = inject(Router);
     const service = inject(<%- entityAngularName %>Service);
     return service
-      .find(<%- primaryKey.composite ? `\`${primaryKey.fields.map(field => `\${encodeURIComponent(${field.fieldName})}`).join('/')}\`` : primaryKey.name %>)
+      .find(<%- primaryKey.composite ? `service.get${entityAngularName}Identifier({ ${primaryKey.fields.map(field => field.fieldName).join(', ')} })` : primaryKey.name %>)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 404) {
