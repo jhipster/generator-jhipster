@@ -731,6 +731,127 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
   <%_ } _%>
+  <%_ if (!primaryKey.autoGenerate) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void create<%- entityClass %>WithoutId() throws Exception {
+        // The id of the entity is given by the request, so an entity without it cannot be created: the id is either
+        // validated as required or checked by the resource
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(null);
+    <%_ if (dtoMapstruct) { _%>
+        <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
+    <%_ } _%>
+
+        long databaseSizeBeforeCreate = getRepositoryCount();
+
+    <%_ if (reactive) { _%>
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+    <%_ } else { _%>
+        rest<%- entityClass %>MockMvc
+            .perform(
+                post(ENTITY_API_URL)
+      <%_ if (serverUsesCsrf) { _%>
+                .with(csrf())
+      <%_ } _%>
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(<%- restInstance %>))
+            )
+            .andExpect(status().isBadRequest());
+    <%_ } _%>
+
+    <%_ if (databaseTypeCouchbase) { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+    <%_ } _%>
+        assertSameRepositoryCount(databaseSizeBeforeCreate);
+    }
+    <%_ if (primaryKey.typeString) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void create<%- entityClass %>WithIdNotPathSegment() throws Exception {
+        // The id cannot be a segment of the url of the entity, so the entity cannot be created
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>("a/b");
+      <%_ if (dtoMapstruct) { _%>
+        <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
+      <%_ } _%>
+
+        long databaseSizeBeforeCreate = getRepositoryCount();
+
+      <%_ if (reactive) { _%>
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.idinvalid");
+      <%_ } else { _%>
+        rest<%- entityClass %>MockMvc
+            .perform(
+                post(ENTITY_API_URL)
+        <%_ if (serverUsesCsrf) { _%>
+                .with(csrf())
+        <%_ } _%>
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(<%- restInstance %>))
+            )
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.idinvalid"));
+      <%_ } _%>
+
+      <%_ if (databaseTypeCouchbase) { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+      <%_ } _%>
+        assertSameRepositoryCount(databaseSizeBeforeCreate);
+    }
+
+    @Test<%- transactionalAnnotation %>
+    void create<%- entityClass %>WithIdEncodedInLocation() throws Exception {
+        // The location of the new entity encodes its id as a segment of the url
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>("a b");
+      <%_ if (dtoMapstruct) { _%>
+        <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
+      <%_ } _%>
+
+      <%_ if (reactive) { _%>
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
+            .exchange()
+            .expectStatus()
+            .isCreated()
+            .expectHeader()
+            .valueEquals("Location", "/api/<%- entityApiUrl %>/a%20b");
+      <%_ } else { _%>
+        rest<%- entityClass %>MockMvc
+            .perform(
+                post(ENTITY_API_URL)
+        <%_ if (serverUsesCsrf) { _%>
+                .with(csrf())
+        <%_ } _%>
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(<%- restInstance %>))
+            )
+            .andExpect(status().isCreated())
+            .andExpect(header().string("Location", "/api/<%- entityApiUrl %>/a%20b"));
+      <%_ } _%>
+
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.findById("a b")<%- reactive ? '.block()' : '.orElseThrow()' %>;
+    }
+    <%_ } _%>
+  <%_ } _%>
 
   <%_ if (databaseTypeSql && isUsingMapsId && updatableEntity) { _%>
     @Test<%- transactionalAnnotation %>
