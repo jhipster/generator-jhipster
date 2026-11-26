@@ -274,7 +274,7 @@ export const <%- entityReactName %> = () => {
 <%_ if (!paginationInfiniteScroll) { _%>
   useEffect(() => {
     sortEntities();
-  }, [<% if (paginationPagination) { %>paginationState.activePage, paginationState.order, paginationState.sort<% } else { %>sortState.order, sortState.sort<% } %><%- searchEngineAny ? ', search' : '' %>]);
+  }, [<%- paginationPagination ? 'paginationState.activePage, paginationState.order, paginationState.sort' : 'sortState.order, sortState.sort' %><%- searchEngineAny ? ', search' : '' %>]);
 <%_ } _%>
 
 <%_ if (paginationPagination) { _%>
