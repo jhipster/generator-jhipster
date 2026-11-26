@@ -183,6 +183,8 @@ gatling {
 import static io.gatling.javaapi.core.CoreDsl.StringBody;
 import static io.gatling.javaapi.core.CoreDsl.css;
 import static io.gatling.javaapi.core.CoreDsl.exec;
+import static io.gatling.javaapi.core.CoreDsl.feed;
+import static io.gatling.javaapi.core.CoreDsl.listFeeder;
 import static io.gatling.javaapi.core.CoreDsl.rampUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.header;
@@ -191,9 +193,11 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import io.gatling.javaapi.core.ChainBuilder;
+import io.gatling.javaapi.core.FeederBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -232,6 +236,112 @@ public class AuthorityGatlingTest extends Simulation {
         "Authorization", "\${access_token}"
     );
 
+    // The bodies of the authorities the users create, each one with its own id and unique values.
+    FeederBuilder<Object> authorityFeeder = listFeeder(
+        List.of(
+            Map.<String, Object>of("body", "{\\"name\\":\\"3063e3d3-9a3b-4427-a287-3e21eccc8f33\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5db07480-05d0-43e1-8696-e9d08da725cf\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"0b54608b-be94-4be2-9100-e5c77189d5e6\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"748e8071-b528-4e2c-87f8-2da188cf0368\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b05d9577-e4f8-46a0-bef1-82a550e5963c\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"0475abba-d906-46e6-97c1-b50000ccdbfe\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"9a1ae256-2c14-4855-8b57-92daa804b627\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"86f428f7-c4d3-4e15-acce-657248e076c0\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"aa0b91b8-9640-4b4b-bba8-a0cdb9c1e9b4\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"1f36e082-a5a3-4f84-a3c1-0393e75c36bc\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"1c37f3a7-b8fb-4177-a849-49d5a74bd45b\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"055689e2-2b18-4c33-8b80-6ccf6d104643\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"efa9476c-5fff-435f-8517-18bbb9706de7\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"88f698cc-c1fb-4c0a-9815-402f167ca7e2\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"e7b28b6b-684d-4d13-add4-966bd915020d\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"cea3901f-ed97-437f-bc4c-ed7707aab3da\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4a1f2ee5-7425-4339-a129-df292ddee2f4\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"93d2a907-7ec5-4a97-8427-f853a3d17d4e\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"d3b37b11-3040-4b9a-95d9-771a4119e220\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5b336a09-f57e-414a-a474-7ddaf58f0842\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"cdb43496-327c-4756-885e-1d87a1eacc3e\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"18e880b1-3481-4e16-9cf9-3a1dbace15eb\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"d538fb36-4101-44e3-b578-c9517ae794fb\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"8241de19-5c9e-4aae-a3b5-78cb12befe19\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ac3a544a-e0d1-4999-a783-ee29a76df838\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ea708a27-ffbf-4653-bae2-40b6de7265cf\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5c127409-2392-4a60-a47e-6df094c87e14\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"606ce652-e65f-414a-b91a-4002d63357d4\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"190c11b7-8141-4073-a83c-94407831d4da\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"c939d1ea-fbda-4e5c-8885-872864164cfa\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4e4f30b4-2e37-4905-8814-96f514969ff2\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b5571df8-d8e5-4689-82de-d037936c1d89\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"22b5d640-cf9a-44ad-8781-3a6d72e348b5\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ca985829-15e2-4971-8a74-bad9dc64d18a\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"0bf84ad3-dfaa-4b65-b576-d75ac002593f\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"83f684ab-102c-45b4-a355-b839c1099667\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"02431121-7b91-4620-8708-9606235754f1\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ba9d8ac4-b28b-454d-ac82-72285e047ab2\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"83a7021a-490c-45f8-9ba5-6532cda90338\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4a0e475c-9b55-4ae1-a401-da704d7955f5\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"7ec3d264-1f2d-4ae7-9174-fc1c54213860\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"0a088f6a-c14e-4515-a629-46a7f4107be6\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"40901ae7-2409-4823-a800-ff07d4f0850b\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b2b28606-51ad-4907-9e0a-c6813e931878\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"dc07b903-7933-4fae-b87c-ee0609fbbf83\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"a69de145-11b2-4574-a7ba-466a6b5c4461\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"1491c99d-329c-445e-b884-851514e901bb\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"c7fe9637-d72e-49c3-b15e-b89585a817b4\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4db4e934-f6bd-4342-bfb7-483c48137e74\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"eeb15ccd-6564-4c27-a2a2-e3db5c1ae5d5\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"e6e282ab-347d-4744-a7d2-af3dcabd47bc\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ab10dd6d-1186-4f00-a26f-dad1662b40f2\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"84150f56-b99d-4000-b2e4-d7ac327fb647\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ee978f68-2297-4d1e-9d5e-fbbd2cb6cf35\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"3aef5df3-ef49-4e85-9c7e-36d76f0844ef\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b1bd638f-fe53-4193-a951-40619519c4cc\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"533f5aad-510f-42f0-a604-86567c5472c0\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"a8af3887-1757-457a-82c3-fc94d70fa782\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4aac6e3e-0b9c-475a-b8cb-1fbdacfe84ae\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"8fe0757c-feb2-489b-a373-adb5d24463df\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"2f488a20-a4fe-4153-9f98-a97cd169f52e\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"7c197747-e9ab-405d-ab18-5f55c5841d58\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5b2da6c3-fc65-4f70-843f-b2e4530e2235\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"fb93cf42-6681-4a3c-b373-5d5234476aca\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"57c5c932-7fa3-4820-81b1-d6f5636d329b\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"03bb781f-5a5b-4788-9e04-7aa2c42845bd\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"3490b22e-1004-48e4-93b6-d7b9fc022da9\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"1d401f1b-4fc7-4de9-924a-080cb57b4562\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"2d7a3bf9-ca88-42f6-9708-1fb1f9d3afa3\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"c58565fa-1408-43d2-8768-645ac842e638\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b5204fcd-c7b3-4fa4-b796-50197b983aed\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"cfbf18ab-645d-40bb-8815-ab2666979e9e\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"78253140-82e0-4a8e-8b69-0b3ba0b726fe\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"e321fbb3-168f-4ee7-a01e-3440e208d732\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"0d0feb47-046f-462b-8aa8-a15cb3ef7fd2\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"edd05612-e893-4e92-bfb6-ad0b33ff4be8\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5b3b59fc-e1a1-4535-afe5-d87783f996af\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4ec12052-c7eb-4659-98d2-ac83e1c855d7\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"187feb5d-26b3-404d-a41f-bce1d3698638\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"178d3e43-0fe6-40af-a937-606528257e2c\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"6ba08e30-2431-4374-8f71-b7cf709b9e67\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"35536151-021f-49f7-9155-f8a1946d8cca\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b7a89ba0-1922-49e8-af6c-3dfa229def66\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"e064baa8-e550-4fe0-b0f2-75d84c88a588\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"2c272022-c7f4-4663-8ea2-29a47bd82053\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"58a9799f-c950-49d0-a4b7-caee8a97ce05\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"c2974291-e9a7-4fc3-9dde-8ad44470cc66\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"af104c94-07dc-4588-b725-b49a27e58025\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b34a7ccf-c948-4bca-810a-dfd1736b169a\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"938967a6-85ca-4dc8-baf9-9954b93d0c5a\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5885c3ff-c499-4e17-a41b-1c9639bb2fc3\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"6f322132-e77f-42e7-8673-927db28390b6\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5452abb0-d682-4f84-9ee3-45c2a9d60501\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5b7ed04a-9db9-450c-b99f-2a075b7d9c34\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4869e362-855f-44bd-a8a9-01ef47527eac\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"50889b54-8194-48bd-b68a-b1090d1d6bda\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"61583615-c406-468f-bc1b-ce09912cc23c\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"a3753def-4c5d-4e63-b048-e4257d5acbc0\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"7b0efb46-4b1c-49dd-9a3d-a2881096989f\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"deafb238-3db8-45e2-95e9-0697d3751e6a\\"}")
+        )
+    ).circular();
+
     ChainBuilder scn = exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headersHttp)
@@ -250,7 +360,7 @@ public class AuthorityGatlingTest extends Simulation {
         .check(status().is(200)))
         .pause(10)
         .repeat(2).on(
-            exec(http("Get all authorities")
+            feed(authorityFeeder).exec(http("Get all authorities")
             .get("/api/authorities")
             .headers(headersHttpAuthenticated)
             .check(status().is(200)))
@@ -258,9 +368,7 @@ public class AuthorityGatlingTest extends Simulation {
             .exec(http("Create new authority")
             .post("/api/authorities")
             .headers(headersHttpAuthenticated)
-            .body(StringBody("{" +
-                "\\"name\\": \\"SAMPLE_TEXT\\"" +
-                "}")).asJson()
+            .body(StringBody("#{body}")).asJson()
             .check(status().is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_authority_url"))).exitHereIfFailed()
             .pause(10)
@@ -495,6 +603,8 @@ gatling {
 import static io.gatling.javaapi.core.CoreDsl.StringBody;
 import static io.gatling.javaapi.core.CoreDsl.css;
 import static io.gatling.javaapi.core.CoreDsl.exec;
+import static io.gatling.javaapi.core.CoreDsl.feed;
+import static io.gatling.javaapi.core.CoreDsl.listFeeder;
 import static io.gatling.javaapi.core.CoreDsl.rampUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.header;
@@ -503,9 +613,11 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import io.gatling.javaapi.core.ChainBuilder;
+import io.gatling.javaapi.core.FeederBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -544,6 +656,112 @@ public class AuthorityGatlingTest extends Simulation {
         "Authorization", "\${access_token}"
     );
 
+    // The bodies of the authorities the users create, each one with its own id and unique values.
+    FeederBuilder<Object> authorityFeeder = listFeeder(
+        List.of(
+            Map.<String, Object>of("body", "{\\"name\\":\\"3063e3d3-9a3b-4427-a287-3e21eccc8f33\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5db07480-05d0-43e1-8696-e9d08da725cf\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"0b54608b-be94-4be2-9100-e5c77189d5e6\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"748e8071-b528-4e2c-87f8-2da188cf0368\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b05d9577-e4f8-46a0-bef1-82a550e5963c\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"0475abba-d906-46e6-97c1-b50000ccdbfe\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"9a1ae256-2c14-4855-8b57-92daa804b627\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"86f428f7-c4d3-4e15-acce-657248e076c0\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"aa0b91b8-9640-4b4b-bba8-a0cdb9c1e9b4\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"1f36e082-a5a3-4f84-a3c1-0393e75c36bc\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"1c37f3a7-b8fb-4177-a849-49d5a74bd45b\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"055689e2-2b18-4c33-8b80-6ccf6d104643\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"efa9476c-5fff-435f-8517-18bbb9706de7\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"88f698cc-c1fb-4c0a-9815-402f167ca7e2\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"e7b28b6b-684d-4d13-add4-966bd915020d\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"cea3901f-ed97-437f-bc4c-ed7707aab3da\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4a1f2ee5-7425-4339-a129-df292ddee2f4\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"93d2a907-7ec5-4a97-8427-f853a3d17d4e\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"d3b37b11-3040-4b9a-95d9-771a4119e220\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5b336a09-f57e-414a-a474-7ddaf58f0842\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"cdb43496-327c-4756-885e-1d87a1eacc3e\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"18e880b1-3481-4e16-9cf9-3a1dbace15eb\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"d538fb36-4101-44e3-b578-c9517ae794fb\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"8241de19-5c9e-4aae-a3b5-78cb12befe19\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ac3a544a-e0d1-4999-a783-ee29a76df838\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ea708a27-ffbf-4653-bae2-40b6de7265cf\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5c127409-2392-4a60-a47e-6df094c87e14\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"606ce652-e65f-414a-b91a-4002d63357d4\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"190c11b7-8141-4073-a83c-94407831d4da\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"c939d1ea-fbda-4e5c-8885-872864164cfa\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4e4f30b4-2e37-4905-8814-96f514969ff2\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b5571df8-d8e5-4689-82de-d037936c1d89\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"22b5d640-cf9a-44ad-8781-3a6d72e348b5\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ca985829-15e2-4971-8a74-bad9dc64d18a\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"0bf84ad3-dfaa-4b65-b576-d75ac002593f\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"83f684ab-102c-45b4-a355-b839c1099667\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"02431121-7b91-4620-8708-9606235754f1\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ba9d8ac4-b28b-454d-ac82-72285e047ab2\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"83a7021a-490c-45f8-9ba5-6532cda90338\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4a0e475c-9b55-4ae1-a401-da704d7955f5\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"7ec3d264-1f2d-4ae7-9174-fc1c54213860\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"0a088f6a-c14e-4515-a629-46a7f4107be6\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"40901ae7-2409-4823-a800-ff07d4f0850b\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b2b28606-51ad-4907-9e0a-c6813e931878\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"dc07b903-7933-4fae-b87c-ee0609fbbf83\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"a69de145-11b2-4574-a7ba-466a6b5c4461\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"1491c99d-329c-445e-b884-851514e901bb\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"c7fe9637-d72e-49c3-b15e-b89585a817b4\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4db4e934-f6bd-4342-bfb7-483c48137e74\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"eeb15ccd-6564-4c27-a2a2-e3db5c1ae5d5\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"e6e282ab-347d-4744-a7d2-af3dcabd47bc\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ab10dd6d-1186-4f00-a26f-dad1662b40f2\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"84150f56-b99d-4000-b2e4-d7ac327fb647\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"ee978f68-2297-4d1e-9d5e-fbbd2cb6cf35\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"3aef5df3-ef49-4e85-9c7e-36d76f0844ef\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b1bd638f-fe53-4193-a951-40619519c4cc\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"533f5aad-510f-42f0-a604-86567c5472c0\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"a8af3887-1757-457a-82c3-fc94d70fa782\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4aac6e3e-0b9c-475a-b8cb-1fbdacfe84ae\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"8fe0757c-feb2-489b-a373-adb5d24463df\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"2f488a20-a4fe-4153-9f98-a97cd169f52e\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"7c197747-e9ab-405d-ab18-5f55c5841d58\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5b2da6c3-fc65-4f70-843f-b2e4530e2235\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"fb93cf42-6681-4a3c-b373-5d5234476aca\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"57c5c932-7fa3-4820-81b1-d6f5636d329b\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"03bb781f-5a5b-4788-9e04-7aa2c42845bd\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"3490b22e-1004-48e4-93b6-d7b9fc022da9\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"1d401f1b-4fc7-4de9-924a-080cb57b4562\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"2d7a3bf9-ca88-42f6-9708-1fb1f9d3afa3\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"c58565fa-1408-43d2-8768-645ac842e638\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b5204fcd-c7b3-4fa4-b796-50197b983aed\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"cfbf18ab-645d-40bb-8815-ab2666979e9e\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"78253140-82e0-4a8e-8b69-0b3ba0b726fe\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"e321fbb3-168f-4ee7-a01e-3440e208d732\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"0d0feb47-046f-462b-8aa8-a15cb3ef7fd2\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"edd05612-e893-4e92-bfb6-ad0b33ff4be8\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5b3b59fc-e1a1-4535-afe5-d87783f996af\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4ec12052-c7eb-4659-98d2-ac83e1c855d7\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"187feb5d-26b3-404d-a41f-bce1d3698638\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"178d3e43-0fe6-40af-a937-606528257e2c\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"6ba08e30-2431-4374-8f71-b7cf709b9e67\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"35536151-021f-49f7-9155-f8a1946d8cca\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b7a89ba0-1922-49e8-af6c-3dfa229def66\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"e064baa8-e550-4fe0-b0f2-75d84c88a588\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"2c272022-c7f4-4663-8ea2-29a47bd82053\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"58a9799f-c950-49d0-a4b7-caee8a97ce05\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"c2974291-e9a7-4fc3-9dde-8ad44470cc66\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"af104c94-07dc-4588-b725-b49a27e58025\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"b34a7ccf-c948-4bca-810a-dfd1736b169a\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"938967a6-85ca-4dc8-baf9-9954b93d0c5a\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5885c3ff-c499-4e17-a41b-1c9639bb2fc3\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"6f322132-e77f-42e7-8673-927db28390b6\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5452abb0-d682-4f84-9ee3-45c2a9d60501\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"5b7ed04a-9db9-450c-b99f-2a075b7d9c34\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"4869e362-855f-44bd-a8a9-01ef47527eac\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"50889b54-8194-48bd-b68a-b1090d1d6bda\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"61583615-c406-468f-bc1b-ce09912cc23c\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"a3753def-4c5d-4e63-b048-e4257d5acbc0\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"7b0efb46-4b1c-49dd-9a3d-a2881096989f\\"}"),
+            Map.<String, Object>of("body", "{\\"name\\":\\"deafb238-3db8-45e2-95e9-0697d3751e6a\\"}")
+        )
+    ).circular();
+
     ChainBuilder scn = exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headersHttp)
@@ -562,7 +780,7 @@ public class AuthorityGatlingTest extends Simulation {
         .check(status().is(200)))
         .pause(10)
         .repeat(2).on(
-            exec(http("Get all authorities")
+            feed(authorityFeeder).exec(http("Get all authorities")
             .get("/api/authorities")
             .headers(headersHttpAuthenticated)
             .check(status().is(200)))
@@ -570,9 +788,7 @@ public class AuthorityGatlingTest extends Simulation {
             .exec(http("Create new authority")
             .post("/api/authorities")
             .headers(headersHttpAuthenticated)
-            .body(StringBody("{" +
-                "\\"name\\": \\"SAMPLE_TEXT\\"" +
-                "}")).asJson()
+            .body(StringBody("#{body}")).asJson()
             .check(status().is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_authority_url"))).exitHereIfFailed()
             .pause(10)
