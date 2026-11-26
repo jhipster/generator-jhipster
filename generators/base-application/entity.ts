@@ -321,6 +321,8 @@ export type PrimaryKey<F extends Field = Field> = {
   javaBuildSpecification?: string;
 
   tsSampleValues?: (string | number)[];
+  /** The properties of the primary key of each sample value, as a TypeScript object literal like `{ orderId: 123, lineCode: 'ABC' }`. */
+  tsSampleParams?: string[];
   javaSampleValues?: string[];
 
   hasUUID?: boolean;

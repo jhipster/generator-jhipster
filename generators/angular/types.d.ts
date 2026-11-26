@@ -82,6 +82,8 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   angularTsSampleWithPartialData?: string;
   /** The sample of a new entity, its dates written as the strings of the REST API. */
   angularTsSampleWithNewData?: string;
+  /** The names of the properties of the primary key, as a union of string literal types, like `'orderId' | 'lineCode'`. */
+  angularPrimaryKeyNames?: string;
 }
 
 export type Application<E extends Entity = Entity> = {

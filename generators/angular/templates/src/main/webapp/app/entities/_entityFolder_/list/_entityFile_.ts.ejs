@@ -361,7 +361,7 @@ export class <%- componentName %> {
     const <%- entityInstancePlural %>New = [...currentValue];
     for (const d of data) {
   <%_ if (primaryKey) { _%>
-      if (!<%- entityInstancePlural %>New.some(op => op.<%- primaryKey.name %> === d.<%- primaryKey.name %>)) {
+      if (!<%- entityInstancePlural %>New.some(op => <%- primaryKey.fields.map(field => `op.${field.fieldName} === d.${field.fieldName}`).join(' && ') %>)) {
   <%_ } _%>
         <%- entityInstancePlural %>New.push(d);
   <%_ if (primaryKey) { _%>

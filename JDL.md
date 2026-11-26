@@ -197,8 +197,9 @@ segment each of its URL, in the order of the `@Id` fields (`/api/order-lines/1/2
 list by every part, in the alphabetical order of their names rather than the order of the `@Id` fields, and
 `sort=id.orderId` by one part that is not a `UUID`. They accept `String`, `Integer`, `Long` and `UUID` key fields: other
 field types, and composite primary keys with MapStruct DTOs, JPA metamodel filtering, a search engine, `@Id`
-relationships, a reactive application or a non-SQL database, are errors. An entity with a composite primary key is
-server-only: its Angular, React or Vue client is not generated.
+relationships, a reactive application or a non-SQL database, are errors. The Angular client addresses an entity with a
+composite primary key by a key it computes from the parts, each one encoded and joined by slashes, and sorts it by
+`id.<part>`; its React or Vue client is not generated.
 
 ## Annotations
 

@@ -78,7 +78,7 @@
   <%_ if (builtInUserManagement && field.fieldName === 'activated') { _%>
                     <th scope="col"></th>
   <%_ } else { _%>
-                    <th scope="col"<% if (fieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- field.fieldName %>"<% } %>>
+                    <th scope="col"<% if (fieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- primaryKey.composite && field.id ? `${primaryKey.name}.${field.fieldName}` : field.fieldName %>"<% } %>>
                         <div class="d-flex">
                             <span>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span>
     <%_ if (fieldSupportsSortBy) { _%>
@@ -115,7 +115,7 @@
             <tbody<%- paginationInfiniteScroll ? ' infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"' : '' %>>
             @for (<%- entityInstance %> of <%- entityInstancePlural %>(); track track<%- primaryKey.nameCapitalized %>(<%- entityInstance %>)) {
                 <tr data-cy="entityTable">
-<%_ const routerLink = ` [routerLink]="['/${entityPage}', ${entityInstance}.${primaryKey.name}, 'view']"`; _%>
+<%_ const routerLink = ` [routerLink]="['/${entityPage}', ${primaryKey.fields.map(field => `${entityInstance}.${field.fieldName}`).join(', ')}, 'view']"`; _%>
 <%_ for (field of fields.filter(field => !field.hidden && !field.hideListView)) { _%>
   <%_ const { fieldName, fieldType, contentTypeFieldName } = field; _%>
   <%_ if (field.fieldTypeBinary && (field.blobContentTypeImage || field.blobContentTypeAny)) { _%>
@@ -207,14 +207,14 @@
                             </button>
   <%_ } _%>
 <%_ } _%>
-                            <a [routerLink]="['/<%- entityPage %>', <%- entityInstance %>.<%- primaryKey.name %>, 'view']"
+                            <a [routerLink]="['/<%- entityPage %>', <%- primaryKey.fields.map(field => `${entityInstance}.${field.fieldName}`).join(', ') %>, 'view']"
                                class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                                 <fa-icon icon="eye" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.view')</span>
                             </a>
 <%_ if (!readOnly && updatableEntity) { _%>
 
-                            <a [routerLink]="['/<%- entityPage %>', <%- entityInstance %>.<%- primaryKey.name %>, 'edit']"
+                            <a [routerLink]="['/<%- entityPage %>', <%- primaryKey.fields.map(field => `${entityInstance}.${field.fieldName}`).join(', ') %>, 'edit']"
                                class="btn btn-primary btn-sm" data-cy="entityEditButton">
                                 <fa-icon icon="pencil-alt" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.edit')</span>

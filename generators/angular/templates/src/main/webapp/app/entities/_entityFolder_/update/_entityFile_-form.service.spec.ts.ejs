@@ -177,15 +177,19 @@ describe('<%- entityAngularName %> Form Service', () => {
       });
 <%_ } else if (editableId) { _%>
 
-      it('should make the <%- primaryKey.name %> readonly once an entity is edited', () => {
+      it('should make the <%- primaryKey.composite ? 'parts of the id' : primaryKey.name %> readonly once an entity is edited', () => {
         const editing = signal(false);
         const form = TestBed.runInInjectionContext(() => service.create<%- entityAngularName %>Form(signal(service.create<%- entityAngularName %>FormModel()), editing));
 
-        expect(form.<%- primaryKey.name %>().readonly()).toBe(false);
+  <%_ for (const field of primaryKey.fields) { _%>
+        expect(form.<%- field.fieldName %>().readonly()).toBe(false);
+  <%_ } _%>
 
         editing.set(true);
 
-        expect(form.<%- primaryKey.name %>().readonly()).toBe(true);
+  <%_ for (const field of primaryKey.fields) { _%>
+        expect(form.<%- field.fieldName %>().readonly()).toBe(true);
+  <%_ } _%>
       });
 <%_ } _%>
     });

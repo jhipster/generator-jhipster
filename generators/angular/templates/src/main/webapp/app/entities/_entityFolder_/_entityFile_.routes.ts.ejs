@@ -38,7 +38,7 @@ const <%- entityInstance %>Route: Routes = [
     canActivate: [userRouteAccessService],
   },
   {
-    path: ':<%- primaryKey.name %>/view',
+    path: '<%- primaryKey.fields.map(field => `:${field.fieldName}`).join('/') %>/view',
     loadComponent: () => import('./detail/<%- entityFileName %>-detail').then(m => m.<%- entityAngularName %>Detail),
     resolve: {
       <%- entityInstance %>: <%- entityAngularName %>Resolve
@@ -67,7 +67,7 @@ const <%- entityInstance %>Route: Routes = [
 <%_ } _%>
 <%_ if (!readOnly && updatableEntity) { _%>
   {
-    path: ':<%- primaryKey.name %>/edit',
+    path: '<%- primaryKey.fields.map(field => `:${field.fieldName}`).join('/') %>/edit',
     loadComponent: () => import('./update/<%- entityFileName %>-update').then(m => m.<%- entityAngularName %>Update),
     resolve: {
       <%- entityInstance %>: <%- entityAngularName %>Resolve

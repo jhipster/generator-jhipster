@@ -133,7 +133,7 @@
 <%_ if (!readOnly && updatableEntity) { _%>
 
       <button type="button"
-          [routerLink]="['/<%- entityPage %>', <%- entityInstance %>Ref.<%- primaryKey.name %>, 'edit']"
+          [routerLink]="['/<%- entityPage %>', <%- primaryKey.fields.map(field => `${entityInstance}Ref.${field.fieldName}`).join(', ') %>, 'edit']"
           class="btn btn-primary">
         <fa-icon icon="pencil-alt" />&nbsp;<span>__jhiTranslateTag__('entity.action.edit')</span>
       </button>

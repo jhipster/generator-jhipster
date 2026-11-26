@@ -43,6 +43,12 @@ export interface I<%- entityAngularName %> {
 <%_ } _%>
 }
 <%_ if (!readOnly && primaryKey) { _%>
+  <%_ if (primaryKey.composite) { _%>
+
+// The parts of the id of a new <%- entityInstance %> are given one by one.
+export type New<%- entityAngularName %> = Omit<I<%- entityAngularName %>, <%- angularPrimaryKeyNames %>> & { <%- primaryKey.fields.map(field => `${field.fieldName}: I${entityAngularName}['${field.fieldName}'] | null`).join('; ') %> };
+  <%_ } else { _%>
 
 export type New<%- entityAngularName %> = Omit<I<%- entityAngularName %>, '<%- primaryKey.name %>'> & { <%- primaryKey.name %>: null };
+  <%_ } _%>
 <%_ } _%>

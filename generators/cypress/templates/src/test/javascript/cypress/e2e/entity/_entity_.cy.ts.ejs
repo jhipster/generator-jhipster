@@ -100,7 +100,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   beforeEach(() => {
     cy.intercept('GET', '/<%- baseApi + entityApiUrl %>+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/<%- baseApi + entityApiUrl %>').as('postEntityRequest');
-    cy.intercept('DELETE', '/<%- baseApi + entityApiUrl %>/*').as('deleteEntityRequest');
+    cy.intercept('DELETE', '/<%- baseApi + entityApiUrl %><%- primaryKey.fields.map(() => '/*').join('') %>').as('deleteEntityRequest');
   });
 
 <%_ if (requiredOtherEntities.length > 0) { _%>
@@ -126,7 +126,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     if (<%- entityInstance %>) {
       cy.authenticatedRequest({
         method: 'DELETE',
-        url: `/<%- baseApi + entityApiUrl %>/${<%- entityInstance %>.<%- primaryKey.name %>}`,
+        url: `/<%- baseApi + entityApiUrl %>/<%- primaryKey.composite ? primaryKey.fields.map(field => `\${encodeURIComponent(${entityInstance}.${field.fieldName})}`).join('/') : `\${${entityInstance}.${primaryKey.name}}` %>`,
       }).then(() => {
         <%- entityInstance %> = undefined;
       });

@@ -120,7 +120,7 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
     if (<%- entityInstance %>) {
       await jhi.authenticatedRequest({
         method: 'DELETE',
-        url: `/<%- baseApi + entityApiUrl %>/${<%- entityInstance %>.<%- primaryKey.name %>}`,
+        url: `/<%- baseApi + entityApiUrl %>/<%- primaryKey.composite ? primaryKey.fields.map(field => `\${encodeURIComponent(${entityInstance}.${field.fieldName})}`).join('/') : `\${${entityInstance}.${primaryKey.name}}` %>`,
       });
       <%- entityInstance %> = undefined;
     }
@@ -370,7 +370,13 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
       // drop the body of the response once the save navigates to the list page.
       const location = postResponse.headers().location;
       expect(location).toBeTruthy();
+  <%_ if (primaryKey.composite) { _%>
+      // The location has a segment by part of the id.
+      const [<%- primaryKey.fields.map(field => field.fieldName).join(', ') %>] = new URL(location, page.url()).pathname.split('/').slice(-<%- primaryKey.fields.length %>).map(part => decodeURIComponent(part));
+      <%- entityInstance %> = { <%- primaryKey.fields.map(field => field.fieldName).join(', ') %> };
+  <%_ } else { _%>
       <%- entityInstance %> = { <%- primaryKey.name %>: decodeURIComponent(new URL(location, page.url()).pathname.split('/').pop()!) };
+  <%_ } _%>
       expect((await listRequest).status()).toBe(200);
       await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
     });

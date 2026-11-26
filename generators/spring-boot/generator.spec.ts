@@ -933,9 +933,28 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with a composite primary key and a client framework', () => {
+  describe('with a composite primary key and the angular client', () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig({ clientFramework: 'angular' }, [
+        {
+          name: 'OrderLine',
+          changelogDate: '20160926101210',
+          fields: [
+            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+            { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+          ],
+        },
+      ]);
+    });
+
+    it('should keep the client for the entity', () => {
+      expect(runResult.entities!.OrderLine.skipClient).toBeFalsy();
+    });
+  });
+
+  describe('with a composite primary key and another client framework', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ clientFramework: 'react' }, [
         {
           name: 'OrderLine',
           changelogDate: '20160926101210',

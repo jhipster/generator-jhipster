@@ -70,7 +70,7 @@ import { I<%- entityAngularName %>, New<%- entityAngularName %> } from '../<%- e
 /**
  * A partial Type with required key is used as form input.
  */
-type PartialWithRequiredKeyOf<T extends { <%- primaryKey.name %>: unknown }> = Partial<Omit<T, '<%- primaryKey.name %>'>> & { <%- primaryKey.name %>: T['<%- primaryKey.name %>'] };
+type PartialWithRequiredKeyOf<T extends { <%- primaryKey.fields.map(field => `${field.fieldName}: unknown`).join('; ') %> }> = Partial<Omit<T, <%- angularPrimaryKeyNames %>>> & { <%- primaryKey.fields.map(field => `${field.fieldName}: T['${field.fieldName}']`).join('; ') %> };
 
 /**
  * Type for the createFormModel argument.

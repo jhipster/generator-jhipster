@@ -628,11 +628,14 @@ ${classProperties
           }
         }
 
-        entity.skipClient = true;
-        if (application.clientFrameworkAny) {
-          this.log.warn(
-            `Entity ${entityName} has a composite primary key, the ${application.clientFramework} client is not generated for it.`,
-          );
+        // The Angular client addresses the entity by a key it computes from the parts, the other clients do not support it yet.
+        if (!application.clientFrameworkAngular) {
+          entity.skipClient = true;
+          if (application.clientFrameworkAny) {
+            this.log.warn(
+              `Entity ${entityName} has a composite primary key, the ${application.clientFramework} client is not generated for it.`,
+            );
+          }
         }
       },
       prepareEntity({ entity }) {
