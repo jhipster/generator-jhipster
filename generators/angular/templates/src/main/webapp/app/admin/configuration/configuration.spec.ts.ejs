@@ -108,7 +108,8 @@ describe('Configuration', () => {
 
     it('should render the sections', () => {
       const text = (fixture.nativeElement as HTMLElement).textContent;
-      expect(text).toContain('<%- enableTranslation ? 'configuration.table.prefix' : 'Beans' %>');
+      expect(text).toContain('Beans');
+      expect(text).toContain('Prefix');
       expect(text).toContain('Properties');
       expect(text).toContain('app');
       expect(text).toContain('plain');
