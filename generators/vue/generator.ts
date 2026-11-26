@@ -385,6 +385,10 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         const fieldsWithoutId = entity.fields.filter(field => !field.id && isClientField(field));
         const formFields = entity.entityClientFormFields!;
         const editableCollectionFields = formFields.filter(field => field.clientConstantsAsValues && field.collection);
+        // The relationships the update form shows, validates and loads the options of.
+        const formRelationships = entity.relationships.filter(
+          relationship => relationship.persistableRelationship && !relationship.otherEntity.embedded,
+        );
         // The authorities of the routes, like Angular: ROLE_USER when the entity declares none.
         const asAuthorities = (authorities: string[]): string =>
           (authorities.length > 0 ? authorities : ['ROLE_USER']).map(authority => `'${authority}'`).join(', ');
@@ -407,6 +411,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           entityClientEnumImports: () => this.generateEntityClientEnumImports(entity.fields),
           vueFormTimeFields: () => formFields.some(field => field.fieldTypeInstant || field.fieldTypeZonedDateTime),
           vueEditableCollectionFields: () => editableCollectionFields,
+          vueFormRelationships: () => formRelationships,
+          // The properties the update form shows the errors of the server for, which the toasts leave out.
+          vueServerErrorProperties: () => [
+            ...formFields.map(field => field.fieldName),
+            ...formRelationships.map(relationship =>
+              relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName,
+            ),
+          ],
           vueEditableCollections: () => [
             ...editableCollectionFields,
             ...entity.relationships.filter(

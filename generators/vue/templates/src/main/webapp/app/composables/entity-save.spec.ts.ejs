@@ -74,7 +74,7 @@ describe('useEntitySave', () => {
 
     await save();
 
-    expect(alertService.showHttpError).toHaveBeenCalledWith({ status: 500 });
+    expect(alertService.showHttpError).toHaveBeenCalledWith({ status: 500 }, []);
     expect(onSaved).not.toHaveBeenCalled();
     expect(isSaving.value).toBe(false);
   });
@@ -105,11 +105,13 @@ describe('useEntitySave', () => {
       updatedMessage: id => `updated ${id}`,
       onSaved: vi.fn(),
       serverErrors,
+      serverErrorProperties: ['name'],
     });
 
     await save();
     expect(serverErrors.value).toEqual({ name: ['name: must not be null', 'name: must match'] });
-    expect(alertService.showHttpError).toHaveBeenCalledWith(response);
+    // The alert leaves out the fields the form shows.
+    expect(alertService.showHttpError).toHaveBeenCalledWith(response, ['name']);
 
     vi.spyOn(alertService, 'showSuccess').mockImplementation(() => {});
     await save();

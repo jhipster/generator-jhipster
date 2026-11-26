@@ -92,6 +92,8 @@ describe('LoginForm Component', () => {
       const expired = shallowMount(LoginForm, { global: globalOptions });
       expect(expired.vm.sessionExpired).toBe(true);
       expect(expired.find('[data-cy="sessionExpired"]').exists()).toBe(true);
+      // Told once: a reload of the login does not tell it again.
+      expect(window.history.state?.sessionExpired).toBeUndefined();
     } finally {
       window.history.replaceState({ ...window.history.state, sessionExpired: undefined }, '');
     }

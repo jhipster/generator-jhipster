@@ -36,6 +36,7 @@ export const useEntitySave = <T, K>({
   updatedMessage,
   onSaved,
   serverErrors,
+  serverErrorProperties = [],
 }: {
   alertService: AlertService;
   /** Whether the entity of the form exists, to update it, else to create it. */
@@ -48,6 +49,8 @@ export const useEntitySave = <T, K>({
   onSaved: () => unknown;
   /** The messages of the fields the server refused, by field, for the validation of the form. */
   serverErrors?: Ref<Record<string, string[]>>;
+  /** The properties the form shows the messages of the server for, which the alert leaves out. */
+  serverErrorProperties?: readonly string[];
 }) => {
   const isSaving = ref(false);
 
@@ -75,7 +78,7 @@ export const useEntitySave = <T, K>({
         }
         serverErrors.value = errors;
       }
-      alertService.showHttpError(response);
+      alertService.showHttpError(response, serverErrors ? serverErrorProperties : []);
     } finally {
       isSaving.value = false;
     }

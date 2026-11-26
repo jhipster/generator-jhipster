@@ -116,7 +116,7 @@ _%>
             </div>
           </div>
 <%_ } _%>
-<%_ for (relationship of relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded)) { _%>
+<%_ for (relationship of vueFormRelationships) { _%>
   <%_ const { otherEntityName, relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = relationship;
       const translationKey = relationship.propertyTranslationKey;
   _%>
@@ -165,7 +165,7 @@ _%>
 <script setup lang="ts">
 <%_ const allRelationshipsThatNeedSelectOptions = Object
       .values(relationshipsByOtherEntity)
-      .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
+      .map(relationships => relationships.filter(rel => vueFormRelationships.includes(rel)))
       .filter(relationships => relationships.length > 0);
     const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
     const clientConstantFields = entityClientFormFields.filter(field => field.clientConstantsAsValues);
@@ -298,8 +298,7 @@ const v$ = useEntityValidation(<%- entityInstance %>, {
 <%_ for (field of entityClientFormFields) { _%>
   <%- field.fieldName %>: <%- field.vueValidationRules %>,
 <%_ } _%>
-<%# The relationships of the form only: the other side of a relationship is not one of its fields. -%>
-<%_ for (relationship of relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded)) { _%>
+<%_ for (relationship of vueFormRelationships) { _%>
   <%- relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: <%- relationship.relationshipValidate ? '{ required: true }' : '{}' %>,
 <%_ } _%>
 }, serverErrors);
@@ -329,6 +328,7 @@ const { isSaving, save: saveEntity } = useEntitySave({
 <%_ } _%>
   onSaved: () => previousState(),
   serverErrors,
+  serverErrorProperties: [<%- vueServerErrorProperties.map(property => `'${property}'`).join(', ') %>],
 });
 
 const save = async () => {

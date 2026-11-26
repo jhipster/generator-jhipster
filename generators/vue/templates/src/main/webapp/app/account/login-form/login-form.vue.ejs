@@ -113,6 +113,10 @@ const { t: t$ } = useI18n();
 const authenticationError = ref(false);
 // A session that expired leaves for the login, which tells it.
 const sessionExpired = ref(window.history.state?.sessionExpired === true);
+if (sessionExpired.value) {
+  // Told once: a reload of the login, or a return to it, does not tell it again.
+  window.history.replaceState({ ...window.history.state, sessionExpired: undefined }, '');
+}
 const submitted = ref(false);
 const login = ref<string | null>(null);
 const password = ref<string | null>(null);

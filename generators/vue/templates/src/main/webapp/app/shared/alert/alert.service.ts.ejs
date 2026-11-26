@@ -89,7 +89,10 @@ export default class AlertService {
     });
   }
 
-  showHttpError(response?: { data?: unknown; status?: number; headers?: Record<string, unknown> }) {
+  /**
+   * The alert of an error of the server, the errors of the given fields left out: the form shows them next to the fields.
+   */
+  showHttpError(response?: { data?: unknown; status?: number; headers?: Record<string, unknown> }, shownFields: readonly string[] = []) {
     // Without a response, the server was not reached.
     const { data: body, status = 0, headers } = response ?? {};
     // The body of an error of the server, a problem detail, else nothing to read.
@@ -109,18 +112,18 @@ export default class AlertService {
 <%_ } _%>
         break;
 
-      // The server denies the access without a body.
+      // The security of the server denies the access without a body, a resource may tell why in a problem.
       case 403:
 <%_ if (enableTranslation) { _%>
-        errorMessage = this.i18n.t('error.http.403').toString();
+        errorMessage = this.i18n.t(problem?.message ?? 'error.http.403').toString();
 <%_ } else { _%>
-        errorMessage = 'You are not authorized to access this page.';
+        errorMessage = problem?.message ?? 'You are not authorized to access this page.';
 <%_ } _%>
         break;
 
       case 400: {
         if (isConstraintViolation(problem) && problem.fieldErrors.length > 0) {
-          for (const fieldError of problem.fieldErrors) {
+          for (const fieldError of problem.fieldErrors.filter(({ field }) => !shownFields.includes(field))) {
             this.showError(this.getFieldErrorMessage(fieldError));
           }
           return;
@@ -169,7 +172,7 @@ export default class AlertService {
 <%_ if (enableTranslation) { _%>
     // The keys of the users are not prefixed by the application.
     const labelKey = `${objectName === 'userManagement' ? 'userManagement' : `<%- frontendAppName %>.${objectName}`}.${convertedField}`;
-    const fieldName = this.i18n.te?.(labelKey) ? this.i18n.t(labelKey).toString() : field;
+    const fieldName = this.i18n.te?.(labelKey) ? this.i18n.t(labelKey).toString() : convertedField;
     const key = `error.${code}`;
     if (code && this.i18n.te?.(key)) {
       return this.i18n.t(key, { fieldName }).toString();
