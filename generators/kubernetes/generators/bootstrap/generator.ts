@@ -22,8 +22,9 @@ import { randomBytes } from 'node:crypto';
 import chalk from 'chalk';
 import defaults from 'lodash-es/defaults.js';
 
-import { mutateDefaults } from '../../../../lib/utils/index.ts';
+import { mutateDefaults, stringHashCode } from '../../../../lib/utils/index.ts';
 import { convertSecretToBase64, createBase64Secret } from '../../../../lib/utils/secret.ts';
+import { createFaker } from '../../../base-application/support/index.ts';
 import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../../../spring-boot/generators/data-relational/support/index.ts';
@@ -142,7 +143,8 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
-      derivedProperties({ deployment, applications }) {
+      async derivedProperties({ deployment, applications }) {
+        const faker = await createFaker();
         deployment.deploymentApplicationTypeMicroservice = deployment.deploymentApplicationType === 'microservice';
         deployment.kubernetesNamespaceDefault = deployment.kubernetesNamespace === 'default';
         deployment.generatorTypeK8s = deployment.generatorType === 'k8s';
@@ -151,7 +153,8 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         deployment.useKafka = applications.some(appConfig => appConfig.messageBroker === 'kafka');
         deployment.usesIngress = deployment.kubernetesServiceType === 'Ingress';
         deployment.useKeycloak = deployment.usesOauth2 && deployment.usesIngress;
-        deployment.keycloakRedirectUris = '';
+        deployment.includesApplicationTypeGateway = applications.some(appConfig => appConfig.applicationTypeGateway);
+        const keycloakWebAppRedirectUris: string[] = [];
         deployment.keycloakAppSchemes = [...new Set(applications.flatMap(appConfig => appConfig.oauth2AppSchemes ?? []))];
         deployment.entryPort = 8080;
         deployment.adminPassword ??= 'admin';
@@ -179,27 +182,32 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
           // Add application configuration
           if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
             deployment.entryPort = appConfig.composePort!;
-            if (deployment.ingressDomain) {
-              deployment.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${deployment.kubernetesNamespace}.${deployment.ingressDomain}/*",
-            "https://${appConfig.baseName.toLowerCase()}.${deployment.kubernetesNamespace}.${deployment.ingressDomain}/*", `;
-            } else {
-              deployment.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*",
-            "https://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", `;
+            if (deployment.keycloakSecrets === undefined && appConfig.authenticationTypeOauth2) {
+              faker.seed(stringHashCode(appConfig.baseName));
+              deployment.keycloakSecrets = Array.from(new Array(6), () => faker.string.uuid());
             }
-
-            deployment.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*",
-            "https://localhost:${appConfig.composePort}/*",`;
-
+            const host =
+              deployment.ingressDomain ?
+                `${appConfig.baseName.toLowerCase()}.${deployment.kubernetesNamespace}.${deployment.ingressDomain}`
+              : `${appConfig.baseName.toLowerCase()}:${appConfig.composePort}`;
+            keycloakWebAppRedirectUris.push(
+              `http://${host}/*`,
+              `https://${host}/*`,
+              `http://localhost:${appConfig.composePort}/*`,
+              `https://localhost:${appConfig.composePort}/*`,
+            );
             if (appConfig.devServerPort !== undefined) {
-              deployment.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
+              keycloakWebAppRedirectUris.push(`http://localhost:${appConfig.devServerPort}/*`);
             }
             if (appConfig.devServerPortProxy !== undefined) {
-              deployment.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPortProxy}/*", `;
+              keycloakWebAppRedirectUris.push(`http://localhost:${appConfig.devServerPortProxy}/*`);
             }
 
-            this.debug(chalk.red.bold(`${appConfig.baseName} has redirect URIs ${deployment.keycloakRedirectUris}`));
+            this.debug(chalk.red.bold(`${appConfig.baseName} has redirect URIs ${keycloakWebAppRedirectUris.join(', ')}`));
           }
         });
+        deployment.keycloakWebAppRedirectUris = keycloakWebAppRedirectUris;
+        deployment.keycloakRedirectUris = keycloakWebAppRedirectUris.map(redirectUri => `"${redirectUri}", `).join('');
       },
     });
   }

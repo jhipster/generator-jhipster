@@ -2874,6 +2874,7 @@ data:
       "id": "jhipster",
       "realm": "jhipster",
       "displayName": "JHipster",
+      "displayNameHtml": "<div class=\\"kc-logo-text\\"><span>JHipster</span></div>",
       "notBefore": 0,
       "defaultSignatureAlgorithm": "RS256",
       "revokeRefreshToken": false,
@@ -3276,6 +3277,15 @@ data:
               "attributes": {}
             },
             {
+              "id": "16925eed-a410-4241-9af8-cc7992c42f7a",
+              "name": "view-groups",
+              "description": "\${role_view-groups}",
+              "composite": false,
+              "clientRole": true,
+              "containerId": "6cc5a716-0880-47dc-b714-9a4967246b2f",
+              "attributes": {}
+            },
+            {
               "id": "a7f45fab-19c3-4c48-aca3-85f828ca0fed",
               "name": "manage-account-links",
               "description": "\${role_manage-account-links}",
@@ -3331,9 +3341,11 @@ data:
       "otpPolicyDigits": 6,
       "otpPolicyLookAheadWindow": 1,
       "otpPolicyPeriod": 30,
+      "otpPolicyCodeReusable": false,
       "otpSupportedApplications": [
-        "FreeOTP",
-        "Google Authenticator"
+        "totpAppGoogleName",
+        "totpAppFreeOTPName",
+        "totpAppMicrosoftAuthenticatorName"
       ],
       "localizationTexts": {},
       "webAuthnPolicyRpEntityName": "keycloak",
@@ -3362,6 +3374,24 @@ data:
       "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
       "webAuthnPolicyPasswordlessAcceptableAaguids": [],
       "webAuthnPolicyPasswordlessExtraOrigins": [],
+      "users": [
+        {
+          "id": "f742ba6f-1d8a-4dec-bf15-e02dab508283",
+          "createdTimestamp": 1598681172054,
+          "username": "service-account-internal",
+          "enabled": true,
+          "totp": false,
+          "emailVerified": false,
+          "serviceAccountClientId": "internal",
+          "disableableCredentialTypes": [],
+          "requiredActions": [],
+          "realmRoles": [
+            "default-roles-jhipster"
+          ],
+          "notBefore": 0,
+          "groups": []
+        }
+      ],
       "scopeMappings": [
         {
           "clientScope": "offline_access",
@@ -3375,7 +3405,8 @@ data:
           {
             "client": "account-console",
             "roles": [
-              "manage-account"
+              "manage-account",
+              "view-groups"
             ]
           }
         ]
@@ -3391,7 +3422,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "fc4b094c-a8f0-48a8-b38f-d2e8a2e1646f",
           "redirectUris": [
             "/realms/jhipster/account/*"
           ],
@@ -3414,6 +3445,7 @@ data:
           "nodeReRegistrationTimeout": 0,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -3435,7 +3467,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "bb374562-19cf-47cf-9a09-f22698b3e29d",
           "redirectUris": [
             "/realms/jhipster/account/*"
           ],
@@ -3469,6 +3501,7 @@ data:
           ],
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -3488,7 +3521,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "2b7f3b32-ef1b-4e87-95b5-97541502a940",
           "redirectUris": [],
           "webOrigins": [],
           "notBefore": 0,
@@ -3509,6 +3542,7 @@ data:
           "nodeReRegistrationTimeout": 0,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -3528,7 +3562,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "03163aa1-9210-4927-9e26-4ec27a90a64e",
           "redirectUris": [],
           "webOrigins": [],
           "notBefore": 0,
@@ -3549,6 +3583,7 @@ data:
           "nodeReRegistrationTimeout": 0,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -3648,6 +3683,7 @@ data:
           ],
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -3710,6 +3746,7 @@ data:
           "nodeReRegistrationTimeout": -1,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "jhipster",
             "roles",
             "profile",
@@ -3730,7 +3767,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "1a3810b5-04db-4a86-8cb4-d3b705bbdf62",
           "redirectUris": [],
           "webOrigins": [],
           "notBefore": 0,
@@ -3751,6 +3788,7 @@ data:
           "nodeReRegistrationTimeout": 0,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -3772,7 +3810,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "53e8f8d2-6b08-457a-a30a-40269d755d18",
           "redirectUris": [
             "/admin/jhipster/console/*"
           ],
@@ -3815,6 +3853,7 @@ data:
           ],
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -3838,16 +3877,20 @@ data:
           "secret": "web_app",
           "redirectUris": [
             "http://jhgate.default.example.com/*",
-            "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*","http://localhost:4200/*", 
+            "https://jhgate.default.example.com/*",
+            "http://localhost:8080/*",
+            "https://localhost:8080/*",
+            "http://localhost:4200/*",
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "dev.localhost.ionic:*"
           ],
           "webOrigins": [
             "http://jhgate.default.example.com",
-            "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080","http://localhost:4200", 
+            "https://jhgate.default.example.com",
+            "http://localhost:8080",
+            "https://localhost:8080",
+            "http://localhost:4200",
             "http://localhost:8100",
             "http://127.0.0.1:8761"
           ],
@@ -3882,6 +3925,7 @@ data:
           "nodeReRegistrationTimeout": -1,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "jhipster",
             "roles",
             "profile",
@@ -4417,6 +4461,27 @@ data:
           ]
         },
         {
+          "id": "49177925-3cb4-4fe1-9ced-d9a331dee5c6",
+          "name": "acr",
+          "description": "OpenID Connect scope for add acr (authentication context class reference) to the token",
+          "protocol": "openid-connect",
+          "attributes": {
+            "include.in.token.scope": "false",
+            "display.on.consent.screen": "false"
+          },
+          "protocolMappers": [{
+            "id": "df11a217-a90d-4d01-9aab-84fbaa3a0ad6",
+            "name": "acr loa level",
+            "protocol": "openid-connect",
+            "protocolMapper": "oidc-acr-mapper",
+            "consentRequired": false,
+            "config": {
+              "id.token.claim": "true",
+              "access.token.claim": "true"
+            }
+          }]
+        },
+        {
           "id": "2daaac74-636f-4074-87a9-d1aba9dffb96",
           "name": "web-origins",
           "description": "OpenID Connect scope for add allowed web origins to the access token",
@@ -4440,6 +4505,7 @@ data:
       ],
       "defaultDefaultClientScopes": [
         "web-origins",
+        "acr",
         "email",
         "profile",
         "roles",
@@ -5263,6 +5329,24 @@ data:
           "defaultAction": false,
           "priority": 1000,
           "config": {}
+        },
+        {
+          "alias": "webauthn-register",
+          "name": "Webauthn Register",
+          "providerId": "webauthn-register",
+          "enabled": true,
+          "defaultAction": false,
+          "priority": 70,
+          "config": { }
+        },
+        {
+          "alias": "webauthn-register-passwordless",
+          "name": "Webauthn Register Passwordless",
+          "providerId": "webauthn-register-passwordless",
+          "enabled": true,
+          "defaultAction": false,
+          "priority": 80,
+          "config": { }
         }
       ],
       "browserFlow": "browser",
@@ -5283,7 +5367,9 @@ data:
         "parRequestUriLifespan": "60",
         "clientOfflineSessionIdleTimeout": "0",
         "cibaInterval": "5",
-        "frontendUrl": ""
+        "realmReusableOtpCode": "false",
+        "frontendUrl": "",
+        "acr.loa.map": "{}"
       },
       "keycloakVersion": "23.0.1",
       "userManagedAccessAllowed": false,
@@ -5294,22 +5380,6 @@ data:
         "policies": []
       },
       "users": [
-        {
-          "id": "f742ba6f-1d8a-4dec-bf15-e02dab508283",
-          "createdTimestamp": 1598681172054,
-          "username": "service-account-internal",
-          "enabled": true,
-          "totp": false,
-          "emailVerified": false,
-          "serviceAccountClientId": "internal",
-          "disableableCredentialTypes": [],
-          "requiredActions": [],
-          "realmRoles": [
-            "default-roles-jhipster"
-          ],
-          "notBefore": 0,
-          "groups": []
-        },
         {
           "id": "4c973896-5761-41fc-8217-07c5d13a004b",
           "createdTimestamp": 1505479415590,
@@ -6414,6 +6484,7 @@ data:
       "id": "jhipster",
       "realm": "jhipster",
       "displayName": "JHipster",
+      "displayNameHtml": "<div class=\\"kc-logo-text\\"><span>JHipster</span></div>",
       "notBefore": 0,
       "defaultSignatureAlgorithm": "RS256",
       "revokeRefreshToken": false,
@@ -6816,6 +6887,15 @@ data:
               "attributes": {}
             },
             {
+              "id": "16925eed-a410-4241-9af8-cc7992c42f7a",
+              "name": "view-groups",
+              "description": "\${role_view-groups}",
+              "composite": false,
+              "clientRole": true,
+              "containerId": "6cc5a716-0880-47dc-b714-9a4967246b2f",
+              "attributes": {}
+            },
+            {
               "id": "a7f45fab-19c3-4c48-aca3-85f828ca0fed",
               "name": "manage-account-links",
               "description": "\${role_manage-account-links}",
@@ -6871,9 +6951,11 @@ data:
       "otpPolicyDigits": 6,
       "otpPolicyLookAheadWindow": 1,
       "otpPolicyPeriod": 30,
+      "otpPolicyCodeReusable": false,
       "otpSupportedApplications": [
-        "FreeOTP",
-        "Google Authenticator"
+        "totpAppGoogleName",
+        "totpAppFreeOTPName",
+        "totpAppMicrosoftAuthenticatorName"
       ],
       "localizationTexts": {},
       "webAuthnPolicyRpEntityName": "keycloak",
@@ -6902,6 +6984,24 @@ data:
       "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
       "webAuthnPolicyPasswordlessAcceptableAaguids": [],
       "webAuthnPolicyPasswordlessExtraOrigins": [],
+      "users": [
+        {
+          "id": "f742ba6f-1d8a-4dec-bf15-e02dab508283",
+          "createdTimestamp": 1598681172054,
+          "username": "service-account-internal",
+          "enabled": true,
+          "totp": false,
+          "emailVerified": false,
+          "serviceAccountClientId": "internal",
+          "disableableCredentialTypes": [],
+          "requiredActions": [],
+          "realmRoles": [
+            "default-roles-jhipster"
+          ],
+          "notBefore": 0,
+          "groups": []
+        }
+      ],
       "scopeMappings": [
         {
           "clientScope": "offline_access",
@@ -6915,7 +7015,8 @@ data:
           {
             "client": "account-console",
             "roles": [
-              "manage-account"
+              "manage-account",
+              "view-groups"
             ]
           }
         ]
@@ -6931,7 +7032,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "fc4b094c-a8f0-48a8-b38f-d2e8a2e1646f",
           "redirectUris": [
             "/realms/jhipster/account/*"
           ],
@@ -6954,6 +7055,7 @@ data:
           "nodeReRegistrationTimeout": 0,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -6975,7 +7077,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "bb374562-19cf-47cf-9a09-f22698b3e29d",
           "redirectUris": [
             "/realms/jhipster/account/*"
           ],
@@ -7009,6 +7111,7 @@ data:
           ],
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -7028,7 +7131,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "2b7f3b32-ef1b-4e87-95b5-97541502a940",
           "redirectUris": [],
           "webOrigins": [],
           "notBefore": 0,
@@ -7049,6 +7152,7 @@ data:
           "nodeReRegistrationTimeout": 0,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -7068,7 +7172,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "03163aa1-9210-4927-9e26-4ec27a90a64e",
           "redirectUris": [],
           "webOrigins": [],
           "notBefore": 0,
@@ -7089,6 +7193,7 @@ data:
           "nodeReRegistrationTimeout": 0,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -7188,6 +7293,7 @@ data:
           ],
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -7250,6 +7356,7 @@ data:
           "nodeReRegistrationTimeout": -1,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "jhipster",
             "roles",
             "profile",
@@ -7270,7 +7377,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "1a3810b5-04db-4a86-8cb4-d3b705bbdf62",
           "redirectUris": [],
           "webOrigins": [],
           "notBefore": 0,
@@ -7291,6 +7398,7 @@ data:
           "nodeReRegistrationTimeout": 0,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -7312,7 +7420,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "**********",
+          "secret": "53e8f8d2-6b08-457a-a30a-40269d755d18",
           "redirectUris": [
             "/admin/jhipster/console/*"
           ],
@@ -7355,6 +7463,7 @@ data:
           ],
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "roles",
             "profile",
             "email"
@@ -7378,16 +7487,20 @@ data:
           "secret": "web_app",
           "redirectUris": [
             "http://jhgate.default.example.com/*",
-            "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*","http://localhost:4200/*", 
+            "https://jhgate.default.example.com/*",
+            "http://localhost:8080/*",
+            "https://localhost:8080/*",
+            "http://localhost:4200/*",
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "dev.localhost.ionic:*"
           ],
           "webOrigins": [
             "http://jhgate.default.example.com",
-            "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080","http://localhost:4200", 
+            "https://jhgate.default.example.com",
+            "http://localhost:8080",
+            "https://localhost:8080",
+            "http://localhost:4200",
             "http://localhost:8100",
             "http://127.0.0.1:8761"
           ],
@@ -7422,6 +7535,7 @@ data:
           "nodeReRegistrationTimeout": -1,
           "defaultClientScopes": [
             "web-origins",
+            "acr",
             "jhipster",
             "roles",
             "profile",
@@ -7957,6 +8071,27 @@ data:
           ]
         },
         {
+          "id": "49177925-3cb4-4fe1-9ced-d9a331dee5c6",
+          "name": "acr",
+          "description": "OpenID Connect scope for add acr (authentication context class reference) to the token",
+          "protocol": "openid-connect",
+          "attributes": {
+            "include.in.token.scope": "false",
+            "display.on.consent.screen": "false"
+          },
+          "protocolMappers": [{
+            "id": "df11a217-a90d-4d01-9aab-84fbaa3a0ad6",
+            "name": "acr loa level",
+            "protocol": "openid-connect",
+            "protocolMapper": "oidc-acr-mapper",
+            "consentRequired": false,
+            "config": {
+              "id.token.claim": "true",
+              "access.token.claim": "true"
+            }
+          }]
+        },
+        {
           "id": "2daaac74-636f-4074-87a9-d1aba9dffb96",
           "name": "web-origins",
           "description": "OpenID Connect scope for add allowed web origins to the access token",
@@ -7980,6 +8115,7 @@ data:
       ],
       "defaultDefaultClientScopes": [
         "web-origins",
+        "acr",
         "email",
         "profile",
         "roles",
@@ -8803,6 +8939,24 @@ data:
           "defaultAction": false,
           "priority": 1000,
           "config": {}
+        },
+        {
+          "alias": "webauthn-register",
+          "name": "Webauthn Register",
+          "providerId": "webauthn-register",
+          "enabled": true,
+          "defaultAction": false,
+          "priority": 70,
+          "config": { }
+        },
+        {
+          "alias": "webauthn-register-passwordless",
+          "name": "Webauthn Register Passwordless",
+          "providerId": "webauthn-register-passwordless",
+          "enabled": true,
+          "defaultAction": false,
+          "priority": 80,
+          "config": { }
         }
       ],
       "browserFlow": "browser",
@@ -8823,7 +8977,9 @@ data:
         "parRequestUriLifespan": "60",
         "clientOfflineSessionIdleTimeout": "0",
         "cibaInterval": "5",
-        "frontendUrl": ""
+        "realmReusableOtpCode": "false",
+        "frontendUrl": "",
+        "acr.loa.map": "{}"
       },
       "keycloakVersion": "23.0.1",
       "userManagedAccessAllowed": false,
@@ -8834,22 +8990,6 @@ data:
         "policies": []
       },
       "users": [
-        {
-          "id": "f742ba6f-1d8a-4dec-bf15-e02dab508283",
-          "createdTimestamp": 1598681172054,
-          "username": "service-account-internal",
-          "enabled": true,
-          "totp": false,
-          "emailVerified": false,
-          "serviceAccountClientId": "internal",
-          "disableableCredentialTypes": [],
-          "requiredActions": [],
-          "realmRoles": [
-            "default-roles-jhipster"
-          ],
-          "notBefore": 0,
-          "groups": []
-        },
         {
           "id": "4c973896-5761-41fc-8217-07c5d13a004b",
           "createdTimestamp": 1505479415590,
