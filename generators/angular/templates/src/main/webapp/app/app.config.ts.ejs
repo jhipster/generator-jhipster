@@ -18,7 +18,6 @@
 -%>
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, LOCALE_ID, inject } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { NavigationError, Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler } from '@angular/router';
 import { provideSignalFormsConfig } from '@angular/forms/signals';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -95,7 +94,6 @@ export const appConfig: ApplicationConfig = {
         notificationInterceptor
       ])
     ),
-    Title,
     { provide: LOCALE_ID, useValue: '<%- angularLocaleId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
 <%_ if (enableI18nRTL) { _%>
