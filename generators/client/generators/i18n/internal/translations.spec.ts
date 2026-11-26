@@ -22,7 +22,7 @@ import { join } from 'node:path';
 
 import { supportedLanguages } from '../../../../languages/support/languages.ts';
 
-import { prepareTranslation } from './translations.ts';
+import { prepareClientTranslation } from './translations.ts';
 
 const translationsFolder = join(import.meta.dirname, '../templates/src/main/webapp/i18n');
 const readTranslation = (languageTag: string, file: string) =>
@@ -39,7 +39,7 @@ const names = {
   hipsterTwitterUsername: '@jhipster',
 };
 
-describe('generator - client:i18n - internal - prepareTranslation', () => {
+describe('generator - client:i18n - internal - prepareClientTranslation', () => {
   it('should have the translation files of English in every supported language', () => {
     const files = readdirSync(join(translationsFolder, 'en')).sort();
     for (const { languageTag } of supportedLanguages) {
@@ -48,21 +48,21 @@ describe('generator - client:i18n - internal - prepareTranslation', () => {
   });
 
   it('should write the names of the application', () => {
-    const translation = prepareTranslation('home', readTranslation('en', 'home'), names);
+    const translation = prepareClientTranslation('home', readTranslation('en', 'home'), names);
     expect(translation.home.title).toBe('Welcome, Java Hipster!');
-    expect(prepareTranslation('global', readTranslation('en', 'global'), names).global.title).toBe('Jhipster');
+    expect(prepareClientTranslation('global', readTranslation('en', 'global'), names).global.title).toBe('Jhipster');
   });
 
   it('should leave out the keys whose options do not hold', () => {
-    const { indicator } = prepareTranslation('health', readTranslation('en', 'health'), names).health;
+    const { indicator } = prepareClientTranslation('health', readTranslation('en', 'health'), names).health;
     expect(indicator).not.toHaveProperty('db');
     expect(indicator).not.toHaveProperty('consul');
     expect(indicator).toHaveProperty('diskSpace');
-    expect(prepareTranslation('global', readTranslation('en', 'global'), names).global.menu.admin).not.toHaveProperty('gateway');
+    expect(prepareClientTranslation('global', readTranslation('en', 'global'), names).global.menu.admin).not.toHaveProperty('gateway');
   });
 
   it('should keep the keys whose options hold', () => {
-    const { indicator } = prepareTranslation('health', readTranslation('en', 'health'), {
+    const { indicator } = prepareClientTranslation('health', readTranslation('en', 'health'), {
       ...names,
       databaseTypeSql: true,
       reactive: true,

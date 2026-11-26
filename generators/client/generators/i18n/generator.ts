@@ -23,19 +23,17 @@ import { join } from 'node:path';
 import { startCase } from '../../../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../../../base-application/generator.ts';
 import { isContentTypeField } from '../../../base-application/internal/content-type-fields.ts';
-import { QUEUES } from '../../../base-application/priorities.ts';
 import { getEnumInfo } from '../../../base-application/support/enum.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../../../generator-constants.ts';
+import { findTranslationSource } from '../../../languages/generators/i18n-bootstrap/support/index.ts';
 import { type Language, findLanguageForTag } from '../../../languages/support/languages.ts';
-import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from '../../../languages/translation-data.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
 
 import { type EntityTranslationTexts, buildEntityTranslation } from './internal/entity-translations.ts';
-import { prepareTranslation } from './internal/translations.ts';
+import { prepareClientTranslation } from './internal/translations.ts';
 
 export default class I18NGenerator extends ClientApplicationGenerator {
-  translationData!: TranslationData;
   languagesToGenerate!: readonly Language[];
 
   async beforeQueue() {
@@ -44,6 +42,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
     }
 
     await this.dependsOnBootstrap('languages');
+    await this.dependsOnJHipster('jhipster:languages:i18n-bootstrap');
     await this.dependsOnBootstrap('client');
   }
 
@@ -110,24 +109,6 @@ export default class I18NGenerator extends ClientApplicationGenerator {
             application.languagesToGenerateDefinition
             // Generate native language + English as fallback, ensuring no duplicates if native language is English. Translation will fallback to English if a translation is missing for the native language.
           : [...new Set([application.nativeLanguage, 'en'])].map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
-      },
-      loadNativeLanguage({ application }) {
-        // eslint-disable-next-line logical-assignment-operators -- translations is not declared as optional, ??= would not type-check
-        application.translations = application.translations ?? {};
-        this.translationData = new TranslationData({ generator: this, translations: application.translations });
-        const { clientI18nDir, enableTranslation, nativeLanguage } = application;
-        const fallbackLanguage = 'en';
-        this.queueLoadLanguages({ clientI18nDir, enableTranslation, nativeLanguage, fallbackLanguage });
-        const filter = createTranslationsFilter({ clientI18nDir, nativeLanguage, fallbackLanguage });
-        const listener = (filePath: string): void => {
-          if (filter(filePath)) {
-            this.env.sharedFs.removeListener('change', listener);
-            this.queueLoadLanguages({ clientI18nDir, enableTranslation, nativeLanguage, fallbackLanguage });
-          }
-        };
-        this.env.sharedFs.on('change', listener);
-
-        application.getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
       },
     });
   }
@@ -264,12 +245,11 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                   `The entity translations of the language ${languageTag} are missing: no entity/i18n/${languageTag}.json file.`,
                 );
               }
-              this.writeTranslation(
-                application,
+              application.addTranslation({
                 languageTag,
-                entity.entityTranslationKey,
-                buildEntityTranslation(context, this.fs.readJSON(textsFile) as unknown as EntityTranslationTexts),
-              );
+                destinationFile: `${clientI18nDir}${languageTag}/${entity.entityTranslationKey}.json`,
+                translation: buildEntityTranslation(context, this.fs.readJSON(textsFile) as unknown as EntityTranslationTexts),
+              });
             }
           }
         }
@@ -357,47 +337,25 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   }
 
   /**
-   * Writes a translation file of the application in a language, from the file of the language, i18n/<language>/<file>.json of the webapp,
-   * of a blueprint first: a template of it, <file>.json.ejs, like one a blueprint gives, is written instead.
+   * Adds a translation file of the application in a language, from the file of the language, i18n/<language>/<file>.json of
+   * the webapp, of a blueprint first: a template of it, <file>.json.ejs, like one a blueprint gives, is written instead.
    */
   async writeApplicationTranslation(application: any, languageTag: string, file: string): Promise<void> {
     const sourceFile = `${CLIENT_MAIN_SRC_DIR}i18n/${languageTag}/${file}.json`;
-    const source = this.jhipsterTemplatesFolders
-      .flatMap(folder => [join(folder, `${sourceFile}.ejs`), join(folder, sourceFile)])
-      .find(path => existsSync(path));
-    if (!source) {
+    const translationSource = findTranslationSource(this.jhipsterTemplatesFolders, sourceFile);
+    if (!translationSource) {
       throw new Error(`The translation ${file} of the language ${languageTag} is missing: no ${sourceFile} file.`);
     }
-    if (source.endsWith('.ejs')) {
-      await this.writeFiles({
-        templates: [{ sourceFile, destinationFile: `${application.clientI18nDir}${languageTag}/${file}.json` }],
-        context: { ...application, lang: languageTag },
-      });
+    const destinationFile = `${application.clientI18nDir}${languageTag}/${file}.json`;
+    if (translationSource.template) {
+      await this.writeFiles({ templates: [{ sourceFile, destinationFile }], context: { ...application, lang: languageTag } });
       return;
     }
-    this.writeTranslation(
-      application,
+    application.addTranslation({
       languageTag,
-      file,
-      prepareTranslation(file, this.fs.readJSON(source) as Record<string, any>, application),
-    );
-  }
-
-  /**
-   * Writes a translation file of the application, the translation of the native language being read without a file when the
-   * application is not translated, English as its fallback.
-   */
-  writeTranslation(
-    application: { clientI18nDir: string; enableTranslation: boolean; nativeLanguage: string },
-    languageTag: string,
-    file: string,
-    translation: Record<string, any>,
-  ): void {
-    if (application.enableTranslation) {
-      this.writeDestination(`${application.clientI18nDir}${languageTag}/${file}.json`, `${JSON.stringify(translation, null, 2)}\n`);
-    } else {
-      this.translationData.mergeTranslation(translation, languageTag !== application.nativeLanguage);
-    }
+      destinationFile,
+      translation: prepareClientTranslation(file, this.fs.readJSON(translationSource.path) as Record<string, any>, application),
+    });
   }
 
   migrateLanguages(languagesToMigrate: Record<string, string>) {
@@ -408,40 +366,5 @@ export default class I18NGenerator extends ClientApplicationGenerator {
     if (languages?.some(lang => languagesToMigrate[lang as string])) {
       this.jhipsterConfig.languages = languages.map(lang => languagesToMigrate[lang as string] ?? lang);
     }
-  }
-
-  queueLoadLanguages({
-    enableTranslation,
-    clientI18nDir,
-    nativeLanguage,
-    fallbackLanguage = 'en',
-  }: {
-    enableTranslation: boolean;
-    clientI18nDir: string;
-    nativeLanguage: string;
-    fallbackLanguage?: string;
-  }) {
-    this.queueTask({
-      method: async () => {
-        const filter = createTranslationsFileFilter({ clientI18nDir, nativeLanguage, fallbackLanguage });
-        await this.pipeline(
-          {
-            name: 'loading translations',
-            filter: file => file.path.startsWith(this.destinationPath()) && filter(file),
-            pendingFiles: false,
-            refresh: true,
-          },
-          this.translationData.loadFromStreamTransform({
-            enableTranslation,
-            clientI18nDir,
-            nativeLanguage,
-            fallbackLanguage,
-          }),
-        );
-      },
-      taskName: 'loadingTranslations',
-      queueName: QUEUES.LOADING_TRANSLATIONS_QUEUE,
-      once: true,
-    });
   }
 }

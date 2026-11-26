@@ -12,6 +12,7 @@ import type {
   Options as JavascriptOptions,
   Source as JavascriptSource,
 } from '../javascript-simple-application/types.ts';
+import type { Application as I18nApplication } from '../languages/generators/i18n-bootstrap/types.d.ts';
 
 import type { ClientAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
@@ -27,7 +28,10 @@ export type Config = JavascriptConfig & CommonConfig & Command['Config'];
 
 export type Options = JavascriptOptions & CommonOptions & Command['Options'];
 
-export type Application<E extends Entity = Entity> = Command['Application'] & CommonApplication<E> & ClientAddedApplicationProperties & {};
+export type Application<E extends Entity = Entity> = Command['Application'] &
+  CommonApplication<E> &
+  ClientAddedApplicationProperties &
+  I18nApplication;
 
 export type ClientResources = {
   /**

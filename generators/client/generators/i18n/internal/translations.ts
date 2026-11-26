@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { type TranslationConditions, prepareTranslation } from '../../../../languages/generators/i18n-bootstrap/support/index.ts';
 
 /** The values of the application a translation takes, written {name} in its text. */
 export type TranslationNames = {
@@ -45,23 +46,11 @@ export type TranslationOptions = TranslationNames & {
   databaseTypeNeo4j?: boolean;
 };
 
-type Condition = (options: TranslationOptions) => boolean | undefined;
+const withDiscovery = ({ applicationTypeGateway, serviceDiscoveryAny }: TranslationOptions) =>
+  applicationTypeGateway || serviceDiscoveryAny;
 
-const TRANSLATION_NAMES: (keyof TranslationNames)[] = [
-  'capitalizedBaseName',
-  'hipsterName',
-  'hipsterProductName',
-  'hipsterHomePageProductName',
-  'hipsterStackOverflowProductName',
-  'hipsterBugTrackerProductName',
-  'hipsterChatProductName',
-  'hipsterTwitterUsername',
-];
-
-const withDiscovery: Condition = ({ applicationTypeGateway, serviceDiscoveryAny }) => applicationTypeGateway || serviceDiscoveryAny;
-
-/** The keys of each translation file, by their path, that the file has only when their condition holds. */
-const TRANSLATION_CONDITIONS: Record<string, Record<string, Condition>> = {
+/** The keys of each translation file of the client, by their path, that the file has only when their condition holds. */
+const CLIENT_TRANSLATION_CONDITIONS: Record<string, TranslationConditions<TranslationOptions>> = {
   global: {
     'global.menu.admin.gateway': ({ applicationTypeGateway }) => applicationTypeGateway,
     'error.querySyntaxError': ({ searchEngineElasticsearch }) => searchEngineElasticsearch,
@@ -85,31 +74,28 @@ const TRANSLATION_CONDITIONS: Record<string, Record<string, Condition>> = {
   },
 };
 
-const replaceNames = (value: unknown, names: TranslationNames): unknown => {
-  if (typeof value === 'string') {
-    return TRANSLATION_NAMES.reduce((text, name) => text.replaceAll(`{${name}}`, names[name]), value);
-  }
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, replaceNames(item, names)]));
-  }
-  return value;
-};
+const CLIENT_TRANSLATION_NAMES: (keyof TranslationNames)[] = [
+  'capitalizedBaseName',
+  'hipsterName',
+  'hipsterProductName',
+  'hipsterHomePageProductName',
+  'hipsterStackOverflowProductName',
+  'hipsterBugTrackerProductName',
+  'hipsterChatProductName',
+  'hipsterTwitterUsername',
+];
 
 /**
- * The content of a translation file of the application, from the file of the language: with the names of the application,
+ * The content of a translation file of the client, from the file of the language: with the names of the application,
  * without the keys whose options do not hold.
  */
-export const prepareTranslation = (file: string, translation: Record<string, any>, options: TranslationOptions): Record<string, any> => {
-  const prepared = replaceNames(translation, options) as Record<string, any>;
-  for (const [path, condition] of Object.entries(TRANSLATION_CONDITIONS[file] ?? {})) {
-    if (!condition(options)) {
-      const keys = path.split('.');
-      const key = keys.pop()!;
-      const parent = keys.reduce<Record<string, any> | undefined>((object, name) => object?.[name], prepared);
-      if (parent) {
-        delete parent[key];
-      }
-    }
-  }
-  return prepared;
-};
+export const prepareClientTranslation = (
+  file: string,
+  translation: Record<string, any>,
+  options: TranslationOptions,
+): Record<string, any> =>
+  prepareTranslation(translation, {
+    names: Object.fromEntries(CLIENT_TRANSLATION_NAMES.map(name => [name, options[name]])),
+    conditions: CLIENT_TRANSLATION_CONDITIONS[file],
+    options,
+  });
