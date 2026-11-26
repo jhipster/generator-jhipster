@@ -21,10 +21,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FieldTree, form } from '@angular/forms/signals';
+import { EMPTY, of, throwError } from 'rxjs';
 
 import { CONSTRAINT_VIOLATION_TYPE, PROBLEM_WITH_MESSAGE_TYPE } from 'app/shared/jhipster/error.constants';
 
-import { getServerFieldErrors } from './server-field-errors';
+import { getServerFieldErrors, toSubmissionResult } from './server-field-errors';
 
 const createNameForm = (): FieldTree<{ name: string; createdBy: string }> =>
   TestBed.runInInjectionContext(() => form(signal({ name: '', createdBy: '' })));
@@ -75,5 +76,27 @@ describe('getServerFieldErrors', () => {
 
   it('should mark no field for an error that is not of http', () => {
     expect(getServerFieldErrors(createNameForm(), ['name'], new Error('failure'))).toBeUndefined();
+  });
+});
+
+describe('toSubmissionResult', () => {
+  it('should give no error for a request that succeeds', async () => {
+    expect(await toSubmissionResult(createNameForm(), ['name'], of({ name: 'saved' }))).toBeUndefined();
+  });
+
+  it('should give the errors of the given fields the server refused', async () => {
+    const nameForm = createNameForm();
+
+    const result = await toSubmissionResult(
+      nameForm,
+      ['name'],
+      throwError(() => constraintViolation({ objectName: 'nameModel', field: 'name', message: 'is refused', code: 'Refused' })),
+    );
+
+    expect(result).toEqual([{ kind: 'server', message: 'is refused', fieldTree: nameForm.name }]);
+  });
+
+  it('should give no error for a request that completes without a value', async () => {
+    expect(await toSubmissionResult(createNameForm(), ['name'], EMPTY)).toBeUndefined();
   });
 });

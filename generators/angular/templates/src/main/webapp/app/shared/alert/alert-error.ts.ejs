@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnDestroy, inject, input, signal } from '@angular/core';
 
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap/alert';
 <%_ if (enableTranslation) { _%>
@@ -40,6 +40,8 @@ import { AlertErrorModel } from './alert-error.model';
   imports: [NgbAlert],
 })
 export class AlertError implements OnDestroy {
+  /** The fields the form of the page shows the error of the server for, which the alert leaves out. */
+  readonly formFields = input<readonly string[]>([]);
   readonly alerts = signal<AlertModel[]>([]);
   errorListener: Subscription;
   httpErrorListener: Subscription;
@@ -95,9 +97,13 @@ export class AlertError implements OnDestroy {
         break;
       }
 
-      // The server denies the access without a body.
+      // The security of the server denies the access without a body, a resource may tell why in a problem.
       case 403:
-        this.addErrorAlert('You are not authorized to access this page.'<%- enableTranslation ? ', \'error.http.403\'' : '' %>);
+        if (getServerProblem(httpErrorResponse.error)?.message) {
+          this.handleDefaultError(httpErrorResponse);
+        } else {
+          this.addErrorAlert('You are not authorized to access this page.'<%- enableTranslation ? ', \'error.http.403\'' : '' %>);
+        }
         break;
 
       case 404:
@@ -146,7 +152,8 @@ export class AlertError implements OnDestroy {
   }
 
   private handleFieldsError(fieldErrors: FieldErrorVM[]): void {
-    for (const fieldError of fieldErrors) {
+    // The form shows the errors of its fields next to them.
+    for (const fieldError of fieldErrors.filter(({ field }) => !this.formFields().includes(field))) {
 <%_ if (enableTranslation) { _%>
       // The code of the constraint is the key of its translation, older servers send it as the message.
       const code: string = fieldError.code ?? fieldError.message;

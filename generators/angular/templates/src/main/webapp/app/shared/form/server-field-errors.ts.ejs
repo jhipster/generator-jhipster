@@ -18,6 +18,7 @@
 -%>
 import { HttpErrorResponse } from '@angular/common/http';
 import { FieldTree, TreeValidationResult } from '@angular/forms/signals';
+import { Observable, catchError, lastValueFrom, map, of } from 'rxjs';
 
 import { getServerProblem, isConstraintViolation } from 'app/shared/jhipster/problem-details';
 
@@ -39,3 +40,20 @@ export const getServerFieldErrors = <T>(form: FieldTree<T>, fieldNames: readonly
     return fieldTree ? [{ kind: 'server', message, fieldTree }] : [];
   });
 };
+
+/**
+ * The result of the submission of a form by a request: nothing when the request succeeds, the errors of the given fields
+ * the server refused when it fails (see `getServerFieldErrors`), nothing either when it completes without a value.
+ */
+export const toSubmissionResult = <T>(
+  form: FieldTree<T>,
+  fieldNames: readonly (keyof T & string)[],
+  request: Observable<unknown>,
+): Promise<TreeValidationResult> =>
+  lastValueFrom(
+    request.pipe(
+      map((): TreeValidationResult => undefined),
+      catchError((error: unknown) => of(getServerFieldErrors(form, fieldNames, error))),
+    ),
+    { defaultValue: undefined },
+  );

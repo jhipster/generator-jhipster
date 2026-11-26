@@ -22,7 +22,7 @@
             <h2 id="<%- jhiPrefixDashed %>-<%- entityFileName %>-heading" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createOrEditLabel')</h2>
 
             <div>
-                <<%- jhiPrefixDashed %>-alert-error />
+                <<%- jhiPrefixDashed %>-alert-error [formFields]="serverErrorFields" />
 <%_ for (const field of fields.filter(field => !field.hidden && !(builtInUserManagement && field.readonly))) { _%>
   <%_ const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent, contentTypeFieldName } = field; _%>
 
@@ -103,7 +103,7 @@
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
-  <%_ if (!field.readonly && !(field.id && field.autoGenerate)) { _%>
+  <%_ if (field.angularShowsServerError) { _%>
                 <<%- jhiPrefixDashed %>-server-error [field]="editForm.<%- fieldName %>" />
   <%_ } _%>
   <%_ if (field.fieldValidate) { _%>
@@ -219,7 +219,7 @@
                     </select>
                 </div>
   <%_ } _%>
-  <%_ if (relationship.persistableRelationship) { _%>
+  <%_ if (relationship.angularShowsServerError) { _%>
             <<%- jhiPrefixDashed %>-server-error [field]="editForm.<%- propertyName %>" />
   <%_ } _%>
   <%_ if (relationship.relationshipValidate && relationship.persistableRelationship) { _%>

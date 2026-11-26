@@ -31,7 +31,7 @@ import { missingTranslationHandler } from 'app/config';
 <%_ } _%>
 import { AlertModel, AlertService, EventManager } from 'app/core/util';
 import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
-import { CONSTRAINT_VIOLATION_TYPE } from 'app/shared/jhipster/error.constants';
+import { CONSTRAINT_VIOLATION_TYPE, PROBLEM_WITH_MESSAGE_TYPE } from 'app/shared/jhipster/error.constants';
 import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 
 import { AlertError } from './alert-error';
@@ -133,6 +133,39 @@ describe('Alert Error Component', () => {
       });
       expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- enableTranslation ? '\'error.http.403\'' : '\'You are not authorized to access this page.\'' %>);
+    });
+
+    it('should display the problem of a 403 that has one', () => {
+      eventManager.broadcast({
+        name: '<%- frontendAppName %>.httpError',
+        content: new HttpErrorResponse({
+          url: 'http://localhost:8080/api/foos',
+          status: 403,
+          error: { type: PROBLEM_WITH_MESSAGE_TYPE, message: 'error.ownerOnly', detail: 'Only the owner can edit it' },
+        }),
+      });
+      expect(comp.alerts()).toHaveLength(1);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- enableTranslation ? '\'error.ownerOnly\'' : '\'Only the owner can edit it\'' %>);
+    });
+
+    it('should leave out the fields the form shows the error of', () => {
+      fixture.componentRef.setInput('formFields', ['name']);
+      const response = new HttpErrorResponse({
+        url: 'http://localhost:8080/api/foos',
+        headers: new HttpHeaders(),
+        status: 400,
+        error: {
+          type: CONSTRAINT_VIOLATION_TYPE,
+          message: 'error.validation',
+          fieldErrors: [
+            { objectName: 'foo', field: 'name', message: 'NotNull' },
+            { objectName: 'foo', field: 'items[3].name', message: 'NotNull' },
+          ],
+        },
+      });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
+
+      expect(comp.alerts().map(alert => alert.message)).toEqual([<%- enableTranslation ? '\'items[].name: NotNull\'' : '\'Items[].name: NotNull\'' %>]);
     });
 
     it('should display an alert for an error without body', () => {

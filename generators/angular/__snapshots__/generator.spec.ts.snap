@@ -2009,7 +2009,7 @@ export class UserManagementFormService {
       </h2>
 
       <div>
-        <jhi-alert-error />
+        <jhi-alert-error [formFields]="serverErrorFields" />
 
         @let loginRef = editForm.login();
         <div class="mb-3">
@@ -2464,14 +2464,14 @@ import {
 import { ActivatedRoute } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { Observable, catchError, finalize, lastValueFrom, map, of } from "rxjs";
+import { Observable, map, tap } from "rxjs";
 
 import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
 import { AlertError } from "app/shared/alert";
 import {
   SelectOptionsDirective,
   ServerError,
-  getServerFieldErrors,
+  toSubmissionResult,
 } from "app/shared/form";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
@@ -2509,6 +2509,17 @@ export class UserManagementUpdate implements OnInit {
   readonly userManagementModel = signal(
     this.userManagementFormService.createUserManagementFormModel(),
   );
+  // The properties showing the error of the server, which marks them invalid and leaves them out of the alert.
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly serverErrorFields = [
+    "login",
+    "firstName",
+    "lastName",
+    "email",
+    "activated",
+    "authorities",
+  ] as const;
+
   // A submit marks the fields as touched and sends nothing while the form is invalid.
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly editForm = this.userManagementFormService.createUserManagementForm(
@@ -2553,34 +2564,16 @@ export class UserManagementUpdate implements OnInit {
   private subscribeToSaveResponse(
     result: Observable<IUserManagement | null>,
   ): Promise<TreeValidationResult> {
-    return lastValueFrom(
+    return toSubmissionResult(
+      this.editForm,
+      this.serverErrorFields,
       result.pipe(
-        map(() => {
-          this.onSaveSuccess();
-          return undefined;
+        tap({
+          next: () => this.onSaveSuccess(),
+          error: () => this.onSaveError(),
+          finalize: () => this.onSaveFinalize(),
         }),
-        // The fields the server refused, among the ones showing its errors, are marked invalid.
-        catchError((error: unknown) => {
-          this.onSaveError();
-          return of(
-            getServerFieldErrors(
-              this.editForm,
-              [
-                "login",
-                "firstName",
-                "lastName",
-                "email",
-                "activated",
-                "authorities",
-              ],
-              error,
-            ),
-          );
-        }),
-        finalize(() => this.onSaveFinalize()),
       ),
-      // A service completing without a value submits nothing to mark.
-      { defaultValue: undefined },
     );
   }
 

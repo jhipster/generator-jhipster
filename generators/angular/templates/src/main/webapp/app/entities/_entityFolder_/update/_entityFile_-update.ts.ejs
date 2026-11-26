@@ -27,13 +27,7 @@ _%>
 <%_ const constantLabelPipes = [...new Map(fields.filter(field => field.angularFieldClientConstant?.angularConstantLabelPipe).map(field => [field.angularFieldClientConstant.angularConstantLabelPipe.importName, field.angularFieldClientConstant.angularConstantLabelPipe])).values()]; _%>
 <%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
 <%_ const editableId = !primaryKey.autoGenerate && !builtInUserManagement; _%>
-<%# The properties showing the error of the server, the only ones a server error may mark invalid: Angular skips the errors of a read-only field, so a read-only field and an auto-generated id show none -%>
-<%_ const serverErrorProperties = [
-      ...fields.filter(field => !field.hidden && !field.readonly && !(field.id && field.autoGenerate)).map(field => field.fieldName),
-      ...relationships.filter(rel => rel.otherEntity.primaryKey && rel.persistableRelationship).map(rel => rel.propertyName),
-    ];
-    const usesServerError = serverErrorProperties.length > 0;
-_%>
+<%_ const usesServerError = angularServerErrorProperties.length > 0; _%>
 <%_ const usesSelectOptions = fields.some(field => field.clientConstantsAsValues && field.collection) || relationships.some(rel => rel.relationshipSerializePrimaryKeyOnly || rel.persistableRelationship); _%>
 <%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
 import { HttpResponse } from '@angular/common/http';
@@ -51,7 +45,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 <%_ if (angularEntityUpdateRequiresTranslationPipe) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
-import { Observable, catchError, finalize, lastValueFrom, map, of } from 'rxjs';
+import { Observable<%- relationships.some(rel => rel.persistableRelationship) ? ', map' : '' %>, tap } from 'rxjs';
 
 <%_ for (const pipe of constantLabelPipes.filter(pipe => pipe.importPath !== 'app/shared/language')) { _%>
 import { <%- pipe.importName %> } from '<%- pipe.importPath %>';
@@ -76,7 +70,7 @@ import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entit
 import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- otherEntity.entityFolderName %>/service/<%- otherEntity.entityFileName %>.service';
 <%_ } _%>
 import { AlertError<%- anyFieldIsBlobDerived ? ', AlertErrorModel' : '' %> } from 'app/shared/alert';
-<%_ const formImports = [usesSelectOptions && 'SelectOptionsDirective', usesServerError && 'ServerError', 'getServerFieldErrors'].filter(Boolean); _%>
+<%_ const formImports = [usesSelectOptions && 'SelectOptionsDirective', usesServerError && 'ServerError', 'toSubmissionResult'].filter(Boolean); _%>
 import { <%- formImports.join(', ') %> } from 'app/shared/form';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { type BlobType } from 'app/shared/jhipster/data-utils';
@@ -168,6 +162,10 @@ export class <%- entityAngularName %>Update implements OnInit {
 <%_ } _%>
     // eslint-disable-next-line @typescript-eslint/member-ordering
     readonly <%- entityInstance %>Model = signal(this.<%- entityInstance %>FormService.create<%- entityAngularName %>FormModel());
+    // The properties showing the error of the server, which marks them invalid and leaves them out of the alert.
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    readonly serverErrorFields = [<%- angularServerErrorProperties.map(property => `'${property}'`).join(', ') %>] as const;
+
     // A submit marks the fields as touched and sends nothing while the form is invalid.
     // eslint-disable-next-line @typescript-eslint/member-ordering
     readonly editForm = this.<%- entityInstance %>FormService.create<%- entityAngularName %>Form(this.<%- entityInstance %>Model, <%- editableId ? 'this.editing, ' : '' %>{
@@ -258,21 +256,10 @@ export class <%- entityAngularName %>Update implements OnInit {
     }
 
     private subscribeToSaveResponse(result: Observable<I<%- entityAngularName %> | null>): Promise<TreeValidationResult> {
-        return lastValueFrom(
-            result.pipe(
-                map(() => {
-                    this.onSaveSuccess();
-                    return undefined;
-                }),
-                // The fields the server refused, among the ones showing its errors, are marked invalid.
-                catchError((error: unknown) => {
-                    this.onSaveError();
-                    return of(getServerFieldErrors(this.editForm, [<%- serverErrorProperties.map(property => `'${property}'`).join(', ') %>], error));
-                }),
-                finalize(() => this.onSaveFinalize()),
-            ),
-            // A service completing without a value submits nothing to mark.
-            { defaultValue: undefined },
+        return toSubmissionResult(
+            this.editForm,
+            this.serverErrorFields,
+            result.pipe(tap({ next: () => this.onSaveSuccess(), error: () => this.onSaveError(), finalize: () => this.onSaveFinalize() })),
         );
     }
 
