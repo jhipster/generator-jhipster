@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Xalati",
+        "refresh.button": "Jańala",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Tolıq",
+            "properties": "Parametrleri",
+            "name": "Atı",
+            "value": "Ma`nisi",
+            "error": "Qátelik"
+        },
+        "indicator": {
+            "binders": "Xabar brokeri",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Qayta júklew sheńberi",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Disktaǵı orin",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Ma`lumotlar bazasi",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Ma`lumotlar bazasi"
+        },
+        "table": {
+            "service": "Servis",
+            "status": "Xalat"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "Aktiv",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "Aktiv emes"
+        }
+    }
+}

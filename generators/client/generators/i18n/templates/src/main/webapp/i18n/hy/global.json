@@ -1,0 +1,148 @@
+{
+    "global": {
+        "title": "{capitalizedBaseName}",
+        "menu": {
+            "home": "Գլխավոր",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Էություններ",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Հաշիվ",
+                "settings": "Կարգավորումներ",
+                "password": "Գաղտնաբառ",
+                "sessions": "Միացումներ",
+                "login": "Մտնել",
+                "logout": "Դուրս",
+                "register": "Գրանցվել"
+            },
+            "admin": {
+                "main": "Կառավարում",
+                "gateway": "Gateway",
+                "userManagement": "Օգվողի կառավարում",
+                "tracker": "Օգտվողի tracker",
+                "metrics": "Մետրիկա",
+                "health": "Health",
+                "configuration": "Կարգավորումներ",
+                "logs": "Logs",
+                "apidocs": "API",
+                "database": "Տվյալների հենքեր",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Լեզու"
+        },
+        "form": {
+            "username.label": "Օգվողի անուն",
+            "username.placeholder": "Ձեր օգտվողի անունը",
+            "currentpassword.label": "Current password",
+            "currentpassword.placeholder": "Current password",
+            "newpassword.label": "Նոր գաղտնաբառ",
+            "newpassword.placeholder": "Նոր գաղտնաբառ",
+            "confirmpassword.label": "Նոր գաղտնաբառի հաստատում",
+            "confirmpassword.placeholder": "Հաստատեք նոր գաղտնաբառը",
+            "email.label": "Email",
+            "email.placeholder": "Ձեր email"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Եթե դուք ցանկանում եք ",
+                    "link": "Մուտք գործել",
+                    "suffix": ", դուք կարող եք փորձել հետևյալ հաշիվները<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Դուք դեռ չունե՞ք հաշիվ",
+                    "link": "Գրանցել նոր հաշիվ"
+                }
+            },
+            "error": {
+                "dontmatch": "Գաղտնաբառը և հաստատումը չեն համընկնում!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Գաղտնաբառը պետք է նշված լինի:",
+                    "minlength": "Գաղտնաբառի երկարությունը պետք է լինի առնվազն 4 նիշ:",
+                    "maxlength": "Գաղտնաբառը չի կարող լինել ավելի երկար, քան 50 նիշ:",
+                    "strength": "Գաղտնաբառի բարդությունը:"
+                },
+                "confirmpassword": {
+                    "required": "Գաղտնաբառի հաստատումը պետք է նշված լինի:",
+                    "minlength": "Գաղտնաբառի երկարության հաստատումը պետք է լինի առնվազն 4 նիշ:",
+                    "maxlength": "Գաղտնաբառի հաստատումը չի կարող լինել ավելի երկար, քան 50 նիշ:"
+                },
+                "email": {
+                    "required": "Ձեր email պետք է նշված լինի:",
+                    "invalid": "Ձեր email պետք է նշված լինի:",
+                    "minlength": "Ձեր email երկարության հաստատումը պետք է լինի առնվազն 5 նիշ:",
+                    "maxlength": "Ձեր email հաստատումը չի կարող լինել ավելի երկար, քան 50 նիշ:"
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev": "Development"
+        },
+        "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Ավելացնել blob",
+            "addimage": "Ավելացնել նկար",
+            "back": "Ետ",
+            "cancel": "Չեղարկում",
+            "delete": "Հեռացնել",
+            "edit": "Փոփոխել",
+            "open": "Բացել",
+            "save": "Պահպանել",
+            "view": "Դիտել",
+            "show": "Show {{otherEntity}}"
+        },
+        "detail": {
+            "field": "Դաշտ",
+            "value": "Արժեք"
+        },
+        "delete": {
+            "title": "Հաստատել հեռացնելու գործողությունը "
+        },
+        "validation": {
+            "required": "Պարտադիր լրացման դաշտ:",
+            "minlength": "Այս դաշտը պարտադիր է պետք է ունենա {{ min }} նիշ:",
+            "maxlength": "Այս դաշտը չի կարող լինել երկար, քան {{ max }} նիշ:",
+            "min": "Այս դաշտը պետք է լինի մեծ, քան {{ min }}:",
+            "max": "Այս դաշտը չի կարող լինել մեծ, քան {{ max }}:",
+            "minbytes": "Այս դաշտը պետք է լինի մեծ, քան {{ min }} բայթ:",
+            "maxbytes": "Այս դաշտը չի կարող լինել մեծ, քան {{ max }} բայթ:",
+            "pattern": "Այս դաշտը պետք է հետևի {{ pattern }} մոդելի:",
+            "number": "Այս դաշտը պետք է լինի թիվ:",
+            "datetimelocal": "Այս դաշտը պետք է լինի ամսաթիվ և ժամ:",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
+        },
+        "filters": {
+            "set": "Following filters are set",
+            "clear": "Clear filter",
+            "clearAll": "Clear all filters"
+        }
+    },
+    "error": {
+        "server.not.reachable": "Server not reachable",
+        "url.not.found": "Not found",
+        "NotNull": "Դաշտը {{ fieldName }} չի կարող լինել դատարկ!",
+        "Size": "Դաշտը {{ fieldName }} չի համապատասխանում փոքրագ./առավելագ. չափերին!",
+        "userexists": "Օգտվողի անունը արդեն օգտագործվում է!",
+        "emailexists": "Email արդեն օգտագործվում է!",
+        "idexists": "Նորը {{ entityName }} չի կարող ունենալ ID",
+        "idnull": "Invalid ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
+        "notsortable": "The sort is not allowed",
+        "querySyntaxError": "Invalid search query",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
+    },
+    "footer": "Սա Ձեր footer է"
+}

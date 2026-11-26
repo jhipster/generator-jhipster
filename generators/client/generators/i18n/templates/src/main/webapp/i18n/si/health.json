@@ -1,0 +1,47 @@
+{
+    "health": {
+        "title": "සෞඛ්‍ය පරීක්ෂාවන්",
+        "refresh.button": "නැවුම් කරන්න",
+        "stacktrace": "ස්ටැක්ට්‍රේස්",
+        "details": {
+            "details": "විස්තර",
+            "properties": "දේපළ",
+            "name": "නම",
+            "value": "වටිනාකම",
+            "error": "දෝෂයකි"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "reactiveDiscoveryClients": "Microservice Discovery Clients",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "තැටියේ ඉඩ",
+            "ssl": "SSL",
+            "mail": "විද්යුත් තැපෑල",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "අයදුම්පත",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "දත්ත සමුදාය",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "දත්ත සමුදාය"
+        },
+        "table": {
+            "service": "සේවා නම",
+            "status": "තත්ත්වය"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "UP",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "DOWN"
+        }
+    }
+}

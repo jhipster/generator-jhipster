@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Состояние",
+        "refresh.button": "Обновить",
+        "stacktrace": "Трассировки стека",
+        "details": {
+            "details": "Детали",
+            "properties": "Параметры",
+            "name": "Имя",
+            "value": "Значение",
+            "error": "Ошибка"
+        },
+        "indicator": {
+            "binders": "Брокер сообщений",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Область обновления микросервиса",
+            "clientConfigServer": "Сервер конфигурации микросервиса",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Место на диске",
+            "ssl": "SSL",
+            "mail": "Эл. почта",
+            "livenessState": "Живой",
+            "readinessState": "Готово",
+            "ping": "Приложение",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "База данных",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "База данных"
+        },
+        "table": {
+            "service": "Название сервиса",
+            "status": "Статус"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "UP",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "DOWN"
+        }
+    }
+}

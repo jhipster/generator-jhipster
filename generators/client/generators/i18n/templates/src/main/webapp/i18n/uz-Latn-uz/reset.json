@@ -1,0 +1,26 @@
+{
+    "reset": {
+        "request": {
+            "title": "Parolni tiklash",
+            "form": {
+                "button": "Parolni tiklash"
+            },
+            "messages": {
+                "info": "Ro'yhatdan o'tgan email kirting",
+                "success": "emailingizni tekshirib batafsil ma'lumot oling."
+            }
+        },
+        "finish": {
+            "title": "Parolni tiklash",
+            "form": {
+                "button": "Yangi parolni tasdiqlayman"
+            },
+            "messages": {
+                "info": "Yangi parol kiriting",
+                "success": "<strong>Sizning parolingiz tiklandi.</strong>",
+                "keymissing": "Tiklash kodi kiritilsin.",
+                "error": "Parolingiz tiklanmadi. Parol tiklash kodi 24 soatgacha faol."
+            }
+        }
+    }
+}

@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "چک سلامتی",
+        "refresh.button": "تازه کردن",
+        "stacktrace": "وقایع برای عیب یابی",
+        "details": {
+            "details": "جزییات",
+            "properties": "خواص",
+            "name": "نام",
+            "value": "مقدار",
+            "error": "خطا"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Disk space",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "پایگاه داده",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "پایگاه داده"
+        },
+        "table": {
+            "service": "نام سرویس",
+            "status": "وضعیت"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "UP",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "DOWN"
+        }
+    }
+}

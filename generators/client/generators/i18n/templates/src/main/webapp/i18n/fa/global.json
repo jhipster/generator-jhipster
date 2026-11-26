@@ -1,0 +1,148 @@
+{
+    "global": {
+        "title": "{capitalizedBaseName}",
+        "menu": {
+            "home": "خانه",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "ماهیت ها",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "حساب",
+                "settings": "تنظیمات",
+                "password": "رمزعبور",
+                "sessions": "نشست ها",
+                "login": "ورود",
+                "logout": "خروج",
+                "register": "ثبت نام"
+            },
+            "admin": {
+                "main": "مدیریت برتر",
+                "gateway": "دروازه",
+                "userManagement": "مدیریت کاربر",
+                "tracker": "ردیاب کاربر",
+                "metrics": "معیارها",
+                "health": "سلامتی",
+                "configuration": "پیکربندی",
+                "logs": "وقایع ثبت شده",
+                "apidocs": "ای‌پی‌آی",
+                "database": "پایگاه داده",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "زبان"
+        },
+        "form": {
+            "username.label": "نام کاربری",
+            "username.placeholder": "نام کاربری شما",
+            "currentpassword.label": "Current password",
+            "currentpassword.placeholder": "Current password",
+            "newpassword.label": "رمزعبور جدید",
+            "newpassword.placeholder": "رمزعبور جدید",
+            "confirmpassword.label": "تصدیق رمزعبور جدید",
+            "confirmpassword.placeholder": "تصدیق رمزعبور جدید",
+            "email.label": "رایانامه",
+            "email.placeholder": "آدرس رایانامه شما"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "اگر شما می‌خواهید",
+                    "link": "ورود",
+                    "suffix": ", می‌توانید از حساب پایه:<br/>- مدیریت برتر (login=\"admin\" and password=\"admin\") <br/>- کاربر (login=\"user\" and password=\"user\")."
+                },
+                "register": {
+                    "noaccount": "آیا هنوز حساب کاربری ندارید؟",
+                    "link": "ثبت نام حساب کاربری جدید"
+                }
+            },
+            "error": {
+                "dontmatch": "رمزعبور و تصدیق رمزعبور یکی نیستند!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "رمزعبور شما ضروری است",
+                    "minlength": "رمزعبور شما باید حداقل ۴ کرکتر باشد",
+                    "maxlength": "رمز عبور شما نمی‌تواند بیش از ۵۰ کرکتر باشد.",
+                    "strength": "قدرتمندی رمزعبور:"
+                },
+                "confirmpassword": {
+                    "required": "تصدیق رمزعبور شما ضروری است",
+                    "minlength": "تصدیق رمزعبور شما باید حداقل ۴ کرکتر باشد",
+                    "maxlength": "تصدیق رمز عبور شما نمی‌تواند بیش از ۵۰ کرکتر باشد."
+                },
+                "email": {
+                    "required": "آدرس ایمیل شما ضروری است",
+                    "invalid": "آدرس ایمیل شما نامعتبر است",
+                    "minlength": "آدرس ایمیل شما حداقل باید ۵ کرکتر باشد",
+                    "maxlength": "آدرس ایمیل شما نمی‌تواند بیش از ۵۰ کرکتر باشد."
+                }
+            }
+        },
+        "field": {
+            "id": "شناسه"
+        },
+        "ribbon": {
+            "dev": "در حال توسعه"
+        },
+        "item-count": "نمایش {{first}} - {{second}} از {{total}} مورد."
+    },
+    "entity": {
+        "action": {
+            "addblob": "اضافه کردن فایل",
+            "addimage": "اضافه کردن تصویر",
+            "back": "برگشت",
+            "cancel": "انصراف",
+            "delete": "حذف",
+            "edit": "ویرایش",
+            "open": "باز",
+            "save": "ذخیره",
+            "view": "مشاهده",
+            "show": "Show {{otherEntity}}"
+        },
+        "detail": {
+            "field": "فیلد",
+            "value": "مقدار"
+        },
+        "delete": {
+            "title": "تصدیق عملیات حذف"
+        },
+        "validation": {
+            "required": "وارد کردن این فیلد ضروری است",
+            "minlength": "این فیلد باید حداقل {{ min }} کراکتر باشد.",
+            "maxlength": "این فیلد نمی‌تواند بیشتر از {{ max }} کرکتر باشد",
+            "min": "این فیلد باید بیشتر از {{ min }} باشد.",
+            "max": "این فیلد نمی‌تواند بیش از {{ max }} باشد.",
+            "minbytes": "این فیلد باید بیش از {{ min }} بایت باشد.",
+            "maxbytes": "این فیلد نمی‌تواند بیش از {{ max }} بایت باشد.",
+            "pattern": "این فیلد باید بر طبق این الگو {{ pattern }} باشد.",
+            "number": "این فیلد باید عدد باشد.",
+            "datetimelocal": "این فیلد باید زمان باشد.",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
+        },
+        "filters": {
+            "set": "Following filters are set",
+            "clear": "Clear filter",
+            "clearAll": "Clear all filters"
+        }
+    },
+    "error": {
+        "server.not.reachable": "سرور در دسترس نیست",
+        "url.not.found": "پیدا نشد",
+        "NotNull": "فیلد {{ fieldName }} نمی‌تواند خالی باشد!",
+        "Size": "فیلد{{ fieldName }} نیازمندی‌های حداقل/حداکثر را ندارد!",
+        "userexists": "این نام کاربر در سیستم وجود دارد!",
+        "emailexists": "این آدرس ایمیل در سیستم وجود دارد!",
+        "idexists": "موجودیت جدید {{ entityName }} نمی‌تواند شناسه داشته‌باشد.",
+        "idnull": "Invalid ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
+        "notsortable": "The sort is not allowed",
+        "querySyntaxError": "Invalid search query",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
+    },
+    "footer": "این پاورقی است"
+}

@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Revisions de salud",
+        "refresh.button": "Actualitzar",
+        "stacktrace": "Traça d'error",
+        "details": {
+            "details": "Detalls",
+            "properties": "Propietats",
+            "name": "Nom",
+            "value": "Valor",
+            "error": "Error"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Espai al disc",
+            "ssl": "SSL",
+            "mail": "Compte de correu electrònic",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Base de dades",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Base de dades"
+        },
+        "table": {
+            "service": "Nom del servei",
+            "status": "Estat"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "ACTIU",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "INACTIU"
+        }
+    }
+}

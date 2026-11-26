@@ -1,6 +1,6 @@
 {
   "sessions": {
-    "title": "[<strong>{{username}}</strong>] සඳහා ක්\u200Dරියාකාරී සැසි",
+    "title": "[<strong>{{username}}</strong>] සඳහා ක්‍රියාකාරී සැසි",
     "table": {
       "ipaddress": "IP ලිපිනය",
       "useragent": "පරිශීලක නියෝජිත",

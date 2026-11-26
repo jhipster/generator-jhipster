@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "आरोग्य तपासणी",
+        "refresh.button": "रिफ्रेश",
+        "stacktrace": "स्टॅक trace",
+        "details": {
+            "details": "तपशील",
+            "properties": "गुणधर्म",
+            "name": "नाव",
+            "value": "मूल्य",
+            "error": "त्रुटी"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "डिस्क स्थान",
+            "ssl": "SSL",
+            "mail": "ईमेल ",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Database",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Database"
+        },
+        "table": {
+            "service": "सेवा नाव",
+            "status": "स्थिती"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "वर",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "खाली"
+        }
+    }
+}

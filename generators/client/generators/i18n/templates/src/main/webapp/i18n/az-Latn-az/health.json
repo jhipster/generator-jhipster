@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Sağlamlıq",
+        "refresh.button": "Yenilə",
+        "stacktrace": "Yığın İzləmə",
+        "details": {
+            "details": "Detallar",
+            "properties": "Xüsusiyyətlər",
+            "name": "Ad",
+            "value": "Dəyər",
+            "error": "Xəta"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Disk sahəsi",
+            "ssl": "SSL",
+            "mail": "E-poçt",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Veritabanı",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Veritabanı"
+        },
+        "table": {
+            "service": "Xidmətin adı",
+            "status": "Status"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "AKTİV",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "DEAKTİV"
+        }
+    }
+}

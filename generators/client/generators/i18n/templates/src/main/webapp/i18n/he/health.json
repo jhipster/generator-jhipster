@@ -1,0 +1,47 @@
+{
+    "health": {
+        "title": "בדיקות תקינות",
+        "refresh.button": "רענן",
+        "stacktrace": "עקבת שגיאה (Stacktrace)",
+        "details": {
+            "details": "פרטים",
+            "properties": "מאפיינים",
+            "name": "שם",
+            "value": "ערך",
+            "error": "שגיאה"
+        },
+        "indicator": {
+            "binders": "מתווך הודעות",
+            "discoveryComposite": "רכיב גילוי שירותים (Discovery Composite)",
+            "refreshScope": "רענון שירותים (Microservice Refresh Scope)",
+            "clientConfigServer": "שרת תצורת שירותים (Microservice Config Server)",
+            "hystrix": "Hystrix",
+            "reactiveDiscoveryClients": "לקוחות גילוי שירותים (Reactive Discovery Clients)",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "שטח דיסק",
+            "ssl": "SSL",
+            "mail": "דוא\"ל",
+            "livenessState": "מצב חיוניות (Liveness)",
+            "readinessState": "מצב מוכנות (Readiness)",
+            "ping": "אפליקציה",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "מסד נתונים (R2DBC)",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "מסד נתונים"
+        },
+        "table": {
+            "service": "שם השירות",
+            "status": "מצב"
+        },
+        "status": {
+            "UNKNOWN": "לא ידוע",
+            "UP": "פעיל",
+            "OUT_OF_SERVICE": "לא זמין",
+            "DOWN": "מושבת"
+        }
+    }
+}

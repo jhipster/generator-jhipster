@@ -1,0 +1,148 @@
+{
+    "global": {
+        "title": "{capitalizedBaseName}",
+        "menu": {
+            "home": "Início",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entidades",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Conta",
+                "settings": "Configuração",
+                "password": "Senha",
+                "sessions": "Sessões",
+                "login": "Entrar",
+                "logout": "Sair",
+                "register": "Criar uma conta"
+            },
+            "admin": {
+                "main": "Administração",
+                "gateway": "Gateway",
+                "userManagement": "Gerenciamento de usuário",
+                "tracker": "Rastreamento de usuário",
+                "metrics": "Métricas",
+                "health": "Estado do Sistema",
+                "configuration": "Configuração",
+                "logs": "Logs",
+                "apidocs": "API",
+                "database": "Banco de dados",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Idioma"
+        },
+        "form": {
+            "username.label": "Usuário",
+            "username.placeholder": "Seu usuário",
+            "currentpassword.label": "Senha atual",
+            "currentpassword.placeholder": "Senha atual",
+            "newpassword.label": "Nova senha",
+            "newpassword.placeholder": "Nova senha",
+            "confirmpassword.label": "Confirmação de nova senha",
+            "confirmpassword.placeholder": "Confirme a nova senha",
+            "email.label": "E-mail",
+            "email.placeholder": "Seu e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Se deseja ",
+                    "link": "entrar",
+                    "suffix": ", utilize as seguintes contas padrões:<br/>- Administrador (usuário=\"admin\" and senha=\"admin\") <br/>- Usuário (usuário=\"user\" e senha=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Não possui uma conta ainda?",
+                    "link": "Crie uma nova conta"
+                }
+            },
+            "error": {
+                "dontmatch": "A senha e sua confirmação devem ser iguais!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "A senha é obrigatória.",
+                    "minlength": "A senha deve ter pelo menos 4 caracteres",
+                    "maxlength": "A senha não pode ter mais de 50 caracteres",
+                    "strength": "Nível de dificuldade da senha:"
+                },
+                "confirmpassword": {
+                    "required": "A confirmação da senha é obrigatória.",
+                    "minlength": "A confirmação da senha deve ter pelo menos 4 caracteres",
+                    "maxlength": "A confirmação da senha não pode ter mais de 50 caracteres"
+                },
+                "email": {
+                    "required": "O e-mail é obrigatório.",
+                    "invalid": "E-mail inválido.",
+                    "minlength": "O e-mail deve ter pelo menos 5 caracteres",
+                    "maxlength": "O e-mail não pode ter mais de 50 caracteres"
+                }
+            }
+        },
+        "field": {
+            "id": "Código"
+        },
+        "ribbon": {
+            "dev": "Desenvolvimento"
+        },
+        "item-count": "Mostrando {{first}} - {{second}} de {{total}} resultados."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Adicionar arquivo",
+            "addimage": "Adicionar imagem",
+            "back": "Voltar",
+            "cancel": "Cancelar",
+            "delete": "Excluir",
+            "edit": "Editar",
+            "open": "Abrir",
+            "save": "Salvar",
+            "view": "Visualizar",
+            "show": "Mostrar {{otherEntity}}"
+        },
+        "detail": {
+            "field": "Campo",
+            "value": "Valor"
+        },
+        "delete": {
+            "title": "Confirme a exclusão"
+        },
+        "validation": {
+            "required": "O campo é obrigatório.",
+            "minlength": "Este campo deve ter pelo menos {{ min }} caracteres.",
+            "maxlength": "Este campo não pode ter mais de {{ max }} caracteres.",
+            "min": "Este campo deve ser maior que {{ min }}.",
+            "max": "Este campo não pode ser maior que {{ max }}.",
+            "minbytes": "Este campo deve ter pelo menos {{ min }} bytes.",
+            "maxbytes": "Este campo não pode ter mais de {{ max }} bytes.",
+            "pattern": "Este campo deve estar dentro do seguinte padrão {{ pattern }}.",
+            "number": "Este campo é do tipo numérico.",
+            "datetimelocal": "Este campo é do tipo data/hora.",
+            "patternLogin": "Este campo só pode conter letras, números e e-mail."
+        },
+        "filters": {
+            "set": "Filtros aplicados",
+            "clear": "Limpar filtro",
+            "clearAll": "Limpar todos filtros"
+        }
+    },
+    "error": {
+        "server.not.reachable": "Servidor indisponível",
+        "url.not.found": "Não encontrado",
+        "NotNull": "O Campo {{ fieldName }} não pode ser vazio!",
+        "Size": "O campo {{ fieldName }} não obedece os requisitos de tamanho mínimo ou máximo!",
+        "userexists": "Usuário já está cadastrado!",
+        "emailexists": "E-mail já está cadastrado!",
+        "idexists": "Novo(a) {{entityName}} não pode ter um identificador",
+        "idnull": "Identificador inválido",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
+        "notsortable": "A ordenação não é permitida",
+        "querySyntaxError": "Invalid search query",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
+    },
+    "footer": "Este é o rodapé da página"
+}

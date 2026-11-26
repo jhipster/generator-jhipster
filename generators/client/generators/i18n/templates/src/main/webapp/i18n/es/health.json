@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Control de salud",
+        "refresh.button": "Refrescar",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detalles",
+            "properties": "Propiedades",
+            "name": "Nombre",
+            "value": "Valor",
+            "error": "Error"
+        },
+        "indicator": {
+            "binders": "Agente de mensajes",
+            "discoveryComposite": "Descubrimiento compuesto",
+            "refreshScope": "Alcance de actualización de microservicios",
+            "clientConfigServer": "Servidor de configuración de microservicio",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Espacio en disco",
+            "ssl": "SSL",
+            "mail": "Correo Electrónico",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Aplicación",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Base de Datos",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Base de Datos"
+        },
+        "table": {
+            "service": "Nombre del servicio",
+            "status": "Estado"
+        },
+        "status": {
+            "UNKNOWN": "DESCONOCIDO",
+            "UP": "LEVANTADO",
+            "OUT_OF_SERVICE": "FUERA_DE_SERVICIO",
+            "DOWN": "CAÍDO"
+        }
+    }
+}

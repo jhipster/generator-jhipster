@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Kontrola stavu",
+        "refresh.button": "Obnovit",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detaily",
+            "properties": "Vlastnosti",
+            "name": "Název",
+            "value": "Hodnota",
+            "error": "Chyba"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice obnovovací rozsah",
+            "clientConfigServer": "Microservice konfiguračný server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Diskový prostor",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Databáze",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Databáze"
+        },
+        "table": {
+            "service": "Název služby",
+            "status": "Stav"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "Spuštěno",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "Zastaveno"
+        }
+    }
+}

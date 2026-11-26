@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Ҳолати",
+        "refresh.button": "Янгилаш",
+        "stacktrace": "Стектрейс",
+        "details": {
+            "details": "Батафсил",
+            "properties": "Хоссалари",
+            "name": "Номи",
+            "value": "Қиймати",
+            "error": "Хатолик"
+        },
+        "indicator": {
+            "binders": "Xabar brokeri",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Қайта юклаш доираси",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Дискдаги жой",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Маълумотлар базаси",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Маълумотлар базаси"
+        },
+        "table": {
+            "service": "Сервис номи",
+            "status": "Ҳолат"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "ФАОЛ",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "ФАОЛ ЭМАС"
+        }
+    }
+}

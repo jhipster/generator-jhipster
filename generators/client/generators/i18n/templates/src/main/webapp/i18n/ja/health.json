@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "ヘルスチェック",
+        "refresh.button": "リロード",
+        "stacktrace": "スタックトレース",
+        "details": {
+            "details": "詳細",
+            "properties": "プロパティ",
+            "name": "名前",
+            "value": "値",
+            "error": "エラー"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "ディスクスペース",
+            "ssl": "SSL",
+            "mail": "メール",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "アプリケーション",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "データベース",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "データベース"
+        },
+        "table": {
+            "service": "サービス名",
+            "status": "ステータス"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "UP",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "DOWN"
+        }
+    }
+}

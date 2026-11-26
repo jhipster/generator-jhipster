@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Ispravnost sistema",
+        "refresh.button": "Osveži",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detalji",
+            "properties": "Osobine",
+            "name": "Ime",
+            "value": "Vrednost",
+            "error": "Greška"
+        },
+        "indicator": {
+            "binders": "Broker za poruke",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Mikroservis Refresh Scope",
+            "clientConfigServer": "Mikroservis Konfiguracioni Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Veličina diska",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elastična pretraga",
+            "r2dbc": "SQL baza podataka",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "SQL baza podataka"
+        },
+        "table": {
+            "service": "Ime servisa",
+            "status": "Status"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "AKTIVAN",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "NEAKTIVAN"
+        }
+    }
+}

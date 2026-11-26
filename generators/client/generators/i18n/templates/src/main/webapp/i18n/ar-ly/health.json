@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "تدقيقات الصحة",
+        "refresh.button": "تحديث",
+        "stacktrace": "تتبع المكدس",
+        "details": {
+            "details": "تفاصيل",
+            "properties": "الخصائص",
+            "name": "اسم",
+            "value": "القيمة",
+            "error": "خطأ"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "مساحة القرص",
+            "ssl": "SSL",
+            "mail": "البريد الإلكتروني",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "قاعدة البيانات",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "قاعدة البيانات"
+        },
+        "table": {
+            "service": "اسم الخدمة",
+            "status": "الحالة"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "تشتغل",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "عاطلة"
+        }
+    }
+}

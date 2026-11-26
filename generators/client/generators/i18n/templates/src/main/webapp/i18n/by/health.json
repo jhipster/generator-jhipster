@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Cтан",
+        "refresh.button": "Абнавіць",
+        "stacktrace": "Трасіроўкі стэка",
+        "details": {
+            "details": "Дэталі",
+            "properties": "Параметры",
+            "name": "Імя",
+            "value": "Значэнне",
+            "error": "Памылка"
+        },
+        "indicator": {
+            "binders": "Прокер паведамленняў",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Вобласць абнаўлення мікрасэрвіса",
+            "clientConfigServer": "Сервер канфігурацыі мікрасэрвіса",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Месца на дыску",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "База дадзеных",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "База дадзеных"
+        },
+        "table": {
+            "service": "Назва сэрвісу",
+            "status": "Статус"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "UP",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "DOWN"
+        }
+    }
+}

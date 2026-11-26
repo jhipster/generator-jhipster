@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "ตรวจสอบสถานะระบบ",
+        "refresh.button": "รีเฟรช",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "รายละเอียด",
+            "properties": "คุณสมบัติ",
+            "name": "ชื่อ",
+            "value": "ค่า",
+            "error": "ผิดพลาด"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "พื้นที่เก็บข้อมูล",
+            "ssl": "SSL",
+            "mail": "อีเมล",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "ฐานข้อมูล",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "ฐานข้อมูล"
+        },
+        "table": {
+            "service": "เซอร์วิส",
+            "status": "สถานะ"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "ขึ้น",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "ลง"
+        }
+    }
+}

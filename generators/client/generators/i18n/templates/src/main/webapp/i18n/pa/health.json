@@ -1,0 +1,47 @@
+{
+    "health": {
+        "title": "ਸਿਹਤ ਜਾਂਚ",
+        "refresh.button": "ਤਾਜ਼ਾ ਕਰੋ",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "ਵੇਰਵੇ",
+            "properties": "ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
+            "name": "ਨਾਮ",
+            "value": "ਵੈਲਿਊ",
+            "error": "ਗਲਤੀ"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "reactiveDiscoveryClients": "Microservice Discovery Clients",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Disk space",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Database",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Database"
+        },
+        "table": {
+            "service": "ਸੇਵਾ ਦਾ ਨਾਮ",
+            "status": "ਸਥਿਤੀ"
+        },
+        "status": {
+            "UNKNOWN": "ਅਣਜਾਣ",
+            "UP": "ਚਾਲੂ",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "ਬੰਦ"
+        }
+    }
+}

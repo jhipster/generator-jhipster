@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "服務狀態",
+        "refresh.button": "重新整理",
+        "stacktrace": "堆疊追蹤",
+        "details": {
+            "details": "詳細資訊",
+            "properties": "屬性",
+            "name": "名稱",
+            "value": "值",
+            "error": "錯誤"
+        },
+        "indicator": {
+            "binders": "Message Broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice 設定伺服器",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "硬碟空間",
+            "ssl": "SSL",
+            "mail": "電子郵件",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "應用程式",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "資料庫",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "資料庫"
+        },
+        "table": {
+            "service": "服務名稱",
+            "status": "狀態"
+        },
+        "status": {
+            "UNKNOWN": "不明",
+            "UP": "正常",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "異常"
+        }
+    }
+}

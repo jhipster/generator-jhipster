@@ -22,7 +22,7 @@ import { join } from 'node:path';
 
 import { supportedLanguages } from '../../../../languages/support/languages.ts';
 
-import { type EntityTranslationTexts, getEntityTranslations } from './entity-translations.ts';
+import { type EntityTranslationTexts, buildEntityTranslation, getEntityTranslations } from './entity-translations.ts';
 
 const textsFolder = join(import.meta.dirname, '../templates/entity/i18n');
 const readTexts = (languageTag: string): EntityTranslationTexts =>
@@ -58,8 +58,66 @@ describe('generator - client:i18n - internal - getEntityTranslations', () => {
     });
   });
 
-  it('should write the texts as the content of JSON strings', () => {
+  it('should keep the texts as written', () => {
     const texts = { ...readTexts('en'), createLabel: 'Create a "new" {entity}' };
-    expect(getEntityTranslations(texts, names).createLabel).toBe('Create a \\"new\\" Order Line');
+    expect(getEntityTranslations(texts, names).createLabel).toBe('Create a "new" Order Line');
+  });
+});
+
+describe('generator - client:i18n - internal - buildEntityTranslation', () => {
+  const entity = {
+    frontendAppName: 'jhipsterApp',
+    entityTranslationKey: 'orderLine',
+    entityNameHumanized: 'Order Line',
+    entityNamePluralHumanized: 'Order Lines',
+    fields: [{ fieldName: 'name', fieldNameHumanized: 'Name', documentation: 'The "name"' }],
+    relationships: [{ relationshipName: 'order', relationshipNameHumanized: 'Order' }],
+  };
+
+  it('should build the translation of an entity', () => {
+    expect(buildEntityTranslation(entity, readTexts('en'))).toEqual({
+      jhipsterApp: {
+        orderLine: {
+          home: {
+            title: 'Order Lines',
+            refreshListLabel: 'Refresh list',
+            createLabel: 'Create a new Order Line',
+            createOrEditLabel: 'Create or edit a Order Line',
+            notFound: 'No Order Lines found',
+          },
+          created: 'A new Order Line is created with identifier {{ param }}',
+          updated: 'A Order Line is updated with identifier {{ param }}',
+          deleted: 'A Order Line is deleted with identifier {{ param }}',
+          delete: { question: 'Are you sure you want to delete Order Line {{ id }}?' },
+          detail: { title: 'Order Line' },
+          name: 'Name',
+          order: 'Order',
+          help: { name: 'The "name"' },
+        },
+      },
+    });
+  });
+
+  it('should leave the texts of the changes out of a read-only entity', () => {
+    expect(buildEntityTranslation({ ...entity, readOnly: true }, readTexts('en')).jhipsterApp.orderLine).toEqual({
+      home: { title: 'Order Lines', refreshListLabel: 'Refresh list', notFound: 'No Order Lines found' },
+      detail: { title: 'Order Line' },
+      name: 'Name',
+      order: 'Order',
+      help: { name: 'The "name"' },
+    });
+  });
+
+  it('should write the texts of the changes of a microservice entity under the microservice', () => {
+    const translation = buildEntityTranslation({ ...entity, microserviceAppName: 'orders', searchEngineAny: true }, readTexts('en'));
+    expect(translation.jhipsterApp.orderLine).not.toHaveProperty('created');
+    expect(translation.jhipsterApp.orderLine.home.search).toBe('Search for Order Line');
+    expect(translation.orders).toEqual({
+      orderLine: {
+        created: 'A new Order Line is created with identifier {{ param }}',
+        updated: 'A Order Line is updated with identifier {{ param }}',
+        deleted: 'A Order Line is deleted with identifier {{ param }}',
+      },
+    });
   });
 });

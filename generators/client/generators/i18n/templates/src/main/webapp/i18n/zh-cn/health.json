@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "服务状态",
+        "refresh.button": "刷新",
+        "stacktrace": "堆栈调用",
+        "details": {
+            "details": "详细情况",
+            "properties": "属性",
+            "name": "名称",
+            "value": "值",
+            "error": "错误"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "硬盘空间",
+            "ssl": "SSL",
+            "mail": "电子邮件",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "数据库",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "数据库"
+        },
+        "table": {
+            "service": "服务名称",
+            "status": "状态"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "正常",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "异常"
+        }
+    }
+}

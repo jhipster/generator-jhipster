@@ -1,0 +1,9 @@
+{
+    "activate": {
+        "title": "Kích hoạt",
+        "messages": {
+            "success": "<strong>Tài khoản của bạn đã được kích hoạt.</strong> Bạn vui lòng ",
+            "error": "<strong>Không thể kích hoạt tài khoản của bạn.</strong> Vui lòng quay lại trang đăng ký để tạo tài khoản."
+        }
+    }
+}

@@ -1,0 +1,47 @@
+{
+    "health": {
+        "title": "Проверка на състоянието",
+        "refresh.button": "Обновяване",
+        "stacktrace": "Трасировка на стека",
+        "details": {
+            "details": "Детайли",
+            "properties": "Параметри",
+            "name": "Име",
+            "value": "Стойност",
+            "error": "Грешка"
+        },
+        "indicator": {
+            "binders": "Брокер за съобщения",
+            "discoveryComposite": "Компонент за търсене на услуги",
+            "refreshScope": "Област за обновяване на микросървиси",
+            "clientConfigServer": "Сървър за конфигурации на микросървиси",
+            "hystrix": "Hystrix",
+            "reactiveDiscoveryClients": "Клиенти за откриване на микросървиси",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Място на диска",
+            "ssl": "SSL",
+            "mail": "Имейл",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Приложение",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "База данни",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "База данни"
+        },
+        "table": {
+            "service": "Име на услугата",
+            "status": "Статус"
+        },
+        "status": {
+            "UNKNOWN": "НЕИЗВЕСТЕН",
+            "UP": "АКТИВНА",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "НЕАКТИВНА"
+        }
+    }
+}

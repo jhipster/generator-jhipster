@@ -31,7 +31,8 @@ import { type Language, findLanguageForTag } from '../../../languages/support/la
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from '../../../languages/translation-data.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
 
-import { type EntityTranslationTexts, getEntityTranslations } from './internal/entity-translations.ts';
+import { type EntityTranslationTexts, buildEntityTranslation } from './internal/entity-translations.ts';
+import { prepareTranslation } from './internal/translations.ts';
 
 export default class I18NGenerator extends ClientApplicationGenerator {
   translationData!: TranslationData;
@@ -187,66 +188,26 @@ export default class I18NGenerator extends ClientApplicationGenerator {
           return;
         }
         // writing/postWriting priorities are skipped by entity command, we need to write global translations here
-        await Promise.all(
-          this.languagesToGenerate.map(({ languageTag }) =>
-            this.writeFiles({
-              sections: {
-                clientI18nFiles: [
-                  {
-                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.clientI18nDir}${context.lang}/`,
-                    transform: false,
-                    templates: ['error.json', 'login.json', 'password.json', 'register.json', 'sessions.json', 'settings.json'],
-                  },
-                  {
-                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.clientI18nDir}${context.lang}/`,
-                    templates: ['global.json', 'home.json', 'reset.json'],
-                  },
-                  {
-                    condition: context => context.generateUserRegistration,
-                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.clientI18nDir}${context.lang}/`,
-                    templates: ['activate.json'],
-                  },
-                  {
-                    condition: context => context.withAdminUi,
-                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.clientI18nDir}${context.lang}/`,
-                    transform: false,
-                    templates: [
-                      'configuration.json',
-                      'logs.json',
-                      'metrics.json',
-                      {
-                        transform: true,
-                        file: 'health.json',
-                      },
-                    ],
-                  },
-                  {
-                    condition: (context: any) => context.communicationSpringWebsocket,
-                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.clientI18nDir}${context.lang}/`,
-                    transform: false,
-                    templates: ['tracker.json'],
-                  },
-                  {
-                    condition: context => context.applicationTypeGateway,
-                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.clientI18nDir}${context.lang}/`,
-                    transform: false,
-                    templates: ['gateway.json'],
-                  },
-                ],
-              },
-              context: {
-                ...application,
-                lang: languageTag,
-              },
-            }),
-          ),
-        );
+        const files = [
+          'error',
+          'login',
+          'password',
+          'register',
+          'sessions',
+          'settings',
+          'global',
+          'home',
+          'reset',
+          ...(application.generateUserRegistration ? ['activate'] : []),
+          ...(application.withAdminUi ? ['configuration', 'logs', 'metrics', 'health'] : []),
+          ...((application as any).communicationSpringWebsocket ? ['tracker'] : []),
+          ...(application.applicationTypeGateway ? ['gateway'] : []),
+        ];
+        for (const { languageTag } of this.languagesToGenerate) {
+          for (const file of files) {
+            await this.writeApplicationTranslation(application, languageTag, file);
+          }
+        }
       },
       async writeEntityFiles({ application, entities }) {
         // The fields the clients skip have no translation.
@@ -262,62 +223,53 @@ export default class I18NGenerator extends ClientApplicationGenerator {
         for (const entity of entitiesToWriteTranslationFor) {
           for (const { languageTag } of this.languagesToGenerate) {
             if (entity.builtInUserManagement) {
-              await this.writeFiles({
-                blocks: [
-                  {
-                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.clientI18nDir}${context.lang}/`,
-                    transform: false,
-                    templates: ['user-management.json'],
-                  },
-                ],
-                context: { ...entity, baseName, clientSrcDir, clientI18nDir, frontendAppName, lang: languageTag },
-              });
+              await this.writeApplicationTranslation(application, languageTag, 'user-management');
             } else {
-              // A template of the language, like one a blueprint gives, is used instead of the texts of the language.
+              // The content type field of a blob is shown with its blob, under the translation of the blob.
+              const context = {
+                ...entity,
+                fields: entity.fields.filter(field => !isContentTypeField(field)),
+                baseName,
+                clientSrcDir,
+                clientI18nDir,
+                frontendAppName,
+                lang: languageTag,
+              };
+              // A template of the language, like one a blueprint gives, is written instead of the texts of the language.
               const languageTemplate = `entity/i18n/entity_${languageTag}.json.ejs`;
-              const hasLanguageTemplate = this.jhipsterTemplatesFolders.some(folder => existsSync(join(folder, languageTemplate)));
+              if (this.jhipsterTemplatesFolders.some(folder => existsSync(join(folder, languageTemplate)))) {
+                await this.writeFiles({
+                  sections: {
+                    entityBaseFiles: [
+                      {
+                        templates: [
+                          {
+                            sourceFile: languageTemplate,
+                            destinationFile: data => `${data.clientI18nDir}${data.lang}/${data.entityTranslationKey}.json`,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  context,
+                });
+                continue;
+              }
               // The texts of the language, entity/i18n/<language>.json, of a blueprint first.
               const textsFile = this.jhipsterTemplatesFolders
                 .map(folder => join(folder, `entity/i18n/${languageTag}.json`))
                 .find(file => existsSync(file));
-              if (!hasLanguageTemplate && !textsFile) {
+              if (!textsFile) {
                 throw new Error(
                   `The entity translations of the language ${languageTag} are missing: no entity/i18n/${languageTag}.json file.`,
                 );
               }
-              const entityTranslations =
-                textsFile &&
-                getEntityTranslations(this.fs.readJSON(textsFile) as unknown as EntityTranslationTexts, {
-                  entity: entity.entityNameHumanized,
-                  entities: entity.entityNamePluralHumanized,
-                  variant: entity.entityI18nVariant,
-                });
-              await this.writeFiles({
-                sections: {
-                  entityBaseFiles: [
-                    {
-                      templates: [
-                        {
-                          sourceFile: hasLanguageTemplate ? languageTemplate : 'entity/i18n/entity.json.ejs',
-                          destinationFile: context => `${context.clientI18nDir}${context.lang}/${context.entityTranslationKey}.json`,
-                        },
-                      ],
-                    },
-                  ],
-                },
-                // The content type field of a blob is shown with its blob, under the translation of the blob.
-                context: {
-                  ...entity,
-                  fields: entity.fields.filter(field => !isContentTypeField(field)),
-                  baseName,
-                  clientSrcDir,
-                  clientI18nDir,
-                  frontendAppName,
-                  lang: languageTag,
-                  entityTranslations,
-                },
-              });
+              this.writeTranslation(
+                application,
+                languageTag,
+                entity.entityTranslationKey,
+                buildEntityTranslation(context, this.fs.readJSON(textsFile) as unknown as EntityTranslationTexts),
+              );
             }
           }
         }
@@ -402,6 +354,50 @@ export default class I18NGenerator extends ClientApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+  }
+
+  /**
+   * Writes a translation file of the application in a language, from the file of the language, i18n/<language>/<file>.json of the webapp,
+   * of a blueprint first: a template of it, <file>.json.ejs, like one a blueprint gives, is written instead.
+   */
+  async writeApplicationTranslation(application: any, languageTag: string, file: string): Promise<void> {
+    const sourceFile = `${CLIENT_MAIN_SRC_DIR}i18n/${languageTag}/${file}.json`;
+    const source = this.jhipsterTemplatesFolders
+      .flatMap(folder => [join(folder, `${sourceFile}.ejs`), join(folder, sourceFile)])
+      .find(path => existsSync(path));
+    if (!source) {
+      throw new Error(`The translation ${file} of the language ${languageTag} is missing: no ${sourceFile} file.`);
+    }
+    if (source.endsWith('.ejs')) {
+      await this.writeFiles({
+        templates: [{ sourceFile, destinationFile: `${application.clientI18nDir}${languageTag}/${file}.json` }],
+        context: { ...application, lang: languageTag },
+      });
+      return;
+    }
+    this.writeTranslation(
+      application,
+      languageTag,
+      file,
+      prepareTranslation(file, this.fs.readJSON(source) as Record<string, any>, application),
+    );
+  }
+
+  /**
+   * Writes a translation file of the application, the translation of the native language being read without a file when the
+   * application is not translated, English as its fallback.
+   */
+  writeTranslation(
+    application: { clientI18nDir: string; enableTranslation: boolean; nativeLanguage: string },
+    languageTag: string,
+    file: string,
+    translation: Record<string, any>,
+  ): void {
+    if (application.enableTranslation) {
+      this.writeDestination(`${application.clientI18nDir}${languageTag}/${file}.json`, `${JSON.stringify(translation, null, 2)}\n`);
+    } else {
+      this.translationData.mergeTranslation(translation, languageTag !== application.nativeLanguage);
+    }
   }
 
   migrateLanguages(languagesToMigrate: Record<string, string>) {

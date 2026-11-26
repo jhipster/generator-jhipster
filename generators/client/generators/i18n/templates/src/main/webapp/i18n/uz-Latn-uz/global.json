@@ -1,0 +1,148 @@
+{
+    "global": {
+        "title": "{capitalizedBaseName}",
+        "menu": {
+            "home": "Bosh sahifa",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Ma`lumotlar",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Profil",
+                "settings": "Sozlamalar",
+                "password": "Parol",
+                "sessions": "Sessiyalar",
+                "login": "Kirish",
+                "logout": "Chiqish",
+                "register": "Ro`yhatdan o`tish"
+            },
+            "admin": {
+                "main": "Boshqaruv",
+                "gateway": "Shlyuz",
+                "userManagement": "Foydalanuvchilar",
+                "tracker": "Foydalauvchi kuzatuvi",
+                "metrics": "Metrikalar",
+                "health": "Holat",
+                "configuration": "Sozlamalar",
+                "logs": "Loglar",
+                "apidocs": "API",
+                "database": "Ma`lumotlar bazasi",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Til"
+        },
+        "form": {
+            "username.label": "Login",
+            "username.placeholder": "Sizning loginingiz",
+            "currentpassword.label": "Parol",
+            "currentpassword.placeholder": "Hozirgi parolingiz",
+            "newpassword.label": "Yangi parol",
+            "newpassword.placeholder": "Yangi parol",
+            "confirmpassword.label": "Yangi parolni tasdig`i",
+            "confirmpassword.placeholder": "Yangi parolni tasdig`i",
+            "email.label": "Email",
+            "email.placeholder": "Sizning email"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Agar ",
+                    "link": "avtarizatsiyadan o`tishni",
+                    "suffix": " xohlasangiz, mavjud foydalanuvchini tekshirib ko`ring:<br/>- Ma`mur (login=\"admin\" va parol=\"admin\") <br/>- Oddiy foydalanuvchi (login=\"user\" va parol=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Siz ro`yhatdan o`tmaganmisiz?",
+                    "link": "Yangi foydalanuvchi qo`shing"
+                }
+            },
+            "error": {
+                "dontmatch": "Parol va uning tasdig`i mos kelmadi!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Parol kiritilishi zarur.",
+                    "minlength": "Parol uzunligi kamida 4 harfdan iborat bo`lsin",
+                    "maxlength": "Parol 50 harfdan uzun bo`lmasin",
+                    "strength": "Parol murakkabligi:"
+                },
+                "confirmpassword": {
+                    "required": "Parol tasdig`i kiritilishi zarur.",
+                    "minlength": "Parol tasdig`i uzunligi kamida 4 harfdan iborat bo`lsin",
+                    "maxlength": "Parol tasdig`i 50 harfdan uzun bo`lmasin"
+                },
+                "email": {
+                    "required": "Email kiritilishi zarur.",
+                    "invalid": "Iltimos, to`g`ri Email kiriting.",
+                    "minlength": "Email uzunligi kamida 5 harfdan iborat bo`lsin",
+                    "maxlength": "Email 50 harfdan uzun bo`lmasin"
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev": "Yakunlanmadi"
+        },
+        "item-count": "{{total}} tadan {{first}} va {{second}} - lari."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Binar ma`lumot qo`shish",
+            "addimage": "Rasm qo`shish",
+            "back": "Orqaga",
+            "cancel": "Bekor",
+            "delete": "O`chir",
+            "edit": "O`zgartir",
+            "open": "Och",
+            "save": "Saqla",
+            "view": "Ko`rish",
+            "show": "Show {{otherEntity}}"
+        },
+        "detail": {
+            "field": "Maydon",
+            "value": "Qiymat"
+        },
+        "delete": {
+            "title": "O`chirish amalini tasdiqlang"
+        },
+        "validation": {
+            "required": "To`ldirish zarur",
+            "minlength": "Kamida {{min}}ta bo`lsin.",
+            "maxlength": "Ko`pi bilan {{max}}ta bo`lsin.",
+            "min": "Kamida {{min}} bo`lsin.",
+            "max": "Ko`pi bilan {{max}} bo`lsin.",
+            "minbytes": "Kamida {{min}}ta bayt bo`lsin.",
+            "maxbytes": "Ko`pi bilan {{max}}ta bayt bo`lsin.",
+            "pattern": "Zarur format {{pattern}}.",
+            "number": "Son bo`lsin.",
+            "datetimelocal": "Sana bo`lsin.",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
+        },
+        "filters": {
+            "set": "Following filters are set",
+            "clear": "Clear filter",
+            "clearAll": "Clear all filters"
+        }
+    },
+    "error": {
+        "server.not.reachable": "Serverga yetishib bo`lmaydi",
+        "url.not.found": "Topilmadi",
+        "NotNull": "{{fieldName}} bo`sh bo`lmasin!",
+        "Size": "{{fieldName}} o`lchami noto`g`ri!",
+        "userexists": "Foydalanuvchi tizimda mavjud!",
+        "emailexists": "Email allaqachon mavjud!",
+        "idexists": "Yangi {{entityName}} IDsi bo`lmasligi kerak",
+        "idnull": "Noto`g`ri ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
+        "notsortable": "The sort is not allowed",
+        "querySyntaxError": "Invalid search query",
+        "file": {
+            "could.not.extract": "Faylni chiqarib bo‘lmaydi",
+            "not.image": "Fayl rasm bo‘lishi kerak edi, lekin \"{{ fileType }}\" topildi"
+        }
+    },
+    "footer": "Sahifa tag qismi"
+}

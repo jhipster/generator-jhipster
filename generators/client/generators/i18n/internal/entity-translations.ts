@@ -51,7 +51,7 @@ export type EntityTranslationTexts = EntityTranslations & {
 };
 
 /**
- * The texts of the translation of an entity, with its names, written as the content of JSON strings.
+ * The texts of the translation of an entity, with its names.
  */
 export const getEntityTranslations = (
   { variants, ...texts }: EntityTranslationTexts,
@@ -60,6 +60,56 @@ export const getEntityTranslations = (
   Object.fromEntries(
     Object.entries({ ...texts, ...(variant ? variants?.[variant] : undefined) }).map(([key, text]) => [
       key,
-      JSON.stringify(text.replaceAll('{entities}', entities).replaceAll('{entity}', entity)).slice(1, -1),
+      text.replaceAll('{entities}', entities).replaceAll('{entity}', entity),
     ]),
   ) as EntityTranslations;
+
+/** The entity whose translation file is built. */
+type TranslatedEntity = {
+  frontendAppName: string;
+  microserviceAppName?: string;
+  entityTranslationKey: string;
+  entityNameHumanized: string;
+  entityNamePluralHumanized: string;
+  entityI18nVariant?: string;
+  readOnly?: boolean;
+  searchEngineAny?: boolean;
+  fields: { fieldName: string; fieldNameHumanized: string; documentation?: string }[];
+  relationships: { relationshipName: string; relationshipNameHumanized: string }[];
+};
+
+/**
+ * The content of the translation file of an entity in a language, from the texts of the language.
+ */
+export const buildEntityTranslation = (entity: TranslatedEntity, texts: EntityTranslationTexts): Record<string, any> => {
+  const { frontendAppName, microserviceAppName, entityTranslationKey, readOnly, searchEngineAny, fields, relationships } = entity;
+  const translations = getEntityTranslations(texts, {
+    entity: entity.entityNameHumanized,
+    entities: entity.entityNamePluralHumanized,
+    variant: entity.entityI18nVariant,
+  });
+  const { created, updated, deleted } = translations;
+  const fieldsWithDocumentation = fields.filter(field => field.documentation);
+  return {
+    [frontendAppName]: {
+      [entityTranslationKey]: {
+        home: {
+          title: translations.title ?? entity.entityNamePluralHumanized,
+          refreshListLabel: translations.refreshListLabel,
+          ...(readOnly ? {} : { createLabel: translations.createLabel, createOrEditLabel: translations.createOrEditLabel }),
+          ...(searchEngineAny ? { search: translations.search } : {}),
+          notFound: translations.notFound,
+        },
+        ...(microserviceAppName || readOnly ? {} : { created, updated, deleted }),
+        ...(readOnly ? {} : { delete: { question: translations.deleteQuestion } }),
+        detail: { title: entity.entityNameHumanized },
+        ...Object.fromEntries(fields.map(field => [field.fieldName, field.fieldNameHumanized])),
+        ...Object.fromEntries(relationships.map(relationship => [relationship.relationshipName, relationship.relationshipNameHumanized])),
+        ...(fieldsWithDocumentation.length > 0 ?
+          { help: Object.fromEntries(fieldsWithDocumentation.map(field => [field.fieldName, field.documentation])) }
+        : {}),
+      },
+    },
+    ...(microserviceAppName && !readOnly ? { [microserviceAppName]: { [entityTranslationKey]: { created, updated, deleted } } } : {}),
+  };
+};

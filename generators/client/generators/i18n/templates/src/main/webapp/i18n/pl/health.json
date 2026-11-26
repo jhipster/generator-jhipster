@@ -1,0 +1,47 @@
+{
+    "health": {
+        "title": "Stan usług",
+        "refresh.button": "Odśwież",
+        "stacktrace": "Stos wywołań",
+        "details": {
+            "details": "Szczegóły",
+            "properties": "Właściwości",
+            "name": "Nazwa",
+            "value": "Wartość",
+            "error": "Błąd"
+        },
+        "indicator": {
+            "binders": "Broker wiadomości",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Obszar aktualizacji mikroserwisów",
+            "clientConfigServer": "Serwer konfiguracyjny mikroserwisów",
+            "hystrix": "Hystrix",
+            "reactiveDiscoveryClients": "Microservice Discovery Clients",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Przestrzeń dyskowa",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Stan żywotności",
+            "readinessState": "Stan gotowości",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Baza danych",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Baza danych"
+        },
+        "table": {
+            "service": "Nazwa usługi",
+            "status": "Status"
+        },
+        "status": {
+            "UNKNOWN": "NIEZNANY",
+            "UP": "DOSTĘPNA",
+            "OUT_OF_SERVICE": "WYŁĄCZONE Z UŻYTKU",
+            "DOWN": "NIEDOSTĘPNA"
+        }
+    }
+}

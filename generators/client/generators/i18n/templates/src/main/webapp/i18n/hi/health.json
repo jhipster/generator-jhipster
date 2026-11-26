@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "स्वास्थ्य जाँच",
+        "refresh.button": "रिफ्रेश करें",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "विवरण",
+            "properties": "गुण",
+            "name": "नाम",
+            "value": "मान",
+            "error": "त्रुटि"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "डिस्क में जग़ह",
+            "ssl": "SSL",
+            "mail": "ई-मेल",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Database",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Database"
+        },
+        "table": {
+            "service": "सेवा का नाम",
+            "status": "स्थिति"
+        },
+        "status": {
+            "UNKNOWN": "अज्ञात स्थिति",
+            "UP": "ऊपर",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "नीचे"
+        }
+    }
+}

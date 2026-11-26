@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Έλεγχοι υγείας",
+        "refresh.button": "Ανανέωση",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Λεπτομέρειες",
+            "properties": "Ιδιότητες",
+            "name": "Ονομασία",
+            "value": "Τιμή",
+            "error": "Σφάλμα"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Χώρος σκληρού δίσκου",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Βάση Δεδομένων",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Βάση Δεδομένων"
+        },
+        "table": {
+            "service": "Υπηρεσία",
+            "status": "Κατάσταση"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "ΠΑΝΩ",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "ΚΑΤΩ"
+        }
+    }
+}

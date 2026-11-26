@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Starea aplicației",
+        "refresh.button": "Reîncărcare",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detalii",
+            "properties": "Proprietăți",
+            "name": "Nume",
+            "value": "Valoare",
+            "error": "Eroare"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Spațiu disc",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Bază de date",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Bază de date"
+        },
+        "table": {
+            "service": "Nume serviciu",
+            "status": "Stare"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "Sus",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "Jos"
+        }
+    }
+}

@@ -1,0 +1,148 @@
+{
+    "global": {
+        "title": "{capitalizedBaseName}",
+        "menu": {
+            "home": "Početak",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entiteti",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Korisnički račun",
+                "settings": "Postavke",
+                "password": "Zaporka",
+                "sessions": "Sjednice",
+                "login": "Prijava",
+                "logout": "Odjava",
+                "register": "Registracija"
+            },
+            "admin": {
+                "main": "Administracija",
+                "gateway": "Gateway",
+                "userManagement": "Upravljanje korisnicima",
+                "tracker": "Korisničke aktivnosti",
+                "metrics": "Metrika",
+                "health": "Stanje sustava",
+                "configuration": "Konfiguracija",
+                "logs": "Logovi",
+                "apidocs": "API",
+                "database": "Baza podataka",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Jezik"
+        },
+        "form": {
+            "username.label": "Korisnik",
+            "username.placeholder": "Vaše korisničko ime",
+            "currentpassword.label": "Postojeća zaporka",
+            "currentpassword.placeholder": "Postojeća zaporka",
+            "newpassword.label": "Nova zaporka",
+            "newpassword.placeholder": "Nova zaporka",
+            "confirmpassword.label": "Potvrda nove zaporke",
+            "confirmpassword.placeholder": "Potvrda nove zaporke",
+            "email.label": "E-pošta",
+            "email.placeholder": "Vaša e-pošta"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Ako se želite ",
+                    "link": "prijaviti",
+                    "suffix": ", možete pokušati sa zadanim korisničkim računima:<br/>- Administrator (korisnik=\"admin\" and zaporka=\"admin\") <br/>- User (korisnik=\"user\" and zaporka=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Još nemate korisnički račun?",
+                    "link": "Registrirajte novog korisnika"
+                }
+            },
+            "error": {
+                "dontmatch": "Zaporka i potvrda zaporke nisu iste!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Potrebna je vaša zaporka.",
+                    "minlength": "Vaša zaporka treba imati najmanje 4 znaka.",
+                    "maxlength": "Vaša zaporka ne može biti duža od 50 znakova.",
+                    "strength": "Jačina zaporke:"
+                },
+                "confirmpassword": {
+                    "required": "Potrebna je potvrda zaporke.",
+                    "minlength": "Potvrda vaše zaporke mora imati najmanje 4 znaka.",
+                    "maxlength": "Potvrda vaše zaporke ne može biti duža od 50 znakova."
+                },
+                "email": {
+                    "required": "Potrebna je adresa vaše e-pošte.",
+                    "invalid": "Adresa vaše e-pošte je neispravna.",
+                    "minlength": "Duljina vaše e-pošte mora imati najmanje 5 znakova.",
+                    "maxlength": "Adresa vaše e-pošte ne može biti duža od 50 znakova."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev": "Razvojna okolina"
+        },
+        "item-count": "Prikaz {{first}} - {{second}} od {{total}} stavaka."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Dodaj BLOB",
+            "addimage": "Dodaj sliku",
+            "back": "Nazad",
+            "cancel": "Odustani",
+            "delete": "Briši",
+            "edit": "Uredi",
+            "open": "Otvori",
+            "save": "Spremi",
+            "view": "Pregled",
+            "show": "Show {{otherEntity}}"
+        },
+        "detail": {
+            "field": "Polje",
+            "value": "Vrijednost"
+        },
+        "delete": {
+            "title": "Potvrdite brisanje"
+        },
+        "validation": {
+            "required": "Potrebno je unijeti ovo polje.",
+            "minlength": "U ovo polje mora biti unijeto najmanje {{ min }} znakova.",
+            "maxlength": "U ovo polje ne može biti unijeto više od {{ max }} znakova.",
+            "min": "Ovo polje mora biti najmanje {{ min }}.",
+            "max": "Ovo polje ne može biti veće od {{ max }}.",
+            "minbytes": "Ovo polje mora sadržavati više od {{ min }} bajtova.",
+            "maxbytes": "Ovo polje ne može sadržavati više od {{ max }} bajtova.",
+            "pattern": "Ovo polje treba slijediti uzorak {{ pattern }}.",
+            "number": "U ovo polje treba unijeti brojčanu vrijednost.",
+            "datetimelocal": "U ovo polje treba unijeti datum i vrijeme.",
+            "patternLogin": "Ovo polje može sadržavati samo slova, brojeve i adrese e-pošte."
+        },
+        "filters": {
+            "set": "Following filters are set",
+            "clear": "Clear filter",
+            "clearAll": "Clear all filters"
+        }
+    },
+    "error": {
+        "server.not.reachable": "Ne mogu pristupiti serveru",
+        "url.not.found": "Nije nađeno",
+        "NotNull": "Polje {{ fieldName }} ne može biti prazno!",
+        "Size": "Polje {{ fieldName }} ne zadovoljava zahtjeve za min/max vrijednost!",
+        "userexists": "Korisničko ime se već koristi!",
+        "emailexists": "Adresa e-pošte se već koristi!",
+        "idexists": "Novi entitet {{ entityName }} ne može imati taj ID",
+        "idnull": "Neispravan ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
+        "notsortable": "The sort is not allowed",
+        "querySyntaxError": "Invalid search query",
+        "file": {
+            "could.not.extract": "Nije moguće izdvojiti datoteku.",
+            "not.image": "Očekivano je da datoteka bude slika ali je prepoznato \"{{ fileType }}\""
+        }
+    },
+    "footer": "Ovo je podnožje stranice"
+}

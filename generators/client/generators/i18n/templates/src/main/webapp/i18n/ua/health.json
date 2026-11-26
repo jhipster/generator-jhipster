@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Стан",
+        "refresh.button": "Оновити",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Деталі",
+            "properties": "Параметри",
+            "name": "Ім'я",
+            "value": "Значення",
+            "error": "Помилка"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Межі оновлення мікросервіса",
+            "clientConfigServer": "Конфігураційний сервер мікросервіса",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Місце на диску",
+            "ssl": "SSL",
+            "mail": "Електронна пошта",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "База даних",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "База даних"
+        },
+        "table": {
+            "service": "Назва сервісу",
+            "status": "Статус"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "ПРАЦЮЄ",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "НЕ ПРАЦЮЄ"
+        }
+    }
+}

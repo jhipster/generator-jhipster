@@ -1,6 +1,6 @@
 {
   "metrics": {
-    "title": "යෙදුම් ප්\u200Dරමිතික",
+    "title": "යෙදුම් ප්‍රමිතික",
     "refresh.button": "නැවුම් කරන්න",
     "updating": "යාවත්කාලීන කිරීම...",
     "jvm": {
@@ -36,13 +36,13 @@
       },
       "http": {
         "title": "HTTP requests (time in milliseconds)",
-        "active": "සක්\u200Dරීය ඉල්ලීම්:",
+        "active": "සක්‍රීය ඉල්ලීම්:",
         "total": "මුළු ඉල්ලීම්:",
         "table": {
           "code": "කේතය",
           "count": "ගණන්",
           "mean": "මධ්යන්ය",
-          "average": "සාමාන්\u200Dයය",
+          "average": "සාමාන්‍යය",
           "max": "උපරිම"
         },
         "code": {

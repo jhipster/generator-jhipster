@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Tình trạng hệ thống",
+        "refresh.button": "Làm mới",
+        "stacktrace": "Theo dõi",
+        "details": {
+            "details": "Chi tiết",
+            "properties": "Các thuộc tính",
+            "name": "Tên",
+            "value": "Giá trị",
+            "error": "Lỗi"
+        },
+        "indicator": {
+            "binders": "Truyền tải tin nhắn",
+            "discoveryComposite": "Thành phần tìm kiếm dịch vụ",
+            "refreshScope": "Phạm vị làm mới Microservice",
+            "clientConfigServer": "Trung tâm cấu hình Microservice",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Dung lượng trống",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Cơ sở dữ liệu",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Cơ sở dữ liệu"
+        },
+        "table": {
+            "service": "Tên dịch vụ",
+            "status": "Trạng thái"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "Đang hoạt động",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "Đã tắt"
+        }
+    }
+}

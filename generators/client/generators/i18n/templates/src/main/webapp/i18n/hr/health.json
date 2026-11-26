@@ -1,0 +1,47 @@
+{
+    "health": {
+        "title": "Stanje sustava",
+        "refresh.button": "Aktualiziraj",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detalji",
+            "properties": "Svojstva",
+            "name": "Naziv",
+            "value": "Vrijednost",
+            "error": "Greška"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Mikroservisni konfiguracijski server",
+            "hystrix": "Hystrix",
+            "reactiveDiscoveryClients": "Mikroservisni klijenti",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Prostor na disku",
+            "ssl": "SSL",
+            "mail": "E-pošta",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Aplikacija",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Database",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Database"
+        },
+        "table": {
+            "service": "Naziv servisa",
+            "status": "Status"
+        },
+        "status": {
+            "UNKNOWN": "NEPOZNAT",
+            "UP": "DIGNUT",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "SPUŠTEN"
+        }
+    }
+}

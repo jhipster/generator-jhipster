@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Tervisekontrollid",
+        "refresh.button": "Värskenda",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detailid",
+            "properties": "Omadused",
+            "name": "Nimetus",
+            "value": "Väärtus",
+            "error": "Viga"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Kettaruum",
+            "ssl": "SSL",
+            "mail": "E-post",
+            "livenessState": "Elusolek",
+            "readinessState": "Valmisolek",
+            "ping": "Rakendus",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Andmebaas",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Andmebaas"
+        },
+        "table": {
+            "service": "Teenuse nimi",
+            "status": "Seisund"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "UP",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "DOWN"
+        }
+    }
+}

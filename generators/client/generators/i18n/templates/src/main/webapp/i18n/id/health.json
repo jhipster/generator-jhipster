@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Pengecekan Kesehatan Aplikasi",
+        "refresh.button": "Muat ulang",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detail",
+            "properties": "Properties",
+            "name": "Nama",
+            "value": "Nilai",
+            "error": "Error"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Ukuran disk",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Database",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Database"
+        },
+        "table": {
+            "service": "Nama Service",
+            "status": "Status"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "BAIK",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "BERMASALAH"
+        }
+    }
+}

@@ -1,0 +1,46 @@
+{
+    "health": {
+        "title": "Rendszer ellenőrzések",
+        "refresh.button": "Frissítés",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Details",
+            "properties": "Properties",
+            "name": "Name",
+            "value": "Value",
+            "error": "Error"
+        },
+        "indicator": {
+            "binders": "Message broker",
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            "consul": "Consul",
+            "hazelcast": "Hazelcast",
+            "diskSpace": "Szabad hely a diszken",
+            "ssl": "SSL",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application",
+            "elasticsearch": "Elasticsearch",
+            "r2dbc": "Adatbázis",
+            "neo4j": "Neo4j",
+            "couchbase": "Couchbase",
+            "cassandra": "Cassandra",
+            "mongo": "MongoDB",
+            "db": "Adatbázis"
+        },
+        "table": {
+            "service": "Szervíz neve",
+            "status": "Státusz"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "MŰKÖDIK",
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+            "DOWN": "NEM MŰKÖDIK"
+        }
+    }
+}

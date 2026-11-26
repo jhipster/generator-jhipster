@@ -1,0 +1,148 @@
+{
+    "global": {
+        "title": "{capitalizedBaseName}",
+        "menu": {
+            "home": "होम",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "एंटिटीज़",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "खाता",
+                "settings": "सेटिंग्स",
+                "password": "पासवर्ड",
+                "sessions": "सत्र",
+                "login": "साइन इन करें",
+                "logout": "साइन आउट करें",
+                "register": "पंजीकृत करें"
+            },
+            "admin": {
+                "main": "प्रशासन",
+                "gateway": "गेटवे",
+                "userManagement": "उपयोगकर्ता प्रबंधन",
+                "tracker": "उपयोगकर्ता ट्रैकर",
+                "metrics": "मेट्रिक्स",
+                "health": "स्वास्थ्य",
+                "configuration": "कॉन्फ़िगरेशन",
+                "logs": "लॉग",
+                "apidocs": "API",
+                "database": "डेटाबेस",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "भाषा"
+        },
+        "form": {
+            "username.label": "उपयोगकर्ता नाम",
+            "username.placeholder": "अपना उपयोगकर्ता नाम",
+            "currentpassword.label": "वर्तमान पासवर्ड",
+            "currentpassword.placeholder": "वर्तमान पासवर्ड",
+            "newpassword.label": "नया पासवर्ड",
+            "newpassword.placeholder": "नया पासवर्ड",
+            "confirmpassword.label": "नए पासवर्ड की पुष्टि",
+            "confirmpassword.placeholder": "नए पासवर्ड की पुष्टि करें",
+            "email.label": "ई-मेल",
+            "email.placeholder": "ई-मेल"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "अगर आप ",
+                    "link": "साइन इन",
+                    "suffix": " करना चाहते हैं, तो आप डिफ़ॉल्ट खातों का प्रयास कर सकते हैं <br/>- व्यवस्थापक (लॉगिन = \"admin\" और पासवर्ड = \"admin\") <br/>- उपयोगकर्ता(लॉगिन \"user\" और पासवर्ड= \"user\")"
+                },
+                "register": {
+                    "noaccount": "आपका खाता मौजूद नहीं है?",
+                    "link": "एक नया खाता पंजीकृत करें"
+                }
+            },
+            "error": {
+                "dontmatch": "पासवर्ड और इसकी पुष्टि से मेल नहीं खाती!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "आपके नये पासवर्ड की आवश्यकता है।",
+                    "minlength": "आपका नया पासवर्ड कम से कम १ अक्षर का होना आवश्यक हैं।",
+                    "maxlength": "आपका नया पासवर्ड ५० अक्षर बतौर मात्रा से अधिक नहीं हो सकता।",
+                    "strength": "पासवर्ड की ताकत:"
+                },
+                "confirmpassword": {
+                    "required": "आपके पुष्टिकरण पासवर्ड की आवश्यकता है।",
+                    "minlength": "आपके पुष्टिकरण पासवर्ड कम से कम १ अक्षर का होना आवश्यक हैं।",
+                    "maxlength": "आपके पुष्टिकरण पासवर्ड ५० अक्षर बतौर मात्रा से अधिक नहीं हो सकता।"
+                },
+                "email": {
+                    "required": "आपके ई-मेल की आवश्यकता है।",
+                    "invalid": "आपका ई-मेल अमान्य है।",
+                    "minlength": "आपका ई-मेल कम से कम १ अक्षर का होना आवश्यक हैं।",
+                    "maxlength": "आपका ई-मेल ५० अक्षर बतौर मात्रा से अधिक नहीं हो सकताा।"
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev": "Development"
+        },
+        "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+    },
+    "entity": {
+        "action": {
+            "addblob": "ब्लॉब जोड़ें",
+            "addimage": "छवि जोड़ें",
+            "back": "पस जाओ",
+            "cancel": "रद्द करें",
+            "delete": "हटाएँ",
+            "edit": "संपादित करें",
+            "open": "Open",
+            "save": "सहेजें",
+            "view": "देखें",
+            "show": "Show {{otherEntity}}"
+        },
+        "detail": {
+            "field": "फ़ील्ड",
+            "value": "मान"
+        },
+        "delete": {
+            "title": "हटाने की कार्रवाई की पुष्टि करें"
+        },
+        "validation": {
+            "required": "यह फ़ील्ड आवश्यक है।",
+            "minlength": "इस फ़ील्ड में कम से कम {{ min }} वर्ण होने आवश्यक है।",
+            "maxlength": "फ़ील्ड {{ max }} वर्णों से अधिक नहीं हो सकता।",
+            "min": "यह फ़ील्ड {{ min }} से अधिक होना चाहिए।",
+            "max": "यह फ़ील्ड {{ max }} से अधिक नहीं हो सकता।",
+            "minbytes": "यह फ़ील्ड {{ min }} बाइट्स से अधिक होना चाहिए।",
+            "maxbytes": "यह फ़ील्ड {{ max }} बाइट्स से अधिक नहीं होना चाहिए।",
+            "pattern": "यह फ़ील्ड {{ pattern }} पैटर्न का पालन करना चाहिए।",
+            "number": "यह फ़ील्ड कोई संख्या होनी चाहिए।",
+            "datetimelocal": "यह फ़ील्ड कोई दिनांक या समय होनी चाहिए।",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
+        },
+        "filters": {
+            "set": "Following filters are set",
+            "clear": "Clear filter",
+            "clearAll": "Clear all filters"
+        }
+    },
+    "error": {
+        "server.not.reachable": "सर्वर पहुँच योग्य नहीं",
+        "url.not.found": "Not found",
+        "NotNull": "यह {{ fieldName }} रिक्त नहीं हो सकता!",
+        "Size": "यह {{ fieldName }} न्यूनतम/अधिकतम आकार की आवश्यकताओं को पूरा नहीं करता है!",
+        "userexists": "लॉगिन नाम पहले से ही इस्तेमाल किया!",
+        "emailexists": "ई-मेल पहले से ही उपयोग में है!",
+        "idexists": "एक नई एंटिटी {{ entityName }} पहले से ही एक ID है नहीं कर सकता",
+        "idnull": "Invalid ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
+        "notsortable": "The sort is not allowed",
+        "querySyntaxError": "Invalid search query",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
+    },
+    "footer": "यह आपके पाद लेख है"
+}
