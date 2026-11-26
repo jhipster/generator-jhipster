@@ -8,3 +8,6 @@
 dependencies:
   # liquibase-neo4j 5.0.4 and 5.0.4.1 fail to read the current Neo4j user with the Neo4j driver of Spring Boot 4.2.0.
   liquibase-neo4j: '5.0.0'
+properties:
+  # Tomcat 11.0.29 fixes vulnerabilities of 11.0.27, the Tomcat version of Spring Boot 4.2.0.
+  tomcat.version: '11.0.29'
