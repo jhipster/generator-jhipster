@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Đăng nhập thất bại!</strong> Bạn vui lòng kiểm tra thông tin đăng nhập và thử lại."
+        "authentication": "<strong>Đăng nhập thất bại!</strong> Bạn vui lòng kiểm tra thông tin đăng nhập và thử lại.",
+        "sessionExpired": "Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại."
       }
     },
     "password": {

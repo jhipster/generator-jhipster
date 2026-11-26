@@ -140,11 +140,14 @@ export const logout: () => AppThunk = () => async dispatch => {
 };
 <%_ } _%>
 
-export const clearAuthentication = messageKey => dispatch => {
+export const clearAuthentication = messageKey => (dispatch, getState) => {
 <%_ if (authenticationTypeJwt) { _%>
   clearAuthToken();
 <%_ } _%>
-  dispatch(authError(messageKey));
+  // Only a session that was authenticated has expired: a later 401 keeps the message of the first one.
+  if (getState().authentication?.isAuthenticated) {
+    dispatch(authError(messageKey));
+  }
   dispatch(clearAuth());
 };
 
@@ -184,6 +187,7 @@ export const AuthenticationSlice = createSlice({
         loading: false,
         loginError: false,
         loginSuccess: true,
+        redirectMessage: null as unknown as string,
       }))
 <%_ } _%>
       .addCase(getAccount.rejected, (state, action) => ({

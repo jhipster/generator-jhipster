@@ -21,6 +21,7 @@ import { before, describe, expect, it } from 'expect-node';
 import { getConfigWithDefaults } from '../../../lib/jhipster/default-application-options.ts';
 import BaseGenerator from '../../base/index.ts';
 import { formatDateForChangelog } from '../../base/support/index.ts';
+import { getFieldFakeDataDomain } from '../internal/fake-data.ts';
 
 import { formatEntitySample, generateEntitySamples } from './entity-samples.ts';
 import { createFaker } from './faker.ts';
@@ -105,6 +106,26 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     expect([...values.slice(3)].sort()).toEqual(['BLUE', 'GREEN', 'RED']);
   });
 
+  it('should list the hundredths of a decimal of a small range as its domain', () => {
+    const field = prepareField({ fieldName: 'rate', fieldType: 'BigDecimal' });
+    Object.assign(field, { fieldFakeDataMin: 0.07, fieldFakeDataMax: 0.29 });
+    const domain = getFieldFakeDataDomain(field)!;
+    expect(domain).toHaveLength(23);
+    expect([domain[0], domain[1], domain.at(-1)]).toEqual([0.07, 0.08, 0.29]);
+  });
+
+  it('should list the single value of a decimal with its min equal to its max as its domain', () => {
+    const field = prepareField({ fieldName: 'rate', fieldType: 'Float' });
+    Object.assign(field, { fieldFakeDataMin: 3, fieldFakeDataMax: 3 });
+    expect(getFieldFakeDataDomain(field)).toEqual([3]);
+  });
+
+  it('should not list a decimal of a large range', () => {
+    const field = prepareField({ fieldName: 'rate', fieldType: 'Double' });
+    Object.assign(field, { fieldFakeDataMin: 0, fieldFakeDataMax: 10.01 });
+    expect(getFieldFakeDataDomain(field)).toBeUndefined();
+  });
+
   it('should keep the unique values among the batches of a call', () => {
     const field = enumField(['unique']);
     const [[first], [second]] = generateEntitySamples(entity, {
@@ -151,6 +172,120 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     expect(new Set(values).size).toBe(20);
   });
 
+  it('should take a value of the type of a field whose faker template gives a text of another type', () => {
+    const field = prepareField({ fieldName: 'reference', fieldType: 'UUID', fakerTemplate: '{{person.firstName}}' });
+    for (const { reference } of samples([field], 5)) {
+      expect(reference).toMatch(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i);
+    }
+  });
+
+  it('should take the value of a faker template of the type of the field', () => {
+    const field = prepareField({ fieldName: 'level', fieldType: 'Integer', fakerTemplate: '42' });
+    expect(samples([field], 2).map(({ level }) => level)).toEqual([42, 42]);
+  });
+
+  it('should take the value of a faker template of an enum, a boolean and a decimal field', () => {
+    const color = prepareField({ ...enumField(), fakerTemplate: 'GREEN' });
+    const active = prepareField({ fieldName: 'active', fieldType: 'Boolean', fakerTemplate: 'true' });
+    const ratio = prepareField({ fieldName: 'ratio', fieldType: 'Float', fakerTemplate: '12.5' });
+    const price = prepareField({ fieldName: 'price', fieldType: 'BigDecimal', fakerTemplate: '-0.25e2' });
+    expect(
+      samples([color, active, ratio, price], 2).map(sample => [sample.color, sample.active, String(sample.ratio), String(sample.price)]),
+    ).toEqual([
+      ['GREEN', true, '12.5', '-25'],
+      ['GREEN', true, '12.5', '-25'],
+    ]);
+  });
+
+  for (const [fieldType, fakerTemplate] of [
+    ['Integer', '08'],
+    ['Long', '1.5'],
+    ['Integer', ' 12 '],
+    ['Float', '0x1A'],
+    ['Double', ' 12 '],
+    ['BigDecimal', '.5'],
+    ['Boolean', 'yes'],
+    ['Integer', '2147483648'],
+    ['Long', '9007199254740992'],
+    ['Float', '167773'],
+    ['Double', '-1e14'],
+  ]) {
+    it(`should not take the text '${fakerTemplate}' of a faker template as a ${fieldType}`, () => {
+      const field = prepareField({ fieldName: 'value', fieldType, fakerTemplate });
+      for (const { value } of samples([field], 3)) {
+        // The text of the template would be taken as its value, the number it reads as for a number field.
+        expect(value).not.toBe(fieldType === 'Boolean' ? fakerTemplate : Number(fakerTemplate));
+        expect(typeof value).toBe(fieldType === 'Boolean' ? 'boolean' : 'number');
+      }
+    });
+  }
+
+  it('should take the value of a faker template at the limits of the type of a number field', () => {
+    const level = prepareField({ fieldName: 'level', fieldType: 'Integer', fakerTemplate: '2147483647' });
+    const total = prepareField({ fieldName: 'total', fieldType: 'Long', fakerTemplate: '-9007199254740991' });
+    expect(samples([level, total], 1).map(sample => [sample.level, sample.total])).toEqual([[2147483647, -9007199254740991]]);
+  });
+
+  it('should not take the value of a faker template out of the min and the max of a field', () => {
+    const field = prepareField({
+      fieldName: 'level',
+      fieldType: 'Integer',
+      fieldValidateRules: ['min', 'max'],
+      fieldValidateRulesMin: 1,
+      fieldValidateRulesMax: 10,
+      fakerTemplate: '42',
+    });
+    for (const { level } of samples([field], 3)) {
+      expect(level).toBeGreaterThanOrEqual(1);
+      expect(level).toBeLessThanOrEqual(10);
+    }
+  });
+
+  it('should take the value of a faker template within the decimal min and max of a field', () => {
+    // The min and the max of a decimal field are texts, as a JDL gives them.
+    const decimalField = (fieldName: string, fieldValidateRulesMin: string, fieldValidateRulesMax: string, fakerTemplate: string) =>
+      prepareField({
+        fieldName,
+        fieldType: 'BigDecimal',
+        fieldValidateRules: ['min', 'max'],
+        fieldValidateRulesMin,
+        fieldValidateRulesMax,
+        fakerTemplate,
+      });
+    const ratio = decimalField('ratio', '0.5', '0.99', '0.644');
+    const tiny = decimalField('tiny', '0.0001', '0.001', '0.000253');
+    expect(samples([ratio, tiny], 2).map(sample => [sample.ratio, sample.tiny])).toEqual([
+      [0.644, 0.000253],
+      [0.644, 0.000253],
+    ]);
+    expect([ratio.fieldValidateRulesMin, ratio.fieldValidateRulesMax]).toEqual(['0.5', '0.99']);
+  });
+
+  it('should take the domain of an enum and of a boolean whose faker template gives a text of another type', () => {
+    const color = prepareField({ ...enumField(), fakerTemplate: '{{person.firstName}}' });
+    const active = prepareField({ fieldName: 'active', fieldType: 'Boolean', fakerTemplate: 'yes' });
+    const drawn = samples([color, active], 3);
+    expect(drawn.map(sample => sample.color).toSorted()).toEqual(['BLUE', 'GREEN', 'RED']);
+    expect([...new Set(drawn.map(sample => sample.active))].toSorted()).toEqual([false, true]);
+  });
+
+  it('should warn once of a faker template that gives a text of another type', () => {
+    const warnings: string[] = [];
+    const warningGenerator = { jhipsterConfig: config, log: { warn: (message: string) => warnings.push(message), debug() {} } };
+    Object.setPrototypeOf(warningGenerator, BaseGenerator.prototype);
+    const field = prepareCommonFieldForTemplates(
+      entity,
+      { fieldName: 'reference', fieldType: 'UUID', fakerTemplate: '{{person.firstName}}' } as any,
+      warningGenerator as any,
+    );
+    samples([field], 3);
+    samples([field], 3);
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatch(
+      /^The faker template \{\{person\.firstName\}\} of the field reference gives '[^']+', which is not a value of the type UUID: its fake data takes values of that type instead\.$/,
+    );
+  });
+
   it('should draw a duration as ISO 8601', () => {
     const [sample] = samples([prepareField({ fieldName: 'time', fieldType: 'Duration' })], 1);
     expect(sample.time).toMatch(/^PT\d+M$/);
@@ -160,6 +295,49 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     const [sample] = samples([prepareField({ fieldName: 'at', fieldType: 'Instant' })], 1);
     expect(sample.at).toBeInstanceOf(Date);
     expect((sample.at as Date).toISOString()).toMatch(/T\d{2}:\d{2}:00\.000Z$/);
+  });
+
+  describe('with a blob of a file', () => {
+    const file = '../fake-data/blob/hipster.png';
+    const base64 = (text: string) => Buffer.from(text).toString('base64');
+    // fieldTypeBinary is prepared by the common generator.
+    const blobField = (rules: Record<string, number> = {}) =>
+      prepareField({
+        fieldName: 'image',
+        fieldType: 'byte[]',
+        fieldTypeBinary: true,
+        fieldTypeBlobContent: 'image',
+        fieldValidateRules: Object.keys(rules),
+        ...Object.fromEntries(
+          Object.entries(rules).map(([rule, value]) => [`fieldValidateRules${rule[0].toUpperCase()}${rule.slice(1)}`, value]),
+        ),
+      });
+    const formats = (field: any) => {
+      const [sample] = samples([field], 1);
+      return {
+        ts: formatEntitySample([field], sample, 'ts').image,
+        json: formatEntitySample([field], sample, 'json-serializable').image,
+        csv: formatEntitySample([field], sample, 'csv').image,
+      };
+    };
+
+    it('should give the file of the fake data within its minbytes and maxbytes', () => {
+      expect(formats(blobField({ minbytes: 2, maxbytes: 10000 }))).toEqual({ ts: `'${file}'`, json: base64(file), csv: file });
+    });
+
+    it('should cut the file over its maxbytes, written as base64 in a CSV instead of the file', () => {
+      expect(formats(blobField({ maxbytes: 8 }))).toEqual({ ts: "'../fake-'", json: base64('../fake-'), csv: base64('../fake-') });
+    });
+
+    it('should complete the file under its minbytes to the characters a client measures it by', () => {
+      // A client measures 3 bytes by 4 characters of base64: 30 bytes take 40 characters.
+      const text = `${file}${'X'.repeat(11)}`;
+      expect(formats(blobField({ minbytes: 30 }))).toEqual({ ts: `'${text}'`, json: base64(text), csv: base64(text) });
+    });
+
+    it('should fail when no text fits both its minbytes and its maxbytes', () => {
+      expect(() => samples([blobField({ minbytes: 7, maxbytes: 8 })], 1)).toThrow(/minbytes 7 and maxbytes 8/);
+    });
   });
 
   describe('formatEntitySample', () => {

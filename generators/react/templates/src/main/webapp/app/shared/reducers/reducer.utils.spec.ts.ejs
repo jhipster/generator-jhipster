@@ -20,6 +20,8 @@ import { describe, expect, it } from 'vitest';
 
 import { AxiosError } from 'axios';
 
+import { CONSTRAINT_VIOLATION_TYPE } from 'app/shared/jhipster/error.constants';
+
 import { createEntitySlice, isFulfilledAction, isRejectedAction, serializeAxiosError } from './reducer.utils';
 
 describe('reducer utils', () => {
@@ -60,6 +62,21 @@ describe('reducer utils', () => {
       const slice = createEntitySlice({ name: 'entity', initialState });
 
       expect(slice.reducer(initialState, rejected)).toMatchObject({ loading: false, updating: false, updateSuccess: false });
+    });
+
+    it('should keep the field errors of its own requests only', () => {
+      const slice = createEntitySlice({ name: 'entity', initialState });
+      const fieldErrors = [{ objectName: 'entity', field: 'name', message: 'NotNull' }];
+      const refused = {
+        type: 'entity/update/rejected',
+        error: { response: { data: { type: CONSTRAINT_VIOLATION_TYPE, fieldErrors } } },
+      };
+
+      const state = slice.reducer(initialState, refused);
+      expect(state.fieldErrors).toEqual(fieldErrors);
+      expect(slice.reducer(state, { type: 'other/fetch/pending' }).fieldErrors).toEqual(fieldErrors);
+      expect(slice.reducer(state, { type: 'other/update/rejected', error: { message: 'Failed' } }).fieldErrors).toEqual(fieldErrors);
+      expect(slice.reducer(state, { type: 'entity/fetch/pending' }).fieldErrors).toBeUndefined();
     });
 
     it('should leave the rejections to the slice that skips them', () => {

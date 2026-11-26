@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Giriş uğursuz oldu!</strong> Zəhmət olmasa, istifadəçi məlumatlarınızı yoxlayıb yenidən cəhd edin."
+        "authentication": "<strong>Giriş uğursuz oldu!</strong> Zəhmət olmasa, istifadəçi məlumatlarınızı yoxlayıb yenidən cəhd edin.",
+        "sessionExpired": "Sessiyanızın vaxtı bitib. Zəhmət olmasa yenidən daxil olun."
       }
     },
     "password": {

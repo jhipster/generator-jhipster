@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../../../lib/utils/index.ts';
+import { mutateData, mutateDefaults } from '../../../../../lib/utils/index.ts';
 import type { DatabaseEntity, DatabaseField, DatabaseJoinColumn, DatabaseRelationship } from '../types.d.ts';
 
 import databaseData from './database-data.ts';
@@ -70,8 +70,7 @@ export function prepareRelationshipForDatabase({
     // Set before columnRequired, which reads it.
     nullable: ({ relationshipValidate, relationshipRequired }) => !(relationshipValidate && relationshipRequired),
   });
-  mutateData(relationship, {
-    __override__: false,
+  mutateDefaults(relationship, {
     columnRequired: data => data.nullable === false || data.relationshipRequired,
     columnNameTruncated: ({ columnName, relationshipName }) => columnName !== hibernateSnakeCase(relationshipName),
   });

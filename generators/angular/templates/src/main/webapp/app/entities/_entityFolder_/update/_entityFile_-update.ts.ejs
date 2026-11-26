@@ -225,7 +225,7 @@ export class <%- entityAngularName %>Update implements OnInit {
 
     save(): void {
         this.isSaving.set(true);
-        const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.<%- entityInstance %>Model());
+        const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.<%- entityInstance %>Model()<%- angularFormKeepsEmptyValues ? `, this.${entityInstance}` : '' %>);
 <%_ if (primaryKey.autoGenerate || builtInUserManagement) { _%>
   <%_ if (updatableEntity) { _%>
         if (<%- entityInstance %>.<%- builtInUserManagement ? 'id' : primaryKey.name %> === null) {

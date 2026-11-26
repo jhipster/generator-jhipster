@@ -44,6 +44,7 @@ import reactor.util.function.Tuples;
 import java.time.LocalDateTime;
 <%_ } _%>
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 <%_ if (user.primaryKey.hasUUID) { _%>
@@ -118,7 +119,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
 <%_ if (!authenticationTypeOauth2) { _%>
     @Override
     public Mono<<%- user.persistClass %>> findOneWithAuthoritiesByEmailIgnoreCase(String email) {
-        return findOneWithAuthoritiesBy("email", email.toLowerCase());
+        return findOneWithAuthoritiesBy("email", email.toLowerCase(Locale.ENGLISH));
     }
 
 <%_ } _%>

@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Sisselogimine ebaõnnestus!</strong> Palun kontrollige kasutajanime ja parooli ning proovige uuesti."
+        "authentication": "<strong>Sisselogimine ebaõnnestus!</strong> Palun kontrollige kasutajanime ja parooli ning proovige uuesti.",
+        "sessionExpired": "Teie seanss on aegunud. Palun logige uuesti sisse."
       }
     },
     "password": {

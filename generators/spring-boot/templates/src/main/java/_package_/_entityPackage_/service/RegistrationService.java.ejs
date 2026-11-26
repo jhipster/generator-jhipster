@@ -146,7 +146,7 @@ public class RegistrationService {
     public <% if (reactive) { %>Mono<<%- user.persistClass %>><% } else { %><%- user.persistClass %><% } %> registerUser(<%- user.adminUserDto %> userDTO, String password) {
 <%_ if (reactive) { _%>
         return userRepository
-            .findOneByLogin(userDTO.getLogin().toLowerCase())
+            .findOneByLogin(userDTO.getLogin().toLowerCase(Locale.ENGLISH))
             .flatMap(existingUser -> {
                 if (!existingUser.isActivated()) {
   <%_ if (cacheProviderAny) { _%>
@@ -175,13 +175,13 @@ public class RegistrationService {
                 newUser.setId(UUID.randomUUID().toString());
   <%_ } _%>
                 String encryptedPassword = passwordEncoder.encode(password);
-                newUser.setLogin(userDTO.getLogin().toLowerCase());
+                newUser.setLogin(userDTO.getLogin().toLowerCase(Locale.ENGLISH));
                 // new user gets initially a generated password
                 newUser.setPassword(encryptedPassword);
                 newUser.setFirstName(userDTO.getFirstName());
                 newUser.setLastName(userDTO.getLastName());
                 if (userDTO.getEmail() != null) {
-                    newUser.setEmail(userDTO.getEmail().toLowerCase());
+                    newUser.setEmail(userDTO.getEmail().toLowerCase(Locale.ENGLISH));
                 }
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
                 newUser.setImageUrl(userDTO.getImageUrl());
@@ -215,7 +215,7 @@ public class RegistrationService {
                     .doOnNext(user -> LOG.debug("Created Information for User: {}", user));
             });
 <%_ } else { /* !reactive */ _%>
-        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase(Locale.ENGLISH)).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new UsernameAlreadyUsedException();
@@ -232,13 +232,13 @@ public class RegistrationService {
         newUser.setId(UUID.randomUUID().toString());
   <%_ } _%>
         String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
+        newUser.setLogin(userDTO.getLogin().toLowerCase(Locale.ENGLISH));
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         if (userDTO.getEmail() != null) {
-            newUser.setEmail(userDTO.getEmail().toLowerCase());
+            newUser.setEmail(userDTO.getEmail().toLowerCase(Locale.ENGLISH));
         }
   <%_ if (user.hasImageField) { _%>
         newUser.setImageUrl(userDTO.getImageUrl());

@@ -245,7 +245,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             saveSubject.complete();
 
             // THEN
-            expect(<%- entityInstance %>FormService.get<%- entityAngularName %>).toHaveBeenCalled();
+            expect(<%- entityInstance %>FormService.get<%- entityAngularName %>).toHaveBeenCalled<%- angularFormKeepsEmptyValues ? `With(comp.${entityInstance}Model(), ${entityInstance})` : '()' %>;
             expect(comp.previousState).toHaveBeenCalled();
             expect(<%- entityInstance %>Service.update).toHaveBeenCalledWith(expect.objectContaining(<%- entityInstance %>));
             expect(comp.isSaving()).toEqual(false);

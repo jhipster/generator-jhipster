@@ -355,7 +355,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         userDTO.setLangKey(DEFAULT_LANGKEY);
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
-        // An email is required, so this API call must fail
+        // An email is required, so this API call must fail, with the field error named by the translation keys of a user
   <%_ if (reactive) { _%>
         webTestClient
             .post()
@@ -364,13 +364,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.fieldErrors.[0].objectName")
+            .isEqualTo("userManagement")
+            .jsonPath("$.fieldErrors.[0].field")
+            .isEqualTo("email");
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(userDTO))<% if (serverUsesCsrf) { %>
             .with(csrf())<% } %>)
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("userManagement"))
+            .andExpect(jsonPath("$.fieldErrors.[0].field").value("email"));
   <%_ } _%>
 
         // Validate the User is not created

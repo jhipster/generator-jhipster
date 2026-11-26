@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Ha fallat l'autenticació!</strong> Si us plau, confirmi les seves credencials i torni a probar-ho."
+        "authentication": "<strong>Ha fallat l'autenticació!</strong> Si us plau, confirmi les seves credencials i torni a probar-ho.",
+        "sessionExpired": "La vostra sessió ha caducat. Torneu a iniciar la sessió."
       }
     },
     "password": {

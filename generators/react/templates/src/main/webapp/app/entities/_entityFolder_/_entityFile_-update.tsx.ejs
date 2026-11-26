@@ -20,8 +20,9 @@
     const userProvidedPrimaryKey = !builtInUserManagement && entityClientFormFields.some(field => field.id);
     const formFieldsNoId = entityClientFormFields.filter(field => !field.id);
     const clientConstantImports = [...new Set(entityClientFormFields.map(field => field.reactFieldClientConstant?.reactConstantImport).filter(Boolean))];
+    const formServerErrors = entityClientFormFields.length > 0 || persistableRelationships.some(rel => !rel.otherEntity.embedded);
 _%>
-import { useEffect } from 'react';
+import { useEffect, useMemo<%- formServerErrors ? ', useState' : '' %> } from 'react';
 import {
   Button,
   Col,
@@ -54,11 +55,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 <%_ for (const clientConstantImport of clientConstantImports) { _%>
 <%- clientConstantImport %>
 <%_ } _%>
-import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-<%_ if (relationships.filter(e => e.relationshipManyToMany) !== undefined) { _%>
-import { mapIdList } from 'app/shared/util/entity-utils';
+<%_ if (formServerErrors) { _%>
+import { getFieldErrorMessage } from 'app/config/notification-middleware';
 <%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { leaveWhenNotFound, mapIdList } from 'app/shared/util/entity-utils';
 
 <%_ const otherEntityActions = new Set(); _%>
 <%_ for (const otherEntity of otherEntitiesWithPersistableRelationship.filter(otherEntity => !otherEntity.embedded)) { _%>
@@ -101,6 +103,19 @@ export const <%- entityReactName %>Update = () => {
   const loading = useAppSelector(state => state.<%- entityReactState %>.loading);
   const updating = useAppSelector(state => state.<%- entityReactState %>.updating);
   const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
+<%_ if (formServerErrors) { _%>
+  const fieldErrors = useAppSelector(state => state.<%- entityReactState %>.fieldErrors);
+  // The fields changed since the server refused them, whose rules show again.
+  const [changedFields, setChangedFields] = useState<string[]>([]);
+  // A field the server refused is marked invalid, with the message of its error, until its value changes.
+  const serverErrorProps = (name: string) => {
+    const fieldError = changedFields.includes(name) ? undefined : fieldErrors?.find(({ field }) => field === name);
+    return {
+      error: fieldError ? { type: 'server', message: getFieldErrorMessage(fieldError) } : undefined,
+      onChange: () => setChangedFields(fields => [...fields, name]),
+    };
+  };
+<%_ } _%>
 <%_ for (const enumField of enumTypeFields) { _%>
   const <%- enumField.enumInstance %>Values = Object.keys(<%- enumField.fieldType %>);
 <%_ } _%>
@@ -115,13 +130,13 @@ export const <%- entityReactName %>Update = () => {
   useEffect(() => {
 <%_ if (paginationInfiniteScroll) { _%>
     if (!isNew) {
-      dispatch(getEntity(id));
+      dispatch(getEntity(id)).unwrap().catch(leaveWhenNotFound(navigate));
     }
 <%_ } else { _%>
     if (isNew) {
       dispatch(reset());
     } else {
-      dispatch(getEntity(id));
+      dispatch(getEntity(id)).unwrap().catch(leaveWhenNotFound(navigate));
     }
 <%_ } _%>
 
@@ -137,13 +152,24 @@ export const <%- entityReactName %>Update = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
+<%_ if (formServerErrors) { _%>
+    setChangedFields([]);
+<%_ } _%>
+<%_ const blankFields = entityClientFormFields.filter(field => !field.fieldTypeTimed && !field.fieldTypeNumeric && !field.fieldTypeString && !field.fieldTypeBoolean && (!field.fieldTypeBinary || field.blobContentTypeText)); _%>
+<%_ if (blankFields.length > 0 || entityClientFormFields.some(field => field.fieldTypeTimed || field.fieldTypeNumeric)) { _%>
+    // A field left blank is sent without a value: an empty text is not one of its values.
+<%_ } _%>
 <%_ for (field of entityClientFormFields) { _%>
   <%_ const { fieldName } = field; _%>
   <%_ if (field.fieldTypeTimed) { _%>
-    values.<%- fieldName %> = convertDateTimeToServer(values.<%- fieldName %>);
+    values.<%- fieldName %> = convertDateTimeToServer(values.<%- fieldName %>) ?? undefined;
   <%_ } else if (field.fieldTypeNumeric) { _%>
     if (typeof values.<%- fieldName %> === 'string') {
-      values.<%- fieldName %> = values.<%- fieldName %> === '' ? null : Number(values.<%- fieldName %>);
+      values.<%- fieldName %> = values.<%- fieldName %> === '' ? undefined : Number(values.<%- fieldName %>);
+    }
+  <%_ } else if (blankFields.includes(field)) { _%>
+    if (values.<%- fieldName %> === '') {
+      values.<%- fieldName %> = undefined;
     }
   <%_ } _%>
 <%_ } _%>
@@ -153,7 +179,7 @@ export const <%- entityReactName %>Update = () => {
       ...values,
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded && !rel.relationshipSerializePrimaryKeyOnly)) { _%>
   <%_ if (rel.collection) { _%>
-      <%- rel.propertyName %>: mapIdList(values.<%- rel.propertyName %>),
+      <%- rel.propertyName %>: mapIdList(values.<%- rel.propertyName %><%- rel.otherEntity.primaryKey?.typeNumeric ? ', Number' : '' %>),
   <%_ } else { _%>
       <%- rel.propertyName %>: <%- rel.otherEntity.entityInstancePlural %>.find(it => it.<%- rel.otherEntity.primaryKey.name %>.toString() === values.<%- rel.propertyName %>?.toString()),
   <%_ } _%>
@@ -167,14 +193,14 @@ export const <%- entityReactName %>Update = () => {
     }
   };
 
-  const defaultValues = () =>
+  // The values change with the record only: the form is filled again only then.
+  const defaultValues = useMemo(
+    () =>
     isNew
       ? {
 <%_ for (field of formFieldsNoId) { _%>
   <%_ const { fieldName } = field; _%>
-  <%_ if (field.fieldTypeTimed) { _%>
-          <%- fieldName %>: displayDefaultDateTime(),
-  <%_ } else if (field.fieldTypeBoolean && (field.fieldTsDefaultValue === 'true' || field.defaultValue === true)) { _%>
+  <%_ if (field.fieldTypeBoolean && (field.fieldTsDefaultValue === 'true' || field.defaultValue === true)) { _%>
           <%- fieldName %>: true,
   <%_ } else if (field.clientConstantsAsValues && field.defaultValue) { _%>
           <%- fieldName %>: '<%- field.defaultValue %>',
@@ -182,13 +208,6 @@ export const <%- entityReactName %>Update = () => {
 <%_ } _%>
         }
       : {
-<%_ for (field of formFieldsNoId) { _%>
-  <%_ const { fieldName } = field; _%>
-  <%_ if (field.fieldIsEnum && !field.clientConstantsAsValues) { _%>
-    <%_ const { enumValues } = field; _%>
-<%- fieldName %>: '<%- enumValues[0].name %>',
-  <%_ } _%>
-<%_ } _%>
           ...<%- entityInstance %>Entity,
 <%_ for (field of formFieldsNoId) { _%>
   <%_ const { fieldName } = field; _%>
@@ -208,7 +227,9 @@ export const <%- entityReactName %>Update = () => {
           <%- relationshipFieldName %>: <%- entityInstance %>Entity?.<%- relationshipFieldName %>?.<%- otherEntityPkName %>,
   <%_ } _%>
 <%_ } _%>
-        };
+        },
+    [isNew, <%- entityInstance %>Entity],
+  );
 
   return (
     <div>
@@ -222,7 +243,7 @@ export const <%- entityReactName %>Update = () => {
     <Row className="justify-content-center">
       <Col md="8">
         { loading ? <p>Loading...</p> :
-        <ValidatedForm mode="all" defaultValues={defaultValues()} onSubmit={saveEntity}>
+        <ValidatedForm mode="all" defaultValues={defaultValues} onSubmit={saveEntity}>
 <%_ if (!builtInUserManagement && !userProvidedPrimaryKey) { _%>
           { !isNew &&
             <ValidatedField
@@ -248,6 +269,7 @@ export const <%- entityReactName %>Update = () => {
             id="<%- entityFileName %>-<%- fieldName %>"
             name="<%- fieldName %>"
             data-cy="<%- fieldName %>"
+            {...serverErrorProps('<%- fieldName %>')}
   <%_ if (field.clientConstantsAsValues) { _%>
     <%_ if (userProvidedPrimaryKey && field.id) { _%>
             disabled={!isNew}
@@ -283,8 +305,11 @@ export const <%- entityReactName %>Update = () => {
           />
   <%_ } else if (field.fieldIsEnum) { _%>
             type="select"
+            <%- include('react_validators') %>
           >
     <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
+            {/* No value is chosen until someone chooses one. */}
+            <option value="" key="0" />
           {<%- field.enumInstance %>Values.map(<%- field.enumInstance %> => (
               <option value={<%- field.enumInstance %>} key={<%- field.enumInstance %>}>
     <%_ if (enableTranslation) { _%>
@@ -349,6 +374,7 @@ export const <%- entityReactName %>Update = () => {
             type="select"
             multiple
             name="<%- relationshipFieldNamePlural %>"
+            {...serverErrorProps('<%- rel.propertyName %>')}
     <%_ if (relationshipRequired) { _%>
             required
             validate={{ required: { value: true, message: translate('entity.validation.required') } }}
@@ -370,6 +396,7 @@ export const <%- entityReactName %>Update = () => {
             id="<%- entityFileName %>-<%- relationshipName %>"
             name="<%- relationshipFieldName %>"
             data-cy="<%- relationshipFieldName %>"
+            {...serverErrorProps('<%- rel.propertyName %>')}
     <%_ if (enableTranslation) { _%>
             label={translate('<%- translationKey %>')}
     <%_ } else { _%>

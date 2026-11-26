@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Greška kod prijave!</strong> Molimo provjerite vaše akreditacije i pokušajte ponovno."
+        "authentication": "<strong>Greška kod prijave!</strong> Molimo provjerite vaše akreditacije i pokušajte ponovno.",
+        "sessionExpired": "Vaša je sesija istekla. Molimo, ponovno se prijavite."
       }
     },
     "password": {

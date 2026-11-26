@@ -46,6 +46,11 @@ export type Field = ClientField & {
   angularFieldClientConstant?: AngularFieldClientConstant;
   /** Singular form of the field name, used to name items of collection fields. */
   angularFieldNameSingular?: string;
+  /**
+   * The form shows two values of the field as a single empty one, an unchecked box for null and false, an empty text for null and '':
+   * the form service keeps the one of the edited entity.
+   */
+  angularFormKeepsEmptyValue?: boolean;
 };
 
 export type Relationship = ClientRelationship & {
@@ -58,6 +63,8 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   angularEntityListRequiresTranslationPipe?: boolean;
   angularEntityDetailsRequiresTranslationPipe?: boolean;
   angularEntityUpdateRequiresTranslationPipe?: boolean;
+  /** A field of the entity keeps its empty value in the form, see `angularFormKeepsEmptyValue`. */
+  angularFormKeepsEmptyValues?: boolean;
   /** The sample with the data of every field, its dates written as the strings of the REST API like the model types them. */
   angularTsSampleWithFullData?: string;
   /** The sample with the data of the required fields, its dates written as the strings of the REST API. */

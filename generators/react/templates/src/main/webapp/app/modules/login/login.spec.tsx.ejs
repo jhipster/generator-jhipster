@@ -17,6 +17,9 @@
  limitations under the License.
 -%>
 import { describe, expect, it, vi } from 'vitest';
+<%_ if (enableTranslation) { _%>
+import { TranslatorContext } from 'react-jhipster';
+<%_ } _%>
 import { Route, Routes } from 'react-router';
 
 import { fireEvent, screen, waitFor } from '@testing-library/react';
@@ -47,6 +50,7 @@ describe('Login', () => {
 
     expect(document.querySelector('[data-cy="loginTitle"]')).not.toBeNull();
     expect(document.querySelector('[data-cy="loginError"]')).toBeNull();
+    expect(document.querySelector('[data-cy="sessionExpired"]')).toBeNull();
     expect(document.querySelector('.modal')).toBeNull();
   });
 
@@ -76,6 +80,22 @@ describe('Login', () => {
 
     expect(document.querySelector('[data-cy="loginError"]')).not.toBeNull();
   });
+
+  it('should tell when the session expired', () => {
+    renderLogin({ redirectMessage: 'login.messages.error.sessionExpired' });
+
+    expect(document.querySelector('[data-cy="sessionExpired"]')).not.toBeNull();
+  });
+<%_ if (enableTranslation) { _%>
+
+  it('should tell the message of the redirection', () => {
+    TranslatorContext.registerTranslations('en', { 'login.messages.error.other': 'Another notice' });
+    TranslatorContext.setLocale('en');
+    renderLogin({ redirectMessage: 'login.messages.error.other' });
+
+    expect(document.querySelector('[data-cy="sessionExpired"]')?.textContent).toBe('Another notice');
+  });
+<%_ } _%>
 
   it('should leave the page once authenticated', () => {
     renderLogin({ isAuthenticated: true });

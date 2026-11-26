@@ -19,6 +19,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import axios from 'axios';
+<%_ if (enableTranslation) { _%>
+import { TranslatorContext } from 'react-jhipster';
+<%_ } _%>
 
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
@@ -57,6 +60,16 @@ describe('Axios Interceptor', () => {
       const networkError = {};
       await expect((axios.interceptors.response as any).handlers[0].rejected(networkError)).rejects.toBe(networkError);
       expect(onUnauthenticated).not.toHaveBeenCalled();
+    });
+    it('onRequestSuccess sends the language of the application', () => {
+      expect((axios.interceptors.request as any).handlers[0].fulfilled({ headers: {} }).headers['Accept-Language']).toEqual('<%- nativeLanguage %>');
+<%_ if (enableTranslation) { _%>
+      sessionStorage.setItem('locale', JSON.stringify('xx'));
+      expect((axios.interceptors.request as any).handlers[0].fulfilled({ headers: {} }).headers['Accept-Language']).toEqual('xx');
+      sessionStorage.removeItem('locale');
+      TranslatorContext.setLocale('yy');
+      expect((axios.interceptors.request as any).handlers[0].fulfilled({ headers: {} }).headers['Accept-Language']).toEqual('yy');
+<%_ } _%>
     });
 <%_ if (authenticationTypeJwt) { _%>
     it('onRequestSuccess adds the token of the session', () => {

@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>인증 실패!</strong> credential을 확인하고 다시 시도해 주세요."
+        "authentication": "<strong>인증 실패!</strong> credential을 확인하고 다시 시도해 주세요.",
+        "sessionExpired": "세션이 만료되었습니다. 다시 로그인하세요."
       }
     },
     "password": {

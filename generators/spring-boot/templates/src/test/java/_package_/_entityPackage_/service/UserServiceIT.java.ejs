@@ -87,6 +87,7 @@ import java.time.LocalDateTime;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import java.util.List;
+import java.util.Locale;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import java.util.Collection;
@@ -261,7 +262,7 @@ class UserServiceIT {
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
         // The synced user gets the `sub` or the lower-cased `preferred_username` of the token as login.
-        for (String login : List.of(DEFAULT_LOGIN, DEFAULT_USERNAME.toLowerCase())) {
+        for (String login : List.of(DEFAULT_LOGIN, DEFAULT_USERNAME.toLowerCase(Locale.ENGLISH))) {
   <%_ if (reactive) { _%>
             userRepository.findOneByLogin(login).flatMap(userRepository::delete).block();
   <%_ } else { _%>

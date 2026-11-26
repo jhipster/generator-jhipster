@@ -23,7 +23,7 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import pluralize from 'pluralize';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { mutateData } from '../../lib/utils/index.ts';
+import { mutateData, mutateDefaults } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
@@ -343,8 +343,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       prepareEnumImports({ entity }) {
-        mutateData(entity, {
-          __override__: false,
+        mutateDefaults(entity, {
           entityClientEnumImports: ({ fields }) => getClientEnumImportsFormat(fields, ANGULAR),
         });
       },
@@ -366,6 +365,29 @@ export default class AngularGenerator extends AngularApplicationGenerator {
                   relationship.collection &&
                   !relationship.persistableRelationship,
               )),
+        });
+      },
+      prepareFormEmptyValues({ entity }) {
+        for (const field of entity.fields) {
+          mutateData(field, {
+            __override__: false,
+            angularFormKeepsEmptyValue: ({
+              fieldValidationRequired,
+              id,
+              clientConstantsAsValues,
+              fieldTypeBoolean,
+              fieldTypeString,
+              blobContentTypeText,
+            }) =>
+              !fieldValidationRequired &&
+              !id &&
+              !clientConstantsAsValues &&
+              Boolean(fieldTypeBoolean || fieldTypeString || blobContentTypeText),
+          });
+        }
+        mutateData(entity, {
+          __override__: false,
+          angularFormKeepsEmptyValues: ({ fields }) => fields.some(field => field.angularFormKeepsEmptyValue),
         });
       },
     });
@@ -583,7 +605,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         source.addSonarProperties?.([
           { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts`, valueSep: ', ' },
           { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}test-results/TESTS-results-sonar-vitest.xml` },
-          { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}test-results/lcov.info` },
+          { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}test-results/lcov-report/lcov.info` },
           {
             key: 'sonar.exclusions',
             value: `${clientSrcDir}content/**/*.*, ${clientI18nDir}*.ts, ${clientDistDir}**/*.*`,

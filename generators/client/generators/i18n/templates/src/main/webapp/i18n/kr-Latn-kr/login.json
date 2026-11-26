@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Kire almadińiz!</strong> Iltimas, maǵlıwmatlarıńızdı tekserip qayta urunp kóriń."
+        "authentication": "<strong>Kire almadińiz!</strong> Iltimas, maǵlıwmatlarıńızdı tekserip qayta urunp kóriń.",
+        "sessionExpired": "Sessiyańızdıń waqtı pitti. Iltimas, qaytadan kiriń."
       }
     },
     "password": {

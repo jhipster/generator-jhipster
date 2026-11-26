@@ -47,6 +47,33 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({}, generator);
 
+  describe('with gradle and the libraries of JHipster built locally', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipClient: true, buildTool: 'gradle' })
+        .withOptions({ jhipsterDependenciesVersion: '0.0.0-CICD' });
+    });
+
+    it('should resolve the libraries of JHipster from the local maven repository alone', () => {
+      runResult.assertFileContent(
+        'build.gradle',
+        /exclusiveContent \{\s+forRepository \{\s+mavenLocal\(\)\s+\}\s+filter \{\s+includeGroup "tech\.jhipster"\s+\}\s+\}/,
+      );
+    });
+  });
+
+  describe('with gradle and the published libraries of JHipster', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true, buildTool: 'gradle' });
+    });
+
+    it('should leave the local maven repository commented out', () => {
+      runResult.assertFileContent('build.gradle', '// mavenLocal()');
+      runResult.assertNoFileContent('build.gradle', 'exclusiveContent');
+    });
+  });
+
   describe('with a field and a relationship annotated @NotSortable', () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
@@ -100,6 +127,37 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent(resourceIT, /UPDATED_CODE = "[01]";/);
       const content = runResult.getSnapshot()[resourceIT].contents as string;
       expect(content.match(/DEFAULT_CODE = "(\d)"/)![1]).not.toBe(content.match(/UPDATED_CODE = "(\d)"/)![1]);
+    });
+  });
+
+  describe('with decimal fields of a faker template', () => {
+    const resourceIT = `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/DoseResourceIT.java`;
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'Dose',
+          changelogDate: '20220129025419',
+          fields: [
+            {
+              fieldName: 'amount',
+              fieldType: 'Double',
+              options: { fakerTemplate: '{{number.float({"min":0.0001,"max":0.001,"fractionDigits":6})}}' },
+            },
+            {
+              fieldName: 'fee',
+              fieldType: 'BigDecimal',
+              options: { fakerTemplate: '{{number.float({"min":0.5,"max":0.99,"fractionDigits":3})}}' },
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should keep the decimals of a Double and the two of the column of a BigDecimal', () => {
+      runResult.assertFileContent(resourceIT, 'DEFAULT_AMOUNT = 0.000679D;');
+      runResult.assertFileContent(resourceIT, 'UPDATED_AMOUNT = 0.000831D;');
+      runResult.assertFileContent(resourceIT, 'DEFAULT_FEE = new BigDecimal("0.75");');
+      runResult.assertFileContent(resourceIT, 'UPDATED_FEE = new BigDecimal("0.76");');
     });
   });
 

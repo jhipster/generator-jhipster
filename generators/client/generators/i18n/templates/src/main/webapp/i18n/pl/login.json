@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Nieudane logowanie!</strong> Sprawdź swoje dane logowania i spróbuj ponownie."
+        "authentication": "<strong>Nieudane logowanie!</strong> Sprawdź swoje dane logowania i spróbuj ponownie.",
+        "sessionExpired": "Twoja sesja wygasła. Zaloguj się ponownie."
       }
     },
     "password": {

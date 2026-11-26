@@ -23,16 +23,19 @@ import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, 
 import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
+  JsonType,
+  JsonTypeProperties,
   Relationship as BaseApplicationRelationship,
 } from '../base-application/types.ts';
 import type { Entity as LanguagesEntity } from '../languages/types.ts';
 
 import command from './command.ts';
+import { getJsonType, jsonTypeDerivedProperties } from './internal/json-type.ts';
 
 const { BIG_DECIMAL, DOUBLE, FLOAT, INSTANT, INTEGER, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME, TEXT_BLOB } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 
-type CommonAddedFieldProperties = {
+type CommonAddedFieldProperties = JsonTypeProperties & {
   /** @deprecated replace with technology-specific implementation */
   fieldTypeTemporal: boolean;
   /** @deprecated replace with technology-specific implementation */
@@ -41,6 +44,8 @@ type CommonAddedFieldProperties = {
   fieldTypeNumeric: boolean;
   /** Whether the lists of the entity offer to sort by the field: a stored field that is neither a collection, a binary but a TextBlob, @NotSortable nor a UUID. */
   fieldSupportsSortBy?: boolean;
+  /** The JSON values a request body takes for the field, the same for every backend. */
+  jsonType: JsonType;
 };
 
 export type Field = BaseApplicationField & CommonAddedFieldProperties;
@@ -53,6 +58,8 @@ export const mutateField = {
   fieldTypeTimed: ({ fieldType }) => fieldType === ZONED_DATE_TIME || fieldType === INSTANT,
   fieldTypeCharSequence: ({ fieldType }) => fieldType === STRING || fieldType === UUID || fieldType === TEXT_BLOB,
   fieldTypeTemporal: ({ fieldType }) => fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
+  jsonType: ({ fieldType }) => getJsonType(fieldType),
+  ...jsonTypeDerivedProperties,
   // No transient, collection, binary (but a TextBlob), @NotSortable or UUID field. The default sort of the lists by the primary key
   // does not depend on it. A backend sets it first for the fields it cannot sort by.
   // Computed once the field is prepared: java:bootstrap makes a field with a mapstruct expression transient after it.

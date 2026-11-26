@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Prijava je neuspešna!</strong> Korisničko ime i/ili lozinka nisu ispavni."
+        "authentication": "<strong>Prijava je neuspešna!</strong> Korisničko ime i/ili lozinka nisu ispavni.",
+        "sessionExpired": "Ваша сесија је истекла. Молимо, пријавите се поново."
       }
     },
     "password": {

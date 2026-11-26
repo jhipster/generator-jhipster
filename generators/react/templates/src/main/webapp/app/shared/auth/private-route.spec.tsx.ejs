@@ -21,7 +21,7 @@ import type { JSX } from 'react';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 
 import { configureStore } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
@@ -32,6 +32,7 @@ import { Authority } from 'app/shared/jhipster/constants';
 import PrivateRoute, { hasAnyAuthority } from './private-route';
 
 const TestComp = () => <div>Test</div>;
+const LoginComp = () => <div>Login{useLocation().search}</div>;
 
 describe('private-route component', () => {
 <%_ if (enableTranslation) { _%>
@@ -42,7 +43,7 @@ describe('private-route component', () => {
   });
 <%_ } _%>
 
-  const wrapper = (Elem: JSX.Element, authentication) => {
+  const wrapper = (Elem: JSX.Element, authentication, initialEntries = ['/']) => {
     const store = configureStore({
       reducer: {
         authentication: () => authentication,
@@ -50,7 +51,7 @@ describe('private-route component', () => {
     });
     return render(
       <Provider store={store}>
-        <MemoryRouter>{Elem}</MemoryRouter>
+        <MemoryRouter initialEntries={initialEntries}>{Elem}</MemoryRouter>
       </Provider>,
     );
   };
@@ -138,6 +139,25 @@ describe('private-route component', () => {
       },
     );
     expect(container.innerHTML).not.toEqual('<div>Test</div>');
+    expect(container.innerHTML).toEqual('<div>Login</div>');
+  });
+
+  it('should redirect to the login without the query of the page', () => {
+    const { container } = wrapper(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <TestComp />
+            </PrivateRoute>
+          }
+        />
+        <Route path="<%- authenticationTypeOauth2 ? '/sign-in' : '/login' %>" element={<LoginComp />} />
+      </Routes>,
+      { isAuthenticated: false, sessionHasBeenFetched: true, account: { authorities: ['ADMIN'] } },
+      ['/?sort=id,asc'],
+    );
     expect(container.innerHTML).toEqual('<div>Login</div>');
   });
 });
