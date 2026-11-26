@@ -57,6 +57,7 @@ import {
   type Logger,
   droppedMutationMessage,
   enableDelayedMutations,
+  finalizeMutations,
   hasCrlf,
   isWin32,
   mutateData,
@@ -273,6 +274,16 @@ export default class CoreGenerator<
         this._queueCurrentJHipsterCommandTasks();
       });
     }
+  }
+
+  /**
+   * The mutation contexts each queue finalizes, in the order they were declared, shared by the generators of the folder:
+   * a queue whose finalization ran has none, the data declared to finalize at it then mutated at once.
+   */
+  get #mutationsToFinalize(): Map<string, Set<object> | null> {
+    return this.getContextData('jhipster:mutationsToFinalize', {
+      factory: () => new Map<string, Set<object> | null>(),
+    });
   }
 
   get #commandsToLoad(): Set<string> {
@@ -1565,11 +1576,47 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   /**
    * Makes the data a mutation context, as `enableDelayedMutations` does, a delayed mutation dropped told in the debug log.
+   * With `finalizeAt`, the queue of a priority reading the data, its delayed mutations are applied by the task
+   * `queueMutationsFinalization` queues at the start of that queue; once that task ran, the data is left as it is, its
+   * mutations applied at once.
    */
-  enableDelayedMutations<const T extends object>(data: T, options: { autoDelay?: boolean } = {}): T {
+  enableDelayedMutations<const T extends object>(data: T, options: { autoDelay?: boolean; finalizeAt?: string } = {}): T {
+    const { finalizeAt, ...contextOptions } = options;
+    if (finalizeAt) {
+      const mutationsToFinalize = this.#mutationsToFinalize;
+      if (!mutationsToFinalize.has(finalizeAt)) {
+        mutationsToFinalize.set(finalizeAt, new Set());
+      }
+      const contexts = mutationsToFinalize.get(finalizeAt);
+      // Finalized already: a mutation delayed now would never be applied.
+      if (!contexts) return data;
+      contexts.add(data);
+    }
     return enableDelayedMutations(data, {
-      ...options,
+      ...contextOptions,
       onDroppedMutation: dropped => this.log.debug(droppedMutationMessage(dropped)),
+    });
+  }
+
+  /**
+   * Queues the task applying the delayed mutations of the contexts declared to finalize at the queue (`finalizeAt`),
+   * once by folder: queued before the tasks of the generators that read them, it runs first in the queue, once every
+   * generator prepared the contexts, the ones declared until then included.
+   */
+  queueMutationsFinalization(queueName: string): void {
+    this.queueTask({
+      queueName,
+      taskName: `${this.destinationRoot()}#finalizeMutations#${queueName}`,
+      once: true,
+      // The arguments of the priority would read its data, creating it in a folder without one.
+      args: [],
+      method: () => {
+        const mutationsToFinalize = this.#mutationsToFinalize;
+        for (const context of mutationsToFinalize.get(queueName) ?? []) {
+          finalizeMutations(context);
+        }
+        mutationsToFinalize.set(queueName, null);
+      },
     });
   }
 

@@ -21,7 +21,7 @@ import { isDeepStrictEqual } from 'node:util';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
-import { finalizeMutations, mutateDefaults } from '../../lib/utils/object.ts';
+import { mutateDefaults } from '../../lib/utils/object.ts';
 import { upperFirst } from '../../lib/utils/string-utils.ts';
 import { POST_WRITING_OBJECTS, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask, TaskGroup } from '../base-core/types.ts';
@@ -842,7 +842,7 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY);
-          const entityDefaults = withDefaults(this.enableDelayedMutations(data.entity));
+          const entityDefaults = withDefaults(this.enableDelayedMutations(data.entity, { finalizeAt: POST_PREPARING_EACH_ENTITY_QUEUE }));
           tasks.forEach(task => {
             this.queueTask({
               ...task,
@@ -863,7 +863,7 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesFieldsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_FIELD} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_FIELD);
-          const fieldDefaults = withDefaults(this.enableDelayedMutations(data.field));
+          const fieldDefaults = withDefaults(this.enableDelayedMutations(data.field, { finalizeAt: POST_PREPARING_EACH_ENTITY_QUEUE }));
           tasks.forEach(task => {
             this.queueTask({
               ...task,
@@ -884,7 +884,9 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesRelationshipsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_RELATIONSHIP} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
-          const relationshipDefaults = withDefaults(this.enableDelayedMutations(data.relationship));
+          const relationshipDefaults = withDefaults(
+            this.enableDelayedMutations(data.relationship, { finalizeAt: POST_PREPARING_EACH_ENTITY_QUEUE }),
+          );
           tasks.forEach(task => {
             this.queueTask({
               ...task,
@@ -897,24 +899,7 @@ export default class BaseApplicationGenerator<
 
     // The delayed defaults of the entities, their fields and their relationships are applied once every generator prepared
     // them: queued once by the folder of the application, it runs before every post preparing task of its entities.
-    this.queueTask({
-      queueName: POST_PREPARING_EACH_ENTITY_QUEUE,
-      taskName: `${this.destinationRoot()}#finalizeEntitiesMutations`,
-      once: true,
-      // The arguments of the priority would read the application, creating it in a folder without one.
-      args: [],
-      method: () => {
-        for (const { entity } of this.#getEntitiesDataToPostPrepare()) {
-          finalizeMutations(entity);
-          for (const field of entity.fields) {
-            finalizeMutations(field);
-          }
-          for (const relationship of entity.relationships) {
-            finalizeMutations(relationship);
-          }
-        }
-      },
-    });
+    this.queueMutationsFinalization(POST_PREPARING_EACH_ENTITY_QUEUE);
 
     this.queueTask({
       queueName: POST_PREPARING_EACH_ENTITY_QUEUE,

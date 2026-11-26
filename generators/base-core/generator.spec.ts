@@ -24,6 +24,7 @@ import { join } from 'node:path';
 import { createJHipsterLogger, finalizeMutations, mutateData } from '../../lib/utils/index.ts';
 
 import Base from './index.ts';
+import { QUEUES } from './priorities.ts';
 import { editPropertiesFileCallback } from './support/properties-file.ts';
 
 import { defaultHelpers as helpers, runResult } from '#testing';
@@ -308,6 +309,33 @@ describe('generator - base-core', () => {
         messages: [],
         debug: ['The delayed default of prop2 was dropped: it waited for prop, and another mutation set prop2 ("first") first.'],
       });
+    });
+
+    it('mutates at once the data declared to finalize at a queue whose finalization ran', async () => {
+      const results: { prop2?: string; prop3?: string } = {};
+      const data: { prop?: string; prop2?: string; prop3?: string; missing?: string } = {};
+      await helpers.run('dummy').withGenerators([
+        [
+          helpers.createDummyGenerator(Base, {
+            [Base.INITIALIZING]() {
+              this.enableDelayedMutations(data, { autoDelay: true, finalizeAt: QUEUES.DEFAULT_QUEUE });
+              this.queueMutationsFinalization(QUEUES.DEFAULT_QUEUE);
+              mutateData(data, { prop2: ctx => ctx.prop });
+            },
+            [Base.CONFIGURING]() {
+              mutateData(data, { prop: 'bar' });
+            },
+            [Base.WRITING]() {
+              results.prop2 = data.prop2;
+              this.enableDelayedMutations(data, { autoDelay: true, finalizeAt: QUEUES.DEFAULT_QUEUE });
+              mutateData(data, { prop3: ctx => ctx.missing ?? 'at once' });
+              results.prop3 = data.prop3;
+            },
+          }),
+          { namespace: 'dummy' },
+        ],
+      ]);
+      expect(results).toEqual({ prop2: 'bar', prop3: 'at once' });
     });
   });
 
