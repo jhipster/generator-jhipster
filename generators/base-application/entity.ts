@@ -103,6 +103,8 @@ type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType
     blobContentTypeAny?: boolean;
 
     fieldTypeBytes?: boolean;
+    /** The field holds an integral number: an Integer or a Long. */
+    fieldTypeIntegral?: boolean;
     /** The smallest value of the fake data of a number field: its min, else 0 without a max, else the smallest of its type. */
     fieldFakeDataMin?: number;
     /** The largest value of the fake data of a number field: its max, else 32767 without a min, else the largest of its type. */
@@ -158,6 +160,7 @@ export const mutateField = {
   fieldIsEnum: data => isFieldEnumType(data),
   ...buildMutateDataForProperty('fieldType', Object.values(fieldTypesValues), { anyData: true }),
   fieldTypeBytes: ({ fieldTypeByte }) => fieldTypeByte,
+  fieldTypeIntegral: ({ fieldTypeInteger, fieldTypeLong }) => fieldTypeInteger || fieldTypeLong,
   // A number field without a min nor a max takes a small range; with one of them, the other is the limit of its type.
   fieldFakeDataMin: field => {
     const limit = restNumberLimit(field);
