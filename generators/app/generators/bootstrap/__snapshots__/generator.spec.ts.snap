@@ -472,6 +472,10 @@ exports[`generator - app:bootstrap with default config should prepare EntityA - 
     "propertyConsumerName": "setId",
     "propertySupplierName": "getId",
     "relationships": [],
+    "tsSampleParams": [
+      "{ id: '9fec3727-3421-4967-b213-ba36557ca194' }",
+      "{ id: '1361f429-3817-4123-8ee3-fdf8943310b2' }",
+    ],
     "tsSampleValues": [
       "'9fec3727-3421-4967-b213-ba36557ca194'",
       "'1361f429-3817-4123-8ee3-fdf8943310b2'",
@@ -1580,6 +1584,10 @@ exports[`generator - app:bootstrap with default config should prepare User - sna
     "propertyConsumerName": "setId",
     "propertySupplierName": "getId",
     "relationships": [],
+    "tsSampleParams": [
+      "{ id: 123 }",
+      "{ id: 456 }",
+    ],
     "tsSampleValues": [
       123,
       456,
@@ -1915,6 +1923,10 @@ exports[`generator - app:bootstrap with skipUserManagement should prepare Entity
     "propertyConsumerName": "setId",
     "propertySupplierName": "getId",
     "relationships": [],
+    "tsSampleParams": [
+      "{ id: '9fec3727-3421-4967-b213-ba36557ca194' }",
+      "{ id: '1361f429-3817-4123-8ee3-fdf8943310b2' }",
+    ],
     "tsSampleValues": [
       "'9fec3727-3421-4967-b213-ba36557ca194'",
       "'1361f429-3817-4123-8ee3-fdf8943310b2'",

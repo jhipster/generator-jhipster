@@ -37,7 +37,7 @@ export const gatlingFiles = asWriteEntityFilesSection({
 export function cleanupEntitiesTask() {}
 
 export default asWritingEntitiesTask(async function writeEntitiesTask({ application, entities }) {
-  for (const entity of entities.filter(entity => (entity as Partial<SpringBootEntity>).entityRestLayer !== false && !entity.skipServer)) {
+  for (const entity of entities.filter(entity => (entity as Partial<SpringBootEntity>).entityRestLayer && !entity.skipServer)) {
     await this.writeFiles({
       sections: gatlingFiles,
       context: { ...application, ...entity },

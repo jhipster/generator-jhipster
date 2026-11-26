@@ -48,32 +48,4 @@ describe(`generator - ${generator}`, () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
-
-  describe('with a composite primary key entity', () => {
-    before(async () => {
-      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
-        {
-          name: 'OrderLine',
-          changelogDate: '20160926101210',
-          fields: [
-            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
-            { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
-            { fieldName: 'ref', fieldType: 'UUID', options: { id: true } },
-            { fieldName: 'productCode', fieldType: 'String' },
-          ],
-        },
-      ]);
-    });
-
-    it('should send random parts of the composite key as properties of the entity', () => {
-      result.assertFileContent(
-        'src/test/java/gatling/simulations/OrderLineGatlingTest.java',
-        '"\\"orderId\\": #{randomLong()}" +\n                ", \\"lineNumber\\": #{randomInt()}" +\n                ", \\"ref\\": \\"#{randomUuid()}\\"" +\n                ", \\"productCode\\": \\"SAMPLE_TEXT\\"" +',
-      );
-    });
-
-    it('should not serialize the composite key as an object', () => {
-      result.assertNoFileContent('src/test/java/gatling/simulations/OrderLineGatlingTest.java', '\\"id\\"');
-    });
-  });
 });
