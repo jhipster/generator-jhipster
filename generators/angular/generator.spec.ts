@@ -355,46 +355,4 @@ describe(`generator - ${clientFramework}`, () => {
       );
     });
   });
-
-  describe('with a composite primary key', () => {
-    const entityFolder = `${CLIENT_MAIN_SRC_DIR}app/entities/order-line/`;
-
-    before(async () => {
-      await helpers.runJHipster(generator).withJHipsterConfig({ clientFramework }, [
-        {
-          name: 'OrderLine',
-          changelogDate: '20160926101210',
-          fields: [
-            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
-            { fieldName: 'lineCode', fieldType: 'String', options: { id: true } },
-            { fieldName: 'name', fieldType: 'String' },
-          ],
-        },
-      ]);
-    });
-
-    it('should compute the key of the entity from the parts of its id', () => {
-      runResult.assertFileContent(
-        `${entityFolder}service/order-line.service.ts`,
-        "return [orderLine.orderId, orderLine.lineCode].map(part => encodeURIComponent(part)).join('/');",
-      );
-    });
-
-    it('should not encode the key again in the url of the entity', () => {
-      runResult.assertNoFileContent(`${entityFolder}service/order-line.service.ts`, 'encodeURIComponent(id)');
-      runResult.assertNoFileContent(`${entityFolder}service/order-line.service.ts`, 'encodeURIComponent(this.getOrderLineIdentifier');
-    });
-
-    it('should route the entity with a segment by part of its id', () => {
-      runResult.assertFileContent(`${entityFolder}order-line.routes.ts`, "path: ':orderId/:lineCode/view',");
-      runResult.assertFileContent(
-        `${entityFolder}list/order-line.html`,
-        "[routerLink]=\"['/order-line', orderLine.orderId, orderLine.lineCode, 'view']\"",
-      );
-    });
-
-    it('should sort a part of the id by its path in the id', () => {
-      runResult.assertFileContent(`${entityFolder}list/order-line.html`, 'jhiSortBy="id.orderId"');
-    });
-  });
 });

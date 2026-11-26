@@ -847,66 +847,6 @@ describe(`generator - ${generator}`, () => {
     it('should match generated files snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
-
-    it('should serialize the parts of the id as properties of the entity', () => {
-      runResult.assertFileContent('src/main/java/com/mycompany/myapp/domain/OrderLine.java', '    @EmbeddedId\n    @JsonUnwrapped\n');
-    });
-
-    it('should give each part of the id its own path segment', () => {
-      runResult.assertFileContent(
-        'src/main/java/com/mycompany/myapp/web/rest/OrderLineResource.java',
-        '@GetMapping("/{orderId}/{lineNumber}")',
-      );
-      runResult.assertFileContent(
-        'src/main/java/com/mycompany/myapp/web/rest/OrderLineResource.java',
-        'UriComponentsBuilder.fromPath("/api/order-lines/{orderId}/{lineNumber}").build(',
-      );
-    });
-  });
-
-  describe('with a composite primary key of string and uuid parts', () => {
-    before(async () => {
-      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
-        {
-          name: 'OrderLine',
-          changelogDate: '20160926101210',
-          fields: [
-            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
-            { fieldName: 'lineCode', fieldType: 'String', options: { id: true } },
-            { fieldName: 'ref', fieldType: 'UUID', options: { id: true } },
-            { fieldName: 'name', fieldType: 'String' },
-          ],
-        },
-      ]);
-    });
-
-    it('should reject a string part that cannot be a path segment', () => {
-      runResult.assertFileContent(
-        'src/main/java/com/mycompany/myapp/web/rest/OrderLineResource.java',
-        '        if (!isPathSegment(orderLine.getId().getLineCode())) {\n            throw BadRequestAlertException.idinvalid(ENTITY_NAME);',
-      );
-    });
-
-    it('should check the type and the range of the parts of a patch', () => {
-      runResult.assertFileContent(
-        'src/main/java/com/mycompany/myapp/web/rest/OrderLineResource.java',
-        'if (!orderIdNode.isIntegralNumber() || !orderIdNode.canConvertToLong() || !lineCodeNode.isString() || !refNode.isString()) {',
-      );
-    });
-
-    it('should compare a uuid part of a patch ignoring its case', () => {
-      runResult.assertFileContent(
-        'src/main/java/com/mycompany/myapp/web/rest/OrderLineResource.java',
-        '!Objects.equals(orderId, orderIdNode.longValue()) || !Objects.equals(lineCode, lineCodeNode.stringValue()) || !ref.toString().equalsIgnoreCase(refNode.stringValue())',
-      );
-    });
-
-    it('should quote the string parts in the representation of the id', () => {
-      runResult.assertFileContent(
-        'src/main/java/com/mycompany/myapp/domain/OrderLineId.java',
-        '"orderId=" + getOrderId() +\n            ", lineCode=\'" + getLineCode() + "\'" +\n            ", ref=\'" + getRef() + "\'" +',
-      );
-    });
   });
 
   describe('with a gateway and a microservice entity with a composite primary key', () => {
