@@ -337,7 +337,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
             throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }
   <%_ const idNodeValue = { Long: 'longValue', Integer: 'intValue' }[primaryKey.type] ?? 'stringValue'; _%>
-        if (!Objects.equals(<%- primaryKey.name %><%- primaryKey.typeUUID ? '.toString()' : '' %>, idNode.<%- idNodeValue %>())) {
+        if (<%- primaryKey.typeUUID ? `!${primaryKey.name}.toString().equalsIgnoreCase(idNode.stringValue())` : `!Objects.equals(${primaryKey.name}, idNode.${idNodeValue}())` %>) {
             throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }
 
