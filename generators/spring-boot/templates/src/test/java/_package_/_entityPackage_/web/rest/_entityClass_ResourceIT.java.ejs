@@ -646,6 +646,41 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
+  <%_ if (updatableEntity && !primaryKey.derived && primaryKey.typeUUID) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void patch<%- entityClass %>WithUpperCaseId() throws Exception {
+        // Initialize the database
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+    <%_ } _%>
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        // A UUID is the same whatever the case of its letters
+        var patchJson = om.createObjectNode();
+        patchJson.put("<%- primaryKey.name %>", inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>().toString().toUpperCase());
+
+    <%_ if (reactive) { _%>
+        webTestClient.patch().uri(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(om.writeValueAsBytes(patchJson))
+            .exchange()
+            .expectStatus()
+            .isOk();
+    <%_ } else { _%>
+        rest<%- entityClass %>MockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())
+      <%_ if (serverUsesCsrf) { _%>
+                .with(csrf())
+      <%_ } _%>
+                .contentType("application/merge-patch+json")
+                .content(om.writeValueAsBytes(patchJson))
+            )
+            .andExpect(status().isOk());
+    <%_ } _%>
+    }
+  <%_ } _%>
 
   <%_ if (databaseTypeSql && isUsingMapsId && updatableEntity) { _%>
     @Test<%- transactionalAnnotation %>
