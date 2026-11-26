@@ -131,7 +131,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.postPreparingEachEntity;
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get default() {
