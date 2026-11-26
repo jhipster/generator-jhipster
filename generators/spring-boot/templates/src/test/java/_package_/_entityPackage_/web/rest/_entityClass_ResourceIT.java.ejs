@@ -280,6 +280,10 @@ import java.net.URI;
 import java.util.Collections;
 import org.springframework.web.util.UriBuilder;
 <%_ } _%>
+<%_ if (primaryKey.composite && !readOnly) { _%>
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+<%_ } _%>
 import java.util.List;
 <%_ if (anyFieldIsUUID || primaryKeyGeneratorUsesUuid || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
 import java.util.UUID;
@@ -2352,7 +2356,14 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%- idUriVariablesStart %><%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- (primaryKey.typeUUID && databaseTypeSql) ? '.toString()' : '' %><%- idUriVariablesEnd %>)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
             .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
+            .andExpect(status().isNoContent())<%- primaryKey.composite ? '' : ';' %>
+    <%_ if (primaryKey.composite) { _%>
+            // The alert shows the key as in the url, its parts joined by "/"
+            .andExpect(result ->
+                assertThat(result.getResponse().getHeaderNames().stream().filter(name -> name.endsWith("-params")).map(result.getResponse()::getHeader))
+                    .containsExactly(URLEncoder.encode(<%- primaryKey.fields.map(field => `${persistInstance}.${primaryKey.propertySupplierName}().${field.propertySupplierName}()`).join(' + "/" + ') %>, StandardCharsets.UTF_8))
+            );
+    <%_ } _%>
   <%_ } _%>
 
         // Validate the database contains one less item

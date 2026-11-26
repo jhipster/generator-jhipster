@@ -174,7 +174,11 @@ public class <%- entityClass %>Resource {
     const instanceName = restInstance;
     const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::toDto`;
-    const idToString = primaryKey.typeString ? '' : '.toString()';
+    let idToString = primaryKey.typeString ? '' : '.toString()';
+    if (primaryKey.composite) {
+      // A composite key is shown to the user as its path, its parts joined by "/".
+      idToString = '.toPath()';
+    }
 _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService, constructorName: `${entityClass}Resource`, queryService: jpaMetamodelFiltering, isUsingMapsId, mapsIdAssoc, isController: true, reactive, injectVariables }) -%>
 <%_ if (!readOnly) { _%>
 
@@ -615,7 +619,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         );
     <%_ } _%>
   <%_ } else { _%>
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- primaryKey.composite || !primaryKey.fields[0].fieldTypeString ? '.toString()' : '' %>)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- idToString %>)).build();
   <%_ } _%>
     }
 <%_ } _%>

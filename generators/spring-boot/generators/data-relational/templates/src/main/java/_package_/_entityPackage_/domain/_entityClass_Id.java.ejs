@@ -87,6 +87,13 @@ public class <%- primaryKey.type %> implements Serializable {
         return Objects.hash(<%- primaryKey.fields.map(field => field.fieldName).join(', ') %>);
     }
 
+    /**
+     * The parts of the key joined by "/", in the order of the url of the entity.
+     */
+    public String toPath() {
+        return <%- primaryKey.fields.map(field => `${field.propertySupplierName}()`).join(' + "/" + ') %>;
+    }
+
     @Override
     public String toString() {
         return "<%- primaryKey.type %>{" +
