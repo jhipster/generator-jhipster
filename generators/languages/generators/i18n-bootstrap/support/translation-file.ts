@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 /** The conditions of the keys of a translation, by their path: a key is left out when its condition does not hold. */
 export type TranslationConditions<Options> = Record<string, (options: Options) => boolean | undefined>;
 
-/** The source of a translation file: a template, rendered, or a JSON file, read. */
-export type TranslationSource = { path: string; template: boolean };
+/** The source of a translation file: a template, rendered, or a JSON file, read, in a templates folder. */
+export type TranslationSource = { folder: string; path: string; template: boolean };
 
 /**
  * The source of a translation file, like `src/main/webapp/i18n/<language>/global.json`, in the first of the folders that has
@@ -32,10 +32,28 @@ export type TranslationSource = { path: string; template: boolean };
 export const findTranslationSource = (folders: string[], sourceFile: string): TranslationSource | undefined =>
   folders
     .flatMap(folder => [
-      { path: join(folder, `${sourceFile}.ejs`), template: true },
-      { path: join(folder, sourceFile), template: false },
+      { folder, path: join(folder, `${sourceFile}.ejs`), template: true },
+      { folder, path: join(folder, sourceFile), template: false },
     ])
     .find(({ path }) => existsSync(path));
+
+/**
+ * The sources of the translation files of a folder, like `src/main/webapp/i18n/<language>`, by the name of the file without
+ * its extension: each one in the first of the templates folders that has it, the folders of the blueprints first.
+ */
+export const findTranslationSources = (folders: string[], folder: string): Record<string, TranslationSource> => {
+  const sources: Record<string, TranslationSource> = {};
+  for (const templatesFolder of folders) {
+    const languageFolder = join(templatesFolder, folder);
+    if (!existsSync(languageFolder)) continue;
+    for (const fileName of readdirSync(languageFolder).sort()) {
+      const name = fileName.replace(/\.json(\.ejs)?$/, '');
+      if (name === fileName || sources[name]) continue;
+      sources[name] = findTranslationSource([templatesFolder], join(folder, `${name}.json`))!;
+    }
+  }
+  return sources;
+};
 
 const replaceNames = (value: unknown, names: Record<string, string>): unknown => {
   if (typeof value === 'string') {

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { type TranslationConditions, prepareTranslation } from '../../../../languages/generators/i18n-bootstrap/support/index.ts';
+import type { TranslationConditions } from '../../../../languages/generators/i18n-bootstrap/support/index.ts';
 
 /** The values of the application a translation takes, written {name} in its text. */
 export type TranslationNames = {
@@ -86,16 +86,12 @@ const CLIENT_TRANSLATION_NAMES: (keyof TranslationNames)[] = [
 ];
 
 /**
- * The content of a translation file of the client, from the file of the language: with the names of the application,
- * without the keys whose options do not hold.
+ * How the translation files of the client are prepared from the files of the language: the names of the application their
+ * texts take, and the conditions of their keys, by file.
  */
-export const prepareClientTranslation = (
-  file: string,
-  translation: Record<string, any>,
+export const getClientTranslationPreparation = (
   options: TranslationOptions,
-): Record<string, any> =>
-  prepareTranslation(translation, {
-    names: Object.fromEntries(CLIENT_TRANSLATION_NAMES.map(name => [name, options[name]])),
-    conditions: CLIENT_TRANSLATION_CONDITIONS[file],
-    options,
-  });
+): { names: Record<string, string>; conditions: Record<string, TranslationConditions<TranslationOptions>> } => ({
+  names: Object.fromEntries(CLIENT_TRANSLATION_NAMES.map(name => [name, options[name]])),
+  conditions: CLIENT_TRANSLATION_CONDITIONS,
+});

@@ -17,6 +17,23 @@
  * limitations under the License.
  */
 import type { GetWebappTranslationCallback } from '../../../client/translation.d.ts';
+import type { Language } from '../../support/languages.ts';
+
+import type { TranslationConditions } from './support/translation-file.ts';
+
+/** The translation files of each language, loaded from the folder of the language in the templates folders. */
+export type TranslationFiles = {
+  /** The templates folders of the generator, of its blueprints first. */
+  templatesFolders: string[];
+  /** The folder of the files of a language in the templates folders: a template `<file>.json.ejs` is rendered, a JSON file read. */
+  folder: (languageTag: string) => string;
+  /** The names the texts take, written `{name}`. */
+  names?: Record<string, string>;
+  /** The conditions of the keys of each file, by its name and their path, given the context. */
+  conditions?: Record<string, TranslationConditions<any>>;
+  /** The context of the conditions and of a template. */
+  context?: Record<string, any>;
+};
 
 export type Application = {
   /** The translations of the native language, English as their fallback, read from the translation files. */
@@ -28,4 +45,13 @@ export type Application = {
    * without a file when it is the native language or English, its fallback.
    */
   addTranslation: (arg: { languageTag: string; destinationFile: string; translation: Record<string, any> }) => void;
+  /** The languages translated: the languages of the application when it is translated, else its native language and English. */
+  translationLanguages: Language[];
+  /**
+   * Loads the translation files of each of the translated languages, all of them, into the translations of the native
+   * language and English, its fallback; the ones the application writes are written by writeTranslationFiles.
+   */
+  loadTranslationFiles: (files: TranslationFiles) => void;
+  /** Writes loaded translation files of each of the translated languages, when the application is translated. */
+  writeTranslationFiles: (arg: { files: string[]; destinationFile: (languageTag: string, file: string) => string }) => void;
 };

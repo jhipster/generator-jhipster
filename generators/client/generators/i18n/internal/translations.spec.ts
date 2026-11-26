@@ -20,9 +20,19 @@ import { describe, expect, it } from 'expect-node';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
+import { prepareTranslation } from '../../../../languages/generators/i18n-bootstrap/support/index.ts';
 import { supportedLanguages } from '../../../../languages/support/languages.ts';
 
-import { prepareClientTranslation } from './translations.ts';
+import { getClientTranslationPreparation } from './translations.ts';
+
+const prepareClientTranslation = (
+  file: string,
+  translation: Record<string, any>,
+  options: Parameters<typeof getClientTranslationPreparation>[0],
+) => {
+  const { names, conditions } = getClientTranslationPreparation(options);
+  return prepareTranslation(translation, { names, conditions: conditions[file], options });
+};
 
 const translationsFolder = join(import.meta.dirname, '../templates/src/main/webapp/i18n');
 const readTranslation = (languageTag: string, file: string) =>

@@ -54,8 +54,13 @@ describe('generator - languages:i18n-bootstrap - support - translation-file', ()
         writeFileSync(join(core, 'en/global.json'), '{}');
         writeFileSync(join(core, 'en/home.json'), '{}');
         writeFileSync(join(blueprint, 'en/home.json.ejs'), '{}');
-        expect(findTranslationSource([blueprint, core], 'en/global.json')).toEqual({ path: join(core, 'en/global.json'), template: false });
+        expect(findTranslationSource([blueprint, core], 'en/global.json')).toEqual({
+          folder: core,
+          path: join(core, 'en/global.json'),
+          template: false,
+        });
         expect(findTranslationSource([blueprint, core], 'en/home.json')).toEqual({
+          folder: blueprint,
           path: join(blueprint, 'en/home.json.ejs'),
           template: true,
         });

@@ -16,18 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import ejs from 'ejs';
+
 import { mutateDefaults } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { QUEUES } from '../../../base-application/priorities.ts';
+import { findLanguageForTag } from '../../support/languages.ts';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from '../../translation-data.ts';
 import type { Application as LanguagesApplication, Entity as LanguagesEntity, Source as LanguagesSource } from '../../types.ts';
 
-import type { Application as I18nApplication } from './types.d.ts';
+import { findTranslationSources, prepareTranslation } from './support/translation-file.ts';
+import type { Application as I18nApplication, TranslationFiles } from './types.d.ts';
 
 const FALLBACK_LANGUAGE = 'en';
 
 /**
- * Prepares the translations of the application, whichever generator writes them: a translation file is added by
+ * Prepares the translations of the application, whichever generator writes them: `translationLanguages` are the languages
+ * translated, `loadTranslationFiles` loads all the files of each of them, `writeTranslationFiles` writes the ones the application uses, and a translation file is added by
  * `application.addTranslation`, written when the application is translated, else read without a file for the native language
  * and English, its fallback; the translation files the generators write are read too. `getWebappTranslation` gives the
  * translation of a key.
@@ -40,6 +45,8 @@ export default class I18nBootstrapGenerator extends BaseApplicationGenerator<
   LanguagesSource
 > {
   translationData!: TranslationData;
+  /** The translation files loaded, by language and by the name of the file. */
+  loadedTranslations: Record<string, Record<string, Record<string, any>>> = {};
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -55,6 +62,14 @@ export default class I18nBootstrapGenerator extends BaseApplicationGenerator<
         mutateDefaults(application, { translations: () => ({}) });
         this.translationData = new TranslationData({ generator: this, translations: application.translations });
         mutateDefaults(application, {
+          // The native language and English, its fallback, are read when the application is not translated.
+          translationLanguages: ({ enableTranslation, languagesToGenerateDefinition, nativeLanguage, supportedLanguages }) =>
+            enableTranslation && languagesToGenerateDefinition ? languagesToGenerateDefinition : (
+              [...new Set([nativeLanguage, FALLBACK_LANGUAGE])].map(languageTag => findLanguageForTag(languageTag, supportedLanguages)!)
+            ),
+          loadTranslationFiles: () => (files: TranslationFiles) => this.loadTranslationFiles(application, files),
+          writeTranslationFiles: () => (arg: Parameters<I18nApplication['writeTranslationFiles']>[0]) =>
+            this.writeTranslationFiles(application, arg),
           getWebappTranslation: () => (key: string, data?: Record<string, any>) => this.translationData.getClientTranslation(key, data),
           addTranslation:
             () =>
@@ -96,6 +111,45 @@ export default class I18nBootstrapGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
+  }
+
+  /** Loads the translation files of each of the translated languages, all of them. */
+  loadTranslationFiles(
+    application: I18nApplication & { nativeLanguage: string },
+    { templatesFolders, folder, names, conditions = {}, context = {} }: TranslationFiles,
+  ): void {
+    for (const { languageTag } of application.translationLanguages) {
+      const sources = findTranslationSources(templatesFolders, folder(languageTag));
+      if (Object.keys(sources).length === 0) {
+        throw new Error(`The translations of the language ${languageTag} are missing: no ${folder(languageTag)} folder.`);
+      }
+      const loaded = (this.loadedTranslations[languageTag] ??= {});
+      for (const [file, { path, template }] of Object.entries(sources)) {
+        const content = this.fs.read(path);
+        const translation = JSON.parse(template ? ejs.render(content, { ...context, lang: languageTag }, { filename: path }) : content);
+        loaded[file] = prepareTranslation(translation, { names, conditions: conditions[file], options: context });
+        if (languageTag === application.nativeLanguage || languageTag === FALLBACK_LANGUAGE) {
+          this.translationData.mergeTranslation(loaded[file], languageTag !== application.nativeLanguage);
+        }
+      }
+    }
+  }
+
+  /** Writes loaded translation files of each of the translated languages, when the application is translated. */
+  writeTranslationFiles(
+    application: I18nApplication & { enableTranslation: boolean },
+    { files, destinationFile }: Parameters<I18nApplication['writeTranslationFiles']>[0],
+  ): void {
+    if (!application.enableTranslation) return;
+    for (const { languageTag } of application.translationLanguages) {
+      for (const file of files) {
+        const translation = this.loadedTranslations[languageTag]?.[file];
+        if (!translation) {
+          throw new Error(`The translation ${file} of the language ${languageTag} is not loaded.`);
+        }
+        this.writeDestination(destinationFile(languageTag, file), `${JSON.stringify(translation, null, 2)}\n`);
+      }
+    }
   }
 
   queueLoadTranslations(options: { enableTranslation: boolean; clientI18nDir: string; nativeLanguage: string; fallbackLanguage: string }) {

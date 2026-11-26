@@ -16,8 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'expect-node';
-import { basename, dirname, resolve } from 'node:path';
+import { after, before, describe, expect, it } from 'expect-node';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { basename, dirname, join, resolve } from 'node:path';
 
 import Generator from './generator.ts';
 
@@ -79,6 +81,94 @@ describe(`generator - ${generator}`, () => {
     it('should read the native language, English as its fallback, without a file', () => {
       expect(result.application!.translations).toEqual({ home: { title: 'Welcome', subtitle: 'Home' } });
       expect(result.application!.getWebappTranslation!('home.title')).toBe('Welcome');
+    });
+  });
+
+  describe('loadTranslationFiles', () => {
+    const templatesFolder = mkdtempSync(join(tmpdir(), 'i18n-bootstrap-'));
+    after(() => rmSync(templatesFolder, { recursive: true }));
+
+    const loadAndWrite = async function ({ application }: any) {
+      application.loadTranslationFiles({
+        templatesFolders: [templatesFolder],
+        folder: (languageTag: string) => languageTag,
+        names: { app: 'Shop' },
+        conditions: { home: { 'home.gateway': ({ gateway }: { gateway?: boolean }) => gateway } },
+        context: { appName: 'Shop' },
+      });
+      application.writeTranslationFiles({
+        files: ['home', 'menu'],
+        destinationFile: (languageTag: string, file: string) => `i18n/${languageTag}/${file}.json`,
+      });
+    };
+
+    before(() => {
+      mkdirSync(join(templatesFolder, 'fr'), { recursive: true });
+      mkdirSync(join(templatesFolder, 'en'), { recursive: true });
+      writeFileSync(join(templatesFolder, 'en/other.json'), JSON.stringify({ other: { title: 'Other', subtitle: 'Fallback' } }));
+      writeFileSync(join(templatesFolder, 'fr/home.json'), JSON.stringify({ home: { title: 'Bienvenue {app}', gateway: 'Passerelle' } }));
+      writeFileSync(join(templatesFolder, 'fr/menu.json.ejs'), '{ "menu": { "title": "Menu <%= appName %>" } }');
+      writeFileSync(join(templatesFolder, 'fr/other.json'), JSON.stringify({ other: { title: 'Autre' } }));
+    });
+
+    describe('with the translation enabled', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
+          .withTask('writing', loadAndWrite);
+      });
+
+      it('should translate the languages of the application', () => {
+        expect(result.application!.translationLanguages.map(({ languageTag }: { languageTag: string }) => languageTag)).toEqual(['fr']);
+      });
+
+      it('should write the prepared JSON file of a language', () => {
+        result.assertJsonFileContent('i18n/fr/home.json', { home: { title: 'Bienvenue Shop' } });
+        result.assertNoJsonFileContent('i18n/fr/home.json', { home: { gateway: 'Passerelle' } });
+      });
+
+      it('should write the rendered template of a language', () => {
+        result.assertJsonFileContent('i18n/fr/menu.json', { menu: { title: 'Menu Shop' } });
+      });
+
+      it('should write only the files asked', () => {
+        result.assertNoFile('i18n/fr/other.json');
+      });
+    });
+
+    describe('with the translation disabled', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withJHipsterConfig({ enableTranslation: false, nativeLanguage: 'fr' })
+          .withTask('writing', loadAndWrite);
+      });
+
+      it('should write no file', () => {
+        result.assertNoFile('i18n/fr/home.json');
+      });
+
+      it('should load every file of the language', () => {
+        expect(result.application!.getWebappTranslation!('other.title')).toBe('Autre');
+        expect(result.application!.getWebappTranslation!('menu.title')).toBe('Menu Shop');
+        expect(result.application!.getWebappTranslation!('other.subtitle')).toBe('Fallback');
+      });
+    });
+  });
+
+  describe('translationLanguages without the translation', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withJHipsterConfig({ enableTranslation: false, nativeLanguage: 'fr' });
+    });
+
+    it('should be the native language and English', () => {
+      expect(result.application!.translationLanguages.map(({ languageTag }: { languageTag: string }) => languageTag)).toEqual(['fr', 'en']);
     });
   });
 });

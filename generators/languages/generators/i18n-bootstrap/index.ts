@@ -18,4 +18,4 @@
  */
 export { default } from './generator.ts';
 export { default as command } from './command.ts';
-export type { Application } from './types.d.ts';
+export type { Application, TranslationFiles } from './types.d.ts';
