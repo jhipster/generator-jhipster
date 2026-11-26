@@ -22,8 +22,27 @@ import axios, { type AxiosError, type AxiosRequestConfig, type InternalAxiosRequ
 import { getAuthenticationToken } from '@/account/authentication-token';
 <%_ } _%>
 
+<%_ if (enableTranslation) { _%>
+import languages from '@/config/languages';
+
+<%_ } _%>
 const TIMEOUT = 1 * 60 * 1000;
+
+/**
+ * The language of the application before it sets the one of its calls: the one the user chose, else the one of the browser
+ * or the native one.
+ */
+const initialLanguage = (): string =>
+<%_ if (enableTranslation) { _%>
+  [localStorage.getItem('currentLanguage'), navigator.language, '<%- nativeLanguage %>'].find(language => language && (languages() as Record<string, unknown>)[language])!;
+<%_ } else { _%>
+  '<%- nativeLanguage %>';
+<%_ } _%>
+
 const onRequestSuccess = (config: AxiosRequestConfig): AxiosRequestConfig => {
+  config.headers ??= {};
+  // The server answers in the language of the application, from the first call.
+  config.headers['Accept-Language'] ??= initialLanguage();
 <%_ if (authenticationTypeJwt) { _%>
   const token = getAuthenticationToken();
   if (token) {

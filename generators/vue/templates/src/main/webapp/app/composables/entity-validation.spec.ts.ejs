@@ -17,20 +17,24 @@
  limitations under the License.
 -%>
 import { describe, expect, it } from 'vitest';
-import { defineComponent, ref } from 'vue';
+import { type Ref, defineComponent, ref } from 'vue';
 
 import { flushPromises, mount } from '@vue/test-utils';
 
 import { type PropertyRules, useEntityValidation } from './entity-validation';
 
 // The validation of a form, mounted for the translations.
-const mountValidation = (entity: Record<string, unknown>, rules: Record<string, PropertyRules>) => {
+const mountValidation = (
+  entity: Record<string, unknown>,
+  rules: Record<string, PropertyRules>,
+  serverErrors?: Ref<Record<string, string[]>>,
+) => {
   let v$!: ReturnType<typeof useEntityValidation>;
   const entityRef = ref(entity);
   mount(
     defineComponent({
       setup() {
-        v$ = useEntityValidation(entityRef, rules);
+        v$ = useEntityValidation(entityRef, rules, serverErrors);
         return () => null;
       },
     }),
@@ -39,6 +43,21 @@ const mountValidation = (entity: Record<string, unknown>, rules: Record<string, 
 };
 
 describe('useEntityValidation', () => {
+  it('should make invalid a field the server refused, with its message', async () => {
+    const serverErrors = ref<Record<string, string[]>>({});
+    const { v$ } = mountValidation({ name: 'any', free: 'any' }, { name: {}, free: {} }, serverErrors);
+    await flushPromises();
+    expect(v$.value.name.$invalid).toBe(false);
+
+    serverErrors.value = { name: ['name: is refused'] };
+    v$.value.$touch();
+    await flushPromises();
+
+    expect(v$.value.name.$invalid).toBe(true);
+    expect(v$.value.name.$errors.map(({ $message }: { $message: unknown }) => $message)).toEqual(['name: is refused']);
+    expect(v$.value.free.$invalid).toBe(false);
+  });
+
   it('should validate each rule of the properties', async () => {
     const { v$ } = mountValidation(
       { name: '', email: 'a', short: 'a', long: 'abc', count: 1.5, small: 1, big: 3, code: 'b', login: 'b', free: 'any' },

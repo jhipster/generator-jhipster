@@ -22,6 +22,7 @@ import { defineComponent } from 'vue';
 import { mount } from '@vue/test-utils';
 
 import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from '@/shared/jhipster/constants';
+import { CONSTRAINT_VIOLATION_TYPE, PROBLEM_WITH_MESSAGE_TYPE } from '@/shared/jhipster/error.constants';
 
 import AlertService, { useAlertService } from './alert.service';
 
@@ -66,7 +67,7 @@ describe('Alert Service test suite', () => {
 
   it('should show not reachable toast when http status = 0', () => {
 <%_ if (enableTranslation) { _%>
-    const translationKey = 'error.server.not.reachable';
+    const translationKey = "error['server.not.reachable']";
 <%_ } _%>
     const message = 'Server not reachable';
     const httpErrorResponse = {
@@ -147,10 +148,8 @@ describe('Alert Service test suite', () => {
         [`${MESSAGE_PARAM_HEADER_NAME}400`]: 'dummyEntity',
       },
       data: {
+        type: PROBLEM_WITH_MESSAGE_TYPE,
         message,
-        fieldErrors: {
-          field1: 'error1',
-        },
       },
     };
 
@@ -213,6 +212,7 @@ describe('Alert Service test suite', () => {
     const httpErrorResponse = {
       status: 500,
       data: {
+        type: PROBLEM_WITH_MESSAGE_TYPE,
         message,
       },
     };
@@ -306,6 +306,7 @@ describe('Alert Service test suite', () => {
       status: 400,
       headers: {},
       data: {
+        type: CONSTRAINT_VIOLATION_TYPE,
         message: 'error.validation',
         fieldErrors: [
           { objectName: 'foo', field: 'name', message: 'must not be null', code: 'NotNull' },
@@ -321,12 +322,79 @@ describe('Alert Service test suite', () => {
     expect(translationStub).toHaveBeenCalledExactlyOnceWith('error.NotNull', { fieldName: 'name' });
     expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'error.NotNull', variant: 'danger' }));
 <%_ } else { _%>
-    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'name: must not be null', variant: 'danger' }));
+    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'Name: must not be null', variant: 'danger' }));
 <%_ } _%>
     expect(toastStub).toHaveBeenCalledWith(
-      expect.objectContaining({ body: 'items[2].quantity: must be greater than or equal to 1', variant: 'danger' }),
+      expect.objectContaining({ body: '<%- enableTranslation ? 'items[].quantity' : 'Items[].quantity' %>: must be greater than or equal to 1', variant: 'danger' }),
     );
   });
+
+  it('should leave out the field errors the form shows', () => {
+    alertService.showHttpError(
+      {
+        status: 400,
+        headers: {},
+        data: {
+          type: CONSTRAINT_VIOLATION_TYPE,
+          message: 'error.validation',
+          fieldErrors: [
+            { objectName: 'foo', field: 'name', message: 'must not be null', code: 'NotNull' },
+            { objectName: 'foo', field: 'other', message: 'must not be blank', code: 'NotBlank' },
+          ],
+        },
+      },
+      ['name'],
+    );
+
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ body: '<%- enableTranslation ? 'other' : 'Other' %>: must not be blank', variant: 'danger' }),
+    );
+  });
+
+  it('should show an access denied toast when http status = 403', () => {
+<%_ if (enableTranslation) { _%>
+    translationStub.mockImplementation((key: string) => key);
+<%_ } _%>
+    alertService.showHttpError({ status: 403, data: '' });
+
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ body: '<%- enableTranslation ? 'error.http.403' : 'You are not authorized to access this page.' %>', variant: 'danger' }),
+    );
+  });
+
+  it('should show the problem of a 403 that has one', () => {
+<%_ if (enableTranslation) { _%>
+    translationStub.mockImplementation((key: string) => key);
+<%_ } _%>
+    alertService.showHttpError({ status: 403, data: { type: PROBLEM_WITH_MESSAGE_TYPE, message: 'error.ownerOnly' } });
+
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ body: 'error.ownerOnly', variant: 'danger' }));
+  });
+<%_ if (enableTranslation) { _%>
+
+  it('should name a field by its label, the one of a user by the key of the user management', () => {
+    const labels: Record<string, string> = { '<%- frontendAppName %>.foo.name': 'Name', 'userManagement.login': 'Login' };
+    translationStub.mockImplementation((key: string) => labels[key] ?? key);
+    const translationExistsStub = vi.fn((key: string) => key in labels);
+    alertService = new AlertService({ toast: { create: toastStub }, i18n: { t: translationStub, te: translationExistsStub } as any });
+
+    alertService.showHttpError({
+      status: 400,
+      headers: {},
+      data: {
+        type: CONSTRAINT_VIOLATION_TYPE,
+        message: 'error.validation',
+        fieldErrors: [
+          { objectName: 'foo', field: 'name', message: 'must match', code: 'Pattern' },
+          { objectName: 'userManagement', field: 'login', message: 'must match', code: 'Pattern' },
+        ],
+      },
+    });
+
+    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'Name: must match' }));
+    expect(toastStub).toHaveBeenCalledWith(expect.objectContaining({ body: 'Login: must match' }));
+  });
+<%_ } _%>
 
   it('should need the toasts of BootstrapVue', () => {
     expect(() =>

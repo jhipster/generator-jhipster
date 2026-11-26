@@ -107,7 +107,6 @@ _%>
   <%_ if (field.fieldTypeBoolean) { _%>
             <label class="form-check-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
-  <%_ if (field.vueClientValidation) { _%>
             <div v-if="v$.<%- fieldName %>.$anyDirty && v$.<%- fieldName %>.$invalid">
               <small
                 class="form-text text-danger"
@@ -115,14 +114,20 @@ _%>
                 :key="error.$uid"
               >{{ error.$message }}</small>
             </div>
-  <%_ } _%>
           </div>
 <%_ } _%>
-<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+<%_ for (relationship of vueFormRelationships) { _%>
   <%_ const { otherEntityName, relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = relationship;
       const translationKey = relationship.propertyTranslationKey;
   _%>
-  <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
+  <%_ if (relationship.collection) { _%>
+          <div class="mb-3">
+            <label class="form-label" for="<%- entityFileName %>-<%- relationshipFieldNamePlural %>">{{ t$('<%- translationKey %>') }}</label>
+            <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" @blur="v$.<%- relationshipFieldNamePlural %>.$touch()" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
+              <option :value="<% if (relationship.relationshipSerializePrimaryKeyOnly) { %><%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %><% } else { %>getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')<% } %>" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
+            </select>
+          </div>
+  <%_ } else { _%>
           <div class="mb-3">
             <label class="form-label" for="<%- entityFileName %>-<%- relationshipName %>">{{ t$('<%- translationKey %>') }}</label>
             <select class="form-select" id="<%- entityFileName %>-<%- relationshipName %>" data-cy="<%- relationshipFieldName %>" name="<%- relationshipName %>" @blur="v$.<%- relationshipFieldName %>.$touch()" v-model="<%- entityInstance %>.<%- relationshipFieldName %>"<%- relationshipRequired ? ' required' : '' %>>
@@ -134,15 +139,7 @@ _%>
               <option :value="<%- entityInstance %>.<%- relationshipFieldName %> && <%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %> === <%- entityInstance %>.<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %> ? <%- entityInstance %>.<%- relationshipFieldName %> : <%- otherEntityName %>Option" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
             </select>
           </div>
-  <%_ } else if (relationship.persistableRelationship) { _%>
-          <div class="mb-3">
-            <label class="form-label" for="<%- entityFileName %>-<%- relationshipFieldNamePlural %>">{{ t$('<%- translationKey %>') }}</label>
-            <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" @blur="v$.<%- relationshipFieldNamePlural %>.$touch()" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
-              <option :value="<% if (relationship.relationshipSerializePrimaryKeyOnly) { %><%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %><% } else { %>getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')<% } %>" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
-            </select>
-          </div>
   <%_ } _%>
-  <%_ if (relationship.relationshipValidate) { _%>
           <div v-if="v$.<%- relationship.collection ? relationshipFieldNamePlural : relationshipFieldName %>.$anyDirty && v$.<%- relationship.collection ? relationshipFieldNamePlural : relationshipFieldName %>.$invalid">
             <small
               class="form-text text-danger"
@@ -150,7 +147,6 @@ _%>
               :key="error.$uid"
             >{{ error.$message }}</small>
           </div>
-  <%_ } _%>
 <%_ } _%>
         </div>
         <div>
@@ -169,22 +165,24 @@ _%>
 <script setup lang="ts">
 <%_ const allRelationshipsThatNeedSelectOptions = Object
       .values(relationshipsByOtherEntity)
-      .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
+      .map(relationships => relationships.filter(rel => vueFormRelationships.includes(rel)))
       .filter(relationships => relationships.length > 0);
     const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
     const clientConstantFields = entityClientFormFields.filter(field => field.clientConstantsAsValues);
     const usesGetSelected = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship && !rel.relationshipSerializePrimaryKeyOnly);
 _%>
-import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', ...enumTypeFields.length > 0 ? ['ref'] : [], 'watch'].join(', ') %> } from 'vue';
+import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', 'ref', 'watch'].join(', ') %> } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router';
 
+<%_ if (allRelationshipsThatNeedSelectOptions.length > 0) { _%>
 import { type AxiosError } from 'axios';
 
+<%_ } _%>
 import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
-<%_ const composables = ['useControlledRequest', ...vueFormTimeFields ? ['useDateFormat'] : [], ...allRelationshipsThatNeedSelectOptions.length > 0 ? ['useEntityOptions'] : [], 'useEntitySave', 'useEntityValidation']; _%>
+<%_ const composables = ['useControlledRequest', ...vueFormTimeFields ? ['useDateFormat'] : [], ...allRelationshipsThatNeedSelectOptions.length > 0 ? ['useEntityOptions'] : [], 'useEntityLoadError', 'useEntitySave', 'useEntityValidation']; _%>
 import { <%- composables.join(', ') %> } from '@/composables';
 <%_ if (anyFieldIsLocalDate) { _%>
 import { currentLanguageKey } from '@/config/injection-keys';
@@ -214,7 +212,9 @@ defineOptions({ name: '<%- entityAngularName %>Update' });
 
 const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
 const alertService = inject(alertServiceKey, () => useAlertService(), true);
+<%_ if (allRelationshipsThatNeedSelectOptions.length > 0) { _%>
 const showLoadError = (error: unknown) => alertService.showHttpError((error as AxiosError).response);
+<%_ } _%>
 
 const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
   const entity = new <%- entityAngularName %>();
@@ -279,7 +279,7 @@ const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
     // The router reuses the component when the id of the route changes, and an update without id is a new entity.
     params: () => route.params?.<%- entityInstance %>Id as string | undefined,
     initialData: new<%- entityAngularName %>,
-    onError: showLoadError,
+    onError: useEntityLoadError(alertService),
   },
 );
 <%_ if (vueFormTimeFields) { _%>
@@ -292,19 +292,25 @@ const dataUtils = useDataUtils();
 <%_ if (enableTranslation) { _%>
 const { t: t$ } = useI18n();
 <%_ } _%>
+// The messages of the fields the server refused.
+const serverErrors = ref<Record<string, string[]>>({});
 const v$ = useEntityValidation(<%- entityInstance %>, {
 <%_ for (field of entityClientFormFields) { _%>
   <%- field.fieldName %>: <%- field.vueValidationRules %>,
 <%_ } _%>
-<%_ for (relationship of relationships) { _%>
+<%_ for (relationship of vueFormRelationships) { _%>
   <%- relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: <%- relationship.relationshipValidate ? '{ required: true }' : '{}' %>,
 <%_ } _%>
-});
+}, serverErrors);
 
-// The router reuses the component when the id of the route changes: the fields of the other entity are not touched yet.
+// The router reuses the component when the id of the route changes: the fields of the other entity are not touched yet,
+// nor refused by the server.
 watch(
   () => route.params?.<%- entityInstance %>Id,
-  () => v$.value.$reset(),
+  () => {
+    serverErrors.value = {};
+    v$.value.$reset();
+  },
 );
 
 const { isSaving, save: saveEntity } = useEntitySave({
@@ -321,15 +327,23 @@ const { isSaving, save: saveEntity } = useEntitySave({
   updatedMessage: id => `A <%- entityAngularName %> is updated with identifier ${id}`,
 <%_ } _%>
   onSaved: () => previousState(),
+  serverErrors,
+  serverErrorProperties: [<%- vueServerErrorProperties.map(property => `'${property}'`).join(', ') %>],
 });
 
 const save = async () => {
+  // The messages of the server are of the values it was sent: the rules of the client decide of the new ones.
+  serverErrors.value = {};
   if (v$.value.$invalid) {
     // The fields are marked and their errors shown, nothing is sent.
     v$.value.$touch();
     return;
   }
   await saveEntity();
+  if (Object.keys(serverErrors.value).length > 0) {
+    // The fields the server refused are marked with its messages.
+    v$.value.$touch();
+  }
 };
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
 

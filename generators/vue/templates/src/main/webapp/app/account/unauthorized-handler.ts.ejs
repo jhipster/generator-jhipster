@@ -27,12 +27,19 @@ import type AccountService from './account.service';
 /**
  * What an error of the server does to the session: a 401 signs the user out and asks for a new authentication.
  */
-export const createUnauthorizedHandler =
-  ({ accountService<%- authenticationTypeOauth2 ? '' : ', router' %> }: { accountService: AccountService<%- authenticationTypeOauth2 ? '' : '; router: Router' %> }) =>
-  (error: AxiosError) => {
+export const createUnauthorizedHandler = ({ accountService<%- authenticationTypeOauth2 ? '' : ', router' %> }: { accountService: AccountService<%- authenticationTypeOauth2 ? '' : '; router: Router' %> }) => {
+<%_ if (!authenticationTypeOauth2) { _%>
+  // The 401s of the requests in parallel come before the login is reached: the first one leaves for it.
+  let loginNavigation: Promise<unknown> | undefined;
+<%_ } _%>
+  return (error: AxiosError) => {
     const url = error.response?.config?.url;
     const status = error.status ?? error.response?.status;
     if (status === 401) {
+<%_ if (!authenticationTypeOauth2) { _%>
+      // Only a session that was authenticated has expired.
+      const sessionExpired = accountService.authenticated;
+<%_ } _%>
       accountService.logout();
       if (!url?.endsWith('api/account') && !url?.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {
         // Ask for a new authentication
@@ -40,8 +47,10 @@ export const createUnauthorizedHandler =
         window.location.reload();
 <%_ } else { _%>
         const { fullPath, path } = router.currentRoute.value;
-        if (path !== '/login') {
-          router.push({ path: '/login', query: { redirect: fullPath } });
+        if (path !== '/login' && !loginNavigation) {
+          loginNavigation = router.push({ path: '/login', query: { redirect: fullPath }, state: { sessionExpired } }).finally(() => {
+            loginNavigation = undefined;
+          });
         }
 <%_ } _%>
       }
@@ -49,3 +58,4 @@ export const createUnauthorizedHandler =
     // The caller fails, a 401 left out of its alerts.
     return Promise.reject(error);
   };
+};

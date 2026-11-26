@@ -61,6 +61,10 @@ export interface Entity<F extends ClientField = Field, R extends ClientRelations
    * relationships, each one read by its propertyName: the server gives null for one without values, the form edits an array.
    */
   vueEditableCollections?: (F | R)[];
+  /** The relationships the update form shows, validates and loads the options of: the persistable ones, embedded entities left out. */
+  vueFormRelationships?: R[];
+  /** The properties of the update form, its fields and the relationships of vueFormRelationships, whose server errors it shows. */
+  vueServerErrorProperties?: string[];
   /** The sample with the data of every field, its dates written as the strings of the server like the model types them. */
   vueTsSampleWithFullData?: string;
   /** The sample with the data of the required fields, its dates written as the strings of the server. */

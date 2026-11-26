@@ -123,10 +123,8 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router';
 
-import { type AxiosError } from 'axios';
-
 import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
-<%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove'], 'useControlledRequest', ...builtInUserManagement ? ['useCurrentAccount'] : []]; _%>
+<%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove'], 'useControlledRequest', 'useEntityLoadError', ...builtInUserManagement ? ['useCurrentAccount'] : []]; _%>
 import { <%- composables.join(', ') %> } from '@/composables';
 <%_ if (anyFieldHasFileBasedContentType) { _%>
 import useDataUtils from '@/composables/data-utils';
@@ -160,7 +158,7 @@ const { data: <%- entityInstance %> } = useControlledRequest((id, { signal }) =>
   // The router reuses the component when the id of the route changes.
   params: () => route.params?.<%- entityInstance %>Id as string | undefined,
   initialData: (): I<%- entityAngularName %> => ({}),
-  onError: error => alertService.showHttpError((error as AxiosError).response),
+  onError: useEntityLoadError(alertService),
 });
 <%_ if (!readOnly) { _%>
 const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remove<%- entityAngularName %> } = useEntityRemove({

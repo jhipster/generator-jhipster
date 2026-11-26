@@ -67,7 +67,19 @@ export const formValues = ['', 'x', ' x', 'x'.repeat(300), 'jhi@pster.net'];
 /** A component rendering all its slots, like a b-nav-item-dropdown with its button content. */
 export const slotsStub = defineComponent({
   setup(_props, { slots }) {
-    return () => h('div', Object.values(slots).map(slot => slot?.()));
+    return () =>
+      h(
+        'div',
+        Object.values(slots).map(slot => slot?.()),
+      );
+  },
+});
+
+/** A b-alert rendering its content only while it is shown. */
+export const bAlertStub = defineComponent({
+  props: { modelValue: { type: null, default: false } },
+  setup(props, { slots }) {
+    return () => (props.modelValue ? h('div', slots.default?.()) : null);
   },
 });
 
@@ -91,6 +103,9 @@ export const modelInputStub = defineComponent({
   emits: ['update:modelValue'],
   setup(props, { emit }) {
     return () =>
-      h('input', { value: props.modelValue, onInput: (event: Event) => emit('update:modelValue', (event.target as HTMLInputElement).value) });
+      h('input', {
+        value: props.modelValue,
+        onInput: (event: Event) => emit('update:modelValue', (event.target as HTMLInputElement).value),
+      });
   },
 });

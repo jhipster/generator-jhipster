@@ -16,11 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ref } from 'vue';
+import { type Ref, ref } from 'vue';
 
 import { type AxiosError } from 'axios';
 
 import type AlertService from '@/shared/alert/alert.service';
+import { getServerProblem, isConstraintViolation } from '@/shared/jhipster/problem-details';
 
 /**
  * The save of the form of an entity: created or updated, with an alert of the saved one.
@@ -34,6 +35,8 @@ export const useEntitySave = <T, K>({
   createdMessage,
   updatedMessage,
   onSaved,
+  serverErrors,
+  serverErrorProperties = [],
 }: {
   alertService: AlertService;
   /** Whether the entity of the form exists, to update it, else to create it. */
@@ -44,11 +47,20 @@ export const useEntitySave = <T, K>({
   createdMessage: (id: K) => string;
   updatedMessage: (id: K) => string;
   onSaved: () => unknown;
+  /** The messages of the fields the server refused, by field, for the validation of the form. */
+  serverErrors?: Ref<Record<string, string[]>>;
+  /** The properties the form shows the messages of the server for, which the alert leaves out. */
+  serverErrorProperties?: readonly string[];
 }) => {
   const isSaving = ref(false);
 
   const save = async () => {
     isSaving.value = true;
+    // The messages written by a previous save are not of this one. A form clears them before its own validation too, which
+    // they make invalid, but the save keeps them right for a caller that does not.
+    if (serverErrors) {
+      serverErrors.value = {};
+    }
     try {
       if (isUpdate()) {
         alertService.showInfo(updatedMessage(getId(await update())));
@@ -57,7 +69,16 @@ export const useEntitySave = <T, K>({
       }
       await onSaved();
     } catch (error) {
-      alertService.showHttpError((error as AxiosError).response);
+      const { response } = error as AxiosError;
+      const problem = getServerProblem(response?.data);
+      if (serverErrors && isConstraintViolation(problem)) {
+        const errors: Record<string, string[]> = {};
+        for (const fieldError of problem.fieldErrors) {
+          (errors[fieldError.field] ??= []).push(alertService.getFieldErrorMessage(fieldError));
+        }
+        serverErrors.value = errors;
+      }
+      alertService.showHttpError(response, serverErrors ? serverErrorProperties : []);
     } finally {
       isSaving.value = false;
     }

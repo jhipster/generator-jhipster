@@ -27,7 +27,7 @@ import axios from 'axios';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-import { bFormStub, slotsStub } from '@/testing/stubs';
+import { bAlertStub, bFormStub, slotsStub } from '@/testing/stubs';
 import { useStore } from '@/stores';
 import AccountService, { accountServiceKey } from '../account.service';
 
@@ -50,6 +50,7 @@ const axiosStub = {
 describe('LoginForm Component', () => {
   let wrapper: VueWrapper<LoginFormComponentType>;
   let loginForm: LoginFormComponentType;
+  let globalOptions: MountingOptions<LoginFormComponentType>['global'];
 
   beforeEach(() => {
     route = { query: {} };
@@ -60,9 +61,9 @@ describe('LoginForm Component', () => {
     const pinia = createTestingPinia();
     const store = useStore();
 
-    const globalOptions: MountingOptions<LoginFormComponentType>['global'] = {
+    globalOptions = {
       stubs: {
-        'b-alert': slotsStub,
+        'b-alert': bAlertStub,
         'b-button': slotsStub,
         'b-form': bFormStub,
         'b-form-input': slotsStub,
@@ -78,6 +79,24 @@ describe('LoginForm Component', () => {
     wrapper = shallowMount(LoginForm, { global: globalOptions });
 
     loginForm = wrapper.vm;
+  });
+
+  it('should not tell that a session expired by default', () => {
+    expect(loginForm.sessionExpired).toBe(false);
+    expect(wrapper.find('[data-cy="sessionExpired"]').exists()).toBe(false);
+  });
+
+  it('should tell that the session expired when the navigation says it', () => {
+    window.history.replaceState({ ...window.history.state, sessionExpired: true }, '');
+    try {
+      const expired = shallowMount(LoginForm, { global: globalOptions });
+      expect(expired.vm.sessionExpired).toBe(true);
+      expect(expired.find('[data-cy="sessionExpired"]').exists()).toBe(true);
+      // Told once: a reload of the login does not tell it again.
+      expect(window.history.state?.sessionExpired).toBeUndefined();
+    } finally {
+      window.history.replaceState({ ...window.history.state, sessionExpired: undefined }, '');
+    }
   });
 
   it('should not authenticate without a login or a password', async () => {

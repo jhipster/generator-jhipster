@@ -65,7 +65,7 @@ describe('Axios interceptor', () => {
   it('should not provide a bearer without a token', () => {
     const result = setupAxiosConfig.onRequestSuccess({ url: 'api/test' });
 
-    expect(result.headers).toBeUndefined();
+    expect(result.headers).toEqual({ 'Accept-Language': '<%- nativeLanguage %>' });
   });
 
   it('should add the bearer to the existing headers', () => {
@@ -73,9 +73,23 @@ describe('Axios interceptor', () => {
 
     const result = setupAxiosConfig.onRequestSuccess({ url: 'api/test', headers: { Accept: 'application/json' } });
 
-    expect(result.headers).toEqual({ Accept: 'application/json', Authorization: 'Bearer auth' });
+    expect(result.headers).toEqual({ Accept: 'application/json', 'Accept-Language': '<%- nativeLanguage %>', Authorization: 'Bearer auth' });
   });
 <%_ } _%>
+
+  it('should send the language of the application from the first call', () => {
+    expect(setupAxiosConfig.onRequestSuccess({ url: 'api/test' }).headers?.['Accept-Language']).toBe('<%- nativeLanguage %>');
+    expect(setupAxiosConfig.onRequestSuccess({ url: 'api/test', headers: { 'Accept-Language': 'xx' } }).headers?.['Accept-Language']).toBe('xx');
+<%_ const otherLanguage = enableTranslation ? languages.find(language => language !== nativeLanguage) : undefined; _%>
+<%_ if (otherLanguage) { _%>
+    localStorage.setItem('currentLanguage', '<%- otherLanguage %>');
+    expect(setupAxiosConfig.onRequestSuccess({ url: 'api/test' }).headers?.['Accept-Language']).toBe('<%- otherLanguage %>');
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+    localStorage.setItem('currentLanguage', 'not-a-language');
+    expect(setupAxiosConfig.onRequestSuccess({ url: 'api/test' }).headers?.['Accept-Language']).toBe('<%- nativeLanguage %>');
+<%_ } _%>
+  });
 });
 
 describe('Axios errors interceptor', () => {

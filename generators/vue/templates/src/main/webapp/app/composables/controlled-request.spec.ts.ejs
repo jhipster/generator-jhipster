@@ -22,7 +22,11 @@ import { effectScope, ref } from 'vue';
 import { flushPromises } from '@vue/test-utils';
 import { CanceledError } from 'axios';
 
-import { useControlledRequest } from './controlled-request';
+import { useControlledRequest, useEntityLoadError } from './controlled-request';
+import type AlertService from '@/shared/alert/alert.service';
+
+const { replace } = vi.hoisted(() => ({ replace: vi.fn() }));
+vi.mock('vue-router', () => ({ useRouter: () => ({ replace }) }));
 
 // A load that ends when told, or rejects when it is aborted.
 const pendingLoader = () => {
@@ -114,5 +118,26 @@ describe('useControlledRequest', () => {
     scope.stop();
 
     expect(loads[0].signal.aborted).toBe(true);
+  });
+});
+
+describe('useEntityLoadError', () => {
+  it('should leave for the page not found when the entity does not exist', () => {
+    const alertService = { showHttpError: vi.fn() };
+
+    useEntityLoadError(alertService as unknown as AlertService)({ response: { status: 404 } });
+
+    expect(replace).toHaveBeenCalledWith({ name: 'NotFound' });
+    expect(alertService.showHttpError).not.toHaveBeenCalled();
+  });
+
+  it('should alert another error', () => {
+    replace.mockClear();
+    const alertService = { showHttpError: vi.fn() };
+
+    useEntityLoadError(alertService as unknown as AlertService)({ response: { status: 500 } });
+
+    expect(alertService.showHttpError).toHaveBeenCalledWith({ status: 500 });
+    expect(replace).not.toHaveBeenCalled();
   });
 });
