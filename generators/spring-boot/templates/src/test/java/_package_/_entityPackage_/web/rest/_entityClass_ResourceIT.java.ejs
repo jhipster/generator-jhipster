@@ -361,11 +361,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ } _%>
 
     private static final String ENTITY_API_URL = "/api/<%- entityApiUrl %>";
-<%_ if (primaryKey.composite) { _%>
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "<%- primaryKey.fields.map(field => `/{${field.fieldName}}`).join('') %>";
-<%_ } else { _%>
-    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{<%- primaryKey.name %>}";
-<%_ } _%>
 <%_ if (searchEngineAny) { _%>
     private static final String ENTITY_SEARCH_API_URL = "/api/<%- entityApiUrl %>/_search";
 <%_ } _%>

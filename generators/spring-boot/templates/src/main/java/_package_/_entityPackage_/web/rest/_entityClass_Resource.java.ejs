@@ -282,15 +282,13 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
 <%_ if (!readOnly && updatableEntity) { _%>
 
     /**
-  <%_ if (primaryKey.composite) { _%>
      * {@code PUT  /<%- entityApiUrl %><%- primaryKey.fields.map(field => `/:${field.fieldName}`).join('') %>} : Updates an existing <%- entityInstance %>.
      *
+  <%_ if (primaryKey.composite) { _%>
     <%_ for (const field of primaryKey.fields) { _%>
      * @param <%- field.fieldName %> the <%- field.fieldName %> of the id of the <%- instanceName %> to save.
     <%_ } _%>
   <%_ } else { _%>
-     * {@code PUT  /<%- entityApiUrl %>/:<%- primaryKey.name %>} : Updates an existing <%- entityInstance %>.
-     *
      * @param <%- primaryKey.name %> the id of the <%- instanceName %> to save.
   <%_ } _%>
      * @param <%- instanceName %> the <%- instanceName %> to update.
@@ -299,21 +297,13 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
      * or with status {@code 500 (Internal Server Error)} if the <%- instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-  <%_ if (primaryKey.composite) { _%>
     @PutMapping("<%- primaryKey.fields.map(field => `/{${field.fieldName}}`).join('') %>")
-  <%_ } else { _%>
-    @PutMapping("/{<%- primaryKey.name %>}")
-  <%_ } _%>
   <%_ if (entitySpringPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
     public <%- reactive ? 'Mono<' : '' %>ResponseEntity<<%- instanceType %>><%- reactive ? '>' : '' %> update<%- entityClass %>(
-  <%_ if (primaryKey.composite) { _%>
-    <%_ for (const field of primaryKey.fields) { _%>
+  <%_ for (const field of primaryKey.fields) { _%>
         @PathVariable(value = "<%- field.fieldName %>", required = false) final <%- field.javaFieldType %> <%- field.fieldName %>,
-    <%_ } _%>
-  <%_ } else { _%>
-        @PathVariable(value = "<%- primaryKey.name %>", required = false) final <%- primaryKey.type %> <%- primaryKey.name %>,
   <%_ } _%>
         <%- anyPropertyHasValidation ? '@Valid ' : '' %>@RequestBody <%- restClass %> <%- restInstance %>
     ) throws URISyntaxException {
@@ -364,15 +354,13 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     }
 
     /**
-  <%_ if (primaryKey.composite) { _%>
      * {@code PATCH  /<%- entityApiUrl %><%- primaryKey.fields.map(field => `/:${field.fieldName}`).join('') %>} : Partial updates given fields of an existing <%- entityInstance %>, field will ignore if it is null
      *
+  <%_ if (primaryKey.composite) { _%>
     <%_ for (const field of primaryKey.fields) { _%>
      * @param <%- field.fieldName %> the <%- field.fieldName %> of the id of the <%- instanceName %> to save.
     <%_ } _%>
   <%_ } else { _%>
-     * {@code PATCH  /<%- entityApiUrl %>/:<%- primaryKey.name %>} : Partial updates given fields of an existing <%- entityInstance %>, field will ignore if it is null
-     *
      * @param <%- primaryKey.name %> the id of the <%- instanceName %> to save.
   <%_ } _%>
      * @param <%- instanceName %> the <%- instanceName %> to update.
@@ -382,21 +370,13 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
      * or with status {@code 500 (Internal Server Error)} if the <%- instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-  <%_ if (primaryKey.composite) { _%>
     @PatchMapping(value = "<%- primaryKey.fields.map(field => `/{${field.fieldName}}`).join('') %>", consumes = {"application/json", "application/merge-patch+json"})
-  <%_ } else { _%>
-    @PatchMapping(value = "/{<%- primaryKey.name %>}", consumes = {"application/json", "application/merge-patch+json"})
-  <%_ } _%>
   <%_ if (entitySpringPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
     public <%- reactive ? 'Mono<' : '' %>ResponseEntity<<%- instanceType %>><%- reactive ? '>' : '' %> partialUpdate<%- entityClass %>(
-  <%_ if (primaryKey.composite) { _%>
-    <%_ for (const field of primaryKey.fields) { _%>
+  <%_ for (const field of primaryKey.fields) { _%>
         @PathVariable(value = "<%- field.fieldName %>", required = false) final <%- field.javaFieldType %> <%- field.fieldName %>,
-    <%_ } _%>
-  <%_ } else { _%>
-        @PathVariable(value = "<%- primaryKey.name %>", required = false) final <%- primaryKey.type %> <%- primaryKey.name %>,
   <%_ } _%>
         @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @io.swagger.v3.oas.annotations.media.Content(schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = <%- instanceType %>.class)))
         @RequestBody ObjectNode <%- instanceName %>
