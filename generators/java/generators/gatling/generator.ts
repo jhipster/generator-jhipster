@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../../lib/utils/index.ts';
+import { mutateDefaults } from '../../../../lib/utils/index.ts';
 import { isContentTypeField } from '../../../base-application/internal/content-type-fields.ts';
 import { formatEntitySample, generateEntitySamples } from '../../../base-application/support/index.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
@@ -45,8 +45,7 @@ export default class GatlingGenerator extends JavaApplicationGenerator {
         // gets a sample for each of the 100 users the simulation starts by default, its values distinct and valid.
         const distinct = fields.some(field => field.id || field.unique);
         const [samples] = generateEntitySamples(entity, { seed: 'gatling', batches: [{ fields, count: distinct ? 100 : 1 }] });
-        mutateData(entity as typeof entity & { gatlingEntityBodies?: string[] }, {
-          __override__: false,
+        mutateDefaults(entity as typeof entity & { gatlingEntityBodies?: string[] }, {
           // The JSON of the body of each request creating the entity, written in a Java string.
           gatlingEntityBodies: () =>
             (samples.length > 0 ? samples : [{}]).map(sample =>
