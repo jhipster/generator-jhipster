@@ -54,7 +54,7 @@ const routes: Routes = [
     title: 'gateway.title',
   },
 <%_ } _%>
-<%_ if (websocketAny) { _%>
+<%_ if (generateUserTracker) { _%>
   {
     path: 'tracker',
     loadComponent: () => import('./tracker/tracker'),

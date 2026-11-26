@@ -159,6 +159,7 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -411,12 +412,6 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/config/store.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/websocket-middleware.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/config/websocket-middleware.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
@@ -553,12 +548,6 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/index.tsx": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/modules/administration/tracker/tracker.spec.tsx": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/modules/administration/tracker/tracker.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/home/home.scss": {
@@ -1081,6 +1070,7 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -1326,12 +1316,6 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/config/translation.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/websocket-middleware.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/config/websocket-middleware.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/admin/authority/authority-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
@@ -1540,12 +1524,6 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/metrics/metrics.tsx": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/modules/administration/tracker/tracker.spec.tsx": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/modules/administration/tracker/tracker.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/home/home.scss": {
@@ -2388,6 +2366,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -3365,6 +3344,7 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -4417,6 +4397,7 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -4658,12 +4639,6 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/translation.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/websocket-middleware.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/websocket-middleware.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/authority/authority-delete-dialog.tsx": {
@@ -4946,12 +4921,6 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/metrics/metrics.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/tracker/tracker.spec.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/tracker/tracker.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/home/home.scss": {
@@ -5538,6 +5507,7 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -6413,6 +6383,7 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -6662,12 +6633,6 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "src/main/webapp/app/config/store.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/config/websocket-middleware.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/websocket-middleware.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
@@ -6795,12 +6760,6 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/index.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/tracker/tracker.spec.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/modules/administration/tracker/tracker.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/home/home.scss": {

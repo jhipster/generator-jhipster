@@ -3288,6 +3288,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -3529,15 +3530,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/admin/gateway/gateway.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/tracker/tracker.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
@@ -3635,15 +3627,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/request/request.model.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/tracker/tracker-activity.model.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/tracker/tracker.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/tracker/tracker.service.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/alert.service.spec.ts": {
@@ -4496,6 +4479,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -4808,15 +4792,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/admin/metrics/metrics.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/tracker/tracker.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
@@ -4914,15 +4889,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/request/request.model.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/tracker/tracker-activity.model.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/tracker/tracker.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/tracker/tracker.service.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/alert.service.spec.ts": {
@@ -5920,6 +5886,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -7095,6 +7062,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -8405,6 +8373,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -8826,15 +8795,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/admin/metrics/metrics.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/tracker/tracker.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
@@ -8938,15 +8898,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/request.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/tracker/tracker-activity.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/tracker/tracker.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/tracker/tracker.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/alert.service.spec.ts": {
@@ -10013,6 +9964,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -11155,6 +11107,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -11381,15 +11334,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/admin/docs/docs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/tracker/tracker.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
@@ -11484,15 +11428,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/request.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/tracker/tracker-activity.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/tracker/tracker.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/tracker/tracker.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/alert.service.spec.ts": {

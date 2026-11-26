@@ -244,7 +244,7 @@ export const files = asWriteFilesSection({
       templates: ['sockjs-client.polyfill.ts'],
     },
     {
-      condition: generator => generator.websocketAny,
+      condition: generator => generator.generateUserTracker,
       ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/tracker/tracker.ts',

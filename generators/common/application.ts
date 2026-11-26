@@ -45,6 +45,11 @@ export type CommonAddedApplicationProperties = {
 
   /** The backend provides a websocket, whichever it is. */
   websocketAny: boolean;
+  /**
+   * The user tracker: the activity of the users sent by the clients through the websocket of a Spring Boot backend, and its admin page.
+   * False unless the backend sets it.
+   */
+  generateUserTracker: boolean;
 
   generateInMemoryUserCredentials: boolean;
   defaultUserUsername: string;
@@ -72,6 +77,7 @@ export const mutateApplication = {
   authenticationTypeOauth2: data => data.authenticationType === 'oauth2',
 
   websocketAny: ({ websocket }) => Boolean(websocket) && websocket !== 'no',
+  generateUserTracker: finalizeDefault(() => false),
 
   authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
   // The session remember-me tokens are stored with the users.

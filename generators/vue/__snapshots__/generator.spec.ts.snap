@@ -159,6 +159,7 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -394,18 +395,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/gateway/gateway.vue": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.service.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.vue": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/app.vue": {
@@ -1081,6 +1070,7 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -1351,18 +1341,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/metrics/metrics.vue": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.service.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/tracker/tracker.vue": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/app.vue": {
@@ -2119,6 +2097,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -3041,6 +3020,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -4044,6 +4024,7 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -4357,18 +4338,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/metrics/metrics.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.vue": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.vue": {
@@ -5153,6 +5122,7 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -6035,6 +6005,7 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -6261,18 +6232,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/tracker/tracker.vue": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.vue": {

@@ -223,6 +223,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "gitLabIndent": "",
   "githubActions": {
     "actions/checkout": "actions/checkout@VERSION",

@@ -11,6 +11,20 @@ exports[`generator - spring-boot:websocket with default config should match file
   "src/main/java/com/mycompany/myapp/config/WebsocketSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
+}
+`;
+
+exports[`generator - spring-boot:websocket with spring-websocket should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/WebsocketConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/WebsocketSecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/web/websocket/ActivityService.java": {
     "stateCleared": "modified",
   },

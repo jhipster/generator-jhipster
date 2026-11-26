@@ -44,7 +44,7 @@ import administration, {
   getSystemHealth,
   getSystemMetrics,
   setLoggers,
-  <%_ if (websocketAny) { _%>
+  <%_ if (generateUserTracker) { _%>
   websocketActivityMessage,
   <%_ } _%>
 <%_ } _%>
@@ -73,7 +73,7 @@ const respond = (url: string) => Promise.resolve({ data: url });
 
 describe('Administration reducer tests', () => {
 
-<%_ if (applicationTypeGateway && gatewayServicesApiAvailable || withAdminUi || websocketAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable || withAdminUi || generateUserTracker) { _%>
   function isEmpty(element): boolean {
     if (Array.isArray(element)) {
       return element.length === 0;
@@ -94,7 +94,7 @@ describe('Administration reducer tests', () => {
 <%_ if (withAdminUi) { _%>
     expect(isEmpty(state.logs.loggers)).toBe(true);
 <%_ } _%>
-<%_ if (websocketAny) { _%>
+<%_ if (generateUserTracker) { _%>
     expect(isEmpty(state.tracker.activities)).toBe(true);
 <%_ } _%>
   }
@@ -224,7 +224,7 @@ describe('Administration reducer tests', () => {
   <%_ } _%>
   });
 <%_ } _%>
-<%_ if (websocketAny) { _%>
+<%_ if (generateUserTracker) { _%>
   describe('Websocket Message Handling', () => {
     const username = process.env.E2E_USERNAME ?? 'admin';
 

@@ -39,4 +39,19 @@ describe(`generator - ${generator}`, () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
+
+  describe('with spring-websocket', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({})
+        .withJHipsterConfig({ websocket: 'spring-websocket' });
+    });
+
+    it('should match files snapshot', () => {
+      expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
 });

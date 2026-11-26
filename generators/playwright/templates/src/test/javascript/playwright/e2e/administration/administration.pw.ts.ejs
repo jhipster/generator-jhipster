@@ -88,7 +88,7 @@ test.describe('/admin', () => {
       });
     });
   });
-<%_ if (websocketAny) { _%>
+<%_ if (generateUserTracker) { _%>
 
   test.describe('/tracker', () => {
     test('should load the page', async ({ page, jhi }) => {

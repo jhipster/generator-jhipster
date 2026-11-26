@@ -222,7 +222,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                     ],
                   },
                   {
-                    condition: (context: any) => context.websocketAny,
+                    condition: (context: any) => context.generateUserTracker,
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
                     to: context => `${context.clientI18nDir}${context.lang}/`,
                     transform: false,

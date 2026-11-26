@@ -153,6 +153,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,

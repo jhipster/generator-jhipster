@@ -54,6 +54,8 @@ export const mutateApplicationPreparing = {
   // Spring WebFlux has no remember-me; else the default of the common application.
   authenticationUsesRememberMe: ({ reactive, authenticationTypeSession }, { undefinedMarker }) =>
     reactive && authenticationTypeSession ? false : undefinedMarker,
+  // The user tracker is a service of Spring Websocket.
+  generateUserTracker: ({ websocket }) => websocket === 'spring-websocket',
   // Populated by the data generators
   springDataDescription: undefined,
   springBootBaseRepositoryClass: undefined,

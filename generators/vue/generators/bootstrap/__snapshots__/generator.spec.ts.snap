@@ -116,6 +116,7 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "hasNonBuiltInEntity": false,
   "hipster": "jhipster_family_member_3",
   "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",

@@ -131,6 +131,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "graalvmReachabilityMetadata": "GRAALVM_REACHABILITY_METADATA_VERSION",
   "graalvmSupport": undefined,
   "graalvmVersion": "25.3",

@@ -79,6 +79,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "hasNonBuiltInEntity": true,
   "hipster": "jhipster_family_member_3",
   "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",

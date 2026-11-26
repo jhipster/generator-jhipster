@@ -91,7 +91,7 @@ describe('/admin', () => {
       });
     });
   });
-<%_ if (websocketAny) { _%>
+<%_ if (generateUserTracker) { _%>
 
   describe('/tracker', () => {
     it('should load the page', () => {

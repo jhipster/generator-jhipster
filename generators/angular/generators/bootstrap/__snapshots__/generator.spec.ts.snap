@@ -152,6 +152,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": false,

@@ -64,7 +64,7 @@ export const files = asWriteFilesSection({
       templates: ['config/translation.ts'],
     },
     {
-      condition: generator => generator.websocketAny,
+      condition: generator => generator.generateUserTracker,
       ...clientApplicationTemplatesBlock(),
       templates: ['config/websocket-middleware.ts', 'config/websocket-middleware.spec.ts'],
     },
@@ -181,7 +181,7 @@ export const files = asWriteFilesSection({
       ],
     },
     {
-      condition: generator => generator.websocketAny,
+      condition: generator => generator.generateUserTracker,
       ...clientApplicationTemplatesBlock(),
       templates: ['modules/administration/tracker/tracker.tsx', 'modules/administration/tracker/tracker.spec.tsx'],
     },

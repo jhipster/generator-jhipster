@@ -25,12 +25,13 @@ const files = asWriteFilesSection({
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: [
-        'config/WebsocketConfiguration.java',
-        'config/WebsocketSecurityConfiguration.java',
-        'web/websocket/ActivityService.java',
-        'web/websocket/dto/ActivityDTO.java',
-      ],
+      templates: ['config/WebsocketConfiguration.java', 'config/WebsocketSecurityConfiguration.java'],
+    },
+    {
+      condition: ctx => ctx.generateUserTracker,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['web/websocket/ActivityService.java', 'web/websocket/dto/ActivityDTO.java'],
     },
   ],
 });

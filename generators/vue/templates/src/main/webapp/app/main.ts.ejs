@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { <%- enableTranslation ? '' : 'computed, ' %>createApp, h<%- !enableTranslation || websocketAny ? ', provide' : '' %> } from 'vue';
+import { <%- enableTranslation ? '' : 'computed, ' %>createApp, h<%- !enableTranslation || generateUserTracker ? ', provide' : '' %> } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -39,7 +39,7 @@ import { useLanguage } from '@/composables/language';
 <%_ } _%>
 import JhiSortHeader from '@/components/jhi-sort-header.vue';
 
-<%_ if (websocketAny) { _%>
+<%_ if (generateUserTracker) { _%>
 import { trackerServiceKey, useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 import App from './app.vue';
@@ -69,7 +69,7 @@ const i18n = initI18N();
 
 const app = createApp({
   setup() {
-    const { store<%- websocketAny ? ', authenticated' : '' %> } = useAccount({ router });
+    const { store<%- generateUserTracker ? ', authenticated' : '' %> } = useAccount({ router });
     useEnvProfiles();
 <%_ if (enableTranslation) { _%>
     useLanguage({ composer: useI18n(), store });
@@ -77,7 +77,7 @@ const app = createApp({
     provide(currentLanguageKey, computed(() => store.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
 <%_ } _%>
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
-<%_ if (websocketAny) { _%>
+<%_ if (generateUserTracker) { _%>
 
     provide(trackerServiceKey, useTrackerService({ authenticated }));
 <%_ } _%>
