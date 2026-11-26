@@ -1796,7 +1796,7 @@ describe("UserManagement Form Service", () => {
 
         expect(userManagement.firstName).toBe("");
         expect(userManagement.lastName).toBe("");
-        expect(userManagement.activated).toBe(null);
+        expect(userManagement.activated).toBeNull();
         expect(userManagement.imageUrl).toBe("");
         expect(userManagement.createdBy).toBe("");
         expect(userManagement.lastModifiedBy).toBe("");
@@ -1818,12 +1818,12 @@ describe("UserManagement Form Service", () => {
           entity,
         );
 
-        expect(userManagement.firstName).toBe(null);
-        expect(userManagement.lastName).toBe(null);
+        expect(userManagement.firstName).toBeNull();
+        expect(userManagement.lastName).toBeNull();
         expect(userManagement.activated).toBe(false);
-        expect(userManagement.imageUrl).toBe(null);
-        expect(userManagement.createdBy).toBe(null);
-        expect(userManagement.lastModifiedBy).toBe(null);
+        expect(userManagement.imageUrl).toBeNull();
+        expect(userManagement.createdBy).toBeNull();
+        expect(userManagement.lastModifiedBy).toBeNull();
       });
     });
   });

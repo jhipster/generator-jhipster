@@ -221,7 +221,7 @@ describe('<%- entityAngularName %> Form Service', () => {
         const <%- entityInstance %> = service.get<%- entityAngularName %>(service.create<%- entityAngularName %>FormModel(entity), entity);
 
   <%_ for (const field of emptyValueFields) { _%>
-        expect(<%- entityInstance %>.<%- field.fieldName %>).toBe(<%- field.fieldTypeBoolean ? 'null' : "''" %>);
+        expect(<%- entityInstance %>.<%- field.fieldName %>).<%- field.fieldTypeBoolean ? 'toBeNull()' : "toBe('')" %>;
   <%_ } _%>
       });
 
@@ -236,7 +236,7 @@ describe('<%- entityAngularName %> Form Service', () => {
         const <%- entityInstance %> = service.get<%- entityAngularName %>(service.create<%- entityAngularName %>FormModel(entity), entity);
 
   <%_ for (const field of emptyValueFields) { _%>
-        expect(<%- entityInstance %>.<%- field.fieldName %>).toBe(<%- field.fieldTypeBoolean ? 'false' : 'null' %>);
+        expect(<%- entityInstance %>.<%- field.fieldName %>).<%- field.fieldTypeBoolean ? 'toBe(false)' : 'toBeNull()' %>;
   <%_ } _%>
       });
 <%_ } _%>
