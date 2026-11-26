@@ -24,7 +24,7 @@ import defaults from 'lodash-es/defaults.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { isOfficialApplicationType } from '../../lib/core/application-types.ts';
 import { getDefaultJDLDeploymentDefaults } from '../../lib/jdl-config/jhipster-jdl-config.ts';
-import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
+import { finalizeMutations, removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import BaseGenerator from '../base/index.ts';
 import { POST_WRITING_OBJECTS, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask, TaskGroup } from '../base-core/types.ts';
@@ -59,7 +59,21 @@ const {
   PRE_CONFLICTS,
   INSTALL,
   END,
+  LOADING,
+  PREPARING,
+  POST_PREPARING,
 } = PRIORITY_NAMES;
+
+/** The priorities preparing the deployment: the delayed defaults of the deployment are applied after them. */
+const DEPLOYMENT_PREPARING_PRIORITIES = new Set<string>([
+  LOADING,
+  PREPARING,
+  POST_PREPARING,
+  PROMPTING_WORKSPACES,
+  CONFIGURING_WORKSPACES,
+  LOADING_WORKSPACES,
+  PREPARING_WORKSPACES,
+]);
 
 /**
  * This is the base class for a generator that generates entities.
@@ -226,6 +240,11 @@ export default abstract class BaseWorkspacesGenerator<
       )
     ) {
       return args;
+    }
+    if (!DEPLOYMENT_PREPARING_PRIORITIES.has(priorityName)) {
+      // Every generator prepared the deployment: its delayed defaults are applied before the first priority after
+      // preparingWorkspaces reads it, the ones of the custom objects included.
+      finalizeMutations(this.context);
     }
     const [first, ...others] = args ?? [];
     // The deployment context is loaded from the configuration in the loading workspaces priority, earlier tasks

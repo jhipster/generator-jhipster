@@ -21,7 +21,7 @@ import { isDeepStrictEqual } from 'node:util';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
-import { mutateDefaults } from '../../lib/utils/object.ts';
+import { finalizeMutations, mutateDefaults } from '../../lib/utils/object.ts';
 import { upperFirst } from '../../lib/utils/string-utils.ts';
 import { POST_WRITING_OBJECTS, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask, TaskGroup } from '../base-core/types.ts';
@@ -892,6 +892,27 @@ export default class BaseApplicationGenerator<
             });
           });
         });
+      },
+    });
+
+    // The delayed defaults of the entities, their fields and their relationships are applied once every generator prepared
+    // them: queued once by the folder of the application, it runs before every post preparing task of its entities.
+    this.queueTask({
+      queueName: POST_PREPARING_EACH_ENTITY_QUEUE,
+      taskName: `${this.destinationRoot()}#finalizeEntitiesMutations`,
+      once: true,
+      // The arguments of the priority would read the application, creating it in a folder without one.
+      args: [],
+      method: () => {
+        for (const { entity } of this.#getEntitiesDataToPostPrepare()) {
+          finalizeMutations(entity);
+          for (const field of entity.fields) {
+            finalizeMutations(field);
+          }
+          for (const relationship of entity.relationships) {
+            finalizeMutations(relationship);
+          }
+        }
       },
     });
 
