@@ -172,7 +172,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       async setAppsYaml({ deployment, applications }) {
         const faker = await createFaker();
 
-        deployment.keycloakRedirectUris = '';
+        const keycloakWebAppRedirectUris: string[] = [];
         deployment.keycloakAppSchemes = [...new Set(applications.flatMap(appConfig => appConfig.oauth2AppSchemes ?? []))];
         deployment.appsYaml = applications.map(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
@@ -201,12 +201,12 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
               faker.seed(stringHashCode(appConfig.baseName));
               deployment.keycloakSecrets = Array.from(new Array(6), () => faker.string.uuid());
             }
-            deployment.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
+            keycloakWebAppRedirectUris.push(`http://localhost:${appConfig.composePort}/*`, `https://localhost:${appConfig.composePort}/*`);
             if (appConfig.devServerPort !== undefined) {
-              deployment.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
+              keycloakWebAppRedirectUris.push(`http://localhost:${appConfig.devServerPort}/*`);
             }
             if (appConfig.devServerPortProxy !== undefined) {
-              deployment.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPortProxy}/*", `;
+              keycloakWebAppRedirectUris.push(`http://localhost:${appConfig.devServerPortProxy}/*`);
             }
             // Split ports by ":" and take last 2 elements to skip the hostname/IP if present
             const ports = yamlConfig.ports[0].split(':').slice(-2);
@@ -304,6 +304,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           yamlString = yamlArray.join('\n');
           return yamlString;
         });
+        deployment.keycloakWebAppRedirectUris = keycloakWebAppRedirectUris;
+        deployment.keycloakRedirectUris = keycloakWebAppRedirectUris.map(redirectUri => `"${redirectUri}", `).join('');
       },
       cleanupOldFilesTask,
       writeFiles,

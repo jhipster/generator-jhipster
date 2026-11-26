@@ -77,6 +77,9 @@ export type Deployment = DeploymentConfig & {
   clusteredDbApps?: string[];
   dockerContainers?: Record<string, string>;
 
+  /** The redirect URIs of the applications for the web_app client of the deployment. */
+  keycloakWebAppRedirectUris?: string[];
+  /** @deprecated Use `keycloakWebAppRedirectUris` instead: the same URIs, each one quoted and followed by a comma. */
   keycloakRedirectUris?: string;
   /** The URL schemes of the apps of the applications, allowed as redirect URIs of the client of the deployment. */
   keycloakAppSchemes?: string[];
