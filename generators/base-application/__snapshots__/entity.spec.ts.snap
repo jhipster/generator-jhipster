@@ -44,6 +44,7 @@ exports[`mutation object test expects mutateField to match snapshot 1`] = `
   "fieldTypeImageBlob": false,
   "fieldTypeInstant": false,
   "fieldTypeInteger": false,
+  "fieldTypeIntegral": false,
   "fieldTypeLocalDate": false,
   "fieldTypeLocalTime": false,
   "fieldTypeLong": false,
