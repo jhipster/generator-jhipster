@@ -16,6 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { mutateData } from '../../../../lib/utils/index.ts';
+import { isContentTypeField } from '../../../base-application/internal/content-type-fields.ts';
+import { formatEntitySample, generateEntitySamples } from '../../../base-application/support/index.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 
@@ -32,6 +35,32 @@ export default class GatlingGenerator extends JavaApplicationGenerator {
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('java');
     }
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareEntityBodies({ entity }) {
+        const fields = entity.fields.filter(field => !(field.id && field.autoGenerate) && !isContentTypeField(field));
+        // Each user of the simulation creates its own entity: an entity with an id the request gives or a unique field
+        // gets a sample for each of the 100 users the simulation starts by default, its values distinct and valid.
+        const distinct = fields.some(field => field.id || field.unique);
+        const [samples] = generateEntitySamples(entity, { seed: 'gatling', batches: [{ fields, count: distinct ? 100 : 1 }] });
+        mutateData(entity as typeof entity & { gatlingEntityBodies?: string[] }, {
+          __override__: false,
+          // The JSON of the body of each request creating the entity, written in a Java string.
+          gatlingEntityBodies: () =>
+            (samples.length > 0 ? samples : [{}]).map(sample =>
+              JSON.stringify(formatEntitySample(fields, sample, 'json-serializable'))
+                .replaceAll('\\', '\\\\')
+                .replaceAll('"', '\\"'),
+            ),
+        });
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get writing() {
