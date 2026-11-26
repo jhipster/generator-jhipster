@@ -97,10 +97,6 @@ export const <%- entityReactName %> = () => {
 <%_ } else { _%>
   const [paginationState, setPaginationState] = useState(() => overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, '<%- primaryKey.name %>'), pageLocation.search));
 <%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
-  const [sorting, setSorting] = useState(false);
-<%_ } _%>
-
 <%_ if (builtInUserManagement) { _%>
   const account = useAppSelector(state => state.authentication.account);
 <%_ } _%>
@@ -158,17 +154,22 @@ export const <%- entityReactName %> = () => {
   };
 
 <%_ if (paginationInfiniteScroll) { _%>
+  // The list starts again from its first page, which the effect of the page loads when it changes.
   const resetAll = () => {
     dispatch(reset());
-    setPaginationState({
-      ...paginationState,
-      activePage: 1,
-    });
-    dispatch(getEntities({}));
+    if (paginationState.activePage === 1) {
+      getAllEntities();
+    } else {
+      setPaginationState({
+        ...paginationState,
+        activePage: 1,
+      });
+    }
   };
 
+  // The effect of the page loads the first one.
   useEffect(() => {
-    resetAll();
+    dispatch(reset());
   }, []);
 <%_ } _%>
 
@@ -176,9 +177,8 @@ export const <%- entityReactName %> = () => {
   const startSearching = (e) => {
     if (search) {
   <%_ if (paginationInfiniteScroll) { _%>
-      dispatch(reset());
-  <%_ } _%>
-  <%_ if (paginationNo) { _%>
+      resetAll();
+  <%_ } else if (paginationNo) { _%>
       dispatch(searchEntities({
         query: search,
         sort: `${sortState.sort},${sortState.order}`,
@@ -204,15 +204,32 @@ export const <%- entityReactName %> = () => {
   const clear = () => {
   <%_ if (paginationInfiniteScroll) { _%>
     dispatch(reset());
-  <%_ } _%>
     setSearch('');
-  <%_ if (!paginationNo) { _%>
+    // The first page without the search, which the state still has until the next render.
+    if (paginationState.activePage === 1) {
+      dispatch(
+        getEntities({
+          page: 0,
+          size: paginationState.itemsPerPage,
+          sort: `${paginationState.sort},${paginationState.order}`,
+        }),
+      );
+    } else {
+      setPaginationState({
+        ...paginationState,
+        activePage: 1,
+      });
+    }
+  <%_ } else { _%>
+    setSearch('');
+    <%_ if (!paginationNo) { _%>
     setPaginationState({
       ...paginationState,
       activePage: 1,
     });
-  <%_ } _%>
+    <%_ } _%>
     dispatch(getEntities({}));
+  <%_ } _%>
   };
 
   const handleSearch = event => setSearch(event.target.value);
@@ -225,9 +242,10 @@ export const <%- entityReactName %> = () => {
     }
   }, [updateSuccess]);
 
+  // The list loads its page, and its first page again when it is sorted.
   useEffect(() => {
     getAllEntities();
-  }, [paginationState.activePage]);
+  }, [paginationState.activePage, paginationState.sort, paginationState.order]);
 
   const handleLoadMore = () => {
     if (globalThis.scrollY > 0) {
@@ -253,16 +271,11 @@ export const <%- entityReactName %> = () => {
   };
 <%_ } _%>
 
+<%_ if (!paginationInfiniteScroll) { _%>
   useEffect(() => {
-<%_ if (paginationInfiniteScroll) { _%>
-    if (sorting) {
-      getAllEntities();
-      setSorting(false);
-    }
-<%_ } else { _%>
     sortEntities();
+  }, [<%- paginationPagination ? 'paginationState.activePage, paginationState.order, paginationState.sort' : 'sortState.order, sortState.sort' %><%- searchEngineAny ? ', search' : '' %>]);
 <%_ } _%>
-  }, [<% if (paginationInfiniteScroll) { %>sorting<% } else if (paginationPagination) { %>paginationState.activePage, paginationState.order, paginationState.sort<% } else { %>sortState.order, sortState.sort<% } %><%- searchEngineAny ? ', search' : '' %>]);
 
 <%_ if (paginationPagination) { _%>
   useEffect(() => {
@@ -291,7 +304,6 @@ export const <%- entityReactName %> = () => {
       order: paginationState.sort === p && paginationState.order === ASC ? DESC : ASC,
       sort: p,
     });
-    setSorting(true);
 <%_ } else if (paginationPagination) { _%>
     setPaginationState({
       ...paginationState,

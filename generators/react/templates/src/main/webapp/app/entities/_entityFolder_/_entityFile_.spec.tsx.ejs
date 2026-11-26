@@ -332,6 +332,72 @@ describe('<%- entityReactName %> screens', () => {
 
       expect(axios.get).not.toHaveBeenCalledWith(expect.stringContaining('page=1'));
     });
+
+    // The requests of the list, a search included, since the last clear of the mock.
+    const listUrls = () =>
+      vi
+        .mocked(axios.get)
+        .mock.calls.map(([url]) => url)
+        .filter(url => url === apiUrl || url.startsWith(`${apiUrl}?`) || url.startsWith(`${apiUrl}/_search?`));
+
+    const scrollToSecondPage = async (container: HTMLElement) => {
+      const intersect = observeIntersection();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).not.toHaveLength(0));
+      vi.spyOn(globalThis, 'scrollY', 'get').mockReturnValue(10);
+      intersect();
+      await waitFor(() => expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('page=1')));
+      vi.mocked(axios.get).mockClear();
+    };
+
+    it('should load the list once, by its first page', async () => {
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+
+      expect(listUrls()).toEqual([expect.stringContaining('page=0')]);
+    });
+
+    it('should load the first page once when sorted after scrolling', async () => {
+      const { container } = renderPage();
+      await scrollToSecondPage(container);
+
+      fireEvent.click(container.querySelector('th.hand')!);
+
+      await waitFor(() => expect(listUrls()).not.toHaveLength(0));
+      await waitFor(() => expect(container.querySelector('th.hand')).not.toBeNull());
+      expect(listUrls()).toEqual([expect.stringContaining('page=0')]);
+    });
+
+    it('should refresh the list once, by its first page', async () => {
+      const { container } = renderPage();
+      await scrollToSecondPage(container);
+
+      fireEvent.click(heading()!.querySelector('button')!);
+
+      await waitFor(() => expect(listUrls()).not.toHaveLength(0));
+      await waitFor(() => expect(container.querySelector('th.hand')).not.toBeNull());
+      expect(listUrls()).toEqual([expect.stringContaining('page=0')]);
+    });
+  <%_ if (searchEngineAny) { _%>
+
+    it('should search and clear the search by the first page once', async () => {
+      const { container } = renderPage();
+      await scrollToSecondPage(container);
+      const input = container.querySelector('input[name="search"]')!;
+
+      fireEvent.change(input, { target: { value: 'term' } });
+      fireEvent.submit(input.closest('form')!);
+      await waitFor(() => expect(listUrls()).not.toHaveLength(0));
+      await waitFor(() => expect(container.querySelector('th.hand')).not.toBeNull());
+      expect(listUrls()).toEqual([expect.stringMatching(/query=term.*page=0|page=0.*query=term/)]);
+
+      vi.mocked(axios.get).mockClear();
+      fireEvent.click(container.querySelector('button[type="reset"]')!);
+      await waitFor(() => expect(listUrls()).not.toHaveLength(0));
+      await waitFor(() => expect(container.querySelector('th.hand')).not.toBeNull());
+      expect(listUrls()).toEqual([expect.not.stringContaining('query=')]);
+      expect(listUrls()).toEqual([expect.stringContaining('page=0')]);
+    });
+  <%_ } _%>
 <%_ } _%>
 <%_ if (paginationPagination) { _%>
 

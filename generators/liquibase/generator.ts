@@ -152,7 +152,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             });
           },
         });
-        this.numberOfRows = application.clientFrameworkReact ? 10 : 30;
+        this.numberOfRows = 30;
       },
       addNeedles({ source, application }) {
         source.addLiquibaseChangelog = changelog =>
