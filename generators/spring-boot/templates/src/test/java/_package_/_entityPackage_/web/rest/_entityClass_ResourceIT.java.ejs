@@ -362,7 +362,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
     private static final String ENTITY_API_URL = "/api/<%- entityApiUrl %>";
 <%_ if (primaryKey.composite) { _%>
-    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "<% for (const field of primaryKey.fields) { %>/{<%- field.fieldName %>}<% } %>";
+    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "<%- primaryKey.fields.map(field => `/{${field.fieldName}}`).join('') %>";
 <%_ } else { _%>
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{<%- primaryKey.name %>}";
 <%_ } _%>
@@ -907,6 +907,82 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
       <%_ } _%>
 
         inserted<%- persistClass %> = <%- entityInstance %>Repository.findById("a b")<%- reactive ? '.block()' : '.orElseThrow()' %>;
+    }
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (primaryKey.composite) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void create<%- entityClass %>WithMissingIdPart() throws Exception {
+        // Every part of the id is required, so this API call must fail
+        <%- persistInstance %>.<%- primaryKey.propertySupplierName %>().<%- primaryKey.fields.at(-1).propertyConsumerName %>(null);
+
+        long databaseSizeBeforeCreate = getRepositoryCount();
+
+        rest<%- entityClass %>MockMvc
+            .perform(
+                post(ENTITY_API_URL)
+    <%_ if (serverUsesCsrf) { _%>
+                .with(csrf())
+    <%_ } _%>
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(<%- persistInstance %>))
+            )
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.idnull"));
+
+        assertSameRepositoryCount(databaseSizeBeforeCreate);
+    }
+    <%_ for (const field of primaryKey.fields.filter(field => field.fieldTypeString)) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void create<%- entityClass %>With<%- field.fieldNameCapitalized %>NotPathSegment() throws Exception {
+        // The <%- field.fieldName %> cannot be a segment of the url of the entity, so this API call must fail
+        <%- persistInstance %>.<%- primaryKey.propertySupplierName %>().<%- field.propertyConsumerName %>("a/b");
+
+        long databaseSizeBeforeCreate = getRepositoryCount();
+
+        rest<%- entityClass %>MockMvc
+            .perform(
+                post(ENTITY_API_URL)
+      <%_ if (serverUsesCsrf) { _%>
+                .with(csrf())
+      <%_ } _%>
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(<%- persistInstance %>))
+            )
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.idinvalid"));
+
+        assertSameRepositoryCount(databaseSizeBeforeCreate);
+    }
+    <%_ } _%>
+    <%_ if (updatableEntity) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void patch<%- entityClass %>WithMissingIdPart() throws Exception {
+        // Initialize the database
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+
+        // Every part of the id is required in the body, so this API call must fail
+        <%- persistClass %> partialUpdated<%- persistClass %> = new <%- persistClass %>();
+        partialUpdated<%- persistClass %>.<%- primaryKey.propertyConsumerName %>(new <%- primaryKey.type %>(<%- [...primaryKey.fields.slice(0, -1).map(field => `inserted${persistClass}.${primaryKey.propertySupplierName}().${field.propertySupplierName}()`), 'null'].join(', ') %>));
+
+        rest<%- entityClass %>MockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, idUriVariables(inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>()))
+      <%_ if (serverUsesCsrf) { _%>
+                .with(csrf())
+      <%_ } _%>
+                .contentType("application/merge-patch+json")
+                .content(om.writeValueAsBytes(partialUpdated<%- persistClass %>))
+            )
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.idnull"));
+
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
     <%_ } _%>
   <%_ } _%>
@@ -1559,7 +1635,10 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
-<%- idJsonPaths.map(({ path, value }) => `            .jsonPath("$.[*].${path}").value(hasItem(${value}))`).join('\n') %><% for (field of fieldsToTest) { %>
+    <%_ for (const { path, value } of idJsonPaths.slice(0, -1)) { _%>
+            .jsonPath("$.[*].<%- path %>").value(hasItem(<%- value %>))
+    <%_ } _%>
+            .jsonPath("$.[*].<%- idJsonPaths.at(-1).path %>").value(hasItem(<%- idJsonPaths.at(-1).value %>))<% for (field of fieldsToTest) { %>
             .jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if
       (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
@@ -1597,11 +1676,14 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
           Long: '.intValue()',
           UUID: '.toString()',
         }[primaryKey.type] || '';
-        const primaryKeyAssertionLines = primaryKey.composite
-          ? idJsonPaths.map(({ path, value }) => `            .andExpect(jsonPath("$.[*].${path}").value(hasItem(${value})))`)
-          : [`            .andExpect(jsonPath("$.[*].${primaryKey.name}").value(hasItem(${persistInstance}.${primaryKey.propertySupplierName}()${primaryKeyConversion})))`];
+        const primaryKeyAssertions = primaryKey.composite
+          ? idJsonPaths
+          : [{ path: primaryKey.name, value: `${persistInstance}.${primaryKey.propertySupplierName}()${primaryKeyConversion}` }];
     _%>
-<%- primaryKeyAssertionLines.join('\n') %><% for (const field of fieldsToTest) { %>
+    <%_ for (const { path, value } of primaryKeyAssertions.slice(0, -1)) { _%>
+            .andExpect(jsonPath("$.[*].<%- path %>").value(hasItem(<%- value %>)))
+    <%_ } _%>
+            .andExpect(jsonPath("$.[*].<%- primaryKeyAssertions.at(-1).path %>").value(hasItem(<%- primaryKeyAssertions.at(-1).value %>)))<% for (const field of fieldsToTest) { %>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
     if (field.fieldTypeBigDecimal) { %>sameNumber(<% } else if (field.fieldTypeLong || field.fieldTypeDouble) { %>sameNumber(BigDecimal.valueOf(<% } else if (field.fieldTypeFloat) { %>Double.valueOf(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else

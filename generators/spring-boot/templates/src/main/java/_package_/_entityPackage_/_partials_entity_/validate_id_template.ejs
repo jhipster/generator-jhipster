@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-        if (<%- restInstance %>.<%- primaryKey.propertySupplierName %>() == null<% for (const field of primaryKey.composite ? primaryKey.fields : []) { %> || <%- restInstance %>.<%- primaryKey.propertySupplierName %>().<%- field.propertySupplierName %>() == null<% } %>) {
+        if (<%- restInstance %>.<%- primaryKey.propertySupplierName %>() == null<%- (primaryKey.composite ? primaryKey.fields : []).map(field => ` || ${restInstance}.${primaryKey.propertySupplierName}().${field.propertySupplierName}() == null`).join('') %>) {
             throw BadRequestAlertException.idnull(ENTITY_NAME);
         }
         if (!Objects.equals(<%- primaryKey.name %>, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())) {

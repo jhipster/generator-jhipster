@@ -58,16 +58,17 @@ describe(`generator - ${generator}`, () => {
           fields: [
             { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
             { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+            { fieldName: 'ref', fieldType: 'UUID', options: { id: true } },
             { fieldName: 'productCode', fieldType: 'String' },
           ],
         },
       ]);
     });
 
-    it('should serialize the parts of the composite key as properties of the entity', () => {
+    it('should send random parts of the composite key as properties of the entity', () => {
       result.assertFileContent(
         'src/test/java/gatling/simulations/OrderLineGatlingTest.java',
-        '"\\"orderId\\": 0" +\n                ", \\"lineNumber\\": 0" +\n                ", \\"productCode\\": \\"SAMPLE_TEXT\\"" +',
+        '"\\"orderId\\": #{randomLong()}" +\n                ", \\"lineNumber\\": #{randomInt()}" +\n                ", \\"ref\\": \\"#{randomUuid()}\\"" +\n                ", \\"productCode\\": \\"SAMPLE_TEXT\\"" +',
       );
     });
 

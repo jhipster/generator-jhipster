@@ -54,7 +54,7 @@ public class <%- primaryKey.type %> implements Serializable {
         // Empty constructor required by JPA.
     }
 
-    public <%- primaryKey.type %>(<% for (const [index, field] of primaryKey.fields.entries()) { %><%- index === 0 ? '' : ', ' %><%- field.javaFieldType %> <%- field.fieldName %><% } %>) {
+    public <%- primaryKey.type %>(<%- primaryKey.fields.map(field => `${field.javaFieldType} ${field.fieldName}`).join(', ') %>) {
 <%_ for (const field of primaryKey.fields) { _%>
         this.<%- field.fieldName %> = <%- field.fieldName %>;
 <%_ } _%>
@@ -79,7 +79,7 @@ public class <%- primaryKey.type %> implements Serializable {
             return false;
         }
         <%- primaryKey.type %> that = (<%- primaryKey.type %>) o;
-        return <% for (const [index, field] of primaryKey.fields.entries()) { %><%- index === 0 ? '' : ' && ' %>Objects.equals(<%- field.fieldName %>, that.<%- field.fieldName %>)<% } %>;
+        return <%- primaryKey.fields.map(field => `Objects.equals(${field.fieldName}, that.${field.fieldName})`).join(' && ') %>;
     }
 
     @Override

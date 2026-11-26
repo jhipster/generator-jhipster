@@ -192,9 +192,11 @@ entity OrderLine {
 
 Generators that support composite primary keys generate an embeddable key class (`OrderLineId` above) as the entity
 identifier. Its parts are properties of the entity in JSON (`{"orderId": 1, "lineNumber": 2, "quantity": 3}`) and one
-segment each of its URL, in the order of the `@Id` fields (`/api/order-lines/1/2`); a list is sorted by the whole key
-with `sort=id`, or by a part that is not a `UUID` with `sort=id.orderId`. They accept `String`, `Integer`, `Long` and `UUID` key
-fields: other field types, and composite primary keys with MapStruct DTOs, JPA metamodel filtering, a search engine, `@Id`
+segment each of its URL, in the order of the `@Id` fields (`/api/order-lines/1/2`), so a `String` part cannot be empty,
+`.` or `..`, nor contain `/`, `\`, `%`, `;` or a control character, which the server rejects in a URL. `sort=id` sorts a
+list by every part, in the alphabetical order of their names rather than the order of the `@Id` fields, and
+`sort=id.orderId` by one part that is not a `UUID`. They accept `String`, `Integer`, `Long` and `UUID` key fields: other
+field types, and composite primary keys with MapStruct DTOs, JPA metamodel filtering, a search engine, `@Id`
 relationships, a reactive application or a non-SQL database, are errors. An entity with a composite primary key is
 server-only: its Angular, React or Vue client is not generated.
 

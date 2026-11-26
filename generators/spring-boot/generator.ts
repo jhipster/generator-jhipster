@@ -254,11 +254,6 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      supportCompositePrimaryKey({ application }) {
-        // Signals to the server generator that this backend implements composite primary keys.
-        // A blueprint replacing the Spring Boot generator does not set it and keeps the generic rejection.
-        application.compositePrimaryKeySupport = true;
-      },
       loading({ applicationDefaults }) {
         applicationDefaults({
           communicationSpringWebsocket: ({ websocket }) => websocket === SPRING_WEBSOCKET,
@@ -612,22 +607,25 @@ ${classProperties
         const { primaryKey } = entity;
         if (!primaryKey?.composite || entity.embedded) return;
 
-        const unsupported = (reason: string): never => {
-          throw new Error(`Composite primary keys are not supported ${reason} yet (entity ${entityName}).`);
-        };
-        if (application.reactive) unsupported('by reactive applications');
-        if (!application.databaseTypeSql) unsupported(`with the "${entity.databaseType}" database`);
-        if (entity.dtoMapstruct) unsupported('with MapStruct DTOs');
-        if (entity.jpaMetamodelFiltering) unsupported('with JPA metamodel filtering');
-        if (entity.searchEngineAny) unsupported('with a search engine');
-        if (entity.relationships.some(relationship => relationship.id)) unsupported('with @Id relationships');
-        const unsupportedFields = primaryKey.ownFields!.filter(field => !compositeIdFieldTypes.includes(field.javaFieldType));
-        if (unsupportedFields.length > 0) {
-          throw new Error(
-            `Composite primary key field type(s) ${unsupportedFields
-              .map(field => `"${field.fieldType}" (${field.fieldName})`)
-              .join(', ')} of entity ${entityName} are not supported yet. Supported types are: ${compositeIdFieldTypes.join(', ')}.`,
-          );
+        // The server of an entity of another application, like a microservice entity in a gateway, is not generated here.
+        if (!entity.skipServer) {
+          const unsupported = (reason: string): never => {
+            throw new Error(`Composite primary keys are not supported ${reason} yet (entity ${entityName}).`);
+          };
+          if (application.reactive) unsupported('by reactive applications');
+          if (!application.databaseTypeSql) unsupported(`with the "${entity.databaseType}" database`);
+          if (entity.dtoMapstruct) unsupported('with MapStruct DTOs');
+          if (entity.jpaMetamodelFiltering) unsupported('with JPA metamodel filtering');
+          if (entity.searchEngineAny) unsupported('with a search engine');
+          if (entity.relationships.some(relationship => relationship.id)) unsupported('with @Id relationships');
+          const unsupportedFields = primaryKey.ownFields!.filter(field => !compositeIdFieldTypes.includes(field.javaFieldType));
+          if (unsupportedFields.length > 0) {
+            throw new Error(
+              `Composite primary key field type(s) ${unsupportedFields
+                .map(field => `"${field.fieldType}" (${field.fieldName})`)
+                .join(', ')} of entity ${entityName} are not supported yet. Supported types are: ${compositeIdFieldTypes.join(', ')}.`,
+            );
+          }
         }
 
         entity.skipClient = true;

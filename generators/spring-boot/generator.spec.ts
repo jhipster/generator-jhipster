@@ -864,6 +864,75 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a composite primary key of string and uuid parts', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'OrderLine',
+          changelogDate: '20160926101210',
+          fields: [
+            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+            { fieldName: 'lineCode', fieldType: 'String', options: { id: true } },
+            { fieldName: 'ref', fieldType: 'UUID', options: { id: true } },
+            { fieldName: 'name', fieldType: 'String' },
+          ],
+        },
+      ]);
+    });
+
+    it('should reject a string part that cannot be a path segment', () => {
+      runResult.assertFileContent(
+        'src/main/java/com/mycompany/myapp/web/rest/OrderLineResource.java',
+        '        if (!isPathSegment(orderLine.getId().getLineCode())) {\n            throw BadRequestAlertException.idinvalid(ENTITY_NAME);',
+      );
+    });
+
+    it('should check the type and the range of the parts of a patch', () => {
+      runResult.assertFileContent(
+        'src/main/java/com/mycompany/myapp/web/rest/OrderLineResource.java',
+        'if (!orderIdNode.isIntegralNumber() || !orderIdNode.canConvertToLong() || !lineCodeNode.isString() || !refNode.isString()) {',
+      );
+    });
+
+    it('should compare a uuid part of a patch ignoring its case', () => {
+      runResult.assertFileContent(
+        'src/main/java/com/mycompany/myapp/web/rest/OrderLineResource.java',
+        '!Objects.equals(orderId, orderIdNode.longValue()) || !Objects.equals(lineCode, lineCodeNode.stringValue()) || !ref.toString().equalsIgnoreCase(refNode.stringValue())',
+      );
+    });
+
+    it('should quote the string parts in the representation of the id', () => {
+      runResult.assertFileContent(
+        'src/main/java/com/mycompany/myapp/domain/OrderLineId.java',
+        '"orderId=" + getOrderId() +\n            ", lineCode=\'" + getLineCode() + "\'" +\n            ", ref=\'" + getRef() + "\'" +',
+      );
+    });
+  });
+
+  describe('with a gateway and a microservice entity with a composite primary key', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ applicationType: 'gateway', reactive: true, skipClient: true }, [
+        {
+          name: 'OrderLine',
+          changelogDate: '20160926101210',
+          microserviceName: 'sales',
+          fields: [
+            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+            { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+          ],
+        },
+      ]);
+    });
+
+    it('should not generate the server of the entity', () => {
+      runResult.assertNoFile('src/main/java/com/mycompany/myapp/domain/OrderLineId.java');
+    });
+
+    it('should skip the client for the entity', () => {
+      expect(runResult.entities!.OrderLine.skipClient).toBe(true);
+    });
+  });
+
   describe('with a composite primary key and a client framework', () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig({ clientFramework: 'angular' }, [

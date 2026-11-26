@@ -902,7 +902,6 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "clientThemeVariantPrimary": false,
   "commandName": "spring-boot",
   "communicationSpringWebsocket": false,
-  "compositePrimaryKeySupport": true,
   "corsAdditionalAllowedOrigins": [],
   "corsAllowedOriginPatterns": [
     "https://*.githubpreview.dev",
@@ -1843,7 +1842,6 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "clientThemeVariantPrimary": false,
   "commandName": "spring-boot",
   "communicationSpringWebsocket": false,
-  "compositePrimaryKeySupport": true,
   "corsAdditionalAllowedOrigins": [],
   "corsAllowedOriginPatterns": [
     "https://*.githubpreview.dev",

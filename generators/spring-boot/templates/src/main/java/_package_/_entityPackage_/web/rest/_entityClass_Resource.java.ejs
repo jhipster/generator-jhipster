@@ -196,11 +196,15 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
             throw BadRequestAlertException.idexists(ENTITY_NAME);
         }
   <%_ } else { _%>
-        if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() == null<% for (const field of primaryKey.composite ? primaryKey.fields : []) { %> || <%- instanceName %>.<%- primaryKey.propertySupplierName %>().<%- field.propertySupplierName %>() == null<% } %>) {
+        if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() == null<%- (primaryKey.composite ? primaryKey.fields : []).map(field => ` || ${instanceName}.${primaryKey.propertySupplierName}().${field.propertySupplierName}() == null`).join('') %>) {
             throw BadRequestAlertException.idnull(ENTITY_NAME);
         }
     <%_ if (primaryKey.typeString) { _%>
         if (!isPathSegment(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
+            throw BadRequestAlertException.idinvalid(ENTITY_NAME);
+        }
+    <%_ } else if (primaryKey.composite && primaryKey.fields.some(field => field.fieldTypeString)) { _%>
+        if (<%- primaryKey.fields.filter(field => field.fieldTypeString).map(field => `!isPathSegment(${instanceName}.${primaryKey.propertySupplierName}().${field.propertySupplierName}())`).join(' || ') %>) {
             throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }
     <%_ } _%>
@@ -264,7 +268,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         <%- restInstance %> = <%- entityInstance %>Service.save(<%- instanceName %>);
     <%_ } _%>
     <%_ if (primaryKey.composite) { _%>
-        return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/<%- entityApiUrl %><% for (const field of primaryKey.fields) { %>/{<%- field.fieldName %>}<% } %>").build(<% for (const [index, field] of primaryKey.fields.entries()) { %><%- index === 0 ? '' : ', ' %><%- restInstance %>.<%- primaryKey.propertySupplierName %>().<%- field.propertySupplierName %>()<% } %>))
+        return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/<%- entityApiUrl %><%- primaryKey.fields.map(field => `/{${field.fieldName}}`).join('') %>").build(<%- primaryKey.fields.map(field => `${restInstance}.${primaryKey.propertySupplierName}().${field.propertySupplierName}()`).join(', ') %>))
     <%_ } else if (primaryKey.typeString && !primaryKey.autoGenerate) { _%>
         return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/<%- entityApiUrl %>/{<%- primaryKey.name %>}").build(<%- restInstance %>.<%- primaryKey.propertySupplierName %>()))
     <%_ } else { _%>
@@ -279,7 +283,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
 
     /**
   <%_ if (primaryKey.composite) { _%>
-     * {@code PUT  /<%- entityApiUrl %><% for (const field of primaryKey.fields) { %>/:<%- field.fieldName %><% } %>} : Updates an existing <%- entityInstance %>.
+     * {@code PUT  /<%- entityApiUrl %><%- primaryKey.fields.map(field => `/:${field.fieldName}`).join('') %>} : Updates an existing <%- entityInstance %>.
      *
     <%_ for (const field of primaryKey.fields) { _%>
      * @param <%- field.fieldName %> the <%- field.fieldName %> of the id of the <%- instanceName %> to save.
@@ -296,7 +300,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
   <%_ if (primaryKey.composite) { _%>
-    @PutMapping("<% for (const field of primaryKey.fields) { %>/{<%- field.fieldName %>}<% } %>")
+    @PutMapping("<%- primaryKey.fields.map(field => `/{${field.fieldName}}`).join('') %>")
   <%_ } else { _%>
     @PutMapping("/{<%- primaryKey.name %>}")
   <%_ } _%>
@@ -361,7 +365,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
 
     /**
   <%_ if (primaryKey.composite) { _%>
-     * {@code PATCH  /<%- entityApiUrl %><% for (const field of primaryKey.fields) { %>/:<%- field.fieldName %><% } %>} : Partial updates given fields of an existing <%- entityInstance %>, field will ignore if it is null
+     * {@code PATCH  /<%- entityApiUrl %><%- primaryKey.fields.map(field => `/:${field.fieldName}`).join('') %>} : Partial updates given fields of an existing <%- entityInstance %>, field will ignore if it is null
      *
     <%_ for (const field of primaryKey.fields) { _%>
      * @param <%- field.fieldName %> the <%- field.fieldName %> of the id of the <%- instanceName %> to save.
@@ -379,7 +383,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
   <%_ if (primaryKey.composite) { _%>
-    @PatchMapping(value = "<% for (const field of primaryKey.fields) { %>/{<%- field.fieldName %>}<% } %>", consumes = {"application/json", "application/merge-patch+json"})
+    @PatchMapping(value = "<%- primaryKey.fields.map(field => `/{${field.fieldName}}`).join('') %>", consumes = {"application/json", "application/merge-patch+json"})
   <%_ } else { _%>
     @PatchMapping(value = "/{<%- primaryKey.name %>}", consumes = {"application/json", "application/merge-patch+json"})
   <%_ } _%>
@@ -406,13 +410,13 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     <%_ for (const field of primaryKey.fields) { _%>
         var <%- field.fieldName %>Node = <%- instanceName %>.get("<%- field.fieldName %>");
     <%_ } _%>
-        if (<% for (const [index, field] of primaryKey.fields.entries()) { %><%- index === 0 ? '' : ' || ' %><%- field.fieldName %>Node == null || <%- field.fieldName %>Node.isNull()<% } %>) {
+        if (<%- primaryKey.fields.map(field => `${field.fieldName}Node == null || ${field.fieldName}Node.isNull()`).join(' || ') %>) {
             throw BadRequestAlertException.idnull(ENTITY_NAME);
         }
-        if (<% for (const [index, field] of primaryKey.fields.entries()) { %><%- index === 0 ? '' : ' || ' %>!<%- field.fieldName %>Node.<%- field.fieldTypeLong || field.fieldTypeInteger ? 'isIntegralNumber' : 'isString' %>()<% } %>) {
+        if (<%- primaryKey.fields.map(field => `!${field.fieldName}Node.${field.fieldTypeLong || field.fieldTypeInteger ? 'isIntegralNumber' : 'isString'}()${{ Integer: ` || !${field.fieldName}Node.canConvertToInt()`, Long: ` || !${field.fieldName}Node.canConvertToLong()` }[field.javaFieldType] ?? ''}`).join(' || ') %>) {
             throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }
-        if (<% for (const [index, field] of primaryKey.fields.entries()) { %><%- index === 0 ? '' : ' || ' %>!Objects.equals(<%- field.fieldName %><%- field.fieldTypeUUID ? '.toString()' : '' %>, <%- field.fieldName %>Node.<%- ({ Long: 'longValue', Integer: 'intValue' })[field.javaFieldType] ?? 'stringValue' %>())<% } %>) {
+        if (<%- primaryKey.fields.map(field => field.fieldTypeUUID ? `!${field.fieldName}.toString().equalsIgnoreCase(${field.fieldName}Node.stringValue())` : `!Objects.equals(${field.fieldName}, ${field.fieldName}Node.${{ Long: 'longValue', Integer: 'intValue' }[field.javaFieldType] ?? 'stringValue'}())`).join(' || ') %>) {
             throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }
   <%_ } else { _%>
@@ -556,7 +560,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
 <%_ } _%>
     /**
 <%_ if (primaryKey.composite) { _%>
-     * {@code GET  /<%- entityApiUrl %><% for (const field of primaryKey.fields) { %>/:<%- field.fieldName %><% } %>} : get the <%- entityInstance %> of the id.
+     * {@code GET  /<%- entityApiUrl %><%- primaryKey.fields.map(field => `/:${field.fieldName}`).join('') %>} : get the <%- entityInstance %> of the id.
      *
   <%_ for (const field of primaryKey.fields) { _%>
      * @param <%- field.fieldName %> the <%- field.fieldName %> of the id of the <%- instanceName %> to retrieve.
@@ -569,7 +573,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the <%- instanceName %>, or with status {@code 404 (Not Found)}.
      */
 <%_ if (primaryKey.composite) { _%>
-    @GetMapping("<% for (const field of primaryKey.fields) { %>/{<%- field.fieldName %>}<% } %>")
+    @GetMapping("<%- primaryKey.fields.map(field => `/{${field.fieldName}}`).join('') %>")
 <%_ } else { _%>
     @GetMapping("/{id}")
 <%_ } _%>
@@ -580,7 +584,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
 <%_ if (primaryKey.composite) { _%>
-    public ResponseEntity<<%- instanceType %>> get<%- entityClass %>(<% for (const [index, field] of primaryKey.fields.entries()) { %><%- index === 0 ? '' : ', ' %>@PathVariable("<%- field.fieldName %>") <%- field.javaFieldType %> <%- field.fieldName %><% } %>) {
+    public ResponseEntity<<%- instanceType %>> get<%- entityClass %>(<%- primaryKey.fields.map(field => `@PathVariable("${field.fieldName}") ${field.javaFieldType} ${field.fieldName}`).join(', ') %>) {
         final <%- primaryKey.type %> id = new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.fieldName).join(', ') %>);
 <%_ } else { _%>
     public <%- reactive ? 'Mono<' : '' %>ResponseEntity<<%- instanceType %>><%- reactive ? '>' : '' %> get<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
@@ -592,7 +596,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
 
     /**
   <%_ if (primaryKey.composite) { _%>
-     * {@code DELETE  /<%- entityApiUrl %><% for (const field of primaryKey.fields) { %>/:<%- field.fieldName %><% } %>} : delete the <%- entityInstance %> of the id.
+     * {@code DELETE  /<%- entityApiUrl %><%- primaryKey.fields.map(field => `/:${field.fieldName}`).join('') %>} : delete the <%- entityInstance %> of the id.
      *
     <%_ for (const field of primaryKey.fields) { _%>
      * @param <%- field.fieldName %> the <%- field.fieldName %> of the id of the <%- instanceName %> to delete.
@@ -605,7 +609,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
   <%_ if (primaryKey.composite) { _%>
-    @DeleteMapping("<% for (const field of primaryKey.fields) { %>/{<%- field.fieldName %>}<% } %>")
+    @DeleteMapping("<%- primaryKey.fields.map(field => `/{${field.fieldName}}`).join('') %>")
   <%_ } else { _%>
     @DeleteMapping("/{id}")
   <%_ } _%>
@@ -613,7 +617,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
   <%_ if (primaryKey.composite) { _%>
-    public ResponseEntity<Void> delete<%- entityClass %>(<% for (const [index, field] of primaryKey.fields.entries()) { %><%- index === 0 ? '' : ', ' %>@PathVariable("<%- field.fieldName %>") <%- field.javaFieldType %> <%- field.fieldName %><% } %>) {
+    public ResponseEntity<Void> delete<%- entityClass %>(<%- primaryKey.fields.map(field => `@PathVariable("${field.fieldName}") ${field.javaFieldType} ${field.fieldName}`).join(', ') %>) {
         final <%- primaryKey.type %> id = new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.fieldName).join(', ') %>);
   <%_ } else { _%>
     public <%- reactive ? 'Mono<' : '' %>ResponseEntity<Void><%- reactive ? '>' : '' %> delete<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
@@ -656,14 +660,14 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ } _%>
 <%- include('../../_partials_entity_/search_template', { viaService }) -%>
 <%_ } _%>
-<%_ if (!readOnly && primaryKey.typeString && !primaryKey.autoGenerate) { _%>
+<%_ if (!readOnly && (primaryKey.composite ? primaryKey.fields.some(field => field.fieldTypeString) : primaryKey.typeString && !primaryKey.autoGenerate)) { _%>
 
     /**
-     * Whether an id can be the segment of the url of the entity: the server rejects an url with an encoded slash,
-     * backslash, percent sign, semicolon or control character, and an empty, {@code .} or {@code ..} segment.
+     * Whether an id, or a part of a composite id, can be a segment of the url of the entity: the server rejects an url with
+     * an encoded slash, backslash, percent sign, semicolon or control character, and an empty, {@code .} or {@code ..} segment.
      *
-     * @param value the id.
-     * @return {@code true} if the id can be a segment of the url.
+     * @param value the id, or the part of the id.
+     * @return {@code true} if the value can be a segment of the url.
      */
     private static boolean isPathSegment(String value) {
         return (

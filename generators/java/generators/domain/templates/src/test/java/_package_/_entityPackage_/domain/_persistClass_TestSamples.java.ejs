@@ -47,7 +47,7 @@ public class <%- persistClass %>TestSamples {
 
     public static <%- persistClass %> get<%- persistClass %>Sample1() {
 <%_ if (fluentMethods) { _%>
-        return new <%- persistClass %>()<% if (primaryKey?.composite) { %>.<%- primaryKey.name %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.javaValueSample1).join(', ') %>))<% } %><% for (const field of sampleFields) { %>.<%- field.fieldName %>(<%- field.javaValueSample1 %>)<% } %>;
+        return new <%- persistClass %>()<% if (primaryKey?.composite) { %>.<%- primaryKey.name %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.javaValueSample1).join(', ') %>))<% } %><%- sampleFields.map(field => `.${field.fieldName}(${field.javaValueSample1})`).join('') %>;
 <%_ } else { _%>
         <%- persistClass %> <%- persistInstance %> = new <%- persistClass %>();
   <%_ if (primaryKey?.composite) { _%>
@@ -62,7 +62,7 @@ public class <%- persistClass %>TestSamples {
 
     public static <%- persistClass %> get<%- persistClass %>Sample2() {
 <%_ if (fluentMethods) { _%>
-        return new <%- persistClass %>()<% if (primaryKey?.composite) { %>.<%- primaryKey.name %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.javaValueSample2).join(', ') %>))<% } %><% for (const field of sampleFields) { %>.<%- field.fieldName %>(<%- field.javaValueSample2 %>)<% } %>;
+        return new <%- persistClass %>()<% if (primaryKey?.composite) { %>.<%- primaryKey.name %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.javaValueSample2).join(', ') %>))<% } %><%- sampleFields.map(field => `.${field.fieldName}(${field.javaValueSample2})`).join('') %>;
 <%_ } else { _%>
         <%- persistClass %> <%- persistInstance %> = new <%- persistClass %>();
   <%_ if (primaryKey?.composite) { _%>
@@ -77,7 +77,7 @@ public class <%- persistClass %>TestSamples {
 
     public static <%- persistClass %> get<%- persistClass %>RandomSampleGenerator() {
 <%_ if (fluentMethods) { _%>
-        return new <%- persistClass %>()<% if (primaryKey?.composite) { %>.<%- primaryKey.name %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.fieldJavaValueGenerator).join(', ') %>))<% } %><% for (const field of sampleFields) { %>.<%- field.fieldName %>(<%- field.fieldJavaValueGenerator %>)<% } %>;
+        return new <%- persistClass %>()<% if (primaryKey?.composite) { %>.<%- primaryKey.name %>(new <%- primaryKey.type %>(<%- primaryKey.fields.map(field => field.fieldJavaValueGenerator).join(', ') %>))<% } %><%- sampleFields.map(field => `.${field.fieldName}(${field.fieldJavaValueGenerator})`).join('') %>;
 <%_ } else { _%>
         <%- persistClass %> <%- persistInstance %> = new <%- persistClass %>();
   <%_ if (primaryKey?.composite) { _%>
