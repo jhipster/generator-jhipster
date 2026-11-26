@@ -348,8 +348,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         });
       },
       preparePrimaryKeyNames({ entity }) {
-        mutateData(entity, {
-          __override__: false,
+        mutateDefaults(entity, {
           angularPrimaryKeyNames: ({ primaryKey }) => primaryKey?.fields.map(field => `'${field.fieldName}'`).join(' | '),
         });
       },
