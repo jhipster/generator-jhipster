@@ -550,16 +550,25 @@ describe(`generator - ${generator}`, () => {
               fieldType: 'String',
               options: { mapstructExpression: 'java(s.getId() + \\\\" | \\\\" + s.getName())' },
             },
+            // A backslash, as a JDL gives it, and as the entity file of a JDL imported before the JDL unescaped its strings.
+            { fieldName: 'split', fieldType: 'String', options: { mapstructExpression: 'java(s.getName().split("\\\\.")[0])' } },
+            {
+              fieldName: 'splitEscaped',
+              fieldType: 'String',
+              options: { mapstructExpression: 'java(s.getName().split(\\"\\\\\\\\.\\")[0])' },
+            },
           ],
         },
       ]);
     });
 
-    it('should escape every quote of the expressions exactly once', () => {
+    it('should escape every quote and backslash of the expressions exactly once', () => {
       const mapper = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/StreamRightsMapper.java`;
       runResult.assertFileContent(mapper, 'target = "details", expression = "java(s.getId() + \\" | \\" + s.getName())"');
       runResult.assertFileContent(mapper, 'target = "bare", expression = "java(s.getId() + \\" | \\" + s.getName())"');
       runResult.assertFileContent(mapper, 'target = "doubled", expression = "java(s.getId() + \\" | \\" + s.getName())"');
+      runResult.assertFileContent(mapper, 'target = "split", expression = "java(s.getName().split(\\"\\\\\\\\.\\")[0])"');
+      runResult.assertFileContent(mapper, 'target = "splitEscaped", expression = "java(s.getName().split(\\"\\\\\\\\.\\")[0])"');
     });
   });
 

@@ -74,9 +74,14 @@ export default class DomainGenerator extends JavaApplicationGenerator {
         }
       },
       normalizeMapstructExpression({ field }) {
-        if (field.mapstructExpression) {
-          // The expression is written inside a java string literal: every quote must be escaped exactly once, whatever the JDL or json escaping was.
-          field.mapstructExpression = field.mapstructExpression.replace(/\\*"/g, '\\"');
+        const expression: string | undefined = field.mapstructExpression;
+        if (expression) {
+          // The expression is written inside a java string literal.
+          // A JDL gives the expression as written in java, so its backslashes and quotes are escaped.
+          // An expression with an escaped quote is a java string literal already, as in the entity files of a JDL imported before
+          // the JDL unescaped its strings, or in a copy of `jhipster info`: every quote is escaped exactly once.
+          field.mapstructExpression =
+            expression.includes('\\"') ? expression.replace(/\\*"/g, '\\"') : expression.replace(/[\\"]/g, '\\$&');
         }
       },
     });
