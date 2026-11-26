@@ -631,6 +631,12 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             valueSep: ', ',
           },
         ]);
+        source.ignoreSonarRule?.({
+          ruleId: 'S3776',
+          ruleKey: 'typescript:S3776',
+          resourceKey: `${clientSrcDir}app/entities/**/*-form.service.ts`,
+          comment: 'Rule typescript:S3776 is ignored, the form services convert every field of the entity, one condition each',
+        });
       },
     });
   }
