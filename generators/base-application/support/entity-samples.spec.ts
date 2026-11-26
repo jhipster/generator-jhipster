@@ -286,6 +286,87 @@ describe('generator - base-application - support - generateEntitySamples', () =>
     );
   });
 
+  it('should draw a value of a pattern within the minlength and the maxlength of its field', () => {
+    const field = prepareField({
+      fieldName: 'code',
+      fieldType: 'String',
+      fieldValidateRules: ['required', 'minlength', 'maxlength', 'pattern'],
+      fieldValidateRulesMinlength: 3,
+      fieldValidateRulesMaxlength: 10,
+      fieldValidateRulesPattern: '^[a-z]+$',
+    });
+    const values = samples([field], 30).map(sample => sample.code);
+    // A value left undefined is not a text: tested as one, it would be 'undefined', of the pattern, and toEqual ignores it.
+    expect(values.filter(value => typeof value !== 'string' || !/^[a-z]{3,10}$/.test(value))).toStrictEqual([]);
+  });
+
+  it('should draw a value of a pattern with a minlength above the repetitions it draws by default', () => {
+    const field = prepareField({
+      fieldName: 'code',
+      fieldType: 'String',
+      fieldValidateRules: ['minlength', 'pattern'],
+      fieldValidateRulesMinlength: 12,
+      fieldValidateRulesPattern: '^[a-z]+$',
+    });
+    const values = samples([field], 30).map(sample => sample.code);
+    expect(values.filter(value => typeof value !== 'string' || !/^[a-z]{12,}$/.test(value))).toStrictEqual([]);
+  });
+
+  it('should draw a value of nested repetitions with a minlength within the 255 characters of its column', () => {
+    const field = prepareField({
+      fieldName: 'name',
+      fieldType: 'String',
+      fieldValidateRules: ['minlength', 'pattern'],
+      fieldValidateRulesMinlength: 80,
+      fieldValidateRulesPattern: '^[a-z]+( [a-z]+)*$',
+    });
+    const values = samples([field], 30).map(sample => sample.name);
+    expect(
+      values.filter(value => typeof value !== 'string' || value.length < 80 || value.length > 255 || !/^[a-z]+( [a-z]+)*$/.test(value)),
+    ).toStrictEqual([]);
+  });
+
+  it('should draw a value of a pattern within its maxlength instead of cutting it', () => {
+    const field = prepareField({
+      fieldName: 'site',
+      fieldType: 'String',
+      fieldValidateRules: ['minlength', 'maxlength', 'pattern'],
+      fieldValidateRulesMinlength: 6,
+      fieldValidateRulesMaxlength: 12,
+      fieldValidateRulesPattern: String.raw`^[a-z]+\.com$`,
+    });
+    const values = samples([field], 30).map(sample => sample.site);
+    expect(values.filter(value => typeof value !== 'string' || !/^[a-z]{2,8}\.com$/.test(value))).toStrictEqual([]);
+  });
+
+  it('should draw a value of a pattern with a back reference within the minlength of its field', () => {
+    const field = prepareField({
+      fieldName: 'code',
+      fieldType: 'String',
+      fieldValidateRules: ['minlength', 'pattern'],
+      fieldValidateRulesMinlength: 20,
+      fieldValidateRulesPattern: String.raw`^(a+)\1$`,
+    });
+    const values = samples([field], 30).map(sample => sample.code);
+    expect(values.filter(value => typeof value !== 'string' || value.length < 20 || !/^(a+)\1$/.test(value))).toStrictEqual([]);
+  });
+
+  it('should warn once of a pattern giving no value within the length of its field', () => {
+    const warnings: string[] = [];
+    const warningGenerator = { jhipsterConfig: config, log: { warn: (message: string) => warnings.push(message), debug() {} } };
+    Object.setPrototypeOf(warningGenerator, BaseGenerator.prototype);
+    const field = prepareCommonFieldForTemplates(
+      entity,
+      { fieldName: 'code', fieldType: 'String', fieldValidateRules: ['pattern'], fieldValidateRulesPattern: '^[a-z]{300}$' } as any,
+      warningGenerator as any,
+    );
+    samples([field], 3);
+    samples([field], 3);
+    expect(warnings).toStrictEqual([
+      'The pattern ^[a-z]{300}$ of the field code gives no value of 0 to 255 characters (its minlength, and its maxlength or the 255 characters of its column): its fake data may be dropped or longer than its column.',
+    ]);
+  });
+
   it('should draw a duration as ISO 8601', () => {
     const [sample] = samples([prepareField({ fieldName: 'time', fieldType: 'Duration' })], 1);
     expect(sample.time).toMatch(/^PT\d+M$/);
