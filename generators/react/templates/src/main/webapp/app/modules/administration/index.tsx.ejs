@@ -32,7 +32,7 @@ import Health from './health/health';
 import Logs from './logs/logs';
 import Metrics from './metrics/metrics';
 <%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
 import Tracker from './tracker/tracker';
 <%_ } _%>
 /* jhipster-needle-add-route-import - JHipster will add admin routes here */
@@ -41,7 +41,7 @@ const AdministrationRoutes = () => (
   <div>
     <ErrorBoundaryRoutes>
       {/* jhipster-needle-add-route-path - JHipster will add admin routes here */}
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
       <Route path="tracker" element={<Tracker />} />
 <%_ } _%>
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>

@@ -88,7 +88,4 @@ export type Application<E extends Entity = Entity> = {
   /** @experimental to be replaced with needles */
   angularEntities?: E[];
   angularLocaleId?: string;
-
-  // Common properties
-  communicationSpringWebsocket?: boolean;
 } & ClientApplication<E>;

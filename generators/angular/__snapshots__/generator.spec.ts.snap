@@ -3447,6 +3447,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -3524,6 +3527,15 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/gateway/gateway.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/admin/tracker/tracker.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/admin/tracker/tracker.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/admin/tracker/tracker.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/app-page-title-strategy.ts": {
@@ -3623,6 +3635,15 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/request/request.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/tracker/tracker-activity.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/tracker/tracker.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/tracker/tracker.service.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/alert.service.spec.ts": {
@@ -4045,6 +4066,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -4210,6 +4234,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/sockjs-client.polyfill.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -4274,6 +4301,15 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
         "tinyglobby": null,
+      },
+    },
+    {
+      "dependencies": {
+        "@stomp/rx-stomp": "STOMP_RX_STOMP_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+      },
+      "devDependencies": {
+        "@types/sockjs-client": "TYPES_SOCKJS_CLIENT_VERSION",
       },
     },
     {
@@ -4609,6 +4645,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -4769,6 +4808,15 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/admin/metrics/metrics.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/admin/tracker/tracker.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/admin/tracker/tracker.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/admin/tracker/tracker.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
@@ -4823,6 +4871,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/core/auth/auth-session.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/auth/csrf.service.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/auth/index.ts": {
     "stateCleared": "modified",
   },
@@ -4863,6 +4914,15 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/request/request.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/tracker/tracker-activity.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/tracker/tracker.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/tracker/tracker.service.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/alert.service.spec.ts": {
@@ -5372,6 +5432,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -5591,6 +5654,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/sockjs-client.polyfill.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -5659,6 +5725,16 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
         "deepmerge": null,
         "folder-hash": null,
         "tinyglobby": null,
+      },
+    },
+    {
+      "dependencies": {
+        "@stomp/rx-stomp": "STOMP_RX_STOMP_VERSION",
+        "ngx-cookie-service": "NGX_COOKIE_SERVICE_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+      },
+      "devDependencies": {
+        "@types/sockjs-client": "TYPES_SOCKJS_CLIENT_VERSION",
       },
     },
     {
@@ -6012,6 +6088,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -7174,6 +7253,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -8473,6 +8555,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -8741,6 +8826,15 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/admin/metrics/metrics.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/tracker/tracker.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/tracker/tracker.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/tracker/tracker.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
@@ -8844,6 +8938,15 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/request.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/tracker/tracker-activity.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/tracker/tracker.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/tracker/tracker.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/alert.service.spec.ts": {
@@ -9425,6 +9528,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -9644,6 +9750,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/sockjs-client.polyfill.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -9710,6 +9819,15 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
         "deepmerge": null,
         "folder-hash": null,
         "tinyglobby": null,
+      },
+    },
+    {
+      "dependencies": {
+        "@stomp/rx-stomp": "STOMP_RX_STOMP_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+      },
+      "devDependencies": {
+        "@types/sockjs-client": "TYPES_SOCKJS_CLIENT_VERSION",
       },
     },
     {
@@ -10054,6 +10172,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -11193,6 +11314,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -11257,6 +11381,15 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/admin/docs/docs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/tracker/tracker.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/tracker/tracker.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/tracker/tracker.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
@@ -11305,6 +11438,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/core/auth/auth-session.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/csrf.service.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/index.ts": {
     "stateCleared": "modified",
   },
@@ -11348,6 +11484,15 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/request.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/tracker/tracker-activity.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/tracker/tracker.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/tracker/tracker.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/alert.service.spec.ts": {
@@ -11770,6 +11915,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -11935,6 +12083,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/sockjs-client.polyfill.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -11996,6 +12147,16 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
         "tinyglobby": null,
+      },
+    },
+    {
+      "dependencies": {
+        "@stomp/rx-stomp": "STOMP_RX_STOMP_VERSION",
+        "ngx-cookie-service": "NGX_COOKIE_SERVICE_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+      },
+      "devDependencies": {
+        "@types/sockjs-client": "TYPES_SOCKJS_CLIENT_VERSION",
       },
     },
     {

@@ -43,6 +43,9 @@ export type CommonAddedApplicationProperties = {
   skipClient?: boolean;
   skipServer?: boolean;
 
+  /** The backend provides a websocket, whichever it is. */
+  websocketAny: boolean;
+
   generateInMemoryUserCredentials: boolean;
   defaultUserUsername: string;
   defaultUserPassword: string;
@@ -67,6 +70,8 @@ export const mutateApplication = {
   authenticationTypeSession: data => data.authenticationType === 'session',
   authenticationTypeJwt: data => data.authenticationType === 'jwt',
   authenticationTypeOauth2: data => data.authenticationType === 'oauth2',
+
+  websocketAny: ({ websocket }) => Boolean(websocket) && websocket !== 'no',
 
   authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
   // The session remember-me tokens are stored with the users.

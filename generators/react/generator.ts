@@ -29,7 +29,6 @@ import {
   generateEntityClientImports as formatEntityClientImports,
   isClientField,
 } from '../client/support/index.ts';
-import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.ts';
@@ -121,7 +120,9 @@ export default class ReactGenerator extends ReactApplicationGenerator {
         await this.composeWithJHipster('jhipster:client:common');
         // The models of the entities are the types of the REST API.
         await this.composeWithJHipster('jhipster:client:rest-domain');
-        if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
+        // The client of a websocket of the backend, whichever it is.
+        const { websocket } = this.jhipsterConfigWithDefaults as { websocket?: string };
+        if (websocket && websocket !== 'no') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
         }
       },
@@ -397,7 +398,7 @@ ${comment}
         });
       },
       addIndexAsset({ application, source }) {
-        if (application.communicationSpringWebsocket) {
+        if (application.websocketAny) {
           source.addExternalResourceToRoot!({
             resource: '<script>const global = globalThis;</script>',
             comment: 'sockjs-client requires the global object to be defined',
@@ -409,8 +410,8 @@ ${comment}
         });
       },
       addWebsocketDependencies({ application, source }) {
-        const { communicationSpringWebsocket, nodeDependencies } = application;
-        if (communicationSpringWebsocket) {
+        const { websocketAny, nodeDependencies } = application;
+        if (websocketAny) {
           source.mergeClientPackageJson!({
             dependencies: {
               rxjs: nodeDependencies.rxjs,

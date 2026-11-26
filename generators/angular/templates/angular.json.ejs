@@ -78,7 +78,7 @@
             "index": "<%- relativeDir(clientRootDir, clientSrcDir) %>index.html",
             "browser": "<%- relativeDir(clientRootDir, clientSrcDir) %>main.ts",
             "polyfills": [
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
               "./<%- relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill",
 <%_ } _%>
 <%_ if (microfrontend) { _%>

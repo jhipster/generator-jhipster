@@ -197,6 +197,7 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "userManagement": Any<Object>,
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": "no",
+  "websocketAny": false,
   "withAdminUi": true,
 }
 `;

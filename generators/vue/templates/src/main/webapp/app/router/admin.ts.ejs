@@ -28,7 +28,7 @@ import {Authority} from "@/shared/jhipster/constants";
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   const <%- jhiPrefixCapitalized %>GatewayComponent = () => import('@/admin/gateway/gateway.vue');
 <%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
   const <%- jhiPrefixCapitalized %>TrackerComponent = () => import('@/admin/tracker/tracker.vue');
 <%_ } _%>
 
@@ -73,7 +73,7 @@ export default [
       meta: { authorities: [Authority.ADMIN] }
     },
 <%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
     {
       path: '/admin/tracker',
       name: '<%- jhiPrefixCapitalized %>TrackerComponent',

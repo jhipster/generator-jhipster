@@ -31,6 +31,7 @@ Options:
   --jdl-store <value>                      JDL store
   --skip-client                            Skip the client-side application generation
   --skip-server                            Skip the server-side application generation
+  --websocket <value>                      The websocket the backend provides, used by the clients
   --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")
   --skip-user-management                   Skip the user management module during app generation
   --skip-user-registration                 Skip the registration and the activation of an account by its user, the users are created by an administrator
@@ -43,7 +44,6 @@ Options:
   --search-engine <value>                  Provide search engine for the application when skipping server side generation (choices: "no", "elasticsearch", "couchbase")
   --skip-check-length-of-identifier        Skip checking the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-fake-data                         Skip generation of fake data for development
-  --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation
   --dev-database-type <value>              Development database (choices: "postgresql", "mysql", "mariadb", "oracle", "mssql", "h2Disk", "h2Memory")
   --reactive                               Generate a reactive backend

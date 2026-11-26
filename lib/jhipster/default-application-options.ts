@@ -86,7 +86,7 @@ const commonDefaultOptions: ApplicationDefaults = {
   [JHI_PREFIX]: OptionValues[JHI_PREFIX],
   messageBroker: 'no',
   [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].no,
-  [WEBSOCKET]: OptionValues[WEBSOCKET].no,
+  [WEBSOCKET]: 'no',
 };
 
 export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}): ApplicationDefaults {

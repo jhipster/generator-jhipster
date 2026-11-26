@@ -320,6 +320,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "webappEnumerationsDir": "clientRoot/src/app/shared/model/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -406,6 +409,12 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
     "stateCleared": "modified",
   },
   "clientRoot/src/app/config/store.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/config/websocket-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/config/websocket-middleware.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
@@ -546,6 +555,12 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/modules/administration/index.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/tracker/tracker.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/tracker/tracker.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/home/home.scss": {
     "stateCleared": "modified",
   },
@@ -607,6 +622,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/encode-csrf-token.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
@@ -854,6 +872,10 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   ],
   "addExternalResourceToRoot": [
     {
+      "comment": "sockjs-client requires the global object to be defined",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
@@ -881,6 +903,13 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
     ],
   ],
   "mergeClientPackageJson": [
+    {
+      "dependencies": {
+        "rxjs": "RXJS_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+        "webstomp-client": "WEBSTOMP_CLIENT_VERSION",
+      },
+    },
     {
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
@@ -1203,6 +1232,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "webappEnumerationsDir": "clientRoot/src/app/shared/model/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -1292,6 +1324,12 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/config/translation.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/config/websocket-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/config/websocket-middleware.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/admin/authority/authority-delete-dialog.tsx": {
@@ -1504,6 +1542,12 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/modules/administration/metrics/metrics.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/tracker/tracker.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/tracker/tracker.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/home/home.scss": {
     "stateCleared": "modified",
   },
@@ -1568,6 +1612,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/encode-csrf-token.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
@@ -1732,6 +1779,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/shared/reducers/user-management.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/util/cookie-utils.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/util/date-utils.ts": {
     "stateCleared": "modified",
   },
@@ -1870,6 +1920,10 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   ],
   "addExternalResourceToRoot": [
     {
+      "comment": "sockjs-client requires the global object to be defined",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
@@ -1897,6 +1951,13 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     ],
   ],
   "mergeClientPackageJson": [
+    {
+      "dependencies": {
+        "rxjs": "RXJS_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+        "webstomp-client": "WEBSTOMP_CLIENT_VERSION",
+      },
+    },
     {
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
@@ -2488,6 +2549,9 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "webappEnumerationsDir": "clientRoot/src/app/shared/model/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -3452,6 +3516,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -4502,6 +4569,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -4588,6 +4658,12 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/translation.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/websocket-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/websocket-middleware.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/authority/authority-delete-dialog.tsx": {
@@ -4872,6 +4948,12 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/modules/administration/metrics/metrics.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/tracker/tracker.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/tracker/tracker.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/home/home.scss": {
     "stateCleared": "modified",
   },
@@ -4945,6 +5027,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/encode-csrf-token.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
@@ -5245,6 +5330,10 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   ],
   "addExternalResourceToRoot": [
     {
+      "comment": "sockjs-client requires the global object to be defined",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
@@ -5272,6 +5361,13 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     ],
   ],
   "mergeClientPackageJson": [
+    {
+      "dependencies": {
+        "rxjs": "RXJS_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+        "webstomp-client": "WEBSTOMP_CLIENT_VERSION",
+      },
+    },
     {
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
@@ -5603,6 +5699,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -6475,6 +6574,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -6558,6 +6660,12 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/store.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/websocket-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/websocket-middleware.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
@@ -6689,6 +6797,12 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "src/main/webapp/app/modules/administration/index.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/tracker/tracker.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/tracker/tracker.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/home/home.scss": {
     "stateCleared": "modified",
   },
@@ -6744,6 +6858,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/encode-csrf-token.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
@@ -6858,6 +6975,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/reducer.utils.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/cookie-utils.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/util/date-utils.ts": {
@@ -6988,6 +7108,10 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   ],
   "addExternalResourceToRoot": [
     {
+      "comment": "sockjs-client requires the global object to be defined",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
@@ -7015,6 +7139,13 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     ],
   ],
   "mergeClientPackageJson": [
+    {
+      "dependencies": {
+        "rxjs": "RXJS_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+        "webstomp-client": "WEBSTOMP_CLIENT_VERSION",
+      },
+    },
     {
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",

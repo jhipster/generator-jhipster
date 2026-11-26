@@ -144,14 +144,14 @@ const config = defineConfig({
 <%_ if (authenticationTypeSession) { _%>
         '/login',
 <%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
         '/websocket',
 <%_ } _%>
       ].map(res => [
         res,
         {
           target: 'http://localhost:<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
           ws: res === '/websocket',
 <%_ } _%>
         },

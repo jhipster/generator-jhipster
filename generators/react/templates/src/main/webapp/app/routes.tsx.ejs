@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Suspense, lazy<%- communicationSpringWebsocket ? ', useEffect' : '' %> } from 'react';
-import { Route<%- communicationSpringWebsocket ? ', useLocation' : '' %> } from 'react-router';
+import { Suspense, lazy<%- websocketAny ? ', useEffect' : '' %> } from 'react';
+import { Route<%- websocketAny ? ', useLocation' : '' %> } from 'react-router';
 
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 import { loadRemote } from '@module-federation/runtime';
 <%_ } _%>
 
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
 import { sendActivity } from 'app/config/websocket-middleware';
 <%_ } _%>
 import EntitiesRoutes from 'app/entities/routes';
@@ -65,7 +65,7 @@ const <%- remote.capitalizedBaseName %>Routes = lazy(() => loadRemote<any>('<%- 
   <%_ } _%>
 <%_ } _%>
 const AppRoutes = () => {
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
   const pageLocation = useLocation();
   useEffect(() => {
     sendActivity(pageLocation.pathname);

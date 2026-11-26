@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { ALPHABETIC_LOWER_PATTERN, ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
+import { ALPHABETIC_LOWER_PATTERN, ALPHANUMERIC_DASH_PATTERN, ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 import { applicationTypesChoices } from '../../lib/core/application-types.ts';
 
 const command = {
@@ -49,6 +49,18 @@ const command = {
         type: Boolean,
       },
       jdl: { type: 'boolean', tokenType: 'BOOLEAN' },
+      scope: 'storage',
+    },
+    websocket: {
+      description: 'The websocket the backend provides, used by the clients',
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_DASH_PATTERN,
+      },
       scope: 'storage',
     },
     authenticationType: {

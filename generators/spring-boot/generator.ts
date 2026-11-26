@@ -60,7 +60,7 @@ import type {
 } from './types.ts';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
-const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
+const { SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
@@ -271,17 +271,6 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
             }),
           );
         });
-      },
-      checksWebsocket({ application }) {
-        const { websocket } = application;
-        if (websocket && websocket !== NO_WEBSOCKET) {
-          if (application.reactive) {
-            throw new Error('Spring Websocket is not supported with reactive applications.');
-          }
-          if (application.applicationType === APPLICATION_TYPE_MICROSERVICE) {
-            throw new Error('Spring Websocket is not supported with microservice applications.');
-          }
-        }
       },
       loadSpringBootBom({ application }) {
         if (this.useVersionPlaceholders) {

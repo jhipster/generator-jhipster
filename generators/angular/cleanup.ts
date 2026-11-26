@@ -121,7 +121,7 @@ export default asWritingTask<AngularEntity, AngularApplication>(function cleanup
     this.removeFile(`${application.clientSrcDir}app/shared/login/login.component.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/login/login.component.html`);
     this.removeFile(`${application.clientSrcDir}app/core/auth/user-route-access-service.ts`);
-    if (!application.authenticationTypeSession || !application.communicationSpringWebsocket) {
+    if (!application.authenticationTypeSession || !application.websocketAny) {
       this.removeFile(`${application.clientSrcDir}app/core/auth/csrf.service.ts`);
     }
     this.removeFolder(`${application.clientSrcDir}app/core/login`);

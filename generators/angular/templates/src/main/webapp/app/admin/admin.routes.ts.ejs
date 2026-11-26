@@ -54,7 +54,7 @@ const routes: Routes = [
     title: 'gateway.title',
   },
 <%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
   {
     path: 'tracker',
     loadComponent: () => import('./tracker/tracker'),

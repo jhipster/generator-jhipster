@@ -29,7 +29,7 @@ export * from './login.model';
 <%_ if (authenticationUsesCsrf) { _%>
 export * from './auth-session.service';
 <%_ } _%>
-<%_ if (authenticationUsesCsrf && communicationSpringWebsocket) { _%>
+<%_ if (authenticationUsesCsrf && websocketAny) { _%>
 export * from './csrf.service';
 <%_ } _%>
 export * from './state-storage.service';

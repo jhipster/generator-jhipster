@@ -239,12 +239,12 @@ export const files = asWriteFilesSection({
       ],
     },
     {
-      condition: generator => generator.communicationSpringWebsocket,
+      condition: generator => generator.websocketAny,
       ...clientSrcTemplatesBlock(),
       templates: ['sockjs-client.polyfill.ts'],
     },
     {
-      condition: generator => generator.communicationSpringWebsocket,
+      condition: generator => generator.websocketAny,
       ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/tracker/tracker.ts',
@@ -396,7 +396,7 @@ export const files = asWriteFilesSection({
       templates: ['core/auth/auth-session.service.ts'],
     },
     {
-      condition: generator => generator.authenticationUsesCsrf && generator.communicationSpringWebsocket,
+      condition: generator => generator.authenticationUsesCsrf && generator.websocketAny,
       ...clientApplicationTemplatesBlock(),
       templates: ['core/auth/csrf.service.ts'],
     },

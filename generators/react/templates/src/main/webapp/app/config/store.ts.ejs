@@ -38,7 +38,7 @@ import errorMiddleware from './error-middleware';
 import loadingBarMiddleware from './loading-bar-middleware';
 import loggerMiddleware from './logger-middleware';
 import notificationMiddleware from './notification-middleware';
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
 import websocketMiddleware from './websocket-middleware';
 <%_ } _%>
 
@@ -54,7 +54,7 @@ const store = configureStore({
       errorMiddleware,
       notificationMiddleware,
       loadingBarMiddleware,
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
       websocketMiddleware,
 <%_ } _%>
       loggerMiddleware

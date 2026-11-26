@@ -40,7 +40,7 @@
     "bootswatch": "<%- nodeDependencies.bootswatch %>",
 <%_ } _%>
     "dayjs": "<%- nodeDependencies.dayjs %>",
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
     "@stomp/rx-stomp": null,
     "js-cookie": "<%- nodeDependencies['js-cookie'] %>",
     "sockjs-client": null,
@@ -64,7 +64,7 @@
     "@pinia/testing": "<%- nodeDependencies['@pinia/testing'] %>",
     "@stylistic/eslint-plugin": "<%- nodeDependencies['@stylistic/eslint-plugin'] %>",
     "@types/node": "<%- nodeDependencies['@types/node'] %>",
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
     "@types/js-cookie": "<%- nodeDependencies['@types/js-cookie'] %>",
     "@types/sockjs-client": "<%- nodeDependencies['@types/sockjs-client'] %>",
 <%_ } _%>

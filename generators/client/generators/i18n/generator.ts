@@ -222,7 +222,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                     ],
                   },
                   {
-                    condition: (context: any) => context.communicationSpringWebsocket,
+                    condition: (context: any) => context.websocketAny,
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
                     to: context => `${context.clientI18nDir}${context.lang}/`,
                     transform: false,

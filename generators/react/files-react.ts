@@ -64,7 +64,7 @@ export const files = asWriteFilesSection({
       templates: ['config/translation.ts'],
     },
     {
-      condition: generator => generator.communicationSpringWebsocket,
+      condition: generator => generator.websocketAny,
       ...clientApplicationTemplatesBlock(),
       templates: ['config/websocket-middleware.ts', 'config/websocket-middleware.spec.ts'],
     },
@@ -181,7 +181,7 @@ export const files = asWriteFilesSection({
       ],
     },
     {
-      condition: generator => generator.communicationSpringWebsocket,
+      condition: generator => generator.websocketAny,
       ...clientApplicationTemplatesBlock(),
       templates: ['modules/administration/tracker/tracker.tsx', 'modules/administration/tracker/tracker.spec.tsx'],
     },
@@ -232,7 +232,7 @@ export const files = asWriteFilesSection({
       templates: ['shared/util/url-utils.ts'],
     },
     {
-      condition: generator => generator.authenticationUsesCsrf && generator.communicationSpringWebsocket,
+      condition: generator => generator.authenticationUsesCsrf && generator.websocketAny,
       ...clientApplicationTemplatesBlock(),
       templates: ['shared/util/cookie-utils.ts'],
     },

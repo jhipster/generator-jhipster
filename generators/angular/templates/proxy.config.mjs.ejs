@@ -5,7 +5,7 @@ const backendPort = <%- applicationTypeMicroservice ? gatewayServerPort : server
  * @type {import('vite').CommonServerOptions['proxy']}
  */
 export default {
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
   '/websocket': {
     target: `ws://${backendHost}:${backendPort}`,
     ws: true,
