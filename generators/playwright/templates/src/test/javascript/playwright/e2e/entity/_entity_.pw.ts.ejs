@@ -244,8 +244,10 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
 <%_ } _%>
 <%_ if (readOnly || skipCreateTest) { _%>
       test.beforeEach(async ({ page, jhi }) => {
-        // The body of the response the page gets may not be readable (Chrome drops it): the API is asked apart.
-        const existing = (await (await jhi.authenticatedRequest({ url: <%- entityInstance %>ApiUrl })).json()) as unknown[];
+        // Chrome may drop the body of the page's list response, so ask the API directly whether an instance exists.
+        const existingResponse = await jhi.authenticatedRequest({ url: <%- entityInstance %>ApiUrl });
+        expect(existingResponse.status()).toBe(200);
+        const existing = (await existingResponse.json()) as unknown[];
         test.skip(existing.length === 0, 'no existing <%- entityNameCapitalized %> to exercise');
         const response = entitiesRequest(page);
         await page.goto(<%- entityInstance %>PageUrl);

@@ -92,7 +92,7 @@ describe(`generator - ${generator}`, () => {
   for (const [clientFramework, testResult, coverage] of [
     ['angular', 'TESTS-results-sonar-vitest.xml', 'outputs.dir("build/test-results/lcov-report/")'],
     ['react', 'TESTS-results-vitest.xml', 'outputs.dir("build/test-results/lcov-report/")'],
-    ['vue', 'TESTS-results-vitest.xml', 'outputs.dir("build/vite-coverage/")'],
+    ['vue', 'TESTS-results-vitest.xml', 'outputs.dir("build/test-results/lcov-report/")'],
   ] as const) {
     describe(`with gradle build tool and ${clientFramework}`, () => {
       before(async () => {

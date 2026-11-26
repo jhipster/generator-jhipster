@@ -35,6 +35,8 @@ export default mergeConfig(
       },
       coverage: {
         provider: 'v8',
+        // lcov writes the lcov.info that Sonar reads, with its HTML report.
+        reporter: ['text', 'lcov'],
         thresholds: {
           statements: 95,
           branches: 95,

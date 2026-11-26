@@ -65,7 +65,11 @@ describe(`generator - ${generator}`, () => {
 
   describe('with gradle and the published libraries of JHipster', () => {
     before(async () => {
-      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true, buildTool: 'gradle' });
+      // A published version given, as JHIPSTER_DEPENDENCIES_VERSION in the shell would give the option its value.
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipClient: true, buildTool: 'gradle' })
+        .withOptions({ jhipsterDependenciesVersion: '9.4.0' });
     });
 
     it('should leave the local maven repository commented out', () => {
