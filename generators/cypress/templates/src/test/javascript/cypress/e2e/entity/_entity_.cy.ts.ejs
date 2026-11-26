@@ -1,4 +1,3 @@
-<%# eslint-disable @stylistic/indent-binary-ops -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -34,20 +33,8 @@ import {
 } from '../../support/entity';
 <%_ const baseApi = `${entityApi}api/`;
 
-    const requiredOtherEntities = [...new Set(requiredRelationships.map(rel => rel.otherEntity))];
-    const otherEntities = [...new Set(Object.values(differentRelationships).filter(rels => rels.length > 0).map(rels => rels[0].otherEntity))];
     // We cannot generate a required entity with relationship with required relationships.
-    const skipCreateTest
-      = !cypressBootstrapEntities
-      // Cannot create a required relationship with itself.
-      || requiredRelationships.some(rel => rel.otherEntity.builtInUser)
-      // Required relationships that contain another required relationship are complex to handle.
-      || requiredOtherEntities.some(otherEntity => otherEntity.relationships.some(rel => rel.relationshipRequired))
-      // Same as above.
-      || requiredOtherEntities.some(otherEntity => otherEntity.primaryKey?.derived)
-      // Cannot generate the required data to test.
-      || !e2eFakeData
-        ? '.skip' : '';
+    const skipCreateTest = !cypressBootstrapEntities || e2eSkipCreateTest ? '.skip' : '';
 
     const reason = 'cannot create a required entity with relationship with required relationships.';
 _%>
@@ -62,7 +49,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 <%_ } _%>
 
   let <%- entityInstance %>;
-<%_ for (otherEntity of requiredOtherEntities) { _%>
+<%_ for (otherEntity of e2eRequiredOtherEntities) { _%>
   <%- skipCreateTest ? '// ' : '' %>let <%- otherEntity.entityInstance %>;
 <%_ } _%>
 
@@ -76,12 +63,12 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     cy.login(username, password);
   });
 
-<%_ if (requiredOtherEntities.length > 0) { _%>
+<%_ if (e2eRequiredOtherEntities.length > 0) { _%>
   <%_ if (skipCreateTest) { _%>
   /* Disabled due to incompatibility
   <%_ } _%>
   beforeEach(() => {
-  <%_ for (otherEntity of requiredOtherEntities) { _%>
+  <%_ for (otherEntity of e2eRequiredOtherEntities) { _%>
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
@@ -103,16 +90,16 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     cy.intercept('DELETE', '/<%- baseApi + entityApiUrl %>/*').as('deleteEntityRequest');
   });
 
-<%_ if (requiredOtherEntities.length > 0) { _%>
+<%_ if (e2eRequiredOtherEntities.length > 0) { _%>
   <%_ if (skipCreateTest) { _%>
   /* Disabled due to incompatibility
   <%_ } _%>
   beforeEach(() => {
     // Simulate relationships API for better performance and reproducibility.
-  <%_ for (otherEntity of otherEntities) { _%>
+  <%_ for (otherEntity of e2eOtherEntities) { _%>
     cy.intercept('GET', '/<%- baseApi + otherEntity.entityApiUrl %>', {
       statusCode: 200,
-      body: [<%- requiredOtherEntities.includes(otherEntity) ? otherEntity.entityInstance : '' %>],
+      body: [<%- e2eRequiredOtherEntities.includes(otherEntity) ? otherEntity.entityInstance : '' %>],
     });
 
   <%_ } _%>
@@ -133,12 +120,12 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     }
   });
 
-<%_ if (requiredOtherEntities.length > 0) { _%>
+<%_ if (e2eRequiredOtherEntities.length > 0) { _%>
   <%_ if (skipCreateTest) { _%>
   /* Disabled due to incompatibility
   <%_ } _%>
   afterEach(() => {
-  <%_ for (otherEntity of requiredOtherEntities) { _%>
+  <%_ for (otherEntity of e2eRequiredOtherEntities) { _%>
     if (<%- otherEntity.entityInstance %>) {
       cy.authenticatedRequest({
         method: 'DELETE',
@@ -312,7 +299,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
     <% if (skipCreateTest) { %>// Reason: <%- reason %><% } %>
     it<%- skipCreateTest %>('should create an instance of <%- entityNameCapitalized %>', () => {
-  <%_ for (const field of fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly)) { _%>
+  <%_ for (const field of e2eCreateTestFields) { _%>
     <%_ const { fieldName, fieldIsEnum } = field;
         let fieldValue = e2eFieldsFakeData[field.fieldName];
         if (fieldValue === undefined) {

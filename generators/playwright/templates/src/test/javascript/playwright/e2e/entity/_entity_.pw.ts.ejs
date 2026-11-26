@@ -36,27 +36,14 @@ import {
 import { test, expect } from '../../support/fixtures';
 <%_ const baseApi = `${entityApi}api/`;
 
-    const requiredOtherEntities = [...new Set(requiredRelationships.map(rel => rel.otherEntity))];
-    const otherEntities = [...new Set(Object.values(differentRelationships).filter(rels => rels.length > 0).map(rels => rels[0].otherEntity))];
     // We cannot generate a required entity with relationship with required relationships.
-    const skipCreateTest = [
-      !playwrightBootstrapEntities,
-      // Cannot create a required relationship with itself.
-      requiredRelationships.some(rel => rel.otherEntity.builtInUser),
-      // Required relationships that contain another required relationship are complex to handle.
-      requiredOtherEntities.some(otherEntity => otherEntity.relationships.some(rel => rel.relationshipRequired)),
-      // Same as above.
-      requiredOtherEntities.some(otherEntity => otherEntity.primaryKey?.derived),
-      // Cannot generate the required data to test.
-      !e2eFakeData,
-    ].some(Boolean) ? '.skip' : '';
+    const skipCreateTest = !playwrightBootstrapEntities || e2eSkipCreateTest ? '.skip' : '';
 
     const reason = 'cannot create a required entity with relationship with required relationships.';
 
     // Only the image fields use the jhi fixture in the create test; destructuring it otherwise
     // leaves an unused parameter, which is an error in the generated application's eslint config.
-    const createTestFields = fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly);
-    const createTestBinaryFields = createTestFields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText);
+    const createTestBinaryFields = e2eCreateTestFields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText);
     const createTestUsesFixture = createTestBinaryFields.some(field => e2eFieldsFakeData[field.fieldName] !== undefined);
 _%>
 
@@ -74,7 +61,7 @@ const entitiesRequest = (page: Page) =>
 
 test.describe('<%- entityNameCapitalized %> e2e test', () => {
   let <%- entityInstance %>;
-<%_ for (otherEntity of requiredOtherEntities) { _%>
+<%_ for (otherEntity of e2eRequiredOtherEntities) { _%>
   <%- skipCreateTest ? '// ' : '' %>let <%- otherEntity.entityInstance %>;
 <%_ } _%>
 
@@ -83,12 +70,12 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
     await jhi.login(username, password);
   });
 
-<%_ if (requiredOtherEntities.length > 0) { _%>
+<%_ if (e2eRequiredOtherEntities.length > 0) { _%>
   <%_ if (skipCreateTest) { _%>
   /* Disabled due to incompatibility
   <%_ } _%>
   test.beforeEach(async ({ jhi }) => {
-  <%_ for (otherEntity of requiredOtherEntities) { _%>
+  <%_ for (otherEntity of e2eRequiredOtherEntities) { _%>
     // create an instance at the required relationship entity:
     <%- otherEntity.entityInstance %> = await (
       await jhi.authenticatedRequest({
@@ -102,12 +89,12 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
 
   test.beforeEach(async ({ page }) => {
     // Simulate relationships API for better performance and reproducibility.
-  <%_ for (otherEntity of otherEntities) { _%>
+  <%_ for (otherEntity of e2eOtherEntities) { _%>
     // A URL predicate rather than a glob: a glob's wildcards would close the "Disabled due to
     // incompatibility" block comment that wraps this section when the create test is skipped.
     await page.route(
       url => url.pathname === '/<%- baseApi + otherEntity.entityApiUrl %>',
-      route => route.fulfill({ status: 200, json: [<%- requiredOtherEntities.includes(otherEntity) ? otherEntity.entityInstance : '' %>].filter(Boolean) }),
+      route => route.fulfill({ status: 200, json: [<%- e2eRequiredOtherEntities.includes(otherEntity) ? otherEntity.entityInstance : '' %>].filter(Boolean) }),
     );
   <%_ } _%>
   });
@@ -126,12 +113,12 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
     }
   });
 
-<%_ if (requiredOtherEntities.length > 0) { _%>
+<%_ if (e2eRequiredOtherEntities.length > 0) { _%>
   <%_ if (skipCreateTest) { _%>
   /* Disabled due to incompatibility
   <%_ } _%>
   test.afterEach(async ({ jhi }) => {
-  <%_ for (otherEntity of requiredOtherEntities) { _%>
+  <%_ for (otherEntity of e2eRequiredOtherEntities) { _%>
     if (<%- otherEntity.entityInstance %>) {
       await jhi.authenticatedRequest({
         method: 'DELETE',
@@ -318,7 +305,7 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
 
     <% if (skipCreateTest) { %>// Reason: <%- reason %><% } %>
     test<%- skipCreateTest %>('should create an instance of <%- entityNameCapitalized %>', async ({ page<%- createTestUsesFixture ? ', jhi' : '' %> }) => {
-  <%_ for (const field of createTestFields) { _%>
+  <%_ for (const field of e2eCreateTestFields) { _%>
     <%_ const { fieldName, fieldIsEnum } = field;
         let fieldValue = e2eFieldsFakeData[field.fieldName];
         if (fieldValue === undefined) {
