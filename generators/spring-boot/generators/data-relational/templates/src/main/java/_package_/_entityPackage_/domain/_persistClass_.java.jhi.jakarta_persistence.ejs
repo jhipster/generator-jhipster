@@ -86,6 +86,17 @@ import org.hibernate.type.SqlTypes;
     <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
     @NotNull
     <%_ } _%>
+    <%_ if (relationship.columnNameTruncated) { _%>
+      <%_ if (relationship.joinColumnNames.length === 1) { _%>
+    @JoinColumn(name = "<%- relationship.joinColumnNames[0] %>")
+      <%_ } else { _%>
+    @JoinColumns({
+        <%_ for (const [idx, field] of relationship.otherEntity.primaryKey.fields.entries()) { _%>
+        <%- idx === 0 ? '' : ',' %>@JoinColumn(name = "<%- relationship.joinColumnNames[idx] %>", referencedColumnName = "<%- field.columnName %>")
+        <%_ } _%>
+    })
+      <%_ } _%>
+    <%_ } _%>
   <%_ } else if (relationship.relationshipManyToMany) { -%>
     @ManyToMany(fetch = FetchType.LAZY<% if (!relationship.ownerSide) { %>, mappedBy = "<%- relationship.otherRelationship.propertyName %>"<% } %>)
     <%_ if (relationship.ownerSide) { _%>

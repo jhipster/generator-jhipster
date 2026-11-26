@@ -75,6 +75,8 @@ export interface DatabaseRelationship extends BaseApplicationRelationship, Datab
   };
 
   joinColumnNames?: string[];
+  /** The column was cut to the limit of the database, so it is not the one the property names. */
+  columnNameTruncated?: boolean;
 }
 
 export interface DatabaseEntity<

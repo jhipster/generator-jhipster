@@ -102,7 +102,7 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationshipForDatabase({ application, entity, relationship }) {
-        prepareRelationshipForDatabase({ application, entity: entity as any, relationship });
+        prepareRelationshipForDatabase({ application, entity: entity as any, relationship, log: this.log });
       },
     });
   }

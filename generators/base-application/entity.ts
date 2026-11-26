@@ -245,6 +245,8 @@ type BaseApplicationAddedRelationshipProperties = DerivedBooleanPropertiesOf<
     relationshipNameHumanized: string;
 
     relationshipIgnoreBackReference?: boolean;
+    /** A back reference named after its entity and the relationship it is the other side of, not by the user. */
+    backReferenceNameDerived?: boolean;
     /** The relationship is serialized as the other entity primary key (or a list of them) instead of the entity object. */
     relationshipSerializePrimaryKeyOnly?: boolean;
 

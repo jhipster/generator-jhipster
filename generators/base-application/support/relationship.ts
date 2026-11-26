@@ -203,6 +203,7 @@ export const addOtherRelationship = <const R extends BaseApplicationRelationship
 ): RelationshipWithEntity<R, BaseApplicationEntity> => {
   // Named after the relationship alone, `orderAsPublisher` for `Order{publisher} to Member`: adding, removing or reordering the
   // other relationships never renames it. The name an older version derived is kept, see `saveLegacyBackReferenceNames`.
+  const backReferenceNameDerived = !relationship.otherEntityRelationshipName && relationship.options?.backReferenceName === undefined;
   relationship.otherEntityRelationshipName ??=
     (relationship.options?.backReferenceName as string | undefined) ??
     `${lowerFirst(entity.name)}As${upperFirst(relationship.relationshipName)}`;
@@ -214,6 +215,7 @@ export const addOtherRelationship = <const R extends BaseApplicationRelationship
     otherEntity: entity,
     ownerSide: !relationship.ownerSide,
     otherRelationship: relationship,
+    ...(backReferenceNameDerived ? { backReferenceNameDerived } : {}),
   } as any;
   otherEntity.relationships ??= [];
   otherEntity.relationships.push(otherRelationship);
