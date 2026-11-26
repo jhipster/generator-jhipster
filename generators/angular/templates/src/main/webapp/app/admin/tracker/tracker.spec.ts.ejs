@@ -29,6 +29,9 @@ import { TrackerService } from 'app/core/tracker/tracker.service';
 
 import Tracker from './tracker';
 
+// The specs share their modules: the tracker service is loaded with the same mock of the web socket as in its own spec.
+vi.mock('sockjs-client', () => ({ default: vi.fn(() => ({})) }));
+
 describe('Tracker', () => {
   let comp: Tracker;
   let fixture: ComponentFixture<Tracker>;

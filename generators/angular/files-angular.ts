@@ -292,6 +292,9 @@ export const files = asWriteFilesSection({
         'core/interceptor/error-handler.interceptor.ts',
         'core/interceptor/notification.interceptor.ts',
         'core/interceptor/auth-expired.interceptor.ts',
+        'core/interceptor/language.interceptor.ts',
+        'core/interceptor/language.interceptor.spec.ts',
+        'core/interceptor/error-handler.interceptor.spec.ts',
 
         // request
         'core/request/index.ts',
@@ -303,6 +306,11 @@ export const files = asWriteFilesSection({
       condition: generator => generator.authenticationTypeJwt,
       ...clientApplicationTemplatesBlock(),
       templates: ['core/interceptor/auth.interceptor.ts'],
+    },
+    {
+      condition: generator => !generator.authenticationTypeOauth2,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['core/interceptor/auth-expired.interceptor.spec.ts'],
     },
     {
       condition: generator => generator.enableTranslation,
@@ -321,6 +329,10 @@ export const files = asWriteFilesSection({
         'shared/form/index.ts',
         'shared/form/select-options.directive.ts',
         'shared/form/select-options.directive.spec.ts',
+        'shared/form/server-error.ts',
+        'shared/form/server-error.spec.ts',
+        'shared/form/server-field-errors.ts',
+        'shared/form/server-field-errors.spec.ts',
         'shared/sort/index.ts',
         'shared/sort/sort-by.directive.ts',
         'shared/sort/sort-by.directive.spec.ts',

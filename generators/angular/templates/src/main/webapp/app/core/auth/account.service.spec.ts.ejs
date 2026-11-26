@@ -148,9 +148,30 @@ describe('Account Service', () => {
       // and then call
       service.identity().subscribe();
 
-      // Then there is a new request
+      // Then there is no request until a sign in
+      httpMock.expectNone({ method: 'GET' });
+      service.identity(true).subscribe();
       const requests = httpMock.match({ method: 'GET' });
       expect(requests).toHaveLength(1);
+    });
+
+    it('should not call /account again once it answered that there is no session', () => {
+      service.identity().subscribe();
+      httpMock.expectOne({ method: 'GET' }).flush(null, { status: 401, statusText: 'Unauthorized' });
+
+      service.identity().subscribe();
+
+      httpMock.expectNone({ method: 'GET' });
+      expect(service.isAuthenticated()).toBe(false);
+    });
+
+    it('should call /account again after a failure other than no session', () => {
+      service.identity().subscribe();
+      httpMock.expectOne({ method: 'GET' }).flush(null, { status: 500, statusText: 'Server Error' });
+
+      service.identity().subscribe();
+
+      expect(httpMock.match({ method: 'GET' })).toHaveLength(1);
     });
 
 <%_ if (enableTranslation) { _%>

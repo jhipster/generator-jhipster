@@ -25,7 +25,7 @@ import { tap } from 'rxjs';
 <%_ if (authenticationTypeOauth2) { _%>
 import { AuthServerProvider, StateStorageService } from 'app/core/auth';
 <%_ } else { _%>
-import { StateStorageService } from 'app/core/auth';
+import { AccountService, StateStorageService } from 'app/core/auth';
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 
@@ -34,6 +34,7 @@ export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
   const authServerProvider = inject(AuthServerProvider);
 <%_ } else { _%>
   const loginService = inject(LoginService);
+  const accountService = inject(AccountService);
 <%_ } _%>
   const stateStorageService = inject(StateStorageService);
   const router = inject(Router);
@@ -50,8 +51,10 @@ export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
 <%_ } _%>
           stateStorageService.storeUrl(router.routerState.snapshot.url);
 <%_ if (authenticationTypeSession || authenticationTypeJwt) { _%>
+          // Only a session that was authenticated has expired.
+          const sessionExpired = accountService.isAuthenticated();
           loginService.logout();
-          void router.navigate(['/login']);
+          void router.navigate(['/login'], { state: { sessionExpired } });
 <%_ } else { _%>
           authServerProvider.login();
 <%_ } _%>

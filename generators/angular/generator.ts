@@ -390,6 +390,25 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           angularFormKeepsEmptyValues: ({ fields }) => fields.some(field => field.angularFormKeepsEmptyValue),
         });
       },
+      prepareServerErrors({ entity }) {
+        for (const field of entity.fields) {
+          mutateDefaults(field, {
+            angularShowsServerError: ({ hidden, readonly, id, autoGenerate }) => !hidden && !readonly && !(id && autoGenerate),
+          });
+        }
+        for (const relationship of entity.relationships) {
+          mutateDefaults(relationship, {
+            angularShowsServerError: ({ otherEntity, persistableRelationship }) =>
+              Boolean(otherEntity.primaryKey && persistableRelationship),
+          });
+        }
+        mutateDefaults(entity, {
+          angularServerErrorProperties: ({ fields, relationships }) => [
+            ...fields.filter(field => field.angularShowsServerError).map(field => field.fieldName),
+            ...relationships.filter(relationship => relationship.angularShowsServerError).map(relationship => relationship.propertyName),
+          ],
+        });
+      },
     });
   }
 

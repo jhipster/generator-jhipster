@@ -74,6 +74,18 @@ describe('Login', () => {
     mockAccountService = TestBed.inject(AccountService);
   });
 
+  describe('session', () => {
+    it('should not tell that a session expired by default', () => {
+      expect(comp.sessionExpired()).toBe(false);
+    });
+
+    it('should tell that the session expired when the navigation says it', () => {
+      vi.spyOn(TestBed.inject(Router), 'currentNavigation').mockReturnValue({ extras: { state: { sessionExpired: true } } } as unknown as Navigation);
+
+      expect(TestBed.createComponent(Login).componentInstance.sessionExpired()).toBe(true);
+    });
+  });
+
   describe('ngOnInit', () => {
     it('should call accountService.identity on Init', () => {
       // GIVEN

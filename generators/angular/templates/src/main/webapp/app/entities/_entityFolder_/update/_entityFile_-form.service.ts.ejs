@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const formDefaultProperties = [
-      ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean || field.id || field.collection || field.fieldTsDefaultValue !== undefined).map(field => field.fieldName),
+      ...fields.filter(field => field.fieldTypeBoolean || field.id || field.collection || field.fieldTsDefaultValue !== undefined).map(field => field.fieldName),
       ...relationships.filter(relationship => relationship.collection && relationship.persistableRelationship).map(relationship => relationship.propertyName),
     ];
     const containDefaultProperties = formDefaultProperties.length > 0;
@@ -227,13 +227,9 @@ export class <%- entityAngularName %>FormService {
 <%_ if (containDefaultProperties) { _%>
 
   private getFormDefaults(): <%- entityAngularName %>FormDefaults {
-  <%_ if (anyFieldTimed) { _%>
-    const currentTime = dayjs().toJSON();
-
-  <%_ } _%>
     return {
   <%_ for (field of fields) { _%>
-    <%_ const { fieldName, fieldTypeBoolean, fieldTypeTimed } = field; _%>
+    <%_ const { fieldName, fieldTypeBoolean } = field; _%>
     <%_ if (field.fieldTsDefaultValue) { _%>
       <%- fieldName %>: <%- field.fieldTsDefaultValue %>,
     <%_ } else { _%>
@@ -241,8 +237,6 @@ export class <%- entityAngularName %>FormService {
       <%- fieldName %>: null,
       <%_ } else if (fieldTypeBoolean) { _%>
       <%- fieldName %>: false,
-      <%_ } else if (fieldTypeTimed) { _%>
-      <%- fieldName %>: currentTime,
       <%_ } else if (field.collection) { _%>
       <%- fieldName %>: [],
       <%_ } _%>

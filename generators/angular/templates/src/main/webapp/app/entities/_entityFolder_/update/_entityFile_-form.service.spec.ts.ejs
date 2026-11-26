@@ -63,6 +63,16 @@ describe('<%- entityAngularName %> Form Service', () => {
           ]),
         );
       });
+<%_ if (timedFields.filter(field => !field.fieldTsDefaultValue).length > 0) { _%>
+
+      it('should leave the dates and times of a new entity empty', () => {
+        const model = service.create<%- entityAngularName %>FormModel();
+
+  <%_ for (const field of timedFields.filter(field => !field.fieldTsDefaultValue)) { _%>
+        expect(model.<%- field.fieldName %>).toBe('');
+  <%_ } _%>
+      });
+<%_ } _%>
 <%_ if (timedFields.length > 0 || collectionRelationships.length > 0) { _%>
 
       it('passing I<%- entityAngularName %> without <%- [timedFields.length > 0 ? 'dates' : '', collectionRelationships.length > 0 ? 'relationships' : ''].filter(Boolean).join(' nor ') %> should create a model with empty values', () => {

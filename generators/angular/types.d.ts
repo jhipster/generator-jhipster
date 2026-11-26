@@ -51,10 +51,17 @@ export type Field = ClientField & {
    * the form service keeps the one of the edited entity.
    */
   angularFormKeepsEmptyValue?: boolean;
+  /**
+   * The update form shows the error the server gives for the field: a field neither hidden nor read-only, but an
+   * auto-generated id. Angular skips the errors of a read-only field, so a server error marks only these ones.
+   */
+  angularShowsServerError?: boolean;
 };
 
 export type Relationship = ClientRelationship & {
   relationshipShouldUsePick?: boolean;
+  /** The update form shows the error the server gives for the relationship, see `angularShowsServerError` of a field. */
+  angularShowsServerError?: boolean;
 };
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends ClientEntity<F, R> {
@@ -65,6 +72,8 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   angularEntityUpdateRequiresTranslationPipe?: boolean;
   /** A field of the entity keeps its empty value in the form, see `angularFormKeepsEmptyValue`. */
   angularFormKeepsEmptyValues?: boolean;
+  /** The properties whose server error the update form shows, the fields and relationships with `angularShowsServerError`. */
+  angularServerErrorProperties?: string[];
   /** The sample with the data of every field, its dates written as the strings of the REST API like the model types them. */
   angularTsSampleWithFullData?: string;
   /** The sample with the data of the required fields, its dates written as the strings of the REST API. */
