@@ -107,7 +107,6 @@ export const <%- entityReactName %> = () => {
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   const links = useAppSelector(state => state.<%- entityReactState %>.links);
-  const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
 <%_ } _%>
 
   const getAllEntities = () => {
@@ -236,12 +235,6 @@ export const <%- entityReactName %> = () => {
 <%_ } _%>
 
 <%_ if (paginationInfiniteScroll) { _%>
-  useEffect(() => {
-    if (updateSuccess) {
-      resetAll();
-    }
-  }, [updateSuccess]);
-
   // The list loads its page, and its first page again when it is sorted.
   useEffect(() => {
     getAllEntities();
@@ -602,7 +595,9 @@ export const <%- entityReactName %> = () => {
           onClose={() => setDeleteId(undefined)}
           onDeleted={() => {
             setDeleteId(undefined);
-  <%_ if (!paginationInfiniteScroll) { _%>
+  <%_ if (paginationInfiniteScroll) { _%>
+            resetAll();
+  <%_ } else { _%>
             sortEntities();
   <%_ } _%>
           }}

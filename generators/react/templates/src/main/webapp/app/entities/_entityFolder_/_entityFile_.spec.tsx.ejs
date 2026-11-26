@@ -127,6 +127,13 @@ const observeIntersection = () => {
   );
   return () => callbacks.at(-1)!([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
 };
+
+// The requests of the list, a search included, since the last clear of the mock.
+const listUrls = () =>
+  vi
+    .mocked(axios.get)
+    .mock.calls.map(([url]) => url)
+    .filter(url => url === apiUrl || url.startsWith(`${apiUrl}?`) || url.startsWith(`${apiUrl}/_search?`));
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 
@@ -333,13 +340,6 @@ describe('<%- entityReactName %> screens', () => {
       expect(axios.get).not.toHaveBeenCalledWith(expect.stringContaining('page=1'));
     });
 
-    // The requests of the list, a search included, since the last clear of the mock.
-    const listUrls = () =>
-      vi
-        .mocked(axios.get)
-        .mock.calls.map(([url]) => url)
-        .filter(url => url === apiUrl || url.startsWith(`${apiUrl}?`) || url.startsWith(`${apiUrl}/_search?`));
-
     const scrollToSecondPage = async (container: HTMLElement) => {
       const intersect = observeIntersection();
       await waitFor(() => expect(container.querySelectorAll('tbody tr')).not.toHaveLength(0));
@@ -522,6 +522,21 @@ describe('<%- entityReactName %> screens', () => {
       await waitFor(() => expect(axios.put).toHaveBeenCalledWith(`${apiUrl}/${sample.<%- primaryKeyName %>}`, expect.anything()));
       await waitFor(() => expect(heading()).not.toBeNull());
     });
+  <%_ if (paginationInfiniteScroll) { _%>
+
+    it('should load the list once, by its first page, after an update', async () => {
+      const { container } = renderPage(`/${sample.<%- primaryKeyName %>}/edit`);
+      await waitForForm();
+      vi.mocked(axios.get).mockClear();
+
+      fillForm(container, formValues);
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).not.toHaveLength(0));
+      expect(listUrls()).toEqual([expect.stringContaining('page=0')]);
+      expect(container.querySelectorAll('tbody tr')).toHaveLength(entities.length);
+    });
+  <%_ } _%>
 
   <%_ if (optionalNumberFields.length > 0) { _%>
     it('should clear an optional number left empty when updating', async () => {
@@ -841,6 +856,24 @@ describe('<%- entityReactName %> screens', () => {
       await waitFor(() => expect(axios.post).toHaveBeenCalledWith(apiUrl, expect.anything()));
       await waitFor(() => expect(heading()).not.toBeNull());
     });
+  <%_ if (paginationInfiniteScroll) { _%>
+
+    it('should load the list once, by its first page, after a creation', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+      vi.mocked(axios.get).mockClear();
+
+      fillForm(container, formValues);
+    <%_ for (const rel of requiredCollections) { _%>
+      selectAllOptions(container, '<%- rel.relationshipFieldNamePlural %>');
+    <%_ } _%>
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).not.toHaveLength(0));
+      expect(listUrls()).toEqual([expect.stringContaining('page=0')]);
+      expect(container.querySelectorAll('tbody tr')).toHaveLength(entities.length);
+    });
+  <%_ } _%>
   });
 
   describe('delete', () => {
@@ -857,6 +890,37 @@ describe('<%- entityReactName %> screens', () => {
       await waitFor(() => expect(document.querySelector('.modal-footer')).toBeNull());
       expect(heading()).not.toBeNull();
     });
+  <%_ if (paginationInfiniteScroll) { _%>
+
+    it('should load the list once, by its first page, after a deletion from the list', async () => {
+      const { container } = renderPage();
+      await waitFor(() => expect(document.querySelector('[data-cy="entityDeleteButton"]')).not.toBeNull());
+      vi.mocked(axios.get).mockClear();
+      entities = [sampleWithoutData];
+
+      fireEvent.click(document.querySelector('[data-cy="entityDeleteButton"]')!);
+      await waitFor(() => expect(document.querySelector('[data-cy="entityConfirmDeleteButton"]')).not.toBeNull());
+      fireEvent.click(document.querySelector('[data-cy="entityConfirmDeleteButton"]')!);
+
+      await waitFor(() => expect(listUrls()).not.toHaveLength(0));
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(1));
+      expect(listUrls()).toEqual([expect.stringContaining('page=0')]);
+    });
+
+    it('should load the list once, by its first page, after a deletion from the detail', async () => {
+      const { container } = renderPage(`/${sample.<%- primaryKeyName %>}`);
+      await waitFor(() => expect(document.querySelector('[data-cy="entityDeleteButton"]')).not.toBeNull());
+      vi.mocked(axios.get).mockClear();
+
+      fireEvent.click(document.querySelector('[data-cy="entityDeleteButton"]')!);
+      await waitFor(() => expect(document.querySelector('[data-cy="entityConfirmDeleteButton"]')).not.toBeNull());
+      fireEvent.click(document.querySelector('[data-cy="entityConfirmDeleteButton"]')!);
+
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).not.toHaveLength(0));
+      expect(listUrls()).toEqual([expect.stringContaining('page=0')]);
+      expect(container.querySelectorAll('tbody tr')).toHaveLength(entities.length);
+    });
+  <%_ } _%>
 
     it('should stay in the list when cancelled there', async () => {
       entities = [sample];
