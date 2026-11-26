@@ -112,7 +112,7 @@
     },
     {
       "name": "ng-webflux-psql-additional",
-      "jdl-samples": "webflux-psql,custom-domain"
+      "jdl-samples": "webflux-psql,custom-domain,custom-id"
     },
     {
       "name": "ng-webflux-gradle-session-h2mem-es",

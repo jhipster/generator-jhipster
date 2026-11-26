@@ -7,12 +7,3 @@ application {
   }
   entities *
 }
-
-/*
- * Integer id, incremented by the database
- */
-@ChangelogDate(20200805000100)
-entity EntityIntegerId {
-  id Integer
-  name String
-}

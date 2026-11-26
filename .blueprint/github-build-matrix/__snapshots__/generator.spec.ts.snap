@@ -369,7 +369,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "skip-backend-tests": "false",
       "skip-frontend-tests": "false",
       "name": "ng-webflux-psql-additional",
-      "jdl-samples": "webflux-psql,custom-domain",
+      "jdl-samples": "webflux-psql,custom-domain,custom-id",
       "workspaces": "false",
       "disabled": false,
       "build-jhipster-bom": true,
