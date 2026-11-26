@@ -51,6 +51,9 @@ package <%- entityAbsolutePackage %>.domain;
 <%_ if (relationshipsContainOtherSideIgnore) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <%_ } _%>
+<%_ if (!embedded && primaryKey?.composite) { _%>
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+<%_ } _%>
 <%_ if (!dtoMapstruct && (entityApiDescription || importApiModelProperty)) { _%>
 import io.swagger.v3.oas.annotations.media.Schema;
 <%_ } _%>
@@ -113,6 +116,7 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
 
 <%_ if (!embedded && primaryKey?.composite) { _%>
     @EmbeddedId
+    @JsonUnwrapped
     private <%- primaryKey.type %> <%- primaryKey.name %>;
 
     public <%- primaryKey.type %> <%- primaryKey.propertySupplierName %>() {

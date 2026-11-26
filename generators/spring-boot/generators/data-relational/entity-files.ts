@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../../../base-application/support/task-type-inference.ts';
-import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from '../../../java/support/index.ts';
-import { javaStringToTypeExpressions } from '../../../server/support/index.ts';
+import { javaMainPackageTemplatesBlock } from '../../../java/support/index.ts';
 
 import type { Application, Entity } from './types.ts';
 
@@ -38,7 +37,6 @@ const useSimpleR2dbcRepository = (ctx: any): boolean =>
   );
 
 const entityIdFilesBlock = javaMainPackageTemplatesBlock('_entityPackage_');
-const entityIdTestFilesBlock = javaTestPackageTemplatesBlock('_entityPackage_');
 
 const domainFiles = asWriteFilesBlock([
   {
@@ -47,18 +45,6 @@ const domainFiles = asWriteFilesBlock([
     templates: ['domain/_entityClass_Id.java'],
     renameTo(this: any, data: any, filePath: string) {
       return entityIdFilesBlock.renameTo!.call(this, data, filePath.replace('_entityClass_Id', `${data.entityClass}Id`));
-    },
-  },
-  {
-    condition: ctx =>
-      !ctx.reactive &&
-      ctx.primaryKey?.composite &&
-      ctx.primaryKey.fields.some((field: any) => field.javaFieldType === 'String') &&
-      ctx.entityDomainLayer,
-    ...entityIdTestFilesBlock,
-    templates: ['domain/_entityClass_IdTest.java'],
-    renameTo(this: any, data: any, filePath: string) {
-      return entityIdTestFilesBlock.renameTo!.call(this, data, filePath.replace('_entityClass_Id', `${data.entityClass}Id`));
     },
   },
   {
@@ -164,7 +150,7 @@ export default asWritingEntitiesTask<Entity, Application>(async function writeEn
     } else {
       await this.writeFiles({
         sections: sqlFiles,
-        context: { ...application, ...entity, javaStringToTypeExpressions },
+        context: { ...application, ...entity },
       });
     }
   }

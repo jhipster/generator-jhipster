@@ -847,6 +847,21 @@ describe(`generator - ${generator}`, () => {
     it('should match generated files snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
+
+    it('should serialize the parts of the id as properties of the entity', () => {
+      runResult.assertFileContent('src/main/java/com/mycompany/myapp/domain/OrderLine.java', '    @EmbeddedId\n    @JsonUnwrapped\n');
+    });
+
+    it('should give each part of the id its own path segment', () => {
+      runResult.assertFileContent(
+        'src/main/java/com/mycompany/myapp/web/rest/OrderLineResource.java',
+        '@GetMapping("/{orderId}/{lineNumber}")',
+      );
+      runResult.assertFileContent(
+        'src/main/java/com/mycompany/myapp/web/rest/OrderLineResource.java',
+        'UriComponentsBuilder.fromPath("/api/order-lines/{orderId}/{lineNumber}").build(',
+      );
+    });
   });
 
   describe('with a composite primary key and a client framework', () => {

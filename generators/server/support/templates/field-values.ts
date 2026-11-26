@@ -24,20 +24,9 @@ const { STRING, UUID, LONG, INTEGER } = dbTypes.CommonDBTypes;
 const { SQL } = databaseTypes;
 
 /**
- * Java expressions converting a String into the field type, used to build a composite primary key from its string
- * representation.
- */
-export const javaStringToTypeExpressions: Record<string, (value: string) => string> = {
-  [STRING]: value => value,
-  [INTEGER]: value => `Integer.valueOf(${value})`,
-  [LONG]: value => `Long.valueOf(${value})`,
-  [UUID]: value => `UUID.fromString(${value})`,
-};
-
-/**
  * Java types supported as a member of a composite primary key.
  */
-export const compositeIdFieldTypes: string[] = Object.keys(javaStringToTypeExpressions);
+export const compositeIdFieldTypes: string[] = [STRING, INTEGER, LONG, UUID];
 
 /**
  * Returns the java value generator for the given primaryKey type

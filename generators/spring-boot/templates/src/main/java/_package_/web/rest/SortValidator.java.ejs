@@ -91,7 +91,12 @@ public final class SortValidator {
         }
         Optional<Field> field = sortableField(entityClass, path[0]);
         if (path.length == 1) {
+<%_ if (databaseTypeSql && !reactive) { _%>
+            // A composite primary key is sorted by its columns.
+            return field.filter(column -> isColumn(column) || column.isAnnotationPresent(jakarta.persistence.EmbeddedId.class)).isPresent();
+<%_ } else { _%>
             return field.filter(SortValidator::isColumn).isPresent();
+<%_ } _%>
         }
         return field
             .filter(relationship -> !isColumn(relationship) && !isCollection(relationship.getType()))

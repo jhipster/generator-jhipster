@@ -64,15 +64,15 @@ describe(`generator - ${generator}`, () => {
       ]);
     });
 
-    it('should serialize the composite key as an object', () => {
+    it('should serialize the parts of the composite key as properties of the entity', () => {
       result.assertFileContent(
         'src/test/java/gatling/simulations/OrderLineGatlingTest.java',
-        '"\\"id\\": { \\"orderId\\": 0, \\"lineNumber\\": 0 }"',
+        '"\\"orderId\\": 0" +\n                ", \\"lineNumber\\": 0" +\n                ", \\"productCode\\": \\"SAMPLE_TEXT\\"" +',
       );
     });
 
-    it('should not serialize the key parts as entity properties', () => {
-      result.assertNoFileContent('src/test/java/gatling/simulations/OrderLineGatlingTest.java', '"\\"orderId\\": 0"');
+    it('should not serialize the composite key as an object', () => {
+      result.assertNoFileContent('src/test/java/gatling/simulations/OrderLineGatlingTest.java', '\\"id\\"');
     });
   });
 });

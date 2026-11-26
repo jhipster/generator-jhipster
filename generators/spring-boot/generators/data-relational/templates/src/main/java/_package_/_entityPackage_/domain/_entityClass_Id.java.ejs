@@ -70,43 +70,6 @@ public class <%- primaryKey.type %> implements Serializable {
     }
 
 <%_ } _%>
-    /**
-     * Decodes a key part: a literal '%' is escaped as '%25' and a literal ',' as '%2C' in the string representation.
-     */
-    private static String decode(String value) {
-        StringBuilder decoded = new StringBuilder();
-        for (int i = 0; i < value.length(); i++) {
-            if (value.startsWith("%2C", i)) {
-                decoded.append(',');
-                i += 2;
-            } else if (value.startsWith("%25", i)) {
-                decoded.append('%');
-                i += 2;
-            } else {
-                decoded.append(value.charAt(i));
-            }
-        }
-        return decoded.toString();
-    }
-
-    private static String encode(String value) {
-        return value.replace("%", "%25").replace(",", "%2C");
-    }
-
-    /**
-     * Creates a key from its comma separated string representation.
-     *
-     * @param value the comma separated key parts.
-     * @return the key.
-     */
-    public static <%- primaryKey.type %> valueOf(String value) {
-        String[] values = value.split(",");
-        if (values.length != <%- primaryKey.fields.length %>) {
-            throw new IllegalArgumentException("Invalid <%- primaryKey.type %>: " + value);
-        }
-        return new <%- primaryKey.type %>(<% for (const [index, field] of primaryKey.fields.entries()) { %><%- index === 0 ? '' : ', ' %><%- field.javaFieldType === 'String' ? `decode(values[${index}])` : javaStringToTypeExpressions[field.javaFieldType](`values[${index}]`) %><% } %>);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -126,6 +89,11 @@ public class <%- primaryKey.type %> implements Serializable {
 
     @Override
     public String toString() {
-        return <% for (const [index, field] of primaryKey.fields.entries()) { %><%- index === 0 ? '' : ' + "," + ' %><%- field.javaFieldType === 'String' ? `encode(${field.fieldName})` : field.fieldName %><% } %>;
+        return "<%- primaryKey.type %>{" +
+<%_ for (const [index, field] of primaryKey.fields.entries()) { _%>
+  <%_ const isNumeric = field.fieldTypeNumeric; _%>
+            "<%- index === 0 ? '' : ', ' %><%- field.fieldName %>=<%- isNumeric ? '' : '\'' %>" + <%- field.propertySupplierName %>() <%- isNumeric ? '' : '+ "\'" ' %>+
+<%_ } _%>
+            "}";
     }
 }
