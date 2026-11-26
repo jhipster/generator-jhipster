@@ -21,25 +21,25 @@
     "<%- frontendAppName %>": {
         "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%- entityNamePluralHumanized %>",
-                "refreshListLabel": "Refresh list",
+                "title": "<%- entityTranslations.title ?? entityNamePluralHumanized %>",
+                "refreshListLabel": "<%- entityTranslations.refreshListLabel %>",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Створити новий <%- entityNameHumanized %>",
-                "createOrEditLabel": "Створити чи редагувати <%- entityNameHumanized %>",
+                "createLabel": "<%- entityTranslations.createLabel %>",
+                "createOrEditLabel": "<%- entityTranslations.createOrEditLabel %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Знайти <%- entityNameHumanized %>",
+                "search": "<%- entityTranslations.search %>",
 <%_ } _%>
-                "notFound": "No <%- entityNamePluralHumanized %> found"
+                "notFound": "<%- entityTranslations.notFound %>"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Новий <%- entityNameHumanized %> створений з ідентифікатором {{ param }}",
-            "updated": "<%- entityNameHumanized %> оновлений з ідентифікатором {{ param }}",
-            "deleted": "<%- entityNameHumanized %> видалений з ідентифікатором {{ param }}",
+            "created": "<%- entityTranslations.created %>",
+            "updated": "<%- entityTranslations.updated %>",
+            "deleted": "<%- entityTranslations.deleted %>",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Ви впевнені, що хочете видалити <%- entityNameHumanized %> {{ id }}?"
+                "question": "<%- entityTranslations.deleteQuestion %>"
             },
 <%_ } _%>
             "detail": {
@@ -53,8 +53,8 @@
 <%_ } _%>
 <%_ if (fieldsWithDocumentation.length > 0) { _%>,
             "help": {
-  <%_ for (const [key, field] of Object.entries(fieldsWithDocumentation)) { _%>
-                "<%- field.fieldName %>": "<%- field.documentation %>"<%- key < fieldsWithDocumentation.length - 1 ? ',' : '' %>
+  <%_ for (const [index, field] of fieldsWithDocumentation.entries()) { _%>
+                "<%- field.fieldName %>": "<%- field.documentation %>"<%- index < fieldsWithDocumentation.length - 1 ? ',' : '' %>
   <%_ } _%>
             }
 <%_ } _%>
@@ -63,9 +63,9 @@
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%- microserviceAppName %>": {
         "<%- entityTranslationKey %>" : {
-            "created": "Новий <%- entityNameHumanized %> створений з ідентифікатором {{ param }}",
-            "updated": "<%- entityNameHumanized %> оновлений з ідентифікатором {{ param }}",
-            "deleted": "<%- entityNameHumanized %> видалений з ідентифікатором {{ param }}"
+            "created": "<%- entityTranslations.created %>",
+            "updated": "<%- entityTranslations.updated %>",
+            "deleted": "<%- entityTranslations.deleted %>"
         }
     }
 <%_ } _%>

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { existsSync } from 'node:fs';
 import { glob } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -29,6 +30,8 @@ import { CLIENT_MAIN_SRC_DIR } from '../../../generator-constants.ts';
 import { type Language, findLanguageForTag } from '../../../languages/support/languages.ts';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from '../../../languages/translation-data.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
+
+import { getEntityTranslations } from './internal/entity-translations.ts';
 
 export default class I18NGenerator extends ClientApplicationGenerator {
   translationData!: TranslationData;
@@ -271,13 +274,24 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                 context: { ...entity, baseName, clientSrcDir, clientI18nDir, frontendAppName, lang: languageTag },
               });
             } else {
+              // A template of the language, like one a blueprint gives, is used instead of the texts of the language.
+              const languageTemplate = `entity/i18n/entity_${languageTag}.json.ejs`;
+              const hasLanguageTemplate = this.jhipsterTemplatesFolders.some(folder => existsSync(join(folder, languageTemplate)));
+              const entityTranslations = getEntityTranslations(languageTag, {
+                entity: entity.entityNameHumanized,
+                entities: entity.entityNamePluralHumanized,
+                variant: entity.entityI18nVariant,
+              });
+              if (!hasLanguageTemplate && !entityTranslations) {
+                throw new Error(`The entity translations of the language ${languageTag} are missing: no ${languageTemplate} template.`);
+              }
               await this.writeFiles({
                 sections: {
                   entityBaseFiles: [
                     {
                       templates: [
                         {
-                          sourceFile: context => `entity/i18n/entity_${context.lang}.json.ejs`,
+                          sourceFile: hasLanguageTemplate ? languageTemplate : 'entity/i18n/entity.json.ejs',
                           destinationFile: context => `${context.clientI18nDir}${context.lang}/${context.entityTranslationKey}.json`,
                         },
                       ],
@@ -293,6 +307,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                   clientI18nDir,
                   frontendAppName,
                   lang: languageTag,
+                  entityTranslations,
                 },
               });
             }
