@@ -3374,24 +3374,6 @@ data:
       "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
       "webAuthnPolicyPasswordlessAcceptableAaguids": [],
       "webAuthnPolicyPasswordlessExtraOrigins": [],
-      "users": [
-        {
-          "id": "f742ba6f-1d8a-4dec-bf15-e02dab508283",
-          "createdTimestamp": 1598681172054,
-          "username": "service-account-internal",
-          "enabled": true,
-          "totp": false,
-          "emailVerified": false,
-          "serviceAccountClientId": "internal",
-          "disableableCredentialTypes": [],
-          "requiredActions": [],
-          "realmRoles": [
-            "default-roles-jhipster"
-          ],
-          "notBefore": 0,
-          "groups": []
-        }
-      ],
       "scopeMappings": [
         {
           "clientScope": "offline_access",
@@ -5380,6 +5362,22 @@ data:
         "policies": []
       },
       "users": [
+        {
+          "id": "f742ba6f-1d8a-4dec-bf15-e02dab508283",
+          "createdTimestamp": 1598681172054,
+          "username": "service-account-internal",
+          "enabled": true,
+          "totp": false,
+          "emailVerified": false,
+          "serviceAccountClientId": "internal",
+          "disableableCredentialTypes": [],
+          "requiredActions": [],
+          "realmRoles": [
+            "default-roles-jhipster"
+          ],
+          "notBefore": 0,
+          "groups": []
+        },
         {
           "id": "4c973896-5761-41fc-8217-07c5d13a004b",
           "createdTimestamp": 1505479415590,
@@ -6984,24 +6982,6 @@ data:
       "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
       "webAuthnPolicyPasswordlessAcceptableAaguids": [],
       "webAuthnPolicyPasswordlessExtraOrigins": [],
-      "users": [
-        {
-          "id": "f742ba6f-1d8a-4dec-bf15-e02dab508283",
-          "createdTimestamp": 1598681172054,
-          "username": "service-account-internal",
-          "enabled": true,
-          "totp": false,
-          "emailVerified": false,
-          "serviceAccountClientId": "internal",
-          "disableableCredentialTypes": [],
-          "requiredActions": [],
-          "realmRoles": [
-            "default-roles-jhipster"
-          ],
-          "notBefore": 0,
-          "groups": []
-        }
-      ],
       "scopeMappings": [
         {
           "clientScope": "offline_access",
@@ -8990,6 +8970,22 @@ data:
         "policies": []
       },
       "users": [
+        {
+          "id": "f742ba6f-1d8a-4dec-bf15-e02dab508283",
+          "createdTimestamp": 1598681172054,
+          "username": "service-account-internal",
+          "enabled": true,
+          "totp": false,
+          "emailVerified": false,
+          "serviceAccountClientId": "internal",
+          "disableableCredentialTypes": [],
+          "requiredActions": [],
+          "realmRoles": [
+            "default-roles-jhipster"
+          ],
+          "notBefore": 0,
+          "groups": []
+        },
         {
           "id": "4c973896-5761-41fc-8217-07c5d13a004b",
           "createdTimestamp": 1505479415590,

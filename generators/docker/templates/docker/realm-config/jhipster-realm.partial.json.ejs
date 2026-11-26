@@ -1,7 +1,7 @@
 <%#
  The Keycloak realm of the docker files of an application and of a docker compose deployment.
  Parameters:
-   realmGateway: whether the realm has the internal client of the gateway.
+   realmGateway: whether the realm has the internal client of the gateway and its service account user.
    realmRootPort: the port of the root and admin urls of the web_app client.
    realmRedirectUris: the redirect uris of the web_app client.
    realmWebOrigins: the web origins of the web_app client.
@@ -514,24 +514,6 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessExtraOrigins": [],
-  "users": [
-    {
-      "id": "f742ba6f-1d8a-4dec-bf15-e02dab508283",
-      "createdTimestamp": 1598681172054,
-      "username": "service-account-internal",
-      "enabled": true,
-      "totp": false,
-      "emailVerified": false,
-      "serviceAccountClientId": "internal",
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "realmRoles": [
-        "default-roles-jhipster"
-      ],
-      "notBefore": 0,
-      "groups": []
-    }
-  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -2575,6 +2557,24 @@
     "policies": []
   },
   "users": [
+<%_ if (realmGateway) { _%>
+    {
+      "id": "f742ba6f-1d8a-4dec-bf15-e02dab508283",
+      "createdTimestamp": 1598681172054,
+      "username": "service-account-internal",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "serviceAccountClientId": "internal",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-jhipster"
+      ],
+      "notBefore": 0,
+      "groups": []
+    },
+<%_ } _%>
     {
       "id": "4c973896-5761-41fc-8217-07c5d13a004b",
       "createdTimestamp": 1505479415590,
