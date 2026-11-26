@@ -84,6 +84,13 @@ export type Deployment = DeploymentConfig & {
   /** The URL schemes of the apps of the applications, allowed as redirect URIs of the client of the deployment. */
   keycloakAppSchemes?: string[];
   keycloakSecrets?: string[];
+  /** The values of the Keycloak realm template, see `KeycloakRealm` of the docker support. */
+  keycloakRealmGateway?: boolean;
+  keycloakRealmRootPort?: number;
+  keycloakRealmRedirectUris?: string[];
+  keycloakRealmWebOrigins?: string[];
+  /** The realm written in the ConfigMap of a kubernetes deployment. */
+  keycloakRealmConfigMap?: boolean;
   usesOauth2?: boolean;
   useKafka?: boolean;
   usePulsar?: boolean;

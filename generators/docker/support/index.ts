@@ -18,3 +18,4 @@
  */
 export * from './check-docker.ts';
 export * from './docker-compose-file.ts';
+export * from './keycloak-realm.ts';

@@ -25,7 +25,7 @@ import { checkImages, configureImageNames } from '../base-workspaces/internal/do
 import type { Features as BaseWorkspacesFeatures } from '../base-workspaces/types.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-boot/generators/data-relational/support/index.ts';
 
-import { applicationFiles, writeDeploymentFiles } from './files.ts';
+import { applicationFiles, keycloakRealmFiles, writeDeploymentFiles } from './files.ts';
 import type {
   Config as KubernetesConfig,
   Deployment as KubernetesDeployment,
@@ -94,6 +94,11 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
         await this.writeFiles({
           sections: writeDeploymentFiles('k8s'),
           context: deployment,
+        });
+        await this.writeFiles({
+          sections: keycloakRealmFiles('k8s'),
+          context: deployment,
+          rootTemplatesPath: this.fetchFromInstalledJHipster('docker/templates/docker'),
         });
       },
     });

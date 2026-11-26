@@ -39,7 +39,7 @@ export const files = asWriteFilesSection({
   keycloak: [
     {
       condition: deployment => deployment.authenticationType === OAUTH2 && deployment.applicationType !== APPLICATION_TYPE_MICROSERVICE,
-      templates: ['realm-config/keycloak-health-check.sh', 'realm-config/jhipster-realm.json'],
+      templates: ['realm-config/keycloak-health-check.sh'],
     },
   ],
   prometheus: [
@@ -50,9 +50,24 @@ export const files = asWriteFilesSection({
   ],
 });
 
+/** The Keycloak realm, from the template of the docker files of an application. */
+export const keycloakRealmFiles = asWriteFilesSection({
+  keycloakRealm: [
+    {
+      condition: deployment => deployment.authenticationType === OAUTH2 && deployment.applicationType !== APPLICATION_TYPE_MICROSERVICE,
+      templates: ['realm-config/jhipster-realm.json'],
+    },
+  ],
+});
+
 export const writeFiles = asWritingWorkspacesTask(async function writeFiles({ deployment }) {
   await this.writeFiles({
     sections: files,
     context: deployment,
+  });
+  await this.writeFiles({
+    sections: keycloakRealmFiles,
+    context: deployment,
+    rootTemplatesPath: this.fetchFromInstalledJHipster('docker/templates/docker'),
   });
 });

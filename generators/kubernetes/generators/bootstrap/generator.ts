@@ -27,6 +27,7 @@ import { convertSecretToBase64, createBase64Secret } from '../../../../lib/utils
 import { createFaker } from '../../../base-application/support/index.ts';
 import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
+import { getDeploymentKeycloakRealm } from '../../../docker/support/index.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../../../spring-boot/generators/data-relational/support/index.ts';
 import { BaseKubernetesGenerator } from '../../generator.ts';
 import { spawnCheckCommand } from '../../kubernetes-base.ts';
@@ -208,6 +209,16 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         });
         deployment.keycloakWebAppRedirectUris = keycloakWebAppRedirectUris;
         deployment.keycloakRedirectUris = keycloakWebAppRedirectUris.map(redirectUri => `"${redirectUri}", `).join('');
+        Object.assign(
+          deployment,
+          getDeploymentKeycloakRealm({
+            includesApplicationTypeGateway: deployment.includesApplicationTypeGateway,
+            entryPort: deployment.entryPort,
+            keycloakWebAppRedirectUris,
+            keycloakAppSchemes: deployment.keycloakAppSchemes,
+          }),
+          { keycloakRealmConfigMap: true },
+        );
       },
     });
   }

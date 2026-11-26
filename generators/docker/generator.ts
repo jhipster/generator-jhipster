@@ -28,7 +28,12 @@ import type { Application as SpringBootApplication } from '../spring-boot/index.
 
 import { SERVICE_HEALTHY } from './constants.ts';
 import { dockerFiles } from './files.ts';
-import { createDockerComposeFile, createDockerExtendedServices, flowHealthcheckCommands } from './support/index.ts';
+import {
+  createDockerComposeFile,
+  createDockerExtendedServices,
+  flowHealthcheckCommands,
+  getApplicationKeycloakRealm,
+} from './support/index.ts';
 import type {
   Application as DockerApplication,
   Config as DockerConfig,
@@ -66,6 +71,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           const faker = await createFaker();
           faker.seed(stringHashCode(application.baseName));
           application.keycloakSecrets = Array.from(new Array(6), () => faker.string.uuid());
+          Object.assign(application, getApplicationKeycloakRealm(application));
         }
         if (application.searchEngineElasticsearch) {
           dockerServices.push('elasticsearch');

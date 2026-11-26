@@ -19,6 +19,7 @@
 import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, finalizeDefault } from '../../lib/utils/object.ts';
 import { JAVA_DOCKER_DIR } from '../generator-constants.ts';
 
+import type { KeycloakRealm } from './support/keycloak-realm.ts';
 import type { Application as DockerApplication, DockerComposeFile } from './types.ts';
 
 export type DockerAddedApplicationLoadingProperties = {
@@ -36,7 +37,7 @@ export type DockerAddedApplicationLoadingProperties = {
    */
   dockerComposeFiles: Record<string, DockerComposeFile>;
   keycloakSecrets?: string[];
-};
+} & Partial<KeycloakRealm>;
 
 export type DockerAddedApplicationPreparingProperties = {
   dockerServicesDir: string;

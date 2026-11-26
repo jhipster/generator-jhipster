@@ -36,7 +36,7 @@ import {
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../base-workspaces/internal/index.ts';
 import { askForDirectoryPath } from '../base-workspaces/prompts.ts';
 import type { Features as BaseWorkspacesFeatures, Options as BaseWorkspacesOptions } from '../base-workspaces/types.ts';
-import { createDockerDeploymentServices } from '../docker/support/index.ts';
+import { createDockerDeploymentServices, getDeploymentKeycloakRealm } from '../docker/support/index.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { writeFiles } from './files.ts';
@@ -306,6 +306,15 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         });
         deployment.keycloakWebAppRedirectUris = keycloakWebAppRedirectUris;
         deployment.keycloakRedirectUris = keycloakWebAppRedirectUris.map(redirectUri => `"${redirectUri}", `).join('');
+        Object.assign(
+          deployment,
+          getDeploymentKeycloakRealm({
+            includesApplicationTypeGateway: Boolean(deployment.includesApplicationTypeGateway),
+            entryPort: deployment.entryPort!,
+            keycloakWebAppRedirectUris,
+            keycloakAppSchemes: deployment.keycloakAppSchemes,
+          }),
+        );
       },
       cleanupOldFilesTask,
       writeFiles,
