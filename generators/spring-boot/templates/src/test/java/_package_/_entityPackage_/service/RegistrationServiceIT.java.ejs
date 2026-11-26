@@ -176,7 +176,7 @@ class RegistrationServiceIT {
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
 <%_ } _%>
         user.setActivated(false);
-        user.setActivationKey(RandomStringUtils.insecure().next(20));
+        user.setActivationKey(RandomStringUtils.insecure().nextAlphanumeric(20));
         <%- user.persistClass %> dbUser = userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
