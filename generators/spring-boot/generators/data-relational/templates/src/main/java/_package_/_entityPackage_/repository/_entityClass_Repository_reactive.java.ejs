@@ -89,6 +89,11 @@ public interface <%- entityClass %>Repository extends ReactiveCrudRepository<<%-
 
     @Override
     Mono<Void> deleteById(<%- primaryKey.type %> id);
+<%_ if (joinTableRelationships.length > 0) { _%>
+
+    @Override
+    Mono<Void> delete(<%- persistClass %> entity);
+<%_ } _%>
 }
 
 interface <%- entityClass %>RepositoryInternal {
@@ -119,5 +124,7 @@ interface <%- entityClass %>RepositoryInternal {
 <%_ if (joinTableRelationships.length > 0) { _%>
 
     Mono<Void> deleteById(<%- primaryKey.type %> id);
+
+    Mono<Void> delete(<%- persistClass %> entity);
 <%_ } _%>
 }
