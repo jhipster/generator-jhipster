@@ -190,16 +190,18 @@ entity OrderLine {
 }
 ```
 
-Generators that support composite primary keys generate an embeddable key class (`OrderLineId` above) as the entity
-identifier. Its parts are properties of the entity in JSON (`{"orderId": 1, "lineNumber": 2, "quantity": 3}`) and one
-segment each of its URL, in the order of the `@Id` fields (`/api/order-lines/1/2`), so a `String` part cannot be empty,
-`.` or `..`, nor contain `/`, `\`, `%`, `;` or a control character, which the server rejects in a URL. `sort=id` sorts a
-list by every part, in the alphabetical order of their names rather than the order of the `@Id` fields, and
-`sort=id.orderId` by one part that is not a `UUID`. They accept `String`, `Integer`, `Long` and `UUID` key fields: other
-field types, and composite primary keys with MapStruct DTOs, JPA metamodel filtering, a search engine, `@Id`
-relationships, a reactive application or a non-SQL database, are errors. The Angular client addresses an entity with a
-composite primary key by a key it computes from the parts, each one encoded and joined by slashes, and sorts it by
-`id.<part>`; its React or Vue client is not generated.
+is imported into `.jhipster/OrderLine.json` (excerpt), each `@Id` field with the `id` option:
+
+```json
+{
+  "fields": [
+    { "fieldName": "orderId", "fieldType": "Long", "options": { "id": true } },
+    { "fieldName": "lineNumber", "fieldType": "Integer", "options": { "id": true } }
+    // ...
+  ]
+  // ...
+}
+```
 
 ## Annotations
 
