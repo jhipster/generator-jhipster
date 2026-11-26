@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "リストの更新",
+  "createLabel": "{entity} の作成",
+  "createOrEditLabel": "{entity}の作成または編集",
+  "search": "{entity} の検索",
+  "notFound": "{entities} が見つかりません。",
+  "created": "新しい {entity} がID {{ param }} で作成されました。",
+  "updated": "ID {{ param }} の {entity} が更新されました。",
+  "deleted": "ID {{ param }} の {entity} が削除されました。",
+  "deleteQuestion": "{entity} {{ id }}を削除してもよろしいですか？"
+}

@@ -31,7 +31,7 @@ import { type Language, findLanguageForTag } from '../../../languages/support/la
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from '../../../languages/translation-data.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
 
-import { getEntityTranslations } from './internal/entity-translations.ts';
+import { type EntityTranslationTexts, getEntityTranslations } from './internal/entity-translations.ts';
 
 export default class I18NGenerator extends ClientApplicationGenerator {
   translationData!: TranslationData;
@@ -277,14 +277,22 @@ export default class I18NGenerator extends ClientApplicationGenerator {
               // A template of the language, like one a blueprint gives, is used instead of the texts of the language.
               const languageTemplate = `entity/i18n/entity_${languageTag}.json.ejs`;
               const hasLanguageTemplate = this.jhipsterTemplatesFolders.some(folder => existsSync(join(folder, languageTemplate)));
-              const entityTranslations = getEntityTranslations(languageTag, {
-                entity: entity.entityNameHumanized,
-                entities: entity.entityNamePluralHumanized,
-                variant: entity.entityI18nVariant,
-              });
-              if (!hasLanguageTemplate && !entityTranslations) {
-                throw new Error(`The entity translations of the language ${languageTag} are missing: no ${languageTemplate} template.`);
+              // The texts of the language, entity/i18n/<language>.json, of a blueprint first.
+              const textsFile = this.jhipsterTemplatesFolders
+                .map(folder => join(folder, `entity/i18n/${languageTag}.json`))
+                .find(file => existsSync(file));
+              if (!hasLanguageTemplate && !textsFile) {
+                throw new Error(
+                  `The entity translations of the language ${languageTag} are missing: no entity/i18n/${languageTag}.json file.`,
+                );
               }
+              const entityTranslations =
+                textsFile &&
+                getEntityTranslations(this.fs.readJSON(textsFile) as unknown as EntityTranslationTexts, {
+                  entity: entity.entityNameHumanized,
+                  entities: entity.entityNamePluralHumanized,
+                  variant: entity.entityI18nVariant,
+                });
               await this.writeFiles({
                 sections: {
                   entityBaseFiles: [

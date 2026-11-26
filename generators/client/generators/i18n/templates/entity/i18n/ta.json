@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "{entity}-ஐ உருவாக்கு",
+  "createOrEditLabel": "{entity} -ஐ மாற்று (அ) உருவாக்கு",
+  "search": "Search for {entity}",
+  "notFound": "No {entities} found",
+  "created": "{entity} புதிதாக உருவாக்கப்பட்டது, அடையாளம் {{ param }}",
+  "updated": "{entity} மாற்றப்பட்டது, அடையாளம் {{ param }}",
+  "deleted": "A {entity} நீக்கப்பட்டது, அடையாளம {{ param }}",
+  "deleteQuestion": "நீக்குவதற்கு உறுதி செய் {entity} {{ id }}?"
+}

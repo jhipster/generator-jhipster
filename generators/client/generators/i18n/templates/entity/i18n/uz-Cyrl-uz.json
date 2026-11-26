@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Янги {entity} қўшиш",
+  "createOrEditLabel": "{entity}ни таҳрирлаш",
+  "search": "{entity}ни излаш",
+  "notFound": "No {entities} found",
+  "created": "{entity} {{ param }} билан қўшилди.",
+  "updated": "{{ param }}- {entity} сақланди.",
+  "deleted": "{{ param }}- {entity} ўчирилди.",
+  "deleteQuestion": "{{ id }}- {entity}ни ўчирмоқчимисиз?"
+}

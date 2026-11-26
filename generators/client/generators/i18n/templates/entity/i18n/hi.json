@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "नया {entity} बनाएँ",
+  "createOrEditLabel": "{entity} बनाएँ या संपादित करें",
+  "search": "{entity} खोजें",
+  "notFound": "No {entities} found",
+  "created": "एक नया {entity} [identifier: {{ param }}] तैयार है",
+  "updated": "एक {entity} [identifier: {{ param }}] का अद्यतन हुआ है",
+  "deleted": "{entity} [identifier: {{ param }}] हटा दिया है",
+  "deleteQuestion": "{entity} [id: {{ id }}] हटाने की पुष्टि करें"
+}

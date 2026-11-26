@@ -1,0 +1,20 @@
+{
+  "refreshListLabel": "Atualizar lista",
+  "createLabel": "Criar novo {entity}",
+  "createOrEditLabel": "Criar ou editar {entity}",
+  "search": "Pesquisar por {entity}",
+  "notFound": "Nenhum {entity} encontrado",
+  "created": "Um novo {entity} foi criado com o identificador {{ param }}",
+  "updated": "Um {entity} foi atualizado com o identificador {{ param }}",
+  "deleted": "Um {entity} foi excluído com o identificador {{ param }}",
+  "deleteQuestion": "Tem certeza de que deseja excluir {entity} {{ id }}?",
+  "variants": {
+    "female": {
+      "createLabel": "Criar nova {entity}",
+      "notFound": "Nenhuma {entity} encontrada",
+      "created": "Uma nova {entity} foi criada com o identificador {{ param }}",
+      "updated": "Uma {entity} foi atualizada com o identificador {{ param }}",
+      "deleted": "Uma {entity} foi excluída com o identificador {{ param }}"
+    }
+  }
+}

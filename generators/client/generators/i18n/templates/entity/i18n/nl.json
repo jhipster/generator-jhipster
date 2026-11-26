@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Maak een nieuwe {entity}",
+  "createOrEditLabel": "Maak of wijzig een {entity}",
+  "search": "Search for {entity}",
+  "notFound": "No {entities} found",
+  "created": "A new {entity} is created with identifier {{ param }}",
+  "updated": "A {entity} is updated with identifier {{ param }}",
+  "deleted": "A {entity} is deleted with identifier {{ param }}",
+  "deleteQuestion": "Bent u zeker dat u {entity} {{ id }} wilt verwijderen?"
+}

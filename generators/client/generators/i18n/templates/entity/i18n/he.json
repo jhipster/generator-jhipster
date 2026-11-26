@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "רענן רשימה",
+  "createLabel": "צור חדש {entity}",
+  "createOrEditLabel": "צור או ערוך {entity}",
+  "search": "חפש {entity}",
+  "notFound": "לא נמצאו {entities}",
+  "created": "{entity} חדש נוצר עם מזהה {{ param }}",
+  "updated": "{entity} עודכן עם מזהה {{ param }}",
+  "deleted": "{entity} נמחק עם מזהה {{ param }}",
+  "deleteQuestion": "האם אתה בטוח שברצונך למחוק את {entity} {{ id }}?"
+}

@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Siyahını yenilə",
+  "createLabel": "Yeni {entity} əlavə et",
+  "createOrEditLabel": "Yeni {entity} əlavə et və ya yenilə",
+  "search": "{entity} axtar",
+  "notFound": "{entities} məlumatı tapılmadı",
+  "created": "{{ param }} ID ilə bir {entity} əlavə edildi",
+  "updated": "{{ param }} nolu {entity} dəyişildi",
+  "deleted": "{{ param }} nolu {entity} silindi",
+  "deleteQuestion": "{{ id }} nolu {entity} silinəcək. Davam etmək istəyirsiniz?"
+}

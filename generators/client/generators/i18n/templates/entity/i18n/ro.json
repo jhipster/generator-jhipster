@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Creeare o nouă entitate {entity}",
+  "createOrEditLabel": "Creeare sau editare {entity}",
+  "search": "Căutare după {entity}",
+  "notFound": "No {entities} found",
+  "created": "A fost creată o nouă entitate {entity} cu identificatorul {{ param }}",
+  "updated": "{entity} cu identificatorul {{ param }} a fost actualizată",
+  "deleted": "{entity} cu identificatorul {{ param }} a fost ștearsă",
+  "deleteQuestion": "Sunteți sigur că doriți să ștergeți {entity} {{ id }}?"
+}

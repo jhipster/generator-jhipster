@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Luo {entity}",
+  "createOrEditLabel": "Luo tai muokkaa {entity}",
+  "search": "Etsi {entity}",
+  "notFound": "{entity} ei löytynyt",
+  "created": "Uusi {entity} on luotu, id: {{ param }}",
+  "updated": "{entity} on päivitetty, id: {{ param }}",
+  "deleted": "{entity} on poistettu, id: {{ param }}",
+  "deleteQuestion": "Haluatko varmasti poistaa {entity} {{ id }}?"
+}

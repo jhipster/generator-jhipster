@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Värskenda nimekirja",
+  "createLabel": "Lisa uus {entity}",
+  "createOrEditLabel": "Lisa või muuda {entity}",
+  "search": "Otsi {entity}",
+  "notFound": "Ei leitud ühtegi {entities}",
+  "created": "Uus {entity} on loodud identifikaatoriga {{ param }}",
+  "updated": "{entity} identifikaatoriga {{ param }} on muudetud",
+  "deleted": "{entity} identifikaatoriga {{ param }} on kustutatud",
+  "deleteQuestion": "Kas olete kindel, et soovite kustutada {entity} {{ id }}?"
+}

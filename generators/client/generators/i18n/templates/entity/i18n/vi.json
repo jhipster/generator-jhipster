@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Thêm mới một {entity}",
+  "createOrEditLabel": "Thêm mới hoặc cập nhật {entity}",
+  "search": "Tìm {entity}",
+  "notFound": "No {entities} found",
+  "created": "Một {entity} mới được tạo với định danh {{ param }}",
+  "updated": "Một {entity} cập nhật với định danh {{ param }}",
+  "deleted": "Một {entity} đã xóa với định danh {{ param }}",
+  "deleteQuestion": "Bạn có chắc là muốn xóa {entity} {{ id }}?"
+}

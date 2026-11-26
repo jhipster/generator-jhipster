@@ -17,40 +17,49 @@
  * limitations under the License.
  */
 import { describe, expect, it } from 'expect-node';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import { supportedLanguages } from '../../../../languages/support/languages.ts';
 
-import { getEntityTranslations } from './entity-translations.ts';
+import { type EntityTranslationTexts, getEntityTranslations } from './entity-translations.ts';
+
+const textsFolder = join(import.meta.dirname, '../templates/entity/i18n');
+const readTexts = (languageTag: string): EntityTranslationTexts =>
+  JSON.parse(readFileSync(join(textsFolder, `${languageTag}.json`), 'utf8'));
 
 describe('generator - client:i18n - internal - getEntityTranslations', () => {
   const names = { entity: 'Order Line', entities: 'Order Lines' };
 
-  it('should give the texts of every supported language', () => {
-    expect(
-      supportedLanguages.filter(({ languageTag }) => !getEntityTranslations(languageTag, names)).map(({ languageTag }) => languageTag),
-    ).toEqual([]);
-  });
-
-  it('should give no texts for an unknown language', () => {
-    expect(getEntityTranslations('xx', names)).toBeUndefined();
+  it('should have the texts of every supported language', () => {
+    for (const { languageTag } of supportedLanguages) {
+      expect(Object.keys(getEntityTranslations(readTexts(languageTag), names))).toEqual(
+        expect.arrayContaining(['createLabel', 'notFound', 'created', 'updated', 'deleted', 'deleteQuestion']),
+      );
+    }
   });
 
   it('should write the names of the entity in the texts', () => {
-    expect(getEntityTranslations('en', names)).toMatchObject({
+    expect(getEntityTranslations(readTexts('en'), names)).toMatchObject({
       createLabel: 'Create a new Order Line',
       notFound: 'No Order Lines found',
     });
   });
 
   it('should agree the Brazilian Portuguese texts with the gender of the variant', () => {
-    expect(getEntityTranslations('pt-br', { ...names, variant: 'female' })).toMatchObject({
+    expect(getEntityTranslations(readTexts('pt-br'), { ...names, variant: 'female' })).toMatchObject({
       createLabel: 'Criar nova Order Line',
       notFound: 'Nenhuma Order Line encontrada',
       created: 'Uma nova Order Line foi criada com o identificador {{ param }}',
     });
-    expect(getEntityTranslations('pt-br', names)).toMatchObject({
+    expect(getEntityTranslations(readTexts('pt-br'), names)).toMatchObject({
       createLabel: 'Criar novo Order Line',
       notFound: 'Nenhum Order Line encontrado',
     });
+  });
+
+  it('should write the texts as the content of JSON strings', () => {
+    const texts = { ...readTexts('en'), createLabel: 'Create a "new" {entity}' };
+    expect(getEntityTranslations(texts, names).createLabel).toBe('Create a \\"new\\" Order Line');
   });
 });
