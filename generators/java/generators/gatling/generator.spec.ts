@@ -48,4 +48,31 @@ describe(`generator - ${generator}`, () => {
       expect(result.getSnapshot()).toMatchSnapshot();
     });
   });
+
+  describe('with a composite primary key entity', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'OrderLine',
+          changelogDate: '20160926101210',
+          fields: [
+            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+            { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+            { fieldName: 'productCode', fieldType: 'String' },
+          ],
+        },
+      ]);
+    });
+
+    it('should serialize the composite key as an object', () => {
+      result.assertFileContent(
+        'src/test/java/gatling/simulations/OrderLineGatlingTest.java',
+        '"\\"id\\": { \\"orderId\\": 0, \\"lineNumber\\": 0 }"',
+      );
+    });
+
+    it('should not serialize the key parts as entity properties', () => {
+      result.assertNoFileContent('src/test/java/gatling/simulations/OrderLineGatlingTest.java', '"\\"orderId\\": 0"');
+    });
+  });
 });
