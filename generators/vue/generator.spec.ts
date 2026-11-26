@@ -261,7 +261,7 @@ describe(`generator - ${clientFramework}`, () => {
               assertion(
                 `${clientSrcDir}app/layouts/navbar/navbar.vue`,
                 '<b-dropdown-item to="/admin/metrics" active-class="active">\n' +
-                  '            <font-awesome-icon icon="tachometer-alt" />\n' +
+                  '            <font-awesome-icon icon="gauge-high" />\n' +
                   "            <span>{{ t$('global.menu.admin.metrics') }}</span>\n" +
                   '          </b-dropdown-item>\n' +
                   '          <b-dropdown-item to="/admin/health" active-class="active">\n' +
@@ -269,11 +269,11 @@ describe(`generator - ${clientFramework}`, () => {
                   "            <span>{{ t$('global.menu.admin.health') }}</span>\n" +
                   '          </b-dropdown-item>\n' +
                   '          <b-dropdown-item to="/admin/configuration" active-class="active">\n' +
-                  '            <font-awesome-icon icon="cogs" />\n' +
+                  '            <font-awesome-icon icon="gears" />\n' +
                   "            <span>{{ t$('global.menu.admin.configuration') }}</span>\n" +
                   '          </b-dropdown-item>\n' +
                   '          <b-dropdown-item to="/admin/logs" active-class="active">\n' +
-                  '            <font-awesome-icon icon="tasks" />\n' +
+                  '            <font-awesome-icon icon="list-check" />\n' +
                   "            <span>{{ t$('global.menu.admin.logs') }}</span>\n" +
                   '          </b-dropdown-item>',
               );

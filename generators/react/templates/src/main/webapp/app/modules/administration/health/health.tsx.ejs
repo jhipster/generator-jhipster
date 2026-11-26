@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { Badge, Button, Table } from 'react-bootstrap';
 import { Translate<%- enableTranslation ? ', translate' : '' %> } from 'react-jhipster';
 
-import { faEye, faSync } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -62,7 +62,7 @@ export const HealthPage = () => {
           <Translate contentKey="health.title">Health Checks</Translate>
         </span>
         <Button onClick={fetchSystemHealth} variant="primary" className="float-end" disabled={isFetching}>
-          <FontAwesomeIcon icon={faSync} />
+          <FontAwesomeIcon icon={faArrowsRotate} />
           &nbsp;
           <Translate component="span" contentKey="health.refresh.button">
             Refresh

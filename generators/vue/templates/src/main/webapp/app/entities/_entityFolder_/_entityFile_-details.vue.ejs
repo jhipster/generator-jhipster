@@ -86,7 +86,7 @@
 <%_ if (!readOnly) { _%>
         <router-link v-if="<%- entityInstance %>.<%- primaryKey.name %>" :to="{name: '<%- entityAngularName %>Edit', params: {<%- entityInstance %>Id: <%- entityInstance %>.<%- primaryKey.name %>}}" custom v-slot="{ navigate }">
           <button @click="navigate" class="btn btn-primary">
-            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.edit') }}</span>
+            <font-awesome-icon icon="pencil"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.edit') }}</span>
           </button>
         </router-link>
         <b-button v-if="<%- entityInstance %>.<%- primaryKey.name %>" @click="prepareRemove(<%- entityInstance %>)" variant="danger"<% if (builtInUserManagement) { %> :disabled="username === <%- entityInstance %>.login"<% } %> data-cy="entityDeleteButton">

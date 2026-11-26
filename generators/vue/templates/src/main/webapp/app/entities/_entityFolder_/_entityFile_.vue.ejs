@@ -4,7 +4,7 @@
       <span id="<%- entityFileName %>">{{ t$('<%- i18nKeyPrefix %>.home.title') }}</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info me-2" @click="reload" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>{{ t$('<%- i18nKeyPrefix %>.home.refreshListLabel') }}</span>
+          <font-awesome-icon icon="arrows-rotate" :spin="isFetching"></font-awesome-icon> <span>{{ t$('<%- i18nKeyPrefix %>.home.refreshListLabel') }}</span>
         </button>
 <%_ if (!readOnly) { _%>
         <router-link :to="{name: '<%- entityAngularName %>Create'}" custom v-slot="{ navigate }">
@@ -25,7 +25,7 @@
               :placeholder="t$('<%- i18nKeyPrefix %>.home.search')"
               v-model="currentSearch" />
             <button type="button" id="launch-search" class="btn btn-primary" @click="search(currentSearch)">
-              <font-awesome-icon icon="search"></font-awesome-icon>
+              <font-awesome-icon icon="magnifying-glass"></font-awesome-icon>
             </button>
             <button type="button" id="clear-search" class="btn btn-secondary" @click="clear()"
               v-if="currentSearch">
@@ -154,7 +154,7 @@ _%>
               <router-link :to="{name: '<%- entityAngularName %>Edit', params: {<%- entityInstance %>Id: <%- entityInstance %>.<%- primaryKey.name %>}}" custom v-slot="{ navigate }">
                 <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
   <%_ } _%>
-                  <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                  <font-awesome-icon icon="pencil"></font-awesome-icon>
                   <span class="d-none d-md-inline">{{ t$('entity.action.edit') }}</span>
   <%_ if (!authenticationTypeSession) { _%>
                 </button>

@@ -194,16 +194,16 @@ describe(`generator - ${clientFramework}`, () => {
             if (enableTranslation) {
               assertion(
                 `${clientSrcDir}app/shared/layout/menus/admin.tsx`,
-                '    <MenuItem icon="tachometer-alt" to="/admin/metrics">\n' +
+                '    <MenuItem icon="gauge-high" to="/admin/metrics">\n' +
                   '      <Translate contentKey="global.menu.admin.metrics">Metrics</Translate>\n' +
                   '    </MenuItem>\n' +
                   '    <MenuItem icon="heart" to="/admin/health">\n' +
                   '      <Translate contentKey="global.menu.admin.health">Health</Translate>\n' +
                   '    </MenuItem>\n' +
-                  '    <MenuItem icon="cogs" to="/admin/configuration">\n' +
+                  '    <MenuItem icon="gears" to="/admin/configuration">\n' +
                   '      <Translate contentKey="global.menu.admin.configuration">Configuration</Translate>\n' +
                   '    </MenuItem>\n' +
-                  '    <MenuItem icon="tasks" to="/admin/logs">\n' +
+                  '    <MenuItem icon="list-check" to="/admin/logs">\n' +
                   '      <Translate contentKey="global.menu.admin.logs">Logs</Translate>\n' +
                   '    </MenuItem>',
               );

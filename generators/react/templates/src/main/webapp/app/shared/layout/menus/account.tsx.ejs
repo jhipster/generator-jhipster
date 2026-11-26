@@ -50,7 +50,7 @@ const accountMenuItemsAuthenticated = () => (
     </MenuItem>
   <%_ } _%>
 <%_ } _%>
-    <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout">
+    <MenuItem icon="right-from-bracket" to="/logout" data-cy="logout">
       <Translate contentKey="global.menu.account.logout">Sign out</Translate>
     </MenuItem>
   </>
@@ -73,7 +73,7 @@ const accountMenuItems = () => {
           })
         }
       >
-        <FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate>
+        <FontAwesomeIcon icon="right-to-bracket" /> <Translate contentKey="global.menu.account.login">Sign in</Translate>
       </DropdownItem>
     </>
   );
@@ -81,7 +81,7 @@ const accountMenuItems = () => {
 <%_ } else { _%>
 const accountMenuItems = () => (
   <>
-    <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login">
+    <MenuItem id="login-item" icon="right-to-bracket" to="/login" data-cy="login">
       <Translate contentKey="global.menu.account.login">Sign in</Translate>
     </MenuItem>
   <%_ if (generateUserRegistration) { _%>

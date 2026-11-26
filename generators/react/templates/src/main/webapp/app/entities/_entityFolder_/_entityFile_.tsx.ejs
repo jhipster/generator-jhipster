@@ -360,7 +360,7 @@ export const <%- entityReactName %> = () => {
         <Translate contentKey="<%- i18nKeyPrefix %>.home.title"><%- entityNamePluralHumanized %></Translate>
         <div className="d-flex justify-content-end">
           <Button className="me-2" variant="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%- i18nKeyPrefix %>.home.refreshListLabel">Refresh list</Translate>
+            <FontAwesomeIcon icon="arrows-rotate" spin={loading} /> <Translate contentKey="<%- i18nKeyPrefix %>.home.refreshListLabel">Refresh list</Translate>
           </Button>
 <%_ if (!readOnly) { _%>
             <Link to="/<%- entityPage %>/new" className="btn btn-primary" id="jh-create-entity" data-cy="entityCreateButton">
@@ -380,7 +380,7 @@ export const <%- entityReactName %> = () => {
                 <FormControl type="text" name="search" defaultValue={search} onChange={handleSearch}
               placeholder=<% if (enableTranslation) { %>{translate('<%- i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
                 <Button className="input-group-addon">
-                  <FontAwesomeIcon icon="search" />
+                  <FontAwesomeIcon icon="magnifying-glass" />
                 </Button>
                 <Button type="reset" className="input-group-addon" onClick={clear}>
                   <FontAwesomeIcon icon="trash" />
@@ -529,7 +529,7 @@ export const <%- entityReactName %> = () => {
                           </Link>
 <%_ if (!readOnly) { _%>
                           <Link to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} className="btn btn-primary btn-sm" data-cy="entityEditButton">
-                            <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
+                            <FontAwesomeIcon icon="pencil" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Link>
                           <Button
                             variant="danger"

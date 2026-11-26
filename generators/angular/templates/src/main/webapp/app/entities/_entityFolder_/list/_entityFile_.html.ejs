@@ -22,7 +22,7 @@
 
         <div class="d-flex justify-content-end">
             <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
-                <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
+                <fa-icon icon="arrows-rotate" [animation]="isLoading() ? 'spin' : undefined" />
                 <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.refreshListLabel')</span>
             </button>
 <%_ if (!readOnly) { _%>
@@ -47,12 +47,12 @@
                 <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="__jhiTranslatePipe__('<%- i18nKeyPrefix %>.home.search')">
 
                 <button class="btn btn-info" (click)="search(currentSearch())">
-                    <fa-icon icon="search" />
+                    <fa-icon icon="magnifying-glass" />
                 </button>
 
             @if (currentSearch()) {
                 <button class="btn btn-danger" (click)="search('')">
-                    <fa-icon icon="trash-alt" />
+                    <fa-icon icon="trash-can" />
                 </button>
             }
             </div>
@@ -216,7 +216,7 @@
 
                             <a [routerLink]="['/<%- entityPage %>', <%- entityInstance %>.<%- primaryKey.name %>, 'edit']"
                                class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                                <fa-icon icon="pencil-alt" />
+                                <fa-icon icon="pencil" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.edit')</span>
                             </a>
 <%_ } _%>

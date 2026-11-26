@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, ProgressBar, Row, Table } from 'react-bootstrap';
 import { Translate, translate } from 'react-jhipster';
 
-import { faSync } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -54,7 +54,7 @@ export const MetricsPage = () => {
           <Translate contentKey="metrics.title">Application Metrics</Translate>
         </span>
         <Button onClick={getMetrics} variant="primary" className="float-end" disabled={isFetching}>
-          <FontAwesomeIcon icon={faSync} />
+          <FontAwesomeIcon icon={faArrowsRotate} />
           &nbsp;
           <Translate component="span" contentKey="metrics.refresh.button">
             Refresh
