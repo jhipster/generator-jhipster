@@ -90,11 +90,11 @@ class <%- upperFirstCamelCaseBaseName %>KafkaResourceIT {
             input.send(testMessage);
             Thread.sleep(100);
             String content = mvcResult.getResponse().getContentAsString();
-            if (content.contains("data:value-consume")) {
+            if (content.contains("data: value-consume")) {
                 restMockMvc.perform(get("/api/<%- dasherizedBaseName %>-kafka/unregister"));
                 return;
             }
         }
-        fail("Expected content data:value-consume not received");
+        fail("Expected content data: value-consume not received");
     }
 }

@@ -37,7 +37,7 @@ export const getTestcontainerSupport = ({
     {
       mariadb: {
         testcontainerClass: 'MariaDBContainer',
-        testcontainerClassPackage: 'org.testcontainers.containers',
+        testcontainerClassPackage: 'org.testcontainers.mariadb',
         testcontainerClassInitialization: '',
         testcontainerDockerImageName: dockerContainers.mariadb,
       },
