@@ -3741,6 +3741,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
         "bagRelationship": false,
         "collection": true,
         "columnName": "authority",
+        "columnNameTruncated": false,
         "columnRequired": undefined,
         "ignoreOtherSideProperty": false,
         "joinColumnNames": Any<Array>,

@@ -3741,6 +3741,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
         "bagRelationship": false,
         "collection": true,
         "columnName": "authority",
+        "columnNameTruncated": false,
         "columnRequired": undefined,
         "ignoreOtherSideProperty": false,
         "joinColumnNames": Any<Array>,
