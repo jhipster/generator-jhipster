@@ -36,7 +36,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should match files snapshot', () => {
-      expect(result.getSnapshot()).toMatchSnapshot();
+      expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
   describe('with gradle build tool', () => {
@@ -45,7 +45,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should match files snapshot', () => {
-      expect(result.getSnapshot()).toMatchSnapshot();
+      expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
 });
