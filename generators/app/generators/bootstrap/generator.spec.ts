@@ -61,6 +61,8 @@ const expectedEntity = (entity: any) => ({
 
   restProperties: expect.any(Array),
   restDomainFields: expect.any(Array),
+  // The fields and the relationships the spring-boot bootstrap filters by.
+  entityJavaFilterableProperties: expect.any(Array),
   entityClientFormFields: expect.any(Array),
   entityClientListFields: expect.any(Array),
 

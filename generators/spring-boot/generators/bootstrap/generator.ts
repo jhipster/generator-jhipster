@@ -18,11 +18,30 @@
  */
 import assert from 'node:assert';
 
-import { mutateData } from '../../../../lib/utils/object.ts';
+import uniqBy from 'lodash-es/uniqBy.js';
+
+import { getEntityDerivedPropertyMutations } from '../../../../lib/command/mutations.ts';
+import type { FieldType } from '../../../../lib/jhipster/field-types.ts';
+import { fieldTypes } from '../../../../lib/jhipster/index.ts';
+import { mutateData, mutateDefaults } from '../../../../lib/utils/object.ts';
 import databaseData from '../../../base-application/generators/database-bootstrap/support/database-data.ts';
-import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
+import { isContentTypeField } from '../../../base-application/internal/content-type-fields.ts';
+import { getFieldFakeDataDomain } from '../../../base-application/internal/fake-data.ts';
+import { generateEntitySamples } from '../../../base-application/support/index.ts';
+import type { Entity as ClientEntity } from '../../../client/types.ts';
+import { javaValue } from '../../../java/support/index.ts';
+import { getJavaValueGeneratorForType, getSpecificationBuildForType } from '../../../server/support/index.ts';
+import {
+  mutateApplicationLoading,
+  mutateApplicationPreparing,
+  mutateFilterableField,
+  mutateFilterableRelationship,
+} from '../../application.ts';
+import command from '../../command.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../data-relational/support/database-url.ts';
+
+const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 
 export default class BootstrapGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
@@ -195,6 +214,40 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
   get [SpringBootApplicationGenerator.POST_PREPARING]() {
     return this.postPreparing;
   }
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ entity, application }) {
+        if (entity.entityRestLayer === false) {
+          mutateDefaults(entity as unknown as ClientEntity, { entityClientModelOnly: true });
+        }
+
+        const hasAnyAuthority = (authorities: string[]): string | undefined =>
+          authorities.length > 0 ? `hasAnyAuthority(${authorities.map(auth => `'${auth}'`).join(',')})` : undefined;
+        mutateDefaults(entity, getEntityDerivedPropertyMutations(command.entity), {
+          entityPersistenceLayer: true,
+          entityRestLayer: true,
+          entitySpringPreAuthorize: hasAnyAuthority(entity.entityAuthority?.split(',') ?? []),
+          entitySpringReadPreAuthorize: hasAnyAuthority([
+            ...(entity.entityAuthority?.split(',') ?? []),
+            ...(entity.entityReadAuthority?.split(',') ?? []),
+          ]),
+          serviceClass: ({ service }) => service === 'serviceClass',
+          serviceImpl: ({ service }) => service === 'serviceImpl',
+          serviceNo: ({ service }) => service === 'no',
+          saveUserSnapshot: ({ hasRelationshipWithBuiltInUser, dto }) =>
+            application.applicationTypeMicroservice &&
+            application.authenticationTypeOauth2 &&
+            hasRelationshipWithBuiltInUser &&
+            dto === 'no',
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.preparingEachEntity;
+  }
+
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       prepareField({ entity, field }) {
@@ -208,10 +261,221 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
           field.readonly = true;
         }
       },
+      prepareFilters({ field }) {
+        mutateDefaults(field, {
+          fieldJavaBuildSpecification: getSpecificationBuildForType(field.fieldType as FieldType),
+          // The content type of a blob is not filtered, like the blob.
+          filterableField:
+            !([TYPE_BYTES, TYPE_BYTE_BUFFER] as string[]).includes(field.fieldType) && !field.transient && !isContentTypeField(field),
+        });
+        if (field.filterableField) {
+          const { fieldType } = field;
+          mutateDefaults(field, mutateFilterableField);
+
+          if (field.fieldIsEnum) {
+            const filterType = `${fieldType}Filter`;
+            mutateDefaults(field, {
+              propertyJavaFilterType: filterType,
+              propertyJavaCustomFilter: { type: filterType, superType: `Filter<${fieldType}>`, fieldType },
+            });
+          } else if (
+            field.fieldTypeDuration ||
+            field.fieldTypeTemporal ||
+            field.fieldTypeCharSequence ||
+            field.fieldTypeNumeric ||
+            field.fieldTypeBoolean
+          ) {
+            mutateDefaults(field, { propertyJavaFilterType: `${fieldType}Filter` });
+          } else if (field.fieldTypeLocalTime) {
+            const filterType = `${fieldType}Filter`;
+            mutateDefaults(field, {
+              propertyJavaFilterType: filterType,
+              propertyJavaCustomFilter: { type: filterType, superType: `RangeFilter<${fieldType}>`, fieldType },
+            });
+          } else {
+            mutateDefaults(field, { propertyJavaFilterType: `Filter<${fieldType}>` });
+          }
+        }
+      },
     });
   }
 
   get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.preparingEachEntityField;
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareEntity({ relationship }) {
+        const { primaryKey } = relationship.otherEntity;
+        if (!primaryKey) return;
+
+        const otherEntityPkField = primaryKey.fields[0];
+        mutateDefaults(relationship, mutateFilterableRelationship, {
+          propertyJavaFilterType: otherEntityPkField.propertyJavaFilterType,
+          propertyJavaFilteredType: otherEntityPkField.propertyJavaFilteredType,
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.preparingEachEntityRelationship;
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareEntity({ entity }) {
+        const { primaryKey } = entity;
+        if (primaryKey) {
+          mutateDefaults(primaryKey, {
+            javaBuildSpecification: getSpecificationBuildForType(primaryKey.type),
+            javaValueGenerator: getJavaValueGeneratorForType(primaryKey.type),
+          });
+          for (const field of primaryKey.fields) {
+            mutateDefaults(field, { fieldJavaValueGenerator: getJavaValueGeneratorForType(field.fieldType) });
+          }
+        }
+      },
+      prepareTestValues({ entity }) {
+        type TestField = (typeof entity.fields)[number];
+        type TestValue = string | number | boolean;
+        const isNumber = (field: TestField) =>
+          field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeFloat || field.fieldTypeDouble || field.fieldTypeBigDecimal;
+        const isTime = (field: TestField) =>
+          field.fieldTypeLocalDate ||
+          field.fieldTypeInstant ||
+          field.fieldTypeZonedDateTime ||
+          field.fieldTypeLocalTime ||
+          field.fieldTypeDuration;
+        // A type with an order has a smaller value too, which the range filters of the test look for below the default one.
+        const durationMinutes = (duration: TestValue) => Number(/^PT(\d+)M$/.exec(duration as string)![1]);
+        const compareTestValues = (field: TestField): ((a: TestValue, b: TestValue) => number) | undefined => {
+          if (isNumber(field)) return (a, b) => (a as number) - (b as number);
+          if (field.fieldTypeDuration) return (a, b) => durationMinutes(a) - durationMinutes(b);
+          return isTime(field) ? (a, b) => (a as string).localeCompare(b as string) : undefined;
+        };
+        const testValuesCount = (field: TestField) => (compareTestValues(field) ? 3 : 2);
+        // The values of the resource integration test, the default and the updated one of each field, and the smaller one of a
+        // type with an order, drawn as entity samples in this order: the texts of a pattern, the other texts, the numbers,
+        // the UUID, boolean and enum fields, the times.
+        const sampleGroups: ((field: TestField) => boolean | undefined)[] = [
+          field => field.fieldTypeString && field.fieldValidateRulesPattern !== undefined,
+          field => field.fieldTypeString,
+          isNumber,
+          field => field.fieldTypeUUID || field.fieldTypeBoolean || field.fieldIsEnum,
+          isTime,
+        ];
+        const sampleGroup = (field: TestField) => sampleGroups.findIndex(inGroup => inGroup(field));
+        const sampleFields = entity.fields
+          .filter(field => !field.id && !isContentTypeField(field) && sampleGroup(field) !== -1)
+          .toSorted((a, b) => sampleGroup(a) - sampleGroup(b));
+        // A date is written as its ISO 8601 text, a BigDecimal with the two decimals of its column, a Float or a Double without
+        // the error of the binary floating point.
+        const testValue = (field: TestField, value: unknown): TestValue | undefined => {
+          if (value instanceof Date) return value.toISOString();
+          if (typeof value !== 'number' || Number.isInteger(value)) return value as TestValue | undefined;
+          return Number(field.fieldTypeBigDecimal ? value.toFixed(2) : value.toPrecision(15));
+        };
+        // The values of a field do not repeat, but for a field with fewer values than the test needs, like an enum of a
+        // single value, whose samples repeat.
+        const samples = generateEntitySamples(entity, {
+          seed: 'resource-it',
+          batches: sampleFields.map(field => ({
+            fields: [field],
+            format: 'json-serializable',
+            count: testValuesCount(field),
+            distinct: (getFieldFakeDataDomain(field)?.length ?? Infinity) >= testValuesCount(field),
+          })),
+        });
+
+        for (const [index, field] of sampleFields.entries()) {
+          const values = samples[index].map(sample => testValue(field, sample[field.fieldName])!);
+          const compare = compareTestValues(field);
+          let [smaller, sample, updated] = (compare ? values.toSorted(compare) : [undefined, ...values]) as [
+            TestValue | undefined,
+            TestValue,
+            TestValue,
+          ];
+          if (isNumber(field)) {
+            // A number of a small range repeats its values: the default and the updated ones are distinct when the range has two,
+            // and the smaller one, which only filters, is below the default one.
+            const distinctValues = [...new Set(values as number[])].toSorted((a, b) => a - b);
+            if (distinctValues.length < values.length) {
+              const step = field.fieldTypeInteger || field.fieldTypeLong ? 1 : 0.01;
+              [sample, updated = sample] = distinctValues;
+              smaller = testValue(field, sample - step);
+            }
+          }
+          mutateDefaults(field, {
+            sbTestDefaultValue: javaValue(field, sample),
+            sbTestUpdatedValue: javaValue(field, updated),
+            sbTestSmallerValue: smaller === undefined ? undefined : javaValue(field, smaller),
+          });
+        }
+
+        // The blob of a file of the test has one byte, or a size within its minbytes and maxbytes, wrapped in a ByteBuffer
+        // with Cassandra.
+        for (const field of entity.fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText)) {
+          const minBytes = field.fieldValidationMinBytes ? Number(field.fieldValidateRulesMinbytes) : 0;
+          const maxBytes = field.fieldValidationMaxBytes ? Number(field.fieldValidateRulesMaxbytes) : Infinity;
+          const size = Math.min(Math.max(1, minBytes), maxBytes);
+          const [sample, updated] = [`TestUtil.createByteArray(${size}, "0")`, `TestUtil.createByteArray(${size}, "1")`].map(bytes =>
+            field.fieldTypeBytes ? bytes : `ByteBuffer.wrap(${bytes})`,
+          );
+          mutateDefaults(field, {
+            sbTestDefaultValue: sample,
+            sbTestUpdatedValue: updated,
+            // The byte arrays are validated by their size, a ByteBuffer is not.
+            sbTestRejectedBlobSizes:
+              field.fieldTypeBytes ? [...(minBytes > 0 ? [minBytes - 1] : []), ...(Number.isFinite(maxBytes) ? [maxBytes + 1] : [])] : [],
+          });
+        }
+
+        // The blobs give no value as a sample: the fake data of a blob is a file.
+        for (const field of entity.fields.filter(field => isContentTypeField(field) || field.blobContentTypeText)) {
+          const [sample, updated] = isContentTypeField(field) ? ['image/jpg', 'image/png'] : ['AAAAAAAAAA', 'BBBBBBBBBB'];
+          mutateDefaults(field, {
+            sbTestDefaultValue: javaValue(field, sample),
+            sbTestUpdatedValue: javaValue(field, updated),
+          });
+        }
+      },
+      prepareFilters({ application, entity }) {
+        mutateDefaults(entity, {
+          entityJavaFilterableProperties: [
+            ...entity.fields.filter(field => field.filterableField),
+            ...entity.relationships.filter(rel => !application.reactive || (rel.persistableRelationship && !rel.collection)),
+          ],
+          entityJavaCustomFilters: uniqBy(entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean), 'type'),
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.postPreparingEachEntity;
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      publicRestIntegrationTests({ entities }) {
+        // Integration tests of entities referenced from another package are used across packages, so they must be public.
+        const referencedFromOtherPackages = new Set(
+          entities.flatMap(entity =>
+            entity.relationships
+              .filter(relationship => relationship.otherEntity.entityAbsolutePackage !== entity.entityAbsolutePackage)
+              .map(relationship => relationship.otherEntity),
+          ),
+        );
+        for (const entity of entities) {
+          mutateDefaults(entity, { entityRestIntegrationTestPublic: referencedFromOtherPackages.has(entity) });
+        }
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.DEFAULT]() {
+    return this.default;
   }
 }
