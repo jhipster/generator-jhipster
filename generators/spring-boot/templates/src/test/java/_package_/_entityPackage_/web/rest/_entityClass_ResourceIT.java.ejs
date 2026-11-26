@@ -25,6 +25,8 @@ import static <%- packageName %>.test.util.TestUtil.createUpdateProxyForBean;
 import static <%- packageName %>.test.util.TestUtil.convertObjectToPartialUpdateBody;
 <%_ } _%>
 <%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => (rel.persistableRelationship || (databaseTypeSql && rel.relationshipManyToMany)) && !rel.otherEntity.hasCyclicRequiredRelationship);
+    // The entities of those relationships, each one once: several relationships may target the same entity.
+    const filterTestableOtherEntities = [...new Set(filterTestableRelationships.map(rel => rel.otherEntity))];
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
     // Fields a request may not set to null. Each is patched to null by the same test.
     const requiredFields = fieldsToTest.filter(field => field.fieldValidate && field.fieldValidationRequired);
@@ -100,8 +102,8 @@ _%>
 import <%- otherEntity.entityAbsolutePackage %>.web.rest.<%- otherEntity.entityNameCapitalized %>ResourceIT;
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
-  <%_ for (const relationship of filterTestableRelationships) { _%>
-import <%- relationship.otherEntity.entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
+  <%_ for (const otherEntity of filterTestableOtherEntities) { _%>
+import <%- otherEntity.entityAbsolutePackage %>.repository.<%- otherEntity.entityNameCapitalized %>Repository;
   <%_ } _%>
 <%_ } else { _%>
   <%_ for (const otherEntity of noCascadeOtherEntities) { _%>
@@ -374,9 +376,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     private <%- persistClass %> inserted<%- persistClass %>;
 
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
-  <%_ for (const relationship of filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser)) { _%>
+  <%_ for (const otherEntity of filterTestableOtherEntities.filter(otherEntity => !otherEntity.builtInUser)) { _%>
     @Autowired
-    private <%- relationship.otherEntity.entityNameCapitalized %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
+    private <%- otherEntity.entityNameCapitalized %>Repository <%- otherEntity.persistInstance %>Repository;
   <%_ } _%>
 <%_ } else { _%>
   <%_ for (const otherEntity of noCascadeOtherEntities) { _%>
@@ -451,6 +453,12 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- otherEntityName %> = TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).getFirst();
         }
             <%_ } _%>
+          <%_ } else if (databaseTypeSql && reactive && otherEntity.primaryKey?.derived) { _%>
+            <%_ const mapsIdRelationship = otherEntity.primaryKey.relationships[0]; _%>
+        <%- otherEntityName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- otherEntity.anyRelationshipIsRequired ? entityManagerVariable : '' %>);
+        // The template inserts it as it is: its id is the one of the entity it maps, as its repository sets it
+        <%- otherEntityName %>.<%- otherEntity.primaryKey.propertyConsumerName %>(<%- otherEntityName %>.<%- mapsIdRelationship.propertySupplierName %>().<%- mapsIdRelationship.otherEntity.primaryKey.propertySupplierName %>());
+        <%- otherEntityName %> = template.insert(<%- otherEntityName %>).block();
           <%_ } else { _%>
         <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) ? entityManagerVariable : '' %>)<%- createEntityPostfix %>;
           <%_ } _%>
@@ -516,6 +524,15 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         }
 <%_ if (databaseTypeSql && reactive) { _%>
         deleteEntities(template);
+  <%_ if (jpaMetamodelFiltering) { _%>
+    <%_ const insertedByFilterTests = filterTestableOtherEntities.filter(otherEntity => !otherEntity.builtInUser && otherEntity.entityNameCapitalized !== entityNameCapitalized); _%>
+    <%_ if (insertedByFilterTests.length > 0) { _%>
+        // The filter tests of the relationships insert the related entities: no transaction rolls them back.
+    <%_ } _%>
+    <%_ for (const otherEntity of insertedByFilterTests) { _%>
+        <%- otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(template);
+    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
     }
 <%_ if (!readOnly) { _%>
@@ -1220,7 +1237,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
     @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>By<%- relationship.relationshipNameCapitalized %>IsEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
-    <%_ if ((relationship.relationshipValidate && relationship.relationshipOneToOne) || relationship.id) { _%>
+    <%_ // The related entity createEntity already made, an @Id or a required one-to-one: the entity is saved here with it. _%>
+    <%_ const existingRelated = (relationship.relationshipValidate && relationship.relationshipOneToOne) || relationship.id; _%>
+    <%_ if (existingRelated) { _%>
         // Get already existing entity
         <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- persistInstance %>.<%- relationship.propertySupplierName %>();
     <%_ } else { _%>
@@ -1256,6 +1275,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
     <%_ if (!reactive) { _%>
         <%- entityInstance %>Repository.saveAndFlush(<%- persistInstance %>);
+        <%- relationship.otherEntity.primaryKey.type %> <%- relationship.relationshipFieldName %>Id = <%- relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
+    <%_ } else if (existingRelated) { _%>
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
         <%- relationship.otherEntity.primaryKey.type %> <%- relationship.relationshipFieldName %>Id = <%- relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
     <%_ } _%>
         // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- relationship.relationshipFieldName %>Id
