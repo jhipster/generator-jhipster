@@ -66,4 +66,25 @@ describe('authExpiredInterceptor', () => {
 
     expect(navigate).toHaveBeenCalledWith(['/login'], { state: { sessionExpired: false } });
   });
+
+  it('should keep the expired session of a first 401 for the 401s of the requests in parallel', async () => {
+    // The first 401 signs the user out before the others come back.
+    isAuthenticated.mockReturnValueOnce(true).mockReturnValue(false);
+    let settle: (navigated: boolean) => void = () => undefined;
+    navigate.mockReturnValueOnce(new Promise<boolean>(resolve => (settle = resolve)));
+
+    unauthorized();
+    unauthorized();
+
+    expect(TestBed.inject(LoginService).logout).toHaveBeenCalledTimes(1);
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(navigate).toHaveBeenCalledWith(['/login'], { state: { sessionExpired: true } });
+
+    // Once the navigation to the login settles, a new 401 leaves for the login again.
+    settle(true);
+    await new Promise(resolve => setTimeout(resolve));
+    unauthorized();
+
+    expect(navigate).toHaveBeenCalledTimes(2);
+  });
 });

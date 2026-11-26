@@ -28,6 +28,11 @@ import { AuthServerProvider, StateStorageService } from 'app/core/auth';
 import { AccountService, StateStorageService } from 'app/core/auth';
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeJwt) { _%>
+
+// The 401s of the requests in parallel come before the login is reached: the first one leaves for it.
+let loginNavigation: Promise<boolean> | undefined;
+<%_ } _%>
 
 export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
 <%_ if (authenticationTypeOauth2) { _%>
@@ -49,13 +54,19 @@ export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
           return;
         }
 <%_ } _%>
-          stateStorageService.storeUrl(router.routerState.snapshot.url);
 <%_ if (authenticationTypeSession || authenticationTypeJwt) { _%>
+          if (loginNavigation) {
+            return;
+          }
+          stateStorageService.storeUrl(router.routerState.snapshot.url);
           // Only a session that was authenticated has expired.
           const sessionExpired = accountService.isAuthenticated();
           loginService.logout();
-          void router.navigate(['/login'], { state: { sessionExpired } });
+          loginNavigation = router.navigate(['/login'], { state: { sessionExpired } }).finally(() => {
+            loginNavigation = undefined;
+          });
 <%_ } else { _%>
+          stateStorageService.storeUrl(router.routerState.snapshot.url);
           authServerProvider.login();
 <%_ } _%>
         }
