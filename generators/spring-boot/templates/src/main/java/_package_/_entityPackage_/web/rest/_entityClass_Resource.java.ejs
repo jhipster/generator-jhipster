@@ -333,7 +333,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         if (idNode == null || idNode.isNull()) {
             throw BadRequestAlertException.idnull(ENTITY_NAME);
         }
-        if (!idNode.<%- primaryKey.typeLong || primaryKey.typeInteger ? 'isIntegralNumber' : 'isString' %>()) {
+        if (!idNode.<%- primaryKey.typeLong || primaryKey.typeInteger ? 'isIntegralNumber' : 'isString' %>()<%- ({ Integer: ' || !idNode.canConvertToInt()', Long: ' || !idNode.canConvertToLong()' })[primaryKey.type] ?? '' %>) {
             throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }
   <%_ const idNodeValue = { Long: 'longValue', Integer: 'intValue' }[primaryKey.type] ?? 'stringValue'; _%>

@@ -681,6 +681,56 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
     }
   <%_ } _%>
+  <%_ if (updatableEntity && !primaryKey.derived && (primaryKey.typeLong || primaryKey.typeInteger)) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void patch<%- entityClass %>WithOutOfRangeId() throws Exception {
+        // Initialize the database
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+    <%_ } _%>
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+
+        // An id out of the range of its type is not the id of the url, even if it wraps around to it
+        var patchJson = om.createObjectNode();
+    <%_ if (primaryKey.typeInteger) { _%>
+        patchJson.put("<%- primaryKey.name %>", inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>() + 4294967296L);
+    <%_ } else { _%>
+        patchJson.put("<%- primaryKey.name %>", java.math.BigInteger.valueOf(inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>()).add(java.math.BigInteger.ONE.shiftLeft(64)));
+    <%_ } _%>
+
+    <%_ if (reactive) { _%>
+        webTestClient.patch().uri(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(om.writeValueAsBytes(patchJson))
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.idinvalid");
+    <%_ } else { _%>
+        rest<%- entityClass %>MockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())
+      <%_ if (serverUsesCsrf) { _%>
+                .with(csrf())
+      <%_ } _%>
+                .contentType("application/merge-patch+json")
+                .content(om.writeValueAsBytes(patchJson))
+            )
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.idinvalid"));
+    <%_ } _%>
+
+    <%_ if (databaseTypeCouchbase) { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+    <%_ } _%>
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+    }
+  <%_ } _%>
 
   <%_ if (databaseTypeSql && isUsingMapsId && updatableEntity) { _%>
     @Test<%- transactionalAnnotation %>
