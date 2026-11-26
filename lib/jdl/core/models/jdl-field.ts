@@ -86,7 +86,8 @@ export default class JDLField {
       if (value === true) {
         string += `@${key}\n`;
       } else if (typeof value === 'string') {
-        string += `@${key}("${value.replace(/(?<!\\)"/g, '\\"')}")\n`;
+        // Escaped as the parser unescapes it, so that the value comes back as it is.
+        string += `@${key}("${value.replace(/["\\]/g, String.raw`\$&`)}")\n`;
       } else {
         string += `@${key}(${value})\n`;
       }

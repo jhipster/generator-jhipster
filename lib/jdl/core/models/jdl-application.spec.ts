@@ -461,8 +461,8 @@ describe('jdl - JDLApplication', () => {
           result = application.toString();
         });
 
-        it('should not stringify it again', () => {
-          expect(result).toContain('jhipsterVersion "6.5.1"');
+        it('should escape its quotes, which the parser unescapes', () => {
+          expect(result).toContain(String.raw`jhipsterVersion "\"6.5.1\""`);
         });
       });
     });
@@ -487,8 +487,8 @@ describe('jdl - JDLApplication', () => {
           result = application.toString();
         });
 
-        it('should not stringify it again', () => {
-          expect(result).toContain('jwtSecretKey "ASTUPIDLYLONGWORD="');
+        it('should escape its quotes, which the parser unescapes', () => {
+          expect(result).toContain(String.raw`jwtSecretKey "\"ASTUPIDLYLONGWORD=\""`);
         });
       });
     });
@@ -513,8 +513,8 @@ describe('jdl - JDLApplication', () => {
           result = application.toString();
         });
 
-        it('should not stringify it again', () => {
-          expect(result).toContain('rememberMeKey "ASTUPIDLYLONGWORD="');
+        it('should escape its quotes, which the parser unescapes', () => {
+          expect(result).toContain(String.raw`rememberMeKey "\"ASTUPIDLYLONGWORD=\""`);
         });
       });
     });

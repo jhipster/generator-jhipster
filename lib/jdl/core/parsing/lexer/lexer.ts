@@ -135,9 +135,9 @@ export const buildTokens = (): JDLTokens => {
   createTokenFromConfig({ name: 'REGEX', pattern: /\/[^\n\r]*\/(?=\s*\))/ });
   createTokenFromConfig({ name: 'DECIMAL', pattern: /-?\d+\.\d+/ });
   createTokenFromConfig({ name: 'INTEGER', pattern: /-?\d+/ });
-  // A backslash is a literal character, except that `\"` does not close the literal, e.g. "java(\"a\")".
-  // The content is kept as written.
-  createTokenFromConfig({ name: 'STRING', pattern: /"(?:[^"\\]|\\"|\\)*"/ });
+  // A backslash escapes the next character, as in JSON, JS and Java: `\"` does not close the literal, e.g. "java(\"a\")",
+  // and `\\` is a backslash, so "a\\" ends after it. The parser unescapes `\"` and `\\` only.
+  createTokenFromConfig({ name: 'STRING', pattern: /"(?:[^"\\]|\\[\s\S])*"/ });
 
   // punctuation
   createTokenFromConfig({ name: 'LPAREN', pattern: '(' });

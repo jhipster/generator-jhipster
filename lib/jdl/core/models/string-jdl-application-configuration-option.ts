@@ -28,7 +28,8 @@ export default class StringJDLApplicationConfigurationOption extends JDLApplicat
   }
 
   toString(): string {
-    const value = this.quoted && !this.value.includes('"') ? `"${this.value}"` : this.value;
+    // Escaped as the parser unescapes it, so that the value comes back as it is.
+    const value = this.quoted ? `"${this.value.replace(/["\\]/g, String.raw`\$&`)}"` : this.value;
     return `${this.name} ${value}`;
   }
 }

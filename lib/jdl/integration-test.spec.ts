@@ -62,6 +62,25 @@ describe('jdl - integration tests', () => {
     });
   });
 
+  describe('when parsing and exporting a quoted config value with a quote and a backslash', () => {
+    const parse = (jdl: string) =>
+      parseFromConfigurationObject({ parsedContent: parseFromContent(jdl), applicationType: APPLICATION_TYPE_MONOLITH });
+    const jwtSecretKey = (jdlObject: ReturnType<typeof parse>) =>
+      jdlObject.getApplication('jhipster')!.getConfigurationOptionValue('jwtSecretKey');
+
+    it('should give the same value once exported and parsed again', () => {
+      const original = parse(String.raw`application {
+  config {
+    baseName jhipster
+    jwtSecretKey "a\"b\\c\\"
+  }
+}
+`);
+      expect(jwtSecretKey(original)).toBe('a"b\\c\\');
+      expect(jwtSecretKey(parse(original.toString()))).toBe('a"b\\c\\');
+    });
+  });
+
   describe('when parsing entities JDL', () => {
     const applicationName = 'jhipster';
     /** The json entities of a jdl without application, by the name of the application they are imported into. */
@@ -77,7 +96,7 @@ describe('jdl - integration tests', () => {
 @Decimal(10.1)
 @Escaped("a.b")
 @Quoted("java(\\"a\\" + b)")
-@DoubleEscaped("java(\\\\"a\\\\" + b)")
+@EscapedBackslash("java(\\\\\\"a\\\\\\" + b)")
 @String(foo)
 @Unary
 entity A
@@ -105,10 +124,10 @@ Map {
         "booleanFalse": false,
         "booleanTrue": true,
         "decimal": 10.1,
-        "doubleEscaped": "java(\\\\"a\\\\" + b)",
         "escaped": "a.b",
+        "escapedBackslash": "java(\\"a\\" + b)",
         "integer": 1,
-        "quoted": "java(\\"a\\" + b)",
+        "quoted": "java("a" + b)",
         "string": "foo",
         "unary": true,
       },
@@ -122,6 +141,22 @@ Map {
   ],
 }
 `);
+      });
+    });
+
+    describe('with a faker template of escaped quotes and of a regex', () => {
+      it('should give the template its quotes and keep the backslash of the regex', () => {
+        const [entity] = convertEntities(String.raw`entity A {
+  @FakerTemplate("{{string.alpha({ \"length\": 3 })}}")
+  code String
+  @FakerTemplate("{{helpers.fromRegExp('\d{3}')}}")
+  digits String
+}
+`).get(applicationName)!;
+        expect(entity.fields.map((field: any) => field.options.fakerTemplate)).toStrictEqual([
+          '{{string.alpha({ "length": 3 })}}',
+          String.raw`{{helpers.fromRegExp('\d{3}')}}`,
+        ]);
       });
     });
 
