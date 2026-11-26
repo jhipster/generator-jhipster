@@ -120,6 +120,9 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
+<%_ if (!readOnly && primaryKey.typeString && !primaryKey.autoGenerate) { _%>
+import org.springframework.web.util.UriComponentsBuilder;
+<%_ } _%>
 
 <%_ if (anyPropertyHasValidation) { _%>
 import jakarta.validation.Valid;
@@ -189,10 +192,20 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() != null) {
             throw BadRequestAlertException.idexists(ENTITY_NAME);
         }
-  <%_ } else if (!reactive) { _%>
+  <%_ } else { _%>
+        if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
+            throw BadRequestAlertException.idnull(ENTITY_NAME);
+        }
+    <%_ if (primaryKey.typeString) { _%>
+        if (!isPathSegment(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
+            throw BadRequestAlertException.idinvalid(ENTITY_NAME);
+        }
+    <%_ } _%>
+    <%_ if (!reactive) { _%>
         if (<%- entityInstance %>Repository.existsById(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
             throw BadRequestAlertException.idexists(ENTITY_NAME);
         }
+    <%_ } _%>
   <%_ } _%>
   <%_ if (isUsingMapsId) { _%>
         if (Objects.isNull(<%- instanceName %>.<%- mapsIdAssoc.propertySupplierName %>())) {
@@ -223,6 +236,13 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         return <%- entityInstance %>Service
             .save(<%- instanceName %>)
     <%_ } _%>
+    <%_ if (primaryKey.typeString && !primaryKey.autoGenerate) { _%>
+            .map(result ->
+                ResponseEntity.created(UriComponentsBuilder.fromPath("/api/<%- entityApiUrl %>/{<%- primaryKey.name %>}").build(result.<%- primaryKey.propertySupplierName %>()))
+                    .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<%- idToString %>))
+                    .body(result)
+            );
+    <%_ } else { _%>
             .map(result -> {
                 try {
                     return ResponseEntity.created(new URI("/api/<%- entityApiUrl %>/" + result.<%- primaryKey.propertySupplierName %>()))
@@ -232,6 +252,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
                     throw new RuntimeException(e);
                 }
             });
+    <%_ } _%>
     <%_ if (!primaryKey.autoGenerate) { _%>
         });
     <%_ } _%>
@@ -239,7 +260,11 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     <%_ if (!serviceNo) { _%>
         <%- restInstance %> = <%- entityInstance %>Service.save(<%- instanceName %>);
     <%_ } _%>
+    <%_ if (primaryKey.typeString && !primaryKey.autoGenerate) { _%>
+        return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/<%- entityApiUrl %>/{<%- primaryKey.name %>}").build(<%- restInstance %>.<%- primaryKey.propertySupplierName %>()))
+    <%_ } else { _%>
         return ResponseEntity.created(new URI("/api/<%- entityApiUrl %>/" + <%- restInstance %>.<%- primaryKey.propertySupplierName %>()))
+    <%_ } _%>
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<%- idToString %>))
             .body(<%- restInstance %>);
   <%_ } _%>
@@ -533,5 +558,23 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
   <%_ } _%>
 <%- include('../../_partials_entity_/search_template', { viaService }) -%>
+<%_ } _%>
+<%_ if (!readOnly && primaryKey.typeString && !primaryKey.autoGenerate) { _%>
+
+    /**
+     * Whether an id can be the segment of the url of the entity: the server rejects an url with an encoded slash,
+     * backslash, percent sign, semicolon or control character, and an empty, {@code .} or {@code ..} segment.
+     *
+     * @param value the id.
+     * @return {@code true} if the id can be a segment of the url.
+     */
+    private static boolean isPathSegment(String value) {
+        return (
+            !value.isEmpty() &&
+            !".".equals(value) &&
+            !"..".equals(value) &&
+            value.chars().noneMatch(c -> c == '/' || c == '\\' || c == '%' || c == ';' || Character.isISOControl(c))
+        );
+    }
 <%_ } _%>
 }
