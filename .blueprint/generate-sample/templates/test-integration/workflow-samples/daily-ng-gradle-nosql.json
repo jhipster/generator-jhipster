@@ -2,7 +2,8 @@
   "include": [
     {
       "name": "gradle-ngx-mongodb",
-      "entity": "mongodb"
+      "entity": "mongodb",
+      "os": "ubuntu-22.04"
     },
     {
       "name": "gradle-ngx-cassandra",
