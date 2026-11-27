@@ -75,7 +75,7 @@
                             <button type="button" (click)="editForm.<%- fieldName %>().value.set(''); editForm.<%- contentTypeFieldName %>().value.set('')"
                                     class="btn btn-secondary btn-xs pull-end">
         <%_ } _%>
-                                  <fa-icon icon="times" />
+                                  <fa-icon icon="xmark" />
                             </button>
                         </div>
                     }
@@ -85,7 +85,7 @@
       <%_ if (field.fieldTypeLocalDate) { _%>
                     <div class="input-group">
                         <input id="field_<%- fieldName %>" data-cy="<%- fieldName %>" type="text" class="form-control" ngbDatepicker #<%- fieldName %>Dp="ngbDatepicker" [formField]="editForm.<%- fieldName %>"/>
-                        <button type="button" class="btn btn-secondary" (click)="<%- fieldName %>Dp.toggle()"><fa-icon icon="calendar-alt" /></button>
+                        <button type="button" class="btn btn-secondary" (click)="<%- fieldName %>Dp.toggle()"><fa-icon icon="calendar-days" /></button>
                     </div>
       <%_ } else if (field.fieldTypeTimed) { _%>
                     <div class="d-flex">
@@ -243,7 +243,7 @@
                 </button>
 
                 <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" [disabled]="isSaving()" class="btn btn-primary">
-                    <fa-icon icon="save" />&nbsp;<span>__jhiTranslateTag__('entity.action.save')</span>
+                    <fa-icon icon="floppy-disk" />&nbsp;<span>__jhiTranslateTag__('entity.action.save')</span>
                 </button>
             </div>
         </form>

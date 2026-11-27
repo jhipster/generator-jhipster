@@ -29,7 +29,7 @@
       <b-navbar-nav class="ms-auto">
         <b-nav-item to="/" exact>
           <span>
-            <font-awesome-icon icon="fa-solid fa-home" />
+            <font-awesome-icon icon="fa-solid fa-house" />
             <span>{{ t$('global.menu.home') }}</span>
           </span>
         </b-nav-item>
@@ -44,7 +44,7 @@
         >
           <template #button-content>
             <span class="navbar-dropdown-menu">
-              <font-awesome-icon icon="th-list" />
+              <font-awesome-icon icon="table-list" />
               <span class="no-bold">{{ t$('global.menu.entities.main') }}</span>
             </span>
           </template>
@@ -69,7 +69,7 @@
         >
           <template #button-content>
             <span class="navbar-dropdown-menu">
-              <font-awesome-icon icon="users-cog" />
+              <font-awesome-icon icon="users-gear" />
               <span class="no-bold">{{ t$('global.menu.admin.main') }}</span>
             </span>
           </template>
@@ -88,7 +88,7 @@
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
           <b-dropdown-item to="/admin/metrics" active-class="active">
-            <font-awesome-icon icon="tachometer-alt" />
+            <font-awesome-icon icon="gauge-high" />
             <span>{{ t$('global.menu.admin.metrics') }}</span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/health" active-class="active">
@@ -96,11 +96,11 @@
             <span>{{ t$('global.menu.admin.health') }}</span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/configuration" active-class="active">
-            <font-awesome-icon icon="cogs" />
+            <font-awesome-icon icon="gears" />
             <span>{{ t$('global.menu.admin.configuration') }}</span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/logs" active-class="active">
-            <font-awesome-icon icon="tasks" />
+            <font-awesome-icon icon="list-check" />
             <span>{{ t$('global.menu.admin.logs') }}</span>
           </b-dropdown-item>
 <%_ } _%>
@@ -162,11 +162,11 @@
           </b-dropdown-item>
 <%_ } _%>
           <b-dropdown-item data-cy="logout" v-if="authenticated" @click="logout()" id="logout" active-class="active">
-            <font-awesome-icon icon="sign-out-alt" />
+            <font-awesome-icon icon="right-from-bracket" />
             <span>{{ t$('global.menu.account.logout') }}</span>
           </b-dropdown-item>
           <b-dropdown-item data-cy="login" v-if="!authenticated" <%- authenticationTypeOauth2 ? '@click="login()"' : 'to="/login"' %> id="login" active-class="active">
-            <font-awesome-icon icon="sign-in-alt" />
+            <font-awesome-icon icon="right-to-bracket" />
             <span>{{ t$('global.menu.account.login') }}</span>
           </b-dropdown-item>
 <%_ if (generateUserRegistration) { _%>

@@ -39,16 +39,16 @@ const adminMenuItems = () => (
     <MenuItem icon="eye" to="/admin/tracker"><Translate contentKey="global.menu.admin.tracker">User tracker</Translate></MenuItem>
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-    <MenuItem icon="tachometer-alt" to="/admin/metrics">
+    <MenuItem icon="gauge-high" to="/admin/metrics">
       <Translate contentKey="global.menu.admin.metrics">Metrics</Translate>
     </MenuItem>
     <MenuItem icon="heart" to="/admin/health">
       <Translate contentKey="global.menu.admin.health">Health</Translate>
     </MenuItem>
-    <MenuItem icon="cogs" to="/admin/configuration">
+    <MenuItem icon="gears" to="/admin/configuration">
       <Translate contentKey="global.menu.admin.configuration">Configuration</Translate>
     </MenuItem>
-    <MenuItem icon="tasks" to="/admin/logs">
+    <MenuItem icon="list-check" to="/admin/logs">
       <Translate contentKey="global.menu.admin.logs">Logs</Translate>
     </MenuItem>
 <%_ } _%>
@@ -74,7 +74,7 @@ export const AdminMenu = ({
   showDatabase,
 <%_ } _%>
 }) => (
-  <NavDropdown icon="users-cog" name={translate('global.menu.admin.main')} id="admin-menu" data-cy="adminMenu">
+  <NavDropdown icon="users-gear" name={translate('global.menu.admin.main')} id="admin-menu" data-cy="adminMenu">
       {adminMenuItems()}
       {showOpenAPI && openAPIItem()}
 <% if (devDatabaseTypeH2Any) { %>

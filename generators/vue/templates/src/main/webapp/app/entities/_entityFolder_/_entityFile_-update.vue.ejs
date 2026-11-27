@@ -52,7 +52,7 @@ _%>
                 <button type="button" @click="<%- entityInstance %>.<%- fieldName %>=undefined;<%- entityInstance %>.<%- contentTypeFieldName %>=undefined; v$.<%- fieldName %>.$touch()"
                     class="btn btn-secondary btn-xs pull-end">
       <%_ } _%>
-                  <font-awesome-icon icon="times"></font-awesome-icon>
+                  <font-awesome-icon icon="xmark"></font-awesome-icon>
                 </button>
               </div>
               <label for="file_<%- fieldName %>" class="btn btn-primary pull-end">{{ <%- fieldTypeBlobContent === 'image' ? 't$(\'entity.action.addimage\')' : 't$(\'entity.action.addblob\')' %> }}</label>
@@ -154,7 +154,7 @@ _%>
             <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.back') }}</span>
           </button>
           <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" :disabled="isSaving || isLoading" class="btn btn-primary">
-            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.save') }}</span>
+            <font-awesome-icon icon="floppy-disk"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.save') }}</span>
           </button>
         </div>
       </form>

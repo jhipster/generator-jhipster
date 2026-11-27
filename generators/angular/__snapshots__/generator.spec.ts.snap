@@ -213,7 +213,7 @@ export class UserManagementDeleteDialog {
         [routerLink]="['/admin/user-management', userManagementRef.login, 'edit']"
         class="btn btn-primary"
       >
-        <fa-icon icon="pencil-alt" />&nbsp;<span>Edit</span>
+        <fa-icon icon="pencil" />&nbsp;<span>Edit</span>
       </button>
 
       <button
@@ -245,7 +245,7 @@ import { RouterTestingHarness } from "@angular/router/testing";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import {
   faArrowLeft,
-  faPencilAlt,
+  faPencil,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
@@ -284,7 +284,7 @@ describe("UserManagement Management Detail Component", () => {
     });
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faArrowLeft);
-    library.addIcons(faPencilAlt);
+    library.addIcons(faPencil);
 
     library.addIcons(faTrash);
   });
@@ -407,7 +407,10 @@ export class UserManagementDetail {
         (click)="load()"
         [disabled]="isLoading()"
       >
-        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
+        <fa-icon
+          icon="arrows-rotate"
+          [animation]="isLoading() ? 'spin' : undefined"
+        />
         <span>Refresh list</span>
       </button>
 
@@ -539,7 +542,7 @@ export class UserManagementDetail {
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
-                <fa-icon icon="pencil-alt" />
+                <fa-icon icon="pencil" />
                 <span class="d-none d-md-inline">Edit</span>
               </a>
 
@@ -604,13 +607,13 @@ import { ActivatedRoute, convertToParamMap } from "@angular/router";
 
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import {
+  faArrowsRotate,
   faEye,
-  faPencilAlt,
+  faPencil,
   faPlus,
   faSort,
   faSortDown,
   faSortUp,
-  faSync,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
@@ -666,13 +669,13 @@ describe("UserManagement Management Component", () => {
 
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(
+      faArrowsRotate,
       faEye,
-      faPencilAlt,
+      faPencil,
       faPlus,
       faSort,
       faSortDown,
       faSortUp,
-      faSync,
       faTrash,
     );
     httpMock = TestBed.inject(HttpTestingController);
@@ -2168,7 +2171,7 @@ export class UserManagementFormService {
           [disabled]="isSaving()"
           class="btn btn-primary"
         >
-          <fa-icon icon="save" />&nbsp;<span>Save</span>
+          <fa-icon icon="floppy-disk" />&nbsp;<span>Save</span>
         </button>
       </div>
     </form>

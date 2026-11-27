@@ -38,7 +38,7 @@
       <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
           <span>
-            <fa-icon icon="home" />
+            <fa-icon icon="house" />
             <span>__jhiTranslateTag__('global.menu.home')</span>
           </span>
         </a>
@@ -54,7 +54,7 @@
         >
           <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
             <span>
-              <fa-icon icon="th-list" />
+              <fa-icon icon="table-list" />
               <span>__jhiTranslateTag__('global.menu.entities.main')</span>
             </span>
           </a>
@@ -102,7 +102,7 @@
       >
         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
           <span>
-            <fa-icon icon="users-cog" />
+            <fa-icon icon="users-gear" />
             <span>__jhiTranslateTag__('global.menu.admin.main')</span>
           </span>
         </a>
@@ -127,7 +127,7 @@
 <%_ if (withAdminUi) { _%>
           <li>
             <a class="dropdown-item" routerLink="/admin/metrics" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="tachometer-alt" [fixedWidth]="true" />
+              <fa-icon icon="gauge-high" [fixedWidth]="true" />
               <span>__jhiTranslateTag__('global.menu.admin.metrics')</span>
             </a>
           </li>
@@ -139,13 +139,13 @@
           </li>
           <li>
             <a class="dropdown-item" routerLink="/admin/configuration" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="cogs" [fixedWidth]="true" />
+              <fa-icon icon="gears" [fixedWidth]="true" />
               <span>__jhiTranslateTag__('global.menu.admin.configuration')</span>
             </a>
           </li>
           <li>
             <a class="dropdown-item" routerLink="/admin/logs" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="tasks" [fixedWidth]="true" />
+              <fa-icon icon="list-check" [fixedWidth]="true" />
               <span>__jhiTranslateTag__('global.menu.admin.logs')</span>
             </a>
           </li>
@@ -231,14 +231,14 @@
 <%_ } _%>
             <li>
               <a class="dropdown-item" (click)="logout()" id="logout" data-cy="logout">
-                <fa-icon icon="sign-out-alt" [fixedWidth]="true" />
+                <fa-icon icon="right-from-bracket" [fixedWidth]="true" />
                 <span>__jhiTranslateTag__('global.menu.account.logout')</span>
               </a>
             </li>
           } @else {
             <li>
               <a class="dropdown-item" (click)="login()" id="login" data-cy="login">
-                <fa-icon icon="sign-in-alt" [fixedWidth]="true" />
+                <fa-icon icon="right-to-bracket" [fixedWidth]="true" />
                 <span>__jhiTranslateTag__('global.menu.account.login')</span>
               </a>
             </li>

@@ -192,7 +192,7 @@ export const <%- entityReactName %>Detail = () => {
 <%_ if (!readOnly) { _%>
         &nbsp;
         <Link to={`/<%- entityPage %>/${<%- entityInstance %>Entity.<%- primaryKey.name %>}/edit`} replace className="btn btn-primary">
-          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
+          <FontAwesomeIcon icon="pencil" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
         </Link>
         <Button onClick={() => setShowDeleteDialog(true)}<% if (builtInUserManagement) { %> disabled={account.login === <%- entityInstance %>Entity.login}<% } %> variant="danger" data-cy="entityDeleteButton">
           <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
