@@ -78,4 +78,15 @@ describe('data utils', () => {
     expect(open).toHaveBeenCalledWith('blob:file');
     expect(revokeObjectURL).toHaveBeenCalledOnce();
   });
+
+  it('should open the bytes the base64 value encodes', async () => {
+    vi.spyOn(globalThis, 'open').mockReturnValue(null);
+    const createObjectURL = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:file');
+
+    openFile(btoa('\x00\x7f\x80\xff'), 'application/pdf');
+
+    expect(createObjectURL).toHaveBeenCalledOnce();
+    const [blob] = createObjectURL.mock.calls[0] as [Blob];
+    expect([...new Uint8Array(await blob.arrayBuffer())]).toEqual([0, 127, 128, 255]);
+  });
 });
