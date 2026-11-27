@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it<%- enableTranslation ? ', vi' : '' %> } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-import { Router, provideRouter } from '@angular/router';
+import { Router, provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 
 <%_ if (enableTranslation) { _%>
@@ -36,13 +36,18 @@ describe('Error routes', () => {
 <%_ if (enableTranslation) { _%>
         provideTranslateService(),
 <%_ } _%>
-        provideRouter(errorRoute),
+        provideRouter(errorRoute, withComponentInputBinding()),
       ],
     });
   });
 
-  // The message is the key, its translation, or the text a build without translation writes: compared between routes.
+  // The message is the key, or the text a build without translation writes: compared between routes.
   const notFoundMessage = async (harness: RouterTestingHarness): Promise<string | undefined> => (await harness.navigateByUrl('/404', ErrorPage)).errorMessage();
+<%_ if (enableTranslation) { _%>
+
+  const alertText = (harness: RouterTestingHarness): string | undefined =>
+    harness.routeNativeElement?.querySelector('.alert-danger')?.textContent.trim();
+<%_ } _%>
 
   it('should show at an unknown url the not found error of /404', async () => {
     const harness = await RouterTestingHarness.create();
@@ -75,20 +80,19 @@ describe('Error routes', () => {
   });
 <%_ if (enableTranslation) { _%>
 
-  it('should translate the message again when the language changes, until the page is left', async () => {
-    const harness = await RouterTestingHarness.create();
-    const errorPage = await harness.navigateByUrl('/accessdenied', ErrorPage);
+  it('should translate the message again when the language changes', async () => {
     const translateService = TestBed.inject(TranslateService);
-    const get = vi.spyOn(translateService, 'get');
-    const errorKey = errorPage.errorKey;
-    const translationsOfTheError = (): number => get.mock.calls.filter(([key]) => key === errorKey).length;
+    translateService.setTranslation('<%- nativeLanguage %>', { error: { http: { 403: 'Access denied' } } });
+    translateService.setTranslation('<%- nativeLanguage %>-test', { error: { http: { 403: 'Forbidden' } } });
+    await firstValueFrom(translateService.use('<%- nativeLanguage %>'));
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl('/accessdenied', ErrorPage);
+    expect(alertText(harness)).toBe('Access denied');
 
     await firstValueFrom(translateService.use('<%- nativeLanguage %>-test'));
-    expect(translationsOfTheError()).toBe(1);
+    await harness.fixture.whenStable();
 
-    await harness.navigateByUrl('/error', ErrorPage);
-    await firstValueFrom(translateService.use('<%- nativeLanguage %>'));
-    expect(translationsOfTheError()).toBe(1);
+    expect(alertText(harness)).toBe('Forbidden');
   });
 <%_ } _%>
 });

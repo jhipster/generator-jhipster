@@ -25,9 +25,15 @@
     <div class="col-md-8">
       <h1>__jhiTranslateTag__('error.title')</h1>
 
-      @if (errorMessage(); as errMessage) {
-        <div class="alert alert-danger">{{ errMessage }}</div>
+<%_ if (enableTranslation) { _%>
+      @if (errorMessage(); as errorKey) {
+        <div class="alert alert-danger">{{ errorKey | translate }}</div>
       }
+<%_ } else { _%>
+      @if (errorMessage(); as errorText) {
+        <div class="alert alert-danger">{{ errorText }}</div>
+      }
+<%_ } _%>
     </div>
   </div>
 </div>

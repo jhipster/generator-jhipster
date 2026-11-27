@@ -16,61 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit<%- enableTranslation ? ', OnDestroy' : '' %>, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
+import { Component, input } from '@angular/core';
 <%_ if (enableTranslation) { _%>
-import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
-<%_ } _%>
 
-<%_ if (enableTranslation) { _%>
+import { TranslatePipe } from '@ngx-translate/core';
+
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-error',
-  <%- enableTranslation ? 'imports: [TranslateDirective],' : '' %>
+  <%- enableTranslation ? 'imports: [TranslateDirective, TranslatePipe],' : '' %>
   templateUrl: './error.html',
 })
-export default class Error implements OnInit<%- enableTranslation ? ', OnDestroy' : '' %> {
-  readonly errorMessage = signal<string | undefined>(undefined);
-<%_ if (enableTranslation) { _%>
-  errorKey?: string;
-  langChangeSubscription?: Subscription;
-
-  private readonly translateService = inject(TranslateService);
-<%_ } _%>
-  private readonly route = inject(ActivatedRoute);
-
-  ngOnInit(): void {
-    this.route.data.subscribe(routeData => {
-      if (routeData.errorMessage) {
-<%_ if (enableTranslation) { _%>
-        this.errorKey = routeData.errorMessage;
-        this.getErrorMessageTranslation();
-        this.langChangeSubscription = this.translateService.onLangChange.subscribe(() => this.getErrorMessageTranslation());
-<%_ } else { _%>
-        this.errorMessage.set(routeData.errorMessage);
-<%_ } _%>
-      }
-    });
-  }
-
-<%_ if (enableTranslation) { _%>
-  ngOnDestroy(): void {
-    if (this.langChangeSubscription) {
-      this.langChangeSubscription.unsubscribe();
-    }
-  }
-
-  private getErrorMessageTranslation(): void {
-    this.errorMessage.set('');
-    if (this.errorKey) {
-      this.translateService.get(this.errorKey).subscribe(translatedErrorMessage => {
-        this.errorMessage.set(translatedErrorMessage);
-      });
-    }
-  }
-<%_ } _%>
+export default class Error {
+  readonly errorMessage = input<string>();
 }
