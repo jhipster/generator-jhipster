@@ -26,7 +26,7 @@ export type TranslationConditions<Options> = Record<string, (options: Options) =
 export type TranslationSource = { folder: string; path: string; template: boolean };
 
 /**
- * The source of a translation file, like `src/main/webapp/i18n/<language>/global.json`, in the first of the folders that has
+ * The source of a translation file, like `i18n/<language>/global.json`, in the first of the folders that has
  * it, the folders of the blueprints first: its template, `<file>.ejs`, before its JSON file.
  */
 export const findTranslationSource = (folders: string[], sourceFile: string): TranslationSource | undefined =>
@@ -38,7 +38,7 @@ export const findTranslationSource = (folders: string[], sourceFile: string): Tr
     .find(({ path }) => existsSync(path));
 
 /**
- * The sources of the translation files of a folder, like `src/main/webapp/i18n/<language>`, by the name of the file without
+ * The sources of the translation files of a folder, like `i18n/<language>`, by the name of the file without
  * its extension: each one in the first of the templates folders that has it, the folders of the blueprints first.
  */
 export const findTranslationSources = (folders: string[], folder: string): Record<string, TranslationSource> => {

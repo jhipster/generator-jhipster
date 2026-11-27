@@ -20,17 +20,17 @@ import { describe, expect, it } from 'expect-node';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { prepareTranslation } from '../../../../languages/generators/i18n-bootstrap/support/index.ts';
-import { supportedLanguages } from '../../../../languages/support/languages.ts';
+import { supportedLanguages } from '../../../support/languages.ts';
+import { prepareTranslation } from '../support/index.ts';
 
-import { getClientTranslationPreparation } from './translations.ts';
+import { getWebappTranslationPreparation } from './webapp-translations.ts';
 
-const prepareClientTranslation = (
+const prepareWebappTranslation = (
   file: string,
   translation: Record<string, any>,
-  options: Parameters<typeof getClientTranslationPreparation>[0],
+  options: Parameters<typeof getWebappTranslationPreparation>[0],
 ) => {
-  const { names, conditions } = getClientTranslationPreparation(options);
+  const { names, conditions } = getWebappTranslationPreparation(options);
   return prepareTranslation(translation, { names, conditions: conditions[file], options });
 };
 
@@ -49,7 +49,7 @@ const names = {
   hipsterTwitterUsername: '@jhipster',
 };
 
-describe('generator - client:i18n - internal - prepareClientTranslation', () => {
+describe('generator - languages:i18n-bootstrap - internal - prepareWebappTranslation', () => {
   it('should have the translation files of English in every supported language', () => {
     const files = readdirSync(join(translationsFolder, 'en')).sort();
     for (const { languageTag } of supportedLanguages) {
@@ -58,21 +58,21 @@ describe('generator - client:i18n - internal - prepareClientTranslation', () => 
   });
 
   it('should write the names of the application', () => {
-    const translation = prepareClientTranslation('home', readTranslation('en', 'home'), names);
+    const translation = prepareWebappTranslation('home', readTranslation('en', 'home'), names);
     expect(translation.home.title).toBe('Welcome, Java Hipster!');
-    expect(prepareClientTranslation('global', readTranslation('en', 'global'), names).global.title).toBe('Jhipster');
+    expect(prepareWebappTranslation('global', readTranslation('en', 'global'), names).global.title).toBe('Jhipster');
   });
 
   it('should leave out the keys whose options do not hold', () => {
-    const { indicator } = prepareClientTranslation('health', readTranslation('en', 'health'), names).health;
+    const { indicator } = prepareWebappTranslation('health', readTranslation('en', 'health'), names).health;
     expect(indicator).not.toHaveProperty('db');
     expect(indicator).not.toHaveProperty('consul');
     expect(indicator).toHaveProperty('diskSpace');
-    expect(prepareClientTranslation('global', readTranslation('en', 'global'), names).global.menu.admin).not.toHaveProperty('gateway');
+    expect(prepareWebappTranslation('global', readTranslation('en', 'global'), names).global.menu.admin).not.toHaveProperty('gateway');
   });
 
   it('should keep the keys whose options hold', () => {
-    const { indicator } = prepareClientTranslation('health', readTranslation('en', 'health'), {
+    const { indicator } = prepareWebappTranslation('health', readTranslation('en', 'health'), {
       ...names,
       databaseTypeSql: true,
       reactive: true,

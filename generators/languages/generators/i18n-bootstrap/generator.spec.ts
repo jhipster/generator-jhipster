@@ -171,4 +171,76 @@ describe(`generator - ${generator}`, () => {
       expect(result.application!.translationLanguages.map(({ languageTag }: { languageTag: string }) => languageTag)).toEqual(['fr', 'en']);
     });
   });
+
+  describe('getEntityTranslation', () => {
+    let translation: Record<string, any>;
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withJHipsterConfig()
+        .withTask('writing', function ({ application }: any) {
+          translation = application.getEntityTranslation('pt-br', {
+            frontendAppName: 'jhipsterApp',
+            entityTranslationKey: 'order',
+            entityNameHumanized: 'Order',
+            entityNamePluralHumanized: 'Orders',
+            entityI18nVariant: 'female',
+            fields: [],
+            relationships: [],
+          });
+        });
+    });
+
+    it('should build the translation from the texts of the language', () => {
+      expect(translation.jhipsterApp.order.home).toMatchObject({ title: 'Orders', createLabel: 'Criar nova Order' });
+    });
+  });
+
+  describe('mergeTranslation', () => {
+    const mergeMenu = function ({ application }: any) {
+      application.mergeTranslation({
+        languageTag: 'fr',
+        destinationFile: 'i18n/fr/global.json',
+        translation: { global: { menu: { entities: { order: 'Commande' } } } },
+      });
+    };
+
+    describe('with the translation enabled', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
+          .withFiles({ 'i18n/fr/global.json': { global: { title: 'Titre' } } })
+          .withTask('writing', mergeMenu);
+      });
+
+      it('should merge the translation into the file', () => {
+        result.assertJsonFileContent('i18n/fr/global.json', { global: { title: 'Titre', menu: { entities: { order: 'Commande' } } } });
+      });
+
+      it('should read the translation', () => {
+        expect(result.application!.getWebappTranslation!('global.menu.entities.order')).toBe('Commande');
+      });
+    });
+
+    describe('with the translation disabled', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withJHipsterConfig({ enableTranslation: false, nativeLanguage: 'fr' })
+          .withTask('writing', mergeMenu);
+      });
+
+      it('should write no file', () => {
+        result.assertNoFile('i18n/fr/global.json');
+      });
+
+      it('should read the translation', () => {
+        expect(result.application!.getWebappTranslation!('global.menu.entities.order')).toBe('Commande');
+      });
+    });
+  });
 });

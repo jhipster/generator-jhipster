@@ -41,10 +41,15 @@ export type Application = {
   /** The translation of a key, with the values of its placeholders. */
   getWebappTranslation?: GetWebappTranslationCallback;
   /**
-   * Adds a translation file of a language: written to its destination when the application is translated, else read
-   * without a file when it is the native language or English, its fallback.
+   * Adds a translation file of a language: written to its destination when the application is translated, and read for
+   * the native language and English, its fallback.
    */
   addTranslation: (arg: { languageTag: string; destinationFile: string; translation: Record<string, any> }) => void;
+  /**
+   * Merges a translation into a translation file of a language, like the entities of a menu: merged into the file when the
+   * application is translated, and read for the native language and English, its fallback.
+   */
+  mergeTranslation: (arg: { languageTag: string; destinationFile: string; translation: Record<string, any> }) => void;
   /** The languages translated: the languages of the application when it is translated, else its native language and English. */
   translationLanguages: Language[];
   /**
@@ -52,6 +57,11 @@ export type Application = {
    * language and English, its fallback; the ones the application writes are written by writeTranslationFiles.
    */
   loadTranslationFiles: (files: TranslationFiles) => void;
+  /**
+   * The translation file of an entity in a language: a template entity/i18n/entity_<language>.json.ejs, like one a blueprint
+   * gives, rendered with the entity, else built from the texts of the language, entity/i18n/<language>.json.
+   */
+  getEntityTranslation: (languageTag: string, entity: Record<string, any>) => Record<string, any>;
   /** Writes loaded translation files of each of the translated languages, when the application is translated. */
   writeTranslationFiles: (arg: { files: string[]; destinationFile: (languageTag: string, file: string) => string }) => void;
 };

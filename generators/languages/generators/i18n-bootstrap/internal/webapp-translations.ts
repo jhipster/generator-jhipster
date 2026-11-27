@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { TranslationConditions } from '../../../../languages/generators/i18n-bootstrap/support/index.ts';
+import type { TranslationConditions } from '../support/index.ts';
 
 /** The values of the application a translation takes, written {name} in its text. */
 export type TranslationNames = {
@@ -49,8 +49,8 @@ export type TranslationOptions = TranslationNames & {
 const withDiscovery = ({ applicationTypeGateway, serviceDiscoveryAny }: TranslationOptions) =>
   applicationTypeGateway || serviceDiscoveryAny;
 
-/** The keys of each translation file of the client, by their path, that the file has only when their condition holds. */
-const CLIENT_TRANSLATION_CONDITIONS: Record<string, TranslationConditions<TranslationOptions>> = {
+/** The keys of each translation file of the webapp, by their path, that the file has only when their condition holds. */
+const WEBAPP_TRANSLATION_CONDITIONS: Record<string, TranslationConditions<TranslationOptions>> = {
   global: {
     'global.menu.admin.gateway': ({ applicationTypeGateway }) => applicationTypeGateway,
     'error.querySyntaxError': ({ searchEngineElasticsearch }) => searchEngineElasticsearch,
@@ -74,7 +74,7 @@ const CLIENT_TRANSLATION_CONDITIONS: Record<string, TranslationConditions<Transl
   },
 };
 
-const CLIENT_TRANSLATION_NAMES: (keyof TranslationNames)[] = [
+const WEBAPP_TRANSLATION_NAMES: (keyof TranslationNames)[] = [
   'capitalizedBaseName',
   'hipsterName',
   'hipsterProductName',
@@ -86,12 +86,12 @@ const CLIENT_TRANSLATION_NAMES: (keyof TranslationNames)[] = [
 ];
 
 /**
- * How the translation files of the client are prepared from the files of the language: the names of the application their
+ * How the translation files of the webapp are prepared from the files of the language: the names of the application their
  * texts take, and the conditions of their keys, by file.
  */
-export const getClientTranslationPreparation = (
+export const getWebappTranslationPreparation = (
   options: TranslationOptions,
 ): { names: Record<string, string>; conditions: Record<string, TranslationConditions<TranslationOptions>> } => ({
-  names: Object.fromEntries(CLIENT_TRANSLATION_NAMES.map(name => [name, options[name]])),
-  conditions: CLIENT_TRANSLATION_CONDITIONS,
+  names: Object.fromEntries(WEBAPP_TRANSLATION_NAMES.map(name => [name, options[name]])),
+  conditions: WEBAPP_TRANSLATION_CONDITIONS,
 });

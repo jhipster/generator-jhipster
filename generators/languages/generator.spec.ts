@@ -21,7 +21,7 @@ import { basename } from 'node:path';
 
 import Generator from './index.ts';
 
-import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const GENERATOR_LANGUAGES = 'languages';
@@ -31,6 +31,7 @@ const generator = basename(import.meta.dirname);
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+  checkEnforcements({ client: true }, generator);
   describe('languages migration', () => {
     describe('indonesian language', () => {
       before(() =>

@@ -18,37 +18,12 @@
  */
 import { inspect } from 'node:util';
 
-import { transform } from '@yeoman/transform';
 import defaultsDeep from 'lodash-es/defaultsDeep.js';
 import get from 'lodash-es/get.js';
 import has from 'lodash-es/has.js';
 import merge from 'lodash-es/merge.js';
-import type { MemFsEditorFile } from 'mem-fs-editor';
-import { Minimatch } from 'minimatch';
 
 import type CoreGenerator from '../base-core/generator.ts';
-
-export const createTranslationsFilter = ({
-  clientI18nDir,
-  nativeLanguage,
-  fallbackLanguage,
-}: {
-  clientI18nDir: string;
-  nativeLanguage: string;
-  fallbackLanguage?: string;
-}) => {
-  const pattern =
-    !fallbackLanguage || nativeLanguage === fallbackLanguage ?
-      `**/${clientI18nDir}${nativeLanguage}/*.json`
-    : `**/${clientI18nDir}{${nativeLanguage},${fallbackLanguage}}/*.json`;
-  const minimatch = new Minimatch(pattern);
-  return (filePath: string): boolean => minimatch.match(filePath);
-};
-
-export const createTranslationsFileFilter = (opts: Parameters<typeof createTranslationsFilter>[0]) => {
-  const filter = createTranslationsFilter(opts);
-  return (file: MemFsEditorFile): boolean => filter(file.path);
-};
 
 export default class TranslationData {
   translations: Record<string, any>;
@@ -60,31 +35,6 @@ export default class TranslationData {
     }
     this.generator = generator;
     this.translations = translations;
-  }
-
-  loadFromStreamTransform({
-    enableTranslation,
-    clientI18nDir,
-    nativeLanguage,
-    fallbackLanguage = 'en',
-  }: {
-    enableTranslation: boolean;
-    clientI18nDir: string;
-    nativeLanguage: string;
-    fallbackLanguage?: string;
-  }) {
-    const filter = createTranslationsFileFilter({ clientI18nDir, nativeLanguage, fallbackLanguage });
-    const minimatchNative = new Minimatch(`**/${clientI18nDir}${nativeLanguage}/*.json`);
-    return transform(file => {
-      if (filter(file) && file.contents) {
-        const contents = JSON.parse(file.contents.toString());
-        this.mergeTranslation(contents, !minimatchNative.match(file.path));
-        if (!enableTranslation) {
-          return undefined;
-        }
-      }
-      return file;
-    });
   }
 
   mergeTranslation(translation: Record<string, any>, fallback: boolean) {

@@ -20,7 +20,7 @@ import { describe, expect, it } from 'expect-node';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { supportedLanguages } from '../../../../languages/support/languages.ts';
+import { supportedLanguages } from '../../../support/languages.ts';
 
 import { type EntityTranslationTexts, buildEntityTranslation, getEntityTranslations } from './entity-translations.ts';
 
@@ -28,7 +28,7 @@ const textsFolder = join(import.meta.dirname, '../templates/entity/i18n');
 const readTexts = (languageTag: string): EntityTranslationTexts =>
   JSON.parse(readFileSync(join(textsFolder, `${languageTag}.json`), 'utf8'));
 
-describe('generator - client:i18n - internal - getEntityTranslations', () => {
+describe('generator - languages:i18n-bootstrap - internal - getEntityTranslations', () => {
   const names = { entity: 'Order Line', entities: 'Order Lines' };
 
   it('should have the texts of every supported language', () => {
@@ -64,7 +64,7 @@ describe('generator - client:i18n - internal - getEntityTranslations', () => {
   });
 });
 
-describe('generator - client:i18n - internal - buildEntityTranslation', () => {
+describe('generator - languages:i18n-bootstrap - internal - buildEntityTranslation', () => {
   const entity = {
     frontendAppName: 'jhipsterApp',
     entityTranslationKey: 'orderLine',

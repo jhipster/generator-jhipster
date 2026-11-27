@@ -105,6 +105,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "kubernetes:knative",
   "languages",
   "languages:bootstrap",
+  "languages:i18n-bootstrap",
   "liquibase",
   "playwright",
   "project-name",
