@@ -24,7 +24,10 @@ import { AxiosError, isAxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
-import { FieldErrorVM, <%- enableTranslation ? 'ProblemWithMessageType, ' : '' %>getServerProblem, isConstraintViolation } from 'app/shared/jhipster/problem-details';
+<%_ if (enableTranslation) { _%>
+import { PROBLEM_WITH_MESSAGE_TYPE } from 'app/shared/jhipster/error.constants';
+<%_ } _%>
+import { FieldErrorVM, getServerProblem, isConstraintViolation } from 'app/shared/jhipster/problem-details';
 import { isFulfilledAction, isRejectedAction } from 'app/shared/reducers/reducer.utils';
 
 type ToastMessage = {
@@ -149,7 +152,7 @@ export default () => next => action => {
           if (errorMessage) {
             addErrorAlert({ message: errorMessage });
 <%_ if (enableTranslation) { _%>
-          } else if (problem?.message && (problem.type === ProblemWithMessageType || isConstraintViolation(problem))) {
+          } else if (problem?.message && (problem.type === PROBLEM_WITH_MESSAGE_TYPE || isConstraintViolation(problem))) {
             // A problem of the account, like a wrong password, tells its detail below: its message is the one of its status.
             addErrorAlert({ message: problem.detail, key: problem.message });
 <%_ } _%>

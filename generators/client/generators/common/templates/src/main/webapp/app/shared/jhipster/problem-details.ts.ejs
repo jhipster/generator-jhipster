@@ -49,8 +49,6 @@ export type JHipsterProblem = ProblemDetails & {
   path?: string;
 };
 
-export const ProblemWithMessageType = PROBLEM_WITH_MESSAGE_TYPE;
-
 /** The types of the problems with a message, the ones of the account included. */
 const problemWithMessageTypes = [PROBLEM_WITH_MESSAGE_TYPE, LOGIN_ALREADY_USED_TYPE, EMAIL_ALREADY_USED_TYPE, INVALID_PASSWORD_TYPE] as const;
 

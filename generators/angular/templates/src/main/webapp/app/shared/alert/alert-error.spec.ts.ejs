@@ -32,7 +32,6 @@ import { missingTranslationHandler } from 'app/config';
 import { AlertModel, AlertService, EventManager } from 'app/core/util';
 import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
 import { CONSTRAINT_VIOLATION_TYPE, PROBLEM_WITH_MESSAGE_TYPE } from 'app/shared/jhipster/error.constants';
-import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 
 import { AlertError } from './alert-error';
 
@@ -240,7 +239,7 @@ describe('Alert Error Component', () => {
         status: 400,
         statusText: 'Bad Request',
         error: {
-          type: ProblemWithMessageType,
+          type: PROBLEM_WITH_MESSAGE_TYPE,
           title: 'Bad Request',
           status: 400,
           path: '/api/foos',
