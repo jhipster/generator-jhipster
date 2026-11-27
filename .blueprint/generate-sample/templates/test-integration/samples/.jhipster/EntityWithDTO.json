@@ -2,7 +2,10 @@
   "changelogDate": "20160806123735",
   "dto": "mapstruct",
   "entityTableName": "entity_with_dto",
-  "fields": [{ "fieldName": "emma", "fieldType": "String" }],
+  "fields": [
+    { "fieldName": "emma", "fieldType": "String" },
+    { "fieldName": "kValue", "fieldType": "Integer" }
+  ],
   "fluentMethods": true,
   "pagination": "no",
   "relationships": [],

@@ -320,6 +320,7 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
         'config/AsyncConfiguration.java',
         'config/CRLFLogConverter.java',
         'config/DateTimeFormatConfiguration.java',
+        'config/JacksonConfiguration.java',
         'config/LoggingConfiguration.java',
         'config/ApplicationProperties.java',
         'config/LoggingAspectConfiguration.java',
