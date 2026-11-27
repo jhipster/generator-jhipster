@@ -48,8 +48,8 @@ describe(`generator - ${generator}`, () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
 
-    it('should write the translation as JSON', () => {
-      result.assertJsonFileContent('i18n/fr/home.json', translation);
+    it('should read the translation', () => {
+      expect(result.application!.translations).toEqual(translation);
     });
   });
 
@@ -124,17 +124,16 @@ describe(`generator - ${generator}`, () => {
         expect(result.application!.translationLanguages.map(({ languageTag }: { languageTag: string }) => languageTag)).toEqual(['fr']);
       });
 
-      it('should write the prepared JSON file of a language', () => {
-        result.assertJsonFileContent('i18n/fr/home.json', { home: { title: 'Bienvenue Shop' } });
-        result.assertNoJsonFileContent('i18n/fr/home.json', { home: { gateway: 'Passerelle' } });
+      it('should write the files asked - snapshot', () => {
+        expect(result.getStateSnapshot()).toMatchSnapshot();
       });
 
-      it('should write the rendered template of a language', () => {
-        result.assertJsonFileContent('i18n/fr/menu.json', { menu: { title: 'Menu Shop' } });
-      });
-
-      it('should write only the files asked', () => {
-        result.assertNoFile('i18n/fr/other.json');
+      it('should load every file of the language, with its names and without the keys whose conditions do not hold', () => {
+        expect(result.application!.translations).toEqual({
+          home: { title: 'Bienvenue Shop' },
+          menu: { title: 'Menu Shop' },
+          other: { title: 'Autre' },
+        });
       });
     });
 
@@ -216,8 +215,8 @@ describe(`generator - ${generator}`, () => {
           .withTask('writing', mergeMenu);
       });
 
-      it('should merge the translation into the file', () => {
-        result.assertJsonFileContent('i18n/fr/global.json', { global: { title: 'Titre', menu: { entities: { order: 'Commande' } } } });
+      it('should merge the translation into the file - snapshot', () => {
+        expect(result.getStateSnapshot()).toMatchSnapshot();
       });
 
       it('should read the translation', () => {
