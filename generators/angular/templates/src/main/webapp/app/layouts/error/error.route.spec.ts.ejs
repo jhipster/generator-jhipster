@@ -78,6 +78,15 @@ describe('Error routes', () => {
     expect(errorPage.errorMessage()).toBeFalsy();
     expect(harness.routeNativeElement?.querySelector('.alert-danger')).toBeNull();
   });
+
+  it('should not show a message given in the query params', async () => {
+    const harness = await RouterTestingHarness.create();
+
+    const errorPage = await harness.navigateByUrl('/error?errorMessage=error.http.403', ErrorPage);
+
+    expect(errorPage.errorMessage()).toBeFalsy();
+    expect(harness.routeNativeElement?.querySelector('.alert-danger')).toBeNull();
+  });
 <%_ if (enableTranslation) { _%>
 
   it('should translate the message again when the language changes', async () => {

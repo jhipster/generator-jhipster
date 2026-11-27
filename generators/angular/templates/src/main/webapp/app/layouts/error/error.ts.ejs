@@ -16,10 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, input } from '@angular/core';
-<%_ if (enableTranslation) { _%>
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 
+<%_ if (enableTranslation) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
+<%_ } _%>
+import { map } from 'rxjs';
+<%_ if (enableTranslation) { _%>
 
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
@@ -30,5 +35,5 @@ import { TranslateDirective } from 'app/shared/language';
   templateUrl: './error.html',
 })
 export default class Error {
-  readonly errorMessage = input<string>();
+  readonly errorMessage = toSignal(inject(ActivatedRoute).data.pipe(map(data => data.errorMessage as string | undefined)));
 }
