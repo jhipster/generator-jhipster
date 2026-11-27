@@ -95,6 +95,7 @@ export const mutateField = {
 
 export type JavaAddedValidatedFieldProperties = JavaAddedPropertyProperties & {
   javaFieldValidatorsPartial?: string;
+  javaContentTypeValidatorsPartial?: string;
 };
 
 export const mutateValidatedField = {

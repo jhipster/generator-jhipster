@@ -34,6 +34,9 @@ import jakarta.validation.constraints.*;
   <%_ if (field.fieldValidate) { -%>
     <%- field.javaFieldValidatorsPartial %>
   <%_ } _%>
+  <%_ if (field.javaContentTypeValidatorsPartial) { -%>
+    <%- field.javaContentTypeValidatorsPartial %>
+  <%_ } _%>
 <&_ } -&>
 <%_ } -%>
 
