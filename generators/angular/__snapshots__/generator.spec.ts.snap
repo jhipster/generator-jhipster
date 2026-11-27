@@ -4270,6 +4270,14 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       },
     ],
   ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule typescript:S3776 is ignored, the form services convert every field of the entity, one condition each",
+      "resourceKey": "clientRoot/src/app/entities/**/*-form.service.ts",
+      "ruleId": "S3776",
+      "ruleKey": "typescript:S3776",
+    },
+  ],
   "mergeClientPackageJson": [
     {
       "dependencies": {},
@@ -5652,6 +5660,14 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       },
     ],
   ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule typescript:S3776 is ignored, the form services convert every field of the entity, one condition each",
+      "resourceKey": "clientRoot/src/app/entities/**/*-form.service.ts",
+      "ruleId": "S3776",
+      "ruleKey": "typescript:S3776",
+    },
+  ],
   "mergeClientPackageJson": [
     {
       "dependencies": {},
@@ -6822,6 +6838,14 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
         "valueSep": ", ",
       },
     ],
+  ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule typescript:S3776 is ignored, the form services convert every field of the entity, one condition each",
+      "resourceKey": "clientRoot/src/app/entities/**/*-form.service.ts",
+      "ruleId": "S3776",
+      "ruleKey": "typescript:S3776",
+    },
   ],
   "mergeClientPackageJson": [
     {
@@ -8125,6 +8149,14 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
         "valueSep": ", ",
       },
     ],
+  ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule typescript:S3776 is ignored, the form services convert every field of the entity, one condition each",
+      "resourceKey": "src/main/webapp/app/entities/**/*-form.service.ts",
+      "ruleId": "S3776",
+      "ruleKey": "typescript:S3776",
+    },
   ],
   "mergeClientPackageJson": [
     {
@@ -9703,6 +9735,14 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       },
     ],
   ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule typescript:S3776 is ignored, the form services convert every field of the entity, one condition each",
+      "resourceKey": "src/main/webapp/app/entities/**/*-form.service.ts",
+      "ruleId": "S3776",
+      "ruleKey": "typescript:S3776",
+    },
+  ],
   "mergeClientPackageJson": [
     {
       "dependencies": {},
@@ -10843,6 +10883,14 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
         "valueSep": ", ",
       },
     ],
+  ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule typescript:S3776 is ignored, the form services convert every field of the entity, one condition each",
+      "resourceKey": "src/main/webapp/app/entities/**/*-form.service.ts",
+      "ruleId": "S3776",
+      "ruleKey": "typescript:S3776",
+    },
   ],
   "mergeClientPackageJson": [
     {
@@ -11991,6 +12039,14 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
         "valueSep": ", ",
       },
     ],
+  ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule typescript:S3776 is ignored, the form services convert every field of the entity, one condition each",
+      "resourceKey": "src/main/webapp/app/entities/**/*-form.service.ts",
+      "ruleId": "S3776",
+      "ruleKey": "typescript:S3776",
+    },
   ],
   "mergeClientPackageJson": [
     {
