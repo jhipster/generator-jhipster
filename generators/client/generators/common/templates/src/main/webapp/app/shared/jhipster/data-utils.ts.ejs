@@ -69,12 +69,7 @@ export const toOpenableContentType = (contentType: string | null | undefined, bl
 };
 
 export const openFile = (data: string, contentType: string | null | undefined, blobType: BlobType = 'any'): void => {
-  const byteCharacters = atob(data);
-  const byteNumbers = new Array(byteCharacters.length);
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.codePointAt(i);
-  }
-  const byteArray = new Uint8Array(byteNumbers);
+  const byteArray = Uint8Array.from(atob(data), c => c.codePointAt(0) ?? 0);
   const blob = new Blob([byteArray], {
     type: toOpenableContentType(contentType, blobType),
   });
