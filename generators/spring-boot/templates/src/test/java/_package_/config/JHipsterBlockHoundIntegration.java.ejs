@@ -26,6 +26,8 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
     public void applyTo(BlockHound.Builder builder) {
         builder.allowBlockingCallsInside("java.util.UUID", "randomUUID");
         builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
+        // The method validation of a @Validated resource, like the email of a password reset, loads the messages bundle at its first error.
+        builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.MethodValidationAdapter", "invokeValidatorForArguments");
         builder.allowBlockingCallsInside("<%- packageName %>.service.MailService", "sendEmailFromTemplate");
         builder.allowBlockingCallsInside("<%- packageName %>.security.DomainUserDetailsService", "createSpringSecurityUser");
         builder.allowBlockingCallsInside("org.springframework.web.reactive.result.method.InvocableHandlerMethod", "invoke");

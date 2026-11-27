@@ -37,13 +37,13 @@ export const getTestcontainerSupport = ({
     {
       mariadb: {
         testcontainerClass: 'MariaDBContainer',
-        testcontainerClassPackage: 'org.testcontainers.containers',
+        testcontainerClassPackage: 'org.testcontainers.mariadb',
         testcontainerClassInitialization: '',
         testcontainerDockerImageName: dockerContainers.mariadb,
       },
       mssql: {
         testcontainerClass: 'MSSQLServerContainer',
-        testcontainerClassPackage: 'org.testcontainers.containers',
+        testcontainerClassPackage: 'org.testcontainers.mssqlserver',
         testcontainerClassInitialization: `// You are required to accept EULA license for SQL server containers
                 // Refer to https://java.testcontainers.org/modules/databases/mssqlserver/
                 //.acceptLicense()`,
@@ -51,7 +51,7 @@ export const getTestcontainerSupport = ({
       },
       mysql: {
         testcontainerClass: 'MySQLContainer',
-        testcontainerClassPackage: 'org.testcontainers.containers',
+        testcontainerClassPackage: 'org.testcontainers.mysql',
         testcontainerClassInitialization: '.withConfigurationOverride("conf/mysql")',
         testcontainerDockerImageName: dockerContainers.mysql,
       },
