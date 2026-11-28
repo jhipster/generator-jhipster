@@ -44,6 +44,8 @@ export default class InfoGenerator extends BaseCoreGenerator<
     super(args, options, {
       customInstallTask: isInfoCommand(options!.commandName),
       customCommitTask: isInfoCommand(options!.commandName),
+      // It takes no blueprint.
+      autoDelegateToBlueprint: false,
       ...features,
     });
   }
