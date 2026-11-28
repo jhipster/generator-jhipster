@@ -27,7 +27,7 @@ const generator = getGeneratorNamespace(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
-  describe('blueprint support', () => testBlueprintSupport(generator));
+  describe('blueprint support', () => testBlueprintSupport(generator, { bootstrapGenerator: true }));
 
   describe('with defaults options', () => {
     before(async () => {

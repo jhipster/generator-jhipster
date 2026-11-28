@@ -49,7 +49,7 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
   }
 
   get [JavaSimpleApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+    return this.loading;
   }
 
   get preparing() {
@@ -133,6 +133,6 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
   }
 
   get [JavaSimpleApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 }

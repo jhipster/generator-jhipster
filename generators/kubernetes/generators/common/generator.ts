@@ -154,7 +154,7 @@ export default class KubernetesCommonGenerator extends BaseKubernetesGenerator {
   }
 
   get [BaseWorkspacesGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
+    return this.prompting;
   }
 
   get promptingWorkspaces() {
@@ -537,7 +537,7 @@ export default class KubernetesCommonGenerator extends BaseKubernetesGenerator {
   }
 
   get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.promptingWorkspaces);
+    return this.promptingWorkspaces;
   }
 }
 

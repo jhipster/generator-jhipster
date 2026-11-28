@@ -56,7 +56,7 @@ export default class E2eCommonGenerator extends BaseApplicationGenerator<E2eEnti
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postPreparing() {
@@ -71,7 +71,7 @@ export default class E2eCommonGenerator extends BaseApplicationGenerator<E2eEnti
   }
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
+    return this.postPreparing;
   }
 
   get postWriting() {
@@ -89,6 +89,6 @@ export default class E2eCommonGenerator extends BaseApplicationGenerator<E2eEnti
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

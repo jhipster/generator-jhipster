@@ -48,7 +48,7 @@ export default class InitGenerator extends BaseSimpleApplicationGenerator<InitAp
   }
 
   get [BaseSimpleApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get writing() {
@@ -70,6 +70,6 @@ export default class InitGenerator extends BaseSimpleApplicationGenerator<InitAp
   }
 
   get [BaseSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 }

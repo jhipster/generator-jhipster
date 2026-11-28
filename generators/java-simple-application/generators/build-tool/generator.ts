@@ -52,7 +52,7 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -204,6 +204,6 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 }

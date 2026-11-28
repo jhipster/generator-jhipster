@@ -62,7 +62,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
   }
 
   get [BaseApplicationGenerator.COMPOSING_BOOTSTRAP]() {
-    return this.delegateTasksToBlueprint(() => this.composingBootstrap);
+    return this.composingBootstrap;
   }
 
   get preparing() {

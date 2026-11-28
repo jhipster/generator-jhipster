@@ -47,7 +47,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -64,7 +64,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get configuringEachEntity() {
@@ -80,7 +80,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
+    return this.configuringEachEntity;
   }
 
   get preparingEachEntity() {
@@ -95,7 +95,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get default() {
@@ -113,7 +113,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get writing() {
@@ -133,7 +133,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -165,7 +165,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -225,6 +225,6 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

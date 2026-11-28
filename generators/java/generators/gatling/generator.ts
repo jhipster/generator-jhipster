@@ -42,7 +42,7 @@ export default class GatlingGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -53,7 +53,7 @@ export default class GatlingGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -114,6 +114,6 @@ export default class GatlingGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

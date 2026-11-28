@@ -136,6 +136,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

@@ -48,6 +48,6 @@ export default class LocalBlueprintGenerator extends BaseSimpleApplicationGenera
   }
 
   get [BaseSimpleApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 }

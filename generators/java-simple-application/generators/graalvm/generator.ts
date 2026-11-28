@@ -74,7 +74,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get default() {
@@ -105,7 +105,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get writing() {
@@ -128,7 +128,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -168,6 +168,6 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

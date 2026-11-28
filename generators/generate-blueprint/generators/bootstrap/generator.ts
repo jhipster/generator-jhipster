@@ -39,7 +39,7 @@ export default class BootstrapGenerator extends BlueprintGenerator {
   }
 
   get [BlueprintGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+    return this.loading;
   }
 
   get preparing() {
@@ -66,6 +66,6 @@ export default class BootstrapGenerator extends BlueprintGenerator {
   }
 
   get [BlueprintGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 }

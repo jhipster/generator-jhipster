@@ -110,7 +110,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composing() {
@@ -126,7 +126,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -238,7 +238,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postPreparing() {
@@ -252,7 +252,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
+    return this.postPreparing;
   }
 
   get preparingEachEntity() {
@@ -272,7 +272,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityField() {
@@ -317,7 +317,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get preparingEachEntityRelationship() {
@@ -337,7 +337,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+    return this.preparingEachEntityRelationship;
   }
 
   get postPreparingEachEntity() {
@@ -413,7 +413,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get default() {
@@ -447,7 +447,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get writing() {
@@ -557,7 +557,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -568,7 +568,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -636,7 +636,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get postWritingEntities() {
@@ -646,7 +646,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+    return this.postWritingEntities;
   }
 
   get end() {
@@ -663,6 +663,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 }

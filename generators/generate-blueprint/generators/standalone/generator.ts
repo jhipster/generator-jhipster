@@ -49,7 +49,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
   }
 
   get [GenerateBlueprintBaseGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get preparing() {
@@ -65,7 +65,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
   }
 
   get [GenerateBlueprintBaseGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get writing() {
@@ -119,7 +119,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
   }
 
   get [GenerateBlueprintBaseGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -243,7 +243,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
   }
 
   get [GenerateBlueprintBaseGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get postInstall() {
@@ -295,7 +295,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
   }
 
   get [GenerateBlueprintBaseGenerator.POST_INSTALL]() {
-    return this.delegateTasksToBlueprint(() => this.postInstall);
+    return this.postInstall;
   }
 
   get end() {
@@ -317,6 +317,6 @@ To start working:
   }
 
   get [GenerateBlueprintBaseGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 }

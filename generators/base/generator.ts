@@ -232,6 +232,8 @@ export default class BaseGenerator<
 
   /**
    * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
+   *
+   * @deprecated a generator delegates its tasks to a blueprint replacing it without it, see extractTasksFromPriority.
    */
   delegateTasksToBlueprint<TaskGroupType extends TaskGroup<PropertyKey>>(tasksGetter: () => TaskGroupType): TaskGroupType {
     return this.delegateToBlueprint ? ({} as TaskGroupType) : tasksGetter();

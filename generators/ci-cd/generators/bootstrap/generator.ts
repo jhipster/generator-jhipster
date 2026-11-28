@@ -45,7 +45,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<C
   }
 
   get [BaseSimpleApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get loading() {
@@ -60,7 +60,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<C
   }
 
   get [BaseSimpleApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+    return this.loading;
   }
 
   get preparing() {
@@ -80,6 +80,6 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<C
   }
 
   get [BaseSimpleApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 }

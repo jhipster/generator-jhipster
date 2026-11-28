@@ -44,6 +44,6 @@ export default class DeploymentGenerator extends BaseGenerator {
   }
 
   get [BaseGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 }

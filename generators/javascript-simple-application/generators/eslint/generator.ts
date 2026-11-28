@@ -61,7 +61,7 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
   }
 
   get [JavascriptSimpleApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get writing() {
@@ -93,7 +93,7 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
   }
 
   get [JavascriptSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -124,6 +124,6 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
   }
 
   get [JavascriptSimpleApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

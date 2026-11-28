@@ -76,6 +76,6 @@ export default class ServerI18NGenerator extends BaseApplicationGenerator<Server
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 }

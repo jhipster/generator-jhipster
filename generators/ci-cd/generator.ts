@@ -46,7 +46,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -66,7 +66,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   shouldAskForPrompts() {

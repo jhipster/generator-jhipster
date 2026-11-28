@@ -37,6 +37,6 @@ export default class I18NGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 }

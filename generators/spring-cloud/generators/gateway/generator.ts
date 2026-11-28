@@ -62,7 +62,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get preparing() {
@@ -81,7 +81,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get writing() {
@@ -124,7 +124,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -150,7 +150,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get postWritingEntities() {
@@ -179,6 +179,6 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+    return this.postWritingEntities;
   }
 }

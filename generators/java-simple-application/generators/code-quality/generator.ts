@@ -50,7 +50,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
   }
 
   get [JavaSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -319,6 +319,6 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
   }
 
   get [JavaSimpleApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

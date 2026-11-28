@@ -70,7 +70,7 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get configuring() {
@@ -100,7 +100,7 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composingComponent() {
@@ -131,7 +131,7 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
   }
 
   get [BaseApplicationGenerator.COMPOSING_COMPONENT]() {
-    return this.delegateTasksToBlueprint(() => this.composingComponent);
+    return this.composingComponent;
   }
 
   get writing() {
@@ -141,6 +141,6 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 }

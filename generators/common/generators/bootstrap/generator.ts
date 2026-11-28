@@ -113,7 +113,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get postPreparingEachEntity() {
@@ -131,7 +131,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get default() {

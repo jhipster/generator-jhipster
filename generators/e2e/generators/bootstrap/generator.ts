@@ -44,7 +44,7 @@ export default class E2eBootstrapGenerator extends BaseApplicationGenerator<E2eE
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+    return this.loading;
   }
 
   get postPreparingEachEntity() {
@@ -73,6 +73,6 @@ export default class E2eBootstrapGenerator extends BaseApplicationGenerator<E2eE
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 }

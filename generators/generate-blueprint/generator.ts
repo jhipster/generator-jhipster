@@ -78,7 +78,7 @@ export default class extends GenerateBlueprintBaseGenerator {
   }
 
   get [BaseSimpleApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get prompting() {
@@ -117,7 +117,7 @@ export default class extends GenerateBlueprintBaseGenerator {
   }
 
   get [BaseSimpleApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
+    return this.prompting;
   }
 
   get configuring() {
@@ -131,7 +131,7 @@ export default class extends GenerateBlueprintBaseGenerator {
   }
 
   get [BaseSimpleApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composing() {
@@ -147,7 +147,7 @@ export default class extends GenerateBlueprintBaseGenerator {
   }
 
   get [BaseSimpleApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get writing() {
@@ -261,6 +261,6 @@ export default class extends GenerateBlueprintBaseGenerator {
   }
 
   get [BaseSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 }

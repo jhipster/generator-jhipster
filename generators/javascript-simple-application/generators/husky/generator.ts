@@ -41,7 +41,7 @@ export default class HuskyGenerator extends JavascriptSimpleApplicationGenerator
   }
 
   get [JavascriptSimpleApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get writing() {
@@ -56,7 +56,7 @@ export default class HuskyGenerator extends JavascriptSimpleApplicationGenerator
   }
 
   get [JavascriptSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -76,6 +76,6 @@ export default class HuskyGenerator extends JavascriptSimpleApplicationGenerator
   }
 
   get [JavascriptSimpleApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

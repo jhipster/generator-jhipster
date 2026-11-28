@@ -42,6 +42,6 @@ export default class CiCdAzureGenerator extends BaseSimpleApplicationGenerator<C
   }
 
   get [BaseSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 }

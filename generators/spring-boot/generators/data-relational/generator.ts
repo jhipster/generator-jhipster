@@ -70,7 +70,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -99,7 +99,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get preparingEachEntity() {
@@ -116,7 +116,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityRelationship() {
@@ -131,7 +131,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+    return this.preparingEachEntityRelationship;
   }
 
   get writing() {
@@ -171,7 +171,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -182,7 +182,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -420,7 +420,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get postWritingEntities() {
@@ -445,7 +445,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+    return this.postWritingEntities;
   }
 
   /**

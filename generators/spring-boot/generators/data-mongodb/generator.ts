@@ -46,7 +46,7 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get writing() {
@@ -67,7 +67,7 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -77,7 +77,7 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -129,6 +129,6 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

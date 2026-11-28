@@ -99,7 +99,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -117,7 +117,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
+    return this.prompting;
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -149,7 +149,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composing() {
@@ -169,7 +169,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get loading() {
@@ -193,7 +193,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+    return this.loading;
   }
 
   get preparing() {
@@ -213,7 +213,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postWriting() {
@@ -229,7 +229,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get supportedLanguages(): Map<string, Language> {

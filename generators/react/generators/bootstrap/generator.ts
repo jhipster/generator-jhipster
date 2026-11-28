@@ -59,6 +59,6 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
   }
 
   get [ClientApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 }

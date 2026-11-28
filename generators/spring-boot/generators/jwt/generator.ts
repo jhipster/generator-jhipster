@@ -101,7 +101,7 @@ export default class JwtGenerator extends SpringBootApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -113,6 +113,6 @@ export default class JwtGenerator extends SpringBootApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

@@ -62,7 +62,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+    return this.loading;
   }
 
   get preparing() {
@@ -74,7 +74,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get preparingEachEntity() {
@@ -92,7 +92,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityField() {
@@ -107,7 +107,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get preparingEachEntityRelationship() {
@@ -121,7 +121,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+    return this.preparingEachEntityRelationship;
   }
 
   get supportedLanguages(): Map<string, Language> {

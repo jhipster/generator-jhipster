@@ -54,7 +54,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
   }
 
   get [SpringBootApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get preparing() {
@@ -95,7 +95,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
   }
 
   get [SpringBootApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get writing() {
@@ -153,7 +153,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
   }
 
   get [SpringBootApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -262,7 +262,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
   }
 
   get [SpringBootApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get postWritingEntities() {
@@ -281,6 +281,6 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
   }
 
   get [SpringBootApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+    return this.postWritingEntities;
   }
 }

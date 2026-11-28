@@ -79,7 +79,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get prompting() {
@@ -89,7 +89,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get [BaseWorkspacesGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
+    return this.prompting;
   }
 
   get preparing() {
@@ -101,7 +101,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get [BaseWorkspacesGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get promptingWorkspaces() {
@@ -113,7 +113,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.promptingWorkspaces);
+    return this.promptingWorkspaces;
   }
 
   get configuringWorkspaces() {
@@ -134,7 +134,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
+    return this.configuringWorkspaces;
   }
 
   get loadingWorkspaces() {
@@ -151,7 +151,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
+    return this.loadingWorkspaces;
   }
 
   get preparingWorkspaces() {
@@ -163,7 +163,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
+    return this.preparingWorkspaces;
   }
 
   get writing() {
@@ -311,7 +311,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get end() {
@@ -335,7 +335,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get [BaseWorkspacesGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 
   checkApplicationsDockerImages({ applications }: { applications: WorkspacesApplication[] }) {

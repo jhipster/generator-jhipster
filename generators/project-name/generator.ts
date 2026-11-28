@@ -54,7 +54,7 @@ export default class ProjectNameGenerator extends CommandBaseGenerator<typeof co
   }
 
   get [CommandBaseGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get configuring() {
@@ -82,6 +82,6 @@ export default class ProjectNameGenerator extends CommandBaseGenerator<typeof co
   }
 
   get [CommandBaseGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 }

@@ -45,7 +45,7 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
   }
 
   get [BaseWorkspacesGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get postPreparing() {
@@ -57,7 +57,7 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
   }
 
   get [BaseWorkspacesGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
+    return this.postPreparing;
   }
 
   get loadingWorkspaces() {
@@ -69,7 +69,7 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
   }
 
   get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
+    return this.loadingWorkspaces;
   }
 
   get preparingWorkspaces() {
@@ -85,6 +85,6 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
   }
 
   get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
+    return this.preparingWorkspaces;
   }
 }

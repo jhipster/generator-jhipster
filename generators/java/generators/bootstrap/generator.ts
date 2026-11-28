@@ -52,7 +52,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+    return this.loading;
   }
 
   get preparing() {
@@ -75,7 +75,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get preparingEachEntity() {
@@ -94,7 +94,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityField() {
@@ -106,7 +106,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get preparingEachEntityRelationship() {
@@ -125,7 +125,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+    return this.preparingEachEntityRelationship;
   }
 
   get postPreparingEachEntity() {
@@ -146,7 +146,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get default() {
@@ -162,6 +162,6 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 }
