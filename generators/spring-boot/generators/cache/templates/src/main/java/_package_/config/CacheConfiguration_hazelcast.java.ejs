@@ -107,7 +107,7 @@ public class CacheConfiguration {
             // see the "spring.application.name" standard Spring property
             String serviceId = registration.getServiceId();
             LOG.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);
-            // In development, everything goes through 127.0.0.1, with a different port
+            // In development, everything goes through <%- loopbackAddress %>, with a different port
             if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
                 LOG.debug(
                     "Application is running with the \"dev\" profile, Hazelcast " + "cluster will only work with localhost instances"
@@ -116,7 +116,7 @@ public class CacheConfiguration {
                 config.getNetworkConfig().setPort(serverProperties.getPort() + 5701);
                 config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
                 for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
-                    String clusterMember = "127.0.0.1:" + (instance.getPort() + 5701);
+                    String clusterMember = "<%- loopbackAddress %>:" + (instance.getPort() + 5701);
                     LOG.debug("Adding Hazelcast (dev) cluster member {}", clusterMember);
                     config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
                 }
@@ -137,7 +137,7 @@ public class CacheConfiguration {
 
         // In development, remove multicast auto-configuration
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-            System.setProperty("hazelcast.local.localAddress", "127.0.0.1");
+            System.setProperty("hazelcast.local.localAddress", "<%- loopbackAddress %>");
 
             config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
             config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);

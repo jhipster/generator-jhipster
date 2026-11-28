@@ -156,7 +156,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       packageJsonE2eScripts({ application, entities }) {
-        const { serverPort, lowercaseBaseName } = application;
+        const { serverPort, lowercaseBaseName, loopbackAddress } = application;
         const microservices = [...new Set(entities.map(entity => entity.microserviceName))].filter(Boolean).map(ms => ms.toLowerCase());
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const waitServices = microservices
@@ -165,11 +165,11 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
           .join(' && ');
 
         scriptsStorage.set({
-          [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:$npm_package_config_backend_port/management/health`,
+          [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://${loopbackAddress}:$npm_package_config_backend_port/management/health`,
           ...Object.fromEntries(
             microservices.map(ms => [
               `ci:server:await:${ms}`,
-              `wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${serverPort}/services/${ms}/management/health/readiness`,
+              `wait-on -t ${WAIT_TIMEOUT} http-get://${loopbackAddress}:${serverPort}/services/${ms}/management/health/readiness`,
             ]),
           ),
           'ci:server:await': `echo "Waiting for services to start" && ${waitServices} && echo "Services started"`,

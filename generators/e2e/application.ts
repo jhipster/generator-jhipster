@@ -40,7 +40,7 @@ export const mutateApplication = {
   // The dev server port is set by the bootstrap of the client framework, which may run after this one.
   e2eDevServerPort: ({ devServerPort, devServerPortProxy }, { delayMarker }) => devServerPortProxy ?? devServerPort ?? delayMarker!,
   // The Angular dev server listens on localhost only (which may resolve to ::1), Vite listens on every address.
-  e2eDevServerHost: ({ clientFrameworkAngular }) => (clientFrameworkAngular ? 'localhost' : '127.0.0.1'),
+  e2eDevServerHost: ({ clientFrameworkAngular, loopbackAddress }) => (clientFrameworkAngular ? 'localhost' : loopbackAddress),
   // The native federation dev server never reports its url to `ng e2e` (the builder only yields on rebuilds),
   // so microfrontend applications start the dev server concurrently and wait for its port instead.
   e2eNgBuilder: ({ clientFrameworkAngular, microfrontend }) => Boolean(clientFrameworkAngular) && !microfrontend,
