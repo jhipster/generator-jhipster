@@ -69,6 +69,33 @@ export default class E2eBootstrapGenerator extends BaseApplicationGenerator<E2eE
           e2eFieldsFakeData: e2eFakeData,
         });
       },
+      prepareTestPlan({ entity }) {
+        // The relationships of the entity by other entity, prepared by the base application.
+        const { differentRelationships = {} } = entity as E2eEntity & {
+          differentRelationships?: Record<string, E2eEntity['relationships']>;
+        };
+        mutateDefaults(entity, {
+          e2eRequiredOtherEntities: ({ requiredRelationships }) => [...new Set(requiredRelationships!.map(rel => rel.otherEntity))],
+          e2eOtherEntities: () => [
+            ...new Set(
+              Object.values(differentRelationships)
+                .filter(rels => rels.length > 0)
+                .map(rels => rels[0].otherEntity),
+            ),
+          ],
+          e2eSkipCreateTest: ({ requiredRelationships, e2eRequiredOtherEntities, e2eFakeData }) =>
+            // Cannot create a required relationship with itself.
+            requiredRelationships!.some(rel => rel.otherEntity.builtInUser) ||
+            // Required relationships that contain another required relationship are complex to handle.
+            e2eRequiredOtherEntities!.some(otherEntity => otherEntity.relationships.some(rel => rel.relationshipRequired)) ||
+            // Same as above.
+            e2eRequiredOtherEntities!.some(otherEntity => otherEntity.primaryKey?.derived) ||
+            // Cannot generate the required data to test.
+            !e2eFakeData,
+          e2eCreateTestFields: ({ fields }) =>
+            fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly),
+        });
+      },
     });
   }
 
