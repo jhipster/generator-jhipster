@@ -39,7 +39,7 @@ import vitest from '@vitest/eslint-plugin';
   {
     files: ['**/*.vue'],
     languageOptions: {
-      parserOptions: { parser: '@typescript-eslint/parser' },
+      parserOptions: { parser: tseslint.parser },
       globals: { ...globals.browser },
     },
     rules: {
