@@ -123,7 +123,7 @@ const config = defineConfig({
       ].map(res => [
         res,
         {
-          target: 'http://localhost:<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+          target: 'http://<%- loopbackAddress %>:<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
 <%_ if (communicationSpringWebsocket) { _%>
           ws: res === '/websocket',
 <%_ } _%>

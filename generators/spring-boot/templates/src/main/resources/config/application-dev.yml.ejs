@@ -158,7 +158,7 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:
-    contact-points: 127.0.0.1
+    contact-points: <%- loopbackAddress %>
     compression: LZ4
     keyspace-name: <%- cassandraKeyspaceName %>
     local-datacenter: datacenter1
@@ -307,7 +307,7 @@ jhipster:
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://127.0.0.1:<%- serverPort %>
+    base-url: http://<%- loopbackAddress %>:<%- serverPort %>
 <%_ } _%>
   logging:
     use-json-format: false # By default, logs are not in JSON format

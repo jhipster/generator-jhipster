@@ -35,6 +35,10 @@ export type CommonAddedApplicationProperties = {
   authenticationUsesRememberMe: boolean;
 
   devServerPort: number;
+  /**
+   * The address the development tools of the application reach the local server at, like the proxy of the dev server.
+   */
+  loopbackAddress: string;
   serverPort: number;
   gatewayServerPort: number | undefined;
 
@@ -76,6 +80,7 @@ export const mutateApplication = {
   endpointPrefix: ({ applicationType, lowercaseBaseName }) => (applicationType === 'microservice' ? `services/${lowercaseBaseName}` : ''),
 
   devServerPort: finalizeDefault(() => 9060),
+  loopbackAddress: '127.0.0.1',
   serverPort: ({ applicationTypeMicroservice }) => (applicationTypeMicroservice ? 8081 : 8080),
   gatewayServerPort: (ctx, { undefinedMarker }) => (ctx.microfrontend && ctx.applicationTypeMicroservice ? 8080 : undefinedMarker),
 
