@@ -99,6 +99,12 @@ export default class Oauth2Generator extends SpringBootApplicationGenerator {
                 renameTo: moveToJavaPackageTestDir,
                 templates: ['security/oauth2/CustomClaimConverterIT.java'],
               },
+              {
+                condition: generator => !generator.reactive && !generator.applicationTypeMicroservice,
+                path: `${SERVER_TEST_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageTestDir,
+                templates: ['config/SecurityConfigurationIT.java'],
+              },
             ],
           },
           context: application,

@@ -62,6 +62,9 @@ exports[`generator - spring-boot:oauth2 with defaults options should match files
   "src/main/java/com/mycompany/myapp/web/rest/LogoutResource.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SecurityConfigurationIT.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
