@@ -18,6 +18,9 @@
 -%>
 // Learn more about Vitest configuration options at https://vitest.dev/config/
 
+<%_ if (clientRootDir) { _%>
+import { relative, resolve } from 'node:path';
+<%_ } _%>
 import { fileURLToPath } from 'node:url';
 
 import { defineConfig } from 'vitest/config';
@@ -48,6 +51,19 @@ export default defineConfig({
   ],
 <%_ } _%>
   test: {
+<%_ if (clientRootDir) { _%>
+    // Sonar resolves the paths of the reports from the root of the project, which holds the client in <%- clientRootDir %>.
+    reporters: [
+      'default',
+      [
+        'vitest-sonar-reporter',
+        {
+          outputFile: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-sonar-vitest.xml', import.meta.url)),
+          onWritePath: (path: string) => relative(fileURLToPath(new URL('./<%- relativeDir(clientRootDir, '') %>', import.meta.url)), resolve(path)),
+        },
+      ],
+    ],
+<%_ } _%>
     coverage: {
       reportsDirectory: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>test-results/lcov-report', import.meta.url)),
     },

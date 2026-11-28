@@ -267,6 +267,17 @@ export default class ClientGenerator extends ClientApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      sonarSources({ application, source }) {
+        const { clientFrameworkBuiltIn, clientSrcDir } = application;
+        // sonar.sources and sonar.tests hold src only: a client out of it, like one in its own folder, adds its source folder.
+        if (clientFrameworkBuiltIn && !clientSrcDir.startsWith('src/')) {
+          const clientSources = clientSrcDir.slice(0, -1);
+          source.addSonarProperties?.([
+            { key: 'sonar.sources', value: clientSources, valueSep: ', ' },
+            { key: 'sonar.tests', value: clientSources, valueSep: ', ' },
+          ]);
+        }
+      },
       packageJsonScripts({ application }) {
         if (!application.clientFrameworkBuiltIn) {
           return;

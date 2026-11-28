@@ -215,7 +215,11 @@
 <%_ } _%>
             "buildTarget": "<%- dasherizedBaseName %>:<%- microfrontend ? 'esbuild' : 'build' %>:development",
             "runnerConfig": true,
+<%_ if (clientRootDir) { _%>
+            "coverageReporters": ["text", ["lcov", { "projectRoot": "<%- relativeDir(clientRootDir, '').slice(0, -1) %>" }]],
+<%_ } else { _%>
             "coverageReporters": ["text", "lcov"],
+<%_ } _%>
             "coverageThresholds": {
               "statements": 95,
               "branches": 95,
@@ -225,10 +229,12 @@
 <%_ if (enableTranslation) { _%>
             "coverageExclude": ["<%- relativeDir(clientRootDir, clientSrcDir) %>i18n/**"],
 <%_ } _%>
+<%_ if (!clientRootDir) { _%>
             "reporters": [
               "default",
               ["vitest-sonar-reporter", { "outputFile": "./<%- relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-sonar-vitest.xml" }]
             ],
+<%_ } _%>
             "watch": false,
             "tsConfig": "tsconfig.spec.json"
           }
