@@ -3,6 +3,7 @@
   "dto": "no",
   "fields": [
     { "fieldName": "stringTom", "fieldType": "String" },
+    { "fieldName": "stringReadonly", "fieldType": "String", "options": { "readonly": true } },
     { "fieldName": "stringRequiredTom", "fieldType": "String", "fieldValidateRules": ["required"] },
     { "fieldName": "stringMinlengthTom", "fieldType": "String", "fieldValidateRules": ["minlength"], "fieldValidateRulesMinlength": 0 },
     { "fieldName": "stringMaxlengthTom", "fieldType": "String", "fieldValidateRules": ["maxlength"], "fieldValidateRulesMaxlength": 20 },
@@ -38,6 +39,7 @@
       "fieldValidateRulesPattern": "^[a-zA-Z ,.\\'-]*$"
     },
     { "fieldName": "integerTom", "fieldType": "Integer" },
+    { "fieldName": "integerReadonly", "fieldType": "Integer", "options": { "readonly": true } },
     { "fieldName": "integerRequiredTom", "fieldType": "Integer", "fieldValidateRules": ["required"] },
     { "fieldName": "integerMinTom", "fieldType": "Integer", "fieldValidateRules": ["min"], "fieldValidateRulesMin": 0 },
     { "fieldName": "integerMaxTom", "fieldType": "Integer", "fieldValidateRules": ["max"], "fieldValidateRulesMax": 100 },
