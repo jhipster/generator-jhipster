@@ -31,30 +31,32 @@
    othersSection: 0,
    referenceSection: 0,
  });
+ // The fragments of a section are blocks of markdown, joined by a blank line; the ones of the references are items of its list.
+ const blocks = { join: '\n\n' };
 _&>
 # <%- baseName %>
 
 This application was generated using JHipster <%- jhipsterVersion %>, you can find documentation and help at [<%- documentationArchiveUrl %>](<%- documentationArchiveUrl %>).
 
-<&- fragments.introSection() &>
+<&- fragments.introSection(blocks) &>
 ## Project Structure
 
-<&- fragments.structureSection() &>
+<&- fragments.structureSection(blocks) &>
 ## Development
 
-<&- fragments.developmentSection() &>
+<&- fragments.developmentSection(blocks) &>
 
 ## Building for production
 
-<&- fragments.productionSection() &>
+<&- fragments.productionSection(blocks) &>
 ## Testing
 
-<&- fragments.testingSection() -&>
+<&- fragments.testingSection(blocks) -&>
 
-<& if (fragments.othersSection()) { &>
+<& if (fragments.othersSection(blocks)) { &>
 ## Others
 
-<&- fragments.othersSection() &>
+<&- fragments.othersSection(blocks) &>
 <& } &>
 
 ## References
