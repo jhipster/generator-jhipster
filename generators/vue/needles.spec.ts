@@ -201,10 +201,7 @@ describe('needle API Vue: an item added to the account menu', () => {
   });
 
   it('imports the icon and adds it to the library', () => {
-    runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/config/config.ts`,
-      "import { faCircleInfo } from '@fortawesome/free-solid-svg-icons/faCircleInfo';",
-    );
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/config.ts`, /^ {2}faBook,\n {2}faCircleInfo,\n {2}faCloud,$/m);
     runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/config.ts`, /^ {4}faCircleInfo,$/m);
   });
 
@@ -218,5 +215,53 @@ describe('needle API Vue: an item added to the account menu', () => {
         }),
       )
       .withOptions({ force: false });
+  });
+});
+
+const addAdminAboutTask = asPostWritingTask<ClientEntity, ClientApplication>(function ({ source }) {
+  source.addItemToAdminMenu!({ route: 'admin/about', translationKey: 'global.menu.admin.about', name: 'About', icon: 'circle-info' });
+  source.addAdminRoute!({ route: 'about', modulePath: '@/admin/about/about.vue' });
+});
+
+describe('needle API Vue: an item and a route added to the administration', () => {
+  before(() =>
+    helpers
+      .runJHipster('vue')
+      .withJHipsterConfig({
+        clientFramework: 'vue',
+        skipServer: true,
+      })
+      .withTask('postWriting', addAdminAboutTask),
+  );
+
+  it('adds the item before the administration menu needle, with its icon', () => {
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.vue`,
+      `
+          <b-dropdown-item to="/admin/about" active-class="active">
+            <font-awesome-icon icon="circle-info" />
+            <span>{{ t$('global.menu.admin.about') }}</span>
+          </b-dropdown-item>
+`,
+    );
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/config.ts`, /^ {4}faCircleInfo,$/m);
+  });
+
+  it('adds the route to the administration routes', () => {
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/router/admin.ts`,
+      `
+  {
+    path: '/admin/about',
+    name: 'About',
+    component: () => import('@/admin/about/about.vue'),
+    meta: { authorities: [Authority.ADMIN] },
+  },
+  // jhipster-needle-add-admin-route`,
+    );
+  });
+
+  it('should bail on any file change adding them again', async () => {
+    await helpers.runJHipsterInApplication('jhipster:vue').withTask('postWriting', addAdminAboutTask).withOptions({ force: false });
   });
 });

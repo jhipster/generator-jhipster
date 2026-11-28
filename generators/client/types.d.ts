@@ -1,5 +1,4 @@
 import type { CommandTypeMap } from '../../lib/command/index.ts';
-import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
@@ -29,6 +28,24 @@ export type Options = JavascriptOptions & CommonOptions & Command['Options'];
 
 export type Application<E extends Entity = Entity> = Command['Application'] & CommonApplication<E> & ClientAddedApplicationProperties & {};
 
+/** An item of a menu: the route it links to, its Font Awesome icon (asterisk by default), and its text, translated with translationKey. */
+export type ClientMenuItem = {
+  route: string;
+  translationKey?: string;
+  name?: string;
+  icon?: string;
+};
+
+/** A route of the administration, loaded lazily from modulePath. */
+export type ClientAdminRoute = {
+  route: string;
+  modulePath: string;
+  pageTitle?: string;
+  title?: string;
+  moduleName?: string;
+  component?: boolean;
+};
+
 export type ClientResources = {
   /**
    * resources added to root file.
@@ -56,13 +73,23 @@ export type Source = JavascriptSource &
      * Add external resources to root file(index.html).
      */
     addExternalResourceToRoot?(resources: ClientResources): void;
-    addIconImport?(args: Parameters<typeof addIconImport>[0]): void;
-    addAdminRoute?(args: Omit<Parameters<typeof addRoute>[0], 'needle'>): void;
-    addItemToAdminMenu?(args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>): void;
     /**
-     * Add an item at the end of the account menu, shown with or without an authenticated account.
+     * Register a Font Awesome icon, like circle-info. Optional: a client framework implements it when it registers its icons.
      */
-    addItemToAccountMenu?(args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>): void;
+    addIconImport?(args: { icon: string }): void;
+    /**
+     * Add a route to the administration. Optional: a client framework implements it when it has the administration routes.
+     */
+    addAdminRoute?(args: ClientAdminRoute): void;
+    /**
+     * Add an item to the administration menu, and register its icon. Optional, like the other menu methods.
+     */
+    addItemToAdminMenu?(args: ClientMenuItem): void;
+    /**
+     * Add an item at the end of the account menu, shown with or without an authenticated account, and register its icon.
+     * Optional: a client framework implements it when its account menu has the add-element-to-account-menu needle.
+     */
+    addItemToAccountMenu?(args: ClientMenuItem): void;
     /**
      * Add webpack config.
      *

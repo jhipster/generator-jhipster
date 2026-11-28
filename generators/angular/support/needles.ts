@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import { joinCallbacks } from '../../base-core/support/write-files.ts';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../../client/types.d.ts';
-
-export { addIconImport } from '../../client/support/needles.ts';
+import { addNamedImports } from '../../client/support/imports.ts';
+import { addListItem } from '../../client/support/needles.ts';
+import type { Application as ClientApplication, ClientMenuItem, Entity as ClientEntity } from '../../client/types.d.ts';
 
 export function addRoute({
   needle,
@@ -111,13 +112,9 @@ export function addAdminEntitiesRoute<const E extends ClientEntity, const A exte
   );
 }
 
-type MenuItem = {
+type MenuItem = ClientMenuItem & {
   jhiPrefix: string;
   enableTranslation?: boolean;
-  route: string;
-  translationKey?: string;
-  icon?: string;
-  name?: string;
 };
 
 export function addItemToMenu({
@@ -157,6 +154,15 @@ export const addItemToAccountMenu = (menu: MenuItem) =>
     needle: 'add-element-to-account-menu',
     ...menu,
   });
+
+/** Adds an icon to the named imports of @fortawesome/free-solid-svg-icons, and to the list of the icons before its add-icon-import needle. */
+export const addIconImport = ({ icon }: { icon: string }) => {
+  const iconImport = `fa${upperFirstCamelCase(icon)}`;
+  return joinCallbacks(
+    addNamedImports({ module: '@fortawesome/free-solid-svg-icons', names: [iconImport] }),
+    addListItem({ needle: 'add-icon-import', item: iconImport }),
+  );
+};
 
 export function addToEntitiesMenu<const E extends ClientEntity, const A extends ClientApplication<E>>({
   application,

@@ -18,3 +18,4 @@
  */
 export * from './translate-react.ts';
 export { default as translateReactFilesTransform } from './translate-react.ts';
+export * from './needles.ts';

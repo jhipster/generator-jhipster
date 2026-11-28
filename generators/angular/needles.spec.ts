@@ -83,7 +83,14 @@ describe('needle API Angular generator : JHipster with blueprint', () => {
           </li>
           <!-- jhipster-needle-add-element-to-account-menu`,
     );
-    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, 'faCircleInfo,');
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`,
+      /^ {2}faCheck,\n {2}faCircleInfo,\n {2}faCloud,$/m,
+    );
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`,
+      /^ {2}faCircleInfo,\n {2}\/\/ jhipster-needle-add-icon-import$/m,
+    );
   });
 
   it('entity module contains the microservice object added by needle api', () => {

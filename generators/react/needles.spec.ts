@@ -52,10 +52,7 @@ describe('needle API React: an item added to the account menu', () => {
   });
 
   it('imports the icon and adds it to the library', () => {
-    runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/config/icon-loader.ts`,
-      /^ {2}faCircleInfo,\n {2}\/\/ jhipster-needle-add-icon-import$/m,
-    );
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/icon-loader.ts`, /^ {2}faBook,\n {2}faCircleInfo,\n {2}faCircleXmark,$/m);
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/config/icon-loader.ts`,
       /^ {4}faCircleInfo,\n {4}\/\/ jhipster-needle-add-icon-import$/m,
@@ -64,5 +61,43 @@ describe('needle API React: an item added to the account menu', () => {
 
   it('should bail on any file change adding the same item again', async () => {
     await helpers.runJHipsterInApplication('jhipster:react').withTask('postWriting', addAboutTask).withOptions({ force: false });
+  });
+});
+
+const addAdminAboutTask = asPostWritingTask<ClientEntity, ClientApplication>(function ({ source }) {
+  source.addItemToAdminMenu!({ route: 'admin/about', translationKey: 'global.menu.admin.about', name: 'About', icon: 'circle-info' });
+  source.addAdminRoute!({ route: 'about', modulePath: './about/about' });
+});
+
+describe('needle API React: an item and a route added to the administration', () => {
+  before(() =>
+    helpers
+      .runJHipster('react')
+      .withJHipsterConfig({
+        clientFramework: 'react',
+        skipServer: true,
+      })
+      .withTask('postWriting', addAdminAboutTask),
+  );
+
+  it('adds the item before the administration menu needle, with its icon', () => {
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/admin.tsx`,
+      `
+    <MenuItem icon="circle-info" to="/admin/about">
+      <Translate contentKey="global.menu.admin.about">About</Translate>
+    </MenuItem>
+`,
+    );
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/icon-loader.ts`, /^ {4}faCircleInfo,$/m);
+  });
+
+  it('adds the route and its import to the administration routes', () => {
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/modules/administration/index.tsx`, "import About from './about/about';");
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/modules/administration/index.tsx`, '<Route path="about" element={<About />} />');
+  });
+
+  it('should bail on any file change adding them again', async () => {
+    await helpers.runJHipsterInApplication('jhipster:react').withTask('postWriting', addAdminAboutTask).withOptions({ force: false });
   });
 });

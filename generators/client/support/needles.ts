@@ -16,46 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import { createNeedleCallback } from '../../base-core/support/needles.ts';
-import { joinCallbacks } from '../../base-core/support/write-files.ts';
-
-/** The name of the Font Awesome definition of an icon, faCircleInfo for circle-info. */
-const iconDefinitionName = (icon: string): string => `fa${upperFirstCamelCase(icon)}`;
 
 /**
- * Adds an icon before every add-icon-import needle of a file importing the icons by name from @fortawesome/free-solid-svg-icons:
- * its named import and the list of the registered icons (Angular, React).
+ * Adds an item to a list, like a value of an array or an argument of a call, before each line of its needle, at the indentation
+ * of the needle and followed by a comma. The item is not added again to a list that has it, the list starting at the line its
+ * bracket opens.
  */
-export const addIconImport = ({ icon }: { icon: string }) => {
-  const iconImport = iconDefinitionName(icon);
+export const addListItem = ({ needle, item }: { needle: string; item: string }) => {
+  const needleName = needle.startsWith('jhipster-needle-') ? needle : `jhipster-needle-${needle}`;
+  const itemLine = new RegExp(String.raw`^\s*${item.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)},$`, 'm');
   return createNeedleCallback({
-    needle: 'jhipster-needle-add-icon-import',
-    contentToCheck: new RegExp(String.raw`\b${iconImport}\b`),
-    contentToAdd: (content, { indentPrefix }) =>
-      content.replace(
-        /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
-        `\n${indentPrefix}${iconImport},\n${indentPrefix}// jhipster-needle-add-icon-import`,
+    needle: needleName,
+    contentToAdd: content =>
+      content.replaceAll(
+        new RegExp(String.raw`^(\s*)(//\s*${needleName}\b.*)$`, 'gm'),
+        (needleLine, indent: string, comment: string, offset: number) => {
+          const before = content.slice(0, offset);
+          const list = before.slice(Math.max(before.lastIndexOf('[\n'), before.lastIndexOf('(\n'), before.lastIndexOf('{\n')));
+          return itemLine.test(list) ? needleLine : `${indent}${item},\n${indent}${comment}`;
+        },
       ),
   });
-};
-
-/**
- * Adds an icon to a file importing each icon from its own module of @fortawesome/free-solid-svg-icons (Vue): its import before
- * the add-icon-import needle, and the icon before the add-icon-to-library needle.
- */
-export const addIconModuleImport = ({ icon }: { icon: string }) => {
-  const iconImport = iconDefinitionName(icon);
-  return joinCallbacks(
-    createNeedleCallback({
-      needle: 'add-icon-import',
-      contentToAdd: `import { ${iconImport} } from '@fortawesome/free-solid-svg-icons/${iconImport}';`,
-      contentToCheck: `/${iconImport}';`,
-    }),
-    createNeedleCallback({
-      needle: 'add-icon-to-library',
-      contentToAdd: `${iconImport},`,
-      contentToCheck: new RegExp(String.raw`^\s*${iconImport},$`, 'm'),
-    }),
-  );
 };

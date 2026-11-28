@@ -27,7 +27,6 @@ import BaseApplicationGenerator from '../base-application/generator.ts';
 import type { Field } from '../base-application/types.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import {
-  addIconModuleImport,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
@@ -39,7 +38,15 @@ import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.ts';
 import { writeEntitiesFiles, writeFiles } from './files-vue.ts';
-import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.ts';
+import {
+  addAdminRoute,
+  addIconImport,
+  addItemToAccountMenu,
+  addItemToAdminMenu,
+  convertTranslationsSupport,
+  isTranslatedVueFile,
+  translateVueFilesTransform,
+} from './support/index.ts';
 import type {
   Application as VueApplication,
   Config as VueConfig,
@@ -225,23 +232,28 @@ export default class VueGenerator extends VueApplicationGenerator {
 
         source.addIconImport = args => {
           const ignoreNonExisting = this.ignoreNeedlesError && 'Icon imports not updated with icon';
-          this.editFile(`${application.clientSrcDir}app/config/config.ts`, { ignoreNonExisting }, addIconModuleImport(args));
+          this.editFile(`${application.clientSrcDir}app/config/config.ts`, { ignoreNonExisting }, addIconImport(args));
         };
 
-        source.addItemToAccountMenu = ({ route, translationKey, name = '', icon }) => {
+        source.addItemToAdminMenu = args => {
           this.editFile(
             `${application.clientSrcDir}app/layouts/navbar/navbar.vue`,
-            createNeedleCallback({
-              needle: 'add-element-to-account-menu',
-              contentToAdd: `<b-dropdown-item to="/${route}" active-class="active">
-  <font-awesome-icon icon="${icon ?? 'asterisk'}" />
-  <span>${application.enableTranslation ? `{{ t$('${translationKey}') }}` : name}</span>
-</b-dropdown-item>`,
-              contentToCheck: `<b-dropdown-item to="/${route}"`,
-            }),
+            addItemToAdminMenu({ enableTranslation: application.enableTranslation, ...args }),
           );
-          if (icon) {
-            source.addIconImport!({ icon });
+          if (args.icon) {
+            source.addIconImport!({ icon: args.icon });
+          }
+        };
+
+        source.addAdminRoute = args => this.editFile(`${application.clientSrcDir}app/router/admin.ts`, addAdminRoute(args));
+
+        source.addItemToAccountMenu = args => {
+          this.editFile(
+            `${application.clientSrcDir}app/layouts/navbar/navbar.vue`,
+            addItemToAccountMenu({ enableTranslation: application.enableTranslation, ...args }),
+          );
+          if (args.icon) {
+            source.addIconImport!({ icon: args.icon });
           }
         };
 

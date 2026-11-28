@@ -24,7 +24,6 @@ import { mutateDefaults } from '../../lib/utils/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { ClientApplicationGenerator } from '../client/generator.ts';
 import {
-  addIconImport,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
@@ -35,7 +34,14 @@ import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.ts';
 import { writeFiles } from './files-react.ts';
-import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.ts';
+import {
+  addAdminRoute,
+  addIconImport,
+  addItemToAccountMenu,
+  addItemToAdminMenu,
+  isTranslatedReactFile,
+  translateReactFilesTransform,
+} from './support/index.ts';
 import type {
   Application as ReactApplication,
   Config as ReactConfig,
@@ -181,19 +187,26 @@ ${comment}
           this.editFile(`${application.clientSrcDir}app/config/icon-loader.ts`, { ignoreNonExisting }, addIconImport(args));
         };
 
-        source.addItemToAccountMenu = ({ route, translationKey, name = '', icon }) => {
+        source.addItemToAdminMenu = args => {
+          this.editFile(
+            `${application.clientSrcDir}app/shared/layout/menus/admin.tsx`,
+            addItemToAdminMenu({ enableTranslation: application.enableTranslation, ...args }),
+          );
+          if (args.icon) {
+            source.addIconImport!({ icon: args.icon });
+          }
+        };
+
+        source.addAdminRoute = args =>
+          this.editFile(`${application.clientSrcDir}app/modules/administration/index.tsx`, addAdminRoute(args));
+
+        source.addItemToAccountMenu = args => {
           this.editFile(
             `${application.clientSrcDir}app/shared/layout/menus/account.tsx`,
-            createNeedleCallback({
-              needle: 'add-element-to-account-menu',
-              contentToAdd: `<MenuItem icon="${icon ?? 'asterisk'}" to="/${route}">
-  ${application.enableTranslation ? `<Translate contentKey="${translationKey}">${name}</Translate>` : name}
-</MenuItem>`,
-              contentToCheck: `to="/${route}"`,
-            }),
+            addItemToAccountMenu({ enableTranslation: application.enableTranslation, ...args }),
           );
-          if (icon) {
-            source.addIconImport!({ icon });
+          if (args.icon) {
+            source.addIconImport!({ icon: args.icon });
           }
         };
 
