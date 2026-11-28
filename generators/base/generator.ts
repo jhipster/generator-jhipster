@@ -215,7 +215,7 @@ export default class BaseGenerator<
   override getTaskNames(): string[] {
     const taskNames = super.getTaskNames();
     // A bootstrap, like jhipster:server:bootstrap, prepares the data the other generators read: its blueprint complements it.
-    if (!this.delegateToBlueprint || this.#isBootstrapGenerator()) {
+    if (!this.delegateToBlueprint || this.features.autoDelegateToBlueprint === false || this.#isBootstrapGenerator()) {
       return taskNames;
     }
     const undelegatedPriorities = (this.constructor as typeof BaseGenerator).undelegatedPriorities ?? [];

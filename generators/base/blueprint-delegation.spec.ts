@@ -27,11 +27,19 @@ type Calls = { core: ReturnType<typeof exnode.fn>; undelegated: ReturnType<typeo
 
 const createGenerators = (
   calls: Calls,
-  { undelegatedPriorities, sbsBlueprint }: { undelegatedPriorities?: string[]; sbsBlueprint?: boolean } = {},
+  {
+    undelegatedPriorities,
+    sbsBlueprint,
+    autoDelegateToBlueprint,
+  }: { undelegatedPriorities?: string[]; sbsBlueprint?: boolean; autoDelegateToBlueprint?: boolean } = {},
 ) => {
   // A generator of JHipster whose priority getters do not call delegateTasksToBlueprint.
   class CoreTestGenerator extends BaseGenerator {
     static override undelegatedPriorities = undelegatedPriorities;
+
+    constructor(args: any, options: any, features: any) {
+      super(args, options, { autoDelegateToBlueprint, ...features });
+    }
 
     async beforeQueue() {
       await this.composeWithBlueprints();
@@ -93,6 +101,17 @@ describe('generator - base - automatic delegation to the blueprint', () => {
     it('runs the tasks of that priority only', () => {
       expect(calls.undelegated).toHaveBeenCalledTimes(1);
       expect(calls.core).not.toHaveBeenCalled();
+      expect(calls.blueprint).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('with the automatic delegation turned off by the generator', () => {
+    const calls = createCalls();
+    before(() => runWithBlueprint(calls, { autoDelegateToBlueprint: false }));
+
+    it('runs the tasks of the generator and of the blueprint', () => {
+      expect(calls.core).toHaveBeenCalledTimes(1);
+      expect(calls.undelegated).toHaveBeenCalledTimes(1);
       expect(calls.blueprint).toHaveBeenCalledTimes(1);
     });
   });

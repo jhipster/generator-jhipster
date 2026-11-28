@@ -29,6 +29,11 @@ export default class extends CommandCoreGenerator<typeof command> {
   jdlFile!: string;
   jdlContent?: string;
 
+  constructor(...[args, options, features]: ConstructorParameters<typeof CommandCoreGenerator<typeof command>>) {
+    // It takes no blueprint.
+    super(args, options, { autoDelegateToBlueprint: false, ...features });
+  }
+
   get [CommandCoreGenerator.DEFAULT]() {
     return this.asAnyTaskGroup({
       convertToJDL() {

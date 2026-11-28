@@ -34,6 +34,7 @@ import { mergeConfigContent, mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
 import BaseCoreGenerator from '../base-core/index.ts';
 import { optionsForAnotherProject } from '../base-core/internal/index.ts';
+import type { Features as CoreFeatures } from '../base-core/types.d.ts';
 import type { Options as BootstrapOptions } from '../bootstrap/types.d.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
@@ -67,6 +68,11 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
   entrypointGenerator = `${CLI_NAME}:app`;
   entitiesGenerator = 'entities';
   workspacesGenerator = 'workspaces';
+
+  constructor(args?: string[], options?: JdlOptions, features?: CoreFeatures) {
+    // It takes no blueprint: the applications it generates take theirs.
+    super(args, options, { autoDelegateToBlueprint: false, ...features });
+  }
 
   interactive?: boolean;
   jsonOnly?: boolean;

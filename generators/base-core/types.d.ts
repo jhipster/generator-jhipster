@@ -120,6 +120,14 @@ export type Features = YeomanFeatures & {
   queueCommandTasks?: boolean;
 
   /**
+   * Delegate the tasks of the generator to a blueprint replacing it (not side-by-side), whatever its priority getters return.
+   * A generator that does not take blueprints, or runs its tasks with them, sets it to false.
+   *
+   * Defaults to true.
+   */
+  autoDelegateToBlueprint?: boolean;
+
+  /**
    * Queue tasks to load and prepare properties from command.
    * This is useful for bootstrap generator.
    */
