@@ -25,7 +25,7 @@
     "@softarc/native-federation-orchestrator": "4.10.2",
     "@stylistic/eslint-plugin": "6.0.1",
     "@types/folder-hash": "4.0.5",
-    "@types/node": "22.20.5",
+    "@types/node": "22.20.7",
     "@types/sockjs-client": "1.5.4",
     "@vitest/eslint-plugin": "1.6.28",
     "angular-eslint": "22.8.0",
