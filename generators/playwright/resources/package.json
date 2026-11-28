@@ -3,9 +3,9 @@
     "postinstall": "playwright install chromium"
   },
   "devDependencies": {
-    "@playwright/test": "1.63.0",
-    "eslint-plugin-playwright": "2.11.0",
-    "playwright-ng-schematics": "22.1.2"
+    "@playwright/test": "1.65.1",
+    "eslint-plugin-playwright": "2.12.2",
+    "playwright-ng-schematics": "22.1.4"
   },
   "packageManager": "npm@12"
 }
