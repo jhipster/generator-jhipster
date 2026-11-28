@@ -231,7 +231,7 @@ export const vueFiles = asWriteFilesSection({
       ],
     },
     {
-      condition: generator => generator.communicationSpringWebsocket,
+      condition: generator => generator.generateUserTracker,
       ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/tracker/tracker.vue',

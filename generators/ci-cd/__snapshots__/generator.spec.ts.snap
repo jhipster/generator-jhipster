@@ -223,6 +223,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "gitLabIndent": "",
   "githubActions": {
     "actions/checkout": "actions/checkout@VERSION",
@@ -511,6 +512,9 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "userManagement": Any<Object>,
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": "no",
+  "websocketAny": false,
+  "websocketNo": true,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": false,
   "workspacesCommand": false,

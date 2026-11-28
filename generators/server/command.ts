@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { ALPHANUMERIC_DASH_PATTERN, ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
+import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 
 import { getDBTypeFromDBValue } from './support/database.ts';
 
@@ -58,18 +58,6 @@ const command = {
       description: 'Skip generation of fake data for development',
       cli: {
         type: Boolean,
-      },
-      scope: 'storage',
-    },
-    websocket: {
-      description: 'Provide websocket option for the application when skipping server side generation',
-      cli: {
-        type: String,
-      },
-      jdl: {
-        type: 'string',
-        tokenType: 'NAME',
-        tokenValuePattern: ALPHANUMERIC_DASH_PATTERN,
       },
       scope: 'storage',
     },

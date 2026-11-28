@@ -37,6 +37,14 @@ const { GATLING, CUCUMBER } = testFrameworkTypes;
 
 const command = {
   configs: {
+    websocket: {
+      ...commonCommand.configs.websocket,
+      description: 'Provide websocket option for the application',
+      choices: [
+        { value: 'no', name: 'No websocket' },
+        { value: 'spring-websocket', name: 'WebSockets using Spring Websocket' },
+      ],
+    },
     fakeKeytool: {
       description: 'Add a fake certificate store file for test purposes',
       cli: {

@@ -153,6 +153,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
@@ -268,6 +269,9 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "userManagement": Any<Object>,
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": "no",
+  "websocketAny": false,
+  "websocketNo": true,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }

@@ -27,7 +27,7 @@
     "<%- relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity-navbar-items.ts",
     "<%- relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity.routes.ts",
 <%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
+<%_ if (websocketAny) { _%>
     "<%- relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill.ts",
 <%_ } _%>
     "<%- relativeDir(clientRootDir, clientSrcDir) %>main.ts"

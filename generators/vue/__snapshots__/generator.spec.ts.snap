@@ -159,6 +159,7 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -320,6 +321,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -663,6 +667,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -850,6 +857,10 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     },
   ],
   "addExternalResourceToRoot": [
+    {
+      "comment": "sockjs-client requires the global object to be defined",
+      "resource": "<script>const global = globalThis;</script>",
+    },
     {
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",
@@ -1059,6 +1070,7 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -1210,6 +1222,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -1649,6 +1664,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -1868,6 +1886,10 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   ],
   "addExternalResourceToRoot": [
     {
+      "comment": "sockjs-client requires the global object to be defined",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",
     },
@@ -2075,6 +2097,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -2245,6 +2268,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -2994,6 +3020,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -3154,6 +3181,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -3994,6 +4024,7 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -4146,6 +4177,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -4657,6 +4691,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -4874,6 +4911,10 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   ],
   "addExternalResourceToRoot": [
     {
+      "comment": "sockjs-client requires the global object to be defined",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",
     },
@@ -5081,6 +5122,7 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -5242,6 +5284,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -5960,6 +6005,7 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -6121,6 +6167,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -6455,6 +6504,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -6639,6 +6691,10 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     },
   ],
   "addExternalResourceToRoot": [
+    {
+      "comment": "sockjs-client requires the global object to be defined",
+      "resource": "<script>const global = globalThis;</script>",
+    },
     {
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",

@@ -33,7 +33,6 @@ import {
   isClientField,
 } from '../client/support/index.ts';
 import type { Field as ClientField } from '../client/types.ts';
-import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.ts';
@@ -175,7 +174,9 @@ export default class VueGenerator extends VueApplicationGenerator {
       async composing() {
         await this.composeWithJHipster('jhipster:javascript-simple-application:eslint');
         await this.composeWithJHipster('jhipster:client:common');
-        if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
+        // The client of a websocket of the backend, whichever it is.
+        const { websocket } = this.jhipsterConfigWithDefaults as { websocket?: string };
+        if (websocket && websocket !== 'no') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
         }
       },
@@ -631,7 +632,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
       },
       addIndexAsset({ source, application }) {
         if (!application.clientBundlerVite) return;
-        if (application.communicationSpringWebsocket) {
+        if (application.websocketAny) {
           source.addExternalResourceToRoot!({
             resource: '<script>const global = globalThis;</script>',
             comment: 'sockjs-client requires the global object to be defined',

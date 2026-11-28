@@ -32,6 +32,23 @@ export default class SpringBootWebsocketGenerator extends SpringBootApplicationG
     }
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      checksWebsocket({ application }) {
+        if (application.reactive) {
+          throw new Error('Spring Websocket is not supported with reactive applications.');
+        }
+        if (application.applicationTypeMicroservice) {
+          throw new Error('Spring Websocket is not supported with microservice applications.');
+        }
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       cleanupTask,

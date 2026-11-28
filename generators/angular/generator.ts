@@ -28,7 +28,6 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
 import { defaultLanguage } from '../languages/support/index.ts';
-import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
@@ -118,7 +117,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       async composing() {
         await this.composeWithJHipster('jhipster:javascript-simple-application:eslint');
         await this.composeWithJHipster('jhipster:client:common');
-        if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
+        // The client of a websocket of the backend, whichever it is.
+        const { websocket } = this.jhipsterConfigWithDefaults as { websocket?: string };
+        if (websocket && websocket !== 'no') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
         }
       },
@@ -601,9 +602,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         });
       },
       addWebsocketDependencies({ application, source }) {
-        const { authenticationUsesCsrf, communicationSpringWebsocket, nodeDependencies } = application;
+        const { authenticationUsesCsrf, websocketAny, nodeDependencies } = application;
         const dependencies: Record<string, string> = {};
-        if (communicationSpringWebsocket) {
+        if (websocketAny) {
           if (authenticationUsesCsrf) {
             dependencies['ngx-cookie-service'] = nodeDependencies['ngx-cookie-service'];
           }

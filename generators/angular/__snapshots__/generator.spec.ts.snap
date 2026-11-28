@@ -3291,6 +3291,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -3450,6 +3451,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -4048,6 +4052,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -4213,6 +4220,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/sockjs-client.polyfill.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -4277,6 +4287,15 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
         "tinyglobby": null,
+      },
+    },
+    {
+      "dependencies": {
+        "@stomp/rx-stomp": "STOMP_RX_STOMP_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+      },
+      "devDependencies": {
+        "@types/sockjs-client": "TYPES_SOCKJS_CLIENT_VERSION",
       },
     },
     {
@@ -4463,6 +4482,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -4612,6 +4632,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -4824,6 +4847,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/auth/auth-session.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/auth/csrf.service.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/auth/index.ts": {
@@ -5375,6 +5401,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -5594,6 +5623,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/sockjs-client.polyfill.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -5662,6 +5694,16 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
         "deepmerge": null,
         "folder-hash": null,
         "tinyglobby": null,
+      },
+    },
+    {
+      "dependencies": {
+        "@stomp/rx-stomp": "STOMP_RX_STOMP_VERSION",
+        "ngx-cookie-service": "NGX_COOKIE_SERVICE_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+      },
+      "devDependencies": {
+        "@types/sockjs-client": "TYPES_SOCKJS_CLIENT_VERSION",
       },
     },
     {
@@ -5847,6 +5889,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -6015,6 +6058,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -7019,6 +7065,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -7177,6 +7224,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -8326,6 +8376,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "generateUserRegistration": true,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -8476,6 +8527,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
@@ -9428,6 +9482,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -9647,6 +9704,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/sockjs-client.polyfill.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -9713,6 +9773,15 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
         "deepmerge": null,
         "folder-hash": null,
         "tinyglobby": null,
+      },
+    },
+    {
+      "dependencies": {
+        "@stomp/rx-stomp": "STOMP_RX_STOMP_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+      },
+      "devDependencies": {
+        "@types/sockjs-client": "TYPES_SOCKJS_CLIENT_VERSION",
       },
     },
     {
@@ -9898,6 +9967,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -10057,6 +10127,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
+  "websocketAny": false,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -11037,6 +11110,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "generateUserRegistration": false,
+  "generateUserTracker": false,
   "getWebappTranslation": [Function],
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
@@ -11196,6 +11270,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
+  "websocketAny": true,
+  "websocketNo": false,
+  "websocketSpringWebsocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
 }
@@ -11306,6 +11383,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/auth-session.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/csrf.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/index.ts": {
@@ -11773,6 +11853,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/shared/jhipster/data-utils.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/encode-csrf-token.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
@@ -11938,6 +12021,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/sockjs-client.polyfill.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -11999,6 +12085,16 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
         "tinyglobby": null,
+      },
+    },
+    {
+      "dependencies": {
+        "@stomp/rx-stomp": "STOMP_RX_STOMP_VERSION",
+        "ngx-cookie-service": "NGX_COOKIE_SERVICE_VERSION",
+        "sockjs-client": "SOCKJS_CLIENT_VERSION",
+      },
+      "devDependencies": {
+        "@types/sockjs-client": "TYPES_SOCKJS_CLIENT_VERSION",
       },
     },
     {
