@@ -22,15 +22,8 @@ import type Generator from './generator.js';
 
 export default {
   configs: {
-    samplesFolder: {
-      description: 'Samples folder',
-      cli: {
-        type: String,
-      },
-      scope: 'generator',
-    },
     samplesGroup: {
-      description: 'Samples Group',
+      description: 'Samples group, the workflow of the matrix or a folder of samples',
       argument: {
         type: String,
       },

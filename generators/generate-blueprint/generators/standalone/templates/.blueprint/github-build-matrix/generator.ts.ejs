@@ -16,12 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { join } from 'node:path';
 import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
-import { type GitHubMatrixOutput, convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from 'generator-jhipster/ci';
+import { type GitHubMatrixOutput, getGithubOutputFile, setGithubTaskOutput } from 'generator-jhipster/ci';
+
+import { WORKFLOWS, samplesGroupMatrix, samplesGroupOf } from '../describe-samples/support/describe-samples.ts';
 
 export default class extends BaseCoreGenerator {
-  samplesFolder?: string;
   samplesGroup?: string;
   matrix?: GitHubMatrixOutput;
 
@@ -29,13 +29,10 @@ export default class extends BaseCoreGenerator {
     return this.asAnyTaskGroup({
       async buildMatrix() {
         const { samplesGroup = 'samples' } = this;
-        const templatePath = this.templatePath('../../generate-sample/templates/');
-        const samplesFolder = this.samplesFolder ? join(templatePath, this.samplesFolder) : templatePath;
-        const { samples, warnings } = await getGithubSamplesGroup(samplesFolder, samplesGroup);
-        if (warnings.length > 0) {
-          this.log.info(warnings.join('\n'));
+        if (!samplesGroupOf(samplesGroup)) {
+          throw new Error(`Samples group ${samplesGroup} not found, expected a folder of samples or one of ${WORKFLOWS.join(', ')}`);
         }
-        this.matrix = convertToGitHubMatrix(samples);
+        this.matrix = samplesGroupMatrix(samplesGroup);
         const githubOutputFile = getGithubOutputFile();
         this.log.info('matrix', this.matrix);
         if (githubOutputFile) {

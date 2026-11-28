@@ -17,10 +17,11 @@
  limitations under the License.
 -%>
 import { beforeAll, describe, expect, it } from 'vitest';
-import { basename, join } from 'node:path';
+import { basename } from 'node:path';
 
-import { getGithubSamplesGroups } from 'generator-jhipster/ci';
 import { createTestHelpers, typedResult } from 'generator-jhipster/testing';
+
+import { WORKFLOWS } from '../describe-samples/support/describe-samples.ts';
 
 import type Generator from './index.js';
 
@@ -30,16 +31,20 @@ const helpers = createTestHelpers<Generator>({
 const result = typedResult<Generator>();
 const generator = basename(import.meta.dirname);
 
-describe(`generator - ${generator}`, async () => {
-  const groups = await getGithubSamplesGroups(join(import.meta.dirname, '../generate-sample/templates/'));
-  for (const workflow of groups.map(sample => sample.split('.')[0])) {
+describe(`generator - ${generator}`, () => {
+  for (const workflow of WORKFLOWS) {
     describe(`with ${workflow}`, () => {
       beforeAll(async () => {
         await helpers.runDefault().withArguments(workflow);
       });
 
-      it('should match matrix value', () => {
-        expect(result.generator.matrix).toMatchSnapshot();
+      it('should match the matrix snapshot', () => {
+        const { matrix } = result.generator;
+        // The node and npm versions are the ones generator-jhipster recommends, they change with generator-jhipster.
+        expect({
+          ...matrix,
+          include: matrix!.include.map(job => ({ ...job, 'node-version': expect.any(String), 'npm-version': expect.any(String) })),
+        }).toMatchSnapshot();
       });
     });
   }

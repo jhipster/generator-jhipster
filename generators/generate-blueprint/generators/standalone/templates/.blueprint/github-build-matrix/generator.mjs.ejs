@@ -1,10 +1,27 @@
-import { join } from 'node:path';
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
-import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from 'generator-jhipster/ci';
+import { getGithubOutputFile, setGithubTaskOutput } from 'generator-jhipster/ci';
+
+import { WORKFLOWS, samplesGroupMatrix, samplesGroupOf } from '../describe-samples/support/describe-samples.mjs';
 
 export default class extends BaseCoreGenerator {
-  /** @type {string} */
-  samplesFolder;
   /** @type {string} */
   samplesGroup;
   /** @type {object} */
@@ -14,13 +31,10 @@ export default class extends BaseCoreGenerator {
     return this.asAnyTaskGroup({
       async buildMatrix() {
         const { samplesGroup = 'samples' } = this;
-        const templatePath = this.templatePath('../../generate-sample/templates/');
-        const samplesFolder = this.samplesFolder ? join(templatePath, this.samplesFolder) : templatePath;
-        const { samples, warnings } = await getGithubSamplesGroup(samplesFolder, samplesGroup);
-        if (warnings.length > 0) {
-          this.log.info(warnings.join('\n'));
+        if (!samplesGroupOf(samplesGroup)) {
+          throw new Error(`Samples group ${samplesGroup} not found, expected a folder of samples or one of ${WORKFLOWS.join(', ')}`);
         }
-        this.matrix = convertToGitHubMatrix(samples);
+        this.matrix = samplesGroupMatrix(samplesGroup);
         const githubOutputFile = getGithubOutputFile();
         this.log.info('matrix', this.matrix);
         if (githubOutputFile) {
