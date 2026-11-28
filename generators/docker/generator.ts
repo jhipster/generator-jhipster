@@ -19,7 +19,7 @@
 
 import intersection from 'lodash-es/intersection.js';
 
-import { stringHashCode } from '../../lib/utils/index.ts';
+import { mutateDefaults, stringHashCode } from '../../lib/utils/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import BaseApplicationGenerator from '../base-simple-application/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../spring-boot/generators/data-relational/index.ts';
@@ -104,14 +104,14 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
       },
       packageJsonScripts({ application }) {
         // The scripts of the root package.json that do not depend on the files written, written by javascript-simple-application:
-        // a blueprint changes them before writing.
+        // a script already set, by a blueprint, is kept, and a blueprint changes them before writing.
         const { databaseType, databaseTypeSql, prodDatabaseType, packageJsonScripts } = application;
         let postServicesSleep;
 
         const dbType = databaseTypeSql ? prodDatabaseType : databaseType;
         if (application.dockerServices.includes(dbType!)) {
           const dockerFile = `${application.dockerServicesDir}${dbType}.yml`;
-          Object.assign(packageJsonScripts, {
+          mutateDefaults(packageJsonScripts, {
             'docker:db:up': `docker compose -f ${dockerFile} up --wait`,
             'docker:db:down': `docker compose -f ${dockerFile} down -v`,
           });
@@ -120,13 +120,15 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
             postServicesSleep = 10;
           }
         } else {
-          packageJsonScripts['docker:db:up'] = `echo "Docker for db ${dbType} not configured for application ${application.baseName}"`;
+          mutateDefaults(packageJsonScripts, {
+            'docker:db:up': `echo "Docker for db ${dbType} not configured for application ${application.baseName}"`,
+          });
         }
 
         if (postServicesSleep) {
-          packageJsonScripts['postservices:up'] = `sleep ${postServicesSleep}`;
+          mutateDefaults(packageJsonScripts, { 'postservices:up': `sleep ${postServicesSleep}` });
         }
-        Object.assign(packageJsonScripts, {
+        mutateDefaults(packageJsonScripts, {
           'app:up': `docker compose -f ${application.dockerServicesDir}app.yml up --wait`,
           'ci:e2e:prepare:docker': 'npm run services:up --if-present && docker ps -a',
           'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',

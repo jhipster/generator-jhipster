@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { mutateDefaults } from '../../../../lib/utils/index.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 
@@ -34,7 +35,8 @@ export default class ServerGenerator extends JavaApplicationGenerator {
 
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
-      // The scripts of the root package.json, written by javascript-simple-application: a blueprint changes them before writing.
+      // The scripts of the root package.json, written by javascript-simple-application: a script already set, by a blueprint, is kept,
+      // and a blueprint changes them before writing.
       packageJsonBackendScripts({ application }) {
         const { packageJsonScripts } = application;
         const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${application.packageName}=OFF`;
@@ -45,7 +47,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
         if (buildTool === 'maven') {
           const { nodePackageManager } = application;
           const excludeWebapp = application.skipClient ? '' : ` -Dskip.installnode${nodePackageManager} -Dskip.${nodePackageManager}`;
-          Object.assign(packageJsonScripts, {
+          mutateDefaults(packageJsonScripts, {
             'app:start': './mvnw -ntp --batch-mode',
             'backend:info': './mvnw --version',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
@@ -61,7 +63,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           });
         } else if (buildTool === 'gradle') {
           const excludeWebapp = application.skipClient ? '' : '-x webapp -x webapp_test';
-          Object.assign(packageJsonScripts, {
+          mutateDefaults(packageJsonScripts, {
             'app:start': './gradlew',
             'backend:info': './gradlew -v',
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
@@ -75,7 +77,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           });
         }
 
-        Object.assign(packageJsonScripts, {
+        mutateDefaults(packageJsonScripts, {
           'java:jar:dev': 'npm run java:jar -- -Pdev,webapp',
           'java:jar:prod': 'npm run java:jar -- -Pprod',
           'java:war:dev': 'npm run java:war -- -Pdev,webapp',
@@ -108,7 +110,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           application.applicationTypeMicroservice ?
             `http-get://127.0.0.1:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
           : `${protocol}-get://127.0.0.1:$npm_package_config_backend_port/management/health`;
-        Object.assign(packageJsonScripts, {
+        mutateDefaults(packageJsonScripts, {
           'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
         });
       },
