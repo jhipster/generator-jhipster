@@ -186,6 +186,37 @@ export default class BaseGenerator<
   }
 
   /**
+   * A bootstrap generator: a part of its namespace after the package has bootstrap, like jhipster:bootstrap,
+   * jhipster:server:bootstrap or jhipster:base-application:database-bootstrap.
+   */
+  #isBootstrapGenerator(): boolean {
+    return this._namespace
+      .split(':')
+      .slice(1)
+      .some(part => part.includes('bootstrap'));
+  }
+
+  /**
+   * The priorities a generator still runs when it delegates its tasks to a blueprint, like a preparation of the data other
+   * generators read.
+   */
+  static undelegatedPriorities?: string[];
+
+  /**
+   * Override yeoman-generator method to delegate the tasks to the blueprint: a generator of JHipster that composed a blueprint
+   * replacing it (not side-by-side) queues only the tasks of its undelegated priorities, whatever its priority getters return.
+   */
+  override getTaskNames(): string[] {
+    const taskNames = super.getTaskNames();
+    // A bootstrap, like jhipster:server:bootstrap, prepares the data the other generators read: its blueprint complements it.
+    if (!this.delegateToBlueprint || this.#isBootstrapGenerator()) {
+      return taskNames;
+    }
+    const undelegatedPriorities = (this.constructor as typeof BaseGenerator).undelegatedPriorities ?? [];
+    return taskNames.filter(taskName => undelegatedPriorities.includes(taskName));
+  }
+
+  /**
    * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
    */
   delegateTasksToBlueprint<TaskGroupType extends TaskGroup<PropertyKey>>(tasksGetter: () => TaskGroupType): TaskGroupType {
