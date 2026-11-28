@@ -23,7 +23,7 @@ import { addNamedImports } from './imports.ts';
 
 import { defaultHelpers as helpers } from '#testing';
 
-describe('client - support - addNamedImports', () => {
+describe('javascript-simple-application - support - addNamedImports', () => {
   let gen: Awaited<ReturnType<typeof helpers.instantiateDummyBaseCoreGenerator>>;
   const run = (content: string, module: string, names: string[]) => addNamedImports({ module, names }).call(gen, content, 'file.ts');
 

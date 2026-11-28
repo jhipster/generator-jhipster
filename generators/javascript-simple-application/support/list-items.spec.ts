@@ -19,11 +19,11 @@
 
 import { before, describe, expect, it } from 'expect-node';
 
-import { addListItem } from './needles.ts';
+import { addListItem } from './list-items.ts';
 
 import { defaultHelpers as helpers } from '#testing';
 
-describe('client - support - addListItem', () => {
+describe('javascript-simple-application - support - addListItem', () => {
   const content = `import {
   faAsterisk,
   // jhipster-needle-add-icon-import

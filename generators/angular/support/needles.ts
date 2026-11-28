@@ -19,9 +19,9 @@
 import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import { joinCallbacks } from '../../base-core/support/write-files.ts';
-import { addNamedImports } from '../../client/support/imports.ts';
-import { addListItem } from '../../client/support/needles.ts';
 import type { Application as ClientApplication, ClientMenuItem, Entity as ClientEntity } from '../../client/types.d.ts';
+import { addNamedImports } from '../../javascript-simple-application/support/imports.ts';
+import { addListItem } from '../../javascript-simple-application/support/list-items.ts';
 
 export function addRoute({
   needle,
