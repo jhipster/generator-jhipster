@@ -24,6 +24,7 @@ import { mutateDefaults } from '../../lib/utils/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { ClientApplicationGenerator } from '../client/generator.ts';
 import {
+  addIconImport,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
@@ -173,6 +174,27 @@ ${comment}
               contentToCheck: style,
             }),
           );
+        };
+
+        source.addIconImport = args => {
+          const ignoreNonExisting = this.ignoreNeedlesError && 'Icon imports not updated with icon';
+          this.editFile(`${application.clientSrcDir}app/config/icon-loader.ts`, { ignoreNonExisting }, addIconImport(args));
+        };
+
+        source.addItemToAccountMenu = ({ route, translationKey, name = '', icon }) => {
+          this.editFile(
+            `${application.clientSrcDir}app/shared/layout/menus/account.tsx`,
+            createNeedleCallback({
+              needle: 'add-element-to-account-menu',
+              contentToAdd: `<MenuItem icon="${icon ?? 'asterisk'}" to="/${route}">
+  ${application.enableTranslation ? `<Translate contentKey="${translationKey}">${name}</Translate>` : name}
+</MenuItem>`,
+              contentToCheck: `to="/${route}"`,
+            }),
+          );
+          if (icon) {
+            source.addIconImport!({ icon });
+          }
         };
 
         source.addEntitiesToClient = ({ application, entities }) => {

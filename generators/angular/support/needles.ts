@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import { joinCallbacks } from '../../base-core/support/write-files.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../../client/types.d.ts';
+
+export { addIconImport } from '../../client/support/needles.ts';
 
 export function addRoute({
   needle,
@@ -156,19 +157,6 @@ export const addItemToAccountMenu = (menu: MenuItem) =>
     needle: 'add-element-to-account-menu',
     ...menu,
   });
-
-export const addIconImport = ({ icon }: { icon: string }) => {
-  const iconImport = `fa${upperFirstCamelCase(icon)}`;
-  return createNeedleCallback({
-    needle: 'jhipster-needle-add-icon-import',
-    contentToCheck: new RegExp(String.raw`\b${iconImport}\b`),
-    contentToAdd: (content, { indentPrefix }) =>
-      content.replace(
-        /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
-        `\n${indentPrefix}${iconImport},\n${indentPrefix}// jhipster-needle-add-icon-import`,
-      ),
-  });
-};
 
 export function addToEntitiesMenu<const E extends ClientEntity, const A extends ClientApplication<E>>({
   application,

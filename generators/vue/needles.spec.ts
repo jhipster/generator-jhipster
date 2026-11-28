@@ -171,3 +171,52 @@ describe('needle API Vue: entities added to an application without entities serv
     );
   });
 });
+
+describe('needle API Vue: an item added to the account menu', () => {
+  before(() =>
+    helpers
+      .runJHipster('vue')
+      .withJHipsterConfig({
+        clientFramework: 'vue',
+        skipServer: true,
+      })
+      .withTask(
+        'postWriting',
+        asPostWritingTask<ClientEntity, ClientApplication>(function ({ source }) {
+          source.addItemToAccountMenu!({ route: 'about', translationKey: 'global.menu.about', name: 'About', icon: 'circle-info' });
+        }),
+      ),
+  );
+
+  it('adds the item before the account menu needle', () => {
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.vue`,
+      `
+          <b-dropdown-item to="/about" active-class="active">
+            <font-awesome-icon icon="circle-info" />
+            <span>{{ t$('global.menu.about') }}</span>
+          </b-dropdown-item>
+          <!-- jhipster-needle-add-element-to-account-menu`,
+    );
+  });
+
+  it('imports the icon and adds it to the library', () => {
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/config/config.ts`,
+      "import { faCircleInfo } from '@fortawesome/free-solid-svg-icons/faCircleInfo';",
+    );
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/config.ts`, /^ {4}faCircleInfo,$/m);
+  });
+
+  it('should bail on any file change adding the same item again', async () => {
+    await helpers
+      .runJHipsterInApplication('jhipster:vue')
+      .withTask(
+        'postWriting',
+        asPostWritingTask<ClientEntity, ClientApplication>(function ({ source }) {
+          source.addItemToAccountMenu!({ route: 'about', translationKey: 'global.menu.about', name: 'About', icon: 'circle-info' });
+        }),
+      )
+      .withOptions({ force: false });
+  });
+});

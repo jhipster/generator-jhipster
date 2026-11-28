@@ -27,6 +27,7 @@ import BaseApplicationGenerator from '../base-application/generator.ts';
 import type { Field } from '../base-application/types.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import {
+  addIconModuleImport,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
@@ -221,6 +222,28 @@ export default class VueGenerator extends VueApplicationGenerator {
       },
       prepareForTemplates({ application, source }) {
         application.prettierExtensions.push('html', 'vue', 'css', 'scss');
+
+        source.addIconImport = args => {
+          const ignoreNonExisting = this.ignoreNeedlesError && 'Icon imports not updated with icon';
+          this.editFile(`${application.clientSrcDir}app/config/config.ts`, { ignoreNonExisting }, addIconModuleImport(args));
+        };
+
+        source.addItemToAccountMenu = ({ route, translationKey, name = '', icon }) => {
+          this.editFile(
+            `${application.clientSrcDir}app/layouts/navbar/navbar.vue`,
+            createNeedleCallback({
+              needle: 'add-element-to-account-menu',
+              contentToAdd: `<b-dropdown-item to="/${route}" active-class="active">
+  <font-awesome-icon icon="${icon ?? 'asterisk'}" />
+  <span>${application.enableTranslation ? `{{ t$('${translationKey}') }}` : name}</span>
+</b-dropdown-item>`,
+              contentToCheck: `<b-dropdown-item to="/${route}"`,
+            }),
+          );
+          if (icon) {
+            source.addIconImport!({ icon });
+          }
+        };
 
         source.addEntitiesToClient = ({ application, entities }) => {
           const { enableTranslation } = application;
