@@ -35,6 +35,7 @@ export type DatabaseData = {
 
   constraintNameMaxLength?: number;
   tableNameMaxLength?: number;
+  columnNameMaxLength?: number;
 };
 
 export type getData = (options: {
@@ -121,6 +122,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
 
     constraintNameMaxLength: 64,
     tableNameMaxLength: 64,
+    columnNameMaxLength: 64,
   },
   [MYSQL]: {
     name: 'MySQL',
@@ -129,6 +131,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     hibernateDialect: 'org.hibernate.dialect.MySQL8Dialect',
     tableNameMaxLength: 64,
     constraintNameMaxLength: 64,
+    columnNameMaxLength: 64,
     port: ':3306/',
     defaultPort: 3306,
     extraOptions: '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true',
@@ -147,6 +150,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
 
     constraintNameMaxLength: 128,
     tableNameMaxLength: 128,
+    columnNameMaxLength: 128,
   },
   [POSTGRESQL]: {
     name: 'PostgreSQL',
@@ -157,6 +161,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     defaultPort: 5432,
     constraintNameMaxLength: 63,
     tableNameMaxLength: 63,
+    columnNameMaxLength: 63,
   },
   [H2_DISK]: {
     name: 'H2Disk',

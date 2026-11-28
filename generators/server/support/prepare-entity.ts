@@ -27,8 +27,6 @@ import type {
   Relationship as SpringBootRelationship,
 } from '../../spring-boot/types.d.ts';
 
-import { hibernateSnakeCase } from './string.ts';
-
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { COUCHBASE } = databaseTypes;
 
@@ -71,7 +69,7 @@ export function preparePostEntityServerDerivedProperties(
       if (!relationship.otherEntity.embedded) {
         (relationship as DatabaseRelationship).joinColumnNames = relationship.otherEntity.primaryKey!.fields.map(
           otherField =>
-            `${relationship.id && relationship.relationshipOneToOne ? '' : `${hibernateSnakeCase(relationship.relationshipName)}_`}${(otherField as DatabaseField).columnName}`,
+            `${relationship.id && relationship.relationshipOneToOne ? '' : `${(relationship as DatabaseRelationship).columnName}_`}${(otherField as DatabaseField).columnName}`,
         );
       }
     }
