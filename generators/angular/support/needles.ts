@@ -150,6 +150,13 @@ export const addItemToAdminMenu = (menu: MenuItem) =>
     ...menu,
   });
 
+/** An item at the end of the account menu, shown with or without an authenticated account. */
+export const addItemToAccountMenu = (menu: MenuItem) =>
+  addItemToMenu({
+    needle: 'add-element-to-account-menu',
+    ...menu,
+  });
+
 export const addIconImport = ({ icon }: { icon: string }) => {
   const iconImport = `fa${upperFirstCamelCase(icon)}`;
   return createNeedleCallback({

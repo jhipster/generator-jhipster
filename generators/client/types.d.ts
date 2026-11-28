@@ -60,6 +60,10 @@ export type Source = JavascriptSource &
     addAdminRoute?(args: Omit<Parameters<typeof addRoute>[0], 'needle'>): void;
     addItemToAdminMenu?(args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>): void;
     /**
+     * Add an item at the end of the account menu, shown with or without an authenticated account.
+     */
+    addItemToAccountMenu?(args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>): void;
+    /**
      * Add webpack config.
      *
      * @deprecated webpack is not supported by any client framework anymore.

@@ -37,6 +37,7 @@ import {
   addAdminEntitiesRoute,
   addEntitiesRoute,
   addIconImport,
+  addItemToAccountMenu,
   addItemToAdminMenu,
   type addItemToMenu,
   addRoute,
@@ -218,6 +219,20 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           this.editFile(
             `${application.clientSrcDir}app/layouts/navbar/navbar.html`,
             addItemToAdminMenu({
+              enableTranslation: application.enableTranslation,
+              jhiPrefix: application.jhiPrefix,
+              ...args,
+            }),
+          );
+          if (args.icon) {
+            source.addIconImport!({ icon: args.icon });
+          }
+        };
+
+        source.addItemToAccountMenu = (args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>) => {
+          this.editFile(
+            `${application.clientSrcDir}app/layouts/navbar/navbar.html`,
+            addItemToAccountMenu({
               enableTranslation: application.enableTranslation,
               jhiPrefix: application.jhiPrefix,
               ...args,

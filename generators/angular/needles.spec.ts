@@ -43,6 +43,7 @@ const postWritingTask = asPostWritingEntitiesTask<AngularEntity, AngularApplicat
       } as AngularEntity,
     ],
   });
+  source.addItemToAccountMenu!({ route: 'about', translationKey: 'global.menu.about', name: 'About', icon: 'circle-info' });
 });
 
 describe('needle API Angular generator : JHipster with blueprint', () => {
@@ -67,6 +68,22 @@ describe('needle API Angular generator : JHipster with blueprint', () => {
             </li>
 `,
     );
+  });
+
+  it('account menu contains the item added by needle api, before the needle', () => {
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`,
+      `
+          }
+          <li>
+            <a class="dropdown-item" routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+              <fa-icon icon="circle-info" [fixedWidth]="true" />
+              <span jhiTranslate="global.menu.about">About</span>
+            </a>
+          </li>
+          <!-- jhipster-needle-add-element-to-account-menu`,
+    );
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, 'faCircleInfo,');
   });
 
   it('entity module contains the microservice object added by needle api', () => {
