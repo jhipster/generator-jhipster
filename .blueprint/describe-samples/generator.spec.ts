@@ -57,6 +57,7 @@ describe(`generator - ${generator}`, () => {
         'generate-blueprint',
         'daily-couchbase',
         'daily-elasticsearch',
+        'daily-liquibase',
         'daily-monolith-oauth2',
         'daily-ms-jwt',
         'daily-ms-oauth2',

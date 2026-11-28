@@ -1,0 +1,8 @@
+{
+  "include": [
+    {
+      "name": "gradle-liquibase",
+      "entity": "sql"
+    }
+  ]
+}
