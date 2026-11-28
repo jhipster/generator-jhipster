@@ -179,6 +179,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "listOrFlux": "List",
   "listOrFluxClassPath": "java.util.List",
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
+  "loopbackAddress": "127.0.0.1",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
   "messageBroker": "no",

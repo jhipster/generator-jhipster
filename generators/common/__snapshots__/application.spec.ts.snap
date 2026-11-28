@@ -23,6 +23,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "gatewayServerPort": 8080,
   "generateInMemoryUserCredentials": false,
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
+  "loopbackAddress": "127.0.0.1",
   "serverPort": 8081,
   "srcMain": "src/main/",
   "srcTest": "src/test/",
