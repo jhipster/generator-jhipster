@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import lowerFirst from 'lodash-es/lowerFirst.js';
-import pluralizeString from 'pluralize';
 
 // The string functions of lodash-es, each imported from its own module.
 export { default as camelCase } from 'lodash-es/camelCase.js';
@@ -30,6 +29,8 @@ export { default as padEnd } from 'lodash-es/padEnd.js';
 export { default as snakeCase } from 'lodash-es/snakeCase.js';
 export { default as startCase } from 'lodash-es/startCase.js';
 export { default as upperFirst } from 'lodash-es/upperFirst.js';
+// The plural of pluralize: a word with no distinct plural, like data, keeps its singular form.
+export { default as pluralize } from 'pluralize';
 
 export function customCamelCase(string: string): string {
   checkStringIsValid(string);
@@ -43,15 +44,4 @@ function checkStringIsValid(string: string) {
   if (string == null) {
     throw new Error('The passed string cannot be nil.');
   }
-}
-
-/**
- * Pluralizes a string. If the plural is the same as the singular, it adds an "s" or "es" suffix at the end of the string to avoid conflicts.
- */
-export function pluralize(string: string, { force }: { force: boolean }): string {
-  const plural = pluralizeString(string);
-  if (plural === string && force) {
-    return string.endsWith('s') ? `${string}es` : `${string}s`;
-  }
-  return plural;
 }
