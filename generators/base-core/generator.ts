@@ -203,12 +203,6 @@ export default class CoreGenerator<
 
   #jhipsterGeneratorRelativePath_?: string;
 
-  /**
-   * The tasks of a JHipster generator are its priorities: a generator without one is not an empty generator for yeoman, like a
-   * generator that delegates its tasks to a blueprint.
-   */
-  override customLifecycle = true;
-
   // Override the type of `env` to be a full Environment
   declare env: Environment;
   declare log: Logger;

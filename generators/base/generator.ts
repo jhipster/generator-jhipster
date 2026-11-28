@@ -186,6 +186,12 @@ export default class BaseGenerator<
   }
 
   /**
+   * The tasks of a generator are its priorities: a generator without one, like a generator that delegates its tasks to a
+   * blueprint, is not an empty generator for yeoman.
+   */
+  override customLifecycle = true;
+
+  /**
    * A bootstrap generator: a part of its namespace after the package has bootstrap, like jhipster:bootstrap,
    * jhipster:server:bootstrap or jhipster:base-application:database-bootstrap.
    */
