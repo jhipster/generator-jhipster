@@ -19,7 +19,7 @@
 import type { ComposeOptions } from 'yeoman-generator';
 
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
-import { finalizeMutations, mutateDefaults } from '../../lib/utils/index.ts';
+import { mutateDefaults } from '../../lib/utils/index.ts';
 import BaseGenerator from '../base/index.ts';
 import { POST_WRITING_OBJECTS, PRIORITY_NAMES, QUEUES, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask, TaskGroup } from '../base-core/types.ts';
@@ -107,20 +107,7 @@ export default class BaseSimpleApplicationGenerator<
     // before its own tasks, once by the folder of the application (a workspace has one for each of its applications), it
     // runs before every post preparing task of the application.
     this.on('before:queueOwnTasks', () => {
-      this.queueTask({
-        queueName: QUEUES.POST_PREPARING_QUEUE,
-        taskName: `${this.destinationRoot()}#finalizeApplicationMutations`,
-        once: true,
-        // The arguments of the priority would read the application, creating it in a folder without one.
-        args: [],
-        method: () => {
-          // Read without creating it: a generator composed in the folder of an application of a blueprint has none.
-          const application = this.env.getContextMap(this.destinationRoot()).get(CONTEXT_DATA_APPLICATION_KEY);
-          if (application) {
-            finalizeMutations(application);
-          }
-        },
-      });
+      this.queueMutationsFinalization(QUEUES.POST_PREPARING_QUEUE);
     });
   }
 
@@ -133,8 +120,11 @@ export default class BaseSimpleApplicationGenerator<
   }
 
   get #application(): Application {
-    return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () => this.enableDelayedMutations({} as Application, { autoDelay: true }),
+    // Declared each time it is read, as one created by another generator or by a test of the folder too: its delayed
+    // defaults are applied once every generator prepared it, at the start of postPreparing.
+    return this.enableDelayedMutations(this.getContextData(CONTEXT_DATA_APPLICATION_KEY, { factory: () => ({}) as Application }), {
+      autoDelay: true,
+      finalizeAt: QUEUES.POST_PREPARING_QUEUE,
     });
   }
 
