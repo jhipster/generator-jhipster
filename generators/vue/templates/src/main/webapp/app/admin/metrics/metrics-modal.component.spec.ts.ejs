@@ -58,11 +58,11 @@ describe('MetricsModal', () => {
     const wrapper = shallowMount(MetricsModal, { props: { details } });
     expect(wrapper.text()).not.toContain('a line');
 
-    await wrapper.find('a').trigger('click');
+    await wrapper.find('h6 button').trigger('click');
     expect(wrapper.text()).toContain('a line');
-    expect(wrapper.find('a').text()).toBe('Hide');
+    expect(wrapper.find('h6 button').text()).toBe('Hide');
 
-    await wrapper.find('a').trigger('click');
+    await wrapper.find('h6 button').trigger('click');
     expect(wrapper.text()).not.toContain('a line');
   });
 
