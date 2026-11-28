@@ -789,6 +789,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/content/js/loading-error.js": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
@@ -1805,6 +1808,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/content/js/loading-error.js": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
@@ -2718,6 +2724,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/content/js/loading-error.js": {
     "stateCleared": "modified",
   },
   "clientRoot/src/content/scss/_bootstrap-variables.scss": {
@@ -3720,6 +3729,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/js/loading-error.js": {
     "stateCleared": "modified",
   },
   "src/main/webapp/content/scss/_bootstrap-variables.scss": {
@@ -4813,6 +4825,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/content/js/loading-error.js": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
@@ -5691,6 +5706,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/js/loading-error.js": {
     "stateCleared": "modified",
   },
   "src/main/webapp/content/scss/_bootstrap-variables.scss": {
@@ -6579,6 +6597,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/js/loading-error.js": {
     "stateCleared": "modified",
   },
   "src/main/webapp/content/scss/_bootstrap-variables.scss": {

@@ -111,17 +111,6 @@
     <noscript>
       <h1>You must enable JavaScript to view this page.</h1>
     </noscript>
-    <script type="text/javascript">
-      // show an error message if the app loading takes more than 4 sec
-      window.onload = function () {
-        setTimeout(showError, 4000);
-      };
-      function showError() {
-        const errorElm = document.getElementById('jhipster-error');
-        if (errorElm?.style) {
-          errorElm.style.display = 'block';
-        }
-      }
-    </script>
+    <script type="module" src="/content/js/loading-error.js"></script>
   </body>
 </html>
