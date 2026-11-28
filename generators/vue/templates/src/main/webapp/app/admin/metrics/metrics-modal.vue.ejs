@@ -16,9 +16,9 @@
       <h6>
         <span class="badge" :class="`bg-${item.status}`">{{ item.value }}</span
         >&nbsp;{{ item.title }}
-        <a v-if="item.lines.length > 0" @click="toggle(item.title)" href="javascript:void(0);">
+        <button v-if="item.lines.length > 0" type="button" class="btn btn-link p-0 align-baseline" @click="toggle(item.title)">
           {{ labelText(shownItems.has(item.title) ? details.hideLines : details.showLines) }}
-        </a>
+        </button>
       </h6>
       <div v-if="shownItems.has(item.title)" class="card">
         <div class="card-body">

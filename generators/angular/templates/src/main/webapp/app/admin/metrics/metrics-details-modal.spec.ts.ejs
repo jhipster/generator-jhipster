@@ -87,7 +87,7 @@ describe('MetricsDetailsModal', () => {
 
   it('should render the items', async () => {
     await fixture.whenStable();
-    (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>('h6 a')!.click();
+    (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('h6 button')!.click();
     await fixture.whenStable();
 
     const text = (fixture.nativeElement as HTMLElement).textContent;

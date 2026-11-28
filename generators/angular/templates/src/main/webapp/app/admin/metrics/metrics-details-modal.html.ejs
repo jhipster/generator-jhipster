@@ -47,13 +47,13 @@
           &nbsp;{{ item.title }}
 
           @if (item.lines.length > 0) {
-            <a (click)="toggle(item.title)" href="javascript:void(0);">
+            <button type="button" class="btn btn-link p-0 align-baseline" (click)="toggle(item.title)">
               @if (shownItems().has(item.title)) {
                 {{ <%- labelText('modalDetails.hideLines') %> }}
               } @else {
                 {{ <%- labelText('modalDetails.showLines') %> }}
               }
-            </a>
+            </button>
           }
         </h6>
 

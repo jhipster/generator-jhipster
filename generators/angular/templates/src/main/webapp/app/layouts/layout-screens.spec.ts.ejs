@@ -109,7 +109,7 @@ describe('Layout screens', () => {
       expect(fixture.nativeElement.querySelector('[data-cy="language-aa"]').textContent.trim()).toBe('Language A');
       expect(fixture.nativeElement.querySelector('[data-cy="language-bb"]').textContent.trim()).toBe('Language B');
 
-      await clickAll(fixture, '[data-cy="navbar"] a, a.dropdown-item');
+      await clickAll(fixture, '[data-cy="navbar"] a, [data-cy="navbar"] button');
 
       expect(use).toHaveBeenCalledWith('aa');
       expect(use).toHaveBeenCalledWith('bb');

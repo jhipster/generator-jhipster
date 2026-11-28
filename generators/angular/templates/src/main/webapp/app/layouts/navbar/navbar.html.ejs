@@ -23,16 +23,16 @@
     <span class="navbar-title">__jhiTranslateTag__('global.title')</span>
     <span class="navbar-version">{{ version }}</span>
   </a>
-  <a
+  <button
+    type="button"
     class="navbar-toggler d-lg-none"
-    href="javascript:void(0);"
     aria-controls="navbarResponsive"
     [attr.aria-expanded]="!isNavbarCollapsed()"
     aria-label="Toggle navigation"
     (click)="isNavbarCollapsed.update(isNavbarCollapsed => !isNavbarCollapsed)"
   >
     <fa-icon icon="bars" />
-  </a>
+  </button>
   <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed()">
     <ul class="navbar-nav ms-auto">
       <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
@@ -52,12 +52,12 @@
           [routerLinkActiveOptions]="{ exact: true }"
           data-cy="entity"
         >
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+          <button type="button" class="nav-link dropdown-toggle" ngbDropdownToggle id="entity-menu">
             <span>
               <fa-icon icon="table-list" />
               <span>__jhiTranslateTag__('global.menu.entities.main')</span>
             </span>
-          </a>
+          </button>
           <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
             <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
 <%_ if (microfrontend) { _%>
@@ -100,12 +100,12 @@
         [routerLinkActiveOptions]="{ exact: true }"
         data-cy="adminMenu"
       >
-        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
+        <button type="button" class="nav-link dropdown-toggle" ngbDropdownToggle id="admin-menu">
           <span>
             <fa-icon icon="users-gear" />
             <span>__jhiTranslateTag__('global.menu.admin.main')</span>
           </span>
-        </a>
+        </button>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
           <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
@@ -175,16 +175,16 @@
 <%_ if (enableTranslation) { _%>
     @if (languages.length > 1) {
       <li ngbDropdown class="nav-item dropdown pointer" display="static" data-cy="languageMenu">
-        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
+        <button type="button" class="nav-link dropdown-toggle" ngbDropdownToggle id="languagesnavBarDropdown">
           <span>
             <fa-icon icon="flag" />
             <span>__jhiTranslateTag__('global.menu.language')</span>
           </span>
-        </a>
+        </button>
         <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
         @for (language of languages; track language) {
           <li>
-            <a class="dropdown-item" [attr.data-cy]="'language-' + language" [<%- jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
+            <button type="button" class="dropdown-item" [attr.data-cy]="'language-' + language" [<%- jhiPrefix %>ActiveMenu]="language" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</button>
           </li>
         }
         </ul>
@@ -193,7 +193,7 @@
 <%_ } _%>
       <li ngbDropdown class="nav-item dropdown pointer" display="static" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" data-cy="accountMenu">
         @let accountRef = account();
-        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
+        <button type="button" class="nav-link dropdown-toggle" ngbDropdownToggle id="account-menu">
         @if (!accountRef?.imageUrl) {
           <span>
             <fa-icon icon="user" />
@@ -204,7 +204,7 @@
             <img [src]="accountRef.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
           </span>
         }
-        </a>
+        </button>
         <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="account-menu">
           @if (accountRef !== null) {
 <%_ if (generateUserManagement) { _%>
