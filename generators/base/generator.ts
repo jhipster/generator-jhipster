@@ -210,16 +210,24 @@ export default class BaseGenerator<
 
   /**
    * Override yeoman-generator method to delegate the tasks to the blueprint: a generator of JHipster that composed a blueprint
-   * replacing it (not side-by-side) queues only the tasks of its undelegated priorities, whatever its priority getters return.
+   * replacing it (not side-by-side) extracts only the tasks of its undelegated priorities, whatever its priority getters return.
+   * Every task group is extracted here, the ones queued by priority name and the ones of the entities base-application queues.
    */
-  override getTaskNames(): string[] {
-    const taskNames = super.getTaskNames();
-    // A bootstrap, like jhipster:server:bootstrap, prepares the data the other generators read: its blueprint complements it.
-    if (!this.delegateToBlueprint || this.features.autoDelegateToBlueprint === false || this.#isBootstrapGenerator()) {
-      return taskNames;
-    }
+  override extractTasksFromPriority(
+    ...args: Parameters<CoreGenerator['extractTasksFromPriority']>
+  ): ReturnType<CoreGenerator['extractTasksFromPriority']> {
+    const [priorityName] = args;
     const undelegatedPriorities = (this.constructor as typeof BaseGenerator).undelegatedPriorities ?? [];
-    return taskNames.filter(taskName => undelegatedPriorities.includes(taskName));
+    if (
+      this.delegateToBlueprint &&
+      this.features.autoDelegateToBlueprint !== false &&
+      // A bootstrap, like jhipster:server:bootstrap, prepares the data the other generators read: its blueprint complements it.
+      !this.#isBootstrapGenerator() &&
+      !undelegatedPriorities.includes(priorityName)
+    ) {
+      return [];
+    }
+    return super.extractTasksFromPriority(...args);
   }
 
   /**

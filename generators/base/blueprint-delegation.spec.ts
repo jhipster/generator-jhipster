@@ -19,6 +19,8 @@
 
 import { before, describe, exnode, expect, it } from 'expect-node';
 
+import BaseApplicationGenerator from '../base-application/index.ts';
+
 import BaseGenerator from './index.ts';
 
 import { defaultHelpers as helpers } from '#testing';
@@ -140,4 +142,40 @@ describe('generator - base - automatic delegation to the blueprint', () => {
       });
     });
   }
+});
+
+describe('generator - base - automatic delegation of the entities priorities to the blueprint', () => {
+  const writingEntities = exnode.fn();
+  const blueprintWritingEntities = exnode.fn();
+
+  // A generator of JHipster whose entities priority getter does not call delegateTasksToBlueprint.
+  class EntitiesTestGenerator extends BaseApplicationGenerator {
+    async beforeQueue() {
+      await this.composeWithBlueprints();
+    }
+
+    get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+      return this.asWritingEntitiesTaskGroup({ writing: () => writingEntities() });
+    }
+  }
+
+  class EntitiesBlueprintTestGenerator extends BaseApplicationGenerator {
+    get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+      return this.asWritingEntitiesTaskGroup({ writing: () => blueprintWritingEntities() });
+    }
+  }
+
+  before(() =>
+    helpers
+      .run(EntitiesTestGenerator, { namespace: 'jhipster:entities-delegation-test' })
+      .withJHipsterGenerators({ useDefaultMocks: true })
+      .withGenerators([[EntitiesBlueprintTestGenerator, { namespace: 'jhipster-foo:entities-delegation-test' }]])
+      .withJHipsterConfig({}, [{ name: 'One', fields: [{ fieldName: 'name', fieldType: 'String' }] }])
+      .withOptions({ blueprint: ['foo'] }),
+  );
+
+  it('runs the entities tasks of the blueprint only', () => {
+    expect(blueprintWritingEntities).toHaveBeenCalledTimes(1);
+    expect(writingEntities).not.toHaveBeenCalled();
+  });
 });
