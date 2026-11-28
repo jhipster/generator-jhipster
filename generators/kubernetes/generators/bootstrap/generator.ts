@@ -71,7 +71,7 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get preparing() {
@@ -83,7 +83,7 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
   }
 
   get [BaseWorkspacesGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get configuringWorkspaces() {
@@ -104,7 +104,7 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
   }
 
   get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
+    return this.configuringWorkspaces;
   }
 
   get loadingWorkspaces() {
@@ -137,7 +137,7 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
   }
 
   get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
+    return this.loadingWorkspaces;
   }
 
   get preparingWorkspaces() {
@@ -205,6 +205,6 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
   }
 
   get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
+    return this.preparingWorkspaces;
   }
 }

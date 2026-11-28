@@ -41,7 +41,7 @@ export default class JavaSimpleApplicationPrettierGenerator extends JavascriptSi
   }
 
   get [JavascriptSimpleApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postWriting() {
@@ -63,6 +63,6 @@ export default class JavaSimpleApplicationPrettierGenerator extends JavascriptSi
   }
 
   get [JavascriptSimpleApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

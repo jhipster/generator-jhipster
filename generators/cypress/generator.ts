@@ -63,7 +63,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get preparing() {
@@ -87,7 +87,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postPreparing() {
@@ -134,7 +134,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
   }
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
+    return this.postPreparing;
   }
 
   get postPreparingEachEntity() {
@@ -148,7 +148,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get writing() {
@@ -190,7 +190,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -220,7 +220,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -360,6 +360,6 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

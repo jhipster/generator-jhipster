@@ -49,7 +49,7 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get composing() {
@@ -63,6 +63,6 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 }

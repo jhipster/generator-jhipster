@@ -109,7 +109,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
   }
 
   get [BaseSimpleApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get prompting() {
@@ -192,7 +192,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
   }
 
   get [BaseSimpleApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
+    return this.prompting;
   }
 
   get loading() {
@@ -211,7 +211,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
   }
 
   get [BaseSimpleApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+    return this.loading;
   }
 
   get default() {
@@ -473,7 +473,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
   }
 
   get [BaseSimpleApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get writing() {
@@ -513,7 +513,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
   }
 
   get [BaseSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get end() {
@@ -609,7 +609,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
   }
 
   get [BaseSimpleApplicationGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 
   /**

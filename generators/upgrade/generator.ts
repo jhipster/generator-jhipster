@@ -156,7 +156,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get default() {
@@ -268,7 +268,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   }
 
   get [BaseGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get end() {
@@ -284,7 +284,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   }
 
   get [BaseGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 
   async rmRf(file: string) {

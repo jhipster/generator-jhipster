@@ -166,7 +166,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   get [BaseEntityChangesGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get configuringEachEntity() {
@@ -185,7 +185,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   get [BaseEntityChangesGenerator.CONFIGURING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
+    return this.configuringEachEntity;
   }
 
   get preparingEachEntityField() {
@@ -206,7 +206,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   get [BaseEntityChangesGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get preparingEachEntityRelationship() {
@@ -221,7 +221,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   get [BaseEntityChangesGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+    return this.preparingEachEntityRelationship;
   }
 
   get postPreparingEachEntity() {
@@ -231,7 +231,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   get [BaseEntityChangesGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get default() {
@@ -343,7 +343,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   get [BaseEntityChangesGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get writing() {
@@ -361,7 +361,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   get [BaseEntityChangesGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -373,7 +373,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   get [BaseEntityChangesGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -600,7 +600,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   get [BaseEntityChangesGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get postWritingEntities() {
@@ -629,7 +629,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   get [BaseEntityChangesGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+    return this.postWritingEntities;
   }
 
   protected override prepareEntityForComparison(entity: LiquibaseEntity): void {

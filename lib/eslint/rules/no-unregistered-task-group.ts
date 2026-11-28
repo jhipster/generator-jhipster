@@ -51,7 +51,7 @@ const rule: Rule.RuleModule = {
     schema: [],
     messages: {
       unregistered:
-        "'{{ name }}' never runs: the generator looks its tasks up by the priority prefix, so declare the getter of the priority that returns it, like `get [BaseApplicationGenerator.{{ constant }}]() { return this.delegateTasksToBlueprint(() => this.{{ name }}); }`, or remove it.",
+        "'{{ name }}' never runs: the generator looks its tasks up by the priority prefix, so declare the getter of the priority that returns it, like `get [BaseApplicationGenerator.{{ constant }}]() { return this.{{ name }}; }`, or remove it.",
     },
   },
   create(context) {

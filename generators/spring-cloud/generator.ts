@@ -71,7 +71,7 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -86,7 +86,7 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postWriting() {
@@ -138,6 +138,6 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

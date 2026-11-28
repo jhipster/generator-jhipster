@@ -46,7 +46,7 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
   }
 
   get [BaseSimpleApplicationGenerator.COMPOSING_BOOTSTRAP]() {
-    return this.delegateTasksToBlueprint(() => this.composingBootstrap);
+    return this.composingBootstrap;
   }
 
   get preparing() {
@@ -68,7 +68,7 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
   }
 
   get [BaseSimpleApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get writing() {
@@ -90,7 +90,7 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
   }
 
   get [BaseSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -115,7 +115,7 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
   }
 
   get [BaseSimpleApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   shouldAskForPrompts() {

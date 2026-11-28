@@ -66,7 +66,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get configuring() {
@@ -110,7 +110,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get [BaseWorkspacesGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composing() {
@@ -144,7 +144,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get [BaseWorkspacesGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -156,7 +156,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get [BaseWorkspacesGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get configuringWorkspaces() {
@@ -170,7 +170,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
+    return this.configuringWorkspaces;
   }
 
   get loadingWorkspaces() {
@@ -184,7 +184,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
+    return this.loadingWorkspaces;
   }
 
   get writing() {
@@ -199,7 +199,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -299,7 +299,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get [BaseWorkspacesGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   getOtherScripts() {

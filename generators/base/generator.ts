@@ -186,7 +186,54 @@ export default class BaseGenerator<
   }
 
   /**
+   * The tasks of a generator are its priorities: a generator without one, like a generator that delegates its tasks to a
+   * blueprint, is not an empty generator for yeoman.
+   */
+  override customLifecycle = true;
+
+  /**
+   * A bootstrap generator: a part of its namespace after the package has bootstrap, like jhipster:bootstrap,
+   * jhipster:server:bootstrap or jhipster:base-application:database-bootstrap.
+   */
+  #isBootstrapGenerator(): boolean {
+    return this._namespace
+      .split(':')
+      .slice(1)
+      .some(part => part.includes('bootstrap'));
+  }
+
+  /**
+   * The priorities a generator still runs when it delegates its tasks to a blueprint, like a preparation of the data other
+   * generators read.
+   */
+  static undelegatedPriorities?: string[];
+
+  /**
+   * Override yeoman-generator method to delegate the tasks to the blueprint: a generator of JHipster that composed a blueprint
+   * replacing it (not side-by-side) extracts only the tasks of its undelegated priorities, whatever its priority getters return.
+   * Every task group is extracted here, the ones queued by priority name and the ones of the entities base-application queues.
+   */
+  override extractTasksFromPriority(
+    ...args: Parameters<CoreGenerator['extractTasksFromPriority']>
+  ): ReturnType<CoreGenerator['extractTasksFromPriority']> {
+    const [priorityName] = args;
+    const undelegatedPriorities = (this.constructor as typeof BaseGenerator).undelegatedPriorities ?? [];
+    if (
+      this.delegateToBlueprint &&
+      this.features.autoDelegateToBlueprint !== false &&
+      // A bootstrap, like jhipster:server:bootstrap, prepares the data the other generators read: its blueprint complements it.
+      !this.#isBootstrapGenerator() &&
+      !undelegatedPriorities.includes(priorityName)
+    ) {
+      return [];
+    }
+    return super.extractTasksFromPriority(...args);
+  }
+
+  /**
    * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
+   *
+   * @deprecated a generator delegates its tasks to a blueprint replacing it without it, see extractTasksFromPriority.
    */
   delegateTasksToBlueprint<TaskGroupType extends TaskGroup<PropertyKey>>(tasksGetter: () => TaskGroupType): TaskGroupType {
     return this.delegateToBlueprint ? ({} as TaskGroupType) : tasksGetter();

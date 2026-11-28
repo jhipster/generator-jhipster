@@ -85,7 +85,7 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get preparing() {
@@ -100,7 +100,7 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
   }
 
   get [BaseGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get writing() {
@@ -112,7 +112,7 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
   }
 
   get [BaseGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -127,7 +127,7 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
   }
 
   get [BaseGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get end() {
@@ -191,7 +191,7 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
   }
 
   get [BaseGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 
   async initializeGitRepository() {

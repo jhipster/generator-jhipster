@@ -51,7 +51,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postPreparing() {
@@ -72,7 +72,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
+    return this.postPreparing;
   }
 
   get writing() {
@@ -100,7 +100,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -335,7 +335,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   useNpmWrapperInstallTask() {

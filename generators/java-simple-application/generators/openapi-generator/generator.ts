@@ -56,7 +56,7 @@ export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator 
   }
 
   get [JavaApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -135,6 +135,6 @@ export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator 
   }
 
   get [JavaApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

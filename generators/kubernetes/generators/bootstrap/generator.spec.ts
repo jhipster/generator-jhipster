@@ -27,5 +27,5 @@ const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basenam
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
-  describe('blueprint support', () => testBlueprintSupport(generator));
+  describe('blueprint support', () => testBlueprintSupport(generator, { bootstrapGenerator: true }));
 });

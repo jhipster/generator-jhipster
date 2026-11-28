@@ -96,6 +96,6 @@ export default class RestDomainGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 }

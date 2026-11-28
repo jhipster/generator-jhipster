@@ -77,7 +77,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
   }
 
   get [BaseSimpleApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get preparing() {
@@ -175,7 +175,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
   }
 
   get [BaseSimpleApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get writing() {
@@ -195,7 +195,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
   }
 
   get [BaseSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -212,6 +212,6 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
   }
 
   get [BaseSimpleApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

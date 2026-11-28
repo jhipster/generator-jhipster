@@ -89,7 +89,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get configuringWorkspaces() {
@@ -103,7 +103,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
   }
 
   get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
+    return this.configuringWorkspaces;
   }
 
   get preparingWorkspaces() {
@@ -113,7 +113,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
   }
 
   get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
+    return this.preparingWorkspaces;
   }
 
   get writing() {
@@ -161,7 +161,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get end() {
@@ -211,7 +211,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
   }
 
   get [BaseWorkspacesGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 
   /**

@@ -54,7 +54,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composing() {
@@ -74,7 +74,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -95,7 +95,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get default() {
@@ -129,7 +129,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -168,7 +168,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -337,7 +337,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -355,7 +355,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get postWritingEntities() {
@@ -378,7 +378,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+    return this.postWritingEntities;
   }
 
   migrateLanguages(languagesToMigrate: Record<string, string>) {

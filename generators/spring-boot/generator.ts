@@ -138,7 +138,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composing() {
@@ -227,7 +227,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get composingComponent() {
@@ -248,7 +248,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
   }
 
   get [BaseApplicationGenerator.COMPOSING_COMPONENT]() {
-    return this.delegateTasksToBlueprint(() => this.composingComponent);
+    return this.composingComponent;
   }
 
   get preparing() {
@@ -468,7 +468,7 @@ ${classProperties
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postPreparing() {
@@ -486,7 +486,7 @@ ${classProperties
   }
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
+    return this.postPreparing;
   }
 
   get preparingEachEntity() {
@@ -520,7 +520,7 @@ ${classProperties
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityField() {
@@ -560,7 +560,7 @@ ${classProperties
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get preparingEachEntityRelationship() {
@@ -597,7 +597,7 @@ ${classProperties
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+    return this.preparingEachEntityRelationship;
   }
 
   get postPreparingEachEntity() {
@@ -729,7 +729,7 @@ ${classProperties
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get default() {
@@ -751,7 +751,7 @@ ${classProperties
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get writing() {
@@ -803,7 +803,7 @@ ${classProperties
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -813,7 +813,7 @@ ${classProperties
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -1145,7 +1145,7 @@ if (os.isMacOsX() && !arch.isAmd64()) {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get end() {
@@ -1181,6 +1181,6 @@ in your ${chalk.yellow.bold(`${application.srcMainResources}config/application.y
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 }

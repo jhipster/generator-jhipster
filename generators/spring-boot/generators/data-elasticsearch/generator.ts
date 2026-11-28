@@ -48,7 +48,7 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
   }
 
   get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityRelationship() {
@@ -63,7 +63,7 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
   }
 
   get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+    return this.preparingEachEntityRelationship;
   }
 
   get writing() {
@@ -83,7 +83,7 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
   }
 
   get [SpringBootApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -94,7 +94,7 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
   }
 
   get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -137,6 +137,6 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
   }
 
   get [SpringBootApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

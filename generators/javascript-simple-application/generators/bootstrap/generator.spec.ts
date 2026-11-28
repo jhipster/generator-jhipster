@@ -30,7 +30,7 @@ const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basenam
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
-  describe('blueprint support', () => testBlueprintSupport(generator));
+  describe('blueprint support', () => testBlueprintSupport(generator, { bootstrapGenerator: true }));
 
   for (const [name, config] of Object.entries(fromMatrix({ packageJsonNodeEngine: [true, false, 'customVersion'] }))) {
     describe(name, () => {

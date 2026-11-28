@@ -40,7 +40,7 @@ export default class SpringBootWebsocketGenerator extends SpringBootApplicationG
   }
 
   get [SpringBootApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -53,6 +53,6 @@ export default class SpringBootWebsocketGenerator extends SpringBootApplicationG
   }
 
   get [SpringBootApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

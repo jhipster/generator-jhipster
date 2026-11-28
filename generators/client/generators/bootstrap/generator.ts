@@ -63,7 +63,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.COMPOSING_BOOTSTRAP]() {
-    return this.delegateTasksToBlueprint(() => this.composingBootstrap);
+    return this.composingBootstrap;
   }
 
   get preparing() {
@@ -123,7 +123,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityField() {
@@ -139,7 +139,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get postPreparingEachEntity() {
@@ -169,7 +169,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get default() {

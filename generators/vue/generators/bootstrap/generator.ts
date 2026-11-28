@@ -86,6 +86,6 @@ export default class VueBootstrapGenerator extends VueApplicationGenerator {
   }
 
   get [VueApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 }

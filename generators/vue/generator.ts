@@ -167,7 +167,7 @@ export default class VueGenerator extends VueApplicationGenerator {
   }
 
   get [VueApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composing() {
@@ -183,7 +183,7 @@ export default class VueGenerator extends VueApplicationGenerator {
   }
 
   get [VueApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -329,7 +329,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   }
 
   get [VueApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postPreparing() {
@@ -343,7 +343,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   }
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
+    return this.postPreparing;
   }
 
   get preparingEachEntityField() {
@@ -366,7 +366,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get postPreparingEachEntity() {
@@ -431,7 +431,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get default() {
@@ -474,7 +474,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   }
 
   get [VueApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get writing() {
@@ -558,7 +558,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   }
 
   get [VueApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -570,7 +570,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   }
 
   get [VueApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -659,7 +659,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   }
 
   get [VueApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get postWritingEntities() {
@@ -669,7 +669,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   }
 
   get [VueApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+    return this.postWritingEntities;
   }
 
   get end() {
@@ -686,7 +686,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   }
 
   get [VueApplicationGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 
   /**

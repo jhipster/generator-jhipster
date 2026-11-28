@@ -37,7 +37,7 @@ export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplic
   }
 
   get [JavascriptSimpleApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+    return this.loading;
   }
 
   get preparing() {
@@ -65,6 +65,6 @@ export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplic
   }
 
   get [JavascriptSimpleApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 }

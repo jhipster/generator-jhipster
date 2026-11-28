@@ -144,7 +144,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<EntityEnti
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get prompting() {
@@ -155,7 +155,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<EntityEnti
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
+    return this.prompting;
   }
 
   get postPreparing() {
@@ -266,7 +266,7 @@ The entity ${entityName} is being created.
   }
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
+    return this.postPreparing;
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -279,7 +279,7 @@ The entity ${entityName} is being created.
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 
   /**

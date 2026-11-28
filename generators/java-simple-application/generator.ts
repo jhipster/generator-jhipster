@@ -72,7 +72,7 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
   }
 
   get [JavaSimpleApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+    return this.initializing;
   }
 
   get configuring() {
@@ -100,7 +100,7 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
   }
 
   get [JavaSimpleApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composing() {
@@ -112,7 +112,7 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
   }
 
   get [JavaSimpleApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get loading() {
@@ -126,7 +126,7 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
   }
 
   get [JavaSimpleApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+    return this.loading;
   }
 
   get default() {
@@ -180,7 +180,7 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
   }
 
   get [JavaSimpleApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get writing() {
@@ -202,7 +202,7 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
   }
 
   get [JavaSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   /**

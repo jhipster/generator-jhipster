@@ -45,6 +45,6 @@ export default class CiCdGithubGenerator extends BaseSimpleApplicationGenerator<
   }
 
   get [BaseSimpleApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 }

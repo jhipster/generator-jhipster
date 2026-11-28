@@ -111,7 +111,7 @@ export default class ReactGenerator extends ReactApplicationGenerator {
   }
 
   get [ReactApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composing() {
@@ -129,7 +129,7 @@ export default class ReactGenerator extends ReactApplicationGenerator {
   }
 
   get [ReactApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -234,7 +234,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postPreparing() {
@@ -248,7 +248,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
+    return this.postPreparing;
   }
 
   get preparingEachEntity() {
@@ -263,7 +263,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityField() {
@@ -291,7 +291,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get postPreparingEachEntity() {
@@ -319,7 +319,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get default() {
@@ -340,7 +340,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get writing() {
@@ -373,7 +373,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -384,7 +384,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -437,7 +437,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 
   get postWritingEntities() {
@@ -447,7 +447,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+    return this.postWritingEntities;
   }
 
   get end() {
@@ -464,7 +464,7 @@ ${comment}
   }
 
   get [ReactApplicationGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 
   /**

@@ -61,7 +61,7 @@ export default class ClientSpringBootGenerator extends BaseApplicationGenerator 
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+    return this.default;
   }
 
   get writing() {
@@ -96,7 +96,7 @@ export default class ClientSpringBootGenerator extends BaseApplicationGenerator 
   }
 
   get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   override get editorMetadata(): EditorMetadata | undefined {

@@ -96,7 +96,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+    return this.configuring;
   }
 
   get composing() {
@@ -119,7 +119,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    return this.composing;
   }
 
   get preparing() {
@@ -155,7 +155,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 
   get postPreparing() {
@@ -186,7 +186,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
+    return this.postPreparing;
   }
 
   get preparingEachEntity() {
@@ -200,7 +200,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityField() {
@@ -214,7 +214,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get preparingEachEntityRelationship() {
@@ -230,7 +230,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+    return this.preparingEachEntityRelationship;
   }
 
   get writing() {
@@ -245,7 +245,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -262,7 +262,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -302,6 +302,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [ClientApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

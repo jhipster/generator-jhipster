@@ -114,7 +114,7 @@ export default class Oauth2Generator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get postWriting() {
@@ -145,6 +145,6 @@ export default class Oauth2Generator extends SpringBootApplicationGenerator {
   }
 
   get [SpringBootApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

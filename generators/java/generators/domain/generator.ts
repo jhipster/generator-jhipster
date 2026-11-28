@@ -58,7 +58,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityField() {
@@ -88,7 +88,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+    return this.preparingEachEntityField;
   }
 
   get preparingEachEntityRelationship() {
@@ -108,7 +108,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+    return this.preparingEachEntityRelationship;
   }
 
   get postPreparingEachEntity() {
@@ -126,7 +126,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get writing() {
@@ -145,7 +145,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+    return this.writing;
   }
 
   get writingEntities() {
@@ -187,7 +187,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+    return this.writingEntities;
   }
 
   get postWriting() {
@@ -212,6 +212,6 @@ export default class DomainGenerator extends JavaApplicationGenerator {
   }
 
   get [JavaApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
+    return this.postWriting;
   }
 }

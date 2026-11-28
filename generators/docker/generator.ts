@@ -300,7 +300,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
+    return this.postWriting;
   }
 
   get end() {
@@ -317,7 +317,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+    return this.end;
   }
 
   /**

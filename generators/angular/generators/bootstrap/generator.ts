@@ -88,6 +88,6 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
   }
 
   get [AngularApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+    return this.preparing;
   }
 }
