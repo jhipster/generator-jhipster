@@ -33,7 +33,7 @@
     "@stylistic/eslint-plugin": "6.0.1",
     "@tsconfig/node24": "24.0.6",
     "@types/js-cookie": "3.0.6",
-    "@types/node": "22.20.5",
+    "@types/node": "22.20.7",
     "@types/sockjs-client": "1.5.4",
     "@vitejs/plugin-vue": "6.0.11",
     "@vitest/eslint-plugin": "1.6.28",
