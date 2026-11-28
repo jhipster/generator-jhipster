@@ -60,6 +60,7 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
     protected final R2dbcEntityTemplate template;
     protected final DatabaseClient db;
     private final Class<T> entityType;
+    private final RelationalPersistentEntity<T> persistentEntity;
     private final R2dbcDialect dialect;
 
     @SuppressWarnings("unchecked")
@@ -72,6 +73,7 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
             converter
         );
         this.entityType = entityType;
+        this.persistentEntity = (RelationalPersistentEntity<T>) converter.getMappingContext().getRequiredPersistentEntity(entityType);
         this.template = template;
         this.db = template.getDatabaseClient();
         this.dialect = dialect;
@@ -174,6 +176,15 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
         return Flux.fromIterable(joinTables())
             .concatMap(joinTable -> deleteFromJoinTable(joinTable, id))
             .then(super.deleteById(id));
+    }
+
+    /**
+     * Deletes the entity by its id, as {@link #deleteById(Object)} deletes its rows of the join tables first.
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public Mono<Void> delete(T entity) {
+        return deleteById((ID) persistentEntity.getIdentifierAccessor(entity).getRequiredIdentifier());
     }
 
     /**

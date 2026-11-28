@@ -378,6 +378,10 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
             })
   <%_ if (serviceNo && dtoMapstruct) { _%>
             .map(<%- mapper %>::toEntity)
+    <%_ if (requiresPersistableImplementation) { _%>
+            // The entity mapped from the DTO is an update of an existing one, as save_template marks it
+            .map(<%- persistClass %>::setIsPersisted)
+    <%_ } _%>
   <%_ } _%>
             .<%- mapOrFlatMap %>(<%- entityInstance %><%- serviceNo ? 'Repository::save' : 'Service::update' %>)
   <%_ if (serviceNo && searchEngineElasticsearch) { _%>

@@ -73,7 +73,8 @@ public interface <%- entityClass %>Repository extends ReactiveCrudRepository<<%-
     Flux<<%- persistClass %>> findBy<%- relationship.relationshipNameCapitalized %>(<%- primaryKey.type %> id);
   <%_ } else if (relationship.relationshipOneToOne) { _%>
 
-    @Query("SELECT * FROM <%- entityTableName %> entity WHERE entity.<%- primaryKey.fields[0].columnName %> not in (select <%- relationship.joinColumnNames[0] %> from <%- relationship.otherEntity.entityTableName %>)")
+    <%_ // The column is the one of the owner side, the other entity: its primary key itself with @MapsId. _%>
+    @Query("SELECT * FROM <%- entityTableName %> entity WHERE entity.<%- primaryKey.fields[0].columnName %> not in (select <%- relationship.otherRelationship.joinColumnNames[0] %> from <%- relationship.otherEntity.entityTableName %>)")
     Flux<<%- persistClass %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull();
   <%_ } _%>
 <%_ } _%>
@@ -89,6 +90,11 @@ public interface <%- entityClass %>Repository extends ReactiveCrudRepository<<%-
 
     @Override
     Mono<Void> deleteById(<%- primaryKey.type %> id);
+<%_ if (joinTableRelationships.length > 0) { _%>
+
+    @Override
+    Mono<Void> delete(<%- persistClass %> entity);
+<%_ } _%>
 }
 
 interface <%- entityClass %>RepositoryInternal {
@@ -119,5 +125,7 @@ interface <%- entityClass %>RepositoryInternal {
 <%_ if (joinTableRelationships.length > 0) { _%>
 
     Mono<Void> deleteById(<%- primaryKey.type %> id);
+
+    Mono<Void> delete(<%- persistClass %> entity);
 <%_ } _%>
 }

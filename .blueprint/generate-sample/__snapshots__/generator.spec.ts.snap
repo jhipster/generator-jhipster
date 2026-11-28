@@ -343,6 +343,9 @@ exports[`generator - generate-sample with ng-webflux-psql-additional (specific j
   "custom-domain.jdl": {
     "stateCleared": "modified",
   },
+  "custom-id.jdl": {
+    "stateCleared": "modified",
+  },
   "webflux-psql.jdl": {
     "stateCleared": "modified",
   },
