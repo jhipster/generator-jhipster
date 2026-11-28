@@ -85,10 +85,12 @@ export const Home = () => {
 <%_ } else { _%>
                 <Link to="/login" className="alert-link"><Translate contentKey="global.messages.info.authenticated.link"> sign in</Translate></Link>
 <%_ } _%>
-                <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:
-                  <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
-                  <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).
-                </Translate>
+<%_ if (clientDefaultAccounts.length > 0) { _%>
+                <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:</Translate>
+  <%_ for (const { login, password, admin } of clientDefaultAccounts) { _%>
+                <br />- <Translate contentKey="global.messages.info.authenticated.<%- admin ? 'adminAccount' : 'userAccount' %>" interpolate={{ login: '<%- login %>', password: '<%- password %>' }}><%- admin ? 'Administrator' : 'User' %> (login=&quot;<%- login %>&quot; and password=&quot;<%- password %>&quot;)</Translate>
+  <%_ } _%>
+<%_ } _%>
               </Alert>
 
 <%_ if (generateUserRegistration) { _%>

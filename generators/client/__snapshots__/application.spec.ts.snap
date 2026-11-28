@@ -3,6 +3,18 @@
 exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
 {
   "clientBundlerName": "esbuild",
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "defaultAdminUsername",
+      "password": "defaultAdminPassword",
+    },
+    {
+      "admin": false,
+      "login": "defaultUserUsername",
+      "password": "defaultUserPassword",
+    },
+  ],
   "clientFrameworkBuiltIn": false,
   "clientI18nDir": "clientSrcDiri18n/",
   "clientTestFrameworkName": "Client Test Framework",

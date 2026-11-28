@@ -70,6 +70,18 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "target/classes/static/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,

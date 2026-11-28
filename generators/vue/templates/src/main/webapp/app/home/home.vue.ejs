@@ -19,10 +19,14 @@
 <%_ } else { _%>
           <router-link class="alert-link" to="/login">{{ t$('global.messages.info.authenticated.link') }}</router-link
 <%_ } _%>
-          ><span v-html="t$('global.messages.info.authenticated.suffix')"
-            >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
-            password="user").</span
+<%_ if (clientDefaultAccounts.length > 0) { _%>
+          ><span>{{ t$('global.messages.info.authenticated.suffix') }}</span>
+  <%_ for (const { login, password, admin } of clientDefaultAccounts) { _%>
+          <br />- <span>{{ t$('global.messages.info.authenticated.<%- admin ? 'adminAccount' : 'userAccount' %>', { login: '<%- login %>', password: '<%- password %>' }) }}</span>
+  <%_ } _%>
+<%_ } else { _%>
           >
+<%_ } _%>
         </div>
 <%_ if (generateUserRegistration) { _%>
         <div class="alert alert-warning" v-if="!authenticated">

@@ -44,6 +44,13 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,
@@ -945,6 +952,18 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,
@@ -1961,6 +1980,18 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientBundlerRsbuild": true,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,
@@ -2880,6 +2911,18 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "clientBundlerRsbuild": true,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,
@@ -3880,6 +3923,18 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,
@@ -4967,6 +5022,18 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,
@@ -5845,6 +5912,13 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,

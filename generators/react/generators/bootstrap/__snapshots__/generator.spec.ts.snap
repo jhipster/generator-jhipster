@@ -34,6 +34,7 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": Any<Array>,
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,

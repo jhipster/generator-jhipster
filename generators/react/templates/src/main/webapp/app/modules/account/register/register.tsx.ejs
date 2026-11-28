@@ -154,13 +154,14 @@ export const RegisterPage = () => {
               <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
             </Link>
 <%_ } _%>
+<%_ if (clientDefaultAccounts.length > 0) { _%>
             <span>
-              <Translate contentKey="global.messages.info.authenticated.suffix">
-                , you can try the default accounts:
-                <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
-                <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).
-              </Translate>
+              <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:</Translate>
             </span>
+  <%_ for (const { login, password, admin } of clientDefaultAccounts) { _%>
+            <br />- <Translate contentKey="global.messages.info.authenticated.<%- admin ? 'adminAccount' : 'userAccount' %>" interpolate={{ login: '<%- login %>', password: '<%- password %>' }}><%- admin ? 'Administrator' : 'User' %> (login=&quot;<%- login %>&quot; and password=&quot;<%- password %>&quot;)</Translate>
+  <%_ } _%>
+<%_ } _%>
           </Alert>
         </Col>
       </Row>

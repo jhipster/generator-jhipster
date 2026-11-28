@@ -46,6 +46,12 @@ export type ClientAddedApplicationProperties = {
   clientBundlerName: string;
   clientTestFrameworkName: string;
   withAdminUi: boolean;
+  /**
+   * The accounts the home and the registration pages suggest to sign in with: by default the admin and the user of the
+   * defaultAdminUsername and defaultUserUsername the application creates.
+   * Empty, the pages show no sign in suggestion.
+   */
+  clientDefaultAccounts: { login: string; password: string; admin: boolean }[];
 
   messageHeaderNameAlert: string;
   messageHeaderNameError: string;
@@ -89,6 +95,15 @@ export const mutateApplication = {
   clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
   withAdminUi: finalizeDefault(
     ({ backendTypeSpringBoot, applicationTypeMicroservice }: ClientApplication) => backendTypeSpringBoot && !applicationTypeMicroservice,
+  ),
+  // The admin and the user the application creates, the admin alone when it is the user too, like with in memory credentials.
+  clientDefaultAccounts: finalizeDefault(
+    ({ defaultAdminUsername, defaultAdminPassword, defaultUserUsername, defaultUserPassword }: ClientApplication) => [
+      { login: defaultAdminUsername, password: defaultAdminPassword, admin: true },
+      ...(defaultUserUsername === defaultAdminUsername ?
+        []
+      : [{ login: defaultUserUsername, password: defaultUserPassword, admin: false }]),
+    ],
   ),
 
   messageHeaderNameAlert: ({ frontendAppName }) => `x-${frontendAppName.toLowerCase()}-alert`,
