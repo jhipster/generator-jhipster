@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Jańa {entity} qosıw",
+  "createOrEditLabel": "{entity}di redaktorlaw",
+  "search": "{entity} izlew",
+  "notFound": "No {entities} found",
+  "created": "{entity} {{ param }} menen qosıldı",
+  "updated": "{{ param }}- {entity} saqlandı",
+  "deleted": "{{ param }}- {entity} óshirildi",
+  "deleteQuestion": "{{ id }}- {entity} tı óshirejaqsizba?"
+}

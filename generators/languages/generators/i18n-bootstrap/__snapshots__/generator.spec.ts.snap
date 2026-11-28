@@ -1,0 +1,45 @@
+// expect-node Snapshot v1, https://github.com/mshima/expect-node#snapshots
+
+exports[`generator - languages:i18n-bootstrap loadTranslationFiles with the translation enabled should write the files asked - snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "i18n/fr/home.json": {
+    "stateCleared": "modified",
+  },
+  "i18n/fr/menu.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - languages:i18n-bootstrap mergeTranslation with the translation enabled should merge the translation into the file - snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "i18n/fr/global.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - languages:i18n-bootstrap with the translation disabled should write no file - snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - languages:i18n-bootstrap with the translation enabled should write the translation file - snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "i18n/fr/home.json": {
+    "stateCleared": "modified",
+  },
+}
+`;

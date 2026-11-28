@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "创建新 {entity}",
+  "createOrEditLabel": "创建或编辑 {entity}",
+  "search": "查找 {entity}",
+  "notFound": "No {entities} found",
+  "created": "{entity} {{ param }} 创建成功",
+  "updated": "{entity} {{ param }} 更新成功",
+  "deleted": "{entity} {{ param }} 删除成功",
+  "deleteQuestion": "你确定要删除 {entity} {{ id }} 吗？"
+}

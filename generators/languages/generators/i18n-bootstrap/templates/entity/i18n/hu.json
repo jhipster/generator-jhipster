@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Egy új {entity} létrehozása",
+  "createOrEditLabel": "Hozzon létre, vagy módosítson {entity}t",
+  "search": "{entity} keresése",
+  "notFound": "No {entities} found",
+  "created": "Egy új {entity} lett létrehozva {{ param }} azonosítóval",
+  "updated": "A {entity} módosítva lett {{ param }} azonosítóval",
+  "deleted": "A {entity} törölve lett {{ param }} azonosítóval",
+  "deleteQuestion": "Biztos benne, hogy törölni szeretné az {entity}t {{ id }} azonosítóval?"
+}

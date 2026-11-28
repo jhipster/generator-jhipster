@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Δημιουργήστε ένα νέο {entity}",
+  "createOrEditLabel": "Δημιουργήστε η επεξεργαστείτε ένα {entity}",
+  "search": "Αναζήτηση για {entity}",
+  "notFound": "No {entities} found",
+  "created": "Ένα νέο {entity} έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
+  "updated": "Ένα {entity} έχει ενημερωθεί με αναγνωριστικό {{ param }}",
+  "deleted": "Ένα {entity} έχει διαγραφτεί με αναγνωριστικό {{ param }}",
+  "deleteQuestion": "Είστε βέβαιοι όταν θέλετε να διαγράψετε το ακόλουθο {entity} {{ id }};"
+}

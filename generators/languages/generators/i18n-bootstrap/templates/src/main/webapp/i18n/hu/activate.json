@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": "Aktiválás",
+    "messages": {
+      "success": "<strong>A hozzáférése aktiválásra került.</strong> Kérjük ",
+      "error": "<strong>A hozzáférését nem sikerült aktiválni.</strong> Kérjük használja a regisztrációs oldalt, hogy hozzáférést igényeljen."
+    }
+  }
+}

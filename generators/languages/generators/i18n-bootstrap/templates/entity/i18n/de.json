@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Liste aktualisieren",
+  "createLabel": "{entity} erstellen",
+  "createOrEditLabel": "{entity} erstellen oder bearbeiten",
+  "search": "Suche nach {entity}",
+  "notFound": "Keine {entities} gefunden",
+  "created": "{entity} erstellt mit ID {{ param }}",
+  "updated": "{entity} aktualisiert mit ID {{ param }}",
+  "deleted": "{entity} gelöscht mit ID {{ param }}",
+  "deleteQuestion": "Soll {entity} {{ id }} wirklich dauerhaft gelöscht werden?"
+}

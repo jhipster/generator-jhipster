@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "重設您的密碼",
+      "form": {
+        "button": "重設密碼"
+      },
+      "messages": {
+        "info": "輸入註冊時使用的電子郵件地址",
+        "success": "檢查您的電子郵件信箱，了解如何重設密碼。"
+      }
+    },
+    "finish": {
+      "title": "重設密碼",
+      "form": {
+        "button": "確定"
+      },
+      "messages": {
+        "info": "請設定新的密碼",
+        "success": "<strong>您的密碼已重設。</strong> 請 ",
+        "keymissing": "沒有輸入重設金鑰",
+        "error": "無法重設密碼。 請注意，密碼重設要求的效期只有 24 小時。"
+      }
+    }
+  }
+}

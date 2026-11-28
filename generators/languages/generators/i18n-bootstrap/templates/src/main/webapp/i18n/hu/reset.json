@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Jelszó visszaállítás",
+      "form": {
+        "button": "Jelszó visszaállítás"
+      },
+      "messages": {
+        "info": "Adja meg email címét, amivel regisztrált",
+        "success": "Email címére elküldtük a leírást, hogyan állíthatja vissza jelszavát."
+      }
+    },
+    "finish": {
+      "title": "Jelszó állítás",
+      "form": {
+        "button": "Ellenőrizze új jelszavát"
+      },
+      "messages": {
+        "info": "Válasszon új jelszót",
+        "success": "<strong>Az Ön jelszava meg lett változtatva.</strong> Kérjük ",
+        "keymissing": "A jelszó visszaállító kulcs hiányzik.",
+        "error": "Az Ön jelszavát nem lehetett átállítani. Kérjük vegye figyelembe, hogy a jelszó visszaállító kulcs csak 24 óráig érvényes."
+      }
+    }
+  }
+}

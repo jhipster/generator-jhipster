@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": "Aktivlestiriw",
+    "messages": {
+      "success": "<strong>Sizdi loginingiz aktivlestirildi. </strong> Ótinish",
+      "error": "<strong>Sizdiń loginińiz aktivlestiriliwi múmkin emes. </strong> Ótinish, dizimnen ótiń."
+    }
+  }
+}

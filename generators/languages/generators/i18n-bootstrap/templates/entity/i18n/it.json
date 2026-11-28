@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Genera un nuovo {entity}",
+  "createOrEditLabel": "Genera o modifica un {entity}",
+  "search": "Cerca {entity}",
+  "notFound": "No {entities} found",
+  "created": "&Egrave; stato generato un nuovo {entity} con identificatore {{ param }}",
+  "updated": "&Egrave; stato aggiornato {entity} identificato da {{ param }}",
+  "deleted": "&Egrave; stato eliminato {entity} con identificatore {{ param }}",
+  "deleteQuestion": "Sei sicuro di volere eliminare {entity} {{ id }}?"
+}

@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Buat {entity} baru",
+  "createOrEditLabel": "Buat atau edit {entity}",
+  "search": "Cari {entity}",
+  "notFound": "No {entities} found",
+  "created": "{entity} dengan id {{ param }} telah dibuat",
+  "updated": "{entity} dengan id {{ param }} telah diperbaharui",
+  "deleted": "{entity} dengan id {{ param }} telah dihapus",
+  "deleteQuestion": "Apakah anda yakin ingin menghapus {entity} {{ id }}?"
+}

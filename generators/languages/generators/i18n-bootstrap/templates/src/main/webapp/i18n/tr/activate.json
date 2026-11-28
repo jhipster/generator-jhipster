@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": "Aktivasyon",
+    "messages": {
+      "success": "<strong>Kullanıcınızın aktivasyon işlemi tamamlandı.</strong> Lütfen ",
+      "error": "<strong>Kullanıcınızın aktivasyon işlemi yapılamadı.</strong> Lütfen giriş sayfasından kaydolun."
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Reimposta Password",
+      "form": {
+        "button": "Reimposta Password"
+      },
+      "messages": {
+        "info": "Inserisci l'indirizzo email utilizzato per la registrazione",
+        "success": "Controlla la tua email per i dettagli su come reimpostare la password."
+      }
+    },
+    "finish": {
+      "title": "Cambia Password",
+      "form": {
+        "button": "Convalida la nuova password"
+      },
+      "messages": {
+        "info": "Scegliere una nuova password",
+        "success": "<strong>La tua password è stata reimpostata .</strong> Per favore ",
+        "keymissing": "La chiave di reimpostazione non è presente.",
+        "error": "La tua password potrebbe non essere ripristinata. Ricorda che la richiesta della password è valida solo per 24 ore."
+      }
+    }
+  }
+}

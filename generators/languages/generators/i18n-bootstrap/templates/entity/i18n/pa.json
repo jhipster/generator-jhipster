@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "ਸੂਚੀ ਤਾਜ਼ਾ ਕਰੋ",
+  "createLabel": "ਇੱਕ ਨਵਾਂ {entity} ਬਣਾਓ",
+  "createOrEditLabel": "ਇੱਕ {entity} ਬਣਾਓ ਜਾਂ ਸੰਪਾਦਿਤ ਕਰੋ",
+  "search": "{entity} ਲਈ ਖੋਜ",
+  "notFound": "ਕੋਈ {entities} ਨਹੀਂ ਮਿਲਿਆ",
+  "created": "ਇੱਕ ਨਵਾਂ {entity} ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਬਣਾਇਆ ਗਿਆ ਹੈ",
+  "updated": "ਇੱਕ {entity} ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਅਪਡੇਟ ਕੀਤਾ ਗਿਆ ਹੈ",
+  "deleted": "ਇੱਕ {entity} ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਮਿਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ",
+  "deleteQuestion": "ਕੀ ਤੁਸੀਂ ਨਿਸ਼ਚਤ ਰੂਪ ਤੋਂ {entity} {{ id }} ਨੂੰ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
+}

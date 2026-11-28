@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Kreiraj novi {entity}",
+  "createOrEditLabel": "Kreirajte ili izmenite {entity}",
+  "search": "Potražite {entity}",
+  "notFound": "No {entities} found",
+  "created": "Kreiran je novi {entity} pod nazivom {{ param }}",
+  "updated": "{entity} pod nazivom {{ param }} je ažuriran",
+  "deleted": "{entity} pod nazivom {{ param }} je obrisan",
+  "deleteQuestion": "Da li ste sigurni da želite da obrišete {entity} pod nazivom {{ id }}?"
+}

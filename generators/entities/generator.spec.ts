@@ -62,8 +62,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should write the entity translations of every language', () => {
-      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`, '"foo" : {');
-      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/foo.json`, '"foo" : {');
+      runResult.assertJsonFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`, { jhipsterApp: { foo: { detail: { title: 'Foo' } } } });
+      runResult.assertJsonFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/foo.json`, { jhipsterApp: { foo: { detail: { title: 'Foo' } } } });
     });
 
     // The entity menu entry is added by the needle, the rest of global.json belongs to the writing

@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Vytvořit {entity}",
+  "createOrEditLabel": "Vytvořit nebo upravit {entity}",
+  "search": "Vyhledat {entity}",
+  "notFound": "No {entities} found",
+  "created": "Byl vytvořen potomek entity {entity} s identifikátorem {{ param }}",
+  "updated": "Potomek entity {entity} s identifikátorem {{ param }} byl upravený.",
+  "deleted": "Potomek entity {entity} s identifikátorem {{ param }} bol smazaný.",
+  "deleteQuestion": "Jste si jisti, že chcete smazat {entity} {{ id }}?"
+}

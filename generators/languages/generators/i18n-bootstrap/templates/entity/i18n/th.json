@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "สร้าง {entity}",
+  "createOrEditLabel": "สร้างหรือแก้ไข {entity}",
+  "search": "ค้นหา {entity}",
+  "notFound": "No {entities} found",
+  "created": "{entity} ถูกสร้างด้วย {{ param }}",
+  "updated": "{entity} ถูกแก้ไขด้วย {{ param }}",
+  "deleted": "{entity} ถูกลบด้วย {{ param }}",
+  "deleteQuestion": "คุณต้องการที่จะลบ {entity} {{ id }}?"
+}

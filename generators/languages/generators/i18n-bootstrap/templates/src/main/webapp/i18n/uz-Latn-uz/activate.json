@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": "Faollashtirish",
+    "messages": {
+      "success": "<strong>Sizni loginingiz faollashtirildi.</strong> Iltimos ",
+      "error": "<strong>Sizni loginingiz faollashtirilishi mumkin emas.</strong> Iltimos, ro`yhatdan o`ting."
+    }
+  }
+}

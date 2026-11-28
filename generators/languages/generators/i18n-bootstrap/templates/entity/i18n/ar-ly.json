@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "تحديث القائمة",
+  "createLabel": "إنشاء {entity} جديد",
+  "createOrEditLabel": "إنشاء أو تعديل {entity}",
+  "search": "البحث عن {entity}",
+  "notFound": "لم يتم العثور على {entities}",
+  "created": "{entity} جديد تم إنشاؤه بالمعرف {{ param }}",
+  "updated": "{entity} تم تحديثه بالمعرف {{ param }}",
+  "deleted": "{entity} تم حذفه بالمعرف {{ param }}",
+  "deleteQuestion": "هل أنت متأكد أنك تريد حذف {entity} {{ id }}؟"
+}

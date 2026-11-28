@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Rivendos fjalëkalimin",
+      "form": {
+        "button": "Revendos fjalëkalimin"
+      },
+      "messages": {
+        "info": "Vendosni emaili që përdorët gjatë regjistrimit",
+        "success": "Kontrolloni emialin tuaj për detajet e rivendosjes së fjalëkalimit."
+      }
+    },
+    "finish": {
+      "title": "Rivendos fjalëkalimin",
+      "form": {
+        "button": "Validoni fjalëkalimin e ri"
+      },
+      "messages": {
+        "info": "Zgjidhni fjalëkalim të ri",
+        "success": "<strong>Fjalëkalimi juaj u rivendos.</strong> Ju lutem ",
+        "keymissing": "Çelësi i rivendosjes mungon.",
+        "error": "Fjalëkalimi juaj nuk mund të rivendosej. Kujtoni që kërkesa për rivendosje është e vlefshme vetëm 24 orë."
+      }
+    }
+  }
+}

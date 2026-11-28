@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": "Aktiveerimine",
+    "messages": {
+      "success": "<strong>Teie konto on aktiveeritud.</strong> Palun ",
+      "error": "<strong>Teie kontot ei saanud aktiveerida.</strong> Palun kasutage registreerumiseks registreerimisvormi."
+    }
+  }
+}

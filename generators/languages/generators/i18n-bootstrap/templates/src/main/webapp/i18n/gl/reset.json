@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Restablecer o seu contrasinal",
+      "form": {
+        "button": "Restablecer o contrasinal"
+      },
+      "messages": {
+        "info": "Introduza a dirección de correo electrónico que utilizou para rexistrarse",
+        "success": "Revise o seu correo electrónico para obter máis información sobre como restablecer o seu contrasinal."
+      }
+    },
+    "finish": {
+      "title": "Restablecer o contrasinal",
+      "form": {
+        "button": "Validar o novo contrasinal"
+      },
+      "messages": {
+        "info": "Elixa un contrasinal novo",
+        "success": "<strong>O seu contrasinal foi restablecida.</strong> Por favor ",
+        "keymissing": "Falta a clave de reinicio.",
+        "error": "O seu contrasinal non pode ser restablecida. Lembre que unha solicitude de reinicio de contrasinal só é válida durante 24 horas."
+      }
+    }
+  }
+}

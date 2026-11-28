@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": "Aktivizim",
+    "messages": {
+      "success": "<strong>Përdoruesi juaj u aktivizua.</strong> Ju lutem ",
+      "error": "<strong>Përdoruesi juaj nuk mund të aktivizohet.</strong> Ju lutem përdorni formularin për tu regjistruar."
+    }
+  }
+}

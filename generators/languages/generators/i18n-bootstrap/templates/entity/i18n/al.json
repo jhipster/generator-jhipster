@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Krijo një të ri {entity}",
+  "createOrEditLabel": "Krijo ose përpuno një {entity}",
+  "search": "Kërko për {entity}",
+  "notFound": "No {entities} found",
+  "created": "Një {entity} i ri u krijua me identifikues {{ param }}",
+  "updated": "Një {entity} u përpunua me identifikues {{ param }}",
+  "deleted": "Një {entity} u fshi me identifikues {{ param }}",
+  "deleteQuestion": "Jeni i sigurtë që doni të fshini {entity} {{ id }}?"
+}

@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Reset password anda",
+      "form": {
+        "button": "Reset password"
+      },
+      "messages": {
+        "info": "Masukkan alamat email yang anda gunakan saat mendaftar",
+        "success": "Cek email anda untuk mengetahui cara mereset password anda."
+      }
+    },
+    "finish": {
+      "title": "Reset password",
+      "form": {
+        "button": "Validasi password baru"
+      },
+      "messages": {
+        "info": "Pilih password baru",
+        "success": "<strong>Password anda sudah direset.</strong> Silakan ",
+        "keymissing": "Reset key hilang.",
+        "error": "Password anda tidak bisa direset. Permintaan mengingat password hanya berlaku selama 24 jam."
+      }
+    }
+  }
+}

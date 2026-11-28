@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "නව {entity} එකක් සාදන්න",
+  "createOrEditLabel": "{entity} සාදන්න හෝ සංස්කරණය කරන්න",
+  "search": "{entity} සඳහා සොයන්න",
+  "notFound": "{entities} හමු නොවීය",
+  "created": "{{ param }} හඳුනාගැනීමෙන් නව {entity} සාදනු ලැබේ",
+  "updated": "{{ param }} හඳුනාගැනීමෙන් {entity} යාවත්කාලීන වේ",
+  "deleted": "{{ param }} හඳුනාගැනීමෙන් {entity} මකා දමනු ලැබේ",
+  "deleteQuestion": "{entity} {{ id }} මකා දැමීමට ඔබට විශ්වාසද?"
+}

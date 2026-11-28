@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Obnoviť heslo",
+      "form": {
+        "button": "Obnoviť heslo"
+      },
+      "messages": {
+        "info": "Zadajte emailovú adresu, ktorú ste použili pri registrácii",
+        "success": "Na Váš email sme Vám poslali informácie o tom ako si môžete obnoviť Vaše heslo."
+      }
+    },
+    "finish": {
+      "title": "Obnoviť heslo",
+      "form": {
+        "button": "Overiť nové heslo"
+      },
+      "messages": {
+        "info": "Vyberte si nové heslo",
+        "success": "<strong>Vaše heslo bolo obnovené.</strong> Môžete sa ",
+        "keymissing": "Chýba kľúč na obnovenie hesla.",
+        "error": "Vaše heslo nemohlo byť obnovené. Požiadavka na obnovenie hesla je platná len 24 hodín."
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Resetoi salasanasi",
+      "form": {
+        "button": "Resetoi salasana"
+      },
+      "messages": {
+        "info": "Syötä rekisteröinnissä käyttämäsi sähköpostiosoite",
+        "success": "Tarkista sähköpostistasi ohjeet salasanasi resetoimiseen."
+      }
+    },
+    "finish": {
+      "title": "Resetoi salasanasi",
+      "form": {
+        "button": "Validoi uusi salasana"
+      },
+      "messages": {
+        "info": "Valitse uusi salasana",
+        "success": "<strong>Salasanasi on resetoitu.</strong> Ole hyvä ",
+        "keymissing": "Resetointi avain puuttuu.",
+        "error": "Salasanaa ei voitu resetoida. Salasanan resetointipyyntö on voimassa vain 24 tuntia."
+      }
+    }
+  }
+}

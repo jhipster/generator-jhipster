@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Resetați parola dumneavoastră",
+      "form": {
+        "button": "Resetare parolă"
+      },
+      "messages": {
+        "info": "Introduceți adresa de email folosită la înregistrare",
+        "success": "Verificați-vă emailul pentru instrucțiunile de schimbare a parolei."
+      }
+    },
+    "finish": {
+      "title": "Resetare parolă",
+      "form": {
+        "button": "Validate parolă nouă"
+      },
+      "messages": {
+        "info": "Alegeți o nouă parolă",
+        "success": "<strong>Parola dumneavoastra a fost resetată</strong>. Vă rugăm să vă autentificați.",
+        "keymissing": "Cheia de resetare lipsește.",
+        "error": "Parola dumneavoastră nu a fost resetată. Vă reamintim că o cerere de resetare este valabilă doar 24 de ore."
+      }
+    }
+  }
+}

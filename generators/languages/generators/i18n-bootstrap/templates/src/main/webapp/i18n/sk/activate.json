@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": "Aktivácia",
+    "messages": {
+      "success": "<strong>Váš používateľský účet bol aktivovaný.</strong> ",
+      "error": "<strong>Váš používateľský účet nemohol byť aktivovaný.</strong> Prosím použite registračný formulár pre prihlásenie."
+    }
+  }
+}

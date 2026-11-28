@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": "Aktivering",
+    "messages": {
+      "success": "<strong>Ditt användarnamn har blivit aktiverat.</strong>. Vänligen ",
+      "error": "<strong>Ditt användarnamn kunde inte aktiveras.</strong> Använd gärna registreringsformuläret."
+    }
+  }
+}

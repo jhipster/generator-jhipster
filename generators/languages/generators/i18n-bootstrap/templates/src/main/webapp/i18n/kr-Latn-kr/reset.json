@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Paroldi tiklew",
+      "form": {
+        "button": "Paroldi tiklew"
+      },
+      "messages": {
+        "info": "Dizimnen ótken email kirtiń",
+        "success": "Emailińizdi tekserip tolıq maǵlıwmat alıń."
+      }
+    },
+    "finish": {
+      "title": "Paroldi tiklew",
+      "form": {
+        "button": "Jańa paroldı tastıyıqlayman"
+      },
+      "messages": {
+        "info": "Jańa parol kiritiń",
+        "success": "<strong>Sizdiń parolıńız tiklendi.</strong>",
+        "keymissing": "Tiklew kodı kiritilsin.",
+        "error": "Parolińiz tiklenbedi. Paroldi qayta tiklew kodı 24 saatǵa shekem aktiv."
+      }
+    }
+  }
+}

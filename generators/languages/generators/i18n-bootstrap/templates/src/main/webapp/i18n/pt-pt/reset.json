@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Reponha a palavra-passe",
+      "form": {
+        "button": "Reposição da palavra-passe"
+      },
+      "messages": {
+        "info": "Introduza o endereço de email utilizado para registar",
+        "success": "Verifique o seu email para mais detalhes sobre como repor a palavra-passe."
+      }
+    },
+    "finish": {
+      "title": "Reposição da palavra-passe",
+      "form": {
+        "button": "Repor a palavra-passe"
+      },
+      "messages": {
+        "info": "Escolha uma nova palavra-passe",
+        "success": "<strong>A sua palavra-passe foi reposta.</strong> Por favor ",
+        "keymissing": "Chave de reposição em falta.",
+        "error": "A sua palavra-passe não pode ser reposta. O pedido de reposição da palavra-passe é válido apenas por 24 horas."
+      }
+    }
+  }
+}

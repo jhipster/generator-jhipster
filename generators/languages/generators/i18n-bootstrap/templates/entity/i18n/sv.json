@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Skapa en ny {entity}",
+  "createOrEditLabel": "Skapa eller ändra en {entity}",
+  "search": "Sök efter {entity}",
+  "notFound": "No {entities} found",
+  "created": "En ny {entity} är skapad med id {{ param }}",
+  "updated": "En {entity} är uppdaterad med id {{ param }}",
+  "deleted": "En {entity} är borttagen med id {{ param }}",
+  "deleteQuestion": "Är du säker på att du vill ta bort {entity} {{ id }}?"
+}

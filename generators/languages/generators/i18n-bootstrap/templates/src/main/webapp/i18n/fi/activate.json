@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": "Aktivoi",
+    "messages": {
+      "success": "<strong>Käyttäjätilisi on aktivoitu.</strong> Ole hyvä ",
+      "error": "<strong>Käyttäjätilisi ei voitu aktivoida.</strong> Ole hyvä ja rekisteröidy sovellukseen."
+    }
+  }
+}

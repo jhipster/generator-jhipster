@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Đặt lại mật khẩu của bạn",
+      "form": {
+        "button": "Đặt lại mật khẩu"
+      },
+      "messages": {
+        "info": "Nhập địa chỉ email mà bạn đã sử dụng để đăng ký",
+        "success": "Vui lòng kiểm tra hòm thư của bạn để xem chi tiết cách lấy lại mật khẩu."
+      }
+    },
+    "finish": {
+      "title": "Đặt lại mật khẩu",
+      "form": {
+        "button": "Kiểm tra mật khẩu mới"
+      },
+      "messages": {
+        "info": "Chọn mật khẩu mới",
+        "success": "<strong>Mật khẩu của bạn đã được đặt lại.</strong> Bạn vui lòng ",
+        "keymissing": "Không tìm thấy khóa để đặt lại mật khẩu.",
+        "error": "Không thể đặt lại mật khẩu của bạn. Lưu ý, yêu cầu đặt lại mật khẩu chỉ có hiệu lực trong 24 giờ."
+      }
+    }
+  }
+}

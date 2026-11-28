@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Şifrəni sıfırla",
+      "form": {
+        "button": "Şifrəni sıfırla"
+      },
+      "messages": {
+        "info": "Qeydiyyatdan keçərkən istifadə etdiyiniz email adresini girin",
+        "success": "Şifrəni necə sıfırlayacağınızı öyrənmək üçün e-poçtlarınızı yoxlayın."
+      }
+    },
+    "finish": {
+      "title": "Şifrəni sıfırla",
+      "form": {
+        "button": "Yeni Şifrəni təsdiqlə"
+      },
+      "messages": {
+        "info": "Yeni şifrə seç",
+        "success": "<strong>Şifrəniz sıfırlandı.</strong> Zəhmət olmasa, ",
+        "keymissing": "Şifrə sıfırlama açar sözü etibarsızdır.",
+        "error": "Şifrəniz sıfırlana bilmıəz. Şifrə istəyi sadəcə 24 saat keçərlidir."
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Listeyi yenile",
+  "createLabel": "Yeni {entity} ekle",
+  "createOrEditLabel": "Yeni {entity} ekle veya guncelle",
+  "search": "{entity} ara",
+  "notFound": "{entities} kaydi bulunamadi",
+  "created": "{{ param }} ID ile bir {entity} eklendi",
+  "updated": "{{ param }} nolu {entity} guncellendi",
+  "deleted": "{{ param }} nolu {entity} silindi",
+  "deleteQuestion": "{{ id }} nolu {entity} silinecek. Devem etmek istiyor musunuz?"
+}

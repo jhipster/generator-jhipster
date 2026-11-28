@@ -1,0 +1,12 @@
+{
+  "title": "{entity}",
+  "refreshListLabel": "Refresh list",
+  "createLabel": "Dodaj {entity}",
+  "createOrEditLabel": "Dodaj lub edytuj: {entity}",
+  "search": "Szukaj {entity}",
+  "notFound": "No {entities} found",
+  "created": "Utworzono nowy obiekt typu {entity} z identyfikatorem {{ param }}",
+  "updated": "Uaktualniono obiekt typu {entity} z identyfikatorem {{ param }}",
+  "deleted": "Usunięto obiekt typu {entity} z identyfikatorem {{ param }}",
+  "deleteQuestion": "Czy na pewno chcesz usunąć {entity} {{ id }}?"
+}

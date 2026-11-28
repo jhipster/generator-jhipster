@@ -1428,6 +1428,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/languages/generators/bootstrap/templates/template-file-languages:bootstrap.ejs": {
     "stateCleared": "modified",
   },
+  "generators/languages/generators/i18n-bootstrap/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generators/i18n-bootstrap/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generators/i18n-bootstrap/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generators/i18n-bootstrap/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generators/i18n-bootstrap/templates/template-file-languages:i18n-bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/languages/index.ts": {
     "stateCleared": "modified",
   },

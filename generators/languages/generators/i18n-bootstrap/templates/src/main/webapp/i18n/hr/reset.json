@@ -1,0 +1,26 @@
+{
+  "reset": {
+    "request": {
+      "title": "Reset zaporke",
+      "form": {
+        "button": "Resetiraj zaporku"
+      },
+      "messages": {
+        "info": "Unesite adresu e-pošte koju ste koristili kod registracije",
+        "success": "Provjerite svoju e-poštu radi detalja o tome kako resetirati zaporku."
+      }
+    },
+    "finish": {
+      "title": "Resetiraj zaporku",
+      "form": {
+        "button": "Provjerite novu zaporku"
+      },
+      "messages": {
+        "info": "Izaberite novu zaporku",
+        "success": "<strong>Vaša zaporka je resetirana.</strong> Molimo ",
+        "keymissing": "Nedostaje ključ za reset.",
+        "error": "Vaša zaporka se ne može resetirati. Obratite pažnju da zahtjev za reset zaporke vrijedi samo 24 sata."
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "refreshListLabel": "Обновить список",
+  "createLabel": "Создать новый {entity}",
+  "createOrEditLabel": "Создать или отредактировать {entity}",
+  "search": "Найти {entity}",
+  "notFound": "{entities} не найдено",
+  "created": "Новый {entity} создан с идентификатором {{ param }}",
+  "updated": "{entity} обновлен с идентификатором {{ param }}",
+  "deleted": "{entity} удален с идентификатором {{ param }}",
+  "deleteQuestion": "Вы уверены что хотите удалить {entity} {{ id }}?"
+}

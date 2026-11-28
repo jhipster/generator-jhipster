@@ -1,0 +1,9 @@
+{
+  "activate": {
+    "title": "Aktivasi",
+    "messages": {
+      "success": "<strong>Akun anda sudah diaktivasi.</strong> Silakan ",
+      "error": "<strong>Akun anda tidak bisa diaktivasi.</strong> Silakan mendaftar terlebih dahulu di halaman registrasi"
+    }
+  }
+}
