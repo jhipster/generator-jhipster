@@ -29,7 +29,6 @@ import {
   mutateRelationship as mutateBaseApplicationRelationship,
   mutateRelationshipWithEntity as mutateBaseApplicationRelationshipWithEntity,
 } from '../base-application/entity.ts';
-import { default as prepareSqlApplicationProperties } from '../base-application/generators/database-bootstrap/support/application-properties.ts';
 import { getJdbcUrl } from '../base-application/generators/database-bootstrap/support/database-url.ts';
 import {
   formatEntitySample,
@@ -108,14 +107,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
         if (!application.databaseTypeSql && !application.databaseTypeNeo4j && !application.databaseTypeCassandra) {
           throw new Error(`Database type ${application.databaseType} is not supported`);
         }
-
-        if (!application.databaseTypeSql) {
-          // Add sql related derived properties
-          // TODO fix types
-          prepareSqlApplicationProperties({ application: application as any });
-        }
       },
-      preparing({ application, applicationDefaults }) {
+      preparing({ applicationDefaults }) {
         applicationDefaults({
           liquibaseDefaultSchemaName: '',
           // Generate h2 properties at master.xml for blueprints that uses h2 for tests or others purposes.
@@ -147,7 +140,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
                   // eslint-disable-next-line no-template-curly-in-string
                   buildDirectory: data.buildToolGradle ? `./${data.temporaryDir}` : '${project.build.directory}/',
                 }),
-              databaseName: application.devDatabaseName,
+              databaseName: data.devDatabaseName,
               skipExtraOptions: true,
             });
           },

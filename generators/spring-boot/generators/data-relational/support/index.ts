@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export { default as prepareSqlApplicationProperties } from './application-properties.ts';
+export { prepareSqlApplicationProperties } from '../../../../base-application/generators/database-bootstrap/support/index.ts';
 export * from './database-data.ts';
 export { default as databaseData } from './database-data.ts';
 export * from './database-url.ts';
