@@ -93,6 +93,17 @@ export const applicationFiles = (suffix: string) =>
     ],
   });
 
+/** The ConfigMap of the Keycloak realm, from the template of the docker files of an application. */
+export const keycloakRealmFiles = (suffix = '') =>
+  asWriteFilesSection<any>({
+    keycloakRealm: [
+      {
+        condition: data => data.useKeycloak,
+        templates: [{ sourceFile: 'realm-config/jhipster-realm.json', destinationFile: `keycloak-${suffix}/keycloak-configmap.yml` }],
+      },
+    ],
+  });
+
 export const writeDeploymentFiles = (suffix = '') =>
   asWriteFilesSection<any>({
     common: [
@@ -121,7 +132,6 @@ export const writeDeploymentFiles = (suffix = '') =>
       {
         condition: data => data.useKeycloak,
         templates: [
-          { sourceFile: 'keycloak/keycloak-configmap.yml.ejs', destinationFile: `keycloak-${suffix}/keycloak-configmap.yml` },
           { sourceFile: 'keycloak/keycloak-postgresql.yml.ejs', destinationFile: `keycloak-${suffix}/keycloak-postgresql.yml` },
           { sourceFile: 'keycloak/keycloak.yml.ejs', destinationFile: `keycloak-${suffix}/keycloak.yml` },
         ],
