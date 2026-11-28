@@ -203,7 +203,14 @@
       <div class="mt-3 alert alert-warning">
         <span>__jhiTranslateTag__('global.messages.info.authenticated.prefix')</span>
         <a class="alert-link" routerLink="/login">__jhiTranslateTag__('global.messages.info.authenticated.link')</a
+<%_ if (clientDefaultAccounts.length > 0) { _%>
         ><span>__jhiTranslateTag__('global.messages.info.authenticated.suffix')</span>
+  <%_ for (const { login, password, admin } of clientDefaultAccounts) { _%>
+        <br />- <span>__jhiTranslateTag__('global.messages.info.authenticated.<%- admin ? 'adminAccount' : 'userAccount' %>', { "login": "'<%- login %>'", "password": "'<%- password %>'" })</span>
+  <%_ } _%>
+<%_ } else { _%>
+        >
+<%_ } _%>
       </div>
     </div>
   </div>

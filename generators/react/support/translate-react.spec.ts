@@ -96,9 +96,16 @@ translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
 `;
           expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
-"global-{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*","anotherPattern":"^[a-zA-Z0-9]*","dynamic":"{exec()}"}-translated-value-0"
+"global-{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*$","anotherPattern":"^[a-zA-Z0-9]*$","dynamic":"{exec()}"}-translated-value-0"
 "
 `);
+        });
+
+        it('should interpolate the whole strings of a Translate tag', () => {
+          const body = `<Translate contentKey="global.messages.info.authenticated.adminAccount" interpolate={{ login: 'admin', password: 'secret' }}>Administrator</Translate>`;
+          expect(replaceReactTranslations(body, extension)).toContain(
+            '{&quot;login&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;secret&quot;}',
+          );
         });
 
         it('should replace translate function with a closing brace in an interpolated string', () => {
@@ -125,7 +132,7 @@ translate('global', { pattern: '^[a-z$&{|}~]+$' })
 `;
           expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
-"global-{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*","anotherPattern":"^[a-zA-Z0-9]*","dynamic":"{exec()}"}-translated-value-0"
+"global-{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*$","anotherPattern":"^[a-zA-Z0-9]*$","dynamic":"{exec()}"}-translated-value-0"
 "
 `);
         });

@@ -3176,6 +3176,13 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
@@ -4349,6 +4356,18 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
@@ -5733,6 +5752,18 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
@@ -6905,6 +6936,18 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
@@ -8212,6 +8255,18 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
@@ -9784,6 +9839,18 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
@@ -10922,6 +10989,13 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,

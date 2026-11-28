@@ -44,6 +44,13 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -938,6 +945,18 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -2213,6 +2232,18 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -3187,6 +3218,18 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -4236,6 +4279,18 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -5328,6 +5383,18 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+    {
+      "admin": false,
+      "login": "user",
+      "password": "user",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -6199,6 +6266,13 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
+  "clientDefaultAccounts": [
+    {
+      "admin": true,
+      "login": "admin",
+      "password": "admin",
+    },
+  ],
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,

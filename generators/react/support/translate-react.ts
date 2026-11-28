@@ -79,7 +79,7 @@ const replaceTranslationKeysWithText = (
           value = Number.parseInt(value, 10);
         } else if (/^'.*'$/.test(value) || /^".*"$/.test(value)) {
           // extract string value, the translation is written in double quotes
-          value = value.slice(1, -2).replaceAll(String.raw`\'`, "'");
+          value = value.slice(1, -1).replaceAll(String.raw`\'`, "'");
           if (wrapTranslation) {
             value = value.replace(/(?<!\\)"/g, String.raw`\"`);
           }
