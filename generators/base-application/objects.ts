@@ -29,6 +29,7 @@ export const isJdlObjectName = (name: string): boolean => /^[a-zA-Z_][\w-]*$/.te
 
 /** A field of an object, as the `objects` of the `.yo-rc.json` file declare it. */
 export type ApplicationObjectFieldConfig = {
+  name: string;
   type: ApplicationObjectConfigType;
   documentation?: string;
   /** The validations of the field by name, with their value. */
@@ -43,7 +44,8 @@ export type ApplicationObjectConfig = {
   documentation?: string;
   /** The annotations of the object by name, in lower camel case, with their value. */
   annotations?: Record<string, unknown>;
-  fields?: Record<string, ApplicationObjectFieldConfig>;
+  /** The fields of the object, in the order they are declared. */
+  fields?: ApplicationObjectFieldConfig[];
 };
 
 /**
@@ -52,5 +54,5 @@ export type ApplicationObjectConfig = {
  */
 export type ApplicationObject = Omit<ApplicationObjectConfig, 'fields'> & {
   name: string;
-  fields?: Record<string, Omit<ApplicationObjectFieldConfig, 'type'> & { type: any }>;
+  fields?: (Omit<ApplicationObjectFieldConfig, 'type'> & { type: any })[];
 } & Record<string, any>;

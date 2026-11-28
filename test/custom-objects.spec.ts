@@ -395,48 +395,56 @@ describe('custom objects', () => {
       OrderCheckout: {
         type: 'service',
         documentation: 'The checkout of a cart.',
-        fields: {
-          placeOrder: { type: { $ref: '#/objects/PlaceOrder' }, documentation: 'Places the order of a cart.' },
-          quote: { type: { $ref: '#/objects/CalculateQuote' } },
-        },
+        fields: [
+          { name: 'placeOrder', type: { $ref: '#/objects/PlaceOrder' }, documentation: 'Places the order of a cart.' },
+          { name: 'quote', type: { $ref: '#/objects/CalculateQuote' } },
+        ],
       },
       PlaceOrder: {
         type: 'operation',
         annotations: { returns: { $ref: '.jhipster/Order.json' } },
-        fields: {
-          cartId: { type: 'Long', validations: { required: true } },
-          coupon: { type: { $ref: '#/objects/Coupon' } },
-        },
+        fields: [
+          { name: 'cartId', type: 'Long', validations: { required: true } },
+          { name: 'coupon', type: { $ref: '#/objects/Coupon' } },
+        ],
       },
       CalculateQuote: {
         type: 'operation',
         annotations: { get: true, returns: [{ $ref: '#/objects/Quote' }] },
-        fields: { cartId: { type: 'Long', validations: { required: true } } },
+        fields: [{ name: 'cartId', type: 'Long', validations: { required: true } }],
       },
       Quote: {
         type: 'record',
-        fields: {
-          total: { type: 'BigDecimal' },
-          lines: { type: [{ $ref: '#/objects/QuoteLine' }] },
-          tags: { type: ['String'] },
-          parent: { type: { $ref: '#/objects/Quote' } },
-        },
+        fields: [
+          { name: 'total', type: 'BigDecimal' },
+          { name: 'lines', type: [{ $ref: '#/objects/QuoteLine' }] },
+          { name: 'tags', type: ['String'] },
+          { name: 'parent', type: { $ref: '#/objects/Quote' } },
+        ],
       },
-      QuoteLine: { type: 'record', fields: { amount: { type: 'BigDecimal' } } },
+      QuoteLine: { type: 'record', fields: [{ name: 'amount', type: 'BigDecimal' }] },
       DiscountedQuote: {
         type: 'record',
-        fields: {
-          quote: {
+        fields: [
+          {
+            name: 'quote',
             type: {
               $ref: '#/objects/Quote',
               documentation: 'The quote with a discount.',
-              fields: { discount: { type: 'BigDecimal' }, total: { type: 'Long' } },
+              fields: [
+                { name: 'discount', type: 'BigDecimal' },
+                { name: 'total', type: 'Long' },
+              ],
             },
           },
-        },
+        ],
       },
-      Coupon: { type: 'record', fields: { code: { type: 'String', validations: { maxlength: 20 } } } },
+      Coupon: { type: 'record', fields: [{ name: 'code', type: 'String', validations: { maxlength: 20 } }] },
+      // Fields by name instead of a list, refused.
+      FieldsByName: { type: 'legacy', fields: { code: { type: 'String' } } },
     };
+    /** The field of an object by its name. */
+    const fieldOf = (object: { fields?: { name: string; type: any }[] }, name: string) => object.fields?.find(field => field.name === name);
     let services: any[];
     let writtenServices: string[];
     let generator: BaseApplicationGenerator;
@@ -514,10 +522,10 @@ describe('custom objects', () => {
     it('embeds the referenced objects, the same instance wherever they are referenced', () => {
       const [checkout] = services;
       const placeOrder = generator.getObject('PlaceOrder');
-      expect(checkout.fields.placeOrder.type).toBe(placeOrder);
-      expect(placeOrder.fields!.coupon.type).toBe(generator.getObject('Coupon'));
-      expect(checkout.fields.quote.type.annotations.returns).toEqual([generator.getObject('Quote')]);
-      expect(checkout.fields.quote.type.annotations.returns[0]).toBe(generator.getObject('Quote'));
+      expect(fieldOf(checkout, 'placeOrder')!.type).toBe(placeOrder);
+      expect(fieldOf(placeOrder, 'coupon')!.type).toBe(generator.getObject('Coupon'));
+      expect(fieldOf(checkout, 'quote')!.type.annotations.returns).toEqual([generator.getObject('Quote')]);
+      expect(fieldOf(checkout, 'quote')!.type.annotations.returns[0]).toBe(generator.getObject('Quote'));
     });
 
     it('embeds the referenced entities, the entities the application prepares', () => {
@@ -527,36 +535,45 @@ describe('custom objects', () => {
 
     it('keeps the lists and the types of the JDL', () => {
       const quote = generator.getObject('Quote');
-      expect(quote.fields!.lines.type).toEqual([generator.getObject('QuoteLine')]);
-      expect(quote.fields!.lines.type[0]).toBe(generator.getObject('QuoteLine'));
-      expect(quote.fields!.tags.type).toEqual(['String']);
-      expect(quote.fields!.total.type).toBe('BigDecimal');
+      expect(fieldOf(quote, 'lines')!.type).toEqual([generator.getObject('QuoteLine')]);
+      expect(fieldOf(quote, 'lines')!.type[0]).toBe(generator.getObject('QuoteLine'));
+      expect(fieldOf(quote, 'tags')!.type).toEqual(['String']);
+      expect(fieldOf(quote, 'total')!.type).toBe('BigDecimal');
+    });
+
+    it('keeps the fields in the order they are declared', () => {
+      expect(generator.getObject('Quote').fields!.map(field => field.name)).toEqual(['total', 'lines', 'tags', 'parent']);
     });
 
     it('embeds an object referencing itself', () => {
       const quote = generator.getObject('Quote');
-      expect(quote.fields!.parent.type).toBe(quote);
+      expect(fieldOf(quote, 'parent')!.type).toBe(quote);
     });
 
     it('merges the fields next to a reference over a copy of the referenced object', () => {
       const quote = generator.getObject('Quote');
-      const discounted = generator.getObject('DiscountedQuote').fields!.quote.type;
+      const discounted = fieldOf(generator.getObject('DiscountedQuote'), 'quote')!.type;
       expect(discounted).not.toBe(quote);
       expect(discounted.name).toBe('Quote');
       expect(discounted.documentation).toBe('The quote with a discount.');
-      expect(Object.keys(discounted.fields)).toEqual(['total', 'lines', 'tags', 'parent', 'discount']);
-      expect(discounted.fields.total.type).toBe('Long');
-      expect(discounted.fields.discount.type).toBe('BigDecimal');
+      // Merged by their name, in the order of the referenced object, the new ones at the end.
+      expect(discounted.fields.map((field: { name: string }) => field.name)).toEqual(['total', 'lines', 'tags', 'parent', 'discount']);
+      expect(fieldOf(discounted, 'total')!.type).toBe('Long');
+      expect(fieldOf(discounted, 'discount')!.type).toBe('BigDecimal');
       // The objects the referenced one references are kept, and the referenced object is not changed.
-      expect(discounted.fields.lines.type[0]).toBe(generator.getObject('QuoteLine'));
-      expect(discounted.fields.parent.type).toBe(quote);
+      expect(fieldOf(discounted, 'lines')!.type[0]).toBe(generator.getObject('QuoteLine'));
+      expect(fieldOf(discounted, 'parent')!.type).toBe(quote);
       expect(quote.documentation).toBeUndefined();
-      expect(quote.fields!.total.type).toBe('BigDecimal');
-      expect(quote.fields!.discount).toBeUndefined();
+      expect(fieldOf(quote, 'total')!.type).toBe('BigDecimal');
+      expect(fieldOf(quote, 'discount')).toBeUndefined();
     });
 
     it('fails for an object not declared', () => {
       expect(() => generator.getObject('Unknown')).toThrow(/The object Unknown is not declared/);
+    });
+
+    it('fails for an object with fields by name instead of a list', () => {
+      expect(() => generator.getObject('FieldsByName')).toThrow(/The fields of the object FieldsByName .* must be a list/);
     });
 
     it('fails to declare an object whose name is not a name of the JDL', () => {

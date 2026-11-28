@@ -307,6 +307,9 @@ export default class BaseApplicationGenerator<
       if (!config) {
         throw new Error(`The object ${name} is not declared in the objects of the .yo-rc.json file`);
       }
+      if (config.fields !== undefined && !Array.isArray(config.fields)) {
+        throw new Error(`The fields of the object ${name} of the .yo-rc.json file must be a list of fields with their name`);
+      }
       object = { ...structuredClone(config), name } as ApplicationObject;
       // Kept before its references are embedded, so an object referencing itself, directly or not, is the same instance.
       objects.set(name, object);
@@ -369,16 +372,32 @@ export default class BaseApplicationGenerator<
 
   /**
    * A copy of a value with the fields merged over it, the nested objects merged too: the referenced objects and entities
-   * are kept, and a list or a value of the fields replaces the one of the value.
+   * are kept, the fields of an object are merged by their name, in the order of the value with the new ones at the end,
+   * and another list or a value of the fields replaces the one of the value.
    */
   #mergeOver(value: Record<string, unknown>, fields: Record<string, unknown>): Record<string, unknown> {
     const mergeable = (item: unknown): item is Record<string, unknown> =>
       Boolean(item) && typeof item === 'object' && !Array.isArray(item) && !this.#embedded.has(item as object);
     const merged: Record<string, unknown> = { ...value };
     for (const [key, field] of Object.entries(fields)) {
-      merged[key] = mergeable(field) && mergeable(value[key]) ? this.#mergeOver(value[key], field) : field;
+      if (key === 'fields' && Array.isArray(field) && Array.isArray(value[key])) {
+        merged[key] = this.#mergeFieldsOver(value[key] as Record<string, unknown>[], field as Record<string, unknown>[]);
+      } else {
+        merged[key] = mergeable(field) && mergeable(value[key]) ? this.#mergeOver(value[key], field) : field;
+      }
     }
     return merged;
+  }
+
+  /** The fields of an object with the ones of the same name merged over them, and the other ones added at the end. */
+  #mergeFieldsOver(fields: Record<string, unknown>[], overFields: Record<string, unknown>[]): Record<string, unknown>[] {
+    const overByName = new Map(overFields.map(field => [field.name, field]));
+    const merged = fields.map(field => {
+      const over = overByName.get(field.name);
+      return over ? this.#mergeOver(field, over) : field;
+    });
+    const names = new Set(fields.map(field => field.name));
+    return [...merged, ...overFields.filter(field => !names.has(field.name))];
   }
 
   /** The object (`#/objects/<Name>`) or the entity (`.jhipster/<Entity>.json`) a reference names. */

@@ -212,16 +212,17 @@ export default class extends Generator {
 #### Objects of the application (base-application)
 
 The `objects` of the `.yo-rc.json` file declare the objects of an application by name, out of the `generator-jhipster`
-key: each with its `type`, `documentation`, `annotations` and `fields`, a field with its `type`, `documentation`,
-`validations` and `annotations`. A type is a type of the JDL or an enum, a reference to an entity
-(`{ "$ref": ".jhipster/Order.json" }`) or to an object (`{ "$ref": "#/objects/Quote" }`), or an array of the type of its
-items:
+key: each with its `type`, `documentation`, `annotations` and `fields`, a list in the order they are declared, a field
+with its `name`, `type`, `documentation`, `validations` and `annotations`. A type is a type of the JDL or an enum, a
+reference to an entity (`{ "$ref": ".jhipster/Order.json" }`) or to an object (`{ "$ref": "#/objects/Quote" }`), or an
+array of the type of its items:
 
 - `getObjectConfig(name)` gives the configuration of an object as declared;
 - `getObject(name)` gives the object, with its `name`, and the objects and the entities it references embedded in place of
   their reference, each the same instance wherever it is referenced, an entity the one the application prepares; a
   reference with other fields (`{ "$ref": "#/objects/Quote", "documentation": "..." }`) gives a copy of the referenced
-  one with the fields merged over it, the objects and the entities it references kept;
+  one with the fields merged over it, the objects and the entities it references kept, and its `fields` merged by their
+  `name`, in the order of the referenced one with the new ones at the end;
 - `findObjects(type)` gives the objects of a type, sorted by name.
 
 The type of an object is the name of the custom object handling it: its getter gives `findObjects(<name>)`, and its
