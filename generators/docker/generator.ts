@@ -102,6 +102,37 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           dockerServices.push(application.prodDatabaseType);
         }
       },
+      packageJsonScripts({ application }) {
+        // The scripts of the root package.json that do not depend on the files written, written by javascript-simple-application:
+        // a blueprint changes them before writing.
+        const { databaseType, databaseTypeSql, prodDatabaseType, packageJsonScripts } = application;
+        let postServicesSleep;
+
+        const dbType = databaseTypeSql ? prodDatabaseType : databaseType;
+        if (application.dockerServices.includes(dbType!)) {
+          const dockerFile = `${application.dockerServicesDir}${dbType}.yml`;
+          Object.assign(packageJsonScripts, {
+            'docker:db:up': `docker compose -f ${dockerFile} up --wait`,
+            'docker:db:down': `docker compose -f ${dockerFile} down -v`,
+          });
+          if (application.databaseTypeCassandra) {
+            // Wait for migration
+            postServicesSleep = 10;
+          }
+        } else {
+          packageJsonScripts['docker:db:up'] = `echo "Docker for db ${dbType} not configured for application ${application.baseName}"`;
+        }
+
+        if (postServicesSleep) {
+          packageJsonScripts['postservices:up'] = `sleep ${postServicesSleep}`;
+        }
+        Object.assign(packageJsonScripts, {
+          'app:up': `docker compose -f ${application.dockerServicesDir}app.yml up --wait`,
+          'ci:e2e:prepare:docker': 'npm run services:up --if-present && docker ps -a',
+          'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',
+          'ci:e2e:teardown': 'npm run ci:e2e:teardown:docker --if-present',
+        });
+      },
       addAppServices({ application, source }) {
         const writeInitialServicesFile = () => {
           if (!this.hasServicesFile) {
@@ -252,24 +283,6 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
       packageJsonScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const { databaseType, databaseTypeSql, prodDatabaseType } = application;
-        let postServicesSleep;
-
-        const dbType = databaseTypeSql ? prodDatabaseType : databaseType;
-        if (application.dockerServices.includes(dbType!)) {
-          const dockerFile = `${application.dockerServicesDir}${dbType}.yml`;
-          scriptsStorage.set({
-            'docker:db:up': `docker compose -f ${dockerFile} up --wait`,
-            'docker:db:down': `docker compose -f ${dockerFile} down -v`,
-          });
-          if (application.databaseTypeCassandra) {
-            // Wait for migration
-            postServicesSleep = 10;
-          }
-        } else {
-          scriptsStorage.set('docker:db:up', `echo "Docker for db ${dbType} not configured for application ${application.baseName}"`);
-        }
-
         ['keycloak', 'elasticsearch', 'kafka', 'consul', 'redis', 'memcached', 'jhipster-registry'].forEach(dockerConfig => {
           const dockerFile = `${application.dockerServicesDir}${dockerConfig}.yml`;
           if (this.fs.exists(this.destinationPath(dockerFile))) {
@@ -278,23 +291,12 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           }
         });
 
-        if (postServicesSleep) {
-          scriptsStorage.set({
-            'postservices:up': `sleep ${postServicesSleep}`,
-          });
-        }
         if (this.hasServicesFile) {
           scriptsStorage.set({
             'services:up': `docker compose -f ${application.dockerServicesDir}services.yml up --wait`,
             'ci:e2e:teardown:docker': `docker compose -f ${application.dockerServicesDir}services.yml down -v && docker ps -a`,
           });
         }
-        scriptsStorage.set({
-          'app:up': `docker compose -f ${application.dockerServicesDir}app.yml up --wait`,
-          'ci:e2e:prepare:docker': 'npm run services:up --if-present && docker ps -a',
-          'ci:e2e:prepare': 'npm run ci:e2e:prepare:docker',
-          'ci:e2e:teardown': 'npm run ci:e2e:teardown:docker --if-present',
-        });
       },
     });
   }

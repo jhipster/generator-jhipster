@@ -32,15 +32,11 @@ export default class ServerGenerator extends JavaApplicationGenerator {
     }
   }
 
-  get postWriting() {
-    return this.asPostWritingTaskGroup({
-      packageJsonScripts({ application }) {
-        const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
-        packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
-        packageJsonConfigStorage.packaging = application.defaultPackaging;
-      },
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      // The scripts of the root package.json, written by javascript-simple-application: a blueprint changes them before writing.
       packageJsonBackendScripts({ application }) {
-        const scriptsStorage = this.packageJson.createStorage('scripts');
+        const { packageJsonScripts } = application;
         const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${application.packageName}=OFF`;
         const javaTestLog =
           '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
@@ -49,7 +45,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
         if (buildTool === 'maven') {
           const { nodePackageManager } = application;
           const excludeWebapp = application.skipClient ? '' : ` -Dskip.installnode${nodePackageManager} -Dskip.${nodePackageManager}`;
-          scriptsStorage.set({
+          Object.assign(packageJsonScripts, {
             'app:start': './mvnw -ntp --batch-mode',
             'backend:info': './mvnw --version',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
@@ -65,7 +61,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           });
         } else if (buildTool === 'gradle') {
           const excludeWebapp = application.skipClient ? '' : '-x webapp -x webapp_test';
-          scriptsStorage.set({
+          Object.assign(packageJsonScripts, {
             'app:start': './gradlew',
             'backend:info': './gradlew -v',
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
@@ -79,7 +75,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           });
         }
 
-        scriptsStorage.set({
+        Object.assign(packageJsonScripts, {
           'java:jar:dev': 'npm run java:jar -- -Pdev,webapp',
           'java:jar:prod': 'npm run java:jar -- -Pprod',
           'java:war:dev': 'npm run java:war -- -Pdev,webapp',
@@ -99,7 +95,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
         });
       },
       packageJsonE2eScripts({ application }) {
-        const scriptsStorage = this.packageJson.createStorage('scripts');
+        const { packageJsonScripts } = application;
 
         let applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
         applicationWaitTimeout = application.authenticationTypeOauth2 ? applicationWaitTimeout * 2 : applicationWaitTimeout;
@@ -112,9 +108,23 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           application.applicationTypeMicroservice ?
             `http-get://127.0.0.1:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
           : `${protocol}-get://127.0.0.1:$npm_package_config_backend_port/management/health`;
-        scriptsStorage.set({
+        Object.assign(packageJsonScripts, {
           'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
         });
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      packageJsonScripts({ application }) {
+        const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
+        packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
+        packageJsonConfigStorage.packaging = application.defaultPackaging;
       },
       sonar({ application, source }) {
         (source as CommonSource).ignoreSonarRule?.({

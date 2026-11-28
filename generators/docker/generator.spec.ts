@@ -90,7 +90,8 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.getSnapshot('**/app.yml')).toMatchSnapshot();
       });
       it('should write the database docker scripts', () => {
-        const { scripts } = runResult.fs.readJSON(`${runResult.cwd}/package.json`) as { scripts: Record<string, string> };
+        // Written to the root package.json by javascript-simple-application, which this generator alone does not run.
+        const scripts = (runResult.application as unknown as { packageJsonScripts: Record<string, string> }).packageJsonScripts;
         if (dbType === ORACLE) {
           expect(scripts['docker:db:up']).toBe('echo "Docker for db oracle not configured for application jhipster"');
           expect(scripts['docker:db:down']).toBeUndefined();
