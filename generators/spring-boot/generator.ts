@@ -23,12 +23,12 @@ import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.t
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFrameworkTypes, websocketTypes } from '../../lib/jhipster/index.ts';
-import { mutateData, mutateDefaults } from '../../lib/utils/index.ts';
+import { mutateData, mutateDefaults, stringHashCode } from '../../lib/utils/index.ts';
 import { lowerFirst } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { isContentTypeField } from '../base-application/internal/content-type-fields.ts';
 import { getFieldFakeDataDomain } from '../base-application/internal/fake-data.ts';
-import { generateEntitySamples } from '../base-application/support/index.ts';
+import { createFaker, generateEntitySamples } from '../base-application/support/index.ts';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
 import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
@@ -610,6 +610,15 @@ ${classProperties
           for (const field of primaryKey.fields) {
             field.fieldJavaValueGenerator = getJavaValueGeneratorForType(field.fieldType);
           }
+        }
+      },
+      async preparePartialPatchTestFields({ application, entity }) {
+        // The fields the partial update test sends, drawn once for the entity: the faker of the entity, reseeded before each
+        // template, does not give the same draws while the templates render.
+        const faker = await createFaker();
+        faker.seed(stringHashCode(`${application.baseName}-${entity.entityClass}-partial-update`));
+        for (const field of entity.fields.filter(field => !field.id && !field.autoGenerate && !field.transient)) {
+          field.sbTestPartialPatchIncluded = faker.datatype.boolean();
         }
       },
       prepareTestValues({ entity }) {

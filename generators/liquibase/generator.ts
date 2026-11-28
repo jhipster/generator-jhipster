@@ -22,6 +22,7 @@ import min from 'lodash-es/min.js';
 
 import { fieldTypes } from '../../lib/jhipster/index.ts';
 import type { EntityAll } from '../../lib/types/application-all.d.ts';
+import { stringHashCode } from '../../lib/utils/index.ts';
 import { mutateData, mutateDefaults } from '../../lib/utils/object.ts';
 import { escape } from '../../lib/utils/string-utils.ts';
 import {
@@ -32,6 +33,7 @@ import {
 import { default as prepareSqlApplicationProperties } from '../base-application/generators/database-bootstrap/support/application-properties.ts';
 import { getJdbcUrl } from '../base-application/generators/database-bootstrap/support/database-url.ts';
 import {
+  createFaker,
   formatEntitySample,
   generateEntitySamples,
   prepareCommonFieldForTemplates,
@@ -338,6 +340,23 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
           }
         }
         this.databaseChangelogs = this.databaseChangelogs.filter(Boolean);
+      },
+      async prepareFakeDataRelationshipRows({ application }) {
+        // The row of the related entity each fake data row references: the same row, or a random one when the related entity has
+        // fewer rows, drawn once every entity has its fake data.
+        for (const { newEntity, entity, changelogData } of this.databaseChangelogs) {
+          if (!newEntity || changelogData!.skipFakeData) continue;
+          const faker = await createFaker();
+          faker.seed(stringHashCode(`${application.baseName}-${entity.entityClass}-liquibase-relationships`));
+          for (const relationship of entity.relationships.filter(relationship => relationship.liquibaseGenerateFakeData)) {
+            const { fakeDataCount } = relationship.otherEntity;
+            relationship.liquibaseFakeDataRows = Array.from({ length: entity.fakeDataCount }, (_, row) =>
+              fakeDataCount > 0 && row >= fakeDataCount && !relationship.unique ?
+                faker.number.int({ min: 0, max: fakeDataCount - 1 })
+              : row,
+            );
+          }
+        }
       },
     });
   }
