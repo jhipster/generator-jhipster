@@ -24,6 +24,11 @@ const { STRING, UUID, LONG, INTEGER } = dbTypes.CommonDBTypes;
 const { SQL } = databaseTypes;
 
 /**
+ * Java types supported as a member of a composite primary key.
+ */
+export const compositeIdFieldTypes: string[] = [STRING, INTEGER, LONG, UUID];
+
+/**
  * Returns the java value generator for the given primaryKey type
  */
 export const getJavaValueGeneratorForType = (type: string) => {

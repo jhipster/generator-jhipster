@@ -36,7 +36,17 @@ const useSimpleR2dbcRepository = (ctx: any): boolean =>
     ctx.isUsingMapsId
   );
 
+const entityIdFilesBlock = javaMainPackageTemplatesBlock('_entityPackage_');
+
 const domainFiles = asWriteFilesBlock([
+  {
+    condition: ctx => !ctx.reactive && ctx.primaryKey?.composite && ctx.entityDomainLayer,
+    ...entityIdFilesBlock,
+    templates: ['domain/_entityClass_Id.java'],
+    renameTo(this: any, data: any, filePath: string) {
+      return entityIdFilesBlock.renameTo!.call(this, data, filePath.replace('_entityClass_Id', `${data.entityClass}Id`));
+    },
+  },
   {
     condition: generator => !generator.reactive && generator.entityDomainLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),

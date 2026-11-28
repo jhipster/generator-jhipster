@@ -347,6 +347,11 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           entityClientEnumImports: ({ fields }) => getClientEnumImportsFormat(fields, ANGULAR),
         });
       },
+      preparePrimaryKeyNames({ entity }) {
+        mutateDefaults(entity, {
+          angularPrimaryKeyNames: ({ primaryKey }) => primaryKey?.fields.map(field => `'${field.fieldName}'`).join(' | '),
+        });
+      },
       prepareTranslationPipeUsage({ application: { enableTranslation }, entity }) {
         mutateData(entity as AngularEntity & { searchEngineAny?: boolean }, {
           angularEntityDetailsRequiresTranslationPipe: ({ fields }) =>

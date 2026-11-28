@@ -19,6 +19,9 @@
 package <%- entityAbsolutePackage %>.repository;
 
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
+<%_ if (primaryKey.composite) { _%>
+import <%- entityAbsolutePackage %>.domain.<%- primaryKey.type %>;
+<%_ } _%>
 
 <%_ if (implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.Page;

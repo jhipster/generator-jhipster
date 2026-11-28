@@ -36,7 +36,7 @@ import { createRequestOption<%- searchEngineAny ? `, ${searchType}` : '' %> } fr
 import { I<%- entityAngularName %><% if (!readOnly) { %>, New<%- entityAngularName %><% } %> } from '../<%- entityFileName %>.model';
 <%_ if (!readOnly && updatableEntity) { _%>
 
-export type PartialUpdate<%- entityAngularName %> = Partial<I<%- entityAngularName %>> & Pick<I<%- entityAngularName %>, '<%- primaryKey.name %>'>;
+export type PartialUpdate<%- entityAngularName %> = Partial<I<%- entityAngularName %>> & Pick<I<%- entityAngularName %>, <%- angularPrimaryKeyNames %>>;
 <%_ } _%>
 
 @Service()
@@ -72,16 +72,16 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
 <%_ if (!readOnly && updatableEntity) { _%>
 
     update(<%- entityInstance %>: I<%- entityAngularName %>): Observable<I<%- entityAngularName %>> {
-        return this.http.put<I<%- entityAngularName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%- entityAngularName %>Identifier(<%- entityInstance %>))}`, <%- entityInstance %>);
+        return this.http.put<I<%- entityAngularName %>>(`${this.resourceUrl}/${<%- primaryKey.composite ? `this.get${entityAngularName}Identifier(${entityInstance})` : `encodeURIComponent(this.get${entityAngularName}Identifier(${entityInstance}))` %>}`, <%- entityInstance %>);
     }
 
     partialUpdate(<%- entityInstance %>: PartialUpdate<%- entityAngularName %>): Observable<I<%- entityAngularName %>> {
-        return this.http.patch<I<%- entityAngularName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%- entityAngularName %>Identifier(<%- entityInstance %>))}`, <%- entityInstance %>);
+        return this.http.patch<I<%- entityAngularName %>>(`${this.resourceUrl}/${<%- primaryKey.composite ? `this.get${entityAngularName}Identifier(${entityInstance})` : `encodeURIComponent(this.get${entityAngularName}Identifier(${entityInstance}))` %>}`, <%- entityInstance %>);
     }
 <%_ } _%>
 
     find(<%- primaryKey.name %>: <%- tsKeyType %>): Observable<I<%- entityAngularName %>> {
-        return this.http.get<I<%- entityAngularName %>>(`${this.resourceUrl}/${encodeURIComponent(<%- primaryKey.name %>)}`);
+        return this.http.get<I<%- entityAngularName %>>(`${this.resourceUrl}/${<%- primaryKey.composite ? primaryKey.name : `encodeURIComponent(${primaryKey.name})` %>}`);
     }
 
     query(req?: any): Observable<HttpResponse<I<%- entityAngularName %>[]>> {
@@ -91,7 +91,7 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
 
 <%_ if (!readOnly) { _%>
     delete(<%- primaryKey.name %>: <%- tsKeyType %>): Observable<undefined> {
-        return this.http.delete<undefined>(`${this.resourceUrl}/${encodeURIComponent(<%- primaryKey.name %>)}`);
+        return this.http.delete<undefined>(`${this.resourceUrl}/${<%- primaryKey.composite ? primaryKey.name : `encodeURIComponent(${primaryKey.name})` %>}`);
     }
 
 <%_ } _%>
@@ -103,15 +103,24 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
     }
 <%_ } _%>
 
-    get<%- entityAngularName %>Identifier(<%- entityInstance %>: Pick<I<%- entityAngularName %>, '<%- primaryKey.name %>'>): <%- primaryKey.tsType %> {
+<%_ if (primaryKey.composite) { _%>
+    /**
+     * The key of the <%- entityInstance %> in its url: the parts of its id, each one encoded, joined by slashes.
+     */
+<%_ } _%>
+    get<%- entityAngularName %>Identifier(<%- entityInstance %>: Pick<I<%- entityAngularName %>, <%- angularPrimaryKeyNames %>>): <%- primaryKey.tsType %> {
+<%_ if (primaryKey.composite) { _%>
+        return [<%- primaryKey.fields.map(field => `${entityInstance}.${field.fieldName}`).join(', ') %>].map(part => encodeURIComponent(part)).join('/');
+<%_ } else { _%>
         return <%- entityInstance %>.<%- primaryKey.name %>;
+<%_ } _%>
     }
 
-    compare<%- entityAngularName %>(o1: Pick<I<%- entityAngularName %>, '<%- primaryKey.name %>'> | null, o2: Pick<I<%- entityAngularName %>, '<%- primaryKey.name %>'> | null): boolean {
+    compare<%- entityAngularName %>(o1: Pick<I<%- entityAngularName %>, <%- angularPrimaryKeyNames %>> | null, o2: Pick<I<%- entityAngularName %>, <%- angularPrimaryKeyNames %>> | null): boolean {
         return o1 && o2 ? this.get<%- entityAngularName %>Identifier(o1) === this.get<%- entityAngularName %>Identifier(o2) : o1 === o2;
     }
 
-    add<%- entityAngularName %>ToCollectionIfMissing<Type extends Pick<I<%- entityAngularName %>, '<%- primaryKey.name %>'>>(<%- entityInstance %>Collection: Type[], ...<%- entityInstancePlural %>ToCheck: (Type | null | undefined)[]): Type[] {
+    add<%- entityAngularName %>ToCollectionIfMissing<Type extends Pick<I<%- entityAngularName %>, <%- angularPrimaryKeyNames %>>>(<%- entityInstance %>Collection: Type[], ...<%- entityInstancePlural %>ToCheck: (Type | null | undefined)[]): Type[] {
         const <%- entityInstancePlural %>: Type[] = <%- entityInstancePlural %>ToCheck.filter(<%- entityInstance %>Item => <%- entityInstance %>Item !== null && <%- entityInstance %>Item !== undefined);
         if (<%- entityInstancePlural %>.length > 0) {
             const <%- entityInstance %>CollectionIdentifiers = <%- entityInstance %>Collection.map(<%- entityInstance %>Item => this.get<%- entityAngularName %>Identifier(<%- entityInstance %>Item));

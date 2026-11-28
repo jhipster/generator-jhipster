@@ -838,6 +838,158 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a composite primary key', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'OrderLine',
+          changelogDate: '20160926101210',
+          fields: [
+            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+            { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+            { fieldName: 'productCode', fieldType: 'String' },
+          ],
+        },
+      ]);
+    });
+
+    it('should match generated files snapshot', () => {
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
+
+  describe('with a gateway and a microservice entity with a composite primary key', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ applicationType: 'gateway', reactive: true, skipClient: true }, [
+        {
+          name: 'OrderLine',
+          changelogDate: '20160926101210',
+          microserviceName: 'sales',
+          fields: [
+            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+            { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+          ],
+        },
+      ]);
+    });
+
+    it('should not generate the server of the entity', () => {
+      runResult.assertNoFile('src/main/java/com/mycompany/myapp/domain/OrderLineId.java');
+    });
+
+    it('should skip the client for the entity', () => {
+      expect(runResult.entities!.OrderLine.skipClient).toBe(true);
+    });
+  });
+
+  describe('with a composite primary key and the angular client', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ clientFramework: 'angular' }, [
+        {
+          name: 'OrderLine',
+          changelogDate: '20160926101210',
+          fields: [
+            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+            { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+          ],
+        },
+      ]);
+    });
+
+    it('should keep the client for the entity', () => {
+      expect(runResult.entities!.OrderLine.skipClient).toBeFalsy();
+    });
+  });
+
+  describe('with a composite primary key and another client framework', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ clientFramework: 'react' }, [
+        {
+          name: 'OrderLine',
+          changelogDate: '20160926101210',
+          fields: [
+            { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+            { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+          ],
+        },
+      ]);
+    });
+
+    it('should skip the client for the entity', () => {
+      expect(runResult.entities!.OrderLine.skipClient).toBe(true);
+    });
+  });
+
+  describe('with an unsupported composite primary key', () => {
+    it('should reject a MapStruct dto', async () => {
+      await expect(
+        helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+          {
+            name: 'OrderLine',
+            changelogDate: '20160926101210',
+            dto: 'mapstruct',
+            fields: [
+              { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+              { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+            ],
+          },
+        ]),
+      ).rejects.toThrow('Composite primary keys are not supported with MapStruct DTOs yet (entity OrderLine).');
+    });
+
+    it('should reject an unsupported id field type', async () => {
+      await expect(
+        helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+          {
+            name: 'OrderLine',
+            changelogDate: '20160926101210',
+            fields: [
+              { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+              { fieldName: 'lineNumber', fieldType: 'BigDecimal', options: { id: true } },
+            ],
+          },
+        ]),
+      ).rejects.toThrow(
+        'Composite primary key field type(s) "BigDecimal" (lineNumber) of entity OrderLine are not supported yet. Supported types are: String, Integer, Long, UUID.',
+      );
+    });
+
+    it('should reject a relationship to an entity with a composite primary key', async () => {
+      await expect(
+        helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+          {
+            name: 'OrderLine',
+            changelogDate: '20160926101210',
+            fields: [
+              { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+              { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+            ],
+          },
+          {
+            name: 'Shipment',
+            changelogDate: '20160926101211',
+            relationships: [{ relationshipName: 'orderLine', otherEntityName: 'OrderLine', relationshipType: 'many-to-one' }],
+          },
+        ]),
+      ).rejects.toThrow('Relationships to entities with a composite primary key are not supported yet (Shipment -> OrderLine).');
+    });
+
+    it('should reject a reactive application', async () => {
+      await expect(
+        helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true, reactive: true }, [
+          {
+            name: 'OrderLine',
+            changelogDate: '20160926101210',
+            fields: [
+              { fieldName: 'orderId', fieldType: 'Long', options: { id: true } },
+              { fieldName: 'lineNumber', fieldType: 'Integer', options: { id: true } },
+            ],
+          },
+        ]),
+      ).rejects.toThrow('Composite primary keys are not supported by reactive applications yet (entity OrderLine).');
+    });
+  });
+
   describe('with filtering entities', () => {
     before(async () => {
       await helpers

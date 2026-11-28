@@ -45,7 +45,7 @@ webTestClient
 .expectStatus()
 .isOk();
 <%_ } else { _%>
-rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- serverUsesCsrf ? '.with(csrf())' : '' %>
+rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- primaryKey.composite ? 'idUriVariables(' : '' %>partialUpdated<%- persistClass %>.<%- primaryKey.propertySupplierName %>()<%- primaryKey.composite ? ')' : '' %>)<%- serverUsesCsrf ? '.with(csrf())' : '' %>
 .contentType("application/merge-patch+json")
 .content(convertObjectToPartialUpdateBody(om, <%- `partialUpdated${persistClass}` %>)))
 .andExpect(status().isOk());

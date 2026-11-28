@@ -176,11 +176,11 @@ describe('<%- entityAngularName %> Management Component', () => {
 <%_ } _%>
     describe('track<%- primaryKey.nameCapitalized %>', () => {
         it('should forward to <%- entityInstance %>Service', () => {
-            const entity = <%- tsPrimaryKeySamples[0] %>;
+            const entity = <%- primaryKey.composite ? primaryKey.tsSampleParams[0] : tsPrimaryKeySamples[0] %>;
             vi.spyOn(service, 'get<%- entityAngularName %>Identifier');
             const <%- primaryKey.name %> = comp.track<%- primaryKey.nameCapitalized %>(entity);
             expect(service.get<%- entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
-            expect(<%- primaryKey.name %>).toBe(entity.<%- primaryKey.name %>);
+            expect(<%- primaryKey.name %>).toBe(<%- primaryKey.composite ? primaryKey.tsSampleValues[0] : `entity.${primaryKey.name}` %>);
         });
     });
 
@@ -224,7 +224,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     httpMock.expectOne({ method: 'GET' });
 
     // THEN
-    expect(service.<%- entityInstancePlural %>Params()).toMatchObject({ sort: ['<%- primaryKey.fields.map(field => field.fieldName).join(',') %>,<%- order %>'] });
+    expect(service.<%- entityInstancePlural %>Params()).toMatchObject({ sort: ['<%- primaryKey.name %>,<%- order %>'] });
   });
 <%_ if (paginationInfiniteScroll) { _%>
 

@@ -50,7 +50,7 @@ describe('<%- entityAngularName %> Management Delete Component', () => {
       vi.spyOn(mockActiveModal, 'close');
 
       // WHEN
-      comp.confirmDelete(<%- tsKeyId %>);
+      comp.confirmDelete(<%- primaryKey.composite ? primaryKey.tsSampleParams[0] : tsKeyId %>);
 
       // THEN
       expect(service.delete).toHaveBeenCalledWith(<%- tsKeyId %>);

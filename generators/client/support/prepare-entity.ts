@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { mutateData } from '../../../lib/utils/object.ts';
 import { isContentTypeField } from '../../base-application/internal/content-type-fields.ts';
 import { type EntitySamplesBatch, formatEntitySample, generateEntitySamples } from '../../base-application/support/entity-samples.ts';
@@ -61,12 +62,30 @@ export function preparePostEntityClientDerivedProperties(entity: ClientEntity) {
       4,
       clientFields.filter(field => !field.id && field.fieldValidationRequired),
     );
-    entity.tsSampleWithNewData = stringifyTsEntity({ ...newSample, [entity.primaryKey.name]: null }, options);
+    // A new entity has no primary key yet, every part of a composite one.
+    const newPrimaryKey = Object.fromEntries(
+      (entity.primaryKey.composite ? entity.primaryKey.fields.map(field => field.fieldName) : [entity.primaryKey.name]).map(name => [
+        name,
+        null,
+      ]),
+    );
+    entity.tsSampleWithNewData = stringifyTsEntity({ ...newSample, ...newPrimaryKey }, options);
 
     mutateData(entity, {
       tsKeyType: getTypescriptKeyType(entity.primaryKey.type),
     });
-    entity.primaryKey.tsSampleValues = [generateTestEntityId(entity.primaryKey, 0), generateTestEntityId(entity.primaryKey, 1)];
+    // The key of an entity with a composite primary key in the client is the text of its parts, as its url has them.
+    entity.primaryKey.tsSampleValues =
+      entity.primaryKey.composite ?
+        ([0, 1] as const).map(
+          index =>
+            `'${entity.primaryKey!.fields.map(field => generateTestEntityId(field.fieldType as FieldType, index, false)).join('/')}'`,
+        )
+      : [generateTestEntityId(entity.primaryKey, 0), generateTestEntityId(entity.primaryKey, 1)];
+    entity.primaryKey.tsSampleParams = ([0, 1] as const).map(
+      index =>
+        `{ ${entity.primaryKey!.fields.map(field => `${field.fieldName}: ${generateTestEntityId(field.fieldType as FieldType, index)}`).join(', ')} }`,
+    );
     entity.tsPrimaryKeySamples = generateTsSamples(5, entity.primaryKey.fields, 2).map(sample => stringifyTsEntity(sample));
   }
 }

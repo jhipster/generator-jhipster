@@ -177,6 +177,32 @@ Validations follow the type, separated by spaces:
 Each type accepts its own set of validations (`minlength` on a `String`, `min` on a number, ...); a validation the type does not
 accept, an unknown validation, or a decimal where an integer is expected (`maxlength(1.5)`) is an error.
 
+### Primary keys
+
+An entity without an `@Id` field gets a generated `id`. The `@Id` annotation marks a field as the primary key, and an entity
+with several `@Id` fields has a composite primary key:
+
+```jdl
+entity OrderLine {
+  @Id orderId Long
+  @Id lineNumber Integer
+  quantity Integer required
+}
+```
+
+is imported into `.jhipster/OrderLine.json` (excerpt), each `@Id` field with the `id` option:
+
+```json
+{
+  "fields": [
+    { "fieldName": "orderId", "fieldType": "Long", "options": { "id": true } },
+    { "fieldName": "lineNumber", "fieldType": "Integer", "options": { "id": true } }
+    // ...
+  ]
+  // ...
+}
+```
+
 ## Annotations
 
 An annotation is `@name` or `@name(value)`, where the value is a string, an integer, a decimal, `true`, `false` or a name.

@@ -285,6 +285,9 @@ exports[`generator - generate-sample with ng-default-additional (star jdl-entity
   "02-authority-relationship.jdl": {
     "stateCleared": "modified",
   },
+  "composite-id.jdl": {
+    "stateCleared": "modified",
+  },
   "custom-domain.jdl": {
     "stateCleared": "modified",
   },
@@ -315,6 +318,9 @@ exports[`generator - generate-sample with ng-default-additional-playwright (star
     "stateCleared": "modified",
   },
   "02-authority-relationship.jdl": {
+    "stateCleared": "modified",
+  },
+  "composite-id.jdl": {
     "stateCleared": "modified",
   },
   "custom-domain.jdl": {
@@ -358,6 +364,9 @@ exports[`generator - generate-sample with vue-default-additional (specific jdl-e
     "stateCleared": "modified",
   },
   "02-authority-relationship.jdl": {
+    "stateCleared": "modified",
+  },
+  "composite-id.jdl": {
     "stateCleared": "modified",
   },
   "custom-domain.jdl": {

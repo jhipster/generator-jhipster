@@ -57,6 +57,15 @@ describe('<%- entityAngularName %> Service', () => {
             req.flush(returnedFromService);
             expect(expectedResult).toMatchObject(expected);
         });
+<%_ if (primaryKey.composite) { _%>
+
+        it('should send the key of the <%- entityInstance %> as the segments of its url', () => {
+            service.find(<%- tsKeyId %>).subscribe();
+
+            const req = httpMock.expectOne({ method: 'GET' });
+            expect(req.request.url).toContain(<%- tsKeyId %>);
+        });
+<%_ } _%>
 
 <%_ if (!readOnly) { _%>
         it('should create a <%- entityAngularName %>', () => {

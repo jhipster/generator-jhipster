@@ -51,8 +51,13 @@ export class <%- entityAngularName %>DeleteDialog {
         this.activeModal.dismiss();
     }
 
+<%_ if (primaryKey.composite) { _%>
+    confirmDelete(<%- entityInstance %>: I<%- entityAngularName %>): void {
+        this.<%- entityInstance %>Service.delete(this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(<%- entityInstance %>)).subscribe(() => {
+<%_ } else { _%>
     confirmDelete(<%- primaryKey.name %>: <%- tsKeyType %>): void {
         this.<%- entityInstance %>Service.delete(<%- primaryKey.name %>).subscribe(() => {
+<%_ } _%>
             this.activeModal.close(ITEM_DELETED_EVENT);
         });
     }

@@ -56,7 +56,10 @@ export default class E2eBootstrapGenerator extends BaseApplicationGenerator<E2eE
         const [[testEntitySample], [testEntity], [fakeData]]: (EntitySample | undefined)[][] = generateEntitySamples(entity, {
           seed: 'e2e',
           batches: [
-            { fields: jsonFields.filter(field => !(field as { nullable?: boolean }).nullable) },
+            // The parts of a composite primary key are required to create the entity.
+            {
+              fields: jsonFields.filter(field => !(field as { nullable?: boolean }).nullable || (entity.primaryKey?.composite && field.id)),
+            },
             { fields: jsonFields },
             { fields: fields.filter(field => !field.id || !field.autoGenerate) },
           ],
