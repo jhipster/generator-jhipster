@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientRootDir) { _%>
+import { relative, resolve } from 'node:path';
+<%_ } _%>
 import { fileURLToPath } from 'node:url'
 
 import { defineConfig, mergeConfig } from 'vitest/config';
@@ -30,14 +33,26 @@ export default mergeConfig(
       environment: 'happy-dom', // happy-dom provides a better performance but doesn't have a default url.
       pool: 'vmThreads',
       setupFiles: [fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientSrcDir) %>app/test-setup.ts', import.meta.url))],
+<%_ if (clientRootDir) { _%>
+      // Sonar resolves the paths of the reports from the root of the project, which holds the client in <%- clientRootDir %>.
+      reporters: [
+        'default',
+        ['vitest-sonar-reporter', { onWritePath: (path: string) => relative(fileURLToPath(new URL('./<%- relativeDir(clientRootDir, '') %>', import.meta.url)), resolve(path)) }],
+      ],
+<%_ } else { _%>
       reporters: ['default', 'vitest-sonar-reporter'],
+<%_ } _%>
       outputFile: {
         'vitest-sonar-reporter': fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-vitest.xml', import.meta.url)),
       },
       coverage: {
         provider: 'v8',
         // lcov writes the lcov.info that Sonar reads, with its HTML report.
+<%_ if (clientRootDir) { _%>
+        reporter: ['text', ['lcov', { projectRoot: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, '') %>', import.meta.url)) }]],
+<%_ } else { _%>
         reporter: ['text', 'lcov'],
+<%_ } _%>
         // The helpers of the tests.
         exclude: ['**/app/testing/**'],
         thresholds: {

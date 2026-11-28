@@ -4251,6 +4251,18 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "addSonarProperties": [
     [
       {
+        "key": "sonar.sources",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.tests",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+    ],
+    [
+      {
         "key": "sonar.test.inclusions",
         "value": "clientRoot/src/app/**/*.spec.ts",
         "valueSep": ", ",
@@ -5633,6 +5645,18 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "addSonarProperties": [
     [
       {
+        "key": "sonar.sources",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.tests",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+    ],
+    [
+      {
         "key": "sonar.test.inclusions",
         "value": "clientRoot/src/app/**/*.spec.ts",
         "valueSep": ", ",
@@ -6802,6 +6826,18 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     },
   ],
   "addSonarProperties": [
+    [
+      {
+        "key": "sonar.sources",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.tests",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+    ],
     [
       {
         "key": "sonar.test.inclusions",

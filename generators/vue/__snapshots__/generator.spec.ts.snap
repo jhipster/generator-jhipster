@@ -858,6 +858,18 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "addSonarProperties": [
     [
       {
+        "key": "sonar.sources",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.tests",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+    ],
+    [
+      {
         "key": "sonar.test.inclusions",
         "value": "clientRoot/src/app/**/*.spec.ts",
         "valueSep": ", ",
@@ -1875,6 +1887,18 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "addSonarProperties": [
     [
       {
+        "key": "sonar.sources",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.tests",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+    ],
+    [
+      {
         "key": "sonar.test.inclusions",
         "value": "clientRoot/src/app/**/*.spec.ts",
         "valueSep": ", ",
@@ -2781,6 +2805,18 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     },
   ],
   "addSonarProperties": [
+    [
+      {
+        "key": "sonar.sources",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.tests",
+        "value": "clientRoot/src",
+        "valueSep": ", ",
+      },
+    ],
     [
       {
         "key": "sonar.test.inclusions",
