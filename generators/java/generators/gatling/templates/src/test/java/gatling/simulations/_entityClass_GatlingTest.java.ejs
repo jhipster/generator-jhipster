@@ -21,6 +21,10 @@ package gatling.simulations;
 import static io.gatling.javaapi.core.CoreDsl.StringBody;
 import static io.gatling.javaapi.core.CoreDsl.css;
 import static io.gatling.javaapi.core.CoreDsl.exec;
+<%_ if (gatlingEntityBodies.length > 1) { _%>
+import static io.gatling.javaapi.core.CoreDsl.feed;
+import static io.gatling.javaapi.core.CoreDsl.listFeeder;
+<%_ } _%>
 import static io.gatling.javaapi.core.CoreDsl.rampUsers;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.header;
@@ -29,9 +33,15 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
 import java.time.Duration;
+<%_ if (gatlingEntityBodies.length > 1) { _%>
+import java.util.List;
+<%_ } _%>
 import java.util.Map;
 import java.util.Optional;
 import io.gatling.javaapi.core.ChainBuilder;
+<%_ if (gatlingEntityBodies.length > 1) { _%>
+import io.gatling.javaapi.core.FeederBuilder;
+<%_ } _%>
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -88,6 +98,17 @@ public class <%- entityClass %>GatlingTest extends Simulation {
     );
 <%_ } _%>
 
+<%_ if (gatlingEntityBodies.length > 1) { _%>
+    // The bodies of the <%- entityInstancePlural %> the users create, each one with its own id and unique values.
+    FeederBuilder<Object> <%- entityInstance %>Feeder = listFeeder(
+        List.of(
+  <%_ for (const [index, body] of gatlingEntityBodies.entries()) { _%>
+            Map.<String, Object>of("body", "<%- body %>")<%- index === gatlingEntityBodies.length - 1 ? '' : ',' %>
+  <%_ } _%>
+        )
+    ).circular();
+
+<%_ } _%>
     ChainBuilder scn = exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headersHttp)
@@ -154,7 +175,7 @@ public class <%- entityClass %>GatlingTest extends Simulation {
         .check(status().is(200)))
         .pause(10)
         .repeat(2).on(
-            exec(http("Get all <%- entityInstancePlural %>")
+            <%- gatlingEntityBodies.length > 1 ? `feed(${entityInstance}Feeder).` : '' %>exec(http("Get all <%- entityInstancePlural %>")
             .get("<% if (applicationTypeMicroservice) { %>/services/<%- baseName.toLowerCase() %><% } %>/api/<%- entityApiUrl %>")
             .headers(headersHttpAuthenticated)
             .check(status().is(200)))
@@ -162,11 +183,7 @@ public class <%- entityClass %>GatlingTest extends Simulation {
             .exec(http("Create new <%- entityInstance %>")
             .post("<% if (applicationTypeMicroservice) { %>/services/<%- baseName.toLowerCase() %><% } %>/api/<%- entityApiUrl %>")
             .headers(headersHttpAuthenticated)
-            .body(StringBody("{" +
-<%_ for (const [idx, field] of fields.filter(f => !(f.id && f.autoGenerate) && !f.contentTypeOf).entries()) { _%>
-                "<%- idx === 0 ? '' : ', ' %>\"<%- field.fieldName %>\": <% if (field.fieldTypeString) { %>\"SAMPLE_TEXT\"<% } else if (field.fieldTypeNumeric) { %>0<% } else if (field.fieldTypeTemporal) { %>\"2020-01-01T00:00:00.000Z\"<% } else if (field.fieldIsEnum) { %>\"<%- field.enumValues[0].name %>\"<% } else { %>null<% } %>" +
-<%_ } _%>
-                "}")).asJson()
+            .body(StringBody("<%- gatlingEntityBodies.length > 1 ? '#{body}' : gatlingEntityBodies[0] %>")).asJson()
             .check(status().is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_<%- entityInstance %>_url"))).exitHereIfFailed()
             .pause(10)
