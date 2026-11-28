@@ -28,6 +28,7 @@ import {
   prepareFieldColumnForDatabase,
   prepareFieldForDatabase,
   prepareRelationshipForDatabase,
+  prepareSqlApplicationProperties,
 } from './support/index.ts';
 import type { Application as DatabaseApplication, DatabaseEntity } from './types.d.ts';
 
@@ -54,7 +55,7 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
         // The database configuration is declared by the generator of the backend, which differs from blueprint to
         // blueprint: the properties the preparation of the database reads, derived here when it does not give them.
         if (application.databaseType === databaseTypes.SQL) {
-          (application as { prodDatabaseType?: string }).prodDatabaseType ??= databaseTypes.POSTGRESQL;
+          mutateDefaults(application as { prodDatabaseType?: string }, { prodDatabaseType: databaseTypes.POSTGRESQL });
         }
         applicationDefaults({
           databaseTypeAny: ({ databaseType }) => Boolean(databaseType) && databaseType !== databaseTypes.NO,
@@ -68,6 +69,8 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
               databaseData[data.prodDatabaseType]?.defaultPort
             : getDatabaseTypeData(data.databaseType).defaultPort) ?? undefinedMarker,
         });
+        // The connection properties of a database Liquibase or Spring Data reads: a relational one, Neo4j and Cassandra.
+        prepareSqlApplicationProperties({ application: application as any });
       },
     });
   }

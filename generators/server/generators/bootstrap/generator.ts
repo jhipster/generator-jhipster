@@ -20,7 +20,6 @@
 import { getEntityDerivedPropertyMutations } from '../../../../lib/command/mutations.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import { upperFirst } from '../../../../lib/utils/string-utils.ts';
-import prepareSqlApplicationProperties from '../../../base-application/generators/database-bootstrap/support/application-properties.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { addEntitiesOtherRelationships } from '../../../base-application/support/relationship.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
@@ -67,11 +66,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      sql({ application }) {
-        if (application.databaseTypeSql || application.databaseTypeNeo4j) {
-          prepareSqlApplicationProperties({ application: application as any });
-        }
-      },
       properties({ application, applicationDefaults }) {
         applicationDefaults(mutateApplication);
         mutateData(application as unknown as SpringDataRelationalApplication, {
