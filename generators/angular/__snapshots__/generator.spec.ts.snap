@@ -4180,6 +4180,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/content/js/loading-error.js": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
@@ -5558,6 +5561,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/content/js/loading-error.js": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
@@ -6728,6 +6734,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/content/js/loading-error.js": {
     "stateCleared": "modified",
   },
   "clientRoot/src/content/scss/_bootstrap-variables.scss": {
@@ -8031,6 +8040,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/js/loading-error.js": {
     "stateCleared": "modified",
   },
   "src/main/webapp/content/scss/_bootstrap-variables.scss": {
@@ -9611,6 +9623,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/content/js/loading-error.js": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
@@ -10755,6 +10770,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/js/loading-error.js": {
     "stateCleared": "modified",
   },
   "src/main/webapp/content/scss/_bootstrap-variables.scss": {
@@ -11903,6 +11921,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/js/loading-error.js": {
     "stateCleared": "modified",
   },
   "src/main/webapp/content/scss/_bootstrap-variables.scss": {

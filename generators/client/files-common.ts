@@ -53,6 +53,7 @@ export const files = asWriteFilesSection({
         'content/images/logo-jhipster.png',
         'favicon.ico',
         'content/css/loading.css',
+        'content/js/loading-error.js',
         'WEB-INF/web.xml',
         'robots.txt',
         '404.html',
