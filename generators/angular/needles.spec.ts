@@ -43,6 +43,7 @@ const postWritingTask = asPostWritingEntitiesTask<AngularEntity, AngularApplicat
       } as AngularEntity,
     ],
   });
+  source.addItemToAccountMenu!({ route: 'about', translationKey: 'global.menu.about', name: 'About', icon: 'circle-info' });
 });
 
 describe('needle API Angular generator : JHipster with blueprint', () => {
@@ -66,6 +67,29 @@ describe('needle API Angular generator : JHipster with blueprint', () => {
               </a>
             </li>
 `,
+    );
+  });
+
+  it('account menu contains the item added by needle api, before the needle', () => {
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`,
+      `
+          }
+          <li>
+            <a class="dropdown-item" routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+              <fa-icon icon="circle-info" [fixedWidth]="true" />
+              <span jhiTranslate="global.menu.about">About</span>
+            </a>
+          </li>
+          <!-- jhipster-needle-add-element-to-account-menu`,
+    );
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`,
+      /^ {2}faCheck,\n {2}faCircleInfo,\n {2}faCloud,$/m,
+    );
+    runResult.assertFileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`,
+      /^ {2}faCircleInfo,\n {2}\/\/ jhipster-needle-add-icon-import$/m,
     );
   });
 

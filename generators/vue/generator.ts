@@ -38,7 +38,15 @@ import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.ts';
 import { writeEntitiesFiles, writeFiles } from './files-vue.ts';
-import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.ts';
+import {
+  addAdminRoute,
+  addIconImport,
+  addItemToAccountMenu,
+  addItemToAdminMenu,
+  convertTranslationsSupport,
+  isTranslatedVueFile,
+  translateVueFilesTransform,
+} from './support/index.ts';
 import type {
   Application as VueApplication,
   Config as VueConfig,
@@ -221,6 +229,33 @@ export default class VueGenerator extends VueApplicationGenerator {
       },
       prepareForTemplates({ application, source }) {
         application.prettierExtensions.push('html', 'vue', 'css', 'scss');
+
+        source.addIconImport = args => {
+          const ignoreNonExisting = this.ignoreNeedlesError && 'Icon imports not updated with icon';
+          this.editFile(`${application.clientSrcDir}app/config/config.ts`, { ignoreNonExisting }, addIconImport(args));
+        };
+
+        source.addItemToAdminMenu = args => {
+          this.editFile(
+            `${application.clientSrcDir}app/layouts/navbar/navbar.vue`,
+            addItemToAdminMenu({ enableTranslation: application.enableTranslation, ...args }),
+          );
+          if (args.icon) {
+            source.addIconImport!({ icon: args.icon });
+          }
+        };
+
+        source.addAdminRoute = args => this.editFile(`${application.clientSrcDir}app/router/admin.ts`, addAdminRoute(args));
+
+        source.addItemToAccountMenu = args => {
+          this.editFile(
+            `${application.clientSrcDir}app/layouts/navbar/navbar.vue`,
+            addItemToAccountMenu({ enableTranslation: application.enableTranslation, ...args }),
+          );
+          if (args.icon) {
+            source.addIconImport!({ icon: args.icon });
+          }
+        };
 
         source.addEntitiesToClient = ({ application, entities }) => {
           const { enableTranslation } = application;

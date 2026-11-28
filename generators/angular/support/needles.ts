@@ -19,7 +19,9 @@
 import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import { joinCallbacks } from '../../base-core/support/write-files.ts';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../../client/types.d.ts';
+import type { Application as ClientApplication, ClientMenuItem, Entity as ClientEntity } from '../../client/types.d.ts';
+import { addNamedImports } from '../../javascript-simple-application/support/imports.ts';
+import { addListItem } from '../../javascript-simple-application/support/list-items.ts';
 
 export function addRoute({
   needle,
@@ -110,13 +112,9 @@ export function addAdminEntitiesRoute<const E extends ClientEntity, const A exte
   );
 }
 
-type MenuItem = {
+type MenuItem = ClientMenuItem & {
   jhiPrefix: string;
   enableTranslation?: boolean;
-  route: string;
-  translationKey?: string;
-  icon?: string;
-  name?: string;
 };
 
 export function addItemToMenu({
@@ -150,17 +148,20 @@ export const addItemToAdminMenu = (menu: MenuItem) =>
     ...menu,
   });
 
+/** An item at the end of the account menu, shown with or without an authenticated account. */
+export const addItemToAccountMenu = (menu: MenuItem) =>
+  addItemToMenu({
+    needle: 'add-element-to-account-menu',
+    ...menu,
+  });
+
+/** Adds an icon to the named imports of @fortawesome/free-solid-svg-icons, and to the list of the icons before its add-icon-import needle. */
 export const addIconImport = ({ icon }: { icon: string }) => {
   const iconImport = `fa${upperFirstCamelCase(icon)}`;
-  return createNeedleCallback({
-    needle: 'jhipster-needle-add-icon-import',
-    contentToCheck: new RegExp(String.raw`\b${iconImport}\b`),
-    contentToAdd: (content, { indentPrefix }) =>
-      content.replace(
-        /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
-        `\n${indentPrefix}${iconImport},\n${indentPrefix}// jhipster-needle-add-icon-import`,
-      ),
-  });
+  return joinCallbacks(
+    addNamedImports({ module: '@fortawesome/free-solid-svg-icons', names: [iconImport] }),
+    addListItem({ needle: 'add-icon-import', item: iconImport }),
+  );
 };
 
 export function addToEntitiesMenu<const E extends ClientEntity, const A extends ClientApplication<E>>({

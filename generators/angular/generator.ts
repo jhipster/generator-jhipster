@@ -37,8 +37,8 @@ import {
   addAdminEntitiesRoute,
   addEntitiesRoute,
   addIconImport,
+  addItemToAccountMenu,
   addItemToAdminMenu,
-  type addItemToMenu,
   addRoute,
   addToEntitiesMenu,
   isAdminPageEntity,
@@ -205,7 +205,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           }
         };
 
-        source.addAdminRoute = (args: Omit<Parameters<typeof addRoute>[0], 'needle'>) =>
+        source.addAdminRoute = args =>
           this.editFile(
             `${application.clientSrcDir}app/admin/admin.routes.ts`,
             addRoute({
@@ -214,10 +214,24 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             }),
           );
 
-        source.addItemToAdminMenu = (args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>) => {
+        source.addItemToAdminMenu = args => {
           this.editFile(
             `${application.clientSrcDir}app/layouts/navbar/navbar.html`,
             addItemToAdminMenu({
+              enableTranslation: application.enableTranslation,
+              jhiPrefix: application.jhiPrefix,
+              ...args,
+            }),
+          );
+          if (args.icon) {
+            source.addIconImport!({ icon: args.icon });
+          }
+        };
+
+        source.addItemToAccountMenu = args => {
+          this.editFile(
+            `${application.clientSrcDir}app/layouts/navbar/navbar.html`,
+            addItemToAccountMenu({
               enableTranslation: application.enableTranslation,
               jhiPrefix: application.jhiPrefix,
               ...args,
