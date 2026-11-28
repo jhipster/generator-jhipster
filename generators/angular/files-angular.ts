@@ -326,6 +326,8 @@ export const files = asWriteFilesSection({
         'shared/date/duration.pipe.ts',
         'shared/date/format-medium-date.pipe.ts',
         'shared/date/format-medium-datetime.pipe.ts',
+        'shared/form/form-values.ts',
+        'shared/form/form-values.spec.ts',
         'shared/form/index.ts',
         'shared/form/select-options.directive.ts',
         'shared/form/select-options.directive.spec.ts',

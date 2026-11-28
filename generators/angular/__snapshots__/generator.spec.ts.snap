@@ -1851,6 +1851,7 @@ import {
 import dayjs from "dayjs/esm";
 
 import { DATE_TIME_FORMAT } from "app/config";
+import { keepEmptyBoolean, keepEmptyText } from "app/shared/form";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 
 /**
@@ -1967,21 +1968,19 @@ export class UserManagementFormService {
     return {
       id: model.id,
       login: model.login || null,
-      firstName:
-        model.firstName || (userManagement?.firstName === "" ? "" : null),
-      lastName: model.lastName || (userManagement?.lastName === "" ? "" : null),
+      firstName: keepEmptyText(model.firstName, userManagement?.firstName),
+      lastName: keepEmptyText(model.lastName, userManagement?.lastName),
       email: model.email || null,
-      activated:
-        model.activated || (userManagement?.activated === null ? null : false),
-      imageUrl: model.imageUrl || (userManagement?.imageUrl === "" ? "" : null),
-      createdBy:
-        model.createdBy || (userManagement?.createdBy === "" ? "" : null),
+      activated: keepEmptyBoolean(model.activated, userManagement?.activated),
+      imageUrl: keepEmptyText(model.imageUrl, userManagement?.imageUrl),
+      createdBy: keepEmptyText(model.createdBy, userManagement?.createdBy),
       createdDate: model.createdDate
         ? dayjs(model.createdDate, DATE_TIME_FORMAT).toJSON()
         : null,
-      lastModifiedBy:
-        model.lastModifiedBy ||
-        (userManagement?.lastModifiedBy === "" ? "" : null),
+      lastModifiedBy: keepEmptyText(
+        model.lastModifiedBy,
+        userManagement?.lastModifiedBy,
+      ),
       lastModifiedDate: model.lastModifiedDate
         ? dayjs(model.lastModifiedDate, DATE_TIME_FORMAT).toJSON()
         : null,
@@ -4018,6 +4017,12 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/form/form-values.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/form-values.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/form/index.ts": {
     "stateCleared": "modified",
   },
@@ -5333,6 +5338,12 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/form/form-values.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/form-values.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/form/index.ts": {
     "stateCleared": "modified",
   },
@@ -6566,6 +6577,12 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/form-values.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/form/form-values.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/form/index.ts": {
@@ -7806,6 +7823,12 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/form-values.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/form-values.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/form/index.ts": {
@@ -9386,6 +9409,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/form/form-values.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/form-values.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/form/index.ts": {
     "stateCleared": "modified",
   },
@@ -10595,6 +10624,12 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/form/form-values.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/form-values.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/form/index.ts": {
     "stateCleared": "modified",
   },
@@ -11741,6 +11776,12 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/form-values.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/form/form-values.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/form/index.ts": {
